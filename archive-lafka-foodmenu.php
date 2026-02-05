@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 // The Archive template file for lafka-foodmenu CPT.
 

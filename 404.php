@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 // The 404 Page template file.
 get_header(); ?>

@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 /**
  * Insert the customized css from selected options on wp_head hook + the custom css for Gutenberg

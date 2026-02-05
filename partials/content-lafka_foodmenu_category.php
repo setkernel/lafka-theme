@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 // Partial to use when displaying lafka_foodmenu_category category, archive and page template
 global $wp;
@@ -165,8 +166,14 @@ $lafka_sidebar_classes[] =  apply_filters('lafka_left_sidebar_position_class', '
 				global $query_string;
 
 				if (is_page()) {
-					//get all foodmenus
-					$lafka_foodmenus = new WP_Query('post_type=lafka-foodmenu&post_status=publish&nopaging=true');
+					//get all foodmenus — use array form to enable meta/term cache priming
+					$lafka_foodmenus = new WP_Query(array(
+						'post_type'              => 'lafka-foodmenu',
+						'post_status'            => 'publish',
+						'nopaging'               => true,
+						'update_post_meta_cache' => true,
+						'update_post_term_cache' => true,
+					));
 				} else {
 					$lafka_foodmenus = new WP_Query($query_string . '&post_type=lafka-foodmenu&nopaging=true');
 				}

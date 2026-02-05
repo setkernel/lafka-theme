@@ -34,12 +34,7 @@
          * Special Characters
          */
 
-        $('h1,h2,h3,h4,h5,h6').each(function() {
-            $(this).html(
-                $(this).html()
-                .replace(/&nbsp;/gi, '')
-            );
-        });
+        // Removed: heading &nbsp; replacement — unnecessary DOM manipulation on every page load
 
         if (lafka_main_js_params.categories_fancy === 'yes') {
             $("div.product-category.product h2").html(function() {
@@ -65,19 +60,15 @@
             }, 1200, 'swing');
         });
 
-        $('div.content_holder.lafka_blog_masonry div.box.box-common:has(.pagination)').parent().addClass('lafka-blog-has-pagination');
+        $('div.content_holder.lafka_blog_masonry div.box.box-common').has('.pagination').parent().addClass('lafka-blog-has-pagination');
 
-        /*
-         * Remove resposive images functionality for CloudZoom galleries
-         */
-        $('#wrap a.cloud-zoom img, .lafka-product-summary-wrapper.lafka-has-product-cover-image > img').removeAttr('srcset');
-        $("div.summary.entry-summary table.variations td:has(div.lafka-wcs-swatches) ").addClass("lafka-has-swatches-option");
-        $("ul#topnav li:has(ul), ul#topnav2 li:has(ul), ul.menu li:has(ul) ").addClass("dropdown");
-        $("ul.menu li:has(div)").addClass("has-mega");
-        $('#main-menu li ul.sub-menu li:has(.lafka-custom-menu-label)').addClass('has-menu-label');
+        // Keep srcset for responsive images; CloudZoom works with src directly
+        $("div.summary.entry-summary table.variations td").has('div.lafka-wcs-swatches').addClass("lafka-has-swatches-option");
+        $("ul#topnav li, ul#topnav2 li, ul.menu li").has('ul').addClass("dropdown");
+        $("ul.menu li").has('div').addClass("has-mega");
+        $('#main-menu li ul.sub-menu li').has('.lafka-custom-menu-label').addClass('has-menu-label');
 
-
-        $("div.vc_row:has(.lafka-fullheight-content-slider) ").addClass("lafka-row-has-full-slider");
+        $("div.vc_row").has('.lafka-fullheight-content-slider').addClass("lafka-row-has-full-slider");
 
 
         /*
@@ -107,9 +98,9 @@
             $("#lafka-account-holder, .lafka-header-account-link-holder").toggleClass("active");
         });
 
-        $("#header .lafka-header-account-link-holder .woocommerce:has(ul.woocommerce-error)").each(function () {
+        if ($("#header .lafka-header-account-link-holder .woocommerce").has('ul.woocommerce-error').length) {
             $("#header .lafka-header-account-link-holder").addClass("active");
-        });
+        }
 
         checkSummaryHeight();
         checkSidebarHeight();
@@ -379,8 +370,10 @@
 
         $("li.menu-item a[href*='#']:not([href='#']), .wpb_text_column a[href*='#']:not([href='#']), a.vc_btn3[href*='#']:not([href='#']), .vc_icon_element a[href*='#']:not([href='#'])").on('click', function() {
             if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
-                var target = $(this.hash);
-                target = target.length ? target : $('[name=' + this.hash.slice(1) + ']');
+                var hashVal = this.hash;
+                if (!hashVal || !/^#[a-zA-Z0-9_-]+$/.test(hashVal)) return;
+                var target = $(document.getElementById(hashVal.slice(1)));
+                target = target.length ? target : $('[name=' + CSS.escape(hashVal.slice(1)) + ']');
                 if (target.length) {
                     $('html,body').animate({
                         scrollTop: target.offset().top - 75
@@ -402,29 +395,41 @@
             aArray.push(ahref);
         } // this for loop fills the aArray with attribute href values
 
-        $(window).scroll(function() {
-            var windowPos = $(window).scrollTop(); // get the offset of the window from the top of page
-            var windowHeight = $(window).height(); // get the height of the window
-            var docHeight = $(document).height();
+        // Throttled scroll handler using requestAnimationFrame
+        var scrollTicking = false;
+        $(window).on('scroll', function() {
+            if (!scrollTicking) {
+                window.requestAnimationFrame(function() {
+                    var windowPos = $(window).scrollTop();
+                    var windowHeight = $(window).height();
+                    var docHeight = $(document).height();
 
-            for (var i = 0; i < aArray.length; i++) {
-                var theID = aArray[i];
-                if ((theID).length && undefined !== $(theID).offset()) {
-                    var divPos = $(theID).offset().top - 145; // get the offset of the div from the top of page
-                    var divHeight = $(theID).height(); // get the height of the div in question
-                    if (windowPos >= divPos && windowPos < (divPos + divHeight)) {
-                        $("li.current-menu-item").removeClass("current-menu-item");
-                        $("li.menu-item a[href='" + theID + "']").parent().addClass("current-menu-item");
+                    for (var i = 0; i < aArray.length; i++) {
+                        var theID = aArray[i];
+                        var theHash = '';
+                        try { theHash = new URL(theID).hash; } catch(e) { continue; }
+                        if (!theHash || !/^#[a-zA-Z0-9_-]+$/.test(theHash)) continue;
+                        var theEl = document.getElementById(theHash.slice(1));
+                        if (theEl) {
+                            var divPos = $(theEl).offset().top - 145;
+                            var divHeight = $(theEl).height();
+                            if (windowPos >= divPos && windowPos < (divPos + divHeight)) {
+                                $("li.current-menu-item").removeClass("current-menu-item");
+                                $("li.menu-item a").filter(function() { return this.href === theID; }).parent().addClass("current-menu-item");
+                            }
+                        }
                     }
-                }
-            }
 
-            if (windowPos + windowHeight == docHeight) {
-                if (!$("li.menu-item:last-child").hasClass("current-menu-item")) {
-                    var navActiveCurrent = $("li.current-menu-item a").prop("href");
-                    $("a[href='" + navActiveCurrent + "']").parent().removeClass("current-menu-item");
-                    $("li.menu-item:last-child a").addClass("current-menu-item");
-                }
+                    if (windowPos + windowHeight == docHeight) {
+                        if (!$("li.menu-item:last-child").hasClass("current-menu-item")) {
+                            var navActiveCurrent = $("li.current-menu-item a").prop("href");
+                            $("li.menu-item a").filter(function() { return this.href === navActiveCurrent; }).parent().removeClass("current-menu-item");
+                            $("li.menu-item:last-child a").addClass("current-menu-item");
+                        }
+                    }
+                    scrollTicking = false;
+                });
+                scrollTicking = true;
             }
         });
 
@@ -481,6 +486,7 @@
 
                         var add_to_cart_ajax_data = {};
                         add_to_cart_ajax_data.action = 'lafka_wc_add_cart';
+                        add_to_cart_ajax_data.security = lafka_main_js_params.nonce;
 
                         if (product_id) {
                             add_to_cart_ajax_data["add-to-cart"] = product_id;
@@ -532,10 +538,17 @@
                     $(document.body).find('div.lafka-shop-pager.lafka-infinite a.next_page').trigger("click");
                 });
             } else {
-                // Track scrolling, hunting for infinite ajax load
+                // Track scrolling, hunting for infinite ajax load (throttled)
+                var infiniteTicking = false;
                 $(window).on("scroll", function() {
-                    if ($(document.body).find('div.lafka-shop-pager.lafka-infinite').is(':in-viewport')) {
-                        $(document.body).find('div.lafka-shop-pager.lafka-infinite a.next_page').trigger("click");
+                    if (!infiniteTicking) {
+                        window.requestAnimationFrame(function() {
+                            if ($(document.body).find('div.lafka-shop-pager.lafka-infinite').is(':in-viewport')) {
+                                $(document.body).find('div.lafka-shop-pager.lafka-infinite a.next_page').trigger("click");
+                            }
+                            infiniteTicking = false;
+                        });
+                        infiniteTicking = true;
                     }
                 });
             }
@@ -771,16 +784,24 @@
 
     });
 
-    window.onresize = function() {
-        checkRevealFooter();
-        checkProductGalleryCarousel();
-        checkSummaryHeight();
-        checkSidebarHeight();
-        checkCommentsHeight();
-        checkFoodmenuHeight();
-        lafka_fullwidth_elements();
-        defineMegaMenuSizing();
-    };
+    // Throttled resize handler using requestAnimationFrame
+    var resizeTicking = false;
+    window.addEventListener('resize', function() {
+        if (!resizeTicking) {
+            window.requestAnimationFrame(function() {
+                checkRevealFooter();
+                checkProductGalleryCarousel();
+                checkSummaryHeight();
+                checkSidebarHeight();
+                checkCommentsHeight();
+                checkFoodmenuHeight();
+                lafka_fullwidth_elements();
+                defineMegaMenuSizing();
+                resizeTicking = false;
+            });
+            resizeTicking = true;
+        }
+    });
 
     /**
      * Initialise the small countdowns on products list
@@ -809,9 +830,16 @@
     window.lafkaStickyHeaderInit = function() {
         var headerHeight = $('body:not(.lafka_transparent_header) #header').height();
         $("body").addClass("lafka-sticky-header").css("padding-top", headerHeight + "px");
+        var stickyTicking = false;
         $(window).on("scroll", function() {
-            var $header = $("#header");
-            $(this).scrollTop() > 0 ? $header.addClass("lafka-sticksy") : $header.removeClass("lafka-sticksy");
+            if (!stickyTicking) {
+                window.requestAnimationFrame(function() {
+                    var $header = $("#header");
+                    $(window).scrollTop() > 0 ? $header.addClass("lafka-sticksy") : $header.removeClass("lafka-sticksy");
+                    stickyTicking = false;
+                });
+                stickyTicking = true;
+            }
         });
     };
 

@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 // The Taxonomy template file for lafka-foodmenu CPT.
 

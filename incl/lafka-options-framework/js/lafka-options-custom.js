@@ -128,7 +128,8 @@ jQuery(document).ready(function ($) {
 		});
 
 		var data = {
-			'action': $action
+			'action': $action,
+			'security': (typeof lafka_back_js_params !== 'undefined') ? lafka_back_js_params.import_nonce : ''
 		};
 
 		// since 2.8 ajaxurl is always defined in the admin header and points to admin-ajax.php

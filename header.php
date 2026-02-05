@@ -1,8 +1,9 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" <?php language_attributes(); ?>>
+<html <?php language_attributes(); ?>>
 	<head>
 		<meta http-equiv="Content-Type" content="<?php bloginfo('html_type'); ?>; charset=<?php bloginfo('charset'); ?>" />
-		<meta name="viewport" content="width=device-width, maximum-scale=1" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="profile" href="http://gmpg.org/xfn/11" />
 		<link rel="pingback" href="<?php esc_url(bloginfo('pingback_url')); ?>" />
 		<?php wp_head(); ?>
@@ -17,7 +18,7 @@
 		<?php endif; ?>
 		<?php if (lafka_get_option('add_to_cart_sound')): ?>
             <audio id="cart_add_sound" controls preload="auto" hidden="hidden">
-                <source src="<?php echo LAFKA_IMAGES_PATH ?>cart_add.wav" type="audio/wav">
+                <source src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cart_add.wav' ); ?>" type="audio/wav">
             </audio>
 		<?php endif; ?>
 		<?php
@@ -50,19 +51,21 @@
 		}
 
 		$lafka_general_layout = lafka_get_option('general_layout');
-		$lafka_specific_layout = get_post_meta(get_queried_object_id(), 'lafka_layout', true);
+		$_qid = get_queried_object_id();
+		$_all_meta = $_qid ? get_post_meta($_qid) : array();
+		$lafka_specific_layout = isset($_all_meta['lafka_layout'][0]) ? $_all_meta['lafka_layout'][0] : '';
 
-		$lafka_meta_show_top_header = get_post_meta(get_queried_object_id(), 'lafka_top_header', true);
+		$lafka_meta_show_top_header = isset($_all_meta['lafka_top_header'][0]) ? $_all_meta['lafka_top_header'][0] : '';
 		if (!$lafka_meta_show_top_header) {
 			$lafka_meta_show_top_header = 'default';
 		}
 
-		$lafka_featured_slider = get_post_meta(get_queried_object_id(), 'lafka_rev_slider', true);
+		$lafka_featured_slider = isset($_all_meta['lafka_rev_slider'][0]) ? $_all_meta['lafka_rev_slider'][0] : '';
 		if (!$lafka_featured_slider) {
 			$lafka_featured_slider = 'none';
 		}
 
-		$lafka_rev_slider_before_header = get_post_meta(get_queried_object_id(), 'lafka_rev_slider_before_header', true);
+		$lafka_rev_slider_before_header = isset($_all_meta['lafka_rev_slider_before_header'][0]) ? $_all_meta['lafka_rev_slider_before_header'][0] : '';
 		if (!$lafka_rev_slider_before_header) {
 			$lafka_rev_slider_before_header = 0;
 		}

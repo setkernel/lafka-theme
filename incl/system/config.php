@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 
 if (!defined('LAFKA_IMAGES_PATH')) {
@@ -14,8 +15,10 @@ if (class_exists('bbPress')) {
 	define('LAFKA_IS_BBPRESS', FALSE);
 }
 
-// Check if WooCommerce is active
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) || class_exists('WooCommerce') ) {
+// Check if WooCommerce is active (supports regular plugins and MU-plugins)
+if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )
+	|| ( is_multisite() && array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins', array() ) ) )
+	|| class_exists( 'WooCommerce' ) ) {
 	define('LAFKA_IS_WOOCOMMERCE', TRUE);
 	require_once(get_template_directory() . '/incl/woocommerce-functions.php');
 } else {

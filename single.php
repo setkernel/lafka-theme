@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 get_header();
 
@@ -126,9 +127,9 @@ $lafka_sidebar_classes[] = apply_filters('lafka_left_sidebar_position_class', ''
 						}
 
 						$lafka_is_latest_posts = true;
-						query_posts($lafka_related_posts_args);
+						$lafka_related_query = new WP_Query($lafka_related_posts_args);
 						?>
-						<?php if (have_posts()) : ?>
+						<?php if ($lafka_related_query->have_posts()) : ?>
 							<?php
 							// owl carousel
 							wp_localize_script('lafka-libs-config', 'lafka_owl_carousel', array(
@@ -139,8 +140,8 @@ $lafka_sidebar_classes[] = apply_filters('lafka_left_sidebar_position_class', ''
 								<h4><?php esc_html_e('Related posts', 'lafka') ?></h4>
 								<div <?php if (lafka_get_option('owl_carousel')): ?> class="owl-carousel lafka-owl-carousel" <?php endif; ?>>
 
-								<?php while (have_posts()) : ?>
-									<?php the_post(); ?>
+								<?php while ($lafka_related_query->have_posts()) : ?>
+									<?php $lafka_related_query->the_post(); ?>
 							        <?php get_template_part('content', 'related-posts'); ?>
 								<?php endwhile; ?>
 
@@ -149,7 +150,7 @@ $lafka_sidebar_classes[] = apply_filters('lafka_left_sidebar_position_class', ''
 							</div>
 						<?php endif; ?>
 					<?php endif; ?>
-					<?php wp_reset_query(); ?>
+					<?php wp_reset_postdata(); ?>
 				</div>
 
 				<!-- SIDEBARS -->

@@ -566,34 +566,46 @@ if (!function_exists('lafka_comment')) {
 
 		function lafka_ajax_search() {
 
-			unset($_REQUEST['action']);
-			if (empty($_REQUEST['s'])) {
-				$_REQUEST['s'] = array_shift(array_values($_REQUEST));
-			}
-			if (empty($_REQUEST['s'])) {
+			check_ajax_referer( 'lafka_ajax_nonce', 'security' );
+
+			$search_term = isset( $_REQUEST['s'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['s'] ) ) : '';
+			if ( empty( $search_term ) ) {
 				wp_die();
 			}
 
-			$defaults = array(
-			        'numberposts' => 5,
-                    'post_type' => 'any',
-                    'post_status' => 'publish',
-                    'post_password' => '',
-                    'suppress_filters' => false
-            );
+			$search_term = apply_filters( 'get_search_query', $search_term );
 
-			$_REQUEST['s'] = apply_filters('get_search_query', $_REQUEST['s']);
+			$post_type = 'any';
+			if ( isset( $_REQUEST['post_type'] ) ) {
+				$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
+			}
 
-			$parameters = array_merge($defaults, $_REQUEST);
-			$query = http_build_query($parameters);
-			$result = get_posts($query);
+			$parameters = array(
+				'numberposts'      => 5,
+				'post_type'        => $post_type,
+				'post_status'      => 'publish',
+				'post_password'    => '',
+				'suppress_filters' => false,
+				's'                => $search_term,
+			);
+
+			$result = get_posts($parameters);
 
 			// If there are WC products in the result and visibility is not set for search - remove them
             if(LAFKA_IS_WOOCOMMERCE) {
 	            foreach ( $result as $key => $post ) {
-	                $product = wc_get_product( $post );
-		            if ( is_a($product, 'WC_Product') && !('visible' === $product->get_catalog_visibility() || 'search' === $product->get_catalog_visibility()) ) {
-                        unset($result[$key]);
+		            if ( 'product' === $post->post_type ) {
+			            $visibility = get_post_meta( $post->ID, '_visibility', true );
+			            // WC 3.0+ uses taxonomy for visibility, fall back to product object only if needed
+			            if ( ! $visibility ) {
+				            $product = wc_get_product( $post );
+				            if ( is_a( $product, 'WC_Product' ) ) {
+					            $visibility = $product->get_catalog_visibility();
+				            }
+			            }
+			            if ( $visibility && ! in_array( $visibility, array( 'visible', 'search' ), true ) ) {
+				            unset( $result[ $key ] );
+			            }
 		            }
 	            }
             }
@@ -715,128 +727,34 @@ if (!function_exists('lafka_comment')) {
 	}
 
 	/* Define ajax calls for each import */
-	for ($i = 0; $i <= 6; $i++) {
-		add_action('wp_ajax_lafka_import_lafka' . $i, 'lafka_import_lafka' . $i . '_callback');
-	}
+	if ( ! function_exists( 'lafka_import_demo_callback' ) ) {
+		function lafka_import_demo_callback( $demo_name ) {
+			check_ajax_referer( 'lafka_import_nonce', 'security' );
 
-	if (!function_exists('lafka_import_lafka0_callback')) {
+			if ( ! current_user_can( 'manage_options' ) ) {
+				wp_die( 'Unauthorized', 403 );
+			}
 
-		/**
-		 * Import lafka0 demo
-		 */
-		function lafka_import_lafka0_callback() {
-			@set_time_limit(1200);
+			if ( function_exists( 'set_time_limit' ) ) {
+				set_time_limit( 1200 );
+			}
+
 			$transfer = Lafka_Transfer_Content::getInstance();
-			$result = $transfer->doImportDemo('lafka0');
+			$result   = $transfer->doImportDemo( $demo_name );
 
-			if ($result) {
+			if ( $result ) {
 				echo 'lafka_import_done';
 			}
-		}
 
-	}
-
-    if ( ! function_exists( 'lafka_import_lafka1_callback' ) ) {
-
-        /**
-         * Import lafka1 demo
-         */
-        function lafka_import_lafka1_callback() {
-            @set_time_limit( 1200 );
-            $transfer = Lafka_Transfer_Content::getInstance();
-            $result   = $transfer->doImportDemo( 'lafka1' );
-
-            if ( $result ) {
-                echo 'lafka_import_done';
-            }
-        }
-
-    }
-
-    if ( ! function_exists( 'lafka_import_lafka2_callback' ) ) {
-
-        /**
-         * Import lafka2 demo
-         */
-        function lafka_import_lafka2_callback() {
-            @set_time_limit( 1200 );
-            $transfer = Lafka_Transfer_Content::getInstance();
-            $result   = $transfer->doImportDemo( 'lafka2' );
-
-            if ( $result ) {
-                echo 'lafka_import_done';
-            }
-        }
-
-    }
-
-    if ( ! function_exists( 'lafka_import_lafka3_callback' ) ) {
-
-        /**
-         * Import lafka3 demo
-         */
-        function lafka_import_lafka3_callback() {
-            @set_time_limit( 1200 );
-            $transfer = Lafka_Transfer_Content::getInstance();
-            $result   = $transfer->doImportDemo( 'lafka3' );
-
-            if ( $result ) {
-                echo 'lafka_import_done';
-            }
-        }
-
-    }
-
-    if ( ! function_exists( 'lafka_import_lafka4_callback' ) ) {
-
-        /**
-         * Import lafka4 demo
-         */
-        function lafka_import_lafka4_callback() {
-            @set_time_limit( 1200 );
-            $transfer = Lafka_Transfer_Content::getInstance();
-            $result   = $transfer->doImportDemo( 'lafka4' );
-
-            if ( $result ) {
-                echo 'lafka_import_done';
-            }
-        }
-
-    }
-
-    if ( ! function_exists( 'lafka_import_lafka5_callback' ) ) {
-
-        /**
-         * Import lafka5 demo
-         */
-        function lafka_import_lafka5_callback() {
-            @set_time_limit( 1200 );
-            $transfer = Lafka_Transfer_Content::getInstance();
-            $result   = $transfer->doImportDemo( 'lafka5' );
-
-            if ( $result ) {
-                echo 'lafka_import_done';
-            }
-        }
-
-    }
-
-if ( ! function_exists( 'lafka_import_lafka6_callback' ) ) {
-
-	/**
-	 * Import lafka6 demo
-	 */
-	function lafka_import_lafka6_callback() {
-		@set_time_limit( 1200 );
-		$transfer = Lafka_Transfer_Content::getInstance();
-		$result   = $transfer->doImportDemo( 'lafka6' );
-
-		if ( $result ) {
-			echo 'lafka_import_done';
+			wp_die();
 		}
 	}
 
-}
+	for ( $i = 0; $i <= 6; $i++ ) {
+		add_action( 'wp_ajax_lafka_import_lafka' . $i, function() use ( $i ) {
+			lafka_import_demo_callback( 'lafka' . $i );
+		});
+	}
 
 	// Replace OF textarea sanitization with lafka one - in admin_init, because we will allow <script> tag
 	add_action('admin_init', 'lafka_add_script_to_allowed');
@@ -897,10 +815,14 @@ if ( ! function_exists( 'lafka_import_lafka6_callback' ) ) {
 
 			// check is singular and not Blog/Shop/Forum so we get the real post_meta
 			if (!(LAFKA_IS_WOOCOMMERCE && is_shop()) && !lafka_is_blog() && !(LAFKA_IS_BBPRESS && bbp_is_forum_archive()) && is_singular()) {
-				$specific_header_size = get_post_meta($wp_query->post->ID, 'lafka_header_size', true) == '' ? 'default' : get_post_meta($wp_query->post->ID, 'lafka_header_size', true);
-				$specific_footer_size = get_post_meta($wp_query->post->ID, 'lafka_footer_size', true) == '' ? 'default' : get_post_meta($wp_query->post->ID, 'lafka_footer_size', true);
-				$specific_footer_style = get_post_meta($wp_query->post->ID, 'lafka_footer_style', true) == '' ? 'default' : get_post_meta($wp_query->post->ID, 'lafka_footer_style', true);
-				$specific_layout = get_post_meta( $wp_query->post->ID, 'lafka_layout', true ) == '' ? 'default' : get_post_meta( $wp_query->post->ID, 'lafka_layout', true );
+				$_header = get_post_meta($wp_query->post->ID, 'lafka_header_size', true);
+				$specific_header_size = $_header === '' ? 'default' : $_header;
+				$_footer = get_post_meta($wp_query->post->ID, 'lafka_footer_size', true);
+				$specific_footer_size = $_footer === '' ? 'default' : $_footer;
+				$_fstyle = get_post_meta($wp_query->post->ID, 'lafka_footer_style', true);
+				$specific_footer_style = $_fstyle === '' ? 'default' : $_fstyle;
+				$_layout = get_post_meta( $wp_query->post->ID, 'lafka_layout', true );
+				$specific_layout = $_layout === '' ? 'default' : $_layout;
 			} else {
 				$specific_header_size = 'default';
 				$specific_footer_size = 'default';
@@ -1171,7 +1093,7 @@ if ( ! function_exists( 'lafka_convert_to_timeago_date_format' ) ) {
 		$post_unix_time = strtotime( $post->post_date );
 
 		if (lafka_get_option('date_format') == 'lafka_format' && !lafka_is_time_more_than_x_months_ago(6, $post_unix_time)) {
-			return human_time_diff( $post_unix_time, current_time( 'timestamp' ) ) . ' ' . __( 'ago', 'lafka' );
+			return human_time_diff( $post_unix_time, time() ) . ' ' . __( 'ago', 'lafka' );
 		}
 
 		return $orig_time;

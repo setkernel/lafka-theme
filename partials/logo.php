@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 $lafka_theme_logo_img        = lafka_get_option( 'theme_logo' );
 $lafka_mobile_logo_img       = lafka_get_option( 'mobile_theme_logo' );

@@ -1,9 +1,10 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 // Woocommerce specific functions
 /** @var $product WC_Product */
 
 // Disable WooCommerce styles
-if ( version_compare( WOOCOMMERCE_VERSION, "2.1" ) >= 0 ) {
+if ( version_compare( WC_VERSION, "2.1" ) >= 0 ) {
 	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 } else {
 	define( 'WOOCOMMERCE_USE_CSS', false );
@@ -44,7 +45,7 @@ add_filter( 'woocommerce_before_shop_loop_item', 'lafka_shop_loop_image', 10 );
 if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
 
 	function lafka_shop_loop_image() {
-		global $post;
+		global $post, $product;
 		echo '<div class="image">';
 
 		?>
@@ -52,17 +53,18 @@ if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
         <a href="<?php the_permalink(); ?>">
 			<?php woocommerce_template_loop_product_thumbnail(); ?>
 			<?php
-			$second_image = lafka_get_second_product_image_id( $post );
+			$second_image = lafka_get_second_product_image_id( $product ? $product : $post );
 			// If we have swap image enabled and second image:
 			if ( lafka_get_option( 'product_hover_onproduct' ) == 'lafka-prodhover-swap' && $second_image ):
 				?>
 				<?php
 				$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'shop_catalog' );
 
-				$props = wc_get_product_attachment_props( $second_image, $post );
+				$alt   = get_post_meta( $second_image, '_wp_attachment_image_alt', true );
+				$title = get_the_title( $second_image );
 				echo wp_get_attachment_image( $second_image, $image_size, false, array(
-					'title' => $props['title'],
-					'alt'   => $props['alt']
+					'title' => $title,
+					'alt'   => $alt ? $alt : $title,
 				) );
 				?>
 			<?php endif; ?>
@@ -87,14 +89,13 @@ if ( ! function_exists( 'lafka_get_second_product_image_id' ) ) {
 	 * @return int|bool false if no second image OR the attachment ID of the image
 	 */
 	function lafka_get_second_product_image_id( $post ) {
-		$product  = wc_get_product( $post );
+		$product  = is_a( $post, 'WC_Product' ) ? $post : wc_get_product( $post );
+		if ( ! $product ) {
+			return false;
+		}
 		$imageIds = $product->get_gallery_image_ids();
 
-		if ( array_key_exists( 0, $imageIds ) ) {
-			return $imageIds[0];
-		}
-
-		return false;
+		return isset( $imageIds[0] ) ? $imageIds[0] : false;
 	}
 }
 
@@ -219,10 +220,19 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 			$style_class = 'owl-carousel lafka-owl-carousel';
 		}
 
-		$display_type = woocommerce_get_loop_display_mode();
+		// Get display mode - compatible with WC 3.3+
+		if ( function_exists( 'woocommerce_get_loop_display_mode' ) ) {
+			$display_type = woocommerce_get_loop_display_mode();
+		} else {
+			$display_type = is_product_category()
+				? get_option( 'woocommerce_category_archive_display', '' )
+				: get_option( 'woocommerce_shop_page_display', '' );
+		}
 		if ( 'subcategories' === $display_type || 'both' === $display_type ) {
 			$before_categories_html = '<div class="lafka_woo_categories_shop woocommerce ' . esc_attr( $style_class ) . '">';
-			echo woocommerce_maybe_show_product_subcategories( $before_categories_html );
+			if ( function_exists( 'woocommerce_maybe_show_product_subcategories' ) ) {
+				echo woocommerce_maybe_show_product_subcategories( $before_categories_html );
+			}
 			echo '</div>';
 		}
 
@@ -231,7 +241,14 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 			Lafka_Branch_Locations::show_change_branch();
 		}
 
-		if ( lafka_get_option( 'show_refine_area' ) && woocommerce_products_will_display() ) {
+		// Check if products will display - compatible with WC 4.0+
+		$lafka_products_will_display = true;
+		if ( function_exists( 'woocommerce_products_will_display' ) ) {
+			$lafka_products_will_display = woocommerce_products_will_display();
+		} else {
+			$lafka_products_will_display = ( 'subcategories' !== $display_type || is_search() || is_paged() );
+		}
+		if ( lafka_get_option( 'show_refine_area' ) && $lafka_products_will_display ) {
 			echo '<div class="box-sort-filter' . ( is_active_sidebar( 'lafka_product_filters_sidebar' ) ? ' lafka-product-filters-has-widgets' : '' ) . '">';
 			echo '<div class="product-filter">';
 			if ( is_active_sidebar( 'lafka_product_filters_sidebar' ) ) {
@@ -392,6 +409,13 @@ if ( ! function_exists( 'lafka_get_filtered_price' ) ) {
 			}
 		}
 
+		// Cache the result per unique query within this request
+		$cache_key = 'lafka_price_' . md5( wp_json_encode( array( $tax_query, $meta_query, isset( $args['s'] ) ? $args['s'] : '' ) ) );
+		$cached    = wp_cache_get( $cache_key, 'lafka' );
+		if ( false !== $cached ) {
+			return $cached;
+		}
+
 		$meta_query = new WP_Meta_Query( $meta_query );
 		$tax_query  = new WP_Tax_Query( $tax_query );
 		$search     = WC_Query::get_main_search_query_sql();
@@ -413,7 +437,9 @@ if ( ! function_exists( 'lafka_get_filtered_price' ) ) {
 
 		$sql = apply_filters( 'woocommerce_price_filter_sql', $sql, $meta_query_sql, $tax_query_sql );
 
-		return $wpdb->get_row( $sql ); // WPCS: unprepared SQL ok.
+		$result = $wpdb->get_row( $sql ); // WPCS: unprepared SQL ok.
+		wp_cache_set( $cache_key, $result, 'lafka' );
+		return $result;
 	}
 }
 
@@ -519,7 +545,7 @@ if ( ! function_exists( 'lafka_get_product_sales_dates' ) ) {
 		$start_sales_date = 9999999999;
 		$end_sales_date   = 0;
 
-		$product = wc_get_product( $post );
+		$product = is_a( $post, 'WC_Product' ) ? $post : wc_get_product( $post );
 		if ( ! $product || ! $product->is_on_sale() ) {
 			return false;
 		}
@@ -527,6 +553,8 @@ if ( ! function_exists( 'lafka_get_product_sales_dates' ) ) {
 		$child_products = $product->get_children();
 // If is variation product
 		if ( count( $child_products ) ) {
+			// Prime the meta cache for all children in one query
+			update_meta_cache( 'post', $child_products );
 			foreach ( $child_products as $child_id ) {
 				$sale_price_dates_from = get_post_meta( $child_id, '_sale_price_dates_from', true );
 				$sale_price_dates_to   = get_post_meta( $child_id, '_sale_price_dates_to', true );
@@ -657,12 +685,13 @@ if ( ! function_exists( 'lafka_header_add_to_cart_fragment' ) ) {
 }
 
 /**
- * Override woocommerce_taxonomy_archive_description
- * Show an archive description on taxonomy archives
+ * Custom taxonomy archive description (replaces WooCommerce default).
  *
  * @return void
  */
-function woocommerce_taxonomy_archive_description() {
+remove_action( 'woocommerce_archive_description', 'woocommerce_taxonomy_archive_description', 10 );
+add_action( 'woocommerce_archive_description', 'lafka_taxonomy_archive_description', 10 );
+function lafka_taxonomy_archive_description() {
 	if ( is_tax( array( 'product_cat', 'product_tag' ) ) && get_query_var( 'paged' ) == 0 ) {
 		$description = wpautop( do_shortcode( term_description() ) );
 
@@ -682,12 +711,13 @@ function woocommerce_taxonomy_archive_description() {
 }
 
 /**
- * Override the woocommerce function
- * Show a shop page description on product archives
+ * Custom product archive description (replaces WooCommerce default).
  *
  * @subpackage    Archives
  */
-function woocommerce_product_archive_description() {
+remove_action( 'woocommerce_archive_description', 'woocommerce_product_archive_description', 10 );
+add_action( 'woocommerce_archive_description', 'lafka_product_archive_description', 10 );
+function lafka_product_archive_description() {
 	if ( is_post_type_archive( 'product' ) && get_query_var( 'paged' ) == 0 ) {
 		$shop_page = get_post( wc_get_page_id( 'shop' ) );
 		if ( $shop_page ) {
@@ -710,8 +740,6 @@ if ( defined( 'YITH_WOOCOMPARE' ) ) {
 	if ( ! function_exists( 'lafka_add_compare_link' ) ) {
 
 		function lafka_add_compare_link( $product_id = false, $args = array() ) {
-			extract( $args );
-
 			global $yith_woocompare;
 			$woocompareFrontEnd = $yith_woocompare->obj;
 
@@ -729,9 +757,12 @@ if ( defined( 'YITH_WOOCOMPARE' ) ) {
 				return;
 			}
 
-			$is_button = ! isset( $button_or_link ) || ! $button_or_link ? get_option( 'yith_woocompare_is_button' ) : $button_or_link;
+			$button_or_link = isset( $args['button_or_link'] ) ? $args['button_or_link'] : '';
+			$button_text    = isset( $args['button_text'] ) ? $args['button_text'] : '';
 
-			if ( ! isset( $button_text ) || $button_text == 'default' ) {
+			$is_button = ! $button_or_link ? get_option( 'yith_woocompare_is_button' ) : $button_or_link;
+
+			if ( ! $button_text || $button_text == 'default' ) {
 				$button_text = get_option( 'yith_woocompare_button_text', esc_html__( 'Compare', 'lafka' ) );
 				$button_text = function_exists( 'icl_translate' ) ? icl_translate( 'Plugins', 'plugin_yit_compare_button_text', $button_text ) : $button_text;
 			}
@@ -816,9 +847,14 @@ if ( ! function_exists( 'lafka_cart_link' ) ) {
 if ( ! function_exists( 'lafka_quickview' ) ) {
 
 	function lafka_quickview() {
+		check_ajax_referer( 'lafka_ajax_nonce', 'security' );
+
 		global $post, $product, $authordata;
-		$prod_id    = esc_attr( $_POST["productid"] );
+		$prod_id    = absint( $_POST["productid"] );
 		$post       = get_post( $prod_id );
+		if ( ! $post || 'publish' !== $post->post_status ) {
+			wp_die();
+		}
 		$product    = wc_get_product( $prod_id );
 		$authordata = get_userdata( $post->post_author );
 
@@ -850,6 +886,7 @@ add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_e
 if ( ! function_exists( 'lafka_wc_add_cart_ajax' ) ) {
 
 	function lafka_wc_add_cart_ajax() {
+		check_ajax_referer( 'lafka_ajax_nonce', 'security' );
 
 		$wc_notices = WC()->session->get( 'wc_notices' );
 		WC()->session->set( 'wc_notices', array() );
@@ -1070,16 +1107,28 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 
 		if ( lafka_is_product_eligible_for_variation_in_listings( $product ) ) {
 			/** @var WC_Product_Variable $lafka_variable_product */
-			$lafka_variable_product = wc_get_product( $product );
+			$lafka_variable_product = $product;
+
+			// Prime meta cache for all variation IDs to avoid N+1 queries
+			$child_ids = $lafka_variable_product->get_children();
+			if ( $child_ids ) {
+				update_meta_cache( 'post', $child_ids );
+			}
+
+			// Load addons once outside the loop (was previously inside = N queries for N variations)
+			$product_addons = array();
+			if ( class_exists( 'WC_Product_Addons_Helper' ) ) {
+				$product_addons = WC_Product_Addons_Helper::get_product_addons( $product->get_id() );
+			}
+
 			ob_start();
 			?>
 			<?php foreach ( $lafka_variable_product->get_available_variations() as $variation ): ?>
 				<?php if ( get_post_meta( $variation['variation_id'], '_lafka_variable_in_catalog', true ) ): ?>
 					<?php
 					$default_addon_option_pairs = array();
-					if ( class_exists( 'WC_Product_Addons_Helper' ) ) {
-						$product_addons = WC_Product_Addons_Helper::get_product_addons( $product->get_id() );
-						foreach ( $product_addons as $addon ) {
+					foreach ( $product_addons as $addon ) {
+						if ( isset( $addon['options'] ) ) {
 							foreach ( $addon['options'] as $option ) {
 								if ( $option['default'] ) {
 									$default_addon_option_pairs[] = array( 'addon' => $addon, 'option' => $option );
@@ -1164,18 +1213,29 @@ if ( ! function_exists( 'lafka_is_product_eligible_for_variation_in_listings' ) 
 	 * @return bool
 	 */
 	function lafka_is_product_eligible_for_variation_in_listings( $product ) {
+		static $cache = array();
+		$pid = $product->get_id();
+		if ( isset( $cache[ $pid ] ) ) {
+			return $cache[ $pid ];
+		}
 
+		$result = false;
 		if ( $product->get_type() === 'variable' ) {
-			/** @var WC_Product_Variable $lafka_variable_product */
-			$lafka_variable_product = wc_get_product( $product );
-			foreach ( $lafka_variable_product->get_available_variations() as $variation ) {
-				if ( get_post_meta( $variation['variation_id'], '_lafka_variable_in_catalog', true ) ) {
-					return true;
+			$children = $product->get_children();
+			if ( $children ) {
+				// Prime meta cache for all children in one query
+				update_meta_cache( 'post', $children );
+				foreach ( $children as $variation_id ) {
+					if ( get_post_meta( $variation_id, '_lafka_variable_in_catalog', true ) ) {
+						$result = true;
+						break;
+					}
 				}
 			}
 		}
 
-		return false;
+		$cache[ $pid ] = $result;
+		return $result;
 	}
 }
 
@@ -1191,7 +1251,7 @@ if ( ! function_exists( 'lafka_get_available_variation_ids' ) ) {
 
 		if ( $product->get_type() === 'variable' ) {
 			/** @var WC_Product_Variable $lafka_variable_product */
-			$variable_product = wc_get_product( $product );
+			$variable_product = $product;
 
 			$available_variations = array();
 
@@ -1199,12 +1259,13 @@ if ( ! function_exists( 'lafka_get_available_variation_ids' ) ) {
 			// And only if there are less than 6 variations (There is no place to show all that info and response becomes slow
 			$variations = $variable_product->get_children();
 			if ( count( $variations ) < 6 ) {
+				$hide_out_of_stock = 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' );
 				foreach ( $variations as $child_id ) {
 					/** @var WC_Product_Variation $variation */
 					$variation = wc_get_product( $child_id );
 
 					// Hide out of stock variations if 'Hide out of stock items from the catalog' is checked.
-					if ( ! $variation || ! $variation->exists() || ( 'yes' === get_option( 'woocommerce_hide_out_of_stock_items' ) && ! $variation->is_in_stock() ) ) {
+					if ( ! $variation || ! $variation->exists() || ( $hide_out_of_stock && ! $variation->is_in_stock() ) ) {
 						continue;
 					}
 
@@ -1242,6 +1303,7 @@ if ( ! function_exists( 'lafka_should_display_weight_in_additional_info' ) ) {
 add_action( 'wp_ajax_lafka_new_orders_notification', 'lafka_new_orders_notification' );
 if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 	function lafka_new_orders_notification() {
+		check_ajax_referer( 'lafka_ajax_nonce', 'security' );
 
 		if ( current_user_can( 'manage_woocommerce' ) ) {
 			$order_id_to_notify       = '';
@@ -1253,6 +1315,11 @@ if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 
 			// Clear the already notified orders which are not new any more
 			$notified_order_ids_array = array_intersect( $notified_order_ids_array, $order_ids_to_be_processed_array );
+
+			// Prime meta cache for all order IDs to avoid N+1 queries
+			if ( $order_ids_to_be_processed_array ) {
+				update_meta_cache( 'post', $order_ids_to_be_processed_array );
+			}
 
 			/** @var WC_Order $order */
 			foreach ( $order_ids_to_be_processed_array as $order_id ) {
@@ -1300,7 +1367,7 @@ if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 
 				$notified_order_ids_array[] = $order_id_to_notify;
 			}
-			update_option( 'lafka_last_processed_order_ids', json_encode( $notified_order_ids_array ) );
+			update_option( 'lafka_last_processed_order_ids', json_encode( $notified_order_ids_array ), false );
 			wp_send_json( $notification );
 		}
 		wp_die();
@@ -1388,9 +1455,9 @@ add_filter( 'lafka_links_before_add_to_cart', 'lafka_quantity_input_on_listing' 
 if ( ! function_exists( 'lafka_quantity_input_on_listing' ) ) {
 	function lafka_quantity_input_on_listing() {
 		if ( lafka_get_option( 'show_quantity_on_listing' ) && ! lafka_get_option( 'use_quickview' ) ) {
-			$product = wc_get_product( get_the_ID() );
-			if ( ! $product ) {
-				global $product;
+			global $product;
+			if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
+				$product = wc_get_product( get_the_ID() );
 			}
 
 			if ( ! empty( $product ) && $product->is_purchasable() && ! $product->is_sold_individually() && $product->is_in_stock() && 'variable' != $product->get_type() && 'bundle' != $product->get_type() && 'combo' != $product->get_type() ) {

@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 $lafka_custom_options = get_post_custom(get_the_ID());
 

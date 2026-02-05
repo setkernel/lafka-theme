@@ -1,5 +1,42 @@
 <?php
 defined( 'ABSPATH' ) || exit;
+
+/**
+ * Replacement for deprecated get_page_by_title() (deprecated since WP 6.2).
+ * Uses WP_Query to find a page by its title.
+ *
+ * @param string $title   Page title.
+ * @param string $output  Optional. The required return type. OBJECT, ARRAY_A, or ARRAY_N. Default OBJECT.
+ * @param string $post_type Optional. Post type. Default 'page'.
+ * @return WP_Post|array|null WP_Post on success, or null on failure.
+ */
+if ( ! function_exists( 'lafka_get_page_by_title' ) ) {
+	function lafka_get_page_by_title( $title, $output = OBJECT, $post_type = 'page' ) {
+		$query = new WP_Query( array(
+			'post_type'              => $post_type,
+			'title'                  => $title,
+			'post_status'            => 'all',
+			'posts_per_page'         => 1,
+			'no_found_rows'          => true,
+			'ignore_sticky_posts'    => true,
+			'update_post_term_cache' => false,
+			'update_post_meta_cache' => false,
+		) );
+
+		if ( ! empty( $query->post ) ) {
+			$page = $query->post;
+			if ( ARRAY_A === $output ) {
+				return get_object_vars( $page );
+			} elseif ( ARRAY_N === $output ) {
+				return array_values( get_object_vars( $page ) );
+			}
+			return $page;
+		}
+
+		return null;
+	}
+}
+
 /* Register Theme Features */
 
 /* Hook into the 'after_setup_theme' action */
@@ -55,19 +92,6 @@ if (!function_exists('lafka_register_theme_features')) {
 
 }
 
-// BC for title tag
-if (!function_exists('_wp_render_title_tag')) {
-	add_action('wp_head', 'lafka_render_title');
-	if (!function_exists('lafka_render_title')) {
-
-		function lafka_render_title() {
-			?>
-			<title><?php wp_title('|', true, 'right'); ?></title>
-			<?php
-		}
-
-	}
-}
 
 // Register top navigation menu
 register_nav_menu('primary', esc_html__('Main Menu', 'lafka'));
@@ -343,8 +367,8 @@ if (!function_exists('lafka_enqueue_admin_js')) {
 		wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker', array('jquery'));
 		// font-awesome
-		wp_enqueue_style('font_awesome_5_shims', get_template_directory_uri() . "/styles/font-awesome/css/v4-shims.min.css", array('fonticonpicker'), false, 'screen');
-		wp_enqueue_style('font_awesome_5', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array('font_awesome_5_shims'), false, 'screen');
+		wp_enqueue_style('font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array('fonticonpicker'), false, 'screen');
+		wp_enqueue_style('font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array('font_awesome_6_v5shims'), false, 'screen');
 		// et-line-font
 		wp_enqueue_style('et-line-font', get_template_directory_uri() . "/styles/et-line-font/style.css", false, false, 'screen');
 		// Flaticon
@@ -365,7 +389,10 @@ if (!function_exists('lafka_enqueue_admin_js')) {
 			'new_orders_push_notifications' => $new_orders_push_notifications,
 			'new_orders_push_notifications_allow_label' => esc_html__('Set Permission', 'lafka'),
 			'new_orders_push_notifications_cancel_label' => esc_html__('Close', 'lafka'),
-            'service_worker_path' => get_template_directory_uri() . "/js/sw.js"
+            'service_worker_path' => get_template_directory_uri() . "/js/sw.js",
+            'nonce' => wp_create_nonce( 'lafka_ajax_nonce' ),
+            'import_nonce' => wp_create_nonce( 'lafka_import_nonce' ),
+            'admin_url' => admin_url( 'admin-ajax.php' )
         ));
 
 
@@ -820,7 +847,7 @@ if (!function_exists('lafka_typography_enqueue_google_font')) {
 add_filter( 'style_loader_tag', 'lafka_style_loader_tag_filter', 10, 2 );
 if ( ! function_exists( 'lafka_style_loader_tag_filter' ) ) {
 	function lafka_style_loader_tag_filter( $html, $handle ) {
-		if ( in_array( $handle, array( 'lafka-fonts', 'font_awesome_5_shims', 'font_awesome_5', 'et-line-font', 'flaticon' ) ) ) {
+		if ( in_array( $handle, array( 'lafka-fonts', 'font_awesome_6_v5shims', 'font_awesome_6', 'et-line-font', 'flaticon' ) ) ) {
 			$link_stylesheet = str_replace( "rel='stylesheet'", "rel='stylesheet' onload=\"this.media='all'\"", $html );
 			$link_preload    = str_replace( "rel='stylesheet'", "rel='preload' as='style'", $html );
 			$link_preload    = str_replace( "media='print'", "", $link_preload );
@@ -865,8 +892,8 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 			wp_enqueue_style('lafka-responsive', get_template_directory_uri() . "/styles/lafka-responsive.css", array('lafka-style'));
 		}
 
-		wp_enqueue_style( 'font_awesome_5_shims', get_template_directory_uri() . "/styles/font-awesome/css/v4-shims.min.css", array(),false, 'print' );
-		wp_enqueue_style( 'font_awesome_5', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array( 'font_awesome_5_shims' ), false, 'print' );
+		wp_enqueue_style( 'font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array(),false, 'print' );
+		wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array( 'font_awesome_6_v5shims' ), false, 'print' );
 		wp_enqueue_style('et-line-font', get_template_directory_uri() . "/styles/et-line-font/style.css", array(),false, 'print');
 		// Flaticon
 		wp_enqueue_style('flaticon', get_template_directory_uri() . "/styles/flaticon/font/flaticon.css", false, false, 'print');
@@ -874,8 +901,8 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 		wp_enqueue_style('tiza', get_template_directory_uri() . "/styles/fonts/tiza.woff",array(),null);
 		wp_enqueue_style('feather', get_template_directory_uri() . "/styles/fonts/feather.woff",array(), null);
 
-		// Modernizr
-		wp_enqueue_script('modernizr', get_template_directory_uri() . "/js/modernizr.custom.js", array('jquery'));
+		// Modernizr — minimal touch-detection build (no dependencies)
+		wp_enqueue_script('modernizr', get_template_directory_uri() . "/js/modernizr.custom.js", array(), '3.0.0', true);
 
 		// nicescroll
 		wp_enqueue_script('nicescroll', get_template_directory_uri() . "/js/jquery.nicescroll/jquery.nicescroll.min.js", array('jquery'), '3.7.6', true);
@@ -936,6 +963,7 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 		wp_localize_script('lafka-front', 'lafka_main_js_params', array(
 				'img_path' => esc_js(LAFKA_IMAGES_PATH),
 				'admin_url' => esc_js(admin_url('admin-ajax.php')),
+				'nonce' => wp_create_nonce( 'lafka_ajax_nonce' ),
 				'product_label' =>  esc_js(__('Product', 'lafka')),
 				'added_to_cart_label' => esc_js(__('was added to the cart', 'lafka')),
 				'show_preloader' => esc_js(lafka_get_option('show_preloader')),
@@ -959,8 +987,8 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 		wp_enqueue_script('imagesloaded', '',array('jquery'), false, true);
 
 		// flexslider
-		wp_enqueue_script('flexslider', get_template_directory_uri() . "/js/flex/jquery.flexslider-min.js", array('jquery'), '2.2.2', true);
-		wp_enqueue_style('flexslider', get_template_directory_uri() . "/styles/flex/flexslider.css", array(), '2.2.2');
+		wp_enqueue_script('flexslider', get_template_directory_uri() . "/js/flex/jquery.flexslider-min.js", array('jquery'), '2.7.2', true);
+		wp_enqueue_style('flexslider', get_template_directory_uri() . "/styles/flex/flexslider.css", array(), '2.7.2');
 
 		// owl-carousel
 		wp_enqueue_script('owl-carousel', get_template_directory_uri() . "/js/owl-carousel2-dist/owl.carousel.min.js", array('jquery'), '2.3.4', true);
@@ -968,22 +996,33 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 		wp_enqueue_style('owl-carousel-theme-default', get_template_directory_uri() . "/styles/owl-carousel2-dist/assets/owl.theme.default.min.css", array(), '2.3.4');
 		wp_enqueue_style('owl-carousel-animate', get_template_directory_uri() . "/styles/owl-carousel2-dist/assets/animate.css", array(), '2.3.4');
 
-		// cloud-zoom
-		wp_enqueue_script('cloud-zoom', get_template_directory_uri() . "/js/cloud-zoom/cloud-zoom.1.0.2.min.js", array('jquery'), '1.0.2', true);
-		wp_enqueue_style('cloud-zoom', get_template_directory_uri() . "/styles/cloud-zoom/cloud-zoom.css", array(), '1.0.2');
+		// cloud-zoom — only on single product pages
+		wp_register_script('cloud-zoom', get_template_directory_uri() . "/js/cloud-zoom/cloud-zoom.1.0.2.min.js", array('jquery'), '1.0.2', true);
+		wp_register_style('cloud-zoom', get_template_directory_uri() . "/styles/cloud-zoom/cloud-zoom.css", array(), '1.0.2');
+		if ( function_exists('is_product') && is_product() ) {
+			wp_enqueue_script('cloud-zoom');
+			wp_enqueue_style('cloud-zoom');
+		}
 
-		// countdown
-		wp_enqueue_script('countdown', get_template_directory_uri() . "/js/count/jquery.countdown.min.js", array('jquery'), '2.0.0', true);
+		// countdown — only on single product pages when enabled
+		wp_register_script('countdown', get_template_directory_uri() . "/js/count/jquery.countdown.min.js", array('jquery'), '2.1.0', true);
+		if ( function_exists('is_product') && is_product() ) {
+			wp_enqueue_script('countdown');
+		}
 
-        // magnific
-		wp_enqueue_script('magnific', get_template_directory_uri() . "/js/magnific/jquery.magnific-popup.min.js", array('jquery'), '1.0.0', true);
-		wp_enqueue_style('magnific', get_template_directory_uri() . "/styles/magnific/magnific-popup.css", array(), '1.0.2');
+        // magnific — register globally, enqueue on product pages and pages with galleries
+		wp_register_script('magnific', get_template_directory_uri() . "/js/magnific/jquery.magnific-popup.min.js", array('jquery'), '1.1.0', true);
+		wp_register_style('magnific', get_template_directory_uri() . "/styles/magnific/magnific-popup.css", array(), '1.1.0');
+		if ( function_exists('is_product') && is_product() || is_singular() ) {
+			wp_enqueue_script('magnific');
+			wp_enqueue_style('magnific');
+		}
 
 		// appear
 		wp_enqueue_script('appear', get_template_directory_uri() . "/js/jquery.appear.min.js", array('jquery'), '1.0.0', true);
 
-		// appear
-		wp_enqueue_script('typed', get_template_directory_uri() . "/js/typed.min.js", array('jquery'), '1.0.0', true);
+		// typed.js v2 — standalone, no jQuery dependency
+		wp_enqueue_script('typed', get_template_directory_uri() . "/js/typed.min.js", array(), '2.0.16', true);
 
 		// nice-select
 		wp_enqueue_script('nice-select', get_template_directory_uri() . "/js/jquery.nice-select.min.js", array('jquery'), '1.0.0', true);
@@ -999,7 +1038,8 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 		}
 
 		// enqueue google map api
-		wp_register_script('lafka-google-maps', 'https://maps.googleapis.com/maps/api/js?'.( lafka_get_option('google_maps_api_key') ? 'key='.lafka_get_option('google_maps_api_key').'&' : '' ).'sensor=false&callback=Function.prototype', array('jquery'), false, true);
+		$lafka_maps_api_key = lafka_get_option('google_maps_api_key');
+		wp_register_script('lafka-google-maps', 'https://maps.googleapis.com/maps/api/js?'.( $lafka_maps_api_key ? 'key=' . $lafka_maps_api_key . '&' : '' ).'sensor=false&callback=Function.prototype', array('jquery'), false, true);
 
 		$lafka_local = lafka_wp_lang_to_valid_language_code(get_locale());
 		if ($lafka_local) {
@@ -1020,20 +1060,25 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 			wp_enqueue_script('comment-reply');
 		}
 
-		/* Include js configs */
-		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . "/js/lafka-libs-config" . $suffix . ".js", array(
+		/* Include js configs — conditionally loaded scripts removed from hard deps */
+		$lafka_libs_deps = array(
 			'jquery',
 			'wp-util',
 			'flexslider',
 			'owl-carousel',
-			'cloud-zoom',
-			'countdown',
-			'magnific',
 			'appear',
 			'typed',
 			'nice-select',
 			'is-in-viewport'
-		), false, true );
+		);
+		if ( function_exists('is_product') && is_product() ) {
+			$lafka_libs_deps[] = 'cloud-zoom';
+			$lafka_libs_deps[] = 'countdown';
+		}
+		if ( function_exists('is_product') && is_product() || is_singular() ) {
+			$lafka_libs_deps[] = 'magnific';
+		}
+		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . "/js/lafka-libs-config" . $suffix . ".js", $lafka_libs_deps, false, true );
 
 		// send is_rtl to js for owl carousel
 		wp_localize_script( 'lafka-libs-config', 'lafka_rtl',
@@ -1045,6 +1090,7 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 			wp_localize_script( 'lafka-libs-config', 'lafka_quickview',
 				array(
 					'lafka_ajax_url' => esc_js( admin_url( 'admin-ajax.php' ) ),
+					'nonce' => wp_create_nonce( 'lafka_ajax_nonce' ),
 					'wc_ajax_url'                      => WC_AJAX::get_endpoint( "%%endpoint%%" ),
 					'i18n_no_matching_variations_text' => esc_attr__( 'Sorry, no products matched your selection. Please choose a different combination.', 'lafka' ),
 					'i18n_make_a_selection_text'       => esc_attr__( 'Please select some product options before adding this product to your cart.', 'lafka' ),
@@ -1096,11 +1142,32 @@ if ( ! function_exists( 'lafka_deregister_plugins_awesome_stylesheet' ) ) {
 		if ( class_exists( 'Vc_Manager' ) ) {
 			wp_deregister_style( 'vc_font_awesome_5_shims' );
 			wp_deregister_style( 'vc_font_awesome_5' );
+			wp_deregister_style( 'vc_font_awesome_6' );
 		}
 		if ( function_exists( 'yith_wishlist_install' ) ) {
 			wp_dequeue_style( 'yith-wcwl-font-awesome' );
 			wp_dequeue_style( 'yith-wcwl-main' );
 		}
+	}
+}
+
+// Add defer to non-critical scripts for faster initial render
+add_filter( 'script_loader_tag', 'lafka_defer_non_critical_scripts', 10, 3 );
+if ( ! function_exists( 'lafka_defer_non_critical_scripts' ) ) {
+	function lafka_defer_non_critical_scripts( $tag, $handle, $src ) {
+		// Don't defer in admin or for critical scripts
+		if ( is_admin() ) {
+			return $tag;
+		}
+		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore' );
+		if ( in_array( $handle, $no_defer, true ) ) {
+			return $tag;
+		}
+		// Skip if already has defer or async
+		if ( strpos( $tag, ' defer' ) !== false || strpos( $tag, ' async' ) !== false ) {
+			return $tag;
+		}
+		return str_replace( ' src=', ' defer src=', $tag );
 	}
 }
 
@@ -1177,32 +1244,25 @@ if (!function_exists('lafka_get_option')) {
 	 */
 	function lafka_get_option($name, $default = false) {
 
-		$option_name = 'lafka';
-
-		// In case the option is in url return that value
-		if ( array_key_exists( $name, $_GET ) ) {
-			return esc_attr( $_GET[ $name ] );
-		}
-
-        // else get it from stored options
-		if (get_option($option_name)) {
-			$options = get_option($option_name);
+		static $options = null;
+		if ( null === $options ) {
+			$options = get_option('lafka');
 		}
 
 		if (isset($options) && isset($options[$name])) {
 			return $options[$name];
-		} else {
-			if($default) {
-				return $default;
-			}
-
-			$all_options_def = lafka_get_default_values();
-			if (is_array($all_options_def) && isset($all_options_def[$name])) {
-				return $all_options_def[$name];
-			} else {
-				return false;
-			}
 		}
+
+		if ($default) {
+			return $default;
+		}
+
+		static $all_defaults = null;
+		if ( null === $all_defaults ) {
+			$all_defaults = lafka_get_default_values();
+		}
+
+		return isset($all_defaults[$name]) ? $all_defaults[$name] : false;
 	}
 
 }

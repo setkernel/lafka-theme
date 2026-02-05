@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 // Off Canvas Sidebar template
 $lafka_sidebar_choice = apply_filters('lafka_has_offcanvas_sidebar', '');

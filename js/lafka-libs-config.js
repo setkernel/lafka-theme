@@ -176,7 +176,7 @@
 
 				$(this).closest('div.prod_hold').addClass('loading');
 				var product_id = $(this).attr('data-id');
-				var data = {action: 'lafka_quickview', productid: product_id};
+				var data = {action: 'lafka_quickview', productid: product_id, security: lafka_quickview.nonce};
 
 				$.post(
 								lafka_quickview.lafka_ajax_url, data, function (response) {
@@ -293,7 +293,7 @@
 											loading = $('<div class="ajax_loading"><span class="ajax_loading_inner"></span></div>'),
 											action = form.attr('action'),
 											values = form.serialize();
-							values += '&action=lafka_ajax_search';
+							values += '&action=lafka_ajax_search&security=' + encodeURIComponent(lafka_main_js_params.nonce);
 							//check if the form got get parameters applied and also apply them
 							if (action.indexOf('?') != -1)
 							{

@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 //  The default template for displaying content. Used for both single/archive/search/shortcode.
 

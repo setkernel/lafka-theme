@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 /**
  * Insert the customized css from selected options on wp_head hook + the custom css
@@ -438,7 +439,7 @@ if (!function_exists('lafka_add_custom_css')) {
                 <?php endif; ?>
                 font-size: <?php echo esc_attr($body_font['size']) ?>;
                 color: <?php echo esc_attr($body_font['color']) ?>;
-                font-display:fallback;
+                font-display:swap;
             }
 
             #header #logo .lafka-logo-subtitle, #header2 #logo .lafka-logo-subtitle {
@@ -524,12 +525,12 @@ if (!function_exists('lafka_add_custom_css')) {
             <?php if(!empty($headings_font['face'])): ?>
                 h1, h2, h3, h4, h5, h6, .foodmenu_top .project-data .project-details .lafka-foodmenu-main-price, p.wp-block-cover-text, .lafka-product-summary-wrapper div.lafka-share-links span, #comments .nav-next a, #comments .nav-previous a, #tab-reviews #reply-title, .woocommerce-form-coupon-toggle .woocommerce-info, .woocommerce-form-login-toggle .woocommerce-info, .r_more_blog, p.woocommerce-thankyou-order-received, nav.woocommerce-MyAccount-navigation ul li a, #lafka-account-holder.lafka-user-is-logged .lafka-header-account-link-holder > ul li a, .lafka-header-user-data small, a.lafka-post-nav .entry-info span.entry-title, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .lafka-product-popup-link > a, .vendor_description .vendor_img_add .vendor_address p.wcmp_vendor_name, .tribe-events-event-cost, .tribe-events-schedule .tribe-events-cost, .lafka-page-load-status, .widget_layered_nav_filters li a, section.woocommerce-order-details, ul.woocommerce-error, table.woocommerce-checkout-review-order-table, body.woocommerce-cart .cart-collaterals, .cart-info table.shop_table.cart, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li, .countdown_time_tiny, blockquote, q, #lafka_footer_menu > li a, .lafka-pagination-numbers .owl-dot:before, .lafka-wcs-swatches .swatch.swatch-label, .foodmenu-unit-info small, .widget .post-date, div.widget_nav_menu ul li a, .comment-body span, .comment-reply-link, span.edit-link a, #reviews .commentlist li .meta, div.widget_categories ul li a, div.widget_archive ul li a, div.widget_recent_entries ul li a, div.widget_recent_comments ul li a, .woocommerce p.cart-empty, div.woocommerce-MyAccount-content .myaccount_user, label, .lafka-pricing-table-content, p.product.woocommerce.add_to_cart_inline, .product-filter .limit b, .product-filter .sort b, .product-filter .price_label, .contact-form .content span, .tribe-countdown-text, .lafka-event-countdown .is-countdown, .lafka-foodmenu-categories ul li a, div.prod_hold .name, #header #logo .lafka-logo-title, #header2 #logo .lafka-logo-title, .lafka-counter-h1, .lafka-typed-h1, .lafka-typed-h2, .lafka-typed-h3, .lafka-typed-h4, .lafka-typed-h5, .lafka-typed-h6, .lafka-counter-h2, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .lafka-counter-h3, .error404 div.blog-post-excerpt:before, #yith-wcwl-popup-message #yith-wcwl-message, div.added-product-text strong, .vc_pie_chart .vc_pie_chart_value, .countdown-amount, .lafka-product-slide-price, .lafka-counter-h4, .lafka-counter-h5, .lafka-search-cart-holder #search input[type="text"], .lafka-counter-h6, .vc_tta-tabs:not(.vc_tta-style-modern) .vc_tta-tab, div.product .price span, a.bbp-forum-title, p.logged-in-as, .lafka-pricing-table-price, li.bbp-forum-info, li.bbp-topic-title .bbp-topic-permalink, .breadcrumb, .offer_title, ul.tabs a, .wpb_tabs .wpb_tabs_nav li a, .wpb_tour .wpb_tabs_nav a, .wpb_accordion .wpb_accordion_wrapper .wpb_accordion_header a, .post-date .num, .lafka-products-list-view div.prod_hold .name, .lafka_shortcode_count_holder .countdown-amount, .blog-post-meta a, .widget_shopping_cart_content p.total, .foodmenu_top .project-data .project-details .simple-list-underlined li, .foodmenu_top .project-data .main-features .checklist li, .summary.entry-summary .yith-wcwl-add-to-wishlist a {
                     font-family: "<?php echo esc_attr($headings_font['face']) ?>";
-                    font-display:fallback;
+                    font-display:swap;
                 }
 
                 .u-column1 h2, .u-column2 h3, .lafka_title_holder h1.heading-title {
                     font-family: "<?php echo esc_attr($headings_font['face']) ?>" !important;
-                    font-display:fallback;
+                    font-display:swap;
                 }
 
                 <?php $use_google_face_for = lafka_get_option('use_google_face_for'); ?>
@@ -537,7 +538,7 @@ if (!function_exists('lafka_add_custom_css')) {
                 <?php if ($use_google_face_for['main_menu']): ?>
                 #main-menu ul.menu li a, ul#mobile-menu.menu li a, #main-menu li div.lafka-mega-menu > ul.sub-menu > li.lafka_colum_title > a, ul.lafka-top-menu > li a {
                     font-family: "<?php echo esc_attr($headings_font['face']) ?>";
-                    font-display:fallback;
+                    font-display:swap;
                 }
 
                 <?php endif; ?>
@@ -545,7 +546,7 @@ if (!function_exists('lafka_add_custom_css')) {
                 <?php if ($use_google_face_for['buttons']): ?>
                 a.button, input.button, .lafka-filter-widgets-triger, .lafka-reset-filters, .wcv-navigation ul.menu.horizontal li a, .wcv-pro-dashboard input[type="submit"], button.button, input[type="submit"], a.button-inline, .lafka_banner_buton, #submit_btn, #submit, .wpcf7-submit, .col2-set.addresses header a.edit, div.product input.qty, .lafka-pricing-table-button a, .vc_btn3 {
                     font-family: "<?php echo esc_attr($headings_font['face']) ?>";
-                    font-display:fallback;
+                    font-display:swap;
                 }
 
                 <?php endif; ?>

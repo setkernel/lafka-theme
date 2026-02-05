@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <!-- FOOTER -->
 <?php
 global $lafka_is_blank;
@@ -53,19 +54,19 @@ global $lafka_is_blank;
             </div>
 		<?php endif; ?>
 		<?php
-		$lafka_meta_options = array();
-		if (is_single() || is_page()) {
-			$lafka_meta_options = get_post_custom(get_queried_object_id());
-		}
-
 		$lafka_show_sidebar = 'yes';
-		if (isset($lafka_meta_options['lafka_show_footer_sidebar']) && trim($lafka_meta_options['lafka_show_footer_sidebar'][0]) != '') {
-			$lafka_show_sidebar = $lafka_meta_options['lafka_show_footer_sidebar'][0];
-		}
-
 		$lafka_footer_sidebar_choice = lafka_get_option('footer_sidebar');
-		if (isset($lafka_meta_options['lafka_custom_footer_sidebar']) && $lafka_meta_options['lafka_custom_footer_sidebar'][0] !== 'default') {
-			$lafka_footer_sidebar_choice = $lafka_meta_options['lafka_custom_footer_sidebar'][0];
+
+		if (is_single() || is_page()) {
+			$_qid = get_queried_object_id();
+			$_show = get_post_meta( $_qid, 'lafka_show_footer_sidebar', true );
+			if ( $_show !== '' ) {
+				$lafka_show_sidebar = $_show;
+			}
+			$_custom = get_post_meta( $_qid, 'lafka_custom_footer_sidebar', true );
+			if ( $_custom && $_custom !== 'default' ) {
+				$lafka_footer_sidebar_choice = $_custom;
+			}
 		}
 
 		if ( $lafka_show_sidebar === 'no' ) {
@@ -144,10 +145,17 @@ $lafka_to_include_backgr_video = lafka_has_to_include_backgr_video($lafka_is_com
     </div>
 	<?php if (!$lafka_video_bckgr_mute): ?>
         <div class="video_controlls">
-            <a id="video-volume" href="#" onclick="<?php echo esc_js('jQuery("#bgndVideo").YTPToggleVolume()') ?>"><i class="fa fa-volume-up"></i></a>
-            <a id="video-play" href="#" onclick="<?php echo esc_js('jQuery("#bgndVideo").YTPPlay()') ?>"><i class="fa fa-play"></i></a>
-            <a id="video-pause" href="#" onclick="<?php echo esc_js('jQuery("#bgndVideo").YTPPause()') ?>"><i class="fa fa-pause"></i></a>
+            <a id="video-volume" href="#"><i class="fa fa-volume-up"></i></a>
+            <a id="video-play" href="#"><i class="fa fa-play"></i></a>
+            <a id="video-pause" href="#"><i class="fa fa-pause"></i></a>
         </div>
+        <script>
+        jQuery(function($){
+            $('#video-volume').on('click',function(e){e.preventDefault();$('#bgndVideo').YTPToggleVolume();});
+            $('#video-play').on('click',function(e){e.preventDefault();$('#bgndVideo').YTPPlay();});
+            $('#video-pause').on('click',function(e){e.preventDefault();$('#bgndVideo').YTPPause();});
+        });
+        </script>
 	<?php endif; ?>
 <?php endif; ?>
 <?php wp_footer(); ?>

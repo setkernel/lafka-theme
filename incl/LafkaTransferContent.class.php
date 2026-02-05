@@ -448,7 +448,7 @@ if (!class_exists('Lafka_Transfer_Content')) {
 				if(!is_null($my_account_page )) {
 					wp_delete_post($my_account_page->ID, true);
 				}
-				$shop_page = get_page_by_title('Order Online');
+				$shop_page = lafka_get_page_by_title('Order Online');
 				if(is_a($shop_page, 'WP_Post')) {
 					wc_create_page( esc_sql( $shop_page->post_name ), 'woocommerce_shop_page_id', $shop_page->post_title, '', '' );
 				}
@@ -508,7 +508,7 @@ if (!class_exists('Lafka_Transfer_Content')) {
 				}
 
 				/** @var WP_Post $wishlist_page */
-				$wishlist_page = get_page_by_title( $wishlist_page_title );
+				$wishlist_page = lafka_get_page_by_title( $wishlist_page_title );
 
 				if($wishlist_page instanceof WP_Post) {
 					update_option( 'yith-wcwl-page-id', $wishlist_page->ID );
@@ -659,10 +659,10 @@ if (!class_exists('Lafka_Transfer_Content')) {
 				$front_page = get_page_by_path( 'Home' );
 			}
 
-			if(get_page_by_title('Blog')) {
-				$blog_page = get_page_by_title( 'Blog' );
+			if(lafka_get_page_by_title('Blog')) {
+				$blog_page = lafka_get_page_by_title( 'Blog' );
 			} else {
-				$blog_page = get_page_by_title( 'News' );
+				$blog_page = lafka_get_page_by_title( 'News' );
 			}
 
 			if ($front_page) {

@@ -1,3 +1,4 @@
+<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 
 /**
@@ -2076,12 +2077,6 @@ function lafka_optionsframework_options() {
 	$options[] = array(
 			'name' => esc_html_x('LinkedIn Profile URL', 'theme-options', 'lafka'),
 			'id' => 'linkedin_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('StumbleUpon Profile URL', 'theme-options', 'lafka'),
-			'id' => 'stumbleupon_profile',
 			'std' => '',
 			'type' => 'text'
 	);

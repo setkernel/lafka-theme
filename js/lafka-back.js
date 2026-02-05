@@ -93,7 +93,8 @@
 						$.ajax({
 							type: 'POST',
 							data: {
-								action: 'lafka_new_orders_notification'
+								action: 'lafka_new_orders_notification',
+								security: lafka_back_js_params.nonce
 							},
 							url: ajaxurl,
 							success: function (response) {
