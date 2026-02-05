@@ -6819,7 +6819,7 @@ div.product div.images ol.flex-control-nav li a img {
     display: block;
 }
 
-figure.woocommerce-product-gallery__wrapper {
+.woocommerce-product-gallery__wrapper {
     margin: 0 !important;
     float: left;
     width: 100%;
@@ -7980,7 +7980,7 @@ div.prod_hold.lafka-prodhover-swap:hover .image img:nth-of-type(2) {
 
 .lafka-product-slider .owl-nav,
 .lafka_image_list .owl-nav,
-figure.woocommerce-product-gallery__wrapper .owl-nav,
+.woocommerce-product-gallery__wrapper .owl-nav,
 .lafka_content_slider .owl-nav,
 .woocommerce.owl-carousel .owl-nav,
 .related.products .owl-nav,
@@ -7996,8 +7996,8 @@ figure.woocommerce-product-gallery__wrapper .owl-nav,
 .lafka-product-slider .owl-nav .owl-prev,
 .lafka_image_list .owl-nav .owl-prev,
 .lafka_image_list .owl-nav .owl-next,
-figure.woocommerce-product-gallery__wrapper .owl-nav .owl-prev,
-figure.woocommerce-product-gallery__wrapper .owl-nav .owl-next,
+.woocommerce-product-gallery__wrapper .owl-nav .owl-prev,
+.woocommerce-product-gallery__wrapper .owl-nav .owl-next,
 .lafka_content_slider .owl-nav .owl-next,
 .lafka_content_slider .owl-nav .owl-prev,
 .woocommerce.owl-carousel .owl-nav .owl-next,
@@ -8084,7 +8084,7 @@ html.touch .similar_projects .owl-nav .owl-next {
 
 .lafka-product-slider.owl-carousel .owl-nav .owl-prev,
 .lafka_image_list .owl-nav .owl-prev,
-figure.woocommerce-product-gallery__wrapper .owl-nav .owl-prev,
+.woocommerce-product-gallery__wrapper .owl-nav .owl-prev,
 .lafka_content_slider .owl-nav .owl-prev,
 .woocommerce.owl-carousel .owl-nav .owl-prev,
 .related.products .owl-nav .owl-prev,
@@ -8098,7 +8098,7 @@ figure.woocommerce-product-gallery__wrapper .owl-nav .owl-prev,
 .lafka_content_slider .owl-nav .owl-next,
 .lafka_image_list .owl-nav .owl-next,
 .lafka-product-slider.owl-carousel .owl-nav .owl-next,
-figure.woocommerce-product-gallery__wrapper .owl-nav .owl-next,
+.woocommerce-product-gallery__wrapper .owl-nav .owl-next,
 .woocommerce.owl-carousel .owl-nav .owl-next,
 .related.products .owl-nav .owl-next,
 .similar_projects .owl-nav .owl-next,
@@ -8117,7 +8117,7 @@ figure.woocommerce-product-gallery__wrapper .owl-nav .owl-next,
 
 .lafka-product-slider:hover .owl-nav .owl-prev,
 .lafka_image_list:hover .owl-nav .owl-prev,
-figure.woocommerce-product-gallery__wrapper:hover .owl-nav .owl-prev,
+.woocommerce-product-gallery__wrapper:hover .owl-nav .owl-prev,
 .woocommerce.owl-carousel:hover .owl-nav .owl-prev,
 .related.products .owl-carousel:hover .owl-nav .owl-prev,
 .similar_projects .owl-carousel:hover .owl-nav .owl-prev,
@@ -8129,7 +8129,7 @@ figure.woocommerce-product-gallery__wrapper:hover .owl-nav .owl-prev,
 
 .lafka_image_list:hover .owl-nav .owl-next,
 .lafka-product-slider:hover .owl-nav .owl-next,
-figure.woocommerce-product-gallery__wrapper:hover .owl-nav .owl-next,
+.woocommerce-product-gallery__wrapper:hover .owl-nav .owl-next,
 .woocommerce.owl-carousel:hover .owl-nav .owl-next,
 .related.products .owl-carousel:hover .owl-nav .owl-next,
 .similar_projects .owl-carousel:hover .owl-nav .owl-next,

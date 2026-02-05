@@ -10,40 +10,33 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	    https://docs.woocommerce.com/document/template-structure/
- * @author 		WooThemes
- * @package 	WooCommerce\Templates
- * @version     3.0.0
+ * @see         https://woocommerce.com/document/template-structure/
+ * @package     WooCommerce\Templates
+ * @version     9.7.0
  */
+
+use Automattic\WooCommerce\Enums\ProductType;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 /** @var WC_Product $product */
-global $post, $product;
+global $product;
 ?>
 <div class="tagcloud product_meta">
     <?php do_action( 'woocommerce_product_meta_start' ); ?>
     <?php
         $categories = wc_get_product_category_list( $product->get_id() );
-        $size_categories = 0;
-        $arr_categories = get_the_terms( $post->ID, 'product_cat' );
-        if(is_array($arr_categories)) {
-            $size_categories = count($arr_categories);
-        }
+        $size_categories = count( $product->get_category_ids() );
 
         $tags = wc_get_product_tag_list( $product->get_id());
-        $size_tags = 0;
-        $arr_tags = get_the_terms( $post->ID, 'product_tag' );
-        if(is_array($arr_tags)) {
-            $size_tags = count($arr_tags);
-        }
+        $size_tags = count( $product->get_tag_ids() );
 
         if($categories) echo '<span class="posted_in">'._n('Category:', 'Categories:', $size_categories, 'lafka').'</span>'.$categories;
 
         if($tags) echo '<span class="tagged_as">'._n('Tag:', 'Tags:', $size_tags, 'lafka').'</span>'.$tags;
     ?>
-	<?php if ( wc_product_sku_enabled() && ( $product->get_sku() || $product->is_type( 'variable' ) ) ) : ?>
+	<?php if ( wc_product_sku_enabled() && ( $product->get_sku() || $product->is_type( ProductType::VARIABLE ) ) ) : ?>
 
 		<span class="sku_wrapper">
             <?php esc_html_e( 'SKU:', 'lafka' ); ?> <span class="sku"><?php if( $sku = $product->get_sku() ) echo esc_html($sku); else esc_html_e( 'N/A', 'lafka' ); ?></span>

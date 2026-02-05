@@ -10,14 +10,16 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	    https://docs.woocommerce.com/document/template-structure/
- * @package 	WooCommerce\Templates
- * @version     3.6.0
+ * @see         https://woocommerce.com/document/template-structure/
+ * @package     WooCommerce\Templates
+ * @version     9.7.0
  */
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
+
+$id_suffix = wp_unique_id();
 
 $per_page_requets = '';
 if (array_key_exists('per_page', $_GET))
@@ -52,13 +54,26 @@ if (array_key_exists('per_page', $_GET))
             </div>
 		<?php endif; ?>
 	<?php endif; ?>
-    <div class="sort"><b><?php esc_html_e('Sort By', 'lafka') ?>:</b>
-        <select name="orderby" class="orderby" aria-label="<?php esc_attr_e( 'Shop order', 'lafka' ); ?>">
+    <div class="sort">
+        <?php if ( ! empty( $use_label ) ) : ?>
+            <label for="woocommerce-orderby-<?php echo esc_attr( $id_suffix ); ?>"><?php esc_html_e( 'Sort By', 'lafka' ); ?></label>
+        <?php else : ?>
+            <b><?php esc_html_e('Sort By', 'lafka') ?>:</b>
+        <?php endif; ?>
+        <select
+            name="orderby"
+            class="orderby"
+            <?php if ( ! empty( $use_label ) ) : ?>
+                id="woocommerce-orderby-<?php echo esc_attr( $id_suffix ); ?>"
+            <?php else : ?>
+                aria-label="<?php esc_attr_e( 'Shop order', 'lafka' ); ?>"
+            <?php endif; ?>
+        >
             <?php foreach ( $catalog_orderby_options as $id => $name ) : ?>
                 <option value="<?php echo esc_attr( $id ); ?>" <?php selected( $orderby, $id ); ?>><?php echo esc_html( $name ); ?></option>
             <?php endforeach; ?>
         </select>
         <input type="hidden" name="paged" value="1" />
     </div>
-	<?php wc_query_string_form_fields( null, array( 'orderby', 'submit', 'per_page', 'product-page' ) ); ?>
+	<?php wc_query_string_form_fields( null, array( 'orderby', 'submit', 'paged', 'per_page', 'product-page' ) ); ?>
 </form>

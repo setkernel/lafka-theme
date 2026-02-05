@@ -10,10 +10,12 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
+ * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 9.0.0
+ * @version 10.5.0
  */
+
+use Automattic\WooCommerce\Enums\ProductType;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -25,12 +27,15 @@ if ( ! function_exists( 'wc_get_gallery_image_html' ) ) {
 global $product;
 $columns           = apply_filters( 'woocommerce_product_thumbnails_columns', 4 );
 $post_thumbnail_id = $product->get_image_id();
-$wrapper_classes   = apply_filters( 'woocommerce_single_product_image_gallery_classes', array(
-	'woocommerce-product-gallery',
+$wrapper_classes   = apply_filters(
+	'woocommerce_single_product_image_gallery_classes',
+	array(
+		'woocommerce-product-gallery',
 		'woocommerce-product-gallery--' . ( $post_thumbnail_id ? 'with-images' : 'without-images' ),
-	'woocommerce-product-gallery--columns-' . absint( $columns ),
-	'images',
-) );
+		'woocommerce-product-gallery--columns-' . absint( $columns ),
+		'images',
+	)
+);
 
 $lafka_product_video_url = get_post_meta($product->get_id(), 'lafka_product_video_url', true);
 
@@ -41,12 +46,12 @@ $lafka_product_video_url = get_post_meta($product->get_id(), 'lafka_product_vide
         <a title="<?php esc_attr_e('Play the video', 'lafka')?>" class="lafka_product_video_trigger" href="<?php echo esc_url($lafka_product_video_url) ?>" ><span class="fa fa-play-circle"></span><?php esc_html_e('Play the video', 'lafka')?></a>
 	<?php endif; ?>
 
-	<figure class="woocommerce-product-gallery__wrapper">
+	<div class="woocommerce-product-gallery__wrapper">
 		<?php
 		if ( $post_thumbnail_id ) {
 			$html  = wc_get_gallery_image_html( $post_thumbnail_id, true );
 		} else {
-			$wrapper_classname = $product->is_type( 'variable' ) && ! empty( $product->get_available_variations( 'image' ) ) ?
+			$wrapper_classname = $product->is_type( ProductType::VARIABLE ) && ! empty( $product->get_visible_children() ) && '' !== $product->get_price() ?
 				'woocommerce-product-gallery__image woocommerce-product-gallery__image--placeholder' :
 				'woocommerce-product-gallery__image--placeholder';
 			$html              = sprintf( '<div class="%s">', esc_attr( $wrapper_classname ) );
@@ -58,5 +63,5 @@ $lafka_product_video_url = get_post_meta($product->get_id(), 'lafka_product_vide
 
 		do_action( 'woocommerce_product_thumbnails' );
 		?>
-	</figure>
+	</div>
 </div>
