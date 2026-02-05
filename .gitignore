@@ -1,0 +1,26 @@
+# Commercial plugins (must be purchased separately)
+plugins/*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Node (if build tooling is added later)
+node_modules/
+package-lock.json
+
+# WordPress
+wp-config.php
+wp-content/uploads/
+
+# Misc
+*.log
+*.bak
+*.orig

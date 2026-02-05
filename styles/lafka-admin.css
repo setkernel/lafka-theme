@@ -1,0 +1,1158 @@
+#lafka_super_slider_ids_images {
+    margin-bottom: 5px;
+}
+
+#lafka_super_slider_ids_images img {
+    background: none repeat scroll 0 0 #FAFAFA;
+    border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC;
+    border-style: solid;
+    border-width: 1px;
+    margin: 5px 5px 0 0;
+    padding: 4px;
+}
+
+* {
+    text-shadow: none !important;
+}
+
+#lafka-optionsframework {
+    height: 100%;
+}
+
+#lafka-optionsframework .controls input.lafka_upload_image_button {
+    width: auto;
+}
+
+#lafka-optionsframework-wrap:before {
+    display: block;
+    content: 'Lafka Theme Options';
+    color: #444444;
+    padding: 40px 10px 40px 110px;
+    font-size: 28px;
+    background: url(images/seo_icon_2.svg) no-repeat 10px 10px;
+    background-size: 80px 80px;
+    background-color: #ffffff;
+    width: calc(100% - 126px);
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -khtml-border-radius: 5px;
+    border-radius: 5px;
+    font-weight: 700;
+}
+
+#lafka-optionsframework .group {
+    padding-bottom: 180px !important;
+    padding: 0px 40px;
+}
+
+#lafka-optionsframework #of-option-importdemo.group {
+    padding-bottom: 300px !important;
+}
+
+#lafka-optionsframework-wrap .nav-tab-wrapper {
+    width: 200px;
+    vertical-align: top;
+    display: inline-block;
+    padding-left: 0;
+    padding-top: 10px;
+    height: 100%;
+    margin-right: 0;
+    margin-top: 0 !important;
+    border: none;
+    font-size: 23px;
+    font-weight: 400;
+    line-height: 29px !important;
+    padding: 10px 0px;
+}
+
+#lafka-optionsframework-wrap #setting-error-save_options, #lafka-optionsframework-wrap #setting-error-restore_defaults, #lafka-optionsframework-wrap div.fade.settings-error {
+    position: absolute;
+    width: 320px;
+    top: 200px;
+    left: 50%;
+    margin-left: -150px;
+    z-index: 20000;
+    border: 10px solid #dd430e;
+    box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
+    -moz-box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: 0 8px 8px 0 rgba(0, 0, 0, 0.3);
+    font-size: 30px !important;
+    text-transform: uppercase;
+}
+
+#lafka-optionsframework {
+    border: none;
+    margin-left: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    -webkit-border-radius: 0 5px 5px 5px;
+    -moz-border-radius: 0 5px 5px 5px;
+    -khtml-border-radius: 0 5px 5px 5px;
+    border-radius: 0 5px 5px 5px;
+}
+
+#lafka-optionsframework-metabox {
+    vertical-align: top;
+    display: inline-block;
+    width: calc(100% - 210px);
+}
+
+#lafka-optionsframework-wrap .nav-tab {
+    font-size: 13px;
+    text-transform: none;
+    font-weight: normal;
+    width: 178px;
+    text-align: left;
+    margin: 0 !important;
+    line-height: 29px !important;
+    padding: 12px 13px !important;
+    background-position: 7px 14px;
+    background-repeat: no-repeat;
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px solid;
+    border-color: rgba(0, 0, 0, 0.05);
+    background-color: #f1f1f1;
+    color: #777777;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+}
+
+#lafka-optionsframework-wrap a.nav-tab:focus, #lafka-optionsframework-wrap a.nav-tab:hover, #lafka-optionsframework-wrap a.nav-tab, #lafka-optionsframework-wrap input:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+#lafka-optionsframework-wrap .nav-tab.nav-tab-active, #lafka-optionsframework-wrap .nav-tab:hover {
+    background-color: #ffffff;
+    color: #333333;
+    position: relative;
+    border-left: 2px solid #0eafcc;
+}
+
+#lafka-optionsframework-wrap a.nav-tab:before {
+    font-family: 'Font Awesome 5 Free';
+    margin-right: 8px;
+    display: inline-block;
+    float: left;
+    font-size: 14px;
+    color: #333333;
+    font-weight: 900;
+}
+
+#lafka-optionsframework-wrap a.nav-tab.nav-tab-active:before {
+    color: #0eafcc;
+}
+
+#of-option-general-tab {
+    -webkit-border-radius: 5px 0 0 0;
+    -moz-border-radius: 5px 0 0 0;
+    -khtml-border-radius: 5px 0 0 0;
+    border-radius: 5px 0 0 0;
+}
+
+#lafka-optionsframework-wrap .nav-tab:last-of-type {
+    -webkit-border-radius: 0 0 0 5px;
+    -moz-border-radius: 0 0 0 5px;
+    -khtml-border-radius: 0 0 0 5px;
+    border-radius: 0 0 0 5px;
+}
+
+#of-option-general-tab:before {
+    content: "\f0ad";
+}
+
+#of-option-headerarea-tab:before {
+    content: "\f022";
+}
+
+#of-option-footerarea-tab:before {
+    content: "\f022";
+    transform: rotate(180deg);
+    -ms-transform: rotate(180deg); /* IE 9 */
+    -moz-transform: rotate(180deg); /* Firefox */
+    -webkit-transform: rotate(180deg); /* Safari and Chrome */
+    -o-transform: rotate(180deg); /* Opera */
+}
+
+#of-option-commoncolors-tab:before {
+    content: "\f1fc";
+}
+
+#of-option-fonts-tab:before {
+    content: "\f034";
+}
+
+#of-option-advancedbackgrounds-tab:before {
+    content: "\f03e";
+}
+
+#of-option-shop-tab:before {
+    content: "\f07a";
+}
+
+#of-option-blog-tab:before {
+    content: "\f14b";
+}
+
+#of-option-sidebars-tab:before {
+    content: "\f022";
+    transform: rotate(90deg);
+    -ms-transform: rotate(90deg); /* IE 9 */
+    -moz-transform: rotate(90deg); /* Firefox */
+    -webkit-transform: rotate(90deg); /* Safari and Chrome */
+    -o-transform: rotate(90deg); /* Opera */
+}
+
+#of-option-contacts-tab:before {
+    content: "\f0e0";
+}
+
+#of-option-slidingblocks-tab:before {
+    content: "\f137";
+}
+
+#of-option-importdemo-tab:before {
+    content: "\f019";
+}
+
+#of-option-socialprofiles-tab:before {
+    content: "\f0c0";
+}
+
+#of-option-foodmenu-tab:before {
+    content: "\f009";
+}
+
+#of-option-bbpress-tab:before {
+    content: "\f0e6";
+}
+
+#of-option-lafkaupdates-tab:before {
+    content: "\f021";
+}
+
+#of-option-events-tab:before {
+    content: "\f073";
+}
+
+#of-option-lafkalicense-tab:before {
+    content: "\f029";
+}
+
+#lafka_is_lafka {
+    font-size: 13px;
+    text-transform: uppercase;
+    font-family: "Open Sans", sans-serif;
+    font-weight: 600;
+    padding: 8px 0;
+    width: 100%;
+}
+
+.lafka_featured_img_holder img {
+    height: auto;
+    width: 100%
+}
+
+.is-lafka, .not-lafka {
+    color: #90ca15;
+    margin-left: 4px;
+    display: inline-block;
+}
+
+.not-lafka {
+    color: #f36939;
+}
+
+.ui-accordion .ui-accordion-header {
+
+    cursor: pointer;
+
+    display: block;
+
+    font-size: 100%;
+
+    margin: 5px 12px 0;
+
+    min-height: 0;
+
+    padding: 0.5em 0.5em 0.5em 0.7em;
+
+    position: relative;
+
+}
+
+.ui-accordion .ui-accordion-icons {
+
+    padding-left: 1em;
+
+}
+
+.ui-accordion .ui-accordion-icons .ui-accordion-icons {
+
+    padding-left: 1em;
+
+}
+
+.ui-accordion .ui-accordion-header .ui-accordion-header-icon {
+
+    left: 0.5em;
+
+    margin-top: -8px;
+
+    position: absolute;
+
+    top: 50%;
+
+}
+
+.ui-accordion .ui-accordion-content {
+
+    border-top: 0 none;
+
+    overflow: auto;
+
+    padding: 1em;
+
+    margin: 0 12px;
+
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-right, .ui-corner-br {
+
+    border-bottom-right-radius: 4px;
+
+}
+
+.ui-corner-all, .ui-corner-bottom, .ui-corner-left, .ui-corner-bl {
+
+    border-bottom-left-radius: 4px;
+
+}
+
+.ui-corner-all, .ui-corner-top, .ui-corner-right, .ui-corner-tr {
+
+    border-top-right-radius: 4px;
+
+}
+
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+
+    border-top-left-radius: 4px;
+
+}
+
+.ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+
+    background: url("../image/ui-bg_glass_1x400.png") repeat-x scroll 50% 50% #e6e6e6;
+
+    border: 1px solid #d3d3d3;
+
+    color: #555555;
+
+    font-weight: normal;
+
+}
+
+.ui-widget-content {
+
+    border: 1px solid #aaaaaa;
+
+}
+
+#lafka-optionsframework .section {
+    padding: 10px !important;
+    margin-bottom: 10px;
+    border: 1px solid #f5f5f5;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -khtml-border-radius: 2px;
+    border-radius: 2px;
+}
+
+#lafka-optionsframework .screenshot {
+    width: 244px !important;
+}
+
+#lafka-optionsframework .section .heading, #lafka-optionsframework h4.heading {
+    border: none !important;
+    margin: 0 0 15px 0 !important;
+    padding: 15px 12px !important;
+    background: #f8f8f8;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    -khtml-border-radius: 3px;
+    border-radius: 3px;
+}
+
+#icon_teaser_2_section, #icon_teaser_1_section {
+    margin-bottom: 20px;
+}
+
+#lafka-optionsframework .lafka_upload_button, .lafka_upload_image_button.button {
+    background: #71a900;
+    color: #ffffff;
+    border-color: transparent;
+    border: none;
+    box-shadow: none;
+}
+
+#lafka-optionsframework h4.ui-accordion-header {
+    background: #e5e5e5;
+    margin: 5px 0;
+    padding: 12px !important;
+}
+
+#lafka-optionsframework h4.ui-accordion-header:before {
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    content: "\f055";
+    display: inline-block;
+    font-size: 14px;
+    vertical-align: middle;
+    margin-right: 8px;
+    position: relative;
+    top: -1px;
+}
+
+@media only screen and (min-width: 1024px) {
+    .lafka-options-two-columns {
+        display: inline-block;
+        width: 49.4%;
+        padding: 1%;
+        vertical-align: top;
+        border: none;
+        box-sizing: border-box;
+    }
+}
+.lafka-options-two-columns .explain {
+    width: 100%;
+    max-width: none !important;
+}
+.lafka-options-two-columns .option {
+    min-height: 60px;
+}
+.section.lafka-options-two-columns .controls {
+    min-width: unset !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    padding-right: 0;
+}
+.lafka-options-two-columns input[type="text"] {
+    width: 100% !important;
+    max-width: 100% !important;
+}
+#promo_tooltip_1, #promo_tooltip_2, #promo_tooltip_3 {
+    border-color: transparent !important;
+    padding: 0px !important;
+    margin: 20px 0 !important;
+}
+
+#lafka-optionsframework h3 {
+    padding: 12px 15px !important;
+    text-transform: uppercase;
+}
+
+#lafka-optionsframework .controls .of-typography-face {
+    max-width: 180px !important;
+    margin-right: 5px;
+}
+
+#lafka-optionsframework .lafka_font_preview {
+    text-align: left !important;
+}
+
+#section-logo_menu_position .controls .of-radio-img-img, #section-general_layout .controls .of-radio-img-img {
+    max-width: 30% !important;
+    height: auto !important;
+}
+
+#lafka-optionsframework input.of-radio {
+    width: auto !important;
+}
+
+#lafka-optionsframework .controls .of-radio-img-img {
+    position: relative;
+    text-align: center;
+}
+
+#lafka-optionsframework .controls .of-radio-img-img span.lafka-of-radio-img-label {
+    padding: 8px 5px;
+    display: block;
+    background-color: #f1f1f1;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px;
+    -khtml-border-radius: 2px;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+#lafka-optionsframework .controls .of-radio-img-img.of-radio-img-selected span.lafka-of-radio-img-label {
+    background-color: #0eafcc;
+    color: #ffffff;
+}
+
+#lafka-optionsframework .controls .of-radio-img-img img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block;
+    vertical-align: text-bottom;
+    position: relative;
+    z-index: 1;
+}
+
+#lafka-optionsframework .controls .of-radio-img-selected {
+    border-color: #0eafcc !important;
+}
+
+.lafka_import_btn {
+    position: absolute;
+    top: 50% !important;
+    left: 50% !important;
+    margin-left: -70px !important;
+    margin-top: -10px !important;
+    width: 100px;
+    text-align: center;
+    padding: 10px;
+    display: block;
+    z-index: 5;
+}
+
+.lafka-optionsframework-submit .button-primary, .lafka-optionsframework-submit-top .button-primary, .lafka-optionsframework-submit .button-secondary, .lafka-optionsframework-submit-top .button-secondary, #lafka-optionsframework .lafka_upload_button, .lafka_upload_image_button.button {
+    border: none;
+    box-shadow: none !important;
+    height: auto;
+    padding: 5px 12px;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+}
+
+.lafka-optionsframework-submit .button-primary, .lafka-optionsframework-submit-top .button-primary, #lafka-optionsframework .lafka_upload_button, .lafka_upload_image_button.button {
+    background-color: #0eafcc;
+}
+
+.lafka-optionsframework-submit, .lafka-optionsframework-submit-top {
+    padding: 20px !important;
+}
+
+#lafka-optionsframework .reset-button, #lafka_import_options, #lafka_export_options {
+    float: left;
+    cursor: pointer;
+    margin-right: 4px;
+}
+
+#lafka-optionsframework .reset-button {
+    background-color: #333333;
+    color: #ffffff;
+}
+
+.lafka-optionsframework-submit-top .button-primary, .lafka-optionsframework-submit .button-primary {
+    background-color: #90ca15;
+    color: #ffffff;
+}
+
+.lafka-optionsframework-submit .button-secondary:hover, .lafka-optionsframework-submit-top .button-secondary:hover {
+    background-color: #0eafcc !important;
+    color: #ffffff;
+}
+
+.lafka-optionsframework-submit-top .button-primary:hover, .lafka-optionsframework-submit .button-primary:hover {
+    background-color: #729f13 !important;
+}
+
+.wpb_lafka_content_slider > .vc_controls {
+    opacity: 1 !important;
+    filter: alpha(opacity=100) !important;
+    visibility: visible;
+    position: relative;
+    height: 23px;
+    margin: 18px 0 2px;
+    border: 1px dotted #e6e6e6;
+    border-bottom-width: 0
+}
+
+.section .controls {
+    position: relative;
+}
+
+a.lafka_remove_image_link {
+    position: absolute;
+    background: url("../image/remove.png") no-repeat center 4px #e6e6e6;
+    text-indent: -9999px;
+    width: 22px;
+    height: 22px;
+    display: block;
+    top: -5px;
+    left: -5px;
+    z-index: 1000;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -khtml-border-radius: 50%;
+    border-radius: 50%;
+}
+
+#section-theme_logo .controls a#theme_logo_remove_link:hover, #section-transparent_theme_logo .controls a#transparent_theme_logo_remove_link:hover, #section-footer_logo .controls a#footer_logo_remove_link:hover {
+    background-color: #333333;
+}
+
+.checkbox.of-input {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+}
+
+.checkbox.of-input + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    margin-right: 18px;
+}
+
+input.checkbox.of-input + label {
+    vertical-align: middle;
+}
+
+input.checkbox.of-input + label:before,
+input.checkbox.of-input + label:after {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    content: "";
+    width: 45px;
+    height: 24px;
+}
+
+input.checkbox.of-input + label:before {
+    right: 1px;
+    background-color: #e1e1e1;
+    border-radius: 60px;
+    transition: background 0.4s;
+    position: relative;
+    display: inline-block;
+    margin-right: 18px;
+    vertical-align: middle;
+}
+
+input.checkbox.of-input + label:after {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    top: 2px;
+    left: 2px;
+}
+
+input.checkbox.of-input:checked + label:before {
+    background-color: #0eafcc;
+}
+
+input.checkbox.of-input:checked + label:after {
+    margin-left: 21px;
+}
+
+#lafka-optionsframework .controls .of-radio-img-img {
+    border-radius: 5px;
+    padding: 5px;
+    background: #ffffff;
+    border: none !important;
+    overflow: hidden;
+    margin: 20px !important;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+}
+
+#lafka-optionsframework .screenshot img {
+    border-radius: 5px;
+    padding: 5px;
+    border: none !important;
+    overflow: hidden;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+}
+
+#lafka-optionsframework .controls .of-radio-img-selected {
+    box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+}
+
+#lafka-optionsframework .controls input[type=text], #lafka-optionsframework .controls input[type=email], #lafka-optionsframework .controls input[type=password], #lafka-optionsframework .controls input[type=number], #lafka-optionsframework .controls textarea {
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    border-radius: 3px;
+    padding: 8px;
+    background: #f8f8f8;
+    border: none !important;
+    -webkit-appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    box-shadow: none;
+}
+
+#lafka-optionsframework .controls input[type=text]:focus, #lafka-optionsframework .controls textarea:focus, #lafka-optionsframework .controls input[type=email]:focus, #lafka-optionsframework .controls input[type=password]:focus, #lafka-optionsframework .controls input[type=number]:focus {
+    outline: none;
+    background-color: #ffffff;
+    border: none;
+    box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2) !important;
+    -moz-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2) !important;
+    -webkit-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2) !important;
+    outline: none;
+}
+
+#lafka-optionsframework .controls .of-color {
+    padding: 8px !important;
+}
+
+#lafka-optionsframework .controls input[type=text], #lafka-optionsframework .controls input[type=email], #lafka-optionsframework .controls input[type=password], #lafka-optionsframework .controls input[type=number], #lafka-optionsframework .controls select {
+    max-width: 320px;
+}
+
+#lafka-optionsframework .controls select {
+    border: 1px solid #e1e1e1;
+    max-width: 200px;
+    height: auto;
+    background: transparent;
+    padding: 6px 25px 6px 7px;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    outline: none;
+    outline-color: transparent;
+    outline-style: none;
+    position: relative;
+    z-index: 1;
+    border-radius: 3px;
+    background: url(images/select_arrow.jpg) no-repeat center right;
+}
+
+#lafka-optionsframework .controls select:focus {
+    background: url(images/select_arrow2.jpg) no-repeat center right;
+    outline: none !important;
+    outline-color: transparent !important;
+    outline-style: none !important;
+    border-color: transparent;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+}
+
+.section-typography select + .wp-picker-container {
+    padding-top: 7px;
+}
+
+label.lafka-admin-option-label {
+    display: inline-block;
+    width: 150px;
+}
+
+/* NICE SELECT STYLES */
+.nice-select {
+    -webkit-tap-highlight-color: transparent;
+    background-color: #fff;
+    border-radius: 3px;
+    border: solid 1px #e8e8e8;
+    color: #999999;
+    box-sizing: border-box;
+    cursor: pointer;
+    display: inline-block;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: normal;
+    height: 37px;
+    line-height: 35px;
+    outline: none;
+    padding-left: 15px;
+    padding-right: 30px;
+    position: relative;
+    text-align: left !important;
+    -webkit-transition: all 0.2s ease-in-out;
+    transition: all 0.2s ease-in-out;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    white-space: nowrap;
+    width: auto;
+}
+
+.widget .nice-select {
+    width: 100%;
+}
+
+.nice-select:hover {
+    border-color: #dbdbdb;
+}
+
+.nice-select:active, .nice-select.open, .nice-select:focus {
+    box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+}
+
+.nice-select:after {
+    display: block;
+    width: 20px;
+    height: 20px;
+    line-height: 20px;
+    vertical-align: middle;
+    text-align: center;
+    font-size: 14px;
+    content: "\f0dc";
+    font-family: 'Font Awesome 5 Free';
+    font-weight: 900;
+    position: absolute;
+    right: 5px;
+    top: 50%;
+    margin-top: -9px;
+    z-index: 50;
+    color: #333333;
+    pointer-events: none;
+}
+
+.nice-select.open:after {
+    -webkit-transform: rotate(-135deg);
+    -ms-transform: rotate(-135deg);
+    transform: rotate(-135deg);
+}
+
+.nice-select.open .list {
+    opacity: 1;
+    pointer-events: auto;
+    -webkit-transform: scale(1) translateY(0);
+    -ms-transform: scale(1) translateY(0);
+    transform: scale(1) translateY(0);
+    box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+}
+
+.nice-select.disabled {
+    border-color: #ededed;
+    color: #999;
+    pointer-events: none;
+}
+
+.nice-select.disabled:after {
+    border-color: #cccccc;
+}
+
+.nice-select.wide {
+    width: 100%;
+}
+
+.nice-select.wide .list {
+    left: 0 !important;
+    right: 0 !important;
+}
+
+.nice-select.right {
+    float: right;
+}
+
+.nice-select.right .list {
+    left: auto;
+    right: 0;
+}
+
+.nice-select.small {
+    font-size: 12px;
+    height: 36px;
+    line-height: 34px;
+}
+
+.nice-select.small:after {
+    height: 4px;
+    width: 4px;
+}
+
+.nice-select.small .option {
+    line-height: 34px;
+    min-height: 34px;
+}
+
+.nice-select .list {
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 0 0 0 1px rgba(68, 68, 68, 0.11);
+    box-sizing: border-box;
+    margin-top: 4px;
+    margin-left: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0;
+    pointer-events: none;
+    position: absolute;
+    top: 100%;
+    min-width: 100%;
+    max-height: calc(100vh - 150px);
+    overflow-y: auto;
+    left: 0;
+    -webkit-transform-origin: 50% 0;
+    -ms-transform-origin: 50% 0;
+    transform-origin: 50% 0;
+    -webkit-transform: scale(0.75) translateY(-21px);
+    -ms-transform: scale(0.75) translateY(-21px);
+    transform: scale(0.75) translateY(-21px);
+    -webkit-transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+    transition: all 0.2s cubic-bezier(0.5, 0, 0, 1.25), opacity 0.15s ease-out;
+    z-index: 999;
+}
+
+.nice-select .list:hover .option:not(:hover) {
+    background-color: transparent !important;
+}
+
+.nice-select .option {
+    cursor: pointer;
+    font-weight: 400;
+    color: #999999;
+    margin-left: 0;
+    line-height: 40px;
+    list-style: none;
+    min-height: 40px;
+    display: block;
+    margin-bottom: 0;
+    outline: none;
+    padding-left: 15px;
+    padding-right: 29px;
+    padding-bottom: 0px;
+    text-align: left;
+    -webkit-transition: all 0.2s;
+    transition: all 0.2s;
+}
+
+.nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
+    background-color: #f6f6f6;
+    color: #333333;
+}
+
+.nice-select .option.selected {
+    font-weight: bold;
+}
+
+.nice-select .option.disabled {
+    background-color: transparent;
+    color: #999;
+    cursor: default;
+}
+
+.no-csspointerevents .nice-select .list {
+    display: none;
+}
+
+.no-csspointerevents .nice-select.open .list {
+    display: block;
+}
+
+.wp-picker-container.wp-picker-active {
+    width: 100%;
+}
+
+.wp-picker-container input[type="text"].wp-color-picker, .section-typography .wp-picker-container input[type="text"].wp-color-picker {
+    width: 65px !important;
+    padding: 8px !important;
+}
+
+.wp-picker-input-wrap .button {
+    width: auto !important;
+}
+
+.wp-core-ui .button.button-small {
+    height: auto !important;
+    padding: 4px 8px;
+    border: 1px solid #f1f1f1;
+    box-shadow: none !important;
+}
+
+.section-typography .wp-picker-open + .wp-picker-input-wrap {
+    display: block;
+    vertical-align: top;
+    clear: left;
+}
+
+#section-header_background .wp-picker-container, #section-footer_background .wp-picker-container {
+    max-width: 300px;
+}
+
+#section-header_background #header_background_images, #section-footer_background #footer_background_images {
+    margin-top: 15px;
+}
+
+a#header_background_remove_link.lafka_remove_image_link, a#footer_background_remove_link.lafka_remove_image_link {
+    position: relative;
+    top: 30px;
+}
+
+/* RTL STYLES BEGIN */
+
+.rtl #lafka-optionsframework .section .controls {
+    float: right;
+    min-width: 350px;
+    width: 54%;
+    padding-right: 0;
+    padding-left: 2%;
+    text-align: right;
+}
+
+.rtl #lafka-optionsframework .controls .of-color, .rtl .colorSelector, .rtl #lafka-optionsframework .controls .of-typography-face, .rtl #lafka-optionsframework .controls .of-typography-size, .rtl #lafka-optionsframework .controls .of-typography-style,
+.rtl #lafka-optionsframework .section-radio label, .rtl #lafka-optionsframework .section-multicheck label, .rtl #lafka-optionsframework .section .explain, .rtl #lafka-optionsframework .controls .of-radio-img-img, .rtl #lafka-optionsframework .screenshot,
+.rtl #lafka-optionsframework input.checkbox, .rtl #lafka-optionsframework input.of-radio, .rtl #lafka-optionsframework .screenshot img, .rtl .of-background-properties select, .rtl #lafka-optionsframework #lafka_custom_sidebars_list div a.lafka_del_sdbr {
+    float: right;
+}
+
+.rtl .of-background-properties select {
+    float: right !important;
+}
+
+.rtl #lafka-optionsframework .controls input.lafka_upload_image_button {
+    float: none;
+}
+
+.rtl #lafka-optionsframework .screenshot {
+    margin-right: 30px;
+}
+
+.rtl #lafka-optionsframework #supersized_images_images.screenshot, .rtl #lafka-optionsframework #shop_title_background_imgid_images.screenshot, .rtl #lafka-optionsframework #blog_title_background_imgid_images.screenshot,
+.rtl #lafka-optionsframework #shop_supersized_images_images.screenshot, .rtl #lafka-optionsframework #blog_supersized_images_images.screenshot {
+    margin-right: 0;
+}
+
+.rtl #lafka-optionsframework .lafka_font_preview {
+    text-align: right !important;
+}
+
+.rtl a#header_background_remove_link.lafka_remove_image_link, .rtl a#footer_background_remove_link.lafka_remove_image_link {
+    right: 135px;
+}
+
+.rtl a.lafka_remove_image_link {
+    left: auto;
+    right: -5px;
+}
+
+.rtl .checkbox.of-input {
+    position: absolute;
+    margin-left: -9999px;
+    visibility: hidden;
+}
+
+.rtl .checkbox.of-input + label {
+    display: block;
+    position: relative;
+    cursor: pointer;
+    outline: none;
+    user-select: none;
+    margin-right: 0px;
+    margin-left: 18px;
+}
+
+.rtl input.checkbox.of-input + label {
+    vertical-align: middle;
+}
+
+.rtl input.checkbox.of-input + label:before,
+.rtl input.checkbox.of-input + label:after {
+    display: block;
+    position: absolute;
+    top: 0px;
+    left: auto;
+    right: 0px;
+    content: "";
+    width: 45px;
+    height: 24px;
+}
+
+.rtl input.checkbox.of-input + label:before {
+    right: 1px;
+    background-color: #e1e1e1;
+    border-radius: 60px;
+    transition: background 0.4s;
+    position: relative;
+    display: inline-block;
+    margin-right: 0px;
+    margin-left: 18px;
+    vertical-align: middle;
+}
+
+.rtl input.checkbox.of-input + label:after {
+    width: 20px;
+    height: 20px;
+    background-color: #fff;
+    border-radius: 50%;
+    transition: all 0.3s ease 0s;
+    -webkit-transition: all 0.3s ease 0s;
+    -ms-transition: all 0.3s ease 0s;
+    -moz-transition: all 0.3s ease 0s;
+    -o-transition: all 0.3s ease 0s;
+    top: 2px;
+    left: auto;
+    right: 2px;
+}
+
+.rtl input.checkbox.of-input:checked + label:before {
+    background-color: #0eafcc;
+}
+
+.rtl input.checkbox.of-input:checked + label:after {
+    margin-right: 21px;
+}
+
+/* RTL STYLES END */
+#lafka_hidden_demo_0, #lafka_hidden_demo_1, #lafka_hidden_demo_2, #lafka_hidden_demo_3, #lafka_hidden_demo_4, #lafka_hidden_demo_5, #lafka_hidden_demo_6, #lafka_hidden_demo_7, #lafka_hidden_demo_8, #lafka_hidden_demo_9 {
+    display: none;
+}
+audio.lafka_order_notify_audio {
+    display: none;
+}
+#lafka-push-confirm{
+    display:none;
+}
+p.description.lafka_megamenu_image {
+    position: relative;
+}
+p.description.lafka_megamenu_image .lafka_remove_image_link {
+    top: auto;
+    left: auto;
+    bottom: 7px;
+    right: 10px;
+}
+p.description.lafka_megamenu_image span.screenshot, p.description.lafka_megamenu_image span.screenshot input.lafka_upload_image_button {
+    display: inline-block !important;
+    vertical-align: bottom !important;
+}
+p.description.lafka_megamenu_image span.screenshot, p.description.lafka_megamenu_image span.screenshot img {
+    max-height: 36px;
+    height: 36px;
+    width: auto;
+}
+.column-taxonomy-lafka_branch_location {
+    width: 5%;
+}

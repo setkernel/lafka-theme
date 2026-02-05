@@ -1,0 +1,26 @@
+<wpml-config>
+	<admin-texts>
+		<key name="lafka">
+			<key name="top_bar_message" />
+			<key name="copyright_text" />
+			<key name="shop_subtitle" />
+			<key name="forum_subtitle" />
+			<key name="blog_title" />
+			<key name="blog_subtitle" />
+			<key name="map_location_title" />
+			<key name="custom_product_popup_link" />
+			<key name="custom_product_popup_content" />
+			<key name="promo_tooltip_1_text" />
+			<key name="promo_tooltip_1_trigger_text" />
+			<key name="promo_tooltip_1_content" />
+			<key name="promo_tooltip_2_text" />
+			<key name="promo_tooltip_2_trigger_text" />
+			<key name="promo_tooltip_2_content" />
+			<key name="promo_tooltip_3_text" />
+			<key name="promo_tooltip_3_trigger_text" />
+			<key name="promo_tooltip_3_content" />
+		</key>
+	</admin-texts>
+</wpml-config>
+
+

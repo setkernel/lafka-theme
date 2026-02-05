@@ -1,0 +1,308 @@
+/*-------------------------------------------------------------------------------------------*/
+/* Options Framework Admin Styles */
+/*-------------------------------------------------------------------------------------------*/
+
+#lafka-optionsframework {
+	position:relative;
+	z-index: 0;
+	max-width:780px;
+	background:#fff;
+}
+#lafka-optionsframework h3 {
+	cursor: default;
+}
+#lafka-optionsframework p {
+	margin-bottom:0;
+	padding-bottom:10px;
+	line-height: 1.4em;
+}
+#lafka-optionsframework .section {
+	padding:10px 10px 0;
+}
+#lafka-optionsframework .group {
+	padding-bottom:40px;
+}
+#lafka-optionsframework .section .heading {
+	padding:10px 0px;
+	margin:0 0 15px;
+	border-bottom: 1px solid #dfdfdf;
+}
+#lafka-optionsframework .section .controls {
+	float: left;
+	min-width:350px;
+	width: 54%;
+	padding-right:2%;
+}
+#lafka-optionsframework .section .explain {
+	max-width:38%;
+	float: left;
+	font-size: 12px;
+	line-height:16px;
+	color: #777;
+}
+#lafka-optionsframework .section-checkbox .controls {
+	width: 98%;
+}
+#lafka-optionsframework .section-checkbox .explain {
+	max-width:94%;
+}
+#lafka-optionsframework .section-color .controls {
+	min-width:125px;
+	width:125px
+}
+#lafka-optionsframework .controls input, #lafka-optionsframework .controls select, #lafka-optionsframework .controls textarea {
+	margin-bottom:10px;
+	width:100%;
+}
+#lafka-optionsframework .section-radio label, #lafka-optionsframework .section-multicheck label {
+	float:left;
+	max-width:90%;
+	line-height: 16px;
+	margin-bottom: 5px;
+}
+#lafka-optionsframework input.checkbox, #lafka-optionsframework input.of-radio {
+	width: 30px;
+	margin-top:2px;
+	float:left;
+	clear:both;
+}
+#lafka-optionsframework .controls .of-color {
+	float:left;
+	width: 80px;
+	margin-left:5px;
+	margin-right:5px;
+}
+#lafka-optionsframework .controls .of-typography-size {
+	width:80px;
+	margin-left:5px;
+	float:left
+}
+#lafka-optionsframework .controls .of-typography-unit {
+	width:50px;
+	margin-left:5px;
+	float:left
+}
+#lafka-optionsframework .controls .of-typography-face {
+	width:200px;
+	margin-left:5px;
+	float:left
+}
+#lafka-optionsframework .controls .of-typography-style {
+	width:100px;
+	margin-left:5px;
+	margin-right:5px;
+	float:left
+}
+#lafka-optionsframework .of-background-properties {
+	clear:both;
+	margin-top: 18px;
+}
+#lafka-optionsframework .controls .of-background-repeat {
+	width:125px;
+	margin-right:5px;
+	float:left
+}
+#lafka-optionsframework .controls .of-background-position {
+	width:125px;
+	margin-right:5px;
+	float:left
+}
+#lafka-optionsframework .controls .of-background-attachment {
+	width:125px;
+	margin-right:5px;
+	float:left
+}
+#lafka-optionsframework div.section-background .controls input.upload {
+	width:47%;
+}
+#lafka-optionsframework .controls .of-radio-img-img {
+	border:3px solid #f9f9f9;
+	margin:0 5px 10px 0;
+	display:none;
+	cursor:pointer;
+	float:left;
+	height: 140px;
+	width: 140px;
+}
+#lafka-optionsframework .controls .of-radio-img-selected {
+	border:3px solid #ccc
+}
+#lafka-optionsframework .controls .of-radio-img-img:hover {
+	opacity:.8;
+}
+#lafka-optionsframework .controls .of-border-width {
+	width:80px;
+	float:left
+}
+#lafka-optionsframework .controls .of-border-style {
+	width:120px;
+	float:left
+}
+#lafka-optionsframework .hide {
+	display:none;
+}
+#lafka-optionsframework .of-option-image {
+	max-width:340px;
+	margin:3px 0 18px 0;
+}
+#lafka-optionsframework .mini .controls select, #lafka-optionsframework .section .mini .controls {
+	width: 140px;
+}
+#lafka-optionsframework .mini .controls input, #lafka-optionsframework .mini .controls {
+	min-width:140px;
+	width: 140px;
+}
+#lafka-optionsframework .mini .explain {
+	max-width:74%;
+}
+
+/* Editor */
+
+#lafka-optionsframework .section-editor .explain {
+	max-width: 98%;
+	float:none;
+	margin-bottom:5px;
+}
+
+/* Image Uploader */
+
+#lafka-optionsframework .controls input.upload {
+	width:80%;
+}
+#lafka-optionsframework .controls input.lafka_upload_button {
+	float:right;
+	width:60px;
+	border-color:#BBBBBB;
+	cursor:pointer;
+	/* height:16px; */
+}
+#lafka-optionsframework .controls input.lafka_upload_image_button
+{
+	float:right;
+}
+#lafka-optionsframework .controls input.lafka_upload_button:hover {
+	border-color:#666666;
+	color:#000;
+}
+#lafka-optionsframework .screenshot {
+	float:left;
+	margin-left:1px;
+	position:relative;
+	width:344px;
+	margin-top:3px;
+}
+#lafka-optionsframework .screenshot img {
+	background:#FAFAFA;
+	border-color:#ccc #eee #eee #ccc;
+	border-style:solid;
+	border-width:1px;
+	float:left;
+	max-width:334px;
+	padding:4px;
+	margin-bottom:10px;
+}
+#lafka-optionsframework .screenshot .mlu_remove {
+	background:url("../images/ico-delete.png") no-repeat;
+	border:medium none;
+	bottom:4px;
+	display:block;
+	float:left;
+	height:16px;
+	padding:0;
+	position:absolute;
+	left:-4px;
+	text-indent:-9999px;
+	width:16px;
+}
+#lafka-optionsframework .screenshot .no_image .file_link {
+	margin-left: 20px;
+}
+#lafka-optionsframework .screenshot .no_image .mlu_remove {
+	bottom: 0px;
+}
+#lafka-optionsframework .reset-button {
+	float:left;
+	cursor:pointer;
+}
+
+/* Bottom Section */
+
+#lafka-optionsframework-submit {
+	padding: 7px 10px;
+	border-top: 1px solid #ECECEC;
+	background-color: #F1F1F1;
+	background-image: -moz-linear-gradient(center top , #F9F9F9, #ECECEC);
+}
+#lafka-optionsframework .button-primary {
+	float:right;
+}
+
+/* Bottom Section */
+
+#lafka-optionsframework .section:before, #lafka-optionsframework .section:after {
+	content: "";
+	display: table;
+}
+#lafka-optionsframework .section:after {
+	clear: both;
+}
+
+/* Custom classes */
+
+#lafka-optionsframework .lafka_wider .controls {
+	width: 100%;
+}
+
+#lafka-optionsframework .lafka_font_preview {
+	clear: both;
+	width: 700px;
+	padding-top: 1px;
+	text-align: center;
+}
+
+#lafka-optionsframework #lafka_custom_sidebars_list div {
+	height: 20px;
+}
+
+#lafka-optionsframework #lafka_custom_sidebars_list div a.lafka_del_sdbr {
+	background:url("../images/ico-delete.png") no-repeat;
+	float: left;
+	height: 16px;
+	width: 16px;
+	margin-right: 5px;
+}
+
+#lafka-optionsframework div.block-start_section .section {padding: 0}
+#lafka-optionsframework div.block-start_section .section .heading {
+	border-bottom: none;
+	margin: 0;
+	padding: 0 0 2px;
+}
+
+#lafka-optionsframework .import_lafka_demo .controls .of-radio-img-img {
+  height: 166px;
+  width: 177px;
+}
+
+div.import_lafka_demo span.of-radio-img-img span.lafka_import_btn {
+  color: #000000;
+  background: #ccc;
+  padding: 10px 20px 10px 20px;
+	text-decoration: none;
+	font-weight: bold;
+	margin-top: 35px;
+	left: 5%;
+	position: absolute;
+	opacity: 0.8;
+}
+
+span.lafka_import_spinner {
+	height: 173px;
+	width:183px;
+	background: #fff url("../images/ajax-loader.gif") no-repeat scroll center;
+	display: block;
+	position: absolute;
+	opacity: 0.8;
+	z-index: 10000;
+	margin: 25px 0 0 25px;
+}

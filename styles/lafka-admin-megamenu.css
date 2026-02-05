@@ -1,0 +1,36 @@
+.field-description span.description {display: none;}
+
+.item-type-lafka-column, .item-type-lafka-mega, .lafka_is_mega_field, .lafka_is_description_field, .lafka_mega_column_label{
+	display:none;
+}
+.lafka_is_mega.menu-item-depth-0 .item-type-lafka-mega, .lafka_is_mega.menu-item-depth-1 .item-type-lafka-column{
+	display:block; font-style: italic;
+}
+
+.lafka_is_mega.menu-item-depth-0 .item-type-wpdef, .lafka_is_mega.menu-item-depth-1 .item-type-wpdef {
+	display:none;
+}
+.menu-item-depth-0 .lafka_is_mega_field {
+	display:block;
+}
+.lafka_is_mega.menu-item-depth-2 .field-description, .lafka_is_mega.menu-item-depth-2 .lafka_is_description_field,
+.lafka_is_mega.menu-item-depth-3 .field-description, .lafka_is_mega.menu-item-depth-3 .lafka_is_description_field,
+.lafka_is_mega.menu-item-depth-4 .field-description, .lafka_is_mega.menu-item-depth-4 .lafka_is_description_field,
+.lafka_is_mega.menu-item-depth-5 .field-description, .lafka_is_mega.menu-item-depth-5 .lafka_is_description_field,
+.lafka_is_mega.menu-item-depth-6 .field-description, .lafka_is_mega.menu-item-depth-6 .lafka_is_description_field,
+.lafka_is_mega.menu-item-depth-7 .field-description, .lafka_is_mega.menu-item-depth-7 .lafka_is_description_field,
+.lafka_is_mega.menu-item-depth-8 .field-description, .lafka_is_mega.menu-item-depth-8 .lafka_is_description_field{
+	display: block;
+}
+.lafka_is_mega.menu-item-depth-1 .lafka_mega_column_label {
+	color: #888;
+	display: inline-block;
+	font-size: 11px;
+}
+.menu-item-settings:after {
+	content: " ";
+	display: block;
+	height: 0px !Important;
+	clear: both;
+	visibility: hidden;
+}
