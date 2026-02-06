@@ -28,6 +28,10 @@ class Lafka_GitHub_Updater {
 	const NOTICE_TRANSIENT = 'lafka_gh_updater_notice';
 
 	public function __construct() {
+		// Always register cache flush action and admin notices (even when updates disabled).
+		add_action( 'admin_post_lafka_flush_github_cache', array( $this, 'handle_flush_cache' ) );
+		add_action( 'admin_notices', array( $this, 'render_admin_notices' ) );
+
 		// Allow disabling update checks entirely.
 		if ( ! lafka_get_option( 'lafka_github_updates_enabled', true ) ) {
 			return;
@@ -47,9 +51,6 @@ class Lafka_GitHub_Updater {
 
 		// Fix directory name after zip extraction
 		add_filter( 'upgrader_source_selection', array( $this, 'fix_source_directory' ), 10, 4 );
-
-		// Admin notices for update issues
-		add_action( 'admin_notices', array( $this, 'render_admin_notices' ) );
 	}
 
 	// =========================================================================
@@ -86,7 +87,7 @@ class Lafka_GitHub_Updater {
 	}
 
 	/**
-	 * Render an admin notice on dashboard/updates/theme-options screens.
+	 * Render admin notices on dashboard/updates/theme-options screens.
 	 */
 	public function render_admin_notices() {
 		if ( ! current_user_can( 'update_themes' ) ) {
@@ -101,6 +102,11 @@ class Lafka_GitHub_Updater {
 		$allowed_screens = array( 'dashboard', 'update-core', 'themes', 'plugins', 'appearance_page_lafka-options' );
 		if ( ! in_array( $screen->id, $allowed_screens, true ) ) {
 			return;
+		}
+
+		// Success message after manual cache flush.
+		if ( ! empty( $_GET['lafka_cache_flushed'] ) ) {
+			echo '<div class="notice notice-success is-dismissible"><p><strong>Lafka Updater:</strong> Update cache cleared. WordPress will check GitHub for new releases on the next update check.</p></div>';
 		}
 
 		$notice = get_transient( self::NOTICE_TRANSIENT );
@@ -118,9 +124,47 @@ class Lafka_GitHub_Updater {
 		);
 	}
 
+	/**
+	 * Handle the manual cache flush admin-post action.
+	 */
+	public function handle_flush_cache() {
+		if ( ! current_user_can( 'update_themes' ) ) {
+			wp_die( 'Unauthorized', 403 );
+		}
+		check_admin_referer( 'lafka_flush_github_cache' );
+
+		// Clear all GitHub API transients.
+		$this->flush_theme_cache();
+		$this->flush_plugin_cache();
+		delete_transient( 'lafka_gh_rate_limit' );
+		delete_transient( self::NOTICE_TRANSIENT );
+
+		// Also force WordPress to re-check on next load.
+		delete_site_transient( 'update_themes' );
+		delete_site_transient( 'update_plugins' );
+
+		self::log( 'Manual cache flush triggered by user.' );
+
+		$redirect = wp_get_referer();
+		if ( ! $redirect ) {
+			$redirect = admin_url( 'update-core.php' );
+		}
+		wp_safe_redirect( add_query_arg( 'lafka_cache_flushed', '1', $redirect ) );
+		exit;
+	}
+
 	// =========================================================================
 	// Cache management
 	// =========================================================================
+
+	/**
+	 * Get the URL for the manual cache flush action.
+	 *
+	 * @return string Nonced admin-post URL.
+	 */
+	public static function get_flush_cache_url() {
+		return wp_nonce_url( admin_url( 'admin-post.php?action=lafka_flush_github_cache' ), 'lafka_flush_github_cache' );
+	}
 
 	/**
 	 * Clear the cached GitHub releases for the theme and child theme repos.

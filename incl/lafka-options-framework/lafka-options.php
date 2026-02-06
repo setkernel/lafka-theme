@@ -2203,7 +2203,9 @@ function lafka_optionsframework_options() {
 	);
 
 	$options[] = array(
-		'desc' => '<p>' . esc_html__( 'Lafka checks GitHub for theme and plugin updates automatically every 12 hours. To force a fresh check, visit Dashboard > Updates and click "Check Again".', 'lafka' ) . '</p>',
+		'desc' => '<p>' . esc_html__( 'Lafka checks GitHub for theme and plugin updates automatically every 12 hours.', 'lafka' ) . '</p>' .
+		           '<p><a href="' . esc_url( Lafka_GitHub_Updater::get_flush_cache_url() ) . '" class="button">' . esc_html__( 'Clear Update Cache', 'lafka' ) . '</a> ' .
+		           '<span class="description">' . esc_html__( 'Forces a fresh check from GitHub on the next update scan.', 'lafka' ) . '</span></p>',
 		'type' => 'info'
 	);
 
