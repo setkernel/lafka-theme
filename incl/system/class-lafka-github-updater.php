@@ -7,14 +7,16 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Lafka GitHub Updater
  *
  * Integrates with WordPress update system to check GitHub releases
- * for both lafka-theme and lafka-plugin updates.
+ * for lafka-theme, lafka-child, and lafka-plugin updates.
  */
 class Lafka_GitHub_Updater {
 
 	const THEME_REPO  = 'setkernel/lafka-theme';
+	const CHILD_REPO  = 'setkernel/lafka-child';
 	const PLUGIN_REPO = 'setkernel/lafka-plugin';
 
 	const THEME_ASSET  = 'lafka.zip';
+	const CHILD_ASSET  = 'lafka-child.zip';
 	const PLUGIN_ASSET = 'lafka-plugin.zip';
 	const PLUGIN_FILE  = 'lafka-plugin/lafka-plugin.php';
 
@@ -36,10 +38,11 @@ class Lafka_GitHub_Updater {
 	}
 
 	/**
-	 * Clear the cached GitHub release for the theme repo.
+	 * Clear the cached GitHub releases for the theme and child theme repos.
 	 */
 	public function flush_theme_cache() {
 		delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::THEME_REPO ) ) );
+		delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::CHILD_REPO ) ) );
 	}
 
 	/**
@@ -125,80 +128,119 @@ class Lafka_GitHub_Updater {
 
 	/**
 	 * Inject theme update data into the update_themes transient.
+	 *
+	 * Checks both the parent theme and, if active, the child theme.
 	 */
 	public function check_theme_update( $transient ) {
 		if ( empty( $transient ) ) {
 			return $transient;
 		}
 
+		// --- Parent theme ---
 		$theme_slug    = get_template();
 		$current_theme = wp_get_theme( $theme_slug );
 		$local_version = $current_theme->get( 'Version' );
 
 		$release = self::get_latest_release( self::THEME_REPO );
-		if ( ! $release ) {
-			return $transient;
-		}
-
-		$remote_version = self::tag_to_version( $release->tag_name );
-
-		// Re-fetch if cached version is not newer than installed.
-		// Uses <= because WP's "Check again" doesn't fire delete_site_transient,
-		// so the flush hooks can't clear our cache. This ensures a fresh API call
-		// on every update check (only runs 2-3× per day via cron / manual check).
-		if ( version_compare( $remote_version, $local_version, '<=' ) ) {
-			delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::THEME_REPO ) ) );
-			$release = self::get_latest_release( self::THEME_REPO );
-			if ( ! $release ) {
-				return $transient;
-			}
+		if ( $release ) {
 			$remote_version = self::tag_to_version( $release->tag_name );
+
+			// Re-fetch if cached version is not newer than installed.
+			if ( version_compare( $remote_version, $local_version, '<=' ) ) {
+				delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::THEME_REPO ) ) );
+				$release = self::get_latest_release( self::THEME_REPO );
+				if ( $release ) {
+					$remote_version = self::tag_to_version( $release->tag_name );
+				}
+			}
+
+			if ( $release ) {
+				$download_url = self::get_asset_url( $release, self::THEME_ASSET );
+				if ( $download_url && version_compare( $remote_version, $local_version, '>' ) ) {
+					$transient->response[ $theme_slug ] = array(
+						'theme'       => $theme_slug,
+						'new_version' => $remote_version,
+						'url'         => 'https://github.com/' . self::THEME_REPO,
+						'package'     => $download_url,
+					);
+				}
+			}
 		}
 
-		$download_url = self::get_asset_url( $release, self::THEME_ASSET );
+		// --- Child theme (only if one is active) ---
+		$child_slug = get_stylesheet();
+		if ( $child_slug !== $theme_slug ) {
+			$child_theme   = wp_get_theme( $child_slug );
+			$child_version = $child_theme->get( 'Version' );
 
-		if ( ! $download_url || ! version_compare( $remote_version, $local_version, '>' ) ) {
-			return $transient;
+			$child_release = self::get_latest_release( self::CHILD_REPO );
+			if ( $child_release ) {
+				$child_remote = self::tag_to_version( $child_release->tag_name );
+
+				if ( version_compare( $child_remote, $child_version, '<=' ) ) {
+					delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::CHILD_REPO ) ) );
+					$child_release = self::get_latest_release( self::CHILD_REPO );
+					if ( $child_release ) {
+						$child_remote = self::tag_to_version( $child_release->tag_name );
+					}
+				}
+
+				if ( $child_release ) {
+					$child_url = self::get_asset_url( $child_release, self::CHILD_ASSET );
+					if ( $child_url && version_compare( $child_remote, $child_version, '>' ) ) {
+						$transient->response[ $child_slug ] = array(
+							'theme'       => $child_slug,
+							'new_version' => $child_remote,
+							'url'         => 'https://github.com/' . self::CHILD_REPO,
+							'package'     => $child_url,
+						);
+					}
+				}
+			}
 		}
-
-		$transient->response[ $theme_slug ] = array(
-			'theme'       => $theme_slug,
-			'new_version' => $remote_version,
-			'url'         => 'https://github.com/' . self::THEME_REPO,
-			'package'     => $download_url,
-		);
 
 		return $transient;
 	}
 
 	/**
 	 * Provide theme info for the "View Details" modal.
+	 *
+	 * Handles both parent theme and child theme requests.
 	 */
 	public function theme_info( $result, $action, $args ) {
-		if ( 'theme_information' !== $action ) {
+		if ( 'theme_information' !== $action || ! isset( $args->slug ) ) {
 			return $result;
 		}
 
 		$theme_slug = get_template();
-		if ( ! isset( $args->slug ) || $args->slug !== $theme_slug ) {
+		$child_slug = get_stylesheet();
+
+		// Determine which repo/asset to query
+		if ( $args->slug === $theme_slug ) {
+			$repo  = self::THEME_REPO;
+			$asset = self::THEME_ASSET;
+		} elseif ( $child_slug !== $theme_slug && $args->slug === $child_slug ) {
+			$repo  = self::CHILD_REPO;
+			$asset = self::CHILD_ASSET;
+		} else {
 			return $result;
 		}
 
-		$release = self::get_latest_release( self::THEME_REPO );
+		$release = self::get_latest_release( $repo );
 		if ( ! $release ) {
 			return $result;
 		}
 
-		$current_theme  = wp_get_theme( $theme_slug );
+		$current_theme  = wp_get_theme( $args->slug );
 		$remote_version = self::tag_to_version( $release->tag_name );
-		$download_url   = self::get_asset_url( $release, self::THEME_ASSET );
+		$download_url   = self::get_asset_url( $release, $asset );
 
 		$info                = new stdClass();
 		$info->name          = $current_theme->get( 'Name' );
-		$info->slug          = $theme_slug;
+		$info->slug          = $args->slug;
 		$info->version       = $remote_version;
 		$info->author        = $current_theme->get( 'Author' );
-		$info->homepage      = 'https://github.com/' . self::THEME_REPO;
+		$info->homepage      = 'https://github.com/' . $repo;
 		$info->download_link = $download_url ? $download_url : '';
 		$info->sections      = array(
 			'description' => $current_theme->get( 'Description' ),
