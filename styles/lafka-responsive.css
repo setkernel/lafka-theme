@@ -1,25 +1,21 @@
 /* RESPONSIVE STYLES */
 @media only screen and (min-width: 1440px) {
-
     body.lafka_boxed #container, body.lafka_boxed .inner, body.lafka_boxed #container > .dokan-dashboard-wrap {
         width: 1280px;
     }
 }
 
 @media only screen and (min-width: 1480px) {
-
     body.lafka_boxed #container, body.lafka_boxed .inner, body.lafka_boxed #container > .dokan-dashboard-wrap {
         width: 1440px;
     }
 }
 
 @media only screen and (min-width: 1024px) {
-
     #content > .inner.lafka_masonry_fullwidth, body.archive.woocommerce.woocommerce-page.lafka-fullwidth-shop-pages #content > #products-wrapper.inner, body.lafka-fullwidth-blog-pages.blog #content > .inner, body.archive.woocommerce.woocommerce-page.lafka-fullwidth-shop-pages .lafka_title_holder .inner {
         padding-left: 5%;
         padding-right: 5%;
     }
-
     body.archive.woocommerce.woocommerce-page.lafka-fullwidth-shop-pages .lafka_title_holder .inner {
         width: 100%;
         max-width: none;
@@ -27,7 +23,6 @@
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1024px) {
-
     div.product div.summary, #content div.product div.summary {
         padding-right: 40px;
         padding-left: 40px;
@@ -35,7 +30,6 @@
 }
 
 @media only screen and (min-width: 769px) and (max-width: 1279px) {
-
     .summary form.cart div.product-addon p.form-row {
         width: 100%;
     }
@@ -73,14 +67,12 @@
 }
 
 @media only screen and (max-width: 782px) {
-
     body.admin-bar #header, body.admin-bar.lafka-sticky-header #header {
         top: 46px
     }
 }
 
 @media only screen and (max-width: 1279px) {
-
     #main-menu, #main-menu #main_nav.menu, ul.lafka-top-menu, .video_controlls, .lafka-wishlist-counter, #lafka-account-holder {
         display: none !important;
     }
@@ -107,7 +99,7 @@
         width: 100%;
     }
 
-    .upsells.products h2::after {
+    .upsells.products h2:after {
         display: none;
     }
 
@@ -137,7 +129,7 @@
 
     .cart-info .coupon button {
         margin-bottom: 5px;
-        background-color: #333;
+        background-color: #333333;
     }
 
     .lafka_blog_masonry.lafka-mozaic .blog-post, .lafka_blog_masonry .blog-post {
@@ -161,7 +153,7 @@
         text-align: left;
     }
 
-    .wpb_lafka_banner a span.lafka_banner-icon, .lafka-none-overlay .foodmenu-unit-info a.foodmenu-link::before {
+    .wpb_lafka_banner a span.lafka_banner-icon, .lafka-none-overlay .foodmenu-unit-info a.foodmenu-link:before {
         display: none;
     }
 
@@ -201,7 +193,7 @@
     }
 
     #content div.product .lafka-product-summary-wrapper div.images {
-        padding-top: 0;
+        padding-top: 0px;
     }
 
     body.single-product #content div.product div.summary h1.product_title {
@@ -215,12 +207,12 @@
     .woocommerce-product-gallery__image {
         width: 100%;
         top: auto !important;
-        padding: 0;
+        padding: 0px;
         margin-bottom: 30px;
     }
 
     .lafka-product-summary-wrapper.lafka-standard-product-gallery .woocommerce-product-gallery__image {
-        margin-bottom: 0 !important;
+        margin-bottom: 0px !important;
     }
 
     body.single-product .content_holder .lafka-has-product-cover-image {
@@ -232,11 +224,9 @@
 and (min-device-width: 768px)
 and (max-device-width: 1024px)
 and (orientation: landscape) {
-
     .inner {
         width: 100% !important;
     }
-
     .count_holder_small .count_info {
         display: none;
     }
@@ -314,14 +304,14 @@ and (orientation: landscape) {
     }
 
     .commentlist ul.children {
-        padding-left: 0;
+        padding-left: 0px;
     }
 
-    .commentlist ul.children::before {
-        left: 0;
+    .commentlist ul.children:before {
+        left: 0px;
     }
 
-    .commentlist ul.children::after {
+    .commentlist ul.children:after {
         left: 6px;
         width: 15px;
         height: 5px;
@@ -334,12 +324,12 @@ and (orientation: landscape) {
     .has-sidebar .content_holder, .has-sidebar.lafka-left-sidebar .content_holder {
         width: 100%;
         padding-right: 0;
-        padding-left: 0;
+        padding-left: 0px;
         border: none;
     }
 
     .sidebar, .has-sidebar.lafka-left-sidebar .sidebar {
-        padding-left: 0;
+        padding-left: 0px;
         width: 100%;
         padding-right: 0;
     }
@@ -367,7 +357,7 @@ and (orientation: landscape) {
     }
 
     div.product div.images ol.flex-control-nav li, #content div.product div.images ol.flex-control-nav li {
-        margin: 0;
+        margin: 0px;
         width: 25% !important;
         padding: 2px;
     }
@@ -435,7 +425,7 @@ and (orientation: landscape) {
         max-width: none !important;
         width: 100%;
         padding: 20px 15px;
-        margin-top: 0;
+        margin-top: 0px;
     }
 
     .blog-post .lafka_post_data_holder h2.heading-title {
@@ -445,7 +435,6 @@ and (orientation: landscape) {
 }
 
 @media only screen and (min-width: 768px) {
-
     p#billing_first_name_field, p#billing_last_name_field {
         display: inline-block;
         width: 49.7%;
@@ -454,7 +443,6 @@ and (orientation: landscape) {
 }
 
 @media only screen and (max-width: 768px) {
-
     div.product div.images, #content div.product div.images, div.product div.summary, #content div.product div.summary, .foodmenu_top div.two_third.foodmenu-main-image-holder, .foodmenu_top div.one_third.last.project-data {
         width: 100%;
         max-width: none;
@@ -480,7 +468,7 @@ and (orientation: landscape) {
     }
 
     #content:not(.has-sidebar) .lafka-product-summary-wrapper.lafka-image-list-product-gallery {
-        padding-top: 0;
+        padding-top: 0px;
     }
 
     body.admin-bar #content:not(.has-sidebar) .lafka-product-summary-wrapper.lafka-image-list-product-gallery {
@@ -500,11 +488,11 @@ and (orientation: landscape) {
         margin-left: -80px;
     }
 
-    #header #logo::after, #header #logo::before {
+    #header #logo:after, #header #logo:before {
         border-width: 20px 40px;
     }
 
-    #header.lafka-sticksy #logo::before, #header.lafka-sticksy #logo::after {
+    #header.lafka-sticksy #logo:before, #header.lafka-sticksy #logo:after {
         bottom: -30px;
         border-width: 15px 40px;
     }
@@ -546,14 +534,14 @@ and (orientation: landscape) {
         font-size: 0 !important;
     }
 
-    #header .lafka-top-bar-message span.lafka-top-bar-phone a::before {
+    #header .lafka-top-bar-message span.lafka-top-bar-phone a:before {
         font-size: 17px !important;
         line-height: 48px;
         width: 48px;
         height: 48px;
         text-align: center;
         margin: 0;
-        color: #fff !important;
+        color: #ffffff !important;
         background-color: #a1ba32 !important;
         border-radius: 50%;
     }
@@ -584,7 +572,7 @@ and (orientation: landscape) {
     }
 
     .foodmenu_top {
-        padding-bottom: 0;
+        padding-bottom: 0px;
     }
 
     .lafka-project-description {
@@ -604,7 +592,6 @@ and (orientation: landscape) {
         text-align: left;
         margin-bottom: 25px;
     }
-
     .lafka-product-summary-wrapper div.lafka-share-links span {
         writing-mode: initial;
         margin-right: 8px;
@@ -670,8 +657,8 @@ and (orientation: landscape) {
     #dokan-primary, #dokan-secondary {
         width: 100%;
         float: left;
-        padding: 0;
-        margin-right: 0;
+        padding: 0px;
+        margin-right: 0px;
     }
 
     #dokan-secondary {
@@ -687,7 +674,7 @@ and (orientation: landscape) {
     }
 
     .foodmenu-main-image-holder #wrap {
-        margin-left: 0;
+        margin-left: 0px;
     }
 
     .lafka-products-list-view .prod_hold .links {
@@ -715,7 +702,7 @@ and (orientation: landscape) {
         padding: 0 12px;
     }
 
-    .lafka-products-list-view div.prod_hold.lafka-variations-list-in-catalog .links a.lafka-quick-view-link::before {
+    .lafka-products-list-view div.prod_hold.lafka-variations-list-in-catalog .links a.lafka-quick-view-link:before {
         display: inline-block;
         margin-right: 4px;
     }
@@ -765,7 +752,7 @@ and (orientation: landscape) {
 
     .cart-info table, .cart-info tbody td, .cart-info tbody tr {
         display: block !important;
-        padding: 12px 0 !important;
+        padding: 12px 0px !important;
         text-align: right;
         background: none;
         border: none;
@@ -832,9 +819,10 @@ and (orientation: landscape) {
         display: inline-block;
     }
 
-    .woocommerce table.shop_table.shop_table_responsive.my_account_orders tr td::before, .woocommerce-page table.shop_table.shop_table_responsive.my_account_orders tr td::before {
+    .woocommerce table.shop_table.shop_table_responsive.my_account_orders tr td:before, .woocommerce-page table.shop_table.shop_table_responsive.my_account_orders tr td:before {
         display: block;
         width: 100%;
+        float: none;
         margin-bottom: 8px;
         float: none;
         text-align: left;
@@ -844,19 +832,20 @@ and (orientation: landscape) {
         float: left;
     }
 
-    .woocommerce table.shop_table_responsive tr td::before, .woocommerce-page table.shop_table_responsive tr td::before {
+    .woocommerce table.shop_table_responsive tr td:before, .woocommerce-page table.shop_table_responsive tr td:before {
         content: attr(data-title) ": ";
+        font-weight: 700;
         float: left;
         vertical-align: middle;
-        font-weight: 400;
+        font-weight: normal;
         font-size: 12px;
     }
 
-    .cart_totals table.shop_table_responsive tr td::before {
+    .cart_totals table.shop_table_responsive tr td:before {
         display: none !important;
     }
 
-    .woocommerce table.shop_table_responsive tr td.actions::before, .woocommerce-page table.shop_table_responsive tr td.actions::before, .woocommerce table.shop_table_responsive tr td.product-remove::before, .woocommerce-page table.shop_table_responsive tr td.product-remove::before, .woocommerce table.shop_table_responsive tr td.product-thumbnail::before, .woocommerce-page table.shop_table_responsive tr td.product-thumbnail::before {
+    .woocommerce table.shop_table_responsive tr td.actions:before, .woocommerce-page table.shop_table_responsive tr td.actions:before, .woocommerce table.shop_table_responsive tr td.product-remove:before, .woocommerce-page table.shop_table_responsive tr td.product-remove:before, .woocommerce table.shop_table_responsive tr td.product-thumbnail:before, .woocommerce-page table.shop_table_responsive tr td.product-thumbnail:before {
         display: none;
     }
 
@@ -874,14 +863,14 @@ and (orientation: landscape) {
     }
 
     table.shop_table.cart td.product-quantity div.quantity {
-        margin-right: 0;
+        margin-right: 0px;
         max-width: 60px;
     }
 
-    .woocommerce table.shop_table_responsive tr td::after {
+    .woocommerce table.shop_table_responsive tr td:after {
         content: " ";
         display: block;
-        height: 0 !Important;
+        height: 0px !Important;
         clear: both;
         visibility: hidden;
     }
@@ -904,8 +893,8 @@ and (orientation: landscape) {
         margin: 0 auto;
     }
 
-    .cart-info td.product-remove a.remove::before, .wishlist_table td.product-remove a.remove::before {
-        padding-top: 0;
+    .cart-info td.product-remove a.remove:before, .wishlist_table td.product-remove a.remove:before {
+        padding-top: 0px;
     }
 
     .woocommerce-form-coupon-toggle, .woocommerce-form-login-toggle {
@@ -982,7 +971,7 @@ and (orientation: landscape) {
     }
 
     .vc_col-xs-1:last-child, .vc_col-sm-1:last-child, .vc_col-md-1:last-child, .vc_col-lg-1:last-child, .vc_col-xs-2:last-child, .vc_col-sm-2:last-child, .vc_col-md-2:last-child, .vc_col-lg-2:last-child, .vc_col-xs-3:last-child, .vc_col-sm-3:last-child, .vc_col-md-3:last-child, .vc_col-lg-3:last-child, .vc_col-xs-4:last-child, .vc_col-sm-4:last-child, .vc_col-md-4:last-child, .vc_col-lg-4:last-child, .vc_col-xs-5:last-child, .vc_col-sm-5:last-child, .vc_col-md-5:last-child, .vc_col-lg-5:last-child, .vc_col-xs-6:last-child, .vc_col-sm-6:last-child, .vc_col-md-6:last-child, .vc_col-lg-6:last-child, .vc_col-xs-7:last-child, .vc_col-sm-7:last-child, .vc_col-md-7:last-child, .vc_col-lg-7:last-child, .vc_col-xs-8:last-child, .vc_col-sm-8:last-child, .vc_col-md-8, .vc_col-lg-8:last-child, .vc_col-xs-9:last-child, .vc_col-sm-9:last-child, .vc_col-md-9:last-child, .vc_col-lg-9:last-child, .vc_col-xs-10:last-child, .vc_col-sm-10:last-child, .vc_col-md-10:last-child, .vc_col-lg-10:last-child, .vc_col-xs-11:last-child, .vc_col-sm-11:last-child, .vc_col-md-11:last-child, .vc_col-lg-11:last-child, .vc_col-xs-12:last-child, .vc_col-sm-12:last-child, .vc_col-md-12:last-child, .vc_col-lg-12:last-child {
-        margin-bottom: 0;
+        margin-bottom: 0px;
     }
 
     #price-filter {
@@ -993,7 +982,7 @@ and (orientation: landscape) {
         display: none;
     }
 
-    #tribe-events-content .tribe-events-calendar td.tribe-events-has-events::after {
+    #tribe-events-content .tribe-events-calendar td.tribe-events-has-events:after {
         background: #999;
         border-radius: 50%;
         top: 50%;
@@ -1042,13 +1031,11 @@ and (orientation: landscape) {
     .has-sidebar .wcmp_vendor_list_wrap .wcmp_sorted_vendors:nth-child(2n+2) {
         margin-right: 0 !important;
     }
-
     .lafka-products-list-view div.prod_hold {
         width: 100% !important;
         text-align: left;
         padding: 15px 0;
     }
-
     body > div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content a.lafka-change-branch-button {
         position: relative;
         top: auto;
@@ -1060,13 +1047,11 @@ and (orientation: landscape) {
         font-size: inherit;
         margin-top: 4px;
     }
-
-    body > div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .lafka-change-branch-button::before {
+    body > div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .lafka-change-branch-button:before {
         display: inline-block !important;
         margin-right: 5px;
         vertical-align: middle;
     }
-
     body > div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .lafka-change-branch + ul.cart_list.product_list_widget {
         top: 105px;
         padding-top: 0;
@@ -1093,7 +1078,7 @@ and (orientation: landscape) {
     }
 
     body.single-product #content:not(.has-sidebar) > #products-wrapper.inner {
-        padding-top: 0;
+        padding-top: 0px;
     }
 
     .lafka-list-variation-weight {
@@ -1104,7 +1089,7 @@ and (orientation: landscape) {
         padding: 20px;
     }
 
-    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info::before {
+    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info:before {
         display: none;
     }
 
@@ -1127,7 +1112,7 @@ and (orientation: landscape) {
         width: 100% !important;
     }
 
-    .post-date::before {
+    .post-date:before {
         display: none !important;
     }
 
@@ -1200,101 +1185,79 @@ and (orientation: landscape) {
 }
 
 @media only screen and (max-width: 600px) {
-
     body.admin-bar #header.lafka-sticksy {
-        top: 0 !important;
+        top: 0px !important;
     }
-
     .foodmenu-unit-holder a.lafka-foodmenu-image-link + .foodmenu-unit-info, .foodmenu-unit-holder > img + .foodmenu-unit-info {
         width: 100%;
     }
-
     a.lafka-foodmenu-image-link + .foodmenu-unit-info a.foodmenu-link, .foodmenu-unit-holder > img + .foodmenu-unit-info a.foodmenu-link {
         padding: 0;
     }
-
     .lafka-none-overlay .foodmenu-unit-info h4 {
         position: static;
     }
-
     .foodmenu-unit-info h4 > span {
         position: absolute;
         top: 25px;
         right: 0;
     }
-
     .foodmenu-unit-info h4 > span.lafka-item-weight-list {
         top: 52px;
         max-width: calc(100% - 105px);
         font-size: 11px;
     }
-
-    .foodmenu-unit-info h4::after {
+    .foodmenu-unit-info h4:after {
         display: none;
     }
-
     .foodmenu-unit-info h6 {
         padding-top: 5px;
         border-top: 2px dotted;
     }
-
     .foodmenu-unit-info ul li .lafka-foodmenu-price, .lafka-foodmenu-option {
         width: 44.5%;
     }
-
     .lafka-foodmenu-option {
         width: 55%;
     }
-
     .lafka-foodmenu-image-link {
         margin-bottom: 8px;
     }
-
     .foodmenu-unit-info a.foodmenu-lightbox-link {
         top: 50px;
     }
-
     form.checkout.woocommerce-checkout #order_review {
         padding: 15px;
     }
-
     table.woocommerce-checkout-review-order-table th.product-name, table.woocommerce-checkout-review-order-table td.product-name {
         width: auto;
     }
-
     table.woocommerce-checkout-review-order-table th.product-total, table.woocommerce-checkout-review-order-table td.product-total {
         width: 90px;
     }
-
     table.woocommerce-checkout-review-order-table dl.variation dd, table.woocommerce-checkout-review-order-table dl.variation dt {
         width: 100%;
     }
-
     table.woocommerce-checkout-review-order-table dl.variation dt.variation- {
         display: none;
     }
 }
 
 @media only screen and (min-width: 320px) and (max-width: 599px) {
-
 .lafka-checkout-datetime-fields {
     height: auto;
     padding: 15px 0;
   }
-
   .lafka-checkout-datetime-fields input#lafka_checkout_date {
     width: 110px;
   }
-
   .lafka-checkout-datetime-fields span.select2-container {
     width: auto !important;
     min-width: 120px;
   }
-
   .lafka-checkout-datetime-container {
     padding: 5px;
   }
-
   .lafka-checkout-datetime-fields .lafka-datetime-clear {
     display: inline-block;
     width: 24px;
@@ -1302,28 +1265,23 @@ and (orientation: landscape) {
     line-height: 24px;
     border: none;
   }
-
   .lafka-checkout-datetime-fields .lafka-datetime-clear::before {
-    margin-right: 0;
+    margin-right: 0px;
     font-size: 21px;
     width: 24px;
     height: 24px;
     line-height: 24px;
   }
-
-  .lafka-delivery-time-toggle, .lafka-delivery-time-toggle::before {
+  .lafka-delivery-time-toggle, .lafka-delivery-time-toggle:before {
       font-size: 12px;
   }
-
   .woocommerce-message[data-lafka-notice="minimum-amount"] {
       margin-bottom: 20px !important;
   }
-
-  .woocommerce-message[data-lafka-notice="minimum-amount"], .woocommerce-message[data-lafka-notice="minimum-amount"]::before {
+  .woocommerce-message[data-lafka-notice="minimum-amount"], .woocommerce-message[data-lafka-notice="minimum-amount"]:before {
       font-size: 14px;
   }
-
-  .woocommerce-message[data-lafka-notice="minimum-amount"]::before {
+  .woocommerce-message[data-lafka-notice="minimum-amount"]:before {
       margin-right: 3px;
   }
 }
@@ -1335,7 +1293,7 @@ and (orientation: landscape) {
     }
 
     .lafka_shortcode_latest_posts.lafka_blog_masonry .owl-item .blog-post {
-        padding: 0 !important;
+        padding: 0px !important;
     }
 
     .lafka-foodmenu-categories ul li {
@@ -1344,14 +1302,14 @@ and (orientation: landscape) {
     }
 
     a.lafka-filter-widgets-triger {
-        background-color: #fff;
+        background-color: #ffffff;
         border: 1px solid #f1f1f1;
         vertical-align: middle;
         padding: 0 10px;
         margin-bottom: 10px;
     }
 
-    a.lafka-filter-widgets-triger::before {
+    a.lafka-filter-widgets-triger:before {
         vertical-align: middle;
         line-height: 64px;
     }
@@ -1376,23 +1334,23 @@ and (orientation: landscape) {
     }
 
     body.single-product #content:not(.has-sidebar) > #products-wrapper.inner {
-        padding-top: 0;
+        padding-top: 0px;
     }
 
     .prod_hold .lafka-list-prod-summary {
-        padding: 30px 0 20px 0;
+        padding: 30px 0px 20px 0px;
     }
 
     .lafka-products-list-view .prod_hold .lafka-list-prod-summary {
-        padding: 0 20px 15px 20px;
+        padding: 0px 20px 15px 20px;
     }
 
     .lafka-product-list-description {
-        padding: 5px 0 0 0;
+        padding: 5px 0px 0px 0px;
     }
 
     div.prod_hold .links {
-        padding: 0 0;
+        padding: 0px 0px;
     }
 
     .lafka-list-variation-weight {
@@ -1407,7 +1365,7 @@ and (orientation: landscape) {
         padding: 20px;
     }
 
-    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info::before {
+    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info:before {
         display: none;
     }
 
@@ -1426,7 +1384,7 @@ and (orientation: landscape) {
         width: 100% !important;
     }
 
-    .post-date::before {
+    .post-date:before {
         display: none !important;
     }
 
@@ -1448,7 +1406,7 @@ and (orientation: landscape) {
     }
 
     .lafka_blog_small_image .blog-post .post-unit-holder, .lafka_blog_small_image .blog-post .lafka_flexslider.post_slide, .lafka_blog_small_image .blog-post .slideshow {
-        margin-right: 0;
+        margin-right: 0px;
         width: 100%;
         float: none;
         display: block;
@@ -1495,7 +1453,7 @@ and (orientation: landscape) {
 
     .cart-info .coupon button {
         margin-bottom: 5px;
-        background-color: #333;
+        background-color: #333333;
     }
 
     .has-sidebar .wcmp_sorted_vendors {
@@ -1510,11 +1468,11 @@ and (orientation: landscape) {
     }
 
     .lafka_shortcode_latest_posts.lafka_blog_masonry .owl-item .blog-post {
-        padding: 0 !important;
+        padding: 0px !important;
     }
 
     a.lafka-filter-widgets-triger {
-        background-color: #fff;
+        background-color: #ffffff;
         border: 1px solid #f1f1f1;
         vertical-align: middle;
         padding: 0 10px;
@@ -1530,7 +1488,7 @@ and (orientation: landscape) {
         text-align: left;
     }
 
-    a.lafka-filter-widgets-triger::before {
+    a.lafka-filter-widgets-triger:before {
         vertical-align: middle;
         line-height: 64px;
     }
@@ -1555,19 +1513,19 @@ and (orientation: landscape) {
     }
 
     body.single-product #content:not(.has-sidebar) > #products-wrapper.inner {
-        padding-top: 0;
+        padding-top: 0px;
     }
 
     .prod_hold .lafka-list-prod-summary {
-        padding: 30px 0 20px 0;
+        padding: 30px 0px 20px 0px;
     }
 
     .lafka-product-list-description {
-        padding: 5px 0 0 0;
+        padding: 5px 0px 0px 0px;
     }
 
     div.prod_hold .links {
-        padding: 0 0;
+        padding: 0px 0px;
     }
 
     .lafka-list-variation-weight {
@@ -1586,7 +1544,7 @@ and (orientation: landscape) {
         padding: 20px;
     }
 
-    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info::before {
+    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info:before {
         display: none;
     }
 
@@ -1613,7 +1571,7 @@ and (orientation: landscape) {
         width: 100% !important;
     }
 
-    .post-date::before {
+    .post-date:before {
         display: none !important;
     }
 
@@ -1635,7 +1593,7 @@ and (orientation: landscape) {
     }
 
     .lafka_blog_small_image .blog-post .post-unit-holder, .lafka_blog_small_image .blog-post .lafka_flexslider.post_slide, .lafka_blog_small_image .blog-post .slideshow {
-        margin-right: 0;
+        margin-right: 0px;
         width: 100%;
         float: none;
         display: block;
@@ -1675,7 +1633,7 @@ and (orientation: landscape) {
     }
 
     .lafka-author-info .title {
-        padding: 0 0 0 65px;
+        padding: 0 0px 0 65px;
     }
 
     .lafka-author-info .title h2 {
@@ -1691,7 +1649,7 @@ and (orientation: landscape) {
     }
 
     body.single-post #comments {
-        padding-bottom: 0;
+        padding-bottom: 0px;
         padding-top: 40px;
     }
 
@@ -1737,61 +1695,49 @@ and (orientation: landscape) {
     ul.tabs a {
         padding: 15px !important;
     }
-
     .woocommerce-tabs ul.tabs a {
-        padding: 8px 0 !important;
+        padding: 8px 0px !important;
         font-size: 12px;
         margin-bottom: 8px;
     }
-
     .lafka-products-list-view .prod_hold .lafka-list-prod-summary {
-        padding: 0 0 15px 0;
+        padding: 0px 0px 15px 0px;
         position: initial;
     }
-
     .lafka-products-list-view div.prod_hold .image {
         display: block;
         margin-bottom: 10px;
     }
-
     .lafka-products-list-view div.prod_hold .lafka-list-view-summary-wrap {
         width: 100%;
     }
-
     .lafka-products-list-view div.prod_hold .name {
         font-size: 15px;
         padding: 0;
     }
-
     .lafka-products-list-view .prod_hold .links, .lafka-products-list-view div.prod_hold.lafka-variations-list-in-catalog .links a.lafka-quick-view-link {
         top: auto !important;
         right: auto !important;
         position: relative !important;
     }
-
     .lafka-products-list-view .prod_hold .price_hold {
         top: 55px;
     }
-
     .lafka-products-list-view div.prod_hold:not(.lafka-variations-list-in-catalog) .links {
         width: auto;
     }
-
     .lafka-products-list-view div.prod_hold a.button, .lafka-products-list-view div.prod_hold .links a.button.add_to_cart_button, .lafka-products-list-view div.prod_hold .links a.button.add_to_cart_button.ajax_add_to_cart {
         width: auto;
         text-indent: 0;
         font-size: 12px;
         padding: 0 12px 0 4px;
     }
-
     .lafka-products-list-view div.prod_hold .links a.button.add_to_cart_button::before, .lafka-products-list-view div.prod_hold .links a.button.product_type_grouped::before, .lafka-products-list-view div.prod_hold .links a.button.product_type_external::before {
         display: inline-block;
     }
-
     .lafka-products-list-view div.prod_hold .woocommerce-product-details__short-description p {
         font-size: 14px;
     }
-
     .lafka-products-list-view div.prod_hold:not(.lafka-variations-list-in-catalog) .links a.lafka-quick-view-link {
         width: auto;
         text-indent: 0;
@@ -1799,19 +1745,16 @@ and (orientation: landscape) {
         padding: 0 12px;
         text-align: left;
     } 
-
 .lafka-products-list-view div.prod_hold:not(.lafka-variations-list-in-catalog) .links a.lafka-quick-view-link::before {
         display: inline-block;
         margin-right: 4px;
 
     }
-
     .lafka-products-list-view.lafka-is-shortcode .prod_hold .lafka-list-prod-summary {
         width: 100%;
     }
-
     .lafka-products-list-view.lafka-is-shortcode div.prod_hold.lafka-variations-list-in-catalog .links {
-        padding: 0;
+        padding: 0px;
     }
 }
 
@@ -1819,10 +1762,9 @@ and (orientation: landscape) {
 #yith-wcwl-form .wishlist_table.mobile {
         border: none !important;
     }
-
 #yith-wcwl-form .wishlist_table.mobile, #yith-wcwl-form .wishlist_table.mobile tbody td, #yith-wcwl-form .wishlist_table.mobile tbody tr {
         display: block !important;
-        padding: 12px 0 !important;
+        padding: 12px 0px !important;
         text-align: right;
         background: none;
         border: none;
@@ -1932,19 +1874,19 @@ and (orientation: landscape) {
         display: inline-block;
         max-width: none;
         width: 100%;
-        margin-right: 0;
+        margin-right: 0px;
         margin-bottom: 10px;
         text-align: center;
     }
 
     #yith-wcwl-form .wishlist_table.mobile li .item-details h3 {
         font-size: 14px !important;
-        font-weight: 400;
+        font-weight: normal;
         margin-bottom: 10px;
     }
 
     .wishlist_table.mobile .links a.button.add_to_cart_button {
-        color: #fff;
+        color: #ffffff;
         border-radius: 0;
     }
 
@@ -1977,6 +1919,7 @@ and (orientation: landscape) {
     }
 
     .wishlist_table.mobile li .additional-info-wrapper .product-remove {
+        text-align: right;
         position: absolute;
         top: 6px;
         right: 6px;
@@ -1984,20 +1927,17 @@ and (orientation: landscape) {
         height: 28px;
         text-align: center;
         border-radius: 50%;
-        background: #333;
+        background: #333333;
         vertical-align: middle;
         line-height: 28px;
     }
-
     .wishlist_table.mobile li .additional-info-wrapper .product-remove a {
-        color: #fff;
+        color: #ffffff;
     }
-
     #yith-wcwl-form .wishlist_table.mobile {
         margin-left: 0;
         list-style: none;
     }
-
     #yith-wcwl-form .wishlist_table.mobile table {
         font-size: 13px;
         border: none;
@@ -2007,7 +1947,6 @@ and (orientation: landscape) {
 
 /* Addon grid responsive override */
 @media only screen and (max-width: 599px) {
-
     .summary form.cart div.product-addon {
         grid-template-columns: 1fr;
     }
