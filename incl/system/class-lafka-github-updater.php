@@ -141,7 +141,18 @@ class Lafka_GitHub_Updater {
 		}
 
 		$remote_version = self::tag_to_version( $release->tag_name );
-		$download_url   = self::get_asset_url( $release, self::THEME_ASSET );
+
+		// Cached release is older than installed version — cache is stale, re-fetch
+		if ( version_compare( $remote_version, $local_version, '<' ) ) {
+			delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::THEME_REPO ) ) );
+			$release = self::get_latest_release( self::THEME_REPO );
+			if ( ! $release ) {
+				return $transient;
+			}
+			$remote_version = self::tag_to_version( $release->tag_name );
+		}
+
+		$download_url = self::get_asset_url( $release, self::THEME_ASSET );
 
 		if ( ! $download_url || ! version_compare( $remote_version, $local_version, '>' ) ) {
 			return $transient;
@@ -226,7 +237,18 @@ class Lafka_GitHub_Updater {
 		}
 
 		$remote_version = self::tag_to_version( $release->tag_name );
-		$download_url   = self::get_asset_url( $release, self::PLUGIN_ASSET );
+
+		// Cached release is older than installed version — cache is stale, re-fetch
+		if ( version_compare( $remote_version, $local_version, '<' ) ) {
+			delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::PLUGIN_REPO ) ) );
+			$release = self::get_latest_release( self::PLUGIN_REPO );
+			if ( ! $release ) {
+				return $transient;
+			}
+			$remote_version = self::tag_to_version( $release->tag_name );
+		}
+
+		$download_url = self::get_asset_url( $release, self::PLUGIN_ASSET );
 
 		if ( ! $download_url || ! version_compare( $remote_version, $local_version, '>' ) ) {
 			return $transient;
