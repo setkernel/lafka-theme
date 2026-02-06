@@ -196,7 +196,7 @@
         padding-top: 0px;
     }
 
-    body.single-product #content div.product div.summary h1.heading-title {
+    body.single-product #content div.product div.summary h1.product_title {
         font-size: 18px !important;
     }
 
@@ -650,7 +650,7 @@ and (orientation: landscape) {
         max-width: none;
     }
 
-    body.single-product #content div.product div.summary h1.heading-title {
+    body.single-product #content div.product div.summary h1.product_title {
         font-size: 18px !important;
     }
 
@@ -1133,11 +1133,7 @@ and (orientation: landscape) {
         top: 28px;
     }
 
-    .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.heading-title {
-        font-size: 36px !important;
-    }
-
-    .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.heading-title {
+    .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.product_title {
         font-size: 36px !important;
     }
 
@@ -1421,7 +1417,7 @@ and (orientation: landscape) {
         width: 250px;
     }
 
-    .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.heading-title {
+    .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.product_title {
         font-size: 32px !important;
     }
 
@@ -1608,7 +1604,7 @@ and (orientation: landscape) {
         width: 250px;
     }
 
-    .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder h1.heading-title, #content div.product div.summary h1.heading-title {
+    .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder h1.heading-title, #content div.product div.summary h1.product_title {
         font-size: 32px !important;
     }
 

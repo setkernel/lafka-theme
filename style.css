@@ -2,7 +2,7 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.2.4
+Version: 5.2.5
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
@@ -1989,7 +1989,7 @@ body.lafka_transparent_header .lafka_title_holder.title_has_image .inner {
     width: 75%;
 }
 
-#content div.product div.summary h1.heading-title,
+#content div.product div.summary h1.product_title,
 .lafka-quick-view-lightbox h1.product_title {
     line-height: normal;
     margin-bottom: 20px;
@@ -20707,7 +20707,7 @@ div.prod_hold.product-type-bundle .woocommerce-product-details__short-descriptio
 /* All selectors below use CSS custom properties set via :root{} in dynamic-css.php */
 
 /* Site main accent color */
-.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate i, .lafka-delivery-time-toggle:before, a.lafka-branch-delivery:before, a.lafka-branch-pickup:before, .wpb_lafka_banner.lafka-banner-dark a h5, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev, div.widget_categories ul li.current-cat > a:before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li:before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title:before, button.single_add_to_cart_button:before, .links a.button.add_to_cart_button:after, .links a.button.add_to_cart_button.ajax_add_to_cart:after, #lafka-account-holder.lafka-user-is-logged .lafka-header-account-link-holder > ul li a:hover:before, .commentlist ul.children:before, .infinite-scroll-request:before, .widget_layered_nav_filters li a:before, div.prod_hold .name sup, #main-menu li ul.sub-menu li a sup, div.prod_hold .name sub, #content div.product div.summary h1.heading-title sup, #content div.product div.summary h1.heading-title sub, .lafka-spec-dot, .count_holder .count_info:before, .lafka-pricing-table-shortcode .title-icon-holder, .count_holder .count_info_left:before, .widget_layered_nav ul li:hover .count, .widget_layered_nav ul li.chosen a, .widget_product_categories ul li:hover > .count, .widget_product_categories ul li.current-cat > a, .widget_layered_nav ul li:hover a:before, .widget_product_categories ul li:hover a:before, .wpb_lafka_banner a span.lafka_banner-icon, .lafka-event-countdown .is-countdown, .video_controlls a#video-volume:after, div.widget_categories ul li > a:hover:before, #main-menu ul.menu > li > a:hover, #main-menu ul.menu > li.current-menu-item > a, .otw-input-wrap:before, a.bbp-forum-title:hover, .foodmenu_top .project-data .main-features .checklist li:before, body.lafka_transparent_header #main-menu ul.menu > li.current-menu-item > a:before, body.lafka_transparent_header #main-menu ul.menu > li > a:hover:before {
+.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate i, .lafka-delivery-time-toggle:before, a.lafka-branch-delivery:before, a.lafka-branch-pickup:before, .wpb_lafka_banner.lafka-banner-dark a h5, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev, div.widget_categories ul li.current-cat > a:before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li:before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title:before, button.single_add_to_cart_button:before, .links a.button.add_to_cart_button:after, .links a.button.add_to_cart_button.ajax_add_to_cart:after, #lafka-account-holder.lafka-user-is-logged .lafka-header-account-link-holder > ul li a:hover:before, .commentlist ul.children:before, .infinite-scroll-request:before, .widget_layered_nav_filters li a:before, div.prod_hold .name sup, #main-menu li ul.sub-menu li a sup, div.prod_hold .name sub, #content div.product div.summary h1.product_title sup, #content div.product div.summary h1.product_title sub, .lafka-spec-dot, .count_holder .count_info:before, .lafka-pricing-table-shortcode .title-icon-holder, .count_holder .count_info_left:before, .widget_layered_nav ul li:hover .count, .widget_layered_nav ul li.chosen a, .widget_product_categories ul li:hover > .count, .widget_product_categories ul li.current-cat > a, .widget_layered_nav ul li:hover a:before, .widget_product_categories ul li:hover a:before, .wpb_lafka_banner a span.lafka_banner-icon, .lafka-event-countdown .is-countdown, .video_controlls a#video-volume:after, div.widget_categories ul li > a:hover:before, #main-menu ul.menu > li > a:hover, #main-menu ul.menu > li.current-menu-item > a, .otw-input-wrap:before, a.bbp-forum-title:hover, .foodmenu_top .project-data .main-features .checklist li:before, body.lafka_transparent_header #main-menu ul.menu > li.current-menu-item > a:before, body.lafka_transparent_header #main-menu ul.menu > li > a:hover:before {
     color: var(--lafka-accent-color);
 }
 
@@ -21150,13 +21150,13 @@ div.prod_hold .links a.lafka-quick-view-link:hover, .lafka-product-slide-cart .b
 }
 
 /* Fancy page titles */
-.lafka-fancy-titles #lafka_page_title h1.heading-title, .lafka-fancy-titles #content div.product div.summary h1.heading-title, .lafka-fancy-titles .lafka-quick-view-lightbox h1.product_title {
+.lafka-fancy-titles #lafka_page_title h1.heading-title, .lafka-fancy-titles #content div.product div.summary h1.product_title, .lafka-fancy-titles .lafka-quick-view-lightbox h1.product_title {
     font-family: "tiza" !important;
     font-weight: normal !important;
     font-size: 32px;
 }
 
-.lafka-fancy-titles #content div.product div.summary h1.heading-title, .lafka-fancy-titles .lafka-quick-view-lightbox h1.product_title {
+.lafka-fancy-titles #content div.product div.summary h1.product_title, .lafka-fancy-titles .lafka-quick-view-lightbox h1.product_title {
     font-size: 28px;
 }
 
