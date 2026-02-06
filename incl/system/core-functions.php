@@ -382,8 +382,8 @@ if (!function_exists('lafka_enqueue_admin_js')) {
 			wp_enqueue_style('wp-color-picker');
 			wp_enqueue_script('wp-color-picker', array('jquery'));
 			// font-awesome
-			wp_enqueue_style('font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array(), false, 'screen');
-			wp_enqueue_style('font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array('font_awesome_6_v5shims'), false, 'screen');
+			wp_enqueue_style('font_awesome_6_v4shims', get_template_directory_uri() . "/styles/font-awesome/css/v4-shims.min.css", array(), false, 'screen');
+			wp_enqueue_style('font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array('font_awesome_6_v4shims'), false, 'screen');
 			// et-line-font
 			wp_enqueue_style('et-line-font', get_template_directory_uri() . "/styles/et-line-font/style.css", false, false, 'screen');
 		}
@@ -866,7 +866,7 @@ if (!function_exists('lafka_typography_enqueue_google_font')) {
 add_filter( 'style_loader_tag', 'lafka_style_loader_tag_filter', 10, 2 );
 if ( ! function_exists( 'lafka_style_loader_tag_filter' ) ) {
 	function lafka_style_loader_tag_filter( $html, $handle ) {
-		if ( in_array( $handle, array( 'lafka-fonts', 'font_awesome_6_v5shims', 'font_awesome_6', 'et-line-font', 'flaticon' ) ) ) {
+		if ( in_array( $handle, array( 'lafka-fonts', 'font_awesome_6_v4shims', 'font_awesome_6', 'et-line-font', 'flaticon' ) ) ) {
 			$link_stylesheet = str_replace( "rel='stylesheet'", "rel='stylesheet' onload=\"this.media='all'\"", $html );
 			$link_preload    = str_replace( "rel='stylesheet'", "rel='preload' as='style'", $html );
 			$link_preload    = str_replace( "media='print'", "", $link_preload );
@@ -911,8 +911,8 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 			wp_enqueue_style('lafka-responsive', get_template_directory_uri() . "/styles/lafka-responsive.css", array('lafka-style'));
 		}
 
-		wp_enqueue_style( 'font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array(),false, 'print' );
-		wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array( 'font_awesome_6_v5shims' ), false, 'print' );
+		wp_enqueue_style( 'font_awesome_6_v4shims', get_template_directory_uri() . "/styles/font-awesome/css/v4-shims.min.css", array(),false, 'print' );
+		wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array( 'font_awesome_6_v4shims' ), false, 'print' );
 		wp_enqueue_style('et-line-font', get_template_directory_uri() . "/styles/et-line-font/style.css", array(),false, 'print');
 		// Flaticon
 		wp_enqueue_style('flaticon', get_template_directory_uri() . "/styles/flaticon/font/flaticon.css", false, false, 'print');
