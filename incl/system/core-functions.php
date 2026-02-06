@@ -98,20 +98,16 @@ if (!function_exists('lafka_register_theme_features')) {
 }
 
 
-// Register top navigation menu
-register_nav_menu('primary', esc_html__('Main Menu', 'lafka'));
-
-// Register mobile navigation menu
-register_nav_menu('mobile', esc_html__('Mobile Menu', 'lafka'));
-
-// Register top left menu
-register_nav_menu('top-left', esc_html__('Top Left Menu', 'lafka'));
-
-// Register top right menu
-register_nav_menu('top-right', esc_html__('Top Right Menu', 'lafka'));
-
-// Register footer navigation menu
-register_nav_menu('tertiary', esc_html__('Footer Menu', 'lafka'));
+add_action( 'after_setup_theme', 'lafka_register_nav_menus' );
+function lafka_register_nav_menus() {
+	register_nav_menus( array(
+		'primary'   => esc_html__( 'Main Menu', 'lafka' ),
+		'mobile'    => esc_html__( 'Mobile Menu', 'lafka' ),
+		'top-left'  => esc_html__( 'Top Left Menu', 'lafka' ),
+		'top-right' => esc_html__( 'Top Right Menu', 'lafka' ),
+		'tertiary'  => esc_html__( 'Footer Menu', 'lafka' ),
+	) );
+}
 
 add_action('widgets_init', 'lafka_register_sidebars');
 if (!function_exists('lafka_register_sidebars')) {
