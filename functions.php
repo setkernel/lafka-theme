@@ -930,6 +930,68 @@ if (!function_exists('lafka_comment')) {
 				$classes[] = lafka_get_option('blog_pages_width');
 			}
 
+			// Feature-toggle classes for CSS custom properties
+			if (lafka_get_option('all_buttons_style') === 'round') {
+				$classes[] = 'lafka-round-buttons';
+			}
+			if (lafka_get_option('fancy_title_font')) {
+				$classes[] = 'lafka-fancy-titles';
+			}
+			if (lafka_get_option('uppercase_page_titles')) {
+				$classes[] = 'lafka-uppercase-titles';
+			}
+			if (lafka_get_option('main_menu_transf_to_uppercase')) {
+				$classes[] = 'lafka-uppercase-menu';
+			}
+			if (lafka_get_option('categories_fancy')) {
+				$classes[] = 'lafka-fancy-categories';
+			}
+			if (!lafka_get_option('header_top_mobile_visibility')) {
+				$classes[] = 'lafka-no-top-header-mobile';
+			}
+			if (lafka_get_option('disable_logo_point_down')) {
+				$classes[] = 'lafka-no-logo-point';
+			}
+			if (!lafka_get_option('logo_background_color')) {
+				$classes[] = 'lafka-no-logo-bg';
+			}
+			$header_backgr_body = lafka_get_option('header_background');
+			if (lafka_get_option('logo_background_color') && lafka_get_option('logo_background_color') === $header_backgr_body['color']) {
+				$classes[] = 'lafka-logo-matches-header';
+			}
+			if (!lafka_get_option('use_quickview')) {
+				$classes[] = 'lafka-no-quickview';
+			}
+			if (lafka_get_option('mobile_theme_logo')) {
+				$classes[] = 'lafka-has-mobile-logo';
+			}
+			if (lafka_get_option('show_quantity_on_listing')) {
+				$classes[] = 'lafka-qty-on-listing';
+			}
+			if (lafka_get_option('product_columns_mobile') === '2') {
+				$classes[] = 'lafka-mobile-2col';
+			}
+			if (!lafka_get_option('show_searchform') && !lafka_get_option('show_shopping_cart') && !lafka_get_option('show_my_account') && !lafka_get_option('show_wish_in_header')) {
+				$classes[] = 'lafka-no-header-services';
+			}
+			$use_google_face_for_body = lafka_get_option('use_google_face_for');
+			if (!empty($use_google_face_for_body['main_menu'])) {
+				$classes[] = 'lafka-headings-for-menu';
+			}
+			if (!empty($use_google_face_for_body['buttons'])) {
+				$classes[] = 'lafka-headings-for-buttons';
+			}
+			if (lafka_get_option('footer_copyright_bar_text_color') === '#ffffff') {
+				$classes[] = 'lafka-light-copyright';
+			}
+			if (!empty($header_backgr_body['image'])) {
+				$classes[] = 'lafka-has-header-bg';
+			}
+			$footer_backgr_body = lafka_get_option('footer_background');
+			if (!empty($footer_backgr_body['image']) && $footer_backgr_body['repeat'] === 'no-repeat') {
+				$classes[] = 'lafka-footer-bg-norepeat';
+			}
+
 			// return the $classes array
 			return $classes;
 		}
