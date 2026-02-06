@@ -367,7 +367,7 @@ if (!function_exists('lafka_enqueue_admin_js')) {
 		wp_enqueue_style('wp-color-picker');
         wp_enqueue_script('wp-color-picker', array('jquery'));
 		// font-awesome
-		wp_enqueue_style('font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array('fonticonpicker'), false, 'screen');
+		wp_enqueue_style('font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array(), false, 'screen');
 		wp_enqueue_style('font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array('font_awesome_6_v5shims'), false, 'screen');
 		// et-line-font
 		wp_enqueue_style('et-line-font', get_template_directory_uri() . "/styles/et-line-font/style.css", false, false, 'screen');
