@@ -1159,7 +1159,7 @@ if ( ! function_exists( 'lafka_defer_non_critical_scripts' ) ) {
 		if ( is_admin() ) {
 			return $tag;
 		}
-		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore' );
+		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore', 'wp-i18n', 'wp-api-fetch', 'wp-hooks', 'wp-polyfill' );
 		if ( in_array( $handle, $no_defer, true ) ) {
 			return $tag;
 		}
