@@ -249,31 +249,31 @@
 
         $('html.no-touch .lafka-from-bottom').each(function() {
             $(this).appear(function() {
-                $(this).delay(300).animate({ opacity: 1, bottom: "0px" }, 500);
+                $(this).animate({ opacity: 1, bottom: "0px" }, 400);
             });
         });
 
         $('html.no-touch .lafka-from-left').each(function() {
             $(this).appear(function() {
-                $(this).delay(300).animate({ opacity: 1, left: "0px" }, 500);
+                $(this).animate({ opacity: 1, left: "0px" }, 400);
             });
         });
 
         $('html.no-touch .lafka-from-right').each(function() {
             $(this).appear(function() {
-                $(this).delay(300).animate({ opacity: 1, right: "0px" }, 500);
+                $(this).animate({ opacity: 1, right: "0px" }, 400);
             });
         });
 
         $('html.no-touch .lafka-fade').each(function() {
             $(this).appear(function() {
-                $(this).delay(300).animate({ opacity: 1 }, 700);
+                $(this).animate({ opacity: 1 }, 400);
             });
         });
 
-        $('html.no-touch div.prod_hold, html.no-touch .wpb_lafka_banner:not(.lafka-from-bottom), html.no-touch .wpb_lafka_banner:not(.lafka-from-left), html.no-touch .wpb_lafka_banner:not(.lafka-from-right), html.no-touch .wpb_lafka_banner:not(.lafka-fade)').each(function() {
+        $('html.no-touch .wpb_lafka_banner:not(.lafka-from-bottom):not(.lafka-from-left):not(.lafka-from-right):not(.lafka-fade)').each(function() {
             $(this).appear(function() {
-                $(this).addClass('prod_visible').delay(2000);
+                $(this).addClass('prod_visible');
             });
         });
 
@@ -1346,12 +1346,6 @@
         $newProducts.imagesLoaded(function() {
             $newProducts.each(function() {
                 $(this).addClass('lafka-infinite-loaded');
-
-                if ($(document.documentElement).hasClass('no-touch')) {
-                    $(this).appear(function() {
-                        $(this).addClass('prod_visible').delay(2000);
-                    });
-                }
             });
         });
 

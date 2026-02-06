@@ -2,7 +2,7 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.4.4
+Version: 5.4.5
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
@@ -7671,16 +7671,6 @@ div.prod_hold {
     box-sizing: border-box;
     text-align: center;
     border-radius: 3px;
-    -webkit-transition: all 0.6s ease 0s;
-    transition: all 0.6s ease 0s;
-    transform: scale(1.5);
-    opacity: 0;
-}
-
-div.prod_hold.prod_visible,
-html.touch div.prod_hold {
-    opacity: 1;
-    transform: scale(1);
 }
 
 @keyframes revealer-text {
