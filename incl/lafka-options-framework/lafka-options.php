@@ -2202,20 +2202,29 @@ function lafka_optionsframework_options() {
 		'tab_id' => 'lafkaupdates'
 	);
 
-	if(defined('LAFKA_IS_ENVATO_MARKET') && LAFKA_IS_ENVATO_MARKET) {
-		$options[] = array(
-			'desc' => '<p>' . esc_html__( 'Lafka automatic updates are managed by the Envato Market plugin (bundled with the theme).', 'lafka' ) . '</p>' .
-			          '<p><a class="lafka-theme-updates" href="' . esc_url( admin_url( 'admin.php?page=envato-market' ) ) . '">' . esc_html_x( 'Manage your Envato purchased items', 'theme-options', 'lafka' ) . '</a></p>',
-			'type' => 'info'
-		);
-	} else {
-		$options[] = array(
-			'desc' => '<p>' . esc_html__( 'Lafka automatic updates are managed by the Envato Market plugin (bundled with the theme).', 'lafka' ) . '</p><p>' .
-			          esc_html_x( 'Please install and activate "Envato Market" in order to manage all your WordPress themes and plugins purchased from Envato.', 'theme-options', 'lafka' ) .
-			          '</p><p><a class="lafka-theme-updates" href="' . esc_url( admin_url( 'admin.php?page=tgmpa-install-plugins' ) ) . '">' . esc_html_x( 'Install/Activate Envato Market plugin', 'theme-options', 'lafka' ) . '</a></p>',
-			'type' => 'info'
-		);
-	}
+	$options[] = array(
+		'desc' => '<p>' . esc_html__( 'Lafka checks GitHub for theme and plugin updates automatically every 12 hours. To force a fresh check, visit Dashboard > Updates and click "Check Again".', 'lafka' ) . '</p>',
+		'type' => 'info'
+	);
+
+	$options[] = array(
+		'name' => esc_html_x('Enable Update Checks', 'theme-options', 'lafka'),
+		'desc' => esc_html_x('Automatically check GitHub for theme and plugin updates.', 'theme-options', 'lafka'),
+		'id' => 'lafka_github_updates_enabled',
+		'std' => 1,
+		'type' => 'checkbox'
+	);
+
+	$options[] = array(
+		'name' => esc_html_x('GitHub Personal Access Token', 'theme-options', 'lafka'),
+		'desc' => sprintf(
+			_x( 'Optional. Increases the GitHub API rate limit from 60 to 5,000 requests/hour. Create a token at %s with no special permissions (public repo access only).', 'theme-options', 'lafka' ),
+			'<a href="https://github.com/settings/tokens" target="_blank">github.com/settings/tokens</a>'
+		),
+		'id' => 'lafka_github_token',
+		'std' => '',
+		'type' => 'text'
+	);
 
 	return $options;
 }
