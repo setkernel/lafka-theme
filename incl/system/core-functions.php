@@ -80,6 +80,11 @@ if (!function_exists('lafka_register_theme_features')) {
 		// Gutenberg
 		add_theme_support( 'align-wide' );
 
+		// Use the classic widget editor — theme widgets are WP_Widget-based.
+		// Filter is used instead of remove_theme_support because WP adds the
+		// default support at after_setup_theme priority 99999 (after themes).
+		add_filter( 'use_widgets_block_editor', '__return_false' );
+
 		if (defined('LAFKA_IS_WOOCOMMERCE') && LAFKA_IS_WOOCOMMERCE) {
             // Add support for woocommerce
 			add_theme_support('woocommerce');
@@ -359,50 +364,64 @@ if (!function_exists('lafka_register_required_plugins')) {
 if (!function_exists('lafka_enqueue_admin_js')) {
 
 	function lafka_enqueue_admin_js($hook) {
+		// Lightweight admin CSS — safe on every page.
 		wp_enqueue_style('lafka-admin', get_template_directory_uri() . "/styles/lafka-admin.css");
-		wp_register_script('lafka-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-medialibrary-uploader.js', array('jquery-ui-accordion', 'media-upload'), false, true);
-		wp_enqueue_script('lafka-medialibrary-uploader');
 
-		// wp-color-picker
-		wp_enqueue_style('wp-color-picker');
-        wp_enqueue_script('wp-color-picker', array('jquery'));
-		// font-awesome
-		wp_enqueue_style('font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array(), false, 'screen');
-		wp_enqueue_style('font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array('font_awesome_6_v5shims'), false, 'screen');
-		// et-line-font
-		wp_enqueue_style('et-line-font', get_template_directory_uri() . "/styles/et-line-font/style.css", false, false, 'screen');
-		// Flaticon
-		wp_enqueue_style('flaticon', get_template_directory_uri() . "/styles/flaticon/font/flaticon.css", false, false, 'screen');
-		// Fonticonpicker
-		wp_enqueue_script('fonticonpicker', get_template_directory_uri() . "/js/fonticonpicker/jquery.fonticonpicker.min.js", array('jquery'), false, true);
-		wp_enqueue_style('fonticonpicker', get_template_directory_uri() . "/styles/fonticonpicker/css/jquery.fonticonpicker.min.css");
-		wp_enqueue_style('fonticonpicker-gray-theme', get_template_directory_uri() . "/styles/fonticonpicker/themes/grey-theme/jquery.fonticonpicker.grey.min.css", array('fonticonpicker'));
-		// Backend jS
-		wp_enqueue_script('nice-select', get_template_directory_uri() . "/js/jquery.nice-select.min.js", array('jquery'), '1.0.0', true);
+		// Heavy scripts only on pages that need them.
+		$needs_editor = in_array( $hook, array( 'post.php', 'post-new.php' ), true );
+		$needs_menus  = ( 'nav-menus.php' === $hook );
+		$needs_options = ( false !== strpos( $hook, 'lafka' ) || false !== strpos( $hook, 'theme-options' ) );
 
-		$new_orders_push_notifications = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && current_user_can('manage_woocommerce' ) && lafka_get_option( 'order_notifications' ) ) {
-			$new_orders_push_notifications = 'yes';
+		if ( $needs_editor || $needs_options ) {
+			wp_register_script('lafka-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-medialibrary-uploader.js', array('jquery-ui-accordion', 'media-upload'), false, true);
+			wp_enqueue_script('lafka-medialibrary-uploader');
 		}
-		wp_enqueue_script('lafka-back', get_template_directory_uri() . "/js/lafka-back.js", array('jquery', 'jquery-ui-dialog', 'nice-select', 'wp-color-picker'), false, true);
-		wp_localize_script('lafka-back', 'lafka_back_js_params', array(
-			'new_orders_push_notifications' => $new_orders_push_notifications,
-			'new_orders_push_notifications_allow_label' => esc_html__('Set Permission', 'lafka'),
-			'new_orders_push_notifications_cancel_label' => esc_html__('Close', 'lafka'),
-            'service_worker_path' => get_template_directory_uri() . "/js/sw.js",
-            'nonce' => wp_create_nonce( 'lafka_ajax_nonce' ),
-            'import_nonce' => wp_create_nonce( 'lafka_import_nonce' ),
-            'admin_url' => admin_url( 'admin-ajax.php' )
-        ));
 
+		if ( $needs_editor || $needs_menus || $needs_options ) {
+			// wp-color-picker
+			wp_enqueue_style('wp-color-picker');
+			wp_enqueue_script('wp-color-picker', array('jquery'));
+			// font-awesome
+			wp_enqueue_style('font_awesome_6_v5shims', get_template_directory_uri() . "/styles/font-awesome/css/v5-font-face.min.css", array(), false, 'screen');
+			wp_enqueue_style('font_awesome_6', get_template_directory_uri() . "/styles/font-awesome/css/all.min.css", array('font_awesome_6_v5shims'), false, 'screen');
+			// et-line-font
+			wp_enqueue_style('et-line-font', get_template_directory_uri() . "/styles/et-line-font/style.css", false, false, 'screen');
+		}
 
-		// Mega Menu script/style
-		wp_enqueue_style('lafka-mega-menu', get_template_directory_uri() . '/styles/lafka-admin-megamenu.css');
-		wp_enqueue_script('lafka-mega-menu', get_template_directory_uri() . '/js/lafka-admin-mega-menu.js', array('jquery', 'jquery-ui-sortable'), false, true);
-		wp_localize_script('lafka-mega-menu', 'lafka_mega_menu_js_params', array(
-			'mega_menu_label' => esc_html__('Mega Menu', 'lafka'),
-			'column_label' => esc_html__('Column', 'lafka')
-		));
+		if ( $needs_menus ) {
+			// Flaticon + Fonticonpicker — only used on menu editor
+			wp_enqueue_style('flaticon', get_template_directory_uri() . "/styles/flaticon/font/flaticon.css", false, false, 'screen');
+			wp_enqueue_script('fonticonpicker', get_template_directory_uri() . "/js/fonticonpicker/jquery.fonticonpicker.min.js", array('jquery'), false, true);
+			wp_enqueue_style('fonticonpicker', get_template_directory_uri() . "/styles/fonticonpicker/css/jquery.fonticonpicker.min.css");
+			wp_enqueue_style('fonticonpicker-gray-theme', get_template_directory_uri() . "/styles/fonticonpicker/themes/grey-theme/jquery.fonticonpicker.grey.min.css", array('fonticonpicker'));
+
+			// Mega Menu
+			wp_enqueue_style('lafka-mega-menu', get_template_directory_uri() . '/styles/lafka-admin-megamenu.css');
+			wp_enqueue_script('lafka-mega-menu', get_template_directory_uri() . '/js/lafka-admin-mega-menu.js', array('jquery', 'jquery-ui-sortable'), false, true);
+			wp_localize_script('lafka-mega-menu', 'lafka_mega_menu_js_params', array(
+				'mega_menu_label' => esc_html__('Mega Menu', 'lafka'),
+				'column_label' => esc_html__('Column', 'lafka')
+			));
+		}
+
+		if ( $needs_editor || $needs_menus || $needs_options ) {
+			wp_enqueue_script('nice-select', get_template_directory_uri() . "/js/jquery.nice-select.min.js", array('jquery'), '1.0.0', true);
+
+			$new_orders_push_notifications = 'no';
+			if ( LAFKA_IS_WOOCOMMERCE && current_user_can('manage_woocommerce' ) && lafka_get_option( 'order_notifications' ) ) {
+				$new_orders_push_notifications = 'yes';
+			}
+			wp_enqueue_script('lafka-back', get_template_directory_uri() . "/js/lafka-back.js", array('jquery', 'jquery-ui-dialog', 'nice-select', 'wp-color-picker'), false, true);
+			wp_localize_script('lafka-back', 'lafka_back_js_params', array(
+				'new_orders_push_notifications' => $new_orders_push_notifications,
+				'new_orders_push_notifications_allow_label' => esc_html__('Set Permission', 'lafka'),
+				'new_orders_push_notifications_cancel_label' => esc_html__('Close', 'lafka'),
+				'service_worker_path' => get_template_directory_uri() . "/js/sw.js",
+				'nonce' => wp_create_nonce( 'lafka_ajax_nonce' ),
+				'import_nonce' => wp_create_nonce( 'lafka_import_nonce' ),
+				'admin_url' => admin_url( 'admin-ajax.php' )
+			));
+		}
 	}
 
 }
