@@ -1944,3 +1944,27 @@ and (orientation: landscape) {
     }
 
     /* END OF NEW WISHLIST STYLES */
+
+/* CSS Grid responsive overrides */
+@supports (display: grid) {
+    @media only screen and (max-width: 979px) {
+        .woocommerce.columns-3,
+        .woocommerce.columns-4,
+        .woocommerce.columns-5,
+        .woocommerce.columns-6 {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    @media only screen and (max-width: 599px) {
+        .woocommerce.columns-2,
+        .woocommerce.columns-3,
+        .woocommerce.columns-4,
+        .woocommerce.columns-5,
+        .woocommerce.columns-6 {
+            grid-template-columns: 1fr;
+        }
+        .summary form.cart div.product-addon {
+            grid-template-columns: 1fr;
+        }
+    }
+}

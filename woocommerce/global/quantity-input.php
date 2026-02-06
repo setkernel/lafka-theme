@@ -55,8 +55,8 @@ $label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 
                 autocomplete="<?php echo esc_attr( isset( $autocomplete ) ? $autocomplete : 'on' ); ?>"
 			<?php endif; ?>
         />
-        <input type="button" value="+" class="lafka-qty-plus" />
-        <input type="button" value="-" class="lafka-qty-minus" />
+        <input type="button" value="+" class="lafka-qty-plus" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>" />
+        <input type="button" value="-" class="lafka-qty-minus" aria-label="<?php esc_attr_e( 'Decrease quantity', 'lafka' ); ?>" />
 		<?php
 		/**
 		 * Hook to output something after quantity input field

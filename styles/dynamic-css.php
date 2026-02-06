@@ -77,7 +77,7 @@ if (!function_exists('lafka_add_custom_css')) {
 
         // Body font
         $body_font = lafka_get_option('body_font');
-        $body_font_family = !empty($body_font['face']) ? '"' . esc_attr($body_font['face']) . '"' : 'inherit';
+        $body_font_family = !empty($body_font['face']) ? '"' . esc_attr($body_font['face']) . '", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
         $body_font_size = esc_attr($body_font['size']);
         $body_font_color = esc_attr($body_font['color']);
 
@@ -91,7 +91,7 @@ if (!function_exists('lafka_add_custom_css')) {
 
         // Headings font
         $headings_font = lafka_get_option('headings_font');
-        $headings_font_family = !empty($headings_font['face']) ? '"' . esc_attr($headings_font['face']) . '"' : 'inherit';
+        $headings_font_family = !empty($headings_font['face']) ? '"' . esc_attr($headings_font['face']) . '", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : 'inherit';
 
         // H1-H6 fonts
         $h_vars = '';
@@ -220,8 +220,8 @@ if (!function_exists('lafka_add_custom_css')) {
         $custom_css .= '--lafka-title-bg-font-size:' . $title_bg_font_size . ';';
         $custom_css .= '}';
 
-        // Static rule that cannot use var() — breadcrumb always #999
-        $custom_css .= '.breadcrumb{color:#999999}';
+        // Breadcrumb base color (WCAG AA compliant)
+        $custom_css .= '.breadcrumb{color:#767676}';
 
         // Compare table — always hide quickview/compare on compare page
         $custom_css .= 'table.compare-list .add-to-cart td a.lafka-quick-view-link,table.compare-list .add-to-cart td a.compare.button{display:none !important}';
