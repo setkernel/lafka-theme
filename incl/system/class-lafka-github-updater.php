@@ -610,7 +610,7 @@ class Lafka_GitHub_Updater {
 	 * @return array { 'version' => string, 'source' => string }
 	 */
 	public static function get_latest_plugin_info() {
-		$fallback_version = '8.1.0';
+		$fallback_version = '8.2.2';
 		$fallback_url     = 'https://github.com/' . self::PLUGIN_REPO . '/releases/download/v' . $fallback_version . '/' . self::PLUGIN_ASSET;
 
 		$release = self::get_latest_release( self::PLUGIN_REPO );
