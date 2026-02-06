@@ -1024,7 +1024,8 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 		}
 
 		// countdown — only on single product pages when enabled
-		wp_register_script('countdown', get_template_directory_uri() . "/js/count/jquery.countdown.min.js", array('jquery'), '2.1.0', true);
+		wp_register_script('jquery-plugin', get_template_directory_uri() . "/js/count/jquery.plugin.min.js", array('jquery'), '2.1.0', true);
+		wp_register_script('countdown', get_template_directory_uri() . "/js/count/jquery.countdown.min.js", array('jquery', 'jquery-plugin'), '2.1.0', true);
 		if ( function_exists('is_product') && is_product() ) {
 			wp_enqueue_script('countdown');
 		}
