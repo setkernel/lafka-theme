@@ -2,6 +2,12 @@
 /* Load core functions */
 require_once (get_template_directory() . '/incl/system/core-functions.php');
 
+/* GitHub auto-updater for theme & plugin */
+require_once (get_template_directory() . '/incl/system/class-lafka-github-updater.php');
+if ( is_admin() ) {
+	new Lafka_GitHub_Updater();
+}
+
 include_once( ABSPATH . 'wp-admin/includes/plugin.php' );
 
 /*

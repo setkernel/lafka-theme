@@ -227,13 +227,13 @@ if (!function_exists('lafka_register_required_plugins')) {
 		 */
 		/**
 		 * Lafka Plugin source: first check for a local zip in the theme's plugins/ directory,
-		 * otherwise fall back to the GitHub releases URL.
+		 * otherwise fetch latest version from GitHub via the updater class.
 		 */
+		$lafka_plugin_info  = Lafka_GitHub_Updater::get_latest_plugin_info();
 		$lafka_plugin_local = get_template_directory() . '/plugins/lafka-plugin.zip';
-		if ( ! defined( 'LAFKA_PLUGIN_GITHUB_RELEASE_URL' ) ) {
-			define( 'LAFKA_PLUGIN_GITHUB_RELEASE_URL', 'https://github.com/setkernel/lafka-plugin/archive/refs/tags/v8.0.0.zip' );
-		}
-		$lafka_plugin_source = file_exists( $lafka_plugin_local ) ? $lafka_plugin_local : LAFKA_PLUGIN_GITHUB_RELEASE_URL;
+		$lafka_plugin_source = file_exists( $lafka_plugin_local )
+			? $lafka_plugin_local
+			: $lafka_plugin_info['source'];
 
 		$plugins = array(
 				array(
@@ -243,7 +243,7 @@ if (!function_exists('lafka_register_required_plugins')) {
 						'required'           => true,
 						'force_activation'   => false,
 						'force_deactivation' => false,
-						'version'            => '8.0.0',
+						'version'            => $lafka_plugin_info['version'],
 				),
 				array(
 						'name'     => esc_html__( 'WooCommerce', 'lafka' ),
