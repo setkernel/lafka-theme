@@ -29,6 +29,24 @@ class Lafka_GitHub_Updater {
 		// Plugin update hooks
 		add_filter( 'pre_set_site_transient_update_plugins', array( $this, 'check_plugin_update' ) );
 		add_filter( 'plugins_api', array( $this, 'plugin_info' ), 10, 3 );
+
+		// Clear our GitHub transients when WordPress forces a fresh update check
+		add_action( 'delete_site_transient_update_themes', array( $this, 'flush_theme_cache' ) );
+		add_action( 'delete_site_transient_update_plugins', array( $this, 'flush_plugin_cache' ) );
+	}
+
+	/**
+	 * Clear the cached GitHub release for the theme repo.
+	 */
+	public function flush_theme_cache() {
+		delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::THEME_REPO ) ) );
+	}
+
+	/**
+	 * Clear the cached GitHub release for the plugin repo.
+	 */
+	public function flush_plugin_cache() {
+		delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::PLUGIN_REPO ) ) );
 	}
 
 	/**
