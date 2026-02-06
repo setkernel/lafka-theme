@@ -65,16 +65,13 @@ class Lafka_GitHub_Updater {
 		}
 
 		$url      = 'https://api.github.com/repos/' . $repo . '/releases/latest';
-		$response = wp_remote_get(
-			$url,
-			array(
-				'timeout' => 10,
-				'headers' => array(
-					'Accept'     => 'application/vnd.github.v3+json',
-					'User-Agent' => 'Lafka-WordPress-Theme',
-				),
-			)
-		);
+		$response = wp_remote_get( $url, array(
+			'timeout'    => 10,
+			'headers'    => array(
+				'Accept'     => 'application/vnd.github.v3+json',
+				'User-Agent' => 'Lafka-WordPress-Theme',
+			),
+		) );
 
 		if ( is_wp_error( $response ) || 200 !== wp_remote_retrieve_response_code( $response ) ) {
 			set_transient( $transient_key, 'error', self::CACHE_FAILURE );

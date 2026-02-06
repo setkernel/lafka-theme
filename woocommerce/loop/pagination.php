@@ -31,22 +31,17 @@ if ( $total <= 1 ) {
 	return;
 }
 ?>
-<div class="box box-common lafka-shop-pager
-<?php
-if ( lafka_get_option( 'enable_shop_infinite' ) ) {
-	echo ' lafka-infinite';}
-?>
-">
+<div class="box box-common lafka-shop-pager<?php if(lafka_get_option('enable_shop_infinite')) echo ' lafka-infinite' ?>">
 
-	<div class="lafka-page-load-status">
-		<p class="infinite-scroll-request"><?php esc_html_e( 'Loading', 'lafka' ); ?>...</p>
-		<p class="infinite-scroll-last"><?php esc_html_e( 'No more items available', 'lafka' ); ?></p>
-	</div>
+    <div class="lafka-page-load-status">
+        <p class="infinite-scroll-request"><?php esc_html_e( 'Loading', 'lafka' ); ?>...</p>
+        <p class="infinite-scroll-last"><?php esc_html_e( 'No more items available', 'lafka' ); ?></p>
+    </div>
 
-	<?php if ( lafka_get_option( 'enable_shop_infinite' ) && lafka_get_option( 'use_load_more_on_shop' ) ) : ?>
-		<div class="lafka-load-more-container">
-			<button class="lafka-load-more button"><?php esc_html_e( 'Load More', 'lafka' ); ?></button>
-		</div>
-	<?php endif; ?>
-	<?php lafka_pagination(); ?>
+    <?php if(lafka_get_option('enable_shop_infinite') && lafka_get_option('use_load_more_on_shop')): ?>
+        <div class="lafka-load-more-container">
+            <button class="lafka-load-more button"><?php esc_html_e( 'Load More', 'lafka' ); ?></button>
+        </div>
+    <?php endif; ?>
+    <?php lafka_pagination(); ?>
 </div>

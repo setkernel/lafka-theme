@@ -32,17 +32,17 @@ if ( $related_products ) :
 			wp_increase_content_media_count( wp_omit_loading_attr_threshold() - $content_media_count );
 		}
 	}
-	?>
+?>
 
-	<section class="related products">
+    <section class="related products">
 		<?php $heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related products', 'lafka' ) ); ?>
 		<?php if ( $heading ) : ?>
-			<h2><?php echo wp_kses_post( $heading ); ?></h2>
+            <h2><?php echo wp_kses_post( $heading ); ?></h2>
 		<?php endif; ?>
 
 		<?php woocommerce_product_loop_start(); ?>
-		<!-- Container for flex carousel on related products  -->
-		<div>
+        <!-- Container for flex carousel on related products  -->
+        <div>
 
 			<?php foreach ( $related_products as $related_product ) : ?>
 
@@ -52,17 +52,15 @@ if ( $related_products ) :
 
 				setup_postdata( $GLOBALS['post'] = $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
-				wc_get_template_part( 'content', 'product' );
-				?>
+				wc_get_template_part( 'content', 'product' ); ?>
 
 			<?php endforeach; ?>
-			<!-- END Container for flex carousel on related products  -->
-		</div>
+            <!-- END Container for flex carousel on related products  -->
+        </div>
 		<?php woocommerce_product_loop_end(); ?>
 
-	</section>
+    </section>
 
-	<?php
-endif;
+<?php endif;
 
 wp_reset_postdata();

@@ -1,9 +1,9 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 
-if ( ! class_exists( 'LafkaMobileMenuWalker' ) ) {
+if (!class_exists('LafkaMobileMenuWalker')) {
 	class LafkaMobileMenuWalker extends Walker_Nav_Menu {
 
 		private static $description_cache = array();
@@ -26,5 +26,6 @@ if ( ! class_exists( 'LafkaMobileMenuWalker' ) ) {
 				parent::end_el( $output, $item, $depth, $args, $id );
 			}
 		}
+
 	}
 }

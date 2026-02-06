@@ -10,13 +10,13 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see         https://docs.woocommerce.com/document/template-structure/
- * @author      WooThemes
- * @package     WooCommerce\Templates
+ * @see 	    https://docs.woocommerce.com/document/template-structure/
+ * @author 		WooThemes
+ * @package 	WooCommerce\Templates
  * @version     1.6.4
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 
@@ -24,15 +24,15 @@ global $product;
 $product_excerpt = '';
 
 if ( lafka_is_product_listview() ) {
-	$product_excerpt = wp_trim_words( get_the_excerpt(), 30, ' ...' );
+	$product_excerpt = wp_trim_words(get_the_excerpt(), 30, ' ...');
 }
 ?>
 <?php if ( lafka_is_product_listview() ) : ?>
-	<div class="lafka-product-excerpt">
-		<?php echo esc_html( $product_excerpt ); ?>
-	</div>
+    <div class="lafka-product-excerpt">
+		<?php echo esc_html($product_excerpt) ?>
+    </div>
 <?php endif; ?>
 
-<?php if ( $price_html = $product->get_price_html() ) : ?>
-	<div class="price_hold"><?php echo wp_kses_post( $price_html ); ?></div>
+<?php if ($price_html = $product->get_price_html()) : ?>
+	<div class="price_hold"><?php echo wp_kses_post($price_html); ?></div>
 <?php endif; ?>

@@ -23,22 +23,22 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.6.0
  */
-do_action( 'woocommerce_account_navigation' );
+do_action('woocommerce_account_navigation');
 ?>
 
 <div class="woocommerce-MyAccount-content">
 	<div class="myaccount_user">
-		<?php if ( get_avatar( get_current_user_id() ) ) : ?>
-			<span class="lafka-account-avatar"><?php echo get_avatar( get_current_user_id() ); ?></span>
+		<?php if (get_avatar(get_current_user_id())) : ?>
+			<span class="lafka-account-avatar"><?php echo get_avatar(get_current_user_id()) ?></span>
 		<?php endif; ?>
 
 		<?php
 		/**
 		 * My Account content.
-		 *
+         *
 		 * @since 2.6.0
 		 */
-		do_action( 'woocommerce_account_content' );
+		do_action('woocommerce_account_content');
 		?>
 	</div>
 </div>

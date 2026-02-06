@@ -4,7 +4,7 @@
 /** @var $product WC_Product */
 
 // Disable WooCommerce styles
-if ( version_compare( WC_VERSION, '2.1' ) >= 0 ) {
+if ( version_compare( WC_VERSION, "2.1" ) >= 0 ) {
 	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 } else {
 	define( 'WOOCOMMERCE_USE_CSS', false );
@@ -50,30 +50,25 @@ if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
 
 		?>
 
-		<a href="<?php the_permalink(); ?>">
+        <a href="<?php the_permalink(); ?>">
 			<?php woocommerce_template_loop_product_thumbnail(); ?>
 			<?php
 			$second_image = lafka_get_second_product_image_id( $product ? $product : $post );
 			// If we have swap image enabled and second image:
-			if ( lafka_get_option( 'product_hover_onproduct' ) == 'lafka-prodhover-swap' && $second_image ) :
+			if ( lafka_get_option( 'product_hover_onproduct' ) == 'lafka-prodhover-swap' && $second_image ):
 				?>
 				<?php
 				$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'shop_catalog' );
 
 				$alt   = get_post_meta( $second_image, '_wp_attachment_image_alt', true );
 				$title = get_the_title( $second_image );
-				echo wp_get_attachment_image(
-					$second_image,
-					$image_size,
-					false,
-					array(
-						'title' => $title,
-						'alt'   => $alt ? $alt : $title,
-					)
-				);
+				echo wp_get_attachment_image( $second_image, $image_size, false, array(
+					'title' => $title,
+					'alt'   => $alt ? $alt : $title,
+				) );
 				?>
 			<?php endif; ?>
-		</a>
+        </a>
 		<?php
 		// Append Add to wishlist shortcode if it exists
 		if ( shortcode_exists( 'yith_wcwl_add_to_wishlist' ) ) {
@@ -94,7 +89,7 @@ if ( ! function_exists( 'lafka_get_second_product_image_id' ) ) {
 	 * @return int|bool false if no second image OR the attachment ID of the image
 	 */
 	function lafka_get_second_product_image_id( $post ) {
-		$product = is_a( $post, 'WC_Product' ) ? $post : wc_get_product( $post );
+		$product  = is_a( $post, 'WC_Product' ) ? $post : wc_get_product( $post );
 		if ( ! $product ) {
 			return false;
 		}
@@ -124,7 +119,7 @@ if ( ! function_exists( 'lafka_is_product_new' ) ) {
 			$post_date_ts = $post_date_dt->format( 'Y-m-d' );
 			$curr_date_ts = $curr_date_dt->format( 'Y-m-d' );
 
-			$diff  = abs( strtotime( $post_date_ts ) - strtotime( $curr_date_ts ) );
+			$diff = abs( strtotime( $post_date_ts ) - strtotime( $curr_date_ts ) );
 			$diff /= 3600 * 24;
 
 			if ( $diff < $days_product_is_new ) {
@@ -218,13 +213,9 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 
 		if ( lafka_get_option( 'enable_shop_cat_carousel' ) ) {
 			// owl carousel
-			wp_localize_script(
-				'lafka-libs-config',
-				'lafka_owl_carousel_cat',
-				array(
-					'columns' => esc_js( lafka_get_option( 'category_columns_num' ) ),
-				)
-			);
+			wp_localize_script( 'lafka-libs-config', 'lafka_owl_carousel_cat', array(
+				'columns' => esc_js( lafka_get_option( 'category_columns_num' ) )
+			) );
 
 			$style_class = 'owl-carousel lafka-owl-carousel';
 		}
@@ -560,7 +551,7 @@ if ( ! function_exists( 'lafka_get_product_sales_dates' ) ) {
 		}
 
 		$child_products = $product->get_children();
-		// If is variation product
+// If is variation product
 		if ( count( $child_products ) ) {
 			// Prime the meta cache for all children in one query
 			update_meta_cache( 'post', $child_products );
@@ -581,10 +572,7 @@ if ( ! function_exists( 'lafka_get_product_sales_dates' ) ) {
 			$end_sales_date   = get_post_meta( $post->ID, '_sale_price_dates_to', true );
 		}
 
-		return array(
-			'from' => $start_sales_date,
-			'to'   => $end_sales_date,
-		);
+		return array( 'from' => $start_sales_date, 'to' => $end_sales_date );
 	}
 
 }
@@ -604,12 +592,12 @@ if ( ! function_exists( 'lafka_shop_sale_countdown' ) ) {
 			if ( $sales_dates['to'] && $now < $sales_dates['to'] ) {
 				$random_num = uniqid();
 				?>
-				<div class="count_holder_small" data-countdown-id="<?php echo esc_js( '#lafkaCountSmallLatest' . $post->ID . $random_num ); ?>"
-					data-countdown-to="<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>">
-					<div class="count_info"><?php esc_html_e( 'Offer ends in', 'lafka' ); ?>:</div>
-					<div id="lafkaCountSmallLatest<?php echo esc_attr( $post->ID . $random_num ); ?>"></div>
-					<div class="clear"></div>
-				</div>
+                <div class="count_holder_small" data-countdown-id="<?php echo esc_js( '#lafkaCountSmallLatest' . $post->ID . $random_num ) ?>"
+                     data-countdown-to="<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) ) ?>">
+                    <div class="count_info"><?php esc_html_e( 'Offer ends in', 'lafka' ) ?>:</div>
+                    <div id="lafkaCountSmallLatest<?php echo esc_attr( $post->ID . $random_num ) ?>"></div>
+                    <div class="clear"></div>
+                </div>
 				<?php
 			}
 		}
@@ -635,22 +623,22 @@ if ( ! function_exists( 'lafka_product_sale_countdown' ) ) {
 
 				$unique_id = uniqid( 'lafka_sale_countdown' );
 				?>
-				<div class="count_holder"><span class="offer_title"><?php esc_html_e( 'Offer ends in', 'lafka' ); ?>:</span>
-					<div id="<?php echo esc_attr( $unique_id ); ?>"></div>
-					<div class="clear"></div>
-				</div>
-				<script>
-					(function ($) {
-						"use strict";
-						$(window).on("load lafka_quickview_loaded", function () {
-							$('#<?php echo esc_attr( $unique_id ); ?>').countdown({
-								until: new Date("<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>"),
-								compact: false,
-								layout: '<span class="countdown_time_tiny">{dn} {dl} {hn}:{mnn}:{snn}</span>'
-							});
-						});
-					})(window.jQuery);
-				</script>
+                <div class="count_holder"><span class="offer_title"><?php esc_html_e( 'Offer ends in', 'lafka' ) ?>:</span>
+                    <div id="<?php echo esc_attr( $unique_id ) ?>"></div>
+                    <div class="clear"></div>
+                </div>
+                <script>
+                    (function ($) {
+                        "use strict";
+                        $(window).on("load lafka_quickview_loaded", function () {
+                            $('#<?php echo esc_attr( $unique_id )?>').countdown({
+                                until: new Date("<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) )?>"),
+                                compact: false,
+                                layout: '<span class="countdown_time_tiny">{dn} {dl} {hn}:{mnn}:{snn}</span>'
+                            });
+                        });
+                    })(window.jQuery);
+                </script>
 				<?php
 			}
 		}
@@ -845,11 +833,11 @@ if ( ! function_exists( 'lafka_cart_link' ) ) {
 			$class = '';
 		}
 		?>
-		<li class="<?php echo sanitize_html_class( $class ); ?>">
-			<a id="lafka_quick_cart_link" class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'View your shopping cart', 'lafka' ); ?>">
-				<span class="count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
-			</a>
-		</li>
+        <li class="<?php echo sanitize_html_class( $class ); ?>">
+            <a id="lafka_quick_cart_link" class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'View your shopping cart', 'lafka' ); ?>">
+                <span class="count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+            </a>
+        </li>
 		<?php
 	}
 
@@ -862,8 +850,8 @@ if ( ! function_exists( 'lafka_quickview' ) ) {
 		check_ajax_referer( 'lafka_ajax_nonce', 'security' );
 
 		global $post, $product, $authordata;
-		$prod_id = absint( $_POST['productid'] );
-		$post    = get_post( $prod_id );
+		$prod_id    = absint( $_POST["productid"] );
+		$post       = get_post( $prod_id );
 		if ( ! $post || 'publish' !== $post->post_status ) {
 			wp_die();
 		}
@@ -912,7 +900,7 @@ if ( ! function_exists( 'lafka_wc_add_cart_ajax' ) ) {
 					$regex         = '/<[^>]*>[^<]*<[^>]*>/';
 					$alert_message = html_entity_decode( preg_replace( $regex, '', $notice_message ) );
 					$response      = array(
-						'error_message' => $alert_message,
+						'error_message' => $alert_message
 					);
 
 					wp_send_json( $response );
@@ -933,12 +921,9 @@ add_action( 'wp_ajax_nopriv_lafka_wc_add_cart', 'lafka_wc_add_cart_ajax' );
 add_filter( 'woocommerce_product_variation_title_include_attributes', '__return_false' );
 
 // Specifically for Lafka, for the gallery images use the main image size as flexslider is disabled
-add_filter(
-	'woocommerce_gallery_image_size',
-	function () {
-		return 'woocommerce_single';
-	}
-);
+add_filter( 'woocommerce_gallery_image_size', function () {
+	return 'woocommerce_single';
+} );
 
 if ( lafka_get_option( 'only_free_delivery' ) ) {
 	add_filter( 'woocommerce_package_rates', 'lafka_hide_shipping_when_free_is_available', 100 );
@@ -1059,7 +1044,7 @@ if ( ! function_exists( 'lafka_redefine_wishlist_link_position' ) ) {
 
 		$positions['add-to-cart'] = array(
 			'hook'     => 'woocommerce_after_add_to_cart_button',
-			'priority' => 98,
+			'priority' => 98
 		);
 
 		return $positions;
@@ -1138,78 +1123,75 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 
 			ob_start();
 			?>
-			<?php foreach ( $lafka_variable_product->get_available_variations() as $variation ) : ?>
-				<?php if ( get_post_meta( $variation['variation_id'], '_lafka_variable_in_catalog', true ) ) : ?>
+			<?php foreach ( $lafka_variable_product->get_available_variations() as $variation ): ?>
+				<?php if ( get_post_meta( $variation['variation_id'], '_lafka_variable_in_catalog', true ) ): ?>
 					<?php
 					$default_addon_option_pairs = array();
 					foreach ( $product_addons as $addon ) {
 						if ( isset( $addon['options'] ) ) {
 							foreach ( $addon['options'] as $option ) {
 								if ( $option['default'] ) {
-									$default_addon_option_pairs[] = array(
-										'addon'  => $addon,
-										'option' => $option,
-									);
+									$default_addon_option_pairs[] = array( 'addon' => $addon, 'option' => $option );
 								}
 							}
 						}
 					}
 					?>
-					<form class="lafka-variations-in-catalog cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
-							method="post"
-							enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>">
+                    <form class="lafka-variations-in-catalog cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
+                          method="post"
+                          enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>">
 
-						<span class="lafka-list-variation-label">
-							<?php
-							$variation_label_array = array();
-							if ( isset( $variation['attributes'] ) ) {
-								foreach ( $variation['attributes'] as $attribute_name => $attribute_slug ) {
-									/** @var WP_Term $attribute_term_object */
-									$attribute_term_object = get_term_by( 'slug', $attribute_slug, str_replace( 'attribute_', '', rawurldecode( $attribute_name ) ) );
-									if ( is_a( $attribute_term_object, 'WP_Term' ) ) {
-										$variation_label_array[] = $attribute_term_object->name;
-									}
-								}
-							}
-							?>
-							<?php if ( count( $variation_label_array ) ) : ?>
-								<?php echo esc_html( implode( ' ', $variation_label_array ) ); ?>
-							<?php endif; ?>
-						</span>
+                        <span class="lafka-list-variation-label">
+                            <?php
+                            $variation_label_array = array();
+                            if ( isset( $variation['attributes'] ) ) {
+	                            foreach ( $variation['attributes'] as $attribute_name => $attribute_slug ) {
+		                            /** @var WP_Term $attribute_term_object */
+		                            $attribute_term_object = get_term_by( 'slug', $attribute_slug, str_replace( 'attribute_', '', rawurldecode( $attribute_name ) ) );
+		                            if ( is_a( $attribute_term_object, 'WP_Term' ) ) {
+			                            $variation_label_array[] = $attribute_term_object->name;
+		                            }
+	                            }
+                            }
+                            ?>
+                            <?php if ( count( $variation_label_array ) ): ?>
+	                            <?php echo esc_html( implode( ' ', $variation_label_array ) ); ?>
+                            <?php endif; ?>
+                        </span>
 
-						<?php if ( isset( $variation['weight'] ) && $variation['weight'] ) : ?>
-							<span class="lafka-list-variation-weight"><?php echo esc_html( $variation['weight_html'] ); ?></span>
+						<?php if ( isset( $variation['weight'] ) && $variation['weight'] ): ?>
+                            <span class="lafka-list-variation-weight"><?php echo esc_html( $variation['weight_html'] ); ?></span>
 						<?php endif; ?>
 
-						<span class="lafka-list-variation-price">
-							<?php
-							$variation_accumulated_price = $variation['display_price'];
-							foreach ( $default_addon_option_pairs as $addon_option_pair ) {
-								$option_price = '';
-								foreach ( $variation['attributes'] as $name => $value ) {
-									$option_price = $addon_option_pair['option']['price'][ str_replace( 'attribute_', '', $name ) ][ $value ] ?? '';
-								}
-								$variation_accumulated_price += floatval( $option_price );
-							}
-							echo wc_price( $variation_accumulated_price );
-							?>
-						</span>
-						<button type="submit" class="single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
+                        <span class="lafka-list-variation-price">
+                            <?php
+                            $variation_accumulated_price = $variation['display_price'];
+                            foreach ( $default_addon_option_pairs as $addon_option_pair ) {
+	                            $option_price = '';
+	                            foreach ( $variation['attributes'] as $name => $value ) {
+		                            $option_price = $addon_option_pair['option']['price'][ str_replace( 'attribute_', '', $name ) ][ $value ] ?? '';
+	                            }
+	                            $variation_accumulated_price += floatval( $option_price );
+                            }
+                            echo wc_price( $variation_accumulated_price );
+                            ?>
+                        </span>
+                        <button type="submit" class="single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
 
 						<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
 
-						<?php foreach ( $variation['attributes'] as $attribute_name => $attribute_slug ) : ?>
-							<input type="hidden" name="<?php echo esc_attr( $attribute_name ); ?>" value="<?php echo esc_attr( $attribute_slug ); ?>"/>
+						<?php foreach ( $variation['attributes'] as $attribute_name => $attribute_slug ): ?>
+                            <input type="hidden" name="<?php echo esc_attr( $attribute_name ); ?>" value="<?php echo esc_attr( $attribute_slug ); ?>"/>
 						<?php endforeach; ?>
-						<input type="hidden" name="quantity" value="<?php echo esc_attr( $variation['min_qty'] ); ?>"/>
-						<input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"/>
-						<input type="hidden" name="product_id" value="<?php echo esc_attr( $product->get_id() ); ?>"/>
-						<input type="hidden" name="variation_id" class="variation_id" value="<?php echo esc_attr( $variation['variation_id'] ); ?>"/>
-						<?php foreach ( $default_addon_option_pairs as $addon_option_pair ) : ?>
-							<input type="hidden" name="addon-<?php esc_attr_e( $addon_option_pair['addon']['field-name'] ); ?>[]"
-									value="<?php esc_attr_e( sanitize_title( $addon_option_pair['option']['label'] ) ); ?>"/>
-						<?php endforeach; ?>
-					</form>
+                        <input type="hidden" name="quantity" value="<?php echo esc_attr( $variation['min_qty'] ); ?>"/>
+                        <input type="hidden" name="add-to-cart" value="<?php echo esc_attr( $product->get_id() ); ?>"/>
+                        <input type="hidden" name="product_id" value="<?php echo esc_attr( $product->get_id() ); ?>"/>
+                        <input type="hidden" name="variation_id" class="variation_id" value="<?php echo esc_attr( $variation['variation_id'] ) ?>"/>
+	                    <?php foreach ( $default_addon_option_pairs as $addon_option_pair ): ?>
+                            <input type="hidden" name="addon-<?php esc_attr_e( $addon_option_pair['addon']['field-name'] ); ?>[]"
+                                   value="<?php esc_attr_e( sanitize_title( $addon_option_pair['option']['label'] ) ); ?>"/>
+	                    <?php endforeach; ?>
+                    </form>
 				<?php endif; ?>
 			<?php endforeach; ?>
 			<?php
@@ -1232,7 +1214,7 @@ if ( ! function_exists( 'lafka_is_product_eligible_for_variation_in_listings' ) 
 	 */
 	function lafka_is_product_eligible_for_variation_in_listings( $product ) {
 		static $cache = array();
-		$pid          = $product->get_id();
+		$pid = $product->get_id();
 		if ( isset( $cache[ $pid ] ) ) {
 			return $cache[ $pid ];
 		}
@@ -1329,12 +1311,7 @@ if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 			if ( is_null( $notified_order_ids_array ) ) {
 				$notified_order_ids_array = array();
 			}
-			$order_ids_to_be_processed_array = wc_get_orders(
-				array(
-					'status' => 'processing',
-					'return' => 'ids',
-				)
-			);
+			$order_ids_to_be_processed_array = wc_get_orders( array( 'status' => 'processing', 'return' => 'ids' ) );
 
 			// Clear the already notified orders which are not new any more
 			$notified_order_ids_array = array_intersect( $notified_order_ids_array, $order_ids_to_be_processed_array );
@@ -1385,7 +1362,7 @@ if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 					'body'  => esc_html__( 'Order', 'lafka' ) . ' #' . esc_html( $order_id_to_notify ) . ' ' . esc_html__( 'is waiting to be processed.', 'lafka' ),
 					'icon'  => $branch_image_src,
 					'sound' => LAFKA_IMAGES_PATH . 'cart_add.wav',
-					'url'   => admin_url( 'post.php?post=' . $order_id_to_notify . '&action=edit' ),
+					'url'   => admin_url( 'post.php?post=' . $order_id_to_notify . '&action=edit' )
 				);
 
 				$notified_order_ids_array[] = $order_id_to_notify;
@@ -1406,15 +1383,13 @@ if ( ! function_exists( 'lafka_custom_related_products_heading' ) ) {
 
 		$output = esc_html__( 'Other', 'lafka' );
 		if ( $lafka_chosen_category !== null && $lafka_chosen_category->slug !== 'uncategorized' ) {
-			ob_start();
-			?>
-			<a class="lafka-related-browse"
-				href="<?php echo esc_url( get_term_link( $lafka_chosen_category ) ); ?>"
-				title="<?php printf( esc_attr__( 'Browse more "%s"', 'lafka' ), $lafka_chosen_category->name ); ?>">
+			ob_start(); ?>
+            <a class="lafka-related-browse"
+               href="<?php echo esc_url( get_term_link( $lafka_chosen_category ) ); ?>"
+               title="<?php echo sprintf( esc_attr__( 'Browse more "%s"', 'lafka' ), $lafka_chosen_category->name ) ?>">
 				<?php echo esc_html( $lafka_chosen_category->name ); ?>
-			</a>
-			<?php
-			$output .= ob_get_clean();
+            </a>
+			<?php $output .= ob_get_clean();
 		} else {
 			$output .= esc_html__( 'Products', 'lafka' );
 		}
@@ -1443,24 +1418,16 @@ if ( ! function_exists( 'lafka_get_single_product_archive_thumbnail_size' ) ) {
 	}
 }
 
-add_action(
-	'woocommerce_before_shop_loop_item',
-	function () {
-		if ( lafka_is_product_listview() ) {
-			echo '<div class="lafka-list-view-summary-wrap">';
-		}
-	},
-	99
-);
-add_action(
-	'woocommerce_after_shop_loop_item',
-	function () {
-		if ( lafka_is_product_listview() ) {
-			echo '</div>';
-		}
-	},
-	99
-);
+add_action( 'woocommerce_before_shop_loop_item', function () {
+	if ( lafka_is_product_listview() ) {
+		echo '<div class="lafka-list-view-summary-wrap">';
+	}
+}, 99 );
+add_action( 'woocommerce_after_shop_loop_item', function () {
+	if ( lafka_is_product_listview() ) {
+		echo '</div>';
+	}
+}, 99 );
 
 if ( ! function_exists( 'lafka_is_product_listview' ) ) {
 	function lafka_is_product_listview(): bool {
@@ -1473,12 +1440,12 @@ if ( ! function_exists( 'lafka_admin_push_permission_dialog' ) ) {
 	function lafka_admin_push_permission_dialog() {
 		if ( class_exists( 'woocommerce' ) && lafka_get_option( 'order_notifications' ) ) {
 			?>
-			<div id="lafka-push-confirm" title="<?php esc_html_e( 'Push notifications for new orders by Lafka', 'lafka' ); ?>">
-				<p>
-					<span class="dashicons dashicons-testimonial"></span>
+            <div id="lafka-push-confirm" title="<?php esc_html_e( 'Push notifications for new orders by Lafka', 'lafka' ); ?>">
+                <p>
+                    <span class="dashicons dashicons-testimonial"></span>
 					<?php esc_html_e( 'To receive notification for new orders, you have to allow this permission in your browser.', 'lafka' ); ?>
-				</p>
-			</div>
+                </p>
+            </div>
 			<?php
 		}
 	}
@@ -1494,12 +1461,7 @@ if ( ! function_exists( 'lafka_quantity_input_on_listing' ) ) {
 			}
 
 			if ( ! empty( $product ) && $product->is_purchasable() && ! $product->is_sold_individually() && $product->is_in_stock() && 'variable' != $product->get_type() && 'bundle' != $product->get_type() && 'combo' != $product->get_type() ) {
-				woocommerce_quantity_input(
-					[
-						'min_value' => 1,
-						'max_value' => $product->backorders_allowed() ? '' : $product->get_stock_quantity(),
-					]
-				);
+				woocommerce_quantity_input( [ 'min_value' => 1, 'max_value' => $product->backorders_allowed() ? '' : $product->get_stock_quantity() ] );
 			}
 		}
 	}

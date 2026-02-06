@@ -1,5 +1,5 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly
 }
 
@@ -8,89 +8,88 @@ add_action( 'wp_nav_menu_item_custom_fields', 'lafka_megamenu_item_custom_fields
 if ( ! function_exists( 'lafka_megamenu_item_custom_fields' ) ) {
 	function lafka_megamenu_item_custom_fields( $item_id, $item, $depth, $args, $id ) {
 		?>
-		<div class='lafka-megamenu-custom'>
+        <div class='lafka-megamenu-custom'>
 			<?php
-			$title = esc_html__( 'Custom Menu Label', 'lafka' );
-			$key   = 'lafka-menu-item-custom_label';
-			$value = get_post_meta( $item_id, '_' . $key, true );
+			$title = esc_html__('Custom Menu Label', 'lafka');
+			$key = "lafka-menu-item-custom_label";
+			$value = get_post_meta($item_id, '_' . $key, true);
 			?>
-			<p class="description description-thin lafka_custom_label">
-				<label for="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>"><?php echo esc_html( $title ); ?>
-					<input type="text" id="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>" class="widefat edit-menu-item-attr-title" name="<?php echo esc_attr( $key . '[' . $item_id . ']' ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-				</label>
-			</p>
+            <p class="description description-thin lafka_custom_label">
+                <label for="edit-<?php echo esc_attr($key . '-' . $item_id); ?>"><?php echo esc_html($title); ?>
+                    <input type="text" id="edit-<?php echo esc_attr($key . '-' . $item_id); ?>" class="widefat edit-menu-item-attr-title" name="<?php echo esc_attr($key . "[" . $item_id . "]"); ?>" value="<?php echo esc_attr($value); ?>" />
+                </label>
+            </p>
 			<?php
-			$title = esc_html__( 'Label Color', 'lafka' );
-			$key   = 'lafka-menu-item-label_color';
-			$value = get_post_meta( $item_id, '_' . $key, true );
+			$title = esc_html__('Label Color', 'lafka');
+			$key = "lafka-menu-item-label_color";
+			$value = get_post_meta($item_id, '_' . $key, true);
 			?>
-			<p class="description description-thin lafka_label_color">
-				<?php echo esc_html( $title ); ?><br>
-				<input type="text" id="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>" class="widefat edit-menu-item-attr-title lafka-menu-colorpicker" name="<?php echo esc_attr( $key . '[' . $item_id . ']' ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-			</p>
+            <p class="description description-thin lafka_label_color">
+	            <?php echo esc_html($title); ?><br>
+                <input type="text" id="edit-<?php echo esc_attr($key . '-' . $item_id); ?>" class="widefat edit-menu-item-attr-title lafka-menu-colorpicker" name="<?php echo esc_attr($key . "[" . $item_id . "]"); ?>" value="<?php echo esc_attr($value); ?>" />
+            </p>
 			<?php
-			$title = esc_html__( 'Icon', 'lafka' );
-			$key   = 'lafka-menu-item-icon';
-			$value = get_post_meta( $item_id, '_' . $key, true );
+			$title = esc_html__('Icon', 'lafka');
+			$key = "lafka-menu-item-icon";
+			$value = get_post_meta($item_id, '_' . $key, true);
 			?>
-			<p class="description description-thin lafka_megamenu_icon">
-				<label for="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>"><?php echo esc_html( $title ); ?><br/>
-					<input type="text" id="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>" class="lafka-menu-icons" name="<?php echo esc_attr( $key . '[' . $item_id . ']' ); ?>" value="<?php echo esc_attr( $value ); ?>" />
-				</label>
-			</p>
+            <p class="description description-thin lafka_megamenu_icon">
+                <label for="edit-<?php echo esc_attr($key . '-' . $item_id); ?>"><?php echo esc_html($title); ?><br/>
+                    <input type="text" id="edit-<?php echo esc_attr($key . '-' . $item_id); ?>" class="lafka-menu-icons" name="<?php echo esc_attr($key . "[" . $item_id . "]"); ?>" value="<?php echo esc_attr($value); ?>" />
+                </label>
+            </p>
+	        <?php
+	        $title = esc_html__('Image', 'lafka');
+	        $key = "lafka-menu-item-image";
+	        $value = get_post_meta($item_id, '_' . $key, true);
+	        ?>
+            <p class="description description-thin lafka_megamenu_image">
+	            <?php echo esc_html($title); ?><br>
+	            <?php echo lafka_medialibrary_uploader( 'edit-' . esc_attr( $key . '-' . $item_id ), $value, '', $key . "[" . $item_id . "]", false, true ); ?>
+            </p>
 			<?php
-			$title = esc_html__( 'Image', 'lafka' );
-			$key   = 'lafka-menu-item-image';
-			$value = get_post_meta( $item_id, '_' . $key, true );
-			?>
-			<p class="description description-thin lafka_megamenu_image">
-				<?php echo esc_html( $title ); ?><br>
-				<?php echo lafka_medialibrary_uploader( 'edit-' . esc_attr( $key . '-' . $item_id ), $value, '', $key . '[' . $item_id . ']', false, true ); ?>
-			</p>
-			<?php
-			$title = esc_html__( 'Set as Mega Menu', 'lafka' );
-			$key   = 'lafka-menu-item-is_megamenu';
-			$value = get_post_meta( $item_id, '_' . $key, true );
-			if ( $value != '' ) {
+			$title = esc_html__('Set as Mega Menu', 'lafka');
+			$key = "lafka-menu-item-is_megamenu";
+			$value = get_post_meta($item_id, '_' . $key, true);
+			if ($value != "") {
 				$value = "checked='checked'";
 			}
 			?>
-			<p class="description description-wide lafka_checkbox lafka_is_mega_field">
-				<label for="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>">
-					<input type="checkbox" value="active" id="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>" class=" <?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key . '[' . $item_id . ']' ); ?>" <?php echo esc_attr( $value ); ?> /><?php echo esc_html( $title ); ?>
-				</label>
-			</p>
+            <p class="description description-wide lafka_checkbox lafka_is_mega_field">
+                <label for="edit-<?php echo esc_attr($key . '-' . $item_id); ?>">
+                    <input type="checkbox" value="active" id="edit-<?php echo esc_attr($key . '-' . $item_id); ?>" class=" <?php echo esc_attr($key); ?>" name="<?php echo esc_attr($key . "[" . $item_id . "]"); ?>" <?php echo esc_attr($value); ?> /><?php echo esc_html($title); ?>
+                </label>
+            </p>
 			<?php
-			$title = esc_html__( 'Use the Description to create a Text Block. It will hide the Navigation Label and display the description instead. (note: dont remove the label text, otherwise WordPress will delete the item)', 'lafka' );
-			$key   = 'lafka-menu-item-is_description';
-			$value = get_post_meta( $item_id, '_' . $key, true );
-			if ( $value != '' ) {
+			$title = esc_html__('Use the Description to create a Text Block. It will hide the Navigation Label and display the description instead. (note: dont remove the label text, otherwise WordPress will delete the item)', 'lafka');
+			$key = "lafka-menu-item-is_description";
+			$value = get_post_meta($item_id, '_' . $key, true);
+			if ($value != "")
 				$value = "checked='checked'";
-			}
 			?>
-			<p class="description description-wide lafka_checkbox lafka_is_description_field">
-				<label for="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>">
-					<input type="checkbox" value="active" id="edit-<?php echo esc_attr( $key . '-' . $item_id ); ?>" class=" <?php echo esc_attr( $key ); ?>" name="<?php echo esc_attr( $key . '[' . $item_id . ']' ); ?>" <?php echo esc_attr( $value ); ?> /><span><?php echo esc_html( $title ); ?></span>
-				</label>
-			</p>
-		</div>
+            <p class="description description-wide lafka_checkbox lafka_is_description_field">
+                <label for="edit-<?php echo esc_attr($key . '-' . $item_id); ?>">
+                    <input type="checkbox" value="active" id="edit-<?php echo esc_attr($key . '-' . $item_id); ?>" class=" <?php echo esc_attr($key); ?>" name="<?php echo esc_attr($key . "[" . $item_id . "]"); ?>" <?php echo esc_attr($value); ?> /><span><?php echo esc_html($title); ?></span>
+                </label>
+            </p>
+        </div>
 		<?php
 	}
 }
 
 // Handle mega menu fields update
-add_action( 'wp_update_nav_menu_item', 'lafka_update_mega_menu_item', 100, 3 );
+add_action('wp_update_nav_menu_item', 'lafka_update_mega_menu_item', 100, 3);
 if ( ! function_exists( 'lafka_update_mega_menu_item' ) ) {
 	function lafka_update_mega_menu_item( $menu_id, $menu_item_db ) {
-		$fields = array( 'is_megamenu', 'is_description', 'custom_label', 'label_color', 'highlight', 'icon', 'image' );
+		$fields = array('is_megamenu', 'is_description', 'custom_label', 'label_color', 'highlight', 'icon', 'image');
 
-		foreach ( $fields as $field ) {
-			if ( ! isset( $_POST[ 'lafka-menu-item-' . $field ][ $menu_item_db ] ) ) {
-				$_POST[ 'lafka-menu-item-' . $field ][ $menu_item_db ] = '';
+		foreach ($fields as $field) {
+			if (!isset($_POST['lafka-menu-item-' . $field][$menu_item_db])) {
+				$_POST['lafka-menu-item-' . $field][$menu_item_db] = "";
 			}
 
-			$value = $_POST[ 'lafka-menu-item-' . $field ][ $menu_item_db ];
-			update_post_meta( $menu_item_db, '_lafka-menu-item-' . $field, $value );
+			$value = $_POST['lafka-menu-item-' . $field][$menu_item_db];
+			update_post_meta($menu_item_db, '_lafka-menu-item-' . $field, $value);
 		}
 	}
 }
@@ -265,12 +264,12 @@ if ( ! class_exists( 'LafkaFrontWalker' ) ) {
 			$item_output = $args->before;
 			if ( $depth >= 2 && $this->is_mega_active && $has_mega_description ) {
 				$item_output .= do_shortcode( $item->post_content );
-			} elseif ( $title != '-' && $title != '"-"' && $title != '&#8211;' && ! $has_mega_description ) {
-				$item_output      .= '<a' . $attributes . '>';
+			} elseif($title != '-' && $title != '"-"' && $title != '&#8211;' && !$has_mega_description) {
+				$item_output .= '<a' . $attributes . '>';
 				$custom_image_html = '';
 				if ( $custom_image_id ) {
-					$custom_image_url     = wp_get_attachment_image_url( $custom_image_id );
-					$custom_image_classes = array( 'lafka-menu-image-icon' );
+					$custom_image_url       = wp_get_attachment_image_url( $custom_image_id );
+					$custom_image_classes = array('lafka-menu-image-icon');
 					if ( substr( $custom_image_url, - 4 ) === '.svg' ) {
 						$custom_image_classes[] = 'lafka-svg-icon';
 					}
@@ -283,10 +282,10 @@ if ( ! class_exists( 'LafkaFrontWalker' ) ) {
 				}
 				$item_output .= $args->link_before . $title . $args->link_after;
 				// Show the label and color in the menu
-				$custom_menu_label_val   = get_post_meta( $item->ID, '_lafka-menu-item-custom_label', true );
-				$custom_menu_label_color = get_post_meta( $item->ID, '_lafka-menu-item-label_color', true );
-				if ( $custom_menu_label_val ) {
-					$item_output .= '<span class="lafka-custom-menu-label" ' . ( $custom_menu_label_color ? 'style="background-color:' . esc_attr( $custom_menu_label_color ) . '"' : '' ) . ' >' . esc_html( $custom_menu_label_val ) . '</span>';
+				$custom_menu_label_val = get_post_meta($item->ID, '_lafka-menu-item-custom_label', true);
+				$custom_menu_label_color = get_post_meta($item->ID, '_lafka-menu-item-label_color', true);
+				if ($custom_menu_label_val) {
+					$item_output .= '<span class="lafka-custom-menu-label" ' . ($custom_menu_label_color ? 'style="background-color:' . esc_attr($custom_menu_label_color) . '"' : '') . ' >' . esc_html($custom_menu_label_val) . '</span>';
 				}
 				$item_output .= '</a>';
 			}
