@@ -142,8 +142,11 @@ class Lafka_GitHub_Updater {
 
 		$remote_version = self::tag_to_version( $release->tag_name );
 
-		// Cached release is older than installed version — cache is stale, re-fetch
-		if ( version_compare( $remote_version, $local_version, '<' ) ) {
+		// Re-fetch if cached version is not newer than installed.
+		// Uses <= because WP's "Check again" doesn't fire delete_site_transient,
+		// so the flush hooks can't clear our cache. This ensures a fresh API call
+		// on every update check (only runs 2-3× per day via cron / manual check).
+		if ( version_compare( $remote_version, $local_version, '<=' ) ) {
 			delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::THEME_REPO ) ) );
 			$release = self::get_latest_release( self::THEME_REPO );
 			if ( ! $release ) {
@@ -238,8 +241,8 @@ class Lafka_GitHub_Updater {
 
 		$remote_version = self::tag_to_version( $release->tag_name );
 
-		// Cached release is older than installed version — cache is stale, re-fetch
-		if ( version_compare( $remote_version, $local_version, '<' ) ) {
+		// Re-fetch if cached version is not newer than installed (see theme check for rationale).
+		if ( version_compare( $remote_version, $local_version, '<=' ) ) {
 			delete_transient( 'lafka_gh_' . sanitize_key( str_replace( '/', '_', self::PLUGIN_REPO ) ) );
 			$release = self::get_latest_release( self::PLUGIN_REPO );
 			if ( ! $release ) {
