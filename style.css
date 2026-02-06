@@ -311,8 +311,8 @@ body.lafka_boxed #container {
     z-index: 25000;
     top: 0;
     bottom: 0;
-    width: min(85vw, 340px);
-    left: calc(-1 * min(85vw, 340px));
+    width: 320px;
+    left: -320px;
     height: 100%;
     -webkit-transform: translate(0, 0);
     transform: translate(0, 0);
@@ -321,7 +321,6 @@ body.lafka_boxed #container {
     background: #333333 !important;
     overflow: hidden;
     padding-top: 20px;
-    padding-bottom: 80px;
 }
 
 .admin-bar #menu_mobile {
@@ -467,10 +466,9 @@ a.mob-close-toggle:before {
     margin: 0px 0px 0px 21px;
     padding-right: 38px;
     padding-left: 0px;
-    padding-bottom: 80px;
+    padding-bottom: 150px;
     height: 100%;
-    box-sizing: border-box;
-    overflow-y: auto;
+    overflow-y: scroll;
     overflow-x: hidden;
     width: 100%;
     -webkit-overflow-scrolling: touch;
@@ -498,8 +496,7 @@ ul#mobile-menu.menu li,
 ul#mobile-menu.menu li a,
 #lafka_mobile_account_tab li a {
     display: block;
-    padding: 14px 16px 14px 17px;
-    min-height: 44px;
+    padding: 8px 5px 8px 17px;
     color: #e1e1e1;
     text-decoration: none !important;
     position: relative;
@@ -517,7 +514,7 @@ ul#mobile-menu.menu li a,
 
 ul#mobile-menu.menu>li>a,
 #lafka_mobile_account_tab>li> {
-    padding: 14px 16px 14px 17px;
+    padding: 10px 5px 10px 17px;
     border-bottom: 1px solid rgba(255, 255, 255, 0.07);
     margin-bottom: 15px;
 }
@@ -534,13 +531,13 @@ ul#mobile-menu.menu>li.menu-item-has-children.current_page_item>ul.sub-menu {
 
 ul#mobile-menu.menu>li.menu-item-has-children>a>span.drop-mob {
     display: block;
-    width: 44px;
-    height: 44px;
-    line-height: 44px !important;
+    width: 20px;
+    height: 20px;
+    line-height: 18px !important;
     position: absolute;
     top: 50%;
-    margin-top: -22px;
-    right: 0;
+    margin-top: -9px;
+    right: 8px;
     z-index: 1000;
     text-align: center;
     vertical-align: middle !important;
@@ -2266,36 +2263,36 @@ small {
 
 h1 {
     color: var(--lafka-h1-color, #333333);
-    font-size: var(--lafka-h1-size);
+    font-size: var(--lafka-h1-size, 2em);
     line-height: 1.3em;
 }
 
 h2 {
     color: var(--lafka-h2-color, #333333);
-    font-size: var(--lafka-h2-size);
+    font-size: var(--lafka-h2-size, 1.5em);
     line-height: 1.3em;
 }
 
 h3 {
     color: var(--lafka-h3-color, #333333);
-    font-size: var(--lafka-h3-size);
+    font-size: var(--lafka-h3-size, 1.17em);
     line-height: 1.3em;
 }
 
 h4 {
     color: var(--lafka-h4-color, #333333);
-    font-size: var(--lafka-h4-size);
+    font-size: var(--lafka-h4-size, 1em);
     line-height: 1.3em;
 }
 
 h5 {
     color: var(--lafka-h5-color, #555555);
-    font-size: var(--lafka-h5-size);
+    font-size: var(--lafka-h5-size, 0.83em);
 }
 
 h6 {
     color: var(--lafka-h6-color, #555555);
-    font-size: var(--lafka-h6-size);
+    font-size: var(--lafka-h6-size, 0.67em);
 }
 
 .vc_separator h4 {
@@ -2462,9 +2459,9 @@ input[type="submit"],
 .tribe-events-button,
 .woocommerce .wishlist_table td.product-add-to-cart a.button {
     cursor: pointer;
-    font-size: 14px;
+    font-size: 13px;
     color: #ffffff;
-    padding: 12px 24px;
+    padding: 11px 20px;
     text-decoration: none;
     background: #333333;
     letter-spacing: 1px;
@@ -3485,14 +3482,12 @@ body.admin-bar.lafka-sticky-header #header {
 }
 
 #header #logo {
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    display: block;
     min-height: 90px;
     width: 200px;
     -webkit-transition: all 0.3s ease-in-out 0s;
     transition: all 0.3s ease-in-out 0s;
-    margin: 0px auto 40px auto;
+    margin: 0px auto 55px auto;
     text-align: center;
     position: relative;
     z-index: 6;
@@ -4172,8 +4167,8 @@ small.lafka-search-hint-text {
     padding: 30px 0px;
     margin: 0;
     text-align: left;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15), 0 0 1px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
+    box-shadow: 0 20px 20px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
 }
 
 #main-menu ul.menu > li > a > img.lafka-menu-image-icon {
@@ -4281,9 +4276,7 @@ body:not(.lafka-main-menu-left) #main-menu>ul>li:nth-last-child(2)>ul.sub-menu l
 
 #main-menu li ul.sub-menu li:not(.lafka_mega_text_block)>a {
     display: block;
-    padding: 11px 16px;
-    min-height: 40px;
-    box-sizing: border-box;
+    padding: 7px 0;
     color: #222222;
     text-decoration: none;
     width: 100%;
@@ -4294,7 +4287,7 @@ body:not(.lafka-main-menu-left) #main-menu>ul>li:nth-last-child(2)>ul.sub-menu l
 }
 
 #main-menu li ul.sub-menu li.has-menu-label>a {
-    padding: 11px 35px 11px 16px;
+    padding: 7px 35px 7px 0;
 }
 
 #main-menu li div.lafka-mega-menu>ul.sub-menu>li>ul.sub-menu>li:not(.lafka_mega_text_block)>a {
@@ -6884,9 +6877,7 @@ div.product div.images ol.flex-control-nav li,
     padding: 5px;
     margin-bottom: 5px;
     margin-right: 5px;
-    width: 80px !important;
-    aspect-ratio: 1;
-    overflow: hidden;
+    width: auto !important;
 }
 
 div.product div.images ol.flex-control-nav li:hover,
@@ -6938,8 +6929,7 @@ div.product div.images ol.flex-control-nav li img {
 ul.additional-images li a img,
 div.product div.images ol.flex-control-nav li a img {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
     display: block;
 }
 
@@ -7681,9 +7671,9 @@ div.prod_hold {
     box-sizing: border-box;
     text-align: center;
     border-radius: 3px;
-    -webkit-transition: box-shadow 0.3s ease, background-color 0.3s ease, opacity 0.35s ease, transform 0.35s ease;
-    transition: box-shadow 0.3s ease, background-color 0.3s ease, opacity 0.35s ease, transform 0.35s ease;
-    transform: scale(1.03);
+    -webkit-transition: all 0.6s ease 0s;
+    transition: all 0.6s ease 0s;
+    transform: scale(1.5);
     opacity: 0;
 }
 
@@ -7744,7 +7734,7 @@ html.touch div.prod_hold {
 div.prod_hold:hover {
     z-index: 555;
     background-color: #ffffff;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
+    box-shadow: none;
 }
 
 .lafka-products-list-view div.prod_hold:hover {
@@ -8292,9 +8282,7 @@ html.touch .similar_projects .owl-nav .owl-next {
 }
 
 div.prod_hold .name {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
+    display: block;
     font-size: 17px;
     font-weight: 500;
     text-decoration: none;
@@ -8302,7 +8290,6 @@ div.prod_hold .name {
     text-transform: capitalize;
     padding: 0;
     overflow: hidden;
-    text-overflow: ellipsis;
     color: #333333;
 }
 
@@ -8978,8 +8965,7 @@ div.prod_hold .new_prod {
 }
 
 div.prod_hold.sale .new_prod {
-    right: 30px;
-    top: 76px;
+    right: 66px;
 }
 
 .links .wish_small,
@@ -9010,9 +8996,6 @@ div.prod_hold.sale .new_prod {
     padding: 9px 8px;
     border-radius: 4px;
     z-index: 5;
-    background-color: rgba(255, 255, 255, 0.95);
-    backdrop-filter: blur(4px);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .prod_hold .from,
@@ -12855,7 +12838,7 @@ p.logged-in-as a:first-of-type:before {
 .lafka-search-cart-holder {
     float: right;
     position: absolute;
-    top: 28px;
+    top: 35px;
     right: 40px;
     padding: 0;
     -webkit-transition: all 0.3s ease 0s;
@@ -21540,34 +21523,6 @@ div.prod_hold .links a.lafka-quick-view-link:hover, .lafka-product-slide-cart .b
     }
 }
 
-/* CSS Grid progressive enhancement for product layouts */
-@supports (display: grid) {
-    .woocommerce.columns-2,
-    .woocommerce.columns-3,
-    .woocommerce.columns-4,
-    .woocommerce.columns-5,
-    .woocommerce.columns-6 {
-        display: grid;
-        gap: 0;
-    }
-    .woocommerce.columns-2 { grid-template-columns: repeat(2, 1fr); }
-    .woocommerce.columns-3 { grid-template-columns: repeat(3, 1fr); }
-    .woocommerce.columns-4 { grid-template-columns: repeat(4, 1fr); }
-    .woocommerce.columns-5 { grid-template-columns: repeat(5, 1fr); }
-    .woocommerce.columns-6 { grid-template-columns: repeat(6, 1fr); }
-    .woocommerce[class*="columns-"] div.prod_hold,
-    .woocommerce[class*="columns-"] li.product-category,
-    .woocommerce[class*="columns-"] div.product-category,
-    .cross-sells div.prod_hold,
-    .upsells.products div.prod_hold,
-    .dokan-w8 div.prod_hold {
-        width: 100% !important;
-        float: none;
-    }
-    .woocommerce[class*="columns-"] > .clear {
-        display: none;
-    }
-}
 
 /* Reduced motion support (WCAG 2.3.3) */
 @media (prefers-reduced-motion: reduce) {
