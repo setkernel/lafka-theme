@@ -2,7 +2,7 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.4.8
+Version: 5.4.9
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
@@ -800,7 +800,7 @@ ul.digital-downloads li:before {
     display: inline-block;
     color: #999999;
     content: "\f019";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 14px;
     margin-bottom: 2px;
@@ -1413,7 +1413,7 @@ div.widget_pages ul li.current_page_item>a {
     display: inline-block;
     vertical-align: middle;
     content: "\f046";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 5px;
     font-size: 14px;
@@ -1456,7 +1456,7 @@ div.widget_pages ul li.current_page_item>a {
 .bbp-login-form .bbp-login-links a:before {
     display: inline-block;
     color: #999999;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-size: 14px;
     margin-bottom: 2px;
     margin-right: 8px;
@@ -1705,7 +1705,7 @@ div.widget_search input[type=submit],
 .bbp_widget_login .bbp-logged-in a.button.logout-link:before {
     display: inline-block;
     content: "\f08b";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-size: 14px;
     margin-bottom: 2px;
     margin-right: 5px;
@@ -1796,7 +1796,7 @@ ul.nav-list a:hover {
 .error-message:before {
     display: inline-block;
     content: "\f071";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 6px;
 }
@@ -1896,7 +1896,7 @@ section.woocommerce-order-details table ul.wc-item-meta li p {
 .success-message:before {
     display: inline-block;
     content: "\f058";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 6px;
 }
@@ -2752,7 +2752,7 @@ span.show-password-input {
 }
 
 span.show-password-input:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     content: "\f06e";
     font-weight: 900;
     color: #666666;
@@ -3437,7 +3437,7 @@ body.admin-bar.lafka-sticky-header #header {
 #main-menu ul#main_nav>li>ul.sub-menu li.dropdown>a:after {
     display: inline-block;
     content: "\f107";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-left: 4px;
     font-size: 12px;
@@ -3676,7 +3676,7 @@ body.admin-bar.lafka-sticky-header #header {
 .lafka-top-bar-mail:before,
 .lafka-top-bar-phone a:before {
     content: "\f095";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     vertical-align: middle;
     margin-right: 4px;
     display: inline-block;
@@ -3768,7 +3768,7 @@ ul.lafka-top-menu li.menu-item-has-children {
 ul.lafka-top-menu>li.menu-item-has-children>a:after {
     display: inline-block;
     content: "\f107";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     height: 8px;
     line-height: 8px;
@@ -4884,7 +4884,7 @@ html.no-touch #footer.lafka_do_reveal {
     display: block;
     color: #ffffff !important;
     content: "\f067";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 10px;
     position: absolute;
@@ -4899,7 +4899,7 @@ html.no-touch #footer.lafka_do_reveal {
 
 .swap:before {
     content: "\f068";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
 }
 
@@ -5231,7 +5231,7 @@ h2.widgettitle:before {
     display: inline-block;
     vertical-align: middle;
     margin: 0 8px 0 0;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
 }
 
@@ -5850,7 +5850,7 @@ form.variations_form {
     display: inline-block;
     margin-right: 3px;
     content: "\f021";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
 }
 
@@ -6151,7 +6151,7 @@ body.admin-bar .foodmenu_top div.one_third.last.project-data.lafka-sticky-summar
     height: 18px;
     line-height: 18px;
     font-size: 21px;
-    font-family: 'Font Awesome 5 Brands';
+    font-family: 'Font Awesome 6 Brands';
     font-weight: 900;
     content: "\f082";
 }
@@ -6360,7 +6360,7 @@ div.summary ul.lafka-nutrition-list li span.lafka-nutrition-list-label:last-of-t
 .lafka-nutrition-allergens:before {
     display: inline-block;
     margin-right: 5px;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f21e";
     color: #e88835;
@@ -6401,7 +6401,7 @@ ul.lafka-item-weight-holder li {
 .lafka-item-weight:before {
     display: inline-block;
     margin-right: 5px;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f24e";
     color: #333333;
@@ -7103,7 +7103,7 @@ div.product div.images a.woocommerce-product-gallery__trigger img.emoji {
 
 div.product div.images a.woocommerce-product-gallery__trigger:before {
     content: "\f065";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 14px;
     width: 40px;
@@ -7442,7 +7442,7 @@ body.page #content:not(.has-sidebar) #comments>ul.commentlist+#respond.comment-r
 
 #review_form .comment-form-rating a:after {
     content: "";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-size: 18px !important;
     color: transparent;
     float: right;
@@ -9078,7 +9078,7 @@ a.woocommerce-review-link {
 
 .prod_hold .star-rating:before {
     content: "\f005 \f005 \f005 \f005 \f005";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     color: #cecece;
     font-size: 14px;
@@ -9098,7 +9098,7 @@ a.woocommerce-review-link {
 
 .prod_hold .star-rating span:before {
     content: "\f005 \f005 \f005 \f005 \f005";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     color: #fab60a;
     font-size: 14px;
@@ -9360,7 +9360,7 @@ div.summary .is-countdown {
 .count_holder .count_info:before {
     display: inline-block;
     margin-right: 8px;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     content: "\f017";
     font-size: 14px !important;
     font-weight: 900;
@@ -9369,7 +9369,7 @@ div.summary .is-countdown {
 .count_holder .count_info_left:before {
     display: inline-block;
     margin-right: 8px;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     content: "\f02c";
     font-size: 14px !important;
     font-weight: 900;
@@ -9992,7 +9992,7 @@ p#calc_shipping_state_field:after {
     text-align: center;
     font-size: 14px;
     content: "\f0dc";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     position: absolute;
     right: 5px;
@@ -11532,7 +11532,7 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
 }
 
 .foodmenu_top .project-data .main-features .checklist li:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f058";
     text-decoration: none !important;
@@ -11900,7 +11900,7 @@ body.single-post .lafka_title_holder .blog-post-meta img.avatar {
 }
 
 .blog-post-meta span.post-meta-date:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f017";
     display: inline-block;
@@ -12566,7 +12566,7 @@ ul.commentlist>li.pingback .edit-link {
     height: 15px;
     line-height: 15px;
     vertical-align: middle;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f139";
     position: absolute;
@@ -12782,7 +12782,7 @@ p.logged-in-as a:first-of-type:before {
     display: inline-block;
     margin-right: 5px;
     content: "\f007";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-size: 14px !important;
     font-weight: 900;
 }
@@ -13547,7 +13547,7 @@ span.edit-link a {
 
 .comment-reply-link:before {
     margin-right: 5px;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f061";
     font-size: 10px;
@@ -13619,7 +13619,7 @@ a#cancel-comment-reply-link:before {
     display: inline-block;
     margin-right: 4px;
     content: "\f057";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
 }
 
@@ -13888,7 +13888,7 @@ body.woocommerce-account #customer_login.col2-set .owl-nav button:before,
 .col2-set.addresses header a.edit:before {
     display: inline-block;
     content: "\f303";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     color: #999999;
     font-size: 14px;
     margin-right: 5px;
@@ -14148,7 +14148,7 @@ ul.woocommerce-error {
     vertical-align: middle;
     margin-right: 8px;
     color: #008cc9;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f05a";
     font-size: 24px;
@@ -14881,7 +14881,7 @@ html.touch .ajax_loading .ajax_loading_inner {
     display: inline-block;
     font-size: 14px;
     vertical-align: middle;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f036";
     margin-right: 8px;
@@ -14909,7 +14909,7 @@ html.touch .ajax_loading .ajax_loading_inner {
 
 .entry-summary .yith-wcwl-wishlistexistsbrowse .feedback:before {
     font-size: 10px;
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f00c";
     display: inline-block;
@@ -16055,7 +16055,7 @@ ul.super-sticky li.bbp-topic-title .bbp-topic-permalink:before {
     display: inline-block;
     color: #ffffff;
     content: "\f0c6";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-size: 12px;
     margin-bottom: 2px;
     margin-right: 8px;
@@ -16068,7 +16068,7 @@ ul.sticky li.bbp-topic-title .bbp-topic-permalink:before {
     display: inline-block;
     color: #ffffff;
     content: "\f0c6";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-size: 12px;
     margin-bottom: 2px;
     margin-right: 8px;
@@ -16081,7 +16081,7 @@ ul.status-closed li.bbp-topic-title .bbp-topic-permalink:before {
     display: inline-block;
     color: #ffffff;
     content: "\f023";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-size: 12px;
     margin-bottom: 2px;
     margin-right: 8px;
@@ -16311,7 +16311,7 @@ li.bbp-topic-freshness {
 #bbpress-forums>#subscription-toggle a.subscription-toggle:before {
     display: inline-block;
     content: "\f024";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     font-size: 12px;
     margin-bottom: 2px;
@@ -17601,7 +17601,7 @@ html.no-touch .tps-wrapper {
 
 .tribe-bar-views-option a:before {
     content: "\f073";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 3px;
 }
@@ -17762,7 +17762,7 @@ h2.tribe-events-page-title {
 
 .tribe-events-list .tribe-events-list-separator-month:before {
     content: "\f073";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     margin-right: 6px;
     font-weight: 900;
 }
@@ -17826,7 +17826,7 @@ h2.tribe-events-page-title {
 .tribe-events-list div.type-tribe_events .tribe-events-event-cost:before,
 .tribe-events-schedule .tribe-events-cost:before {
     content: "\f145";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 5px;
     display: inline-block;
@@ -18061,7 +18061,7 @@ h2.tribe-events-page-title {
 
 .tribe-venue-widget-venue-name a:before {
     content: "\f041";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 6px;
     text-decoration: none;
@@ -18070,7 +18070,7 @@ h2.tribe-events-page-title {
 .tribe-events-countdown-widget .tribe-countdown-text:before,
 .tribe-venue-widget-list h4 a:before {
     content: "\f145";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     margin-right: 6px;
     font-weight: 900;
     color: #333333;
@@ -18279,7 +18279,7 @@ address.venue-address>span,
 .tribe-events-organizer-meta .url a:before,
 .tribe-events-organizer-meta .email a:before {
     content: "\f041";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     margin-right: 6px;
     text-decoration: none;
@@ -18833,7 +18833,7 @@ a.lafka-filter-widgets-triger:before {
     text-align: center;
     font-size: 14px;
     content: "\f0dc";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     position: absolute;
     right: 5px;
@@ -19672,7 +19672,7 @@ a.wcv-file-uploader-delete_wcv_store_icon_id {
 }
 
 .wcmp_admin_massege .wcmp_cross {
-    font-family: 'Font Awesome 5 Free' !important;
+    font-family: 'Font Awesome 6 Free' !important;
     font-weight: 900;
 }
 
@@ -20369,7 +20369,7 @@ small.includes_tax .woocommerce-Price-amount {
     margin-right: 2px;
     font-size: 14px;
     content: "\f101";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     vertical-align: middle;
     position: relative;

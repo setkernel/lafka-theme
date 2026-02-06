@@ -132,7 +132,7 @@
 }
 
 #lafka-optionsframework-wrap a.nav-tab:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     margin-right: 8px;
     display: inline-block;
     float: left;
@@ -405,7 +405,7 @@
 }
 
 #lafka-optionsframework h4.ui-accordion-header:before {
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     content: "\f055";
     display: inline-block;
@@ -826,7 +826,7 @@ label.lafka-admin-option-label {
     text-align: center;
     font-size: 14px;
     content: "\f0dc";
-    font-family: 'Font Awesome 5 Free';
+    font-family: 'Font Awesome 6 Free';
     font-weight: 900;
     position: absolute;
     right: 5px;
