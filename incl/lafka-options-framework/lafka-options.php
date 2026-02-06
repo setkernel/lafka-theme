@@ -1120,6 +1120,18 @@ function lafka_optionsframework_options() {
 			'type' => 'checkbox'
 		);
 		$options[] = array(
+			'name' => esc_html_x( 'Kitchen Display System (KDS)', 'theme-options', 'lafka' ),
+			'desc' => esc_html_x( 'Fullscreen kitchen/counter display for live order management. Orders progress through: New → Accepted → Preparing → Ready → Completed. Includes customer-facing order tracking.', 'theme-options', 'lafka' ) .
+			          '<br>' . esc_html_x( 'Once enabled, settings are available under WooCommerce → Lafka Kitchen Display.', 'theme-options', 'lafka' ),
+			'id'   => 'kitchen_display',
+			'std'  => '',
+			'type' => 'select',
+			'options' => array(
+				'' => esc_html__('Disabled', 'lafka'),
+				'enabled' => esc_html__('Enabled', 'lafka')
+			)
+		);
+		$options[] = array(
 				'name' => esc_html_x('Shop Page Header Style', 'theme-options', 'lafka'),
 				'desc' => esc_html_x('Choose the header style for the page set as Shop page.', 'theme-options', 'lafka'),
 				'id' => 'shop_header_style',
