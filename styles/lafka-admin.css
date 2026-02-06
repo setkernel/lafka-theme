@@ -4,7 +4,7 @@
 
 #lafka_super_slider_ids_images img {
     background: none repeat scroll 0 0 #FAFAFA;
-    border-color: #CCCCCC #EEEEEE #EEEEEE #CCCCCC;
+    border-color: #CCC #EEE #EEE #CCC;
     border-style: solid;
     border-width: 1px;
     margin: 5px 5px 0 0;
@@ -23,15 +23,15 @@
     width: auto;
 }
 
-#lafka-optionsframework-wrap:before {
+#lafka-optionsframework-wrap::before {
     display: block;
     content: 'Lafka Theme Options';
-    color: #444444;
+    color: #444;
     padding: 40px 10px 40px 110px;
     font-size: 28px;
     background: url(images/seo_icon_2.svg) no-repeat 10px 10px;
     background-size: 80px 80px;
-    background-color: #ffffff;
+    background-color: #fff;
     width: calc(100% - 126px);
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
@@ -42,7 +42,7 @@
 
 #lafka-optionsframework .group {
     padding-bottom: 180px !important;
-    padding: 0px 40px;
+    padding: 0 40px;
 }
 
 #lafka-optionsframework #of-option-importdemo.group {
@@ -62,7 +62,7 @@
     font-size: 23px;
     font-weight: 400;
     line-height: 29px !important;
-    padding: 10px 0px;
+    padding: 10px 0;
 }
 
 #lafka-optionsframework-wrap #setting-error-save_options, #lafka-optionsframework-wrap #setting-error-restore_defaults, #lafka-optionsframework-wrap div.fade.settings-error {
@@ -100,7 +100,6 @@
 #lafka-optionsframework-wrap .nav-tab {
     font-size: 13px;
     text-transform: none;
-    font-weight: normal;
     width: 178px;
     text-align: left;
     margin: 0 !important;
@@ -114,7 +113,7 @@
     border-bottom: 1px solid;
     border-color: rgba(0, 0, 0, 0.05);
     background-color: #f1f1f1;
-    color: #777777;
+    color: #777;
     font-family: "Open Sans", sans-serif;
     font-weight: 600;
 }
@@ -125,23 +124,23 @@
 }
 
 #lafka-optionsframework-wrap .nav-tab.nav-tab-active, #lafka-optionsframework-wrap .nav-tab:hover {
-    background-color: #ffffff;
-    color: #333333;
+    background-color: #fff;
+    color: #333;
     position: relative;
     border-left: 2px solid #0eafcc;
 }
 
-#lafka-optionsframework-wrap a.nav-tab:before {
+#lafka-optionsframework-wrap a.nav-tab::before {
     font-family: 'Font Awesome 5 Free';
     margin-right: 8px;
     display: inline-block;
     float: left;
     font-size: 14px;
-    color: #333333;
+    color: #333;
     font-weight: 900;
 }
 
-#lafka-optionsframework-wrap a.nav-tab.nav-tab-active:before {
+#lafka-optionsframework-wrap a.nav-tab.nav-tab-active::before {
     color: #0eafcc;
 }
 
@@ -159,15 +158,15 @@
     border-radius: 0 0 0 5px;
 }
 
-#of-option-general-tab:before {
+#of-option-general-tab::before {
     content: "\f0ad";
 }
 
-#of-option-headerarea-tab:before {
+#of-option-headerarea-tab::before {
     content: "\f022";
 }
 
-#of-option-footerarea-tab:before {
+#of-option-footerarea-tab::before {
     content: "\f022";
     transform: rotate(180deg);
     -ms-transform: rotate(180deg); /* IE 9 */
@@ -176,27 +175,27 @@
     -o-transform: rotate(180deg); /* Opera */
 }
 
-#of-option-commoncolors-tab:before {
+#of-option-commoncolors-tab::before {
     content: "\f1fc";
 }
 
-#of-option-fonts-tab:before {
+#of-option-fonts-tab::before {
     content: "\f034";
 }
 
-#of-option-advancedbackgrounds-tab:before {
+#of-option-advancedbackgrounds-tab::before {
     content: "\f03e";
 }
 
-#of-option-shop-tab:before {
+#of-option-shop-tab::before {
     content: "\f07a";
 }
 
-#of-option-blog-tab:before {
+#of-option-blog-tab::before {
     content: "\f14b";
 }
 
-#of-option-sidebars-tab:before {
+#of-option-sidebars-tab::before {
     content: "\f022";
     transform: rotate(90deg);
     -ms-transform: rotate(90deg); /* IE 9 */
@@ -205,39 +204,39 @@
     -o-transform: rotate(90deg); /* Opera */
 }
 
-#of-option-contacts-tab:before {
+#of-option-contacts-tab::before {
     content: "\f0e0";
 }
 
-#of-option-slidingblocks-tab:before {
+#of-option-slidingblocks-tab::before {
     content: "\f137";
 }
 
-#of-option-importdemo-tab:before {
+#of-option-importdemo-tab::before {
     content: "\f019";
 }
 
-#of-option-socialprofiles-tab:before {
+#of-option-socialprofiles-tab::before {
     content: "\f0c0";
 }
 
-#of-option-foodmenu-tab:before {
+#of-option-foodmenu-tab::before {
     content: "\f009";
 }
 
-#of-option-bbpress-tab:before {
+#of-option-bbpress-tab::before {
     content: "\f0e6";
 }
 
-#of-option-lafkaupdates-tab:before {
+#of-option-lafkaupdates-tab::before {
     content: "\f021";
 }
 
-#of-option-events-tab:before {
+#of-option-events-tab::before {
     content: "\f073";
 }
 
-#of-option-lafkalicense-tab:before {
+#of-option-lafkalicense-tab::before {
     content: "\f029";
 }
 
@@ -345,19 +344,19 @@
 
 .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
 
-    background: url("../image/ui-bg_glass_1x400.png") repeat-x scroll 50% 50% #e6e6e6;
+    background: url(../image/ui-bg_glass_1x400.png) repeat-x scroll 50% 50% #e6e6e6;
 
     border: 1px solid #d3d3d3;
 
-    color: #555555;
+    color: #555;
 
-    font-weight: normal;
+    font-weight: 400;
 
 }
 
 .ui-widget-content {
 
-    border: 1px solid #aaaaaa;
+    border: 1px solid #aaa;
 
 }
 
@@ -392,7 +391,7 @@
 
 #lafka-optionsframework .lafka_upload_button, .lafka_upload_image_button.button {
     background: #71a900;
-    color: #ffffff;
+    color: #fff;
     border-color: transparent;
     border: none;
     box-shadow: none;
@@ -404,7 +403,7 @@
     padding: 12px !important;
 }
 
-#lafka-optionsframework h4.ui-accordion-header:before {
+#lafka-optionsframework h4.ui-accordion-header::before {
     font-family: 'Font Awesome 5 Free';
     font-weight: 900;
     content: "\f055";
@@ -417,6 +416,7 @@
 }
 
 @media only screen and (min-width: 1024px) {
+
     .lafka-options-two-columns {
         display: inline-block;
         width: 49.4%;
@@ -426,26 +426,31 @@
         box-sizing: border-box;
     }
 }
+
 .lafka-options-two-columns .explain {
     width: 100%;
     max-width: none !important;
 }
+
 .lafka-options-two-columns .option {
     min-height: 60px;
 }
+
 .section.lafka-options-two-columns .controls {
     min-width: unset !important;
     width: 100% !important;
     max-width: 100% !important;
     padding-right: 0;
 }
+
 .lafka-options-two-columns input[type="text"] {
     width: 100% !important;
     max-width: 100% !important;
 }
+
 #promo_tooltip_1, #promo_tooltip_2, #promo_tooltip_3 {
     border-color: transparent !important;
-    padding: 0px !important;
+    padding: 0 !important;
     margin: 20px 0 !important;
 }
 
@@ -490,7 +495,7 @@
 
 #lafka-optionsframework .controls .of-radio-img-img.of-radio-img-selected span.lafka-of-radio-img-label {
     background-color: #0eafcc;
-    color: #ffffff;
+    color: #fff;
 }
 
 #lafka-optionsframework .controls .of-radio-img-img img {
@@ -546,18 +551,18 @@
 }
 
 #lafka-optionsframework .reset-button {
-    background-color: #333333;
-    color: #ffffff;
+    background-color: #333;
+    color: #fff;
 }
 
 .lafka-optionsframework-submit-top .button-primary, .lafka-optionsframework-submit .button-primary {
     background-color: #90ca15;
-    color: #ffffff;
+    color: #fff;
 }
 
 .lafka-optionsframework-submit .button-secondary:hover, .lafka-optionsframework-submit-top .button-secondary:hover {
     background-color: #0eafcc !important;
-    color: #ffffff;
+    color: #fff;
 }
 
 .lafka-optionsframework-submit-top .button-primary:hover, .lafka-optionsframework-submit .button-primary:hover {
@@ -581,7 +586,7 @@
 
 a.lafka_remove_image_link {
     position: absolute;
-    background: url("../image/remove.png") no-repeat center 4px #e6e6e6;
+    background: url(../image/remove.png) no-repeat center 4px #e6e6e6;
     text-indent: -9999px;
     width: 22px;
     height: 22px;
@@ -596,7 +601,7 @@ a.lafka_remove_image_link {
 }
 
 #section-theme_logo .controls a#theme_logo_remove_link:hover, #section-transparent_theme_logo .controls a#transparent_theme_logo_remove_link:hover, #section-footer_logo .controls a#footer_logo_remove_link:hover {
-    background-color: #333333;
+    background-color: #333;
 }
 
 .checkbox.of-input {
@@ -618,18 +623,18 @@ input.checkbox.of-input + label {
     vertical-align: middle;
 }
 
-input.checkbox.of-input + label:before,
-input.checkbox.of-input + label:after {
+input.checkbox.of-input + label::before,
+input.checkbox.of-input + label::after {
     display: block;
     position: absolute;
-    top: 0px;
-    left: 0px;
+    top: 0;
+    left: 0;
     content: "";
     width: 45px;
     height: 24px;
 }
 
-input.checkbox.of-input + label:before {
+input.checkbox.of-input + label::before {
     right: 1px;
     background-color: #e1e1e1;
     border-radius: 60px;
@@ -640,7 +645,7 @@ input.checkbox.of-input + label:before {
     vertical-align: middle;
 }
 
-input.checkbox.of-input + label:after {
+input.checkbox.of-input + label::after {
     width: 20px;
     height: 20px;
     background-color: #fff;
@@ -654,18 +659,18 @@ input.checkbox.of-input + label:after {
     left: 2px;
 }
 
-input.checkbox.of-input:checked + label:before {
+input.checkbox.of-input:checked + label::before {
     background-color: #0eafcc;
 }
 
-input.checkbox.of-input:checked + label:after {
+input.checkbox.of-input:checked + label::after {
     margin-left: 21px;
 }
 
 #lafka-optionsframework .controls .of-radio-img-img {
     border-radius: 5px;
     padding: 5px;
-    background: #ffffff;
+    background: #fff;
     border: none !important;
     overflow: hidden;
     margin: 20px !important;
@@ -686,18 +691,18 @@ input.checkbox.of-input:checked + label:after {
     -ms-transition: all 0.3s ease 0s;
     -moz-transition: all 0.3s ease 0s;
     -o-transition: all 0.3s ease 0s;
-    box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
 }
 
 #lafka-optionsframework .controls .of-radio-img-selected {
-    box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2);
 }
 
-#lafka-optionsframework .controls input[type=text], #lafka-optionsframework .controls input[type=email], #lafka-optionsframework .controls input[type=password], #lafka-optionsframework .controls input[type=number], #lafka-optionsframework .controls textarea {
+#lafka-optionsframework .controls input[type="text"], #lafka-optionsframework .controls input[type="email"], #lafka-optionsframework .controls input[type="password"], #lafka-optionsframework .controls input[type="number"], #lafka-optionsframework .controls textarea {
     transition: all 0.3s ease 0s;
     -webkit-transition: all 0.3s ease 0s;
     -ms-transition: all 0.3s ease 0s;
@@ -713,13 +718,12 @@ input.checkbox.of-input:checked + label:after {
     box-shadow: none;
 }
 
-#lafka-optionsframework .controls input[type=text]:focus, #lafka-optionsframework .controls textarea:focus, #lafka-optionsframework .controls input[type=email]:focus, #lafka-optionsframework .controls input[type=password]:focus, #lafka-optionsframework .controls input[type=number]:focus {
-    outline: none;
-    background-color: #ffffff;
+#lafka-optionsframework .controls input[type="text"]:focus, #lafka-optionsframework .controls textarea:focus, #lafka-optionsframework .controls input[type="email"]:focus, #lafka-optionsframework .controls input[type="password"]:focus, #lafka-optionsframework .controls input[type="number"]:focus {
+    background-color: #fff;
     border: none;
-    box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2) !important;
-    -moz-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2) !important;
-    -webkit-box-shadow: 0 0px 40px 0 rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2) !important;
+    -moz-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2) !important;
+    -webkit-box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.2) !important;
     outline: none;
 }
 
@@ -727,7 +731,7 @@ input.checkbox.of-input:checked + label:after {
     padding: 8px !important;
 }
 
-#lafka-optionsframework .controls input[type=text], #lafka-optionsframework .controls input[type=email], #lafka-optionsframework .controls input[type=password], #lafka-optionsframework .controls input[type=number], #lafka-optionsframework .controls select {
+#lafka-optionsframework .controls input[type="text"], #lafka-optionsframework .controls input[type="email"], #lafka-optionsframework .controls input[type="password"], #lafka-optionsframework .controls input[type="number"], #lafka-optionsframework .controls select {
     max-width: 320px;
 }
 
@@ -735,7 +739,6 @@ input.checkbox.of-input:checked + label:after {
     border: 1px solid #e1e1e1;
     max-width: 200px;
     height: auto;
-    background: transparent;
     padding: 6px 25px 6px 7px;
     -webkit-appearance: none;
     -moz-appearance: none;
@@ -758,9 +761,9 @@ input.checkbox.of-input:checked + label:after {
     border-radius: 3px;
     -moz-border-radius: 3px;
     -webkit-border-radius: 3px;
-    box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
 }
 
 .section-typography select + .wp-picker-container {
@@ -778,13 +781,13 @@ label.lafka-admin-option-label {
     background-color: #fff;
     border-radius: 3px;
     border: solid 1px #e8e8e8;
-    color: #999999;
+    color: #999;
     box-sizing: border-box;
     cursor: pointer;
     display: inline-block;
     font-family: inherit;
     font-size: 13px;
-    font-weight: normal;
+    font-weight: 400;
     height: 37px;
     line-height: 35px;
     outline: none;
@@ -811,13 +814,13 @@ label.lafka-admin-option-label {
 }
 
 .nice-select:active, .nice-select.open, .nice-select:focus {
-    box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
     border-radius: 3px;
 }
 
-.nice-select:after {
+.nice-select::after {
     display: block;
     width: 20px;
     height: 20px;
@@ -833,11 +836,11 @@ label.lafka-admin-option-label {
     top: 50%;
     margin-top: -9px;
     z-index: 50;
-    color: #333333;
+    color: #333;
     pointer-events: none;
 }
 
-.nice-select.open:after {
+.nice-select.open::after {
     -webkit-transform: rotate(-135deg);
     -ms-transform: rotate(-135deg);
     transform: rotate(-135deg);
@@ -849,9 +852,9 @@ label.lafka-admin-option-label {
     -webkit-transform: scale(1) translateY(0);
     -ms-transform: scale(1) translateY(0);
     transform: scale(1) translateY(0);
-    box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
-    -moz-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
-    -webkit-box-shadow: 0 0px 30px 0 rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
+    -webkit-box-shadow: 0 0 30px 0 rgba(0, 0, 0, 0.2);
 }
 
 .nice-select.disabled {
@@ -860,8 +863,8 @@ label.lafka-admin-option-label {
     pointer-events: none;
 }
 
-.nice-select.disabled:after {
-    border-color: #cccccc;
+.nice-select.disabled::after {
+    border-color: #ccc;
 }
 
 .nice-select.wide {
@@ -888,7 +891,7 @@ label.lafka-admin-option-label {
     line-height: 34px;
 }
 
-.nice-select.small:after {
+.nice-select.small::after {
     height: 4px;
     width: 4px;
 }
@@ -933,7 +936,7 @@ label.lafka-admin-option-label {
 .nice-select .option {
     cursor: pointer;
     font-weight: 400;
-    color: #999999;
+    color: #999;
     margin-left: 0;
     line-height: 40px;
     list-style: none;
@@ -943,7 +946,7 @@ label.lafka-admin-option-label {
     outline: none;
     padding-left: 15px;
     padding-right: 29px;
-    padding-bottom: 0px;
+    padding-bottom: 0;
     text-align: left;
     -webkit-transition: all 0.2s;
     transition: all 0.2s;
@@ -951,11 +954,11 @@ label.lafka-admin-option-label {
 
 .nice-select .option:hover, .nice-select .option.focus, .nice-select .option.selected.focus {
     background-color: #f6f6f6;
-    color: #333333;
+    color: #333;
 }
 
 .nice-select .option.selected {
-    font-weight: bold;
+    font-weight: 700;
 }
 
 .nice-select .option.disabled {
@@ -1070,7 +1073,7 @@ a#header_background_remove_link.lafka_remove_image_link, a#footer_background_rem
     cursor: pointer;
     outline: none;
     user-select: none;
-    margin-right: 0px;
+    margin-right: 0;
     margin-left: 18px;
 }
 
@@ -1078,31 +1081,31 @@ a#header_background_remove_link.lafka_remove_image_link, a#footer_background_rem
     vertical-align: middle;
 }
 
-.rtl input.checkbox.of-input + label:before,
-.rtl input.checkbox.of-input + label:after {
+.rtl input.checkbox.of-input + label::before,
+.rtl input.checkbox.of-input + label::after {
     display: block;
     position: absolute;
-    top: 0px;
+    top: 0;
     left: auto;
-    right: 0px;
+    right: 0;
     content: "";
     width: 45px;
     height: 24px;
 }
 
-.rtl input.checkbox.of-input + label:before {
+.rtl input.checkbox.of-input + label::before {
     right: 1px;
     background-color: #e1e1e1;
     border-radius: 60px;
     transition: background 0.4s;
     position: relative;
     display: inline-block;
-    margin-right: 0px;
+    margin-right: 0;
     margin-left: 18px;
     vertical-align: middle;
 }
 
-.rtl input.checkbox.of-input + label:after {
+.rtl input.checkbox.of-input + label::after {
     width: 20px;
     height: 20px;
     background-color: #fff;
@@ -1117,11 +1120,11 @@ a#header_background_remove_link.lafka_remove_image_link, a#footer_background_rem
     right: 2px;
 }
 
-.rtl input.checkbox.of-input:checked + label:before {
+.rtl input.checkbox.of-input:checked + label::before {
     background-color: #0eafcc;
 }
 
-.rtl input.checkbox.of-input:checked + label:after {
+.rtl input.checkbox.of-input:checked + label::after {
     margin-right: 21px;
 }
 
@@ -1129,30 +1132,37 @@ a#header_background_remove_link.lafka_remove_image_link, a#footer_background_rem
 #lafka_hidden_demo_0, #lafka_hidden_demo_1, #lafka_hidden_demo_2, #lafka_hidden_demo_3, #lafka_hidden_demo_4, #lafka_hidden_demo_5, #lafka_hidden_demo_6, #lafka_hidden_demo_7, #lafka_hidden_demo_8, #lafka_hidden_demo_9 {
     display: none;
 }
+
 audio.lafka_order_notify_audio {
     display: none;
 }
+
 #lafka-push-confirm{
     display:none;
 }
+
 p.description.lafka_megamenu_image {
     position: relative;
 }
+
 p.description.lafka_megamenu_image .lafka_remove_image_link {
     top: auto;
     left: auto;
     bottom: 7px;
     right: 10px;
 }
+
 p.description.lafka_megamenu_image span.screenshot, p.description.lafka_megamenu_image span.screenshot input.lafka_upload_image_button {
     display: inline-block !important;
     vertical-align: bottom !important;
 }
+
 p.description.lafka_megamenu_image span.screenshot, p.description.lafka_megamenu_image span.screenshot img {
     max-height: 36px;
     height: 36px;
     width: auto;
 }
+
 .column-taxonomy-lafka_branch_location {
     width: 5%;
 }

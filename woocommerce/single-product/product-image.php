@@ -37,26 +37,26 @@ $wrapper_classes   = apply_filters(
 	)
 );
 
-$lafka_product_video_url = get_post_meta($product->get_id(), 'lafka_product_video_url', true);
+$lafka_product_video_url = get_post_meta( $product->get_id(), 'lafka_product_video_url', true );
 
 ?>
 <div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $wrapper_classes ) ) ); ?>" data-columns="<?php echo esc_attr( $columns ); ?>" style="opacity: 0; transition: opacity .25s ease-in-out;">
 
-    <?php if($lafka_product_video_url): ?>
-        <a title="<?php esc_attr_e('Play the video', 'lafka')?>" class="lafka_product_video_trigger" href="<?php echo esc_url($lafka_product_video_url) ?>" ><span class="fa fa-play-circle"></span><?php esc_html_e('Play the video', 'lafka')?></a>
+	<?php if ( $lafka_product_video_url ) : ?>
+		<a title="<?php esc_attr_e( 'Play the video', 'lafka' ); ?>" class="lafka_product_video_trigger" href="<?php echo esc_url( $lafka_product_video_url ); ?>" ><span class="fa fa-play-circle"></span><?php esc_html_e( 'Play the video', 'lafka' ); ?></a>
 	<?php endif; ?>
 
 	<div class="woocommerce-product-gallery__wrapper">
 		<?php
 		if ( $post_thumbnail_id ) {
-			$html  = wc_get_gallery_image_html( $post_thumbnail_id, true );
+			$html = wc_get_gallery_image_html( $post_thumbnail_id, true );
 		} else {
 			$wrapper_classname = $product->is_type( ProductType::VARIABLE ) && ! empty( $product->get_visible_children() ) && '' !== $product->get_price() ?
 				'woocommerce-product-gallery__image woocommerce-product-gallery__image--placeholder' :
 				'woocommerce-product-gallery__image--placeholder';
 			$html              = sprintf( '<div class="%s">', esc_attr( $wrapper_classname ) );
-			$html .= sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( wc_placeholder_img_src('woocommerce_single') ), esc_html__( 'Awaiting product image', 'lafka' ) );
-			$html .= '</div>';
+			$html             .= sprintf( '<img src="%s" alt="%s" class="wp-post-image" />', esc_url( wc_placeholder_img_src( 'woocommerce_single' ) ), esc_html__( 'Awaiting product image', 'lafka' ) );
+			$html             .= '</div>';
 		}
 
 		echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $post_thumbnail_id ); // phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped

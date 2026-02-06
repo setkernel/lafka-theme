@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	https://docs.woocommerce.com/document/template-structure/
+ * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
  * @version 3.5.5
  */
@@ -30,9 +30,9 @@ if ( ! is_a( $product, 'WC_Product' ) ) {
 <li>
 	<?php do_action( 'woocommerce_widget_product_item_start', $args ); ?>
 
-    <a href="<?php echo esc_url($product->get_permalink()); ?>" >
-	    <?php echo wp_kses_post( $product->get_image("lafka-general-small-size-nocrop") ); ?>
-        <span class="product-title"><?php echo wp_kses_post( $product->get_name() ); ?></span>
+	<a href="<?php echo esc_url( $product->get_permalink() ); ?>" >
+		<?php echo wp_kses_post( $product->get_image( 'lafka-general-small-size-nocrop' ) ); ?>
+		<span class="product-title"><?php echo wp_kses_post( $product->get_name() ); ?></span>
 	</a>
 
 	<?php if ( ! empty( $show_rating ) ) : ?>

@@ -24,24 +24,36 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product;
 ?>
 <div class="tagcloud product_meta">
-    <?php do_action( 'woocommerce_product_meta_start' ); ?>
-    <?php
-        $categories = wc_get_product_category_list( $product->get_id() );
-        $size_categories = count( $product->get_category_ids() );
+	<?php do_action( 'woocommerce_product_meta_start' ); ?>
+	<?php
+		$categories      = wc_get_product_category_list( $product->get_id() );
+		$size_categories = count( $product->get_category_ids() );
 
-        $tags = wc_get_product_tag_list( $product->get_id());
-        $size_tags = count( $product->get_tag_ids() );
+		$tags      = wc_get_product_tag_list( $product->get_id() );
+		$size_tags = count( $product->get_tag_ids() );
 
-        if($categories) echo '<span class="posted_in">'._n('Category:', 'Categories:', $size_categories, 'lafka').'</span>'.$categories;
+	if ( $categories ) {
+		echo '<span class="posted_in">' . _n( 'Category:', 'Categories:', $size_categories, 'lafka' ) . '</span>' . $categories;
+	}
 
-        if($tags) echo '<span class="tagged_as">'._n('Tag:', 'Tags:', $size_tags, 'lafka').'</span>'.$tags;
-    ?>
+	if ( $tags ) {
+		echo '<span class="tagged_as">' . _n( 'Tag:', 'Tags:', $size_tags, 'lafka' ) . '</span>' . $tags;
+	}
+	?>
 	<?php if ( wc_product_sku_enabled() && ( $product->get_sku() || $product->is_type( ProductType::VARIABLE ) ) ) : ?>
 
 		<span class="sku_wrapper">
-            <?php esc_html_e( 'SKU:', 'lafka' ); ?> <span class="sku"><?php if( $sku = $product->get_sku() ) echo esc_html($sku); else esc_html_e( 'N/A', 'lafka' ); ?></span>
-        </span>
+			<?php esc_html_e( 'SKU:', 'lafka' ); ?> <span class="sku">
+			<?php
+			if ( $sku = $product->get_sku() ) {
+				echo esc_html( $sku );
+			} else {
+				esc_html_e( 'N/A', 'lafka' );
+			}
+			?>
+			</span>
+		</span>
 
 	<?php endif; ?>
-    <?php do_action( 'woocommerce_product_meta_end' ); ?>
+	<?php do_action( 'woocommerce_product_meta_end' ); ?>
 </div>

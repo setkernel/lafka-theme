@@ -24,15 +24,16 @@ global $post, $product;
 
 ?>
 <?php if ( $product->is_on_sale() ) : ?>
-	<?php if ( $product->is_type( 'grouped' ) ): ?>
-		<?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__('sale', 'lafka') . '</span>'); ?>
-    <?php elseif ( $product->is_type( 'combo' ) ): ?>
-        <?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__('save', 'lafka') . '</span>'); ?>
-	<?php else: ?>
+	<?php if ( $product->is_type( 'grouped' ) ) : ?>
+		<?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' ); ?>
+	<?php elseif ( $product->is_type( 'combo' ) ) : ?>
+		<?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' ); ?>
+	<?php else : ?>
 		<?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . ' -' . lafka_get_product_saving( $product ) . '%</span>', $post, $product ); ?>
 	<?php endif ?>
 <?php endif; ?>
 
-<?php if ( lafka_is_product_new( $product ) ): ?>
-    <span class="new_prod"><?php esc_html_e( 'New', 'lafka' ) ?></span>
-<?php endif;
+<?php if ( lafka_is_product_new( $product ) ) : ?>
+	<span class="new_prod"><?php esc_html_e( 'New', 'lafka' ); ?></span>
+	<?php
+endif;

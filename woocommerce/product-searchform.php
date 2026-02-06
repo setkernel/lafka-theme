@@ -22,11 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<form role="search" method="get" id="searchform" action="<?php echo esc_url(lafka_wpml_get_home_url()); ?>">
+<form role="search" method="get" id="searchform" action="<?php echo esc_url( lafka_wpml_get_home_url() ); ?>">
 	<div>
-		<input type="text" value="<?php echo esc_attr(get_search_query()); ?>" name="s" id="s" placeholder="<?php esc_attr_e('Search Products', 'lafka'); ?>" />
-        <small class="lafka-search-hint-text"><?php echo esc_html__('Type and hit Enter to Search', 'lafka') ?></small>
-		<input type="submit" id="searchsubmit" value="<?php esc_attr_e('Search Products', 'lafka') ?>" />
+		<input type="text" value="<?php echo esc_attr( get_search_query() ); ?>" name="s" id="s" placeholder="<?php esc_attr_e( 'Search Products', 'lafka' ); ?>" />
+		<small class="lafka-search-hint-text"><?php echo esc_html__( 'Type and hit Enter to Search', 'lafka' ); ?></small>
+		<input type="submit" id="searchsubmit" value="<?php esc_attr_e( 'Search Products', 'lafka' ); ?>" />
 		<input type="hidden" name="post_type" value="product" />
 	</div>
 </form>
