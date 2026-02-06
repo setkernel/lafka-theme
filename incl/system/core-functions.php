@@ -880,8 +880,8 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 			wp_enqueue_style('lafka-preloader', get_template_directory_uri() . "/styles/lafka-preloader.css");
 		}
 
-		// Load the main stylesheet.
-		wp_enqueue_style( 'lafka-style', get_stylesheet_uri(), array(), wp_get_theme()->get( 'Version' ) );
+		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
+		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', array(), wp_get_theme( get_template() )->get( 'Version' ) );
 		// Load the rtl stylesheet.
 		if ( is_rtl() ) {
 			wp_enqueue_style( 'lafka-rtl', get_template_directory_uri() . "/styles/rtl.css", array('lafka-style'), wp_get_theme()->get( 'Version' ) );
