@@ -9,20 +9,26 @@ if (!defined('LAFKA_BACKGROUNDS_PATH')) {
 	define('LAFKA_BACKGROUNDS_PATH', LAFKA_IMAGES_PATH . 'backgrounds/');
 }
 
-if (class_exists('bbPress')) {
-	define('LAFKA_IS_BBPRESS', TRUE);
-} else {
-	define('LAFKA_IS_BBPRESS', FALSE);
+if ( ! defined( 'LAFKA_IS_BBPRESS' ) ) {
+	if (class_exists('bbPress')) {
+		define('LAFKA_IS_BBPRESS', TRUE);
+	} else {
+		define('LAFKA_IS_BBPRESS', FALSE);
+	}
 }
 
 // Check if WooCommerce is active (supports regular plugins and MU-plugins)
-if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )
-	|| ( is_multisite() && array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins', array() ) ) )
-	|| class_exists( 'WooCommerce' ) ) {
-	define('LAFKA_IS_WOOCOMMERCE', TRUE);
+if ( ! defined( 'LAFKA_IS_WOOCOMMERCE' ) ) {
+	if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) )
+		|| ( is_multisite() && array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins', array() ) ) )
+		|| class_exists( 'WooCommerce' ) ) {
+		define('LAFKA_IS_WOOCOMMERCE', TRUE);
+	} else {
+		define('LAFKA_IS_WOOCOMMERCE', FALSE);
+	}
+}
+if ( LAFKA_IS_WOOCOMMERCE ) {
 	require_once(get_template_directory() . '/incl/woocommerce-functions.php');
-} else {
-	define('LAFKA_IS_WOOCOMMERCE', FALSE);
 }
 
 if (class_exists('Tribe__Events__Main')) {
@@ -37,17 +43,21 @@ if (class_exists('YITH_WCWL')) {
 	define('LAFKA_IS_WISHLIST', FALSE);
 }
 
-if (class_exists('RevSliderBase')) {
-	define('LAFKA_IS_REVOLUTION', TRUE);
-} else {
-	define('LAFKA_IS_REVOLUTION', FALSE);
+if ( ! defined( 'LAFKA_IS_REVOLUTION' ) ) {
+	if (class_exists('RevSliderBase')) {
+		define('LAFKA_IS_REVOLUTION', TRUE);
+	} else {
+		define('LAFKA_IS_REVOLUTION', FALSE);
+	}
 }
 
 // Check if WC Marketplace is active
-if ( class_exists('WCMp') || function_exists('wcmp_plugin_init') ) {
-	define('LAFKA_IS_WC_MARKETPLACE', TRUE);
-} else {
-	define('LAFKA_IS_WC_MARKETPLACE', FALSE);
+if ( ! defined( 'LAFKA_IS_WC_MARKETPLACE' ) ) {
+	if ( class_exists('WCMp') || function_exists('wcmp_plugin_init') ) {
+		define('LAFKA_IS_WC_MARKETPLACE', TRUE);
+	} else {
+		define('LAFKA_IS_WC_MARKETPLACE', FALSE);
+	}
 }
 
 // Check if WC Vendors is active
@@ -115,8 +125,12 @@ if (!function_exists('lafka_vc_set_cpt')) {
 
 /**
  * Include Lafka_Font_Awesome
+ * PERF-C04: Only load the 3,026-line icon data class in admin — its static arrays
+ * (icon picker data) are only used by VC icon pickers and admin UI.
  */
-require_once(get_template_directory() . '/incl/Lafka_Font_Awesome.php');
+if ( is_admin() ) {
+	require_once(get_template_directory() . '/incl/Lafka_Font_Awesome.php');
+}
 
 /**
  * Include TGM-Plugin-Activation
