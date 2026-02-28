@@ -37,8 +37,15 @@ function lafka_optionsframework_load_sanitization() {
  *
  */
 
-// Loads the options array from the theme
-require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options.php';
+// PERF-C05: Defer loading the 2,245-line options definition file to admin only.
+// The function lafka_optionsframework_options() is only called in:
+//   - lafka_optionsframework_init() (admin_init)
+//   - lafka_optionsframework_setdefaults() (admin_init)
+//   - lafka_options_interface (admin menu page)
+// Frontend only reads saved option values from the DB, not definitions.
+if ( is_admin() ) {
+	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options.php';
+}
 
 function lafka_optionsframework_init() {
 
@@ -115,10 +122,10 @@ function lafka_optionsframework_load_scripts($hook) {
 	}
 
 	// Enqueued scripts
-	wp_enqueue_script('lafka-options-custom', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-options-custom.js', array('jquery'), false, true);
+	wp_enqueue_script('lafka-options-custom', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-options-custom.js', array('jquery'), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-options-custom.js' ), true);
 
 	// Enqueued styles
-	wp_enqueue_style('lafka-optionsframework', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'css/lafka-optionsframework.css');
+	wp_enqueue_style('lafka-optionsframework', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'css/lafka-optionsframework.css', array(), lafka_asset_version( '/incl/lafka-options-framework/css/lafka-optionsframework.css' ));
 
 	// Inline scripts from lafka-options-interface.php
 	do_action('lafka_optionsframework_custom_scripts');
@@ -274,10 +281,13 @@ function lafka_get_default_values() {
 			$output[$option['id']] = apply_filters('lafka_sanitize_' . $option['type'], $option['std'], $option);
 		}
 	}
+	// Register defaults with the shared Lafka_Options helper (if plugin provides it).
+	if ( class_exists( 'Lafka_Options' ) ) {
+		Lafka_Options::set_defaults( $output );
+	}
+
 	return $output;
 }
-
-// Search in the options array
 if (!function_exists('lafka_search_array')) {
 
 	function lafka_search_array($name, $array) {

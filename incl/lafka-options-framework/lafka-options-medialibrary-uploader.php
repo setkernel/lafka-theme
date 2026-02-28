@@ -22,7 +22,7 @@ if (!function_exists('lafka_optionsframework_mlu_js')) {
 	function lafka_optionsframework_mlu_js() {
 
 		// Registers custom scripts for the Media Library AJAX uploader.
-		wp_enqueue_script('lafka-of-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-of-medialibrary-uploader.js', array('jquery', 'thickbox'), false, true);
+		wp_enqueue_script('lafka-of-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-of-medialibrary-uploader.js', array('jquery', 'thickbox'), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-of-medialibrary-uploader.js' ), true);
 	}
 
 }

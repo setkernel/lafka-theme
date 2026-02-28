@@ -9,7 +9,7 @@ add_action('lafka_optionsframework_custom_scripts', 'lafka_optionsframework_cust
 
 function lafka_optionsframework_custom_scripts() {
 
-	wp_enqueue_script('lafka-of-fonts-preview', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-of-fonts-preview.js', array('jquery'), false, true);
+	wp_enqueue_script('lafka-of-fonts-preview', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-of-fonts-preview.js', array('jquery'), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-of-fonts-preview.js' ), true);
 	wp_localize_script('lafka-of-fonts-preview', 'lafka_font_prev_params', array(
 			'fonts' => esc_js(json_encode(lafka_typography_get_os_fonts())),
 			'google_subset' => esc_js(lafka_get_google_subsets())
