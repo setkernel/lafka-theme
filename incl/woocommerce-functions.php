@@ -291,7 +291,8 @@ if ( ! function_exists( 'lafka_price_filter' ) ) {
 		}
 
 		wp_enqueue_style( 'jquery-ui' );
-		wp_enqueue_script( 'lafka-price-slider', get_template_directory_uri() . '/js/lafka-price-slider.js', array( 'jquery-ui-slider', 'wc-jquery-ui-touchpunch', 'accounting' ), false, true );
+		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		wp_enqueue_script( 'lafka-price-slider', get_template_directory_uri() . '/js/lafka-price-slider' . $suffix . '.js', array( 'jquery-ui-slider', 'wc-jquery-ui-touchpunch', 'accounting' ), lafka_asset_version( '/js/lafka-price-slider' . $suffix . '.js' ), true );
 
 		// Round values to nearest 10 by default.
 		$step = max( apply_filters( 'woocommerce_price_filter_widget_step', 10 ), 1 );
@@ -858,8 +859,12 @@ if ( ! function_exists( 'lafka_quickview' ) ) {
 		$product    = wc_get_product( $prod_id );
 		$authordata = get_userdata( $post->post_author );
 
-		Lafka_WCVS();
-		Lafka_WC_Variation_Swatches_Frontend::instance();
+		if ( function_exists( 'Lafka_WCVS' ) ) {
+			Lafka_WCVS();
+		}
+		if ( class_exists( 'Lafka_WC_Variation_Swatches_Frontend' ) ) {
+			Lafka_WC_Variation_Swatches_Frontend::instance();
+		}
 
 		if ( function_exists( 'YITH_WCWL_Frontend' ) ) {
 			$wishlist = YITH_WCWL_Frontend();
@@ -1121,9 +1126,37 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 				$product_addons = WC_Product_Addons_Helper::get_product_addons( $product->get_id() );
 			}
 
+			// PERF-C06: Batch-fetch all attribute terms for all variations at once,
+			// instead of calling get_term_by() per attribute per variation (N+1).
+			$available_variations = $lafka_variable_product->get_available_variations();
+			$lafka_term_lookup = array();
+			$lafka_slugs_by_taxonomy = array();
+			foreach ( $available_variations as $variation ) {
+				if ( ! empty( $variation['attributes'] ) ) {
+					foreach ( $variation['attributes'] as $attribute_name => $attribute_slug ) {
+						if ( $attribute_slug ) {
+							$taxonomy = str_replace( 'attribute_', '', rawurldecode( $attribute_name ) );
+							$lafka_slugs_by_taxonomy[ $taxonomy ][ $attribute_slug ] = true;
+						}
+					}
+				}
+			}
+			foreach ( $lafka_slugs_by_taxonomy as $taxonomy => $slugs ) {
+				$terms = get_terms( array(
+					'taxonomy'   => $taxonomy,
+					'slug'       => array_keys( $slugs ),
+					'hide_empty' => false,
+				) );
+				if ( ! is_wp_error( $terms ) ) {
+					foreach ( $terms as $term ) {
+						$lafka_term_lookup[ $taxonomy . '|' . $term->slug ] = $term->name;
+					}
+				}
+			}
+
 			ob_start();
 			?>
-			<?php foreach ( $lafka_variable_product->get_available_variations() as $variation ): ?>
+			<?php foreach ( $available_variations as $variation ): ?>
 				<?php if ( get_post_meta( $variation['variation_id'], '_lafka_variable_in_catalog', true ) ): ?>
 					<?php
 					$default_addon_option_pairs = array();
@@ -1146,10 +1179,11 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
                             $variation_label_array = array();
                             if ( isset( $variation['attributes'] ) ) {
 	                            foreach ( $variation['attributes'] as $attribute_name => $attribute_slug ) {
-		                            /** @var WP_Term $attribute_term_object */
-		                            $attribute_term_object = get_term_by( 'slug', $attribute_slug, str_replace( 'attribute_', '', rawurldecode( $attribute_name ) ) );
-		                            if ( is_a( $attribute_term_object, 'WP_Term' ) ) {
-			                            $variation_label_array[] = $attribute_term_object->name;
+		                            // PERF-C06: Use pre-fetched term lookup instead of get_term_by() per attribute
+		                            $taxonomy = str_replace( 'attribute_', '', rawurldecode( $attribute_name ) );
+		                            $lookup_key = $taxonomy . '|' . $attribute_slug;
+		                            if ( isset( $lafka_term_lookup[ $lookup_key ] ) ) {
+			                            $variation_label_array[] = $lafka_term_lookup[ $lookup_key ];
 		                            }
 	                            }
                             }
