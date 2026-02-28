@@ -1651,12 +1651,14 @@ div:not(.sidebar) div.widget_product_search {
 }
 
 div:not(.sidebar) .widget.widget_search #searchform>div,
-div:not(.sidebar) div.widget_product_search #searchform>div {
+div:not(.sidebar) div.widget_product_search #searchform>div,
+div:not(.sidebar) div.widget_product_search .woocommerce-product-search>div {
     position: relative;
 }
 
 div:not(.sidebar) .widget.widget_search #searchform>div:before,
-div:not(.sidebar) div.widget_product_search #searchform>div:before {
+div:not(.sidebar) div.widget_product_search #searchform>div:before,
+div:not(.sidebar) div.widget_product_search .woocommerce-product-search>div:before {
     display: block;
     color: #cecece;
     content: "\e8bd";
@@ -3932,7 +3934,8 @@ body>#search.active {
     display: block;
 }
 
-#searchform input#searchsubmit {
+#searchform input#searchsubmit,
+.woocommerce-product-search button[type=submit] {
     border: 0 none;
     position: absolute;
     right: 10px;
@@ -13460,7 +13463,8 @@ div.prod_hold .links:after {
     display: none;
 }
 
-#searchform .screen-reader-text {
+#searchform .screen-reader-text,
+.woocommerce-product-search .screen-reader-text {
     display: block;
     font-size: 90%;
     left: 0;
