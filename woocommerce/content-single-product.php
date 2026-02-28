@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see     https://docs.woocommerce.com/document/template-structure/
+ * @see     https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
  * @version 3.6.0
  */
@@ -22,12 +22,12 @@ global $product;
 /**
  * Hook: woocommerce_before_single_product.
  *
- * @hooked wc_print_notices - 10
+ * @hooked woocommerce_output_all_notices - 10
  */
 do_action( 'woocommerce_before_single_product' );
 
 if ( post_password_required() ) {
-	echo get_the_password_form();
+	echo get_the_password_form(); // WPCS: XSS ok.
 
 	return;
 }

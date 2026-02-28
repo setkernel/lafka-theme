@@ -28,12 +28,14 @@ get_header('shop');
  */
 do_action('woocommerce_before_main_content');
 
-global $wp_query;
-$cat = $wp_query->get_queried_object();
-if (isset($cat->term_id)) {
-	$thumbnail_id = get_term_meta($cat->term_id, 'thumbnail_id', true);
-	$image = wp_get_attachment_url($thumbnail_id);
-}
+/**
+ * Hook: woocommerce_shop_loop_header.
+ *
+ * @since 8.6.0
+ *
+ * @hooked woocommerce_product_taxonomy_archive_header - 10
+ */
+do_action( 'woocommerce_shop_loop_header' );
 ?>
 <div id="main" class="fixed box box-common">
 
@@ -104,5 +106,12 @@ if (isset($cat->term_id)) {
  * @hooked woocommerce_output_content_wrapper_end - 10 (outputs closing divs for the content)
  */
 do_action('woocommerce_after_main_content');
+
+/**
+ * Hook: woocommerce_sidebar.
+ *
+ * @hooked woocommerce_get_sidebar - 10
+ */
+do_action( 'woocommerce_sidebar' );
 
 get_footer('shop');
