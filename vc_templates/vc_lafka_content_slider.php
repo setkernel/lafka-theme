@@ -33,7 +33,7 @@ if($pagination === 'yes') {
 	$css_classes[] = $pagination_type;
 }
 
-$unique_id = uniqid('lafka_content_slider');
+$unique_id = 'lafka_content_slider_' . uniqid();
 
 $output_escaped = '<div id="' . esc_attr($unique_id) . '" class="lafka_content_slider' . ($custom_css_class ? ' ' . esc_attr($custom_css_class) : '') . (empty($css_classes) ? '' : ' ' . esc_attr(implode(' ', $css_classes))) . '">';
 $output_escaped .= $this->getTemplateVariable('title');
@@ -45,10 +45,10 @@ $output_escaped .= $this->getTemplateVariable('tabs-list-right');
 $output_escaped .= '</div>';
 
 $autoplay_owl_option = 'false';
-$autoplayTimeout_owl_option = '5000';
-if ($autoplay !== 'none') {
+$autoplayTimeout_owl_option = 5000;
+if ($autoplay !== 'none' && is_numeric($autoplay) && (int) $autoplay > 0) {
 	$autoplay_owl_option = 'true';
-	$autoplayTimeout_owl_option = $autoplay . '000';
+	$autoplayTimeout_owl_option = (int) $autoplay * 1000;
 }
 
 $navigation_owl_option = 'false';
@@ -99,7 +99,7 @@ add_action('wp_footer', function() use ($unique_id, $pause_on_hover_owl_option, 
 			items: 1,
 			autoplayHoverPause: <?php echo esc_js($pause_on_hover_owl_option); ?>,
 			autoplay: <?php echo esc_js($autoplay_owl_option); ?>,
-			autoplayTimeout: <?php echo esc_js($autoplayTimeout_owl_option); ?>,
+			autoplayTimeout: <?php echo (int) $autoplayTimeout_owl_option; ?>,
 			autoplaySpeed: 800,
 			dots: <?php echo esc_js($pagination_owl_option); ?>,
 			nav: <?php echo esc_js($navigation_owl_option); ?>,
