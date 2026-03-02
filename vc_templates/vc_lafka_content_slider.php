@@ -76,44 +76,49 @@ if ($transition === 'fade') {
 	$animateIn = 'flipInX';
 }
 
-$inline_js = '(function ($) {
-		"use strict";
-		var is_lafka_video_background = jQuery("#' . esc_js($unique_id) . '").find("div.lafka_bckgr_player").length;
-		var lafka_loop = true;
-		if(is_lafka_video_background) {
-			lafka_loop = false;
-		}
-
-		var lafka_owl_args = {
-				rtl: '.( is_rtl() ? 'true' : 'false' ).',
-				items: 1,
-				autoplayHoverPause: ' . esc_js($pause_on_hover_owl_option) . ',
-				autoplay: ' . esc_js($autoplay_owl_option) . ',
-				autoplayTimeout: ' . esc_js($autoplayTimeout_owl_option) . ',
-				autoplaySpeed: 800,
-				dots: ' . esc_js($pagination_owl_option) . ',
-				nav: ' . esc_js($navigation_owl_option) . ',
-				navText: [
-					"<i class=\'fas fa-angle-left\'></i>",
-					"<i class=\'fas fa-angle-right\'></i>"
-				],
-				animateOut: ' . ($animateOut == 'false' ? 'false' : '"' . esc_js($animateOut) . '"') . ',
-				animateIn: ' . ($animateIn == 'false' ? 'false' : '"' . esc_js($animateIn) . '"') . ', ' . ($transition === 'slide-flip' ? 'smartSpeed:450,' : '') . '
-		};
-		lafka_owl_args["loop"] = lafka_loop;
-
-		function lafkaInitContentSlider() {
-			// Using timeout because of strange resizing issue only in Mozilla
-			setTimeout(function(){ jQuery("#' . esc_js($unique_id) . ' > .vc_tta-panels").owlCarousel(lafka_owl_args) }, 10);
-		}
-		// Handle deferred scripts: if window already loaded, init immediately; otherwise wait for load
-		if (document.readyState === "complete") {
-			lafkaInitContentSlider();
-		} else {
-			$(window).on("load", lafkaInitContentSlider);
-		}
-	})(window.jQuery);';
-wp_add_inline_script('owl-carousel', $inline_js);
-
 // This variable has been safely escaped in the following file: lafka/vc_templates/vc_lafka_content_slider.php Line: 40 - 47
 echo $output_escaped; // All dynamic data escaped.
+
+// Output initialization script directly in footer to ensure owl-carousel is loaded
+add_action('wp_footer', function() use ($unique_id, $pause_on_hover_owl_option, $autoplay_owl_option, $autoplayTimeout_owl_option, $pagination_owl_option, $navigation_owl_option, $animateOut, $animateIn, $transition) {
+?>
+<script>
+(function ($) {
+	"use strict";
+	function lafkaInitSlider_<?php echo esc_js($unique_id); ?>() {
+		if (typeof $.fn.owlCarousel === 'undefined') {
+			// owlCarousel not loaded yet, retry in 100ms
+			setTimeout(lafkaInitSlider_<?php echo esc_js($unique_id); ?>, 100);
+			return;
+		}
+		var is_lafka_video_background = jQuery("#<?php echo esc_js($unique_id); ?>").find("div.lafka_bckgr_player").length;
+		var lafka_loop = !is_lafka_video_background;
+
+		var lafka_owl_args = {
+			rtl: <?php echo ( is_rtl() ? 'true' : 'false' ); ?>,
+			items: 1,
+			autoplayHoverPause: <?php echo esc_js($pause_on_hover_owl_option); ?>,
+			autoplay: <?php echo esc_js($autoplay_owl_option); ?>,
+			autoplayTimeout: <?php echo esc_js($autoplayTimeout_owl_option); ?>,
+			autoplaySpeed: 800,
+			dots: <?php echo esc_js($pagination_owl_option); ?>,
+			nav: <?php echo esc_js($navigation_owl_option); ?>,
+			navText: ["<i class='fas fa-angle-left'></i>", "<i class='fas fa-angle-right'></i>"],
+			animateOut: <?php echo ($animateOut == 'false' ? 'false' : '"' . esc_js($animateOut) . '"'); ?>,
+			animateIn: <?php echo ($animateIn == 'false' ? 'false' : '"' . esc_js($animateIn) . '"'); ?>,
+			<?php echo ($transition === 'slide-flip' ? 'smartSpeed: 450,' : ''); ?>
+			loop: lafka_loop
+		};
+		// Using timeout because of strange resizing issue only in Mozilla
+		setTimeout(function(){ jQuery("#<?php echo esc_js($unique_id); ?> > .vc_tta-panels").owlCarousel(lafka_owl_args); }, 10);
+	}
+	// Initialize when DOM ready or window loaded
+	if (document.readyState === "complete") {
+		lafkaInitSlider_<?php echo esc_js($unique_id); ?>();
+	} else {
+		$(window).on("load", lafkaInitSlider_<?php echo esc_js($unique_id); ?>);
+	}
+})(window.jQuery);
+</script>
+<?php
+}, 99);
