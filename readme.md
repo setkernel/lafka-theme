@@ -62,7 +62,7 @@ lafka/
 ├── plugins/                # Place commercial plugin zips here
 ├── functions.php           # Main theme functions
 ├── header.php / footer.php # Layout templates
-└── style.css               # Main stylesheet (v4.5.7)
+└── style.css               # Main stylesheet
 ```
 
 ## License
