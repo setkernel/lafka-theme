@@ -1198,7 +1198,8 @@ if ( ! function_exists( 'lafka_defer_non_critical_scripts' ) ) {
 		if ( is_admin() ) {
 			return $tag;
 		}
-		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore', 'wp-i18n', 'wp-api-fetch', 'wp-hooks', 'wp-polyfill' );
+		// Scripts that should not be deferred (critical or have inline scripts attached)
+		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore', 'wp-i18n', 'wp-api-fetch', 'wp-hooks', 'wp-polyfill', 'owl-carousel', 'flexslider', 'lafka-libs-config' );
 		if ( in_array( $handle, $no_defer, true ) ) {
 			return $tag;
 		}
