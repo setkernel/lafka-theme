@@ -83,7 +83,7 @@ $inline_js = '(function ($) {
 		if(is_lafka_video_background) {
 			lafka_loop = false;
 		}
-		
+
 		var lafka_owl_args = {
 				rtl: '.( is_rtl() ? 'true' : 'false' ).',
 				items: 1,
@@ -101,11 +101,17 @@ $inline_js = '(function ($) {
 				animateIn: ' . ($animateIn == 'false' ? 'false' : '"' . esc_js($animateIn) . '"') . ', ' . ($transition === 'slide-flip' ? 'smartSpeed:450,' : '') . '
 		};
 		lafka_owl_args["loop"] = lafka_loop;
-		
-		$(window).on("load", function () {
+
+		function lafkaInitContentSlider() {
 			// Using timeout because of strange resizing issue only in Mozilla
-			setTimeout(function(){ jQuery("#' . esc_js($unique_id) . ' > .vc_tta-panels").owlCarousel(lafka_owl_args) }, 10)
-		});
+			setTimeout(function(){ jQuery("#' . esc_js($unique_id) . ' > .vc_tta-panels").owlCarousel(lafka_owl_args) }, 10);
+		}
+		// Handle deferred scripts: if window already loaded, init immediately; otherwise wait for load
+		if (document.readyState === "complete") {
+			lafkaInitContentSlider();
+		} else {
+			$(window).on("load", lafkaInitContentSlider);
+		}
 	})(window.jQuery);';
 wp_add_inline_script('owl-carousel', $inline_js);
 
