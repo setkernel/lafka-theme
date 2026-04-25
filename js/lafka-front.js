@@ -913,7 +913,11 @@
             lafkaInitSmallCountdowns($(document.body).find('div.lafka-closed-store-message'));
 
             shoppingCart.addClass("active_cart");
-            $(document.body).find('div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content ul.cart_list.product_list_widget').niceScroll({ horizrailenabled: false });
+            // NiceScroll removed; native OS scrollbar handles overflow. Guard kept for
+            // back-compat with sites that may still bundle the plugin via mu-plugins.
+            if (typeof $.fn.niceScroll === 'function') {
+                $(document.body).find('div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content ul.cart_list.product_list_widget').niceScroll({ horizrailenabled: false });
+            }
 
         });
 
@@ -1091,7 +1095,9 @@
                 $(document.body).find("div.widget.woocommerce.widget_shopping_cart").removeClass("active_cart");
             }, 8000);
 
-            $(document.body).find('div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content ul.cart_list.product_list_widget').niceScroll({ horizrailenabled: false });
+            if (typeof $.fn.niceScroll === 'function') {
+                $(document.body).find('div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content ul.cart_list.product_list_widget').niceScroll({ horizrailenabled: false });
+            }
         }
     }
 

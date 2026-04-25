@@ -939,11 +939,13 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 		wp_enqueue_style('tiza', get_template_directory_uri() . "/styles/fonts/tiza.woff", array(), lafka_asset_version( '/styles/fonts/tiza.woff' ));
 		wp_enqueue_style('feather', get_template_directory_uri() . "/styles/fonts/feather.woff", array(), lafka_asset_version( '/styles/fonts/feather.woff' ));
 
-		// Modernizr — minimal touch-detection build (no dependencies)
-		wp_enqueue_script('modernizr', get_template_directory_uri() . "/js/modernizr.custom.js", array(), lafka_asset_version( '/js/modernizr.custom.js' ), true);
-
-		// nicescroll
-		wp_enqueue_script('nicescroll', get_template_directory_uri() . "/js/jquery.nicescroll/jquery.nicescroll.min.js", array('jquery'), lafka_asset_version( '/js/jquery.nicescroll/jquery.nicescroll.min.js' ), true);
+		// Modernizr removed — custom build only exposed `window.Modernizr.touch`, which no
+		// theme/plugin code actually reads. Modern browsers all support pointer events natively.
+		//
+		// NiceScroll removed — modern browsers ship native momentum scrolling on iOS/Android,
+		// and on desktop the OS scrollbar is the right thing. lafka-front.js calls .niceScroll()
+		// in two places; those calls are guarded by a `typeof $.fn.niceScroll === 'function'`
+		// check so they no-op safely when the lib is absent.
 
 		/* loading jquery-ui-slider only for price filter */
 		if (LAFKA_IS_WOOCOMMERCE && lafka_get_option('show_pricefilter') && is_woocommerce() && !is_product()) {
@@ -992,7 +994,7 @@ if (!function_exists('lafka_enqueue_scripts_and_styles')) {
 			$order_hours_cart_update = 'yes';
 		}
 
-		$lafka_front_deps = array('jquery', 'jquery-ui-tabs', 'nicescroll');
+		$lafka_front_deps = array('jquery', 'jquery-ui-tabs');
 		if(LAFKA_IS_VC) {
 			$lafka_front_deps[] = 'wpb_composer_front_js';
         }

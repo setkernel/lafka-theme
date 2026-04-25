@@ -21,6 +21,9 @@ vendor/
 wp-config.php
 wp-content/uploads/
 
+# Test artefacts
+.phpunit.result.cache
+
 # Misc
 *.log
 *.bak

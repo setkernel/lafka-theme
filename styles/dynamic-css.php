@@ -7,9 +7,48 @@
  */
 add_action('wp_enqueue_scripts', 'lafka_add_custom_css', 99);
 
+// Bust the dynamic-css cache whenever theme options change.
+add_action('updated_option', 'lafka_dynamic_css_bust_on_options_save', 10, 1);
+add_action('added_option',   'lafka_dynamic_css_bust_on_options_save', 10, 1);
+if (!function_exists('lafka_dynamic_css_bust_on_options_save')) {
+    function lafka_dynamic_css_bust_on_options_save($option_name) {
+        if ($option_name === 'lafka') {
+            update_option('lafka_dynamic_css_version', (string) time(), false);
+        }
+    }
+}
+
 if (!function_exists('lafka_add_custom_css')) {
 
     function lafka_add_custom_css()
+    {
+        // Cache key includes options-version so a settings save invalidates immediately.
+        $version   = get_option('lafka_dynamic_css_version', '0');
+        $cache_key = 'lafka_dyncss_v' . $version . '_' . get_locale();
+
+        $custom_css = wp_cache_get($cache_key, 'lafka');
+        if ($custom_css === false) {
+            $custom_css = get_transient($cache_key);
+        }
+        if ($custom_css === false) {
+            $custom_css = lafka_dynamic_css_build();
+            wp_cache_set($cache_key, $custom_css, 'lafka', DAY_IN_SECONDS);
+            set_transient($cache_key, $custom_css, WEEK_IN_SECONDS);
+        }
+
+        wp_add_inline_style('lafka-style', $custom_css);
+    }
+}
+
+if (!function_exists('lafka_dynamic_css_build')) {
+
+    /**
+     * Build the dynamic-css string from current theme options. Pure: no side effects.
+     * Pulled out of lafka_add_custom_css() so the result is cacheable.
+     *
+     * @return string CSS string ready for wp_add_inline_style.
+     */
+    function lafka_dynamic_css_build()
     {
         // Gather all theme options
         $accent_color = esc_attr(lafka_get_option('accent_color'));
@@ -226,7 +265,7 @@ if (!function_exists('lafka_add_custom_css')) {
         // Compare table — always hide quickview/compare on compare page
         $custom_css .= 'table.compare-list .add-to-cart td a.lafka-quick-view-link,table.compare-list .add-to-cart td a.compare.button{display:none !important}';
 
-        wp_add_inline_style('lafka-style', $custom_css);
+        return $custom_css;
     }
 
 }

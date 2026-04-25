@@ -762,17 +762,10 @@ if (!function_exists('lafka_comment')) {
 		});
 	}
 
-	// Replace OF textarea sanitization with lafka one - in admin_init, because we will allow <script> tag
-	add_action('admin_init', 'lafka_add_script_to_allowed');
-	if (!function_exists('lafka_add_script_to_allowed')) {
-
-		function lafka_add_script_to_allowed() {
-			// Add script to allowed tags only for the logged users - to be able to add tracking code
-			global $allowedposttags;
-			$allowedposttags['script'] = array('type' => TRUE);
-		}
-
-	}
+	// Tracking code field is now stored as raw text and emitted via dedicated wp_head/wp_footer
+	// hooks; we no longer expand $allowedposttags globally because admin_init scope leaks the
+	// permissive allow-list to every authenticated request, creating a stored-XSS surface if any
+	// other field is ever passed through wp_kses_post() with user-supplied input.
 
 	/**
 	 * Returns selected subsets from options to pass to google
