@@ -1334,12 +1334,49 @@ if ( ! function_exists( 'lafka_defer_non_critical_scripts' ) ) {
 
 add_filter( 'wp_resource_hints', 'lafka_add_resource_hints', 20, 2 );
 if ( ! function_exists( 'lafka_add_resource_hints' ) ) {
+	/**
+	 * Preconnect / dns-prefetch hints for third-party origins this theme depends on.
+	 *
+	 * Preconnect kicks off DNS+TCP+TLS handshakes early so the actual font / map
+	 * request finds an open connection waiting. Cuts ~100-300 ms from FCP on
+	 * cold visits when those resources are above-the-fold.
+	 *
+	 * fonts.gstatic.com is always-on (font files); fonts.googleapis.com is
+	 * conditional on whether Google Fonts CSS is enqueued; maps.googleapis.com
+	 * is conditional on whether a Google Maps API key is set.
+	 */
 	function lafka_add_resource_hints( $urls, $relation_type ) {
 		if ( 'preconnect' === $relation_type ) {
 			$urls[] = array(
 				'href' => 'https://fonts.gstatic.com',
 				'crossorigin',
 			);
+
+			if ( wp_style_is( 'lafka-google-fonts', 'enqueued' ) ) {
+				$urls[] = array(
+					'href' => 'https://fonts.googleapis.com',
+					'crossorigin',
+				);
+			}
+
+			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) ) {
+				$urls[] = array(
+					'href' => 'https://maps.googleapis.com',
+					'crossorigin',
+				);
+				$urls[] = array(
+					'href' => 'https://maps.gstatic.com',
+					'crossorigin',
+				);
+			}
+		}
+
+		// dns-prefetch is a cheaper hint for resources we may load lazily.
+		if ( 'dns-prefetch' === $relation_type ) {
+			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) ) {
+				$urls[] = 'https://maps.googleapis.com';
+				$urls[] = 'https://maps.gstatic.com';
+			}
 		}
 
 		return $urls;

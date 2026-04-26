@@ -41,7 +41,7 @@
 				'menu_id'        => 'mobile-menu',
 				'items_wrap'     => lafka_build_mobile_menu_items_wrap(),
 				'fallback_cb'    => '',
-				'walker'         => new LafkaMobileMenuWalker(),
+				'walker'         => apply_filters( 'lafka_nav_menu_walker', new LafkaMobileMenuWalker(), 'mobile' ),
 			);
 			wp_nav_menu( $lafka_top_nav_mobile_args );
 		}
@@ -316,7 +316,7 @@
 							'container_class' => $lafka_top_menu_container_class,
 							'menu_id'         => 'main_nav',
 							'fallback_cb'     => '',
-							'walker'          => new LafkaFrontWalker(),
+							'walker'          => apply_filters( 'lafka_nav_menu_walker', new LafkaFrontWalker(), 'primary' ),
 						);
 						wp_nav_menu( $lafka_top_nav_args );
 						?>
