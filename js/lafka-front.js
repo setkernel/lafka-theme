@@ -1017,22 +1017,23 @@
 
         if ($contentDiv.length) {
             $elements.each(function(index) {
-                var width = $contentDiv.width();
+                // Renamed from `width`/`offset` to avoid shadowing window.{width,offset} (no-redeclare).
+                var contentWidth = $contentDiv.width();
                 var row_padding = 40;
-                var offset = -($contentDiv.width() - $('#content > .inner ').css("width").replace("px", "")) / 2 - row_padding + 15;
+                var contentOffset = -($contentDiv.width() - $('#content > .inner ').css("width").replace("px", "")) / 2 - row_padding + 15;
 
                 $(this).css({
                     'position': 'relative',
                     'box-sizing': 'border-box',
-                    'width': width,
-                    'padding-left': Math.abs(offset),
-                    'padding-right': Math.abs(offset)
+                    'width': contentWidth,
+                    'padding-left': Math.abs(contentOffset),
+                    'padding-right': Math.abs(contentOffset)
                 });
 
                 if ($rtl.length && !($(this).prop('id') === 'comments')) {
-                    $(this).css({ 'right': offset });
+                    $(this).css({ 'right': contentOffset });
                 } else {
-                    $(this).css({ 'left': offset });
+                    $(this).css({ 'left': contentOffset });
                 }
             });
         }
@@ -1048,14 +1049,15 @@
         var is_vc_stretch_content = el.data('vc-stretch-content');
         var $content = $(document.body).find('#content');
         if ($content.length) {
-            var width = $content.width();
+            // Renamed from `width`/`offset` to avoid shadowing window.{width,offset} (no-redeclare).
+            var contentWidth = $content.width();
             var row_padding = 40;
-            var offset = -($('#content').width() - $('#content > .inner ').css("width").replace("px", "")) / 2 - row_padding + 15;
-            el.css({"width": width + "px"});
+            var contentOffset = -($('#content').width() - $('#content > .inner ').css("width").replace("px", "")) / 2 - row_padding + 15;
+            el.css({"width": contentWidth + "px"});
             if ((is_boxed || is_left_header) && !is_vc_stretch_content) {
                 el.css({
-                    'padding-left': Math.abs(offset),
-                    'padding-right': Math.abs(offset)
+                    'padding-left': Math.abs(contentOffset),
+                    'padding-right': Math.abs(contentOffset)
                 });
             }
             if ($rtl.length) {
@@ -1428,7 +1430,7 @@ function lafkaUpdateUrlParameters(currentParams, newParams) {
     for (var prop in newParamsObj) {
         // remove the hash part before operating on the uri
         var i = currentParams.indexOf('#');
-        var hash = i === -1 ? '' : uri.substr(i);
+        var hash = i === -1 ? '' : currentParams.substr(i);
         currentParams = i === -1 ? currentParams : currentParams.substr(0, i);
 
         var re = new RegExp("([?&])" + prop + "=.*?(&|$)", "i");

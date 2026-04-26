@@ -63,11 +63,12 @@
 		/*****************************
 		 * "lafka-owl-carousel-cat"
 		 *****************************/
+		// Hoisted is_rtl shared with the next two carousel blocks below.
+		var is_rtl = false;
+		if (typeof lafka_rtl !== 'undefined' && lafka_rtl.is_rtl === 'true') {
+			is_rtl = true;
+		}
 		if (typeof lafka_owl_carousel_cat !== 'undefined') {
-			var is_rtl = false;
-			if (lafka_rtl.is_rtl === 'true') {
-				is_rtl = true;
-			}
 			$(".lafka_woo_categories_shop.lafka-owl-carousel", "#main").owlCarousel({
 				rtl: is_rtl,
 				responsiveClass: true,
@@ -102,10 +103,6 @@
 		 * "lafka-owl-carousel"
 		 *************************/
 		if (typeof lafka_owl_carousel !== 'undefined') {
-            var is_rtl = false;
-            if (lafka_rtl.is_rtl === 'true') {
-                is_rtl = true;
-            }
             $(".lafka-related-blog-posts div.lafka-owl-carousel, .similar_projects div.lafka-owl-carousel, .related.products div.lafka-owl-carousel", "#content:not(.has-sidebar)").owlCarousel({
 				rtl: is_rtl,
 				responsiveClass: true,
@@ -135,10 +132,6 @@
 			});
 		}
 		if (typeof lafka_owl_carousel !== 'undefined') {
-			var is_rtl = false;
-			if (lafka_rtl.is_rtl === 'true') {
-				is_rtl = true;
-			}
 			$(".lafka-related-blog-posts div.lafka-owl-carousel, .similar_projects div.lafka-owl-carousel, .related.products div.lafka-owl-carousel", "#content.has-sidebar").owlCarousel({
 				rtl: is_rtl,
 				responsiveClass: true,

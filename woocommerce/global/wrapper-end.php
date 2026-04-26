@@ -10,7 +10,7 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	    https://woocommerce.com/document/template-structure/
+ * @see         https://woocommerce.com/document/template-structure/
  * @package     WooCommerce\Templates
  * @version     3.3.0
  */
@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Previous / Next links
-if (lafka_get_option('show_prev_next')) {
+if ( lafka_get_option( 'show_prev_next' ) ) {
 	echo lafka_post_nav();
 }
 

@@ -21,12 +21,12 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 ?>
 
-<form role="search" method="get" class="woocommerce-product-search" action="<?php echo esc_url(lafka_wpml_get_home_url()); ?>">
+<form role="search" method="get" class="woocommerce-product-search" action="<?php echo esc_url( lafka_wpml_get_home_url() ); ?>">
 	<div>
-		<label class="screen-reader-text" for="woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>"><?php esc_html_e('Search for:', 'lafka'); ?></label>
-		<input type="search" id="woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>" value="<?php echo esc_attr(get_search_query()); ?>" name="s" placeholder="<?php esc_attr_e('Search Products', 'lafka'); ?>" />
-        <small class="lafka-search-hint-text"><?php echo esc_html__('Type and hit Enter to Search', 'lafka') ?></small>
-		<button type="submit" value="<?php esc_attr_e('Search Products', 'lafka') ?>"><?php echo esc_html_x( 'Search', 'submit button', 'lafka' ); ?></button>
+		<label class="screen-reader-text" for="woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>"><?php esc_html_e( 'Search for:', 'lafka' ); ?></label>
+		<input type="search" id="woocommerce-product-search-field-<?php echo isset( $index ) ? absint( $index ) : 0; ?>" value="<?php echo esc_attr( get_search_query() ); ?>" name="s" placeholder="<?php esc_attr_e( 'Search Products', 'lafka' ); ?>" />
+		<small class="lafka-search-hint-text"><?php echo esc_html__( 'Type and hit Enter to Search', 'lafka' ); ?></small>
+		<button type="submit" value="<?php esc_attr_e( 'Search Products', 'lafka' ); ?>"><?php echo esc_html_x( 'Search', 'submit button', 'lafka' ); ?></button>
 		<input type="hidden" name="post_type" value="product" />
 	</div>
 </form>

@@ -73,10 +73,14 @@ class Lafka_GitHub_Updater {
 	 * @param string $type     'error' | 'warning' | 'info'.
 	 */
 	private static function set_notice( $message, $type = 'warning' ) {
-		set_transient( self::NOTICE_TRANSIENT, array(
-			'message' => $message,
-			'type'    => $type,
-		), DAY_IN_SECONDS );
+		set_transient(
+			self::NOTICE_TRANSIENT,
+			array(
+				'message' => $message,
+				'type'    => $type,
+			),
+			DAY_IN_SECONDS
+		);
 	}
 
 	/**
@@ -223,10 +227,13 @@ class Lafka_GitHub_Updater {
 		}
 
 		$url      = 'https://api.github.com/repos/' . $repo . '/releases/latest';
-		$response = wp_remote_get( $url, array(
-			'timeout' => 10,
-			'headers' => self::get_request_headers(),
-		) );
+		$response = wp_remote_get(
+			$url,
+			array(
+				'timeout' => 10,
+				'headers' => self::get_request_headers(),
+			)
+		);
 
 		// -- Handle transport errors --
 		if ( is_wp_error( $response ) ) {
@@ -246,11 +253,15 @@ class Lafka_GitHub_Updater {
 
 		// Store rate limit info for admin display.
 		if ( null !== $rate_remaining && null !== $rate_limit ) {
-			set_transient( 'lafka_gh_rate_limit', array(
-				'remaining' => $rate_remaining,
-				'limit'     => $rate_limit,
-				'reset'     => $rate_reset,
-			), HOUR_IN_SECONDS );
+			set_transient(
+				'lafka_gh_rate_limit',
+				array(
+					'remaining' => $rate_remaining,
+					'limit'     => $rate_limit,
+					'reset'     => $rate_reset,
+				),
+				HOUR_IN_SECONDS
+			);
 		}
 
 		// -- Handle rate limiting (403 with remaining=0) --

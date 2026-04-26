@@ -11,17 +11,17 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
- * @see 	    https://woocommerce.com/document/template-structure/
+ * @see         https://woocommerce.com/document/template-structure/
  * @package     WooCommerce\Templates
  * @version     1.6.4
  */
-if (!defined('ABSPATH')) {
+if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$woocommerce_sidebar = lafka_get_option('woocommerce_sidebar');
+$woocommerce_sidebar = lafka_get_option( 'woocommerce_sidebar' );
 
-if ($woocommerce_sidebar && $woocommerce_sidebar != 'none' ) {
+if ( $woocommerce_sidebar && $woocommerce_sidebar != 'none' ) {
 	get_sidebar();
 }
 
