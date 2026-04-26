@@ -7,6 +7,41 @@
         is_rtl = true;
     }
 
+    /**
+     * lafkaOnVisible — IntersectionObserver-based one-shot trigger.
+     *
+     * Replaces the old jquery.appear / isInViewport vendor libs (P3-05).
+     * Calls `fn` ONCE the first time `el` enters the viewport, then unobserves.
+     * Behaves as a no-op on the small set of legacy browsers without IO.
+     *
+     * @param {Element|jQuery} el  Element or jQuery wrapper.
+     * @param {Function} fn        Callback fired with the underlying DOM element bound as `this`.
+     * @param {Object} opts        Optional IntersectionObserver init options.
+     */
+    function lafkaOnVisible(el, fn, opts) {
+        var node = (el && el.jquery) ? el.get(0) : el;
+        if (!node || typeof IntersectionObserver === 'undefined') {
+            // Legacy fallback: fire immediately so the animated elements at
+            // least settle into their final state instead of staying invisible.
+            if (node && typeof fn === 'function') {
+                fn.call(node);
+            }
+            return;
+        }
+        var observer = new IntersectionObserver(function(entries, obs) {
+            for (var i = 0; i < entries.length; i++) {
+                if (entries[i].isIntersecting) {
+                    fn.call(node);
+                    obs.unobserve(node);
+                    return;
+                }
+            }
+        }, opts || { rootMargin: '0px 0px -10% 0px', threshold: 0.01 });
+        observer.observe(node);
+    }
+    // Expose for child themes / future modules that want the same primitive.
+    window.lafkaOnVisible = lafkaOnVisible;
+
     /* If preloader is enabled */
     if (lafka_main_js_params.show_preloader) {
         $(window).on("load", function() {
@@ -248,37 +283,37 @@
         });
 
         $('html.no-touch .lafka-from-bottom').each(function() {
-            $(this).appear(function() {
+            lafkaOnVisible(this, function() {
                 $(this).animate({ opacity: 1, bottom: "0px" }, 400);
             });
         });
 
         $('html.no-touch .lafka-from-left').each(function() {
-            $(this).appear(function() {
+            lafkaOnVisible(this, function() {
                 $(this).animate({ opacity: 1, left: "0px" }, 400);
             });
         });
 
         $('html.no-touch .lafka-from-right').each(function() {
-            $(this).appear(function() {
+            lafkaOnVisible(this, function() {
                 $(this).animate({ opacity: 1, right: "0px" }, 400);
             });
         });
 
         $('html.no-touch .lafka-fade').each(function() {
-            $(this).appear(function() {
+            lafkaOnVisible(this, function() {
                 $(this).animate({ opacity: 1 }, 400);
             });
         });
 
         $('html.no-touch .wpb_lafka_banner:not(.lafka-from-bottom):not(.lafka-from-left):not(.lafka-from-right):not(.lafka-fade)').each(function() {
-            $(this).appear(function() {
+            lafkaOnVisible(this, function() {
                 $(this).addClass('prod_visible');
             });
         });
 
         $('.lafka-counter:not(.already_seen)').each(function() {
-            $(this).appear(function() {
+            lafkaOnVisible(this, function() {
 
                 $(this).prop('Counter', 0).animate({
                     Counter: $(this).text()
@@ -543,8 +578,16 @@
                 $(window).on("scroll", function() {
                     if (!infiniteTicking) {
                         window.requestAnimationFrame(function() {
-                            if ($(document.body).find('div.lafka-shop-pager.lafka-infinite').is(':in-viewport')) {
-                                $(document.body).find('div.lafka-shop-pager.lafka-infinite a.next_page').trigger("click");
+                            // Native bbox check replaces the old isInViewport
+                            // jQuery selector (:in-viewport). Inside a scroll
+                            // throttler, IO would be overkill — bbox is fine.
+                            var $pager = $(document.body).find('div.lafka-shop-pager.lafka-infinite');
+                            if ($pager.length) {
+                                var rect = $pager[0].getBoundingClientRect();
+                                var inView = rect.top < window.innerHeight && rect.bottom > 0;
+                                if (inView) {
+                                    $(document.body).find('div.lafka-shop-pager.lafka-infinite a.next_page').trigger("click");
+                                }
                             }
                             infiniteTicking = false;
                         });

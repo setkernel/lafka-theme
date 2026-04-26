@@ -1161,8 +1161,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_style( 'magnific' );
 		}
 
-		// appear
-		wp_enqueue_script( 'appear', get_template_directory_uri() . '/js/jquery.appear.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.appear.min.js' ), true );
+		// jquery.appear + isInViewport replaced by lafkaOnVisible() (IntersectionObserver)
+		// inside lafka-front.js — see P3-05. No standalone scripts to enqueue.
 
 		// typed.js v2 — standalone, no jQuery dependency
 		wp_enqueue_script( 'typed', get_template_directory_uri() . '/js/typed.min.js', array(), lafka_asset_version( '/js/typed.min.js' ), true );
@@ -1170,8 +1170,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// nice-select
 		wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), true );
 
-		// is-in-viewport
-		wp_enqueue_script( 'is-in-viewport', get_template_directory_uri() . '/js/isInViewport.min.js', array( 'jquery' ), lafka_asset_version( '/js/isInViewport.min.js' ), true );
+		// is-in-viewport replaced by native getBoundingClientRect() check in
+		// lafka-front.js infinite-scroll handler (P3-05). No script to enqueue.
 
 		// register Isotope
 		wp_register_script( 'isotope', get_template_directory_uri() . '/js/isotope/dist/isotope.pkgd.min.js', array( 'jquery', 'imagesloaded' ), lafka_asset_version( '/js/isotope/dist/isotope.pkgd.min.js' ), true );
@@ -1209,10 +1209,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			'wp-util',
 			'flexslider',
 			'owl-carousel',
-			'appear',
 			'typed',
 			'nice-select',
-			'is-in-viewport',
 		);
 		if ( function_exists( 'is_product' ) && is_product() ) {
 			$lafka_libs_deps[] = 'cloud-zoom';
