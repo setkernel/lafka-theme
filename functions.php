@@ -592,9 +592,30 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 
 		$search_term = apply_filters( 'get_search_query', $search_term );
 
-		$post_type = 'any';
+		// Allowlist post types — `post_type=any` previously hit every CPT
+		// (orders, addons, combos, etc.) which was both slow and a leak risk.
+		$allowed_post_types = apply_filters(
+			'lafka_ajax_search_allowed_post_types',
+			array( 'post', 'product', 'lafka-foodmenu' )
+		);
+		$post_type = $allowed_post_types;
 		if ( isset( $_REQUEST['post_type'] ) ) {
-			$post_type = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
+			$requested = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
+			if ( in_array( $requested, $allowed_post_types, true ) ) {
+				$post_type = $requested;
+			}
+		}
+
+		// Cache final rendered HTML for 5 min, keyed by term + post_type + locale.
+		// Versioned key so save_post can invalidate by incrementing the version
+		// (cheaper than deleting transients with a LIKE query).
+		$cache_version = (int) get_option( 'lafka_search_cache_version', 1 );
+		$post_type_key = is_array( $post_type ) ? implode( ',', $post_type ) : $post_type;
+		$cache_key     = 'lafka_search_v' . $cache_version . '_' . md5( $search_term . '|' . $post_type_key . '|' . get_locale() );
+		$cached_html   = get_transient( $cache_key );
+		if ( false !== $cached_html ) {
+			echo wp_kses_post( $cached_html );
+			wp_die();
 		}
 
 		$parameters = array(
@@ -603,10 +624,24 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 			'post_status'      => 'publish',
 			'post_password'    => '',
 			'suppress_filters' => false,
+			'fields'           => 'ids',
 			's'                => $search_term,
 		);
 
-		$result = get_posts( $parameters );
+		$result_ids = get_posts( $parameters );
+
+		// Single batched meta-cache prime to kill N+1 in the visibility loop and rendering.
+		if ( ! empty( $result_ids ) ) {
+			update_meta_cache( 'post', $result_ids );
+		}
+
+		$result = array();
+		foreach ( $result_ids as $id ) {
+			$post = get_post( $id );
+			if ( $post ) {
+				$result[] = $post;
+			}
+		}
 
 		// If there are WC products in the result and visibility is not set for search - remove them
 		if ( LAFKA_IS_WOOCOMMERCE ) {
@@ -651,6 +686,7 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 			$output .= '</span>';
 			$output .= '</li>';
 			$output .= '</ul>';
+			set_transient( $cache_key, $output, 5 * MINUTE_IN_SECONDS );
 			echo wp_kses_post( $output );
 			wp_die();
 		}
@@ -714,10 +750,32 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 
 		$output .= "<a class='ajax_search_unit ajax_search_unit_view_all' href='" . esc_url( $search_messages['all_results_link'] ) . "'>" . esc_html( $search_messages['view_all_results'] ) . '</a>';
 
+		set_transient( $cache_key, $output, 5 * MINUTE_IN_SECONDS );
 		echo wp_kses_post( $output );
 		wp_die();
 	}
 
+}
+
+// Bust the AJAX-search cache by bumping its version on save_post for any
+// allowlisted type. Cheaper than deleting individual transients via LIKE
+// query; old entries simply expire on their TTL.
+add_action( 'save_post', 'lafka_bust_ajax_search_cache_on_save', 10, 2 );
+if ( ! function_exists( 'lafka_bust_ajax_search_cache_on_save' ) ) {
+	function lafka_bust_ajax_search_cache_on_save( $post_id, $post ) {
+		if ( wp_is_post_revision( $post_id ) || wp_is_post_autosave( $post_id ) ) {
+			return;
+		}
+		$allowed = apply_filters(
+			'lafka_ajax_search_allowed_post_types',
+			array( 'post', 'product', 'lafka-foodmenu' )
+		);
+		if ( ! in_array( $post->post_type, $allowed, true ) ) {
+			return;
+		}
+		$version = (int) get_option( 'lafka_search_cache_version', 1 );
+		update_option( 'lafka_search_cache_version', $version + 1, false );
+	}
 }
 
 	add_filter( 'wp_import_post_data_processed', 'lafka_preserve_post_ids', 10, 2 );
