@@ -266,6 +266,13 @@ function lafka_optionsframework_validate($input) {
  */
 function lafka_get_default_values() {
 	$output = array();
+	// PERF-C05 follow-up: the options definition file is admin-only loaded above,
+	// but this function may run on the front-end the first time (no saved 'lafka'
+	// option and plugin not yet active). Lazy-load it here so the standalone path
+	// in lafka_get_option() works in any context.
+	if ( ! function_exists( 'lafka_optionsframework_options' ) ) {
+		require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options.php';
+	}
 	$config = lafka_optionsframework_options();
 	foreach ((array) $config as $option) {
 		if (!isset($option['id'])) {
