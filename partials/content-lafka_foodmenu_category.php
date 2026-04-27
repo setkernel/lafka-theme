@@ -161,10 +161,12 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 						// Modern array-form get_terms() — the legacy
 						// `get_terms($tax_name)` positional first-arg was
 						// deprecated in WP 4.5 and is removed in WP 7.0.
-						$lafka_foodmenu_categories = get_terms( array(
-							'taxonomy'   => 'lafka_foodmenu_category',
-							'hide_empty' => false,
-						) );
+						$lafka_foodmenu_categories = get_terms(
+                            array(
+								'taxonomy'   => 'lafka_foodmenu_category',
+								'hide_empty' => false,
+                            ) 
+                        );
 					?>
 				<?php endif; ?>
 
@@ -178,7 +180,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 								<?php
 								if ( ! is_object( $lafka_category ) ) {
 										$lafka_category = get_term( (int) $lafka_category, 'lafka_foodmenu_category' );
-									}
+								}
 								?>
 								<li><a 
 								<?php
