@@ -7,18 +7,26 @@
 		 * Used for displaying flex slides when
 		 * there are featured images from 1-5
 		 * "lafka-flex-slider"
+		 *
+		 * PERF-2: flexslider is enqueued conditionally now (product /
+		 * front-page / page-template / foodmenu single). Guard the call so
+		 * pages without the lib don't blow up; if the slider element exists
+		 * but the lib didn't load, we fall back to the static stack of
+		 * images, which is harmless visually.
 		 ***************************************/
-		$('.lafka_flexslider', '#content').flexslider({
-			controlNav: false,
-			directionNav: true,
-			animation: 'fade',
-			animationSpeed: 1500,
-			smoothHeight: true,
-			prevText: "", //String: Set the text for the "previous" directionNav item
-			nextText: "",
-			touch: true,
-			pauseOnHover: true
-		});
+		if (typeof $.fn.flexslider === 'function') {
+			$('.lafka_flexslider', '#content').flexslider({
+				controlNav: false,
+				directionNav: true,
+				animation: 'fade',
+				animationSpeed: 1500,
+				smoothHeight: true,
+				prevText: "", //String: Set the text for the "previous" directionNav item
+				nextText: "",
+				touch: true,
+				pauseOnHover: true
+			});
+		}
 
 		/*****************************
 		 * "lafka-masonry-settings"

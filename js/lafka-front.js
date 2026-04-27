@@ -63,7 +63,13 @@
         // Dropdown Menu
         // -------------------------------------------------------------------------------------------------------
 
-        $('.box-sort-filter .woocommerce-ordering .limit select, .box-sort-filter .woocommerce-ordering .sort select, .widget_archive select, .widget_categories select').niceSelect();
+        // PERF-2: nice-select is conditionally enqueued (skipped on cart /
+        // checkout / blog / etc. where there are no styled selects). Guard with
+        // a typeof check so the missing-plugin case degrades to the native
+        // browser dropdown rather than a console TypeError.
+        if (typeof $.fn.niceSelect === 'function') {
+            $('.box-sort-filter .woocommerce-ordering .limit select, .box-sort-filter .woocommerce-ordering .sort select, .widget_archive select, .widget_categories select').niceSelect();
+        }
 
         /*
          * Special Characters

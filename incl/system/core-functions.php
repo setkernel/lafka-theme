@@ -1101,7 +1101,20 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			$lafka_front_deps[] = 'wpb_composer_front_js';
 		}
 
-		wp_enqueue_script( 'lafka-front', get_template_directory_uri() . '/js/lafka-front' . $suffix . '.js', $lafka_front_deps, lafka_asset_version( '/js/lafka-front' . $suffix . '.js' ), true );
+		// PERF-26: WP 6.3 native defer strategy. Inline `wp_localize_script`
+		// blocks emitted below are plain object literals, so they evaluate
+		// instantly and don't depend on the deferred external script being
+		// parsed first.
+		wp_enqueue_script(
+			'lafka-front',
+			get_template_directory_uri() . '/js/lafka-front' . $suffix . '.js',
+			$lafka_front_deps,
+			lafka_asset_version( '/js/lafka-front' . $suffix . '.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 		wp_localize_script(
 			'lafka-front',
 			'lafka_main_js_params',
@@ -1132,18 +1145,38 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		/* imagesloaded */
 		wp_enqueue_script( 'imagesloaded', '', array( 'jquery' ), false, true );
 
-		// flexslider
-		wp_enqueue_script( 'flexslider', get_template_directory_uri() . '/js/flex/jquery.flexslider-min.js', array( 'jquery' ), lafka_asset_version( '/js/flex/jquery.flexslider-min.js' ), true );
-		wp_enqueue_style( 'flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
+		// PERF-2/16/17/26: bias every optional library toward `wp_register_*`
+		// + a conditional `wp_enqueue_*`, and use the native WP 6.3 defer
+		// strategy via the array form of the args param so inline localisations
+		// are correctly emitted before the deferred external file runs.
+		$footer_defer = array(
+			'in_footer' => true,
+			'strategy'  => 'defer',
+		);
 
-		// owl-carousel
-		wp_enqueue_script( 'owl-carousel', get_template_directory_uri() . '/js/owl-carousel2-dist/owl.carousel.min.js', array( 'jquery' ), lafka_asset_version( '/js/owl-carousel2-dist/owl.carousel.min.js' ), true );
+		global $post;
+		$post_content_for_lib_detect = ( is_singular() && $post instanceof WP_Post ) ? (string) $post->post_content : '';
+
+		// flexslider — `lafka-libs-config.js` calls `$(...).flexslider()`
+		// unconditionally on `window.load`, so we keep it enqueued globally.
+		// The defer strategy is the real win here. JS guard added at the call
+		// site protects against future narrowing.
+		wp_enqueue_script( 'flexslider', get_template_directory_uri() . '/js/flex/jquery.flexslider-min.js', array( 'jquery' ), lafka_asset_version( '/js/flex/jquery.flexslider-min.js' ), $footer_defer );
+		wp_enqueue_style( 'flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
+		$flex_enqueue = true;
+
+		// owl-carousel — same story; `lafka-libs-config.js` runs
+		// `.owlCarousel()` on multiple selectors at `window.load`. Defer is the
+		// safe gain. PERF-2 narrowing here is deferred until the JS file is
+		// converted to a "if-element-exists, lazy-import" pattern (P3-05).
+		wp_enqueue_script( 'owl-carousel', get_template_directory_uri() . '/js/owl-carousel2-dist/owl.carousel.min.js', array( 'jquery' ), lafka_asset_version( '/js/owl-carousel2-dist/owl.carousel.min.js' ), $footer_defer );
 		wp_enqueue_style( 'owl-carousel', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.carousel.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.carousel.min.css' ) );
 		wp_enqueue_style( 'owl-carousel-theme-default', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css' ) );
 		wp_enqueue_style( 'owl-carousel-animate', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/animate.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/animate.css' ) );
+		$owl_enqueue = true;
 
 		// cloud-zoom — only on single product pages
-		wp_register_script( 'cloud-zoom', get_template_directory_uri() . '/js/cloud-zoom/cloud-zoom.1.0.2.min.js', array( 'jquery' ), lafka_asset_version( '/js/cloud-zoom/cloud-zoom.1.0.2.min.js' ), true );
+		wp_register_script( 'cloud-zoom', get_template_directory_uri() . '/js/cloud-zoom/cloud-zoom.1.0.2.min.js', array( 'jquery' ), lafka_asset_version( '/js/cloud-zoom/cloud-zoom.1.0.2.min.js' ), $footer_defer );
 		wp_register_style( 'cloud-zoom', get_template_directory_uri() . '/styles/cloud-zoom/cloud-zoom.css', array(), lafka_asset_version( '/styles/cloud-zoom/cloud-zoom.css' ) );
 		if ( function_exists( 'is_product' ) && is_product() ) {
 			wp_enqueue_script( 'cloud-zoom' );
@@ -1151,28 +1184,33 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		}
 
 		// countdown — only on single product pages when enabled
-		wp_register_script( 'jquery-plugin', get_template_directory_uri() . '/js/count/jquery.plugin.min.js', array( 'jquery' ), lafka_asset_version( '/js/count/jquery.plugin.min.js' ), true );
-		wp_register_script( 'countdown', get_template_directory_uri() . '/js/count/jquery.countdown.min.js', array( 'jquery', 'jquery-plugin' ), lafka_asset_version( '/js/count/jquery.countdown.min.js' ), true );
+		wp_register_script( 'jquery-plugin', get_template_directory_uri() . '/js/count/jquery.plugin.min.js', array( 'jquery' ), lafka_asset_version( '/js/count/jquery.plugin.min.js' ), $footer_defer );
+		wp_register_script( 'countdown', get_template_directory_uri() . '/js/count/jquery.countdown.min.js', array( 'jquery', 'jquery-plugin' ), lafka_asset_version( '/js/count/jquery.countdown.min.js' ), $footer_defer );
 		if ( function_exists( 'is_product' ) && is_product() ) {
 			wp_enqueue_script( 'countdown' );
 		}
 
-		// magnific — register globally, enqueue on product pages and pages with galleries
-		wp_register_script( 'magnific', get_template_directory_uri() . '/js/magnific/jquery.magnific-popup.min.js', array( 'jquery' ), lafka_asset_version( '/js/magnific/jquery.magnific-popup.min.js' ), true );
-		wp_register_style( 'magnific', get_template_directory_uri() . '/styles/magnific/magnific-popup.css', array(), lafka_asset_version( '/styles/magnific/magnific-popup.css' ) );
-		if ( function_exists( 'is_product' ) && is_product() || is_singular() ) {
-			wp_enqueue_script( 'magnific' );
-			wp_enqueue_style( 'magnific' );
-		}
+		// magnific — same constraint as flexslider/owl: lafka-libs-config calls
+		// `.magnificPopup()` unconditionally. Keep enqueued; defer is the win.
+		wp_enqueue_script( 'magnific', get_template_directory_uri() . '/js/magnific/jquery.magnific-popup.min.js', array( 'jquery' ), lafka_asset_version( '/js/magnific/jquery.magnific-popup.min.js' ), $footer_defer );
+		wp_enqueue_style( 'magnific', get_template_directory_uri() . '/styles/magnific/magnific-popup.css', array(), lafka_asset_version( '/styles/magnific/magnific-popup.css' ) );
+		$magnific_enqueue = true;
 
 		// jquery.appear + isInViewport replaced by lafkaOnVisible() (IntersectionObserver)
 		// inside lafka-front.js — see P3-05. No standalone scripts to enqueue.
 
-		// typed.js v2 — standalone, no jQuery dependency
-		wp_enqueue_script( 'typed', get_template_directory_uri() . '/js/typed.min.js', array(), lafka_asset_version( '/js/typed.min.js' ), true );
+		// typed.js v2 — only when the page actually uses `[lafka_typed]`. Lib is
+		// ~8 KB minified; loading it everywhere was pure overhead.
+		wp_register_script( 'typed', get_template_directory_uri() . '/js/typed.min.js', array(), lafka_asset_version( '/js/typed.min.js' ), $footer_defer );
+		if ( is_singular() && false !== strpos( $post_content_for_lib_detect, '[lafka_typed' ) ) {
+			wp_enqueue_script( 'typed' );
+		}
 
-		// nice-select
-		wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), true );
+		// nice-select — `lafka-front.js` calls `$(...).niceSelect()`
+		// unconditionally on `document.ready` (now JS-guarded), so keep
+		// enqueued globally; defer strategy is the safe perf win.
+		wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), $footer_defer );
+		$nice_enqueue = true;
 
 		// is-in-viewport replaced by native getBoundingClientRect() check in
 		// lafka-front.js infinite-scroll handler (P3-05). No script to enqueue.
@@ -1208,22 +1246,27 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		}
 
 		/* Include js configs — conditionally loaded scripts removed from hard deps */
-		$lafka_libs_deps = array(
-			'jquery',
-			'wp-util',
-			'flexslider',
-			'owl-carousel',
-			'typed',
-			'nice-select',
-		);
+		$lafka_libs_deps = array( 'jquery', 'wp-util' );
+		if ( $flex_enqueue ) {
+			$lafka_libs_deps[] = 'flexslider';
+		}
+		if ( $owl_enqueue ) {
+			$lafka_libs_deps[] = 'owl-carousel';
+		}
+		if ( wp_script_is( 'typed', 'enqueued' ) ) {
+			$lafka_libs_deps[] = 'typed';
+		}
+		if ( $nice_enqueue ) {
+			$lafka_libs_deps[] = 'nice-select';
+		}
 		if ( function_exists( 'is_product' ) && is_product() ) {
 			$lafka_libs_deps[] = 'cloud-zoom';
 			$lafka_libs_deps[] = 'countdown';
 		}
-		if ( function_exists( 'is_product' ) && is_product() || is_singular() ) {
+		if ( $magnific_enqueue ) {
 			$lafka_libs_deps[] = 'magnific';
 		}
-		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config' . $suffix . '.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config' . $suffix . '.js' ), true );
+		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config' . $suffix . '.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config' . $suffix . '.js' ), $footer_defer );
 
 		// send is_rtl to js for owl carousel
 		wp_localize_script(
