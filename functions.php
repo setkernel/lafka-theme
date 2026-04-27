@@ -896,13 +896,21 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 
 		// check is singular and not Blog/Shop/Forum so we get the real post_meta
 		if ( ! ( LAFKA_IS_WOOCOMMERCE && is_shop() ) && ! lafka_is_blog() && ! ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() ) && is_singular() ) {
-			$_header               = get_post_meta( $wp_query->post->ID, 'lafka_header_size', true );
+			// Pull the full meta array once instead of four separate single-key
+			// reads (which all hit `get_metadata_raw()` independently). The
+			// returned array is already in WP's meta cache, so individual key
+			// reads after this are O(1) memory lookups for the rest of the
+			// request — header.php's later `get_post_meta($id)` call is now
+			// guaranteed to be a cache hit.
+			$_meta                 = get_post_meta( $wp_query->post->ID );
+			$_get                  = static fn( $k ) => isset( $_meta[ $k ][0] ) ? $_meta[ $k ][0] : '';
+			$_header               = $_get( 'lafka_header_size' );
 			$specific_header_size  = $_header === '' ? 'default' : $_header;
-			$_footer               = get_post_meta( $wp_query->post->ID, 'lafka_footer_size', true );
+			$_footer               = $_get( 'lafka_footer_size' );
 			$specific_footer_size  = $_footer === '' ? 'default' : $_footer;
-			$_fstyle               = get_post_meta( $wp_query->post->ID, 'lafka_footer_style', true );
+			$_fstyle               = $_get( 'lafka_footer_style' );
 			$specific_footer_style = $_fstyle === '' ? 'default' : $_fstyle;
-			$_layout               = get_post_meta( $wp_query->post->ID, 'lafka_layout', true );
+			$_layout               = $_get( 'lafka_layout' );
 			$specific_layout       = $_layout === '' ? 'default' : $_layout;
 		} else {
 			$specific_header_size  = 'default';
