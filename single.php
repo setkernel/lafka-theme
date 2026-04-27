@@ -123,29 +123,72 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 					?>
 					<?php if ( lafka_get_option( 'show_related_posts' ) ) : ?>
 						<?php
-						// Get random post from the same category as the current one
-						$lafka_related_posts_args = array(
-							'posts_per_page' => lafka_get_option( 'number_related_posts' ),
-							'post__not_in'   => array( $post->ID ),
-							'orderby'        => 'rand',
-							'post_type'      => 'post',
-							'post_status'    => 'publish',
-						);
-						$lafka_get_terms_args     = array(
+						// PERF-6: random related posts. `ORDER BY RAND()` with a
+						// tax_query JOIN is a filesort that the MySQL query
+						// cache can't dedupe. Cache a list of `N + buffer`
+						// candidate IDs from the same category in a transient
+						// (15 min) keyed on the current post's first category
+						// slug, then pick `posts_per_page` from the cached list
+						// here at request time. The "random" feel survives —
+						// just rotated on a 15-minute cadence per category —
+						// and we get one DB query per category per 15min
+						// instead of one filesort per pageview.
+						$lafka_rp_count = (int) lafka_get_option( 'number_related_posts' );
+						if ( $lafka_rp_count <= 0 ) {
+							$lafka_rp_count = 4;
+						}
+						$lafka_get_terms_args = array(
 							'orderby' => 'name',
 							'order'   => 'ASC',
 							'fields'  => 'slugs',
 						);
-						$lafka_categories         = wp_get_post_terms( $post->ID, 'category', $lafka_get_terms_args );
-						if ( ! $lafka_categories instanceof WP_Error && ! empty( $lafka_categories ) ) {
-							$lafka_related_posts_args['tax_query'] = array(
-								array(
-									'taxonomy' => 'category',
-									'field'    => 'slug',
-									'terms'    => $lafka_categories,
-								),
+						$lafka_categories     = wp_get_post_terms( $post->ID, 'category', $lafka_get_terms_args );
+						$lafka_cat_key        = ( ! is_wp_error( $lafka_categories ) && ! empty( $lafka_categories ) )
+							? md5( implode( '|', (array) $lafka_categories ) )
+							: 'no-cat';
+						$lafka_rp_cache_key   = 'lafka_related_posts_' . $lafka_cat_key;
+						$lafka_rp_pool        = get_transient( $lafka_rp_cache_key );
+						if ( false === $lafka_rp_pool || ! is_array( $lafka_rp_pool ) ) {
+							$lafka_rp_pool_args = array(
+								'posts_per_page'         => max( 24, $lafka_rp_count * 4 ),
+								'orderby'                => 'date',
+								'order'                  => 'DESC',
+								'post_type'              => 'post',
+								'post_status'            => 'publish',
+								'fields'                 => 'ids',
+								'no_found_rows'          => true,
+								'update_post_meta_cache' => false,
+								'update_post_term_cache' => false,
 							);
+							if ( ! is_wp_error( $lafka_categories ) && ! empty( $lafka_categories ) ) {
+								$lafka_rp_pool_args['tax_query'] = array(
+									array(
+										'taxonomy' => 'category',
+										'field'    => 'slug',
+										'terms'    => $lafka_categories,
+									),
+								);
+							}
+							$lafka_rp_pool_query = new WP_Query( $lafka_rp_pool_args );
+							$lafka_rp_pool       = $lafka_rp_pool_query->posts;
+							set_transient( $lafka_rp_cache_key, $lafka_rp_pool, 15 * MINUTE_IN_SECONDS );
 						}
+
+						// Filter out the current post and shuffle a slice.
+						$lafka_rp_candidates = array_values( array_diff( (array) $lafka_rp_pool, array( $post->ID ) ) );
+						shuffle( $lafka_rp_candidates );
+						$lafka_rp_ids = array_slice( $lafka_rp_candidates, 0, $lafka_rp_count );
+
+						$lafka_related_posts_args = array(
+							'posts_per_page'         => $lafka_rp_count,
+							'post__in'               => ! empty( $lafka_rp_ids ) ? $lafka_rp_ids : array( 0 ),
+							'orderby'                => 'post__in',
+							'post_type'              => 'post',
+							'post_status'            => 'publish',
+							'no_found_rows'          => true,
+							'update_post_meta_cache' => true,
+							'update_post_term_cache' => true,
+						);
 
 						$lafka_is_latest_posts = true;
 						$lafka_related_query   = new WP_Query( $lafka_related_posts_args );

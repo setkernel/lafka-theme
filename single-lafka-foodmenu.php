@@ -350,14 +350,11 @@ while ( have_posts() ) :
 						</div>
 					<?php endif; ?>
 					<?php
-					// Get random foodmenu projects from the same category as the current one
-					$lafka_get_foodmenu_args = array(
-						'posts_per_page' => '6',
-						'post__not_in'   => array( $lafka_curr_foodmenu_id ),
-						'orderby'        => 'rand',
-						'post_type'      => 'lafka-foodmenu',
-						'post_status'    => 'publish',
-					);
+					// PERF-21: random "you'll love" foodmenu items. Same fix
+					// shape as PERF-6 in single.php — fetch a `posts_per_page
+					// × 4` candidate ID pool keyed on the foodmenu's first
+					// category, cache it for 15 min, then shuffle a slice.
+					$lafka_sim_count = 6;
 
 					$lafka_get_terms_args          = array(
 						'orderby' => 'name',
@@ -365,16 +362,53 @@ while ( have_posts() ) :
 					);
 					$lafka_foodmenu_categories     = wp_get_object_terms( get_the_ID(), 'lafka_foodmenu_category', $lafka_get_terms_args );
 					$lafka_foodmenu_first_category = null;
-					if ( array_key_exists( 0, $lafka_foodmenu_categories ) ) {
-						$lafka_foodmenu_first_category        = $lafka_foodmenu_categories[0];
-						$lafka_get_foodmenu_args['tax_query'] = array(
-							array(
-								'taxonomy' => 'lafka_foodmenu_category',
-								'field'    => 'slug',
-								'terms'    => $lafka_foodmenu_first_category,
-							),
-						);
+					if ( ! is_wp_error( $lafka_foodmenu_categories ) && array_key_exists( 0, (array) $lafka_foodmenu_categories ) ) {
+						$lafka_foodmenu_first_category = $lafka_foodmenu_categories[0];
 					}
+
+					$lafka_sim_cat_key   = $lafka_foodmenu_first_category ? $lafka_foodmenu_first_category->term_id : 'no-cat';
+					$lafka_sim_cache_key = 'lafka_similar_foodmenus_' . $lafka_sim_cat_key;
+					$lafka_sim_pool      = get_transient( $lafka_sim_cache_key );
+					if ( false === $lafka_sim_pool || ! is_array( $lafka_sim_pool ) ) {
+						$lafka_sim_pool_args = array(
+							'posts_per_page'         => max( 24, $lafka_sim_count * 4 ),
+							'orderby'                => 'date',
+							'order'                  => 'DESC',
+							'post_type'              => 'lafka-foodmenu',
+							'post_status'            => 'publish',
+							'fields'                 => 'ids',
+							'no_found_rows'          => true,
+							'update_post_meta_cache' => false,
+							'update_post_term_cache' => false,
+						);
+						if ( $lafka_foodmenu_first_category ) {
+							$lafka_sim_pool_args['tax_query'] = array(
+								array(
+									'taxonomy' => 'lafka_foodmenu_category',
+									'field'    => 'slug',
+									'terms'    => $lafka_foodmenu_first_category->slug,
+								),
+							);
+						}
+						$lafka_sim_pool_query = new WP_Query( $lafka_sim_pool_args );
+						$lafka_sim_pool       = $lafka_sim_pool_query->posts;
+						set_transient( $lafka_sim_cache_key, $lafka_sim_pool, 15 * MINUTE_IN_SECONDS );
+					}
+
+					$lafka_sim_candidates = array_values( array_diff( (array) $lafka_sim_pool, array( (int) $lafka_curr_foodmenu_id ) ) );
+					shuffle( $lafka_sim_candidates );
+					$lafka_sim_ids = array_slice( $lafka_sim_candidates, 0, $lafka_sim_count );
+
+					$lafka_get_foodmenu_args = array(
+						'posts_per_page'         => $lafka_sim_count,
+						'post__in'               => ! empty( $lafka_sim_ids ) ? $lafka_sim_ids : array( 0 ),
+						'orderby'                => 'post__in',
+						'post_type'              => 'lafka-foodmenu',
+						'post_status'            => 'publish',
+						'no_found_rows'          => true,
+						'update_post_meta_cache' => true,
+						'update_post_term_cache' => true,
+					);
 
 					wp_reset_postdata();
 
