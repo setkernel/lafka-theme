@@ -1222,9 +1222,22 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_script( 'isotope' );
 		}
 
-		// enqueue google map api
+		// enqueue google map api — only when an API key is configured. Without
+		// a key Google's loader still serves the JS, but every Geocoding /
+		// Places call returns 401 + a console error ("You must use an API key
+		// to authenticate each request"). Skip the registration entirely so
+		// dependent enqueues fail-closed (handlers null-check `lafka-google-maps`
+		// being available).
 		$lafka_maps_api_key = lafka_get_option( 'google_maps_api_key' );
-		wp_register_script( 'lafka-google-maps', 'https://maps.googleapis.com/maps/api/js?' . ( $lafka_maps_api_key ? 'key=' . $lafka_maps_api_key . '&' : '' ) . 'sensor=false&callback=Function.prototype', array( 'jquery' ), false, true );
+		if ( ! empty( $lafka_maps_api_key ) ) {
+			wp_register_script(
+				'lafka-google-maps',
+				'https://maps.googleapis.com/maps/api/js?key=' . rawurlencode( $lafka_maps_api_key ) . '&sensor=false&callback=Function.prototype',
+				array( 'jquery' ),
+				false,
+				true
+			);
+		}
 
 		$lafka_local = lafka_wp_lang_to_valid_language_code( get_locale() );
 		if ( $lafka_local ) {
