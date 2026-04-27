@@ -198,7 +198,22 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 						)
 					);
 				} else {
-					$lafka_foodmenus = new WP_Query( $query_string . '&post_type=lafka-foodmenu&nopaging=true' );
+					// Convert global query-string form into an explicit array so
+					// we can opt into meta/term cache priming and skip the dead
+					// SQL_CALC_FOUND_ROWS pass (nopaging=true ignores it anyway).
+					$lafka_query_args = array(
+						'post_type'              => 'lafka-foodmenu',
+						'nopaging'               => true,
+						'no_found_rows'          => true,
+						'update_post_meta_cache' => true,
+						'update_post_term_cache' => true,
+					);
+					if ( $query_string ) {
+						wp_parse_str( $query_string, $lafka_qs_args );
+						unset( $lafka_qs_args['post_type'] );
+						$lafka_query_args = array_merge( $lafka_qs_args, $lafka_query_args );
+					}
+					$lafka_foodmenus = new WP_Query( $lafka_query_args );
 				}
 				?>
 				<div class="foodmenus">
