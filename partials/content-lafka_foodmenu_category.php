@@ -169,7 +169,8 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 							<?php foreach ( $lafka_foodmenu_categories as $lafka_category ) : ?>
 								<?php
 								if ( ! is_object( $lafka_category ) ) {
-									$lafka_category = get_term_by( 'id', $lafka_category, 'lafka_foodmenu_category' );}
+										$lafka_category = get_term( (int) $lafka_category, 'lafka_foodmenu_category' );
+									}
 								?>
 								<li><a 
 								<?php
