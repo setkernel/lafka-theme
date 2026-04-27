@@ -157,7 +157,15 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 					<?php $lafka_portgolio_categories = array( $lafka_curr_category ); ?>
 					<?php $lafka_foodmenu_categories = array_merge( $lafka_portgolio_categories, get_term_children( $lafka_curr_category->term_id, 'lafka_foodmenu_category' ) ); ?>
 				<?php else : ?>
-					<?php $lafka_foodmenu_categories = get_terms( 'lafka_foodmenu_category' ); ?>
+					<?php
+						// Modern array-form get_terms() — the legacy
+						// `get_terms($tax_name)` positional first-arg was
+						// deprecated in WP 4.5 and is removed in WP 7.0.
+						$lafka_foodmenu_categories = get_terms( array(
+							'taxonomy'   => 'lafka_foodmenu_category',
+							'hide_empty' => false,
+						) );
+					?>
 				<?php endif; ?>
 
 				<?php if ( count( $lafka_foodmenu_categories ) > 0 ) : ?>
