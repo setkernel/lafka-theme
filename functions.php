@@ -560,18 +560,28 @@ if ( ! function_exists( 'lafka_get_lafka_foodmenu_category_parents' ) ) {
 	 * @return Array with term ids
 	 */
 	function lafka_get_lafka_foodmenu_category_parents( $term_id ) {
-		$parents = array();
-		// start from the current term
-		$parent    = get_term_by( 'id', $term_id, 'lafka_foodmenu_category' );
-		$parents[] = $parent;
-		// climb up the hierarchy until we reach a term with parent = '0'
-		while ( $parent->parent != '0' ) {
-			$term_id = $parent->parent;
-
-			$parent    = get_term_by( 'id', $term_id, 'lafka_foodmenu_category' );
-			$parents[] = $parent;
+		// Same call site is hit twice on a typical food-menu page (once from the
+		// breadcrumb, once from the category-loop partial). Memoize per
+		// `$term_id` so the second call is free, and fan ancestor lookups
+		// through `get_ancestors()` + `get_term()` (object-cache backed) instead
+		// of `get_term_by('id', ...)` (which goes to DB on miss).
+		static $cache = array();
+		$term_id = (int) $term_id;
+		if ( isset( $cache[ $term_id ] ) ) {
+			return $cache[ $term_id ];
 		}
-		return $parents;
+
+		$ancestors = array_reverse( get_ancestors( $term_id, 'lafka_foodmenu_category', 'taxonomy' ) );
+		$ids       = array_merge( $ancestors, array( $term_id ) );
+		$parents   = array();
+		foreach ( $ids as $id ) {
+			$term = get_term( (int) $id, 'lafka_foodmenu_category' );
+			if ( $term && ! is_wp_error( $term ) ) {
+				$parents[] = $term;
+			}
+		}
+
+		return $cache[ $term_id ] = $parents;
 	}
 
 }
