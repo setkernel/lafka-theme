@@ -133,8 +133,17 @@ if ( ! class_exists( 'LafkaFrontWalker' ) ) {
 		}
 
 		public function start_el( &$output, $item, $depth = 0, $args = array(), $id = 0 ) {
+			// PERF-10: pull every `_lafka-menu-item-*` meta in one shot. WP's
+			// nav-menu pipeline already primed `wp_postmeta` for the menu items
+			// (see wp_nav_menu()), so this is a memory hit; the previous code
+			// did 5–7 separate `get_post_meta($id, $key, true)` calls per
+			// `start_el` invocation, each one a function-call frame + array
+			// lookup, repeated for every nav item rendered.
+			$meta_all = get_post_meta( $item->ID );
+			$mm_get   = static fn( string $k ) => isset( $meta_all[ $k ][0] ) ? $meta_all[ $k ][0] : '';
+
 			if ( $depth === 0 ) {
-				$this->is_mega_active = get_post_meta( $item->ID, '_lafka-menu-item-is_megamenu', true );
+				$this->is_mega_active = $mm_get( '_lafka-menu-item-is_megamenu' );
 			}
 
 			if ( isset( $args->item_spacing ) && 'discard' === $args->item_spacing ) {
@@ -154,11 +163,11 @@ if ( ! class_exists( 'LafkaFrontWalker' ) ) {
 				$classes[] = 'lafka_colum_title';
 			}
 			// Handle the FA icons on menu items
-			if ( get_post_meta( $item->ID, '_lafka-menu-item-icon', true ) ) {
+			if ( $mm_get( '_lafka-menu-item-icon' ) ) {
 				$classes[] = 'lafka-link-has-icon';
 			}
 			// Mega menu description classes
-			if ( $depth >= 2 && $this->is_mega_active && get_post_meta( $item->ID, '_lafka-menu-item-is_description', true ) ) {
+			if ( $depth >= 2 && $this->is_mega_active && $mm_get( '_lafka-menu-item-is_description' ) ) {
 				$classes[] = 'lafka_mega_text_block';
 			}
 
@@ -258,9 +267,10 @@ if ( ! class_exists( 'LafkaFrontWalker' ) ) {
 			 */
 			$title = apply_filters( 'nav_menu_item_title', $title, $item, $args, $depth );
 
-			$has_mega_description = get_post_meta( $item->ID, '_lafka-menu-item-is_description', true );
-			$font_awesome_icon    = get_post_meta( $item->ID, '_lafka-menu-item-icon', true );
-			$custom_image_id      = get_post_meta( $item->ID, '_lafka-menu-item-image', true );
+			// Reuse the bulk meta read from the top of start_el (PERF-10).
+			$has_mega_description = $mm_get( '_lafka-menu-item-is_description' );
+			$font_awesome_icon    = $mm_get( '_lafka-menu-item-icon' );
+			$custom_image_id      = $mm_get( '_lafka-menu-item-image' );
 
 			$item_output = $args->before;
 			if ( $depth >= 2 && $this->is_mega_active && $has_mega_description ) {
@@ -282,9 +292,9 @@ if ( ! class_exists( 'LafkaFrontWalker' ) ) {
 					$item_output .= '<i class="' . $font_awesome_icon . '"></i> ';
 				}
 				$item_output .= $args->link_before . $title . $args->link_after;
-				// Show the label and color in the menu
-				$custom_menu_label_val   = get_post_meta( $item->ID, '_lafka-menu-item-custom_label', true );
-				$custom_menu_label_color = get_post_meta( $item->ID, '_lafka-menu-item-label_color', true );
+				// Show the label and color in the menu (PERF-10: bulk meta).
+				$custom_menu_label_val   = $mm_get( '_lafka-menu-item-custom_label' );
+				$custom_menu_label_color = $mm_get( '_lafka-menu-item-label_color' );
 				if ( $custom_menu_label_val ) {
 					$item_output .= '<span class="lafka-custom-menu-label" ' . ( $custom_menu_label_color ? 'style="background-color:' . esc_attr( $custom_menu_label_color ) . '"' : '' ) . ' >' . esc_html( $custom_menu_label_val ) . '</span>';
 				}
