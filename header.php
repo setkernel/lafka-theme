@@ -19,7 +19,12 @@
 			</div>
 		<?php endif; ?>
 		<?php if ( lafka_get_option( 'add_to_cart_sound' ) ) : ?>
-			<audio id="cart_add_sound" controls preload="auto" hidden="hidden">
+			<?php
+			// `preload="none"` so the 352 KB cart_add.wav doesn't download on
+			// every pageview — only fetched when add-to-cart actually fires.
+			// Saves 352 KB on home/blog/landing/category pages (Session 4 audit).
+			?>
+			<audio id="cart_add_sound" controls preload="none" hidden="hidden">
 				<source src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cart_add.wav' ); ?>" type="audio/wav">
 			</audio>
 		<?php endif; ?>

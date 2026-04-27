@@ -1034,8 +1034,12 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// Flaticon
 		wp_enqueue_style( 'flaticon', get_template_directory_uri() . '/styles/flaticon/font/flaticon.css', false, lafka_asset_version( '/styles/flaticon/font/flaticon.css' ), 'print' );
 
-		wp_enqueue_style( 'tiza', get_template_directory_uri() . '/styles/fonts/tiza.woff', array(), lafka_asset_version( '/styles/fonts/tiza.woff' ) );
-		wp_enqueue_style( 'feather', get_template_directory_uri() . '/styles/fonts/feather.woff', array(), lafka_asset_version( '/styles/fonts/feather.woff' ) );
+		// `tiza.woff` (159 KB) and `feather.woff` (29 KB) used to be enqueued as
+		// stylesheets — Chrome treated them as render-blocking CSS, charged them
+		// to the CSS budget, and logged "preload but not used" warnings on every
+		// page. The actual @font-face declarations live in et-line-font/style.css
+		// + flaticon/font/flaticon.css above. Removed in P5-Sec/Perf audit
+		// (Session 4) — saves 188 KB of render-blocking weight per page.
 
 		// Modernizr removed — custom build only exposed `window.Modernizr.touch`, which no
 		// theme/plugin code actually reads. Modern browsers all support pointer events natively.

@@ -226,14 +226,21 @@
             event.preventDefault();
         });
 
-        $('a[href$=".mov"] , a[href$=".swf"], a[href$=".mp4"], a[href*="vimeo.com/"], a[href*="youtube.com/watch"]').magnificPopup({
-            disableOn: 700,
-            type: 'iframe',
-            mainClass: 'mfp-fade is-lafka-video',
-            removalDelay: 160,
-            preloader: false,
-            fixedContentPos: false
-        });
+        // Guard: magnific is registered conditionally (only on product/singular
+        // pages). Without the guard this throws on home/blog → breaks every
+        // chained handler in the same $(document).ready block. Audit caught
+        // this in Session 4. Eventual P3-04 migration will replace magnific
+        // with GLightbox; until then, no-op when missing.
+        if ( typeof $.fn.magnificPopup === 'function' ) {
+            $('a[href$=".mov"] , a[href$=".swf"], a[href$=".mp4"], a[href*="vimeo.com/"], a[href*="youtube.com/watch"]').magnificPopup({
+                disableOn: 700,
+                type: 'iframe',
+                mainClass: 'mfp-fade is-lafka-video',
+                removalDelay: 160,
+                preloader: false,
+                fixedContentPos: false
+            });
+        }
 
         $(".prod_hold a.add_to_wishlist").prop("title", function() {
             return $(this).data("title");

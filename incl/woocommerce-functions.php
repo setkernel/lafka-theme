@@ -846,9 +846,17 @@ if ( ! function_exists( 'lafka_cart_link' ) ) {
 			$class = '';
 		}
 		?>
+		<?php
+		// `WC()->cart` is null in some early-template / REST contexts. Without
+		// the guard the page fatals — debug.log on local end-to-end testing
+		// (Session 4) confirmed the NPE in production-equivalent runs.
+		$lafka_cart_count = ( function_exists( 'WC' ) && WC() && WC()->cart )
+			? (int) WC()->cart->get_cart_contents_count()
+			: 0;
+		?>
 		<li class="<?php echo sanitize_html_class( $class ); ?>">
 			<a id="lafka_quick_cart_link" class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'View your shopping cart', 'lafka' ); ?>">
-				<span class="count"><?php echo WC()->cart->get_cart_contents_count(); ?></span>
+				<span class="count"><?php echo esc_html( (string) $lafka_cart_count ); ?></span>
 			</a>
 		</li>
 		<?php

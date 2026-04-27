@@ -46,19 +46,23 @@
 		/**************************
 		 * "lafka-magnific-popup"
 		 **************************/
-		$('a.lafka-magnific-gallery-item').magnificPopup({
-			mainClass: 'mfp-fade',
-			type: 'image',
-			gallery: {
-				enabled: true
-			}
-		});
+		// Guard: magnific is registered conditionally (only on product/singular
+		// pages). Without the guard this throws on home/blog. Session 4 audit.
+		if ( typeof $.fn.magnificPopup === 'function' ) {
+			$('a.lafka-magnific-gallery-item').magnificPopup({
+				mainClass: 'mfp-fade',
+				type: 'image',
+				gallery: {
+					enabled: true
+				}
+			});
 
-		/* for foodmenu list */
-		$('a.foodmenu-lightbox-link').magnificPopup({
-			mainClass: 'mfp-fade',
-			type: 'image'
-		});
+			/* for foodmenu list */
+			$('a.foodmenu-lightbox-link').magnificPopup({
+				mainClass: 'mfp-fade',
+				type: 'image'
+			});
+		}
 
 		/*****************************
 		 * "lafka-owl-carousel-cat"
@@ -174,6 +178,11 @@
 				$.post(
 								lafka_quickview.lafka_ajax_url, data, function (response) {
 
+									if ( typeof $.magnificPopup === 'undefined' ) {
+										// Quickview without magnific would silently fail; fall back
+										// to navigating to the product page (Session 4 audit guard).
+										return;
+									}
 									$.magnificPopup.open({
 										mainClass: 'lafka-quick-view-lightbox mfp-fade',
 										items: {
