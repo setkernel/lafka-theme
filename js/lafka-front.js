@@ -759,19 +759,61 @@
         // Show reset button if there are active filters
         $.lafka_handle_active_filters_reset_button();
 
-        // Build mobile menu tabs
-        $(document.body).find('div#menu_mobile').tabs({
-            beforeActivate: function(event, ui) {
-                if (!$.isEmptyObject(ui.newTab)) {
-                    var $link = ui.newTab.find('a');
-                    // If is wishlist link - do not open tab, instead redirect
-                    if ($link.length && $link.hasClass('lafka-mobile-wishlist')) {
-                        window.location.href = $link.prop('href');
-                        return false;
-                    }
+        // P6-A11Y-3: Custom mobile menu tab switching — replaces jQuery UI .tabs()
+        // so that role="tab" lives on the <a> (focusable element), not the <li>.
+        // ARIA attributes (role, aria-selected, tabindex) are set in PHP; JS
+        // manages show/hide, aria-selected, and the CSS ui-state-active class.
+        ( function () {
+            var $menuMobile = $( 'div#menu_mobile' );
+            if ( ! $menuMobile.length ) { return; }
+
+            var $tabs    = $menuMobile.find( '[role="tab"]' );
+            var $panels  = $menuMobile.find( '[role="tabpanel"]' );
+
+            // Initialise: show first panel, hide others, mark first li active
+            $panels.hide();
+            $panels.first().show();
+            $tabs.first().closest( 'li' ).addClass( 'ui-state-active' );
+
+            $tabs.on( 'click', function ( e ) {
+                e.preventDefault();
+                var $tab    = $( this );
+
+                // Wishlist: redirect, no panel switch
+                if ( $tab.hasClass( 'lafka-mobile-wishlist' ) ) {
+                    window.location.href = $tab.attr( 'href' );
+                    return;
                 }
-            }
-        });
+
+                var targetId = $tab.attr( 'aria-controls' );
+                if ( ! targetId ) { return; }
+
+                // Update ARIA on tabs
+                $tabs.attr( { 'aria-selected': 'false', tabindex: '-1' } );
+                $tab.attr( { 'aria-selected': 'true', tabindex: '0' } );
+
+                // Update CSS active class on li
+                $tabs.closest( 'li' ).removeClass( 'ui-state-active' );
+                $tab.closest( 'li' ).addClass( 'ui-state-active' );
+
+                // Show target panel, hide others
+                $panels.hide();
+                $( '#' + targetId ).show();
+            } );
+
+            // Keyboard: arrow key navigation within tablist
+            $tabs.on( 'keydown', function ( e ) {
+                var $all = $tabs.filter( '[role="tab"]' );
+                var idx  = $all.index( this );
+                if ( e.key === 'ArrowRight' || e.key === 'ArrowDown' ) {
+                    e.preventDefault();
+                    $all.eq( ( idx + 1 ) % $all.length ).trigger( 'click' ).focus();
+                } else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
+                    e.preventDefault();
+                    $all.eq( ( idx - 1 + $all.length ) % $all.length ).trigger( 'click' ).focus();
+                }
+            } );
+        } )();
 
         // Handle unavailable variations swatches on single product
         $(document.body).find(".variations_form").on("woocommerce_update_variation_values", function() {

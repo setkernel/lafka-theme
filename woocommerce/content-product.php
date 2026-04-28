@@ -24,24 +24,10 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 	return;
 }
 
-// Extra post classes
-$classes = array( 'prod_hold' );
-
-// Hover Product Behaviour on Product List - product_hover_onproduct
-if ( lafka_get_option( 'product_hover_onproduct' ) != 'none' ) {
-	// Check if swap effect is selected but second image is not present
-	if ( ! ( lafka_get_option( 'product_hover_onproduct' ) == 'lafka-prodhover-swap' && ! lafka_get_second_product_image_id( $product ) ) ) {
-		$classes[] = lafka_get_option( 'product_hover_onproduct' );
-	}
-}
-
-if ( lafka_is_product_eligible_for_variation_in_listings( $product ) ) {
-	$classes[] = 'lafka-variations-list-in-catalog';
-}
-// Manage Buttons Visibility on Listings
-$classes[] = lafka_get_option( 'product_list_buttons_visibility' );
+// P6-A11Y-6: Extra classes injected via lafka_product_loop_item_class filter in woocommerce-functions.php.
+// The <li> outer wrapper (changed from <div>) makes these valid children of <ul class="products">.
 ?>
-<div <?php wc_product_class( $classes, $product ); ?>>
+<li <?php wc_product_class( '', $product ); ?>>
 
 	<?php
 	/**
@@ -94,4 +80,4 @@ $classes[] = lafka_get_option( 'product_list_buttons_visibility' );
 	do_action( 'woocommerce_after_shop_loop_item' );
 	?>
 
-</div>
+</li>

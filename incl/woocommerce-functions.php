@@ -1548,3 +1548,51 @@ if ( ! function_exists( 'lafka_quantity_input_on_listing' ) ) {
 		}
 	}
 }
+
+/**
+ * P6-A11Y-6: Inject lafka product-loop classes via WC filter.
+ *
+ * content-product.php now calls wc_product_class( '', $product ) so that
+ * the template regex matches <li <?php wc_product_class( '', $product ); ?>>.
+ * This filter re-adds the theme-specific classes (prod_hold, hover behaviour,
+ * variation flag, button-visibility) that were previously passed inline.
+ *
+ * The WC filter that runs inside wc_get_product_class() is 'woocommerce_post_class'
+ * and receives (array $classes, WC_Product $product).
+ *
+ * @param array      $classes  Classes assembled by WooCommerce.
+ * @param WC_Product $product  Current product object.
+ * @return array
+ */
+add_filter( 'woocommerce_post_class', 'lafka_product_loop_item_class', 10, 2 );
+if ( ! function_exists( 'lafka_product_loop_item_class' ) ) {
+	function lafka_product_loop_item_class( array $classes, $product ): array {
+		if ( ! is_a( $product, WC_Product::class ) ) {
+			return $classes;
+		}
+
+		// Always add the lafka card holder class.
+		$classes[] = 'prod_hold';
+
+		// Hover behaviour.
+		$hover = lafka_get_option( 'product_hover_onproduct' );
+		if ( $hover && 'none' !== $hover ) {
+			if ( ! ( 'lafka-prodhover-swap' === $hover && ! lafka_get_second_product_image_id( $product ) ) ) {
+				$classes[] = $hover;
+			}
+		}
+
+		// Variation-in-catalog flag.
+		if ( lafka_is_product_eligible_for_variation_in_listings( $product ) ) {
+			$classes[] = 'lafka-variations-list-in-catalog';
+		}
+
+		// Button visibility modifier.
+		$btn_visibility = lafka_get_option( 'product_list_buttons_visibility' );
+		if ( $btn_visibility ) {
+			$classes[] = $btn_visibility;
+		}
+
+		return $classes;
+	}
+}

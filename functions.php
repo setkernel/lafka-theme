@@ -1298,14 +1298,26 @@ if ( ! function_exists( 'lafka_build_mobile_menu_items_wrap' ) ) {
 		ob_start();
 		$current_user = wp_get_current_user();
 		?>
-		<ul class="lafka-mobile-menu-tabs">
+		<ul class="lafka-mobile-menu-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Mobile menu navigation', 'lafka' ); ?>">
 			<li>
-				<a class="lafka-mobile-menu-tab-link" href="#lafka_mobile_menu_tab"><?php echo esc_html__( 'Menu', 'lafka' ); ?></a>
+				<a id="lafka-tab-menu"
+					class="lafka-mobile-menu-tab-link"
+					href="#lafka_mobile_menu_tab"
+					role="tab"
+					aria-controls="lafka_mobile_menu_tab"
+					aria-selected="true"
+					tabindex="0"><?php echo esc_html__( 'Menu', 'lafka' ); ?></a>
 			</li>
 			<?php $has_shortcode_my_account = isset( $post->post_content ) && has_shortcode( $post->post_content, 'woocommerce_my_account' ); ?>
 			<?php if ( lafka_should_show_account_icon() && wp_is_mobile() && ( is_user_logged_in() || ( ! is_user_logged_in() && ! $has_shortcode_my_account ) ) ) : ?>
 				<li>
-					<a class="lafka-mobile-account-tab-link" href="#lafka_mobile_account_tab"><?php echo esc_html__( 'My Account', 'lafka' ); ?></a>
+					<a id="lafka-tab-account"
+						class="lafka-mobile-account-tab-link"
+						href="#lafka_mobile_account_tab"
+						role="tab"
+						aria-controls="lafka_mobile_account_tab"
+						aria-selected="false"
+						tabindex="-1"><?php echo esc_html__( 'My Account', 'lafka' ); ?></a>
 				</li>
 			<?php endif; ?>
 			<?php if ( lafka_should_show_wishlist_icon() ) : ?>
@@ -1317,11 +1329,17 @@ if ( ! function_exists( 'lafka_build_mobile_menu_items_wrap' ) ) {
 				<a class="mob-close-toggle" href="#" role="button" aria-label="<?php esc_attr_e( 'Close menu', 'lafka' ); ?>"><i class="fa fa-times" aria-hidden="true"></i></a>
 			</li>
 		</ul>
-		<div id="lafka_mobile_menu_tab">
+		<div id="lafka_mobile_menu_tab"
+			role="tabpanel"
+			aria-labelledby="lafka-tab-menu"
+			tabindex="0">
 			<ul id="%1$s" class="%2$s">%3$s</ul>
 		</div>
 		<?php if ( lafka_should_show_account_icon() && wp_is_mobile() ) : ?>
-			<div id="lafka_mobile_account_tab">
+			<div id="lafka_mobile_account_tab"
+				role="tabpanel"
+				aria-labelledby="lafka-tab-account"
+				tabindex="0">
 				<?php if ( is_user_logged_in() ) : ?>
 					<ul>
 						<li>

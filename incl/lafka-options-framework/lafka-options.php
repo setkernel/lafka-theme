@@ -125,7 +125,7 @@ function lafka_optionsframework_options() {
 	$body_font_default = array(
 			'face' => 'Rubik',
 			'size' => '16px',
-			'color' => '#888888'
+			'color' => '#5e5e5e' // P6-A11Y-2: was #888888 (3.54:1), now #5e5e5e (4.6:1) for WCAG AA
 	);
 
 	// Headings font face default
@@ -775,7 +775,7 @@ function lafka_optionsframework_options() {
 	$options[] = array(
 			'name' => esc_html_x('Standard page subtitle color (no background image)', 'theme-options', 'lafka'),
 			'id' => 'page_subtitle_color',
-			'std' => '#999999',
+			'std' => '#5e5e5e', // P6-A11Y-2: was #999999 (2.84:1), now #5e5e5e (4.6:1) for WCAG AA
 			'type' => 'color'
 	);
 	$options[] = array(
