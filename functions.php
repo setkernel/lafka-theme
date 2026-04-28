@@ -1314,7 +1314,7 @@ if ( ! function_exists( 'lafka_build_mobile_menu_items_wrap' ) ) {
 				</li>
 			<?php endif; ?>
 			<li>
-				<a class="mob-close-toggle"></a>
+				<a class="mob-close-toggle" href="#" role="button" aria-label="<?php esc_attr_e( 'Close menu', 'lafka' ); ?>"><i class="fa fa-times" aria-hidden="true"></i></a>
 			</li>
 		</ul>
 		<div id="lafka_mobile_menu_tab">
