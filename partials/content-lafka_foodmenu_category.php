@@ -109,7 +109,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 				<?php elseif ( is_page() && $lafka_show_title_page == 'yes' ) : ?>
 					<h1 class="heading-title"><?php the_title(); ?></h1>
 					<?php if ( $lafka_subtitle ) : ?>
-						<h6><?php echo esc_html( $lafka_subtitle ); ?></h6>
+						<p class="section-subtitle"><?php echo esc_html( $lafka_subtitle ); ?></p>
 					<?php endif; ?>
 				<?php elseif ( ! is_page() ) : ?>
 					<h1 class="heading-title"><?php esc_html_e( 'Menu', 'lafka' ); ?></h1>
@@ -304,7 +304,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 											<?php endif; ?>
 										</h4>
 										<?php if ( $lafka_ingredients ) : ?>
-											<h6><?php echo esc_html( $lafka_ingredients ); ?></h6>
+											<p class="ingredients"><?php echo esc_html( $lafka_ingredients ); ?></p>
 										<?php endif; ?>
 										<?php if ( lafka_has_foodmenu_options( $lafka_foodmenu ) ) : ?>
 											<?php $lafka_foodmenu_options_array = lafka_get_foodmenu_options( $lafka_foodmenu ); ?>

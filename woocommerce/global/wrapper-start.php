@@ -113,9 +113,9 @@ if ( is_product_category() || is_product_tag() ) {
 						<?php if ( ! is_product() && apply_filters( 'woocommerce_show_page_title', true ) ) : ?>
 							<h1 class="product_title entry-title heading-title"><?php woocommerce_page_title(); ?></h1>
 							<?php if ( is_shop() && $shop_subtitle ) : ?>
-								<h6><?php echo esc_html( $shop_subtitle ); ?></h6>
+								<p class="section-subtitle"><?php echo esc_html( $shop_subtitle ); ?></p>
 							<?php elseif ( ( is_product_category() || is_product_tag() ) && $lafka_prod_category_subtitle ) : ?>
-								<h6><?php echo esc_html( $lafka_prod_category_subtitle ); ?></h6>
+								<p class="section-subtitle"><?php echo esc_html( $lafka_prod_category_subtitle ); ?></p>
 							<?php endif; ?>
 						<?php endif; ?>
 						<!-- END OF TITLE -->
