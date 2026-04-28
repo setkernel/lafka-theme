@@ -221,9 +221,7 @@
 								<?php if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'show_shopping_cart' ) ) : ?>
 									<ul id="cart-module" class="site-header-cart">
 										<?php lafka_cart_link(); ?>
-										<li>
-											<?php the_widget( 'WC_Widget_Cart', 'title=' ); ?>
-										</li>
+										<?php the_widget( 'WC_Widget_Cart', 'title=' ); ?>
 									</ul>
 								<?php endif; ?>
 								<!-- END OF SHOPPING CART -->
