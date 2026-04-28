@@ -93,8 +93,9 @@ final class HeroPreloadHookTest extends TestCase {
 
 	public function test_child_sets_fetchpriority_high_on_hero(): void {
 		$src = $this->read_child_functions();
-		self::assertStringContainsString(
-			"'fetchpriority' => 'high'",
+		// Match the actual array-assignment syntax: $attr['fetchpriority'] = 'high'
+		self::assertMatchesRegularExpression(
+			"/\\\$attr\\['fetchpriority'\\]\\s*=\\s*'high'/",
 			$src,
 			"lafka-child/functions.php must set \$attr['fetchpriority'] = 'high' — P6-PERF-1"
 		);
