@@ -6,6 +6,20 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
 		<link rel="profile" href="http://gmpg.org/xfn/11" />
 		<link rel="pingback" href="<?php echo esc_url( get_bloginfo( 'pingback_url' ) ); ?>" />
+		<?php
+		/**
+		 * P6-PERF-1: Preload the LCP image for the current page template.
+		 * Filterable so child theme + WC pages can override per route.
+		 * Returning an empty string is a no-op (no preload emitted).
+		 */
+		$lafka_lcp_image = apply_filters( 'lafka_lcp_image_url', '' );
+		if ( $lafka_lcp_image ) {
+			printf(
+				'<link rel="preload" as="image" fetchpriority="high" href="%s">' . "\n",
+				esc_url( $lafka_lcp_image )
+			);
+		}
+		?>
 		<?php wp_head(); ?>
 	</head>
 
