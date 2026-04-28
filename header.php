@@ -88,6 +88,7 @@
 			</div>
 		<?php endif; ?>
 		<!-- MAIN WRAPPER -->
+		<main id="content" tabindex="-1">
 		<div id="container">
 			<?php if ( ! $lafka_is_blank ) : ?>
 

@@ -97,6 +97,7 @@ global $lafka_is_blank;
 	<!-- END OF FOOTER -->
 <?php endif; ?>
 </div>
+</main>
 <!-- END OF MAIN WRAPPER -->
 <?php
 $lafka_is_compare = false;
