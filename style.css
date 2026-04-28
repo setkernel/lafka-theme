@@ -2,7 +2,7 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.8.3
+Version: 5.8.4
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
@@ -7708,6 +7708,19 @@ ul.product_list_widget li a img,
     height: auto;
 }
 
+/*
+ * Collapse the ~4px text-node space that appears between sibling
+ * inline-block .prod_hold cards. Without this, 5 cards at 20% width
+ * sum to 100% but 4 inter-sibling whitespace gaps push the row past
+ * 100%, dropping the last card to a new line (columns-5 displays as
+ * columns-4, columns-6 as columns-5, etc.). Children re-declare
+ * font-size, so collapsing it on the list wrapper is safe.
+ */
+ul.products {
+    font-size: 0;
+    letter-spacing: 0;
+}
+
 div.prod_hold {
     width: 100%;
     vertical-align: top;
@@ -7721,6 +7734,7 @@ div.prod_hold {
     box-sizing: border-box;
     text-align: center;
     border-radius: 3px;
+    font-size: var(--lafka-body-font-size, 16px);
 }
 
 @keyframes revealer-text {
@@ -7812,6 +7826,7 @@ div.product-category {
     text-align: center;
     list-style: none !important;
     box-sizing: border-box;
+    font-size: var(--lafka-body-font-size, 16px);
 }
 
 .owl-item li.product-category,
