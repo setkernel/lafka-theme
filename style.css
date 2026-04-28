@@ -10,6 +10,29 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: lafka
 */
 
+/* P6-PERF-3: Self-hosted Rubik (3 weights) replaces Google Fonts CDN. */
+/* font-display: optional prevents FOIT/FOUT layout shift (P6-PERF-2 follow-on). */
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 400;
+    font-display: optional;
+    src: url('assets/fonts/rubik/Rubik-400.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 600;
+    font-display: optional;
+    src: url('assets/fonts/rubik/Rubik-600.woff2') format('woff2');
+}
+@font-face {
+    font-family: 'Rubik';
+    font-style: normal;
+    font-weight: 700;
+    font-display: optional;
+    src: url('assets/fonts/rubik/Rubik-700.woff2') format('woff2');
+}
 
 /*------------------------------------------------------------------
 [Table of contents]

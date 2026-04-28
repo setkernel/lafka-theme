@@ -976,7 +976,33 @@ add_action( 'admin_enqueue_scripts', 'lafka_typography_enqueue_google_font' );
  */
 if ( ! function_exists( 'lafka_typography_enqueue_google_font' ) ) {
 	function lafka_typography_enqueue_google_font() {
-		wp_enqueue_style( 'lafka-fonts', lafka_typography_google_fonts_url(), array(), false, 'print' );
+		// P6-PERF-3: Rubik is self-hosted via @font-face in style.css — strip it from the
+		// Google Fonts CDN URL so it is never fetched from fonts.googleapis.com.
+		$url = lafka_typography_google_fonts_url();
+		if ( ! empty( $url ) ) {
+			// Parse and rebuild the family param, removing 'Rubik' entries.
+			$parsed = wp_parse_url( $url );
+			if ( isset( $parsed['query'] ) ) {
+				parse_str( $parsed['query'], $params );
+				if ( isset( $params['family'] ) ) {
+					$families = array_filter(
+						explode( '|', $params['family'] ),
+						function ( $f ) {
+							return 0 !== strpos( $f, 'Rubik' );
+						}
+					);
+					if ( empty( $families ) ) {
+						return; // Only 'Rubik' was requested — nothing to fetch from CDN.
+					}
+					$params['family'] = implode( '|', $families );
+					$url              = ( isset( $parsed['scheme'] ) ? $parsed['scheme'] . ':' : '' )
+						. '//' . $parsed['host']
+						. ( isset( $parsed['path'] ) ? $parsed['path'] : '' )
+						. '?' . http_build_query( $params );
+				}
+			}
+		}
+		wp_enqueue_style( 'lafka-fonts', $url, array(), false, 'print' );
 	}
 }
 
