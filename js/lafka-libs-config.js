@@ -1,7 +1,20 @@
 (function ($) {
 	"use strict";
 
-	$(window).on("load", function () {
+	/**
+	 * P6-PERF-7 (W3-T7): readyState guard so callbacks fire even when the script
+	 * executes after the load event (deferred loading). jQuery Migrate warned that
+	 * $(window).on('load', ...) registered post-load is a silent no-op.
+	 */
+	function lafkaLibsOnLoad(callback) {
+		if (document.readyState === 'complete') {
+			callback();
+		} else {
+			jQuery(window).on('load', callback);
+		}
+	}
+
+	lafkaLibsOnLoad(function () {
 
 		/***************************************
 		 * Used for displaying flex slides when
@@ -634,7 +647,7 @@ if (typeof lafka_quickview !== 'undefined') {
             } else {
                 form.$form.trigger('woocommerce_variation_select_change');
                 form.$form.trigger('check_variations');
-                $(this).blur();
+                $(this).trigger('blur'); // P6-PERF-7: .blur() shorthand deprecated
             }
 
             // Custom event for when variation selection has been changed

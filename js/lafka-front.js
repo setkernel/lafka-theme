@@ -42,15 +42,30 @@
     // Expose for child themes / future modules that want the same primitive.
     window.lafkaOnVisible = lafkaOnVisible;
 
+    /**
+     * P6-PERF-7 (W3-T7): Guard $(window).on('load', ...) calls so they fire
+     * immediately when the page is already loaded (i.e. deferred script execution)
+     * rather than silently dropping the callback. jQuery Migrate warned that
+     * $(window).on('load') registered after the load event fires is a no-op.
+     *
+     * @param {Function} callback
+     */
+    function lafkaOnLoad(callback) {
+        if (document.readyState === 'complete') {
+            callback();
+        } else {
+            jQuery(window).on('load', callback);
+        }
+    }
+
     /* If preloader is enabled */
     if (lafka_main_js_params.show_preloader) {
-        $(window).on("load", function() {
+        lafkaOnLoad(function() {
             $("#loader").delay(100).fadeOut();
             $(".mask").delay(300).fadeOut();
         });
-
     }
-    $(window).on("load", function() {
+    lafkaOnLoad(function() {
         checkRevealFooter();
         checkProductGalleryCarousel();
         defineMegaMenuSizing();
@@ -155,7 +170,7 @@
         $('#header .lafka-search-trigger a, .close-search-button').on('click', function(event) {
             event.stopPropagation();
             $("body > #search").toggleClass("active");
-            $("body > #search #s").focus();
+            $("body > #search #s").trigger('focus'); // P6-PERF-7: .focus() shorthand deprecated
         });
 
         $('#main-menu .lafka-mega-menu').css("display", "");
@@ -807,10 +822,10 @@
                 var idx  = $all.index( this );
                 if ( e.key === 'ArrowRight' || e.key === 'ArrowDown' ) {
                     e.preventDefault();
-                    $all.eq( ( idx + 1 ) % $all.length ).trigger( 'click' ).focus();
+                    $all.eq( ( idx + 1 ) % $all.length ).trigger( 'click' ).trigger('focus'); // P6-PERF-7
                 } else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
                     e.preventDefault();
-                    $all.eq( ( idx - 1 + $all.length ) % $all.length ).trigger( 'click' ).focus();
+                    $all.eq( ( idx - 1 + $all.length ) % $all.length ).trigger( 'click' ).trigger('focus'); // P6-PERF-7
                 }
             } );
         } )();
@@ -972,18 +987,37 @@
         var $menuHolderElement = $('#header .menu-main-menu-container');
         var menuOffset = $menuHolderElement.offset();
 
-        $menuElement.find('.lafka-mega-menu').each(function() {
-            $(this).css('max-width', $menuHolderElement.outerWidth() + 'px');
-            var dropdown = $(this).parent().offset();
+        // P6-PERF-8: Two-pass to prevent layout thrashing.
+        // Old pattern read .outerWidth()/.offset() on each menu item AFTER the
+        // previous iteration had written a new max-width/margin, forcing the
+        // browser to recalculate layout on every iteration.
+        // Pass 1: read all geometry values before any writes.
+        var $megaMenus = $menuElement.find('.lafka-mega-menu');
+        var menuHolderWidth = $menuHolderElement.outerWidth();
+        var windowWidth = $(window).width();
+        var menuGeometry = [];
+        $megaMenus.each(function() {
+            menuGeometry.push({
+                dropdownOffset: $(this).parent().offset(),
+                ownWidth:       $(this).outerWidth(),
+                parentWidth:    $(this).parent().outerWidth()
+            });
+        });
+
+        // Pass 2: apply all writes using the pre-read values.
+        $megaMenus.each(function(idx) {
+            $(this).css('max-width', menuHolderWidth + 'px');
+            var geo = menuGeometry[idx];
+            var dropdown = geo.dropdownOffset;
             var i;
             if (is_rtl) {
-                var dropdown_right_offset = $(window).width() - (dropdown.left + $(this).parent().outerWidth());
-                i = (dropdown_right_offset + $(this).outerWidth()) - (menuOffset.left + $menuHolderElement.outerWidth());
+                var dropdown_right_offset = windowWidth - (dropdown.left + geo.parentWidth);
+                i = (dropdown_right_offset + geo.ownWidth) - (menuOffset.left + menuHolderWidth);
                 if (i > 0) {
                     $(this).css('margin-right', '-' + (i) + 'px');
                 }
             } else {
-                i = (dropdown.left + $(this).outerWidth()) - (menuOffset.left + $menuHolderElement.outerWidth());
+                i = (dropdown.left + geo.ownWidth) - (menuOffset.left + menuHolderWidth);
                 if (i > 0) {
                     $(this).css('margin-left', '-' + (i) + 'px');
                 }
@@ -1114,12 +1148,15 @@
         var $contentDiv = $('#content');
 
         if ($contentDiv.length) {
-            $elements.each(function(index) {
-                // Renamed from `width`/`offset` to avoid shadowing window.{width,offset} (no-redeclare).
-                var contentWidth = $contentDiv.width();
-                var row_padding = 40;
-                var contentOffset = -($contentDiv.width() - $('#content > .inner ').css("width").replace("px", "")) / 2 - row_padding + 15;
+            // P6-PERF-8: Hoist ALL geometry reads outside the .each() loop.
+            // Old pattern called $contentDiv.width() twice and .css("width") once
+            // per iteration, each forcing a layout recalc after the previous
+            // iteration's .css() write had invalidated the layout.
+            var row_padding = 40;
+            var contentWidth = $contentDiv.width();
+            var contentOffset = -(contentWidth - parseFloat($('#content > .inner').css("width"))) / 2 - row_padding + 15;
 
+            $elements.each(function(index) {
                 $(this).css({
                     'position': 'relative',
                     'box-sizing': 'border-box',
@@ -1246,6 +1283,14 @@
             'z-index': 19999,
         });
 
+        // P6-PERF-8: Batch reads before writes inside the loader .each() to
+        // prevent read-after-write thrash. The old code set max-height/max-width
+        // on the img then immediately read img.width() — forcing a layout flush
+        // so the browser could return the post-constraint width.
+        // Fix: read window geometry once before the loop; read overlay geometry
+        // in a dedicated read pass before applying any CSS writes.
+        var winHeight = $(window).outerHeight();
+        var winWidth  = $(window).outerWidth();
         $shopbypricefilter_overlay.each(function() {
             var overlay = this;
             var img;
@@ -1256,15 +1301,17 @@
                 img = $('<img id="price_fltr_loading_gif" src="' + lafka_main_js_params.img_path + 'loading3.gif" />').prependTo(overlay);
             }
 
-            $(img).css({
-                'max-height': $(overlay).height() * 0.8,
-                'max-width': $(overlay).width() * 0.8
-            });
+            // Read phase: capture overlay dimensions before writing anything.
+            var overlayHeight = $(overlay).height();
+            var overlayWidth  = $(overlay).width();
 
+            // Write phase: all CSS writes together; no reads in between.
             $(img).css({
+                'max-height': overlayHeight * 0.8,
+                'max-width':  overlayWidth  * 0.8,
                 'position': 'fixed',
-                'top': $(window).outerHeight() / 2,
-                'left': ($(window).outerWidth() - $(img).width()) / 2
+                'top':  winHeight / 2,
+                'left': (winWidth - overlayWidth * 0.8) / 2
             });
         }).show();
 
