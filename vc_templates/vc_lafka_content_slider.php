@@ -94,14 +94,22 @@ $inline_js = '(function ($) {
 				dots: ' . esc_js( $pagination_owl_option ) . ',
 				nav: ' . esc_js( $navigation_owl_option ) . ',
 				navText: [
-					"<i class=\'fas fa-angle-left\'></i>",
-					"<i class=\'fas fa-angle-right\'></i>"
+					\'<span class="screen-reader-text">Previous slide</span><i class="fas fa-angle-left" aria-hidden="true"></i>\',
+					\'<span class="screen-reader-text">Next slide</span><i class="fas fa-angle-right" aria-hidden="true"></i>\'
 				],
 				animateOut: ' . ( $animateOut == 'false' ? 'false' : '"' . esc_js( $animateOut ) . '"' ) . ',
 				animateIn: ' . ( $animateIn == 'false' ? 'false' : '"' . esc_js( $animateIn ) . '"' ) . ', ' . ( $transition === 'slide-flip' ? 'smartSpeed:450,' : '' ) . '
+				onInitialized: function() {
+					var $el = $(this.$element);
+					$el.find(".owl-dot").each(function(i) {
+						$(this).attr("aria-label", "Go to slide " + (i + 1));
+					});
+					// Remove role="presentation" from focusable nav buttons (audit: presentation-role-conflict)
+					$el.find(".owl-nav button").removeAttr("role");
+				}
 		};
 		lafka_owl_args["loop"] = lafka_loop;
-		
+
 		$(window).on("load", function () {
 			// Using timeout because of strange resizing issue only in Mozilla
 			setTimeout(function(){ jQuery("#' . esc_js( $unique_id ) . ' > .vc_tta-panels").owlCarousel(lafka_owl_args) }, 10)

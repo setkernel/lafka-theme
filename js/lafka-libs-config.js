@@ -105,8 +105,8 @@
 				loop: false,
 				nav: true,
 				navText: [
-					"<i class='fas fa-angle-left'></i>",
-					"<i class='fas fa-angle-right'></i>"
+					'<span class="screen-reader-text">Previous slide</span><i class="fas fa-angle-left" aria-hidden="true"></i>',
+					'<span class="screen-reader-text">Next slide</span><i class="fas fa-angle-right" aria-hidden="true"></i>'
 				]
 			});
 		}
@@ -138,8 +138,8 @@
 				dots: false,
 				nav: true,
 				navText: [
-					"<i class='fas fa-angle-left'></i>",
-					"<i class='fas fa-angle-right'></i>"
+					'<span class="screen-reader-text">Previous slide</span><i class="fas fa-angle-left" aria-hidden="true"></i>',
+					'<span class="screen-reader-text">Next slide</span><i class="fas fa-angle-right" aria-hidden="true"></i>'
 				]
 			});
 		}
@@ -167,8 +167,8 @@
 				dots: false,
 				nav: true,
 				navText: [
-					"<i class='fas fa-angle-left'></i>",
-					"<i class='fas fa-angle-right'></i>"
+					'<span class="screen-reader-text">Previous slide</span><i class="fas fa-angle-left" aria-hidden="true"></i>',
+					'<span class="screen-reader-text">Next slide</span><i class="fas fa-angle-right" aria-hidden="true"></i>'
 				]
 			});
 		}
