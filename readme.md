@@ -6,10 +6,12 @@ Originally developed by [theAlThemist](https://www.althemist.com) and sold on Th
 
 ## Requirements
 
-- WordPress 5.6+
-- WooCommerce 7.0+
-- PHP 7.4+
+- WordPress 6.6+
+- WooCommerce 9.5+
+- PHP 8.1+
 - [Lafka Plugin](https://github.com/setkernel/lafka-plugin) (companion plugin, required)
+
+These match the floor declared in `style.css` (`Requires at least:` / `Requires PHP:` / `WC requires at least:`). The theme will fatal-error or behave unexpectedly on older versions.
 
 ## Optional Commercial Plugins
 

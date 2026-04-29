@@ -2,12 +2,18 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.11.2
+Version: 5.11.3
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: lafka
+Requires at least: 6.6
+Tested up to: 6.9
+Requires PHP: 8.1
+WC requires at least: 9.5
+WC tested up to: 10.7
+Tags: e-commerce, woocommerce, restaurant, food, full-width-template, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, accessibility-ready, block-styles, wide-blocks
 */
 
 /* P6-PERF-3: Self-hosted Rubik (3 weights) replaces Google Fonts CDN. */
