@@ -197,9 +197,37 @@
         // -------------------------------------------------------------------------------------------------------
         // Mobile Menu
         // -------------------------------------------------------------------------------------------------------
+
+        // C-12 C-A11Y-Audit-2026-04-29: keyboard trap fix (WCAG 2.1.2).
+        // #menu_mobile is hidden by transform (left: -320px) but its links remain
+        // in the tab order, forcing keyboard users through 26+ off-screen items.
+        // Fix: apply `inert` when the drawer is closed so AT and keyboard skip it.
+        // `inert` is supported in all evergreen browsers since 2023.
+        var $mobileMenuDrawer = $("#menu_mobile");
+        if ($mobileMenuDrawer.length) {
+            // Set inert initially (drawer starts closed).
+            $mobileMenuDrawer[0].setAttribute('inert', '');
+        }
+
+        function lafkaMobileMenuOpen() {
+            if ($mobileMenuDrawer.length) {
+                $mobileMenuDrawer[0].removeAttribute('inert');
+            }
+        }
+        function lafkaMobileMenuClose() {
+            if ($mobileMenuDrawer.length) {
+                $mobileMenuDrawer[0].setAttribute('inert', '');
+            }
+        }
+
         $(".mob-menu-toggle, .mob-close-toggle, ul#mobile-menu.menu li:not(.menu-item-has-children) a").on('click', function(event) {
             event.stopPropagation();
             $("#menu_mobile").toggleClass("active");
+            if ($("#menu_mobile").hasClass("active")) {
+                lafkaMobileMenuOpen();
+            } else {
+                lafkaMobileMenuClose();
+            }
         });
         $("ul#mobile-menu.menu .menu-item a").each(function() {
             if ($(this).html() == "–") {
@@ -226,6 +254,9 @@
                 $("body > div.widget.woocommerce.widget_shopping_cart").removeClass("active_cart");
             }
             if (!$(e.target).closest('#menu_mobile').hasClass('active')) {
+                if ($("#menu_mobile").hasClass("active")) {
+                    lafkaMobileMenuClose();
+                }
                 $("#menu_mobile").removeClass("active");
             }
             if (!$(e.target).closest('#search').hasClass('active')) {

@@ -2,7 +2,7 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.11.1
+Version: 5.11.2
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
@@ -4146,7 +4146,7 @@ small.lafka-search-hint-text {
 #main-menu li ul.sub-menu li a i,
 #main-menu li ul.sub-menu li a i::before {
     font-size: 24px;
-    color: #999;
+    color: #5e5e5e; /* C-A11Y-Audit-2026-04-29: #999→#5e5e5e, 4.6:1 WCAG AA (was 2.84:1 on white dropdown bg) */
 }
 
 [class^="flaticon-"]::before {
@@ -11453,7 +11453,7 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
 
 .lafka-foodmenu-light .foodmenu-unit-info h4>span.lafka-item-weight-list {
     background-color: rgba(0, 0, 0, 0.17);
-    color: #999;
+    color: #5e5e5e; /* C-A11Y-Audit-2026-04-29: #999→#5e5e5e, 4.6:1 WCAG AA (light foodmenu bg) */
 }
 
 .similar_projects .foodmenu-unit-info h4>span.lafka-item-weight-list {
@@ -13494,7 +13494,7 @@ table.shop_table.cart.wishlist_table div.yith-wcwl-add-to-wishlist {
 }
 
 .video_controlls a:hover {
-    color: #999;
+    color: #999; /* C-A11Y-Audit-2026-04-29: P6-A11Y-2 large-text exemption — hover state on video overlay (dark bg); #999 on dark exceeds 4.5:1 */
 }
 
 

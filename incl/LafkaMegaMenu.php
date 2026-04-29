@@ -85,11 +85,22 @@ if ( ! function_exists( 'lafka_update_mega_menu_item' ) ) {
 		$fields = array( 'is_megamenu', 'is_description', 'custom_label', 'label_color', 'highlight', 'icon', 'image' );
 
 		foreach ( $fields as $field ) {
-			if ( ! isset( $_POST[ 'lafka-menu-item-' . $field ][ $menu_item_db ] ) ) {
-				$_POST[ 'lafka-menu-item-' . $field ][ $menu_item_db ] = '';
+			$post_key = 'lafka-menu-item-' . $field;
+			$raw      = isset( $_POST[ $post_key ][ $menu_item_db ] ) ? wp_unslash( $_POST[ $post_key ][ $menu_item_db ] ) : '';
+
+			if ( is_array( $raw ) ) {
+				$raw = '';
 			}
 
-			$value = $_POST[ 'lafka-menu-item-' . $field ][ $menu_item_db ];
+			$value = sanitize_text_field( (string) $raw );
+
+			// For the FA icon, validate against an allowlist of safe characters
+			// (Font Awesome conventions: lowercase letters, digits, spaces, hyphens).
+			// This blocks stored XSS via the class="" attribute on the <i> element.
+			if ( 'icon' === $field && '' !== $value && ! preg_match( '/^[a-z0-9 \-]*$/i', $value ) ) {
+				$value = '';
+			}
+
 			update_post_meta( $menu_item_db, '_lafka-menu-item-' . $field, $value );
 		}
 	}
@@ -289,7 +300,7 @@ if ( ! class_exists( 'LafkaFrontWalker' ) ) {
 				if ( $custom_image_html ) {
 					$item_output .= $custom_image_html;
 				} elseif ( $font_awesome_icon ) {
-					$item_output .= '<i class="' . $font_awesome_icon . '"></i> ';
+					$item_output .= '<i class="' . esc_attr( $font_awesome_icon ) . '"></i> ';
 				}
 				$item_output .= $args->link_before . $title . $args->link_after;
 				// Show the label and color in the menu (PERF-10: bulk meta).

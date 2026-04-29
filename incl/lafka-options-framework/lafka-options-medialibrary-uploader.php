@@ -163,13 +163,23 @@ if (!function_exists('lafka_optionsframework_mlu_get_silentpost')) {
 			$_args = array('post_type' => 'lafka-optionsframework', 'post_name' => 'of-' . $_token, 'post_status' => 'draft', 'comment_status' => 'closed', 'ping_status' => 'closed');
 
 			// Look in the database for a "silent" post that meets our criteria.
-			$query = 'SELECT ID FROM ' . $wpdb->posts . ' WHERE post_parent = 0';
-			foreach ($_args as $k => $v) {
-				$query .= ' AND ' . $k . ' = "' . $v . '"';
+			// C-9: use $wpdb->prepare() instead of string concatenation. The
+			// columns we filter on are a fixed allowlist (keys of $_args), so
+			// we whitelist them rather than parameterise the column name (which
+			// PDO/MySQL placeholders can't bind).
+			$_allowed_columns = array( 'post_type', 'post_name', 'post_status', 'comment_status', 'ping_status' );
+			$where_sql        = 'post_parent = 0';
+			$values           = array();
+			foreach ( $_args as $k => $v ) {
+				if ( ! in_array( $k, $_allowed_columns, true ) ) {
+					continue;
+				}
+				$where_sql .= ' AND ' . $k . ' = %s';
+				$values[]   = $v;
 			} // End FOREACH Loop
 
-			$query .= ' LIMIT 1';
-			$_posts = $wpdb->get_row($query);
+			// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared -- $where_sql contains only allowlisted column names + %s placeholders.
+			$_posts = $wpdb->get_row( $wpdb->prepare( "SELECT ID FROM {$wpdb->posts} WHERE {$where_sql} LIMIT 1", $values ) );
 
 			// If we've got a post, loop through and get it's ID.
 			if (null != $_posts) {

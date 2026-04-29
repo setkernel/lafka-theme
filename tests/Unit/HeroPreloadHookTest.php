@@ -75,10 +75,12 @@ final class HeroPreloadHookTest extends TestCase {
 			$src,
 			'lafka-child/functions.php must gate the hero URL on is_front_page() — P6-PERF-1'
 		);
+		// W2-T1: hero URL now comes from Customizer (lafka_homepage_hero_image),
+		// not a hardcoded literal. Verify the filter pulls from get_theme_mod().
 		self::assertStringContainsString(
-			'Untitled-design-11.png',
+			"get_theme_mod( 'lafka_homepage_hero_image'",
 			$src,
-			'lafka-child/functions.php must reference the known hero image filename — P6-PERF-1'
+			'lafka-child/functions.php must read the hero image from the lafka_homepage_hero_image Customizer setting — P6-PERF-1 / W2-T1'
 		);
 	}
 

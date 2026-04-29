@@ -91,6 +91,26 @@ final class EditorialTemplatesTest extends TestCase {
         );
     }
 
+    /**
+     * W2-T1: lafka_get_restaurant_info() must now be DEFINED in the plugin's
+     * schema helpers (no longer a deferred / phantom function). Assert it by
+     * loading the helpers file and checking function_exists().
+     */
+    public function test_get_restaurant_info_function_is_defined(): void {
+        $helpers = dirname( __DIR__, 3 ) . '/lafka-plugin/incl/schema/lafka-schema-helpers.php';
+        $this->assertFileExists( $helpers, 'Plugin must ship lafka-schema-helpers.php (the resolver lives here).' );
+
+        if ( ! defined( 'ABSPATH' ) ) {
+            define( 'ABSPATH', __DIR__ . '/' );
+        }
+        require_once $helpers;
+
+        $this->assertTrue(
+            function_exists( 'lafka_get_restaurant_info' ),
+            'lafka_get_restaurant_info() must be defined by lafka-plugin/incl/schema/lafka-schema-helpers.php (W2-T1 resolver).'
+        );
+    }
+
     public function test_no_hardcoded_peppery_strings(): void {
         // OSS-safety: per the architectural feedback, no Peppery-specific strings
         // should appear in the OSS code. Operator content flows through Customizer.

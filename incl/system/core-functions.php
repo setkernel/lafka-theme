@@ -394,6 +394,9 @@ if ( ! function_exists( 'lafka_register_required_plugins' ) ) {
  * @since 5.7.0
  */
 if ( ! function_exists( 'lafka_asset_version' ) ) {
+	// Fallback: only fires if lafka-plugin is not active. Plugin's class-lafka-options.php
+	// definition supersedes this when both load. Canonical plugin version:
+	// lafka-plugin/lafka-plugin.php → lafka_plugin_asset_version().
 	function lafka_asset_version( $relative_path ) {
 		$file = get_template_directory() . $relative_path;
 		return file_exists( $file ) ? (string) filemtime( $file ) : wp_get_theme( get_template() )->get( 'Version' );
@@ -1546,6 +1549,9 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 	/**
 	 * Get Option.
 	 *
+	 * Fallback: only fires if lafka-plugin is not active. Plugin's class-lafka-options.php
+	 * definition supersedes this when both load.
+	 *
 	 * Delegates to Lafka_Options when the plugin provides it, falling back to
 	 * a local implementation for standalone theme use.
 	 */
@@ -1960,6 +1966,8 @@ function lafka_strip_script_tag_from_js_block( $source ) {
 }
 
 if ( ! function_exists( 'lafka_write_log' ) ) {
+	// Fallback: only fires if lafka-plugin is not active. Plugin's class-lafka-options.php
+	// definition supersedes this when both load. Both bodies are identical.
 	function lafka_write_log( $log ) {
 		if ( is_array( $log ) || is_object( $log ) ) {
 			error_log( print_r( $log, true ) );
