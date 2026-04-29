@@ -69,4 +69,23 @@ final class CriticalCssTest extends TestCase {
 		$core = file_get_contents( dirname( __DIR__, 2 ) . '/incl/system/core-functions.php' );
 		$this->assertStringContainsString( 'lafka-critical-css.php', $core );
 	}
+
+	/**
+	 * Inline function rewrites relative url() refs to absolute URLs.
+	 *
+	 * Regression: critical.css uses url('../assets/fonts/rubik/...'),
+	 * which when inlined into <head> resolves against the page URL
+	 * (e.g. /menu/pizza/../assets/) → 404 on every front-end page.
+	 * The inline emitter must rewrite these to absolute URLs before echo.
+	 */
+	public function test_inline_rewrites_relative_urls_to_absolute(): void {
+		$this->assertStringContainsString( 'get_template_directory_uri', $this->module,
+			'inline function must build the stylesheet base URL via get_template_directory_uri()'
+		);
+		$this->assertMatchesRegularExpression(
+			'/preg_replace_callback[^;]*url\\\\\(/s',
+			$this->module,
+			'inline function must run a preg_replace_callback over url(...) refs to rewrite relative paths'
+		);
+	}
 }

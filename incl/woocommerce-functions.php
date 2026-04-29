@@ -681,7 +681,11 @@ if ( ! function_exists( 'lafka_wrap_cart_after' ) ) {
 
 }
 
-// Ensure cart contents update when products are added to the cart via AJAX
+// Ensure cart contents update when products are added to the cart via AJAX.
+// P6-A11Y-7-followup: fragment is keyed on the <li> wrapper (not the inner
+// <a>). Earlier versions keyed on `a.cart-contents` which caused WC to inject
+// the full <li>...</li> markup INTO the existing <a> position, producing
+// <li><li><a>...</a></li></li> nesting on every fragment refresh.
 add_filter( 'woocommerce_add_to_cart_fragments', 'lafka_header_add_to_cart_fragment' );
 if ( ! function_exists( 'lafka_header_add_to_cart_fragment' ) ) {
 
@@ -690,7 +694,7 @@ if ( ! function_exists( 'lafka_header_add_to_cart_fragment' ) ) {
 
 		lafka_cart_link();
 
-		$fragments['a.cart-contents'] = ob_get_clean();
+		$fragments['li.lafka-cart-link-item'] = ob_get_clean();
 
 		return $fragments;
 	}
@@ -854,7 +858,7 @@ if ( ! function_exists( 'lafka_cart_link' ) ) {
 			? (int) WC()->cart->get_cart_contents_count()
 			: 0;
 		?>
-		<li class="<?php echo sanitize_html_class( $class ); ?>">
+		<li class="lafka-cart-link-item <?php echo sanitize_html_class( $class ); ?>">
 			<a id="lafka_quick_cart_link" class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'View your shopping cart', 'lafka' ); ?>">
 				<span class="count"><?php echo esc_html( (string) $lafka_cart_count ); ?></span>
 			</a>

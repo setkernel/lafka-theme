@@ -65,6 +65,31 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 		$css = preg_replace( '/\s+/', ' ', $css );
 		$css = trim( $css );
 
+		// Rewrite relative url() refs to absolute URLs.
+		// critical.css lives at <theme>/styles/critical.css, so its base URL is
+		// <theme>/styles/. When the CSS is INLINED into <head>, relative paths
+		// like url('../assets/...') would otherwise resolve against the page URL
+		// (e.g. /menu/pizza/../assets/...) → 404.
+		$base_url = trailingslashit( get_template_directory_uri() ) . 'styles/';
+		$css      = preg_replace_callback(
+			'#url\(\s*([\'"]?)([^\'")\s]+)\1\s*\)#i',
+			static function ( $m ) use ( $base_url ) {
+				$url = $m[2];
+				// Leave absolute URLs (http://, //, /), data: URIs, and #fragments alone.
+				if ( preg_match( '#^(?:[a-z]+:|//|/|data:|\#)#i', $url ) ) {
+					return $m[0];
+				}
+				// Resolve url(../foo) and url(./foo) and url(foo) against the stylesheet's base.
+				$resolved = $base_url . $url;
+				// Collapse "styles/../assets/" → "assets/".
+				while ( false !== strpos( $resolved, '/../' ) ) {
+					$resolved = preg_replace( '#[^/]+/\.\./#', '', $resolved, 1 );
+				}
+				return 'url(' . $resolved . ')';
+			},
+			$css
+		);
+
 		echo "\n<style id=\"lafka-critical-css\">" . $css . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
