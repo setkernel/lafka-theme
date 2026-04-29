@@ -20,6 +20,22 @@
 			);
 		}
 		?>
+		<?php
+		// LCP optimization for PDP: preload the main product image.
+		if ( function_exists( 'is_product' ) && is_product() ) {
+			global $post;
+			$thumb_id = $post ? get_post_thumbnail_id( $post->ID ) : 0;
+			if ( $thumb_id ) {
+				$src = wp_get_attachment_image_url( $thumb_id, 'woocommerce_single' );
+				if ( $src ) {
+					printf(
+						'<link rel="preload" as="image" fetchpriority="high" href="%s">' . "\n",
+						esc_url( $src )
+					);
+				}
+			}
+		}
+		?>
 		<?php wp_head(); ?>
 	</head>
 
