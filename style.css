@@ -2,7 +2,7 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.14.1
+Version: 5.15.0
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
@@ -17,27 +17,30 @@ Tags: e-commerce, woocommerce, restaurant, food, full-width-template, custom-men
 */
 
 /* P6-PERF-3: Self-hosted Rubik (3 weights) replaces Google Fonts CDN. */
+
 /* font-display: optional prevents FOIT/FOUT layout shift (P6-PERF-2 follow-on). */
 @font-face {
-    font-family: 'Rubik';
+    font-family: Rubik;
     font-style: normal;
     font-weight: 400;
     font-display: optional;
-    src: url('assets/fonts/rubik/Rubik-400.woff2') format('woff2');
+    src: url(assets/fonts/rubik/Rubik-400.woff2) format('woff2');
 }
+
 @font-face {
-    font-family: 'Rubik';
+    font-family: Rubik;
     font-style: normal;
     font-weight: 600;
     font-display: optional;
-    src: url('assets/fonts/rubik/Rubik-600.woff2') format('woff2');
+    src: url(assets/fonts/rubik/Rubik-600.woff2) format('woff2');
 }
+
 @font-face {
-    font-family: 'Rubik';
+    font-family: Rubik;
     font-style: normal;
     font-weight: 700;
     font-display: optional;
-    src: url('assets/fonts/rubik/Rubik-700.woff2') format('woff2');
+    src: url(assets/fonts/rubik/Rubik-700.woff2) format('woff2');
 }
 
 /*------------------------------------------------------------------
@@ -20639,16 +20642,16 @@ small.includes_tax .woocommerce-Price-amount {
 }
 
 
-/* ADDONS & NUTRITION styles */
-
-body.lafka-pdp-disabled div.product-addon,
-body.lafka-pdp-disabled .theme-lafka .bundle_form .product-addon {
-    margin: 0 0 25px 0;
-}
-
-body.lafka-pdp-disabled h3.addon-name {
-    margin-top: 0;
-}
+/*
+ * ADDON STYLES live in lafka-child/styles/pdp-redesign.css.
+ * The lafka-theme parent stays addon-agnostic — themes that ship the
+ * modern lafka-pdp redesign (or other custom addon UIs) own all visual
+ * decisions. The legacy 2-column-grid + floating-tab-heading rules
+ * that lived here through v5.14.x were retired in v5.15.0.
+ *
+ * Generic .product-addon-totals / .addon-alert / .addon-description
+ * helpers stay since they're functionally useful and theme-agnostic.
+ */
 
 div.addon-description p {
     margin-bottom: 8px;
@@ -20682,119 +20685,8 @@ dl.product-addon-totals dd {
     color: red;
 }
 
-/*
- * Legacy addon section styling. These rules paint addons as a 2-column
- * grid of gray-pill labels with a floating "tab" heading positioned
- * absolutely above the section. Pre-redesign aesthetic.
- *
- * Scoped under `body.lafka-pdp-disabled` so they only paint sites that
- * have the modern PDP redesign disabled. Sites with the redesign on
- * (Peppery's, etc.) get clean default block layout the lafka-child
- * pdp-redesign.css then styles on top — without these rules clobbering
- * the heading position, label backgrounds, or grid layout.
- *
- * Removed: the orphan global `h3.addon-name { position: absolute }`
- * rule that was duplicating + overriding the in-card heading. That
- * rule had no scope and was bleeding into every modern PDP layout.
- */
-body.lafka-pdp-disabled .summary form.cart div.product-addon {
-    width: 100%;
-    padding: 20px;
-    border: 2px solid var(--lafka-border-light, #f1f1f1);
-    border-radius: 6px;
-    position: relative;
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon h3.addon-name {
-    font-size: 14px !important;
-    text-transform: uppercase;
-    position: absolute;
-    margin-bottom: 8px;
-    margin-top: -34px;
-    padding: 5px 8px;
-    background-color: #fff;
-    display: inline-block;
-    font-weight: 700;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row {
-    width: 100%;
-    border: 1px solid transparent;
-    margin: 0;
-    vertical-align: top;
-}
-
-body.lafka-pdp-disabled .summary form.cart .combined_product_summary div.product-addon p.form-row,
-body.lafka-pdp-disabled .summary form.cart div.product-addon.lafka-addon-with-images p.form-row {
-    width: 100%;
-}
-
 .summary form.cart h4.combined_product_title + .combined_item_cart_content.variations_form {
     margin-top: 8px;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label {
-    margin: 0;
-    background-color: var(--lafka-border-light, #f1f1f1);
-    padding: 3px 5px;
-    vertical-align: middle;
-    border-radius: 4px;
-    display: block;
-    font-size: 11px !important;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon.rigid-addon-with-images p.form-row label {
-    padding: 8px 5px;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="checkbox"],
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="radio"],
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label img {
-    display: inline-block;
-    vertical-align: middle;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label img {
-    height: 44px;
-    width: auto;
-    margin-right: 8px;
-    margin-left: 3px;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="checkbox"] {
-    position: relative;
-    top: -1px;
-    vertical-align: middle;
-    margin-top: 0;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="radio"] {
-    position: relative;
-    top: -1px;
-    vertical-align: middle;
-    margin-top: 0;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon.textarea p.form-row label {
-    background: none;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon.textarea p.form-row,
-body.lafka-pdp-disabled .summary form.cart div.product-addon.textarea textarea {
-    width: 100%;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label .woocommerce-Price-amount {
-    font-size: 12px !important;
-}
-
-body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label .woocommerce-Price-amount sup {
-    font-size: 100% !important;
-    bottom: 0;
-    font-weight: inherit;
 }
 
 
