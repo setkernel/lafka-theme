@@ -2,7 +2,7 @@
 Theme Name: Lafka
 Theme URI: https://github.com/setkernel/lafka-theme
 Description: Modern E-commerce WordPress / WooCommerce theme. Originally by theAlThemist, now community-maintained.
-Version: 5.14.0
+Version: 5.14.1
 Author: theAlThemist, Contributors
 Author URI: https://github.com/setkernel/lafka-theme
 License: GNU General Public License v2 or later
@@ -20641,12 +20641,12 @@ small.includes_tax .woocommerce-Price-amount {
 
 /* ADDONS & NUTRITION styles */
 
-div.product-addon,
-.theme-lafka .bundle_form .product-addon {
+body.lafka-pdp-disabled div.product-addon,
+body.lafka-pdp-disabled .theme-lafka .bundle_form .product-addon {
     margin: 0 0 25px 0;
 }
 
-h3.addon-name {
+body.lafka-pdp-disabled h3.addon-name {
     margin-top: 0;
 }
 
@@ -20682,15 +20682,33 @@ dl.product-addon-totals dd {
     color: red;
 }
 
-.summary form.cart div.product-addon {
+/*
+ * Legacy addon section styling. These rules paint addons as a 2-column
+ * grid of gray-pill labels with a floating "tab" heading positioned
+ * absolutely above the section. Pre-redesign aesthetic.
+ *
+ * Scoped under `body.lafka-pdp-disabled` so they only paint sites that
+ * have the modern PDP redesign disabled. Sites with the redesign on
+ * (Peppery's, etc.) get clean default block layout the lafka-child
+ * pdp-redesign.css then styles on top — without these rules clobbering
+ * the heading position, label backgrounds, or grid layout.
+ *
+ * Removed: the orphan global `h3.addon-name { position: absolute }`
+ * rule that was duplicating + overriding the in-card heading. That
+ * rule had no scope and was bleeding into every modern PDP layout.
+ */
+body.lafka-pdp-disabled .summary form.cart div.product-addon {
     width: 100%;
     padding: 20px;
     border: 2px solid var(--lafka-border-light, #f1f1f1);
     border-radius: 6px;
     position: relative;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
 }
 
-h3.addon-name {
+body.lafka-pdp-disabled .summary form.cart div.product-addon h3.addon-name {
     font-size: 14px !important;
     text-transform: uppercase;
     position: absolute;
@@ -20702,20 +20720,15 @@ h3.addon-name {
     font-weight: 700;
 }
 
-.summary form.cart div.product-addon {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 4px;
-}
-
-.summary form.cart div.product-addon p.form-row {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row {
     width: 100%;
     border: 1px solid transparent;
     margin: 0;
     vertical-align: top;
 }
 
-.summary form.cart .combined_product_summary div.product-addon p.form-row, .summary form.cart div.product-addon.lafka-addon-with-images p.form-row  {
+body.lafka-pdp-disabled .summary form.cart .combined_product_summary div.product-addon p.form-row,
+body.lafka-pdp-disabled .summary form.cart div.product-addon.lafka-addon-with-images p.form-row {
     width: 100%;
 }
 
@@ -20723,7 +20736,7 @@ h3.addon-name {
     margin-top: 8px;
 }
 
-.summary form.cart div.product-addon p.form-row label {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label {
     margin: 0;
     background-color: var(--lafka-border-light, #f1f1f1);
     padding: 3px 5px;
@@ -20733,50 +20746,52 @@ h3.addon-name {
     font-size: 11px !important;
 }
 
-.summary form.cart div.product-addon.rigid-addon-with-images p.form-row label {
+body.lafka-pdp-disabled .summary form.cart div.product-addon.rigid-addon-with-images p.form-row label {
     padding: 8px 5px;
 }
 
-.summary form.cart div.product-addon p.form-row label input[type="checkbox"], .summary form.cart div.product-addon p.form-row label input[type="radio"], .summary form.cart div.product-addon p.form-row label img {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="checkbox"],
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="radio"],
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label img {
     display: inline-block;
     vertical-align: middle;
 }
 
-.summary form.cart div.product-addon p.form-row label img {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label img {
     height: 44px;
     width: auto;
     margin-right: 8px;
     margin-left: 3px;
 }
 
-.summary form.cart div.product-addon p.form-row label input[type="checkbox"] {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="checkbox"] {
     position: relative;
     top: -1px;
     vertical-align: middle;
     margin-top: 0;
 }
 
-.summary form.cart div.product-addon p.form-row label input[type="radio"] {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label input[type="radio"] {
     position: relative;
     top: -1px;
     vertical-align: middle;
     margin-top: 0;
 }
 
-.summary form.cart div.product-addon.textarea p.form-row label {
+body.lafka-pdp-disabled .summary form.cart div.product-addon.textarea p.form-row label {
     background: none;
 }
 
-.summary form.cart div.product-addon.textarea p.form-row,
-.summary form.cart div.product-addon.textarea textarea {
+body.lafka-pdp-disabled .summary form.cart div.product-addon.textarea p.form-row,
+body.lafka-pdp-disabled .summary form.cart div.product-addon.textarea textarea {
     width: 100%;
 }
 
-.summary form.cart div.product-addon p.form-row label .woocommerce-Price-amount {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label .woocommerce-Price-amount {
     font-size: 12px !important;
 }
 
-.summary form.cart div.product-addon p.form-row label .woocommerce-Price-amount sup {
+body.lafka-pdp-disabled .summary form.cart div.product-addon p.form-row label .woocommerce-Price-amount sup {
     font-size: 100% !important;
     bottom: 0;
     font-weight: inherit;
