@@ -665,7 +665,12 @@ class Lafka_GitHub_Updater {
 	 * @return array { 'version' => string, 'source' => string }
 	 */
 	public static function get_latest_plugin_info() {
-		$fallback_version = '8.2.4';
+		// Fallback used by TGMPA on a fresh theme install when the GitHub API
+		// is unreachable. Bumped each major release to avoid offering a
+		// massively stale version. Pre-v5.15.1 this was '8.2.4', 15+ versions
+		// behind by April 2026 — TGMPA would install that and then the
+		// updater immediately upgrade once the API came back.
+		$fallback_version = '9.7.23';
 		$fallback_url     = 'https://github.com/' . self::PLUGIN_REPO . '/releases/download/v' . $fallback_version . '/' . self::PLUGIN_ASSET;
 
 		$release = self::get_latest_release( self::PLUGIN_REPO );

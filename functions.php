@@ -281,15 +281,18 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 					$brdcrmb .= $before . get_the_title( $wp_query->post->ID ) . $after;
 				}
 			} elseif ( is_search() ) {
-				$brdcrmb .= $before . 'Search results for "' . get_search_query() . '"' . $after;
+				/* translators: %s: the search term entered by the visitor */
+				$brdcrmb .= $before . sprintf( esc_html__( 'Search results for "%s"', 'lafka' ), esc_html( get_search_query() ) ) . $after;
 			} elseif ( is_tag() ) {
-				$brdcrmb .= $before . 'Posts tagged "' . single_tag_title( '', false ) . '"' . $after;
+				/* translators: %s: the tag name */
+				$brdcrmb .= $before . sprintf( esc_html__( 'Posts tagged "%s"', 'lafka' ), esc_html( (string) single_tag_title( '', false ) ) ) . $after;
 			} elseif ( is_author() ) {
 				global $author;
 				$userdata = get_userdata( $author );
-				$brdcrmb .= $before . 'Articles posted by ' . esc_attr( $userdata->display_name ) . $after;
+				/* translators: %s: the author display name */
+				$brdcrmb .= $before . sprintf( esc_html__( 'Articles posted by %s', 'lafka' ), esc_html( $userdata->display_name ?? '' ) ) . $after;
 			} elseif ( is_404() ) {
-				$brdcrmb .= $before . 'Error 404' . $after;
+				$brdcrmb .= $before . esc_html__( 'Error 404', 'lafka' ) . $after;
 			}
 
 			if ( get_query_var( 'paged' ) ) {
