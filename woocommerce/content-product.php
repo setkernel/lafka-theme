@@ -1,83 +1,55 @@
 <?php
 /**
- * The template for displaying product content within loops
+ * The template for displaying product content within loops.
  *
- * This template can be overridden by copying it to yourtheme/woocommerce/content-product.php.
+ * Lafka v5.17.0 — list-row layout: image-left thumb (92px mobile, 120px desktop),
+ * body-right with title, short description, price. Whole card wrapped in a
+ * single <a> linking to PDP (no inline add-to-cart button).
  *
- * HOWEVER, on occasion WooCommerce will need to update template files and you
- * (the theme developer) will need to copy the new files to your theme to
- * maintain compatibility. We try to do this as little as possible, but it does
- * happen. When this occurs the version of the template file will be bumped and
- * the readme will list any important changes.
+ * Hooks preserved for WooCommerce ecosystem compatibility:
+ * - woocommerce_before_shop_loop_item       (link_open already removed by lafka)
+ * - woocommerce_before_shop_loop_item_title (sale flash) — fires inside image wrap
+ * - woocommerce_after_shop_loop_item_title  (rating)     — fires in body, above bottom row
+ * - woocommerce_after_shop_loop_item        (link_close + add_to_cart removed)
  *
- * @see     https://woocommerce.com/document/template-structure/
- * @package WooCommerce\Templates
- * @version 9.4.0
+ * Operators wanting the loop add-to-cart back can re-add via:
+ *   add_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+ *
+ * @see https://woocommerce.com/document/template-structure/
+ * @package Lafka\WooCommerce
+ * @version 5.17.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
 global $product;
 
-// Check if the product is a valid WooCommerce product and ensure its visibility before proceeding.
 if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 	return;
 }
-
-// P6-A11Y-6: Extra classes injected via lafka_product_loop_item_class filter in woocommerce-functions.php.
-// The <li> outer wrapper (changed from <div>) makes these valid children of <ul class="products">.
 ?>
-<li <?php wc_product_class( '', $product ); ?>>
-
-	<?php
-	/**
-	 * Hook: woocommerce_before_shop_loop_item.
-	 *
-	 * @hooked woocommerce_template_loop_product_link_open - 10 - removed
-	 */
-	do_action( 'woocommerce_before_shop_loop_item' );
-	?>
-	<div class="lafka-list-prod-summary">
-		<a class="wrap_link" href="<?php the_permalink(); ?>">
-			<span class="name">
-				<?php the_title(); ?>
-			</span>
-		</a>
-		<?php if ( $product->get_short_description() ) : ?>
-			<?php woocommerce_template_single_excerpt(); ?>
-		<?php endif; ?>
-		<?php if ( ! lafka_is_product_eligible_for_variation_in_listings( $product ) ) : ?>
-			<?php woocommerce_template_loop_price(); ?>
-		<?php endif; ?>
-		<!-- Small countdown -->
-		<?php lafka_shop_sale_countdown(); ?>
-	</div>
-	<?php
-	/**
-	 * Hook: woocommerce_before_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_show_product_loop_sale_flash - 10
-	 *
-	 */
-	do_action( 'woocommerce_before_shop_loop_item_title' );
-
-	/**
-	 * Hook: woocommerce_after_shop_loop_item_title.
-	 *
-	 * @hooked woocommerce_template_loop_rating - 5
-	 * @hooked woocommerce_template_loop_price - 10 (removed by lafka)
-	 */
-	do_action( 'woocommerce_after_shop_loop_item_title' );
-	?>
-
-	<?php
-	/**
-	 * Hook: woocommerce_after_shop_loop_item.
-	 *
-	 * @hooked woocommerce_template_loop_product_link_close - 5
-	 * @hooked woocommerce_template_loop_add_to_cart - 10
-	 */
-	do_action( 'woocommerce_after_shop_loop_item' );
-	?>
-
+<li <?php wc_product_class( 'lafka-product-card', $product ); ?>>
+	<?php do_action( 'woocommerce_before_shop_loop_item' ); ?>
+	<a class="lafka-product-card__link" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( $product->get_name() ); ?>">
+		<div class="lafka-product-card__img-wrap">
+			<?php do_action( 'woocommerce_before_shop_loop_item_title' ); ?>
+			<?php echo lafka_product_card_image_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — helper returns escaped HTML ?>
+		</div>
+		<div class="lafka-product-card__body">
+			<div class="lafka-product-card__head">
+				<h3 class="lafka-product-card__title"><?php echo esc_html( $product->get_name() ); ?></h3>
+				<?php if ( $product->get_short_description() ) : ?>
+					<p class="lafka-product-card__desc"><?php echo esc_html( wp_strip_all_tags( $product->get_short_description() ) ); ?></p>
+				<?php endif; ?>
+				<?php do_action( 'woocommerce_after_shop_loop_item_title' ); ?>
+			</div>
+			<div class="lafka-product-card__bottom">
+				<?php if ( ! lafka_is_product_eligible_for_variation_in_listings( $product ) ) : ?>
+					<span class="lafka-product-card__price"><?php woocommerce_template_loop_price(); ?></span>
+				<?php endif; ?>
+				<?php lafka_shop_sale_countdown(); ?>
+			</div>
+		</div>
+	</a>
+	<?php do_action( 'woocommerce_after_shop_loop_item' ); ?>
 </li>

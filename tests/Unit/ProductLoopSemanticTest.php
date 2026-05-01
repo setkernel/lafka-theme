@@ -15,9 +15,10 @@ final class ProductLoopSemanticTest extends TestCase {
         $tpl = file_get_contents( dirname( __DIR__, 2 ) . '/woocommerce/content-product.php' );
 
         // Find the outermost wrapping element. WC's wc_product_class() generates
-        // the classes; the wrapping tag must be <li>.
+        // the classes; the wrapping tag must be <li>. The first arg may be any
+        // string literal (empty or extra classes like 'lafka-product-card').
         $this->assertMatchesRegularExpression(
-            '/<li\s[^>]*?<\?php\s+wc_product_class\(\s*[\'"]?[\'"]?\s*,\s*\$product\s*\)\s*;\s*\?>/s',
+            '/<li\s[^>]*?<\?php\s+wc_product_class\(\s*[\'"][^\'"]*[\'"]\s*,\s*\$product\s*\)\s*;\s*\?>/s',
             $tpl,
             'content-product.php must wrap product output in <li>, not <div>'
         );

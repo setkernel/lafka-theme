@@ -39,6 +39,11 @@ remove_action( 'woocommerce_before_main_content', 'woocommerce_breadcrumb', 20 )
 remove_action( 'woocommerce_before_shop_loop_item', 'woocommerce_template_loop_product_link_open', 10 );
 remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_product_link_close', 5 );
 
+// v5.17.0: suppress the loop add-to-cart button. Whole card is the tap
+// target (link to PDP). Operators wanting the button back can re-add it
+// from their child theme via add_action().
+remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
+
 remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
 add_filter( 'woocommerce_before_shop_loop_item', 'lafka_shop_loop_image', 10 );
 
