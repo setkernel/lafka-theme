@@ -1761,3 +1761,28 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_get_theme( get_template() )->get( 'Version' )
 	);
 }, 30 );
+
+/**
+ * Product card list — conditional asset enqueue.
+ *
+ * Loads on shop archives, product taxonomy archives, and pages using
+ * the WC [products] shortcode. Does NOT load on PDP, cart, checkout,
+ * or account pages.
+ *
+ * @since 5.17.0
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! function_exists( 'is_shop' ) ) {
+		return;
+	}
+	$is_archive_context = is_shop() || is_product_taxonomy();
+	if ( ! $is_archive_context ) {
+		return;
+	}
+	wp_enqueue_style(
+		'lafka-product-card',
+		get_template_directory_uri() . '/styles/product-card.css',
+		array( 'lafka-style' ),
+		wp_get_theme( get_template() )->get( 'Version' )
+	);
+}, 30 );
