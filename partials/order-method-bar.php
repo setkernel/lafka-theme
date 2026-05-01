@@ -65,7 +65,17 @@ if ( preg_match( '/-(\d{2}:\d{2})$/', $today_hours, $m ) ) {
                 <?php elseif ( $is_open ): ?>
                     <?php esc_html_e( 'Open', 'lafka' ); ?>
                 <?php else: ?>
-                    <?php esc_html_e( 'Closed', 'lafka' ); ?>
+                    <?php
+                    esc_html_e( 'Closed', 'lafka' );
+
+                    if ( class_exists( 'Lafka_Order_Hours' ) ) {
+                        $next_open = Lafka_Order_Hours::get_next_opening_time();
+                        $human     = Lafka_Order_Hours::format_next_open_time_human( $next_open );
+                        if ( '' !== $human ) {
+                            echo ' &middot; ' . esc_html( sprintf( __( 'Opens %s', 'lafka' ), $human ) );
+                        }
+                    }
+                    ?>
                 <?php endif; ?>
             </span>
         </div>
