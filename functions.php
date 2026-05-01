@@ -1588,3 +1588,135 @@ add_action( 'wp', function () {
 		remove_action( 'woocommerce_shop_loop_header', 'woocommerce_product_taxonomy_archive_header' );
 	}
 } );
+
+/**
+ * PDP redesign — conditional asset enqueue.
+ *
+ * Migrated from lafka-child v5.10.6. Gated on the lafka_pdp_redesign_enabled()
+ * Customizer flag (default 'yes', defined in lafka-plugin/incl/customizer/
+ * class-lafka-customizer-pdp.php).
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
+		return;
+	}
+	if ( ! function_exists( 'is_product' ) ) {
+		return;
+	}
+
+	$tpl_uri  = get_template_directory_uri();
+	$base_dir = get_template_directory();
+	$ver_for  = static function ( string $rel ) use ( $base_dir ): string {
+		$f = $base_dir . '/' . ltrim( $rel, '/' );
+		return file_exists( $f ) ? (string) filemtime( $f ) : (string) time();
+	};
+
+	wp_enqueue_style(
+		'lafka-pdp-redesign',
+		$tpl_uri . '/styles/pdp-redesign.css',
+		array(),
+		$ver_for( 'styles/pdp-redesign.css' )
+	);
+
+	wp_enqueue_script(
+		'lafka-order-method',
+		$tpl_uri . '/js/order-method.js',
+		array(),
+		$ver_for( 'js/order-method.js' ),
+		array( 'in_footer' => true, 'strategy' => 'defer' )
+	);
+
+	if ( function_exists( 'lafka_get_restaurant_info' ) ) {
+		$info = lafka_get_restaurant_info();
+		wp_localize_script(
+			'lafka-order-method',
+			'lafkaOrderMethodLabels',
+			array(
+				'pickupLabel'   => trim( (string) ( $info['address_short'] ?? '' ) ),
+				'deliveryLabel' => trim( (string) ( $info['city'] ?? '' ) ),
+			)
+		);
+	}
+
+	wp_enqueue_script(
+		'lafka-cart-drawer',
+		$tpl_uri . '/js/cart-drawer.js',
+		array( 'jquery' ),
+		$ver_for( 'js/cart-drawer.js' ),
+		array( 'in_footer' => true, 'strategy' => 'defer' )
+	);
+
+	if ( is_product() ) {
+		wp_enqueue_script(
+			'lafka-pdp-pickers',
+			$tpl_uri . '/js/pdp-pickers.js',
+			array(),
+			$ver_for( 'js/pdp-pickers.js' ),
+			array( 'in_footer' => true, 'strategy' => 'defer' )
+		);
+
+		wp_localize_script(
+			'lafka-pdp-pickers',
+			'lafkaPdpCurrency',
+			array(
+				'symbol'      => function_exists( 'get_woocommerce_currency_symbol' ) ? html_entity_decode( get_woocommerce_currency_symbol() ) : '$',
+				'position'    => get_option( 'woocommerce_currency_pos', 'left' ),
+				'thousandSep' => function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : ',',
+				'decimalSep'  => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
+				'decimals'    => function_exists( 'wc_get_price_decimals' ) ? (int) wc_get_price_decimals() : 2,
+			)
+		);
+
+		wp_enqueue_script(
+			'lafka-upsell-modal',
+			$tpl_uri . '/js/upsell-modal.js',
+			array( 'jquery' ),
+			$ver_for( 'js/upsell-modal.js' ),
+			array( 'in_footer' => true, 'strategy' => 'defer' )
+		);
+
+		wp_enqueue_script(
+			'lafka-pdp-addons',
+			$tpl_uri . '/js/pdp-addons.js',
+			array( 'jquery' ),
+			$ver_for( 'js/pdp-addons.js' ),
+			array( 'in_footer' => true, 'strategy' => 'defer' )
+		);
+	}
+}, 11 );
+
+/**
+ * PDP redesign — order-method bar partial via wp_body_open.
+ */
+add_action( 'wp_body_open', function () {
+	if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
+		return;
+	}
+	$partial = get_template_directory() . '/partials/order-method-bar.php';
+	if ( file_exists( $partial ) ) {
+		include $partial;
+	}
+}, 5 );
+
+/**
+ * PDP redesign — cart-drawer partial via wp_footer.
+ */
+add_action( 'wp_footer', function () {
+	if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
+		return;
+	}
+	$partial = get_template_directory() . '/partials/cart-drawer.php';
+	if ( file_exists( $partial ) ) {
+		include $partial;
+	}
+}, 5 );
+
+/**
+ * PDP redesign — body_class signal for redesign-disabled state.
+ */
+add_filter( 'body_class', function ( $classes ) {
+	if ( function_exists( 'lafka_pdp_redesign_enabled' ) && ! lafka_pdp_redesign_enabled() ) {
+		$classes[] = 'lafka-pdp-disabled';
+	}
+	return $classes;
+} );
