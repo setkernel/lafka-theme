@@ -1729,3 +1729,29 @@ add_filter( 'body_class', function ( $classes ) {
 	}
 	return $classes;
 } );
+
+/**
+ * Editorial templates — conditional asset enqueue.
+ *
+ * editorial.css declares its own @font-face for Fraunces, so font files
+ * inherit this conditional load — no separate font enqueue needed.
+ *
+ * Migrated from lafka-child v5.10.6 in v5.16.0.
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! is_page() ) {
+		return;
+	}
+	if ( ! is_page_template( array(
+		'page_templates/template-editorial-home.php',
+		'page_templates/template-editorial-contact.php',
+	) ) ) {
+		return;
+	}
+	wp_enqueue_style(
+		'lafka-editorial',
+		get_template_directory_uri() . '/styles/editorial.css',
+		array( 'lafka-style' ),
+		wp_get_theme()->get( 'Version' )
+	);
+}, 30 );

@@ -35,4 +35,15 @@ final class EditorialCustomizerTest extends TestCase {
 			$src
 		);
 	}
+
+	public function test_editorial_css_enqueue_gated_to_editorial_templates(): void {
+		$src = file_get_contents( dirname( __DIR__, 2 ) . '/functions.php' );
+		$this->assertStringContainsString( "'lafka-editorial'", $src );
+		$this->assertStringContainsString( 'styles/editorial.css', $src );
+		$this->assertMatchesRegularExpression(
+			"/is_page_template\(\s*array\(\s*\n?\s*['\"]page_templates\/template-editorial-home\.php['\"]/",
+			$src,
+			'Editorial CSS must enqueue only when the page uses an editorial template.'
+		);
+	}
 }
