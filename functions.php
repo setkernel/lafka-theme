@@ -1569,3 +1569,22 @@ if ( ! function_exists( 'lafka_add_wishlist_settings' ) ) {
 		return $wishlist_settings_array;
 	}
 }
+
+/**
+ * Suppress WC core's duplicate <h1> on shop + product-taxonomy archives.
+ *
+ * The themed <h1> from lafka-theme/woocommerce/global/wrapper-start.php:114
+ * already covers the heading; WC's woocommerce_product_taxonomy_archive_header
+ * fires a second one. Gated to shop + product taxonomies so PDP and other
+ * archives are unaffected.
+ *
+ * Migrated from lafka-child v5.10.6 functions.php in v5.16.0.
+ */
+add_action( 'wp', function () {
+	if ( ! function_exists( 'is_shop' ) ) {
+		return;
+	}
+	if ( is_shop() || is_product_taxonomy() ) {
+		remove_action( 'woocommerce_shop_loop_header', 'woocommerce_product_taxonomy_archive_header' );
+	}
+} );
