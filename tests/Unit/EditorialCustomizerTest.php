@@ -45,5 +45,10 @@ final class EditorialCustomizerTest extends TestCase {
 			$src,
 			'Editorial CSS must enqueue only when the page uses an editorial template.'
 		);
+		$this->assertMatchesRegularExpression(
+			"/wp_enqueue_style\(\s*['\"]lafka-editorial['\"][\s\S]*?array\(\s*['\"]lafka-style['\"]/",
+			$src,
+			'lafka-editorial must depend on lafka-style for cascade order — without this dep, base theme styles can override editorial overrides depending on enqueue order.'
+		);
 	}
 }

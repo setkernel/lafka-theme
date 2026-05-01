@@ -1752,6 +1752,6 @@ add_action( 'wp_enqueue_scripts', function () {
 		'lafka-editorial',
 		get_template_directory_uri() . '/styles/editorial.css',
 		array( 'lafka-style' ),
-		wp_get_theme()->get( 'Version' )
+		wp_get_theme( get_template() )->get( 'Version' )
 	);
 }, 30 );
