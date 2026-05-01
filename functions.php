@@ -1772,10 +1772,12 @@ add_action( 'wp_enqueue_scripts', function () {
  * @since 5.17.0
  */
 add_action( 'wp_enqueue_scripts', function () {
-	if ( ! function_exists( 'is_shop' ) ) {
+	if ( ! function_exists( 'is_shop' ) || ! function_exists( 'is_product' ) ) {
 		return;
 	}
-	$is_archive_context = is_shop() || is_product_taxonomy();
+	// Includes PDP because the related-products section uses the same
+	// content-product.php template via wc_get_template_part('content','product').
+	$is_archive_context = is_shop() || is_product_taxonomy() || is_product();
 	if ( ! $is_archive_context ) {
 		return;
 	}

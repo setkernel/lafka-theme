@@ -40,10 +40,26 @@ final class ProductCardEnqueueTest extends TestCase {
 	}
 
 	public function test_enqueue_gated_to_archive_contexts(): void {
-		// Must NOT load on PDP, cart, checkout, account pages.
-		// Should load on shop, product taxonomies, all-products page.
+		// Must NOT load on cart, checkout, account pages.
+		// Should load on shop, product taxonomies, all-products page,
+		// and PDP (for the related-products section, which uses the same
+		// content-product.php template).
 		$this->assertStringContainsString( 'is_shop()', $this->src );
 		$this->assertStringContainsString( 'is_product_taxonomy()', $this->src );
+		$this->assertStringContainsString( 'is_product()', $this->src );
+	}
+
+	public function test_no_hardcoded_brand_color_in_css(): void {
+		// Per saved memory feedback_no_hardcoded_site_values.md, lafka-* repos
+		// are public OSS — operator-specific brand values must come from
+		// filters/customizer/CSS variables, never literals. The price color
+		// fallback must use currentColor or a neutral default, not a brand red.
+		$css = file_get_contents( dirname( __DIR__, 2 ) . '/styles/product-card.css' );
+		$this->assertStringNotContainsString(
+			'#c62828',
+			$css,
+			'CSS must not contain Peppery brand red #c62828 — public OSS theme.'
+		);
 	}
 
 	public function test_enqueue_depends_on_lafka_style(): void {
