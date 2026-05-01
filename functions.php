@@ -1826,3 +1826,26 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_get_theme( get_template() )->get( 'Version' )
 	);
 }, 30 );
+
+/**
+ * Checkout tweaks — conditional asset enqueue.
+ *
+ * Loads only on the checkout page. Currently hides the mid-form
+ * Google Map injected by the address-field-autocomplete-for-woocommerce
+ * 3rd-party plugin. The autocomplete dropdown above the input
+ * handles all address resolution; the map adds ~420px of
+ * non-actionable mid-form scroll on mobile.
+ *
+ * @since 5.19.0
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
+		return;
+	}
+	wp_enqueue_style(
+		'lafka-checkout-tweaks',
+		get_template_directory_uri() . '/styles/checkout-tweaks.css',
+		array( 'lafka-style' ),
+		wp_get_theme( get_template() )->get( 'Version' )
+	);
+}, 30 );

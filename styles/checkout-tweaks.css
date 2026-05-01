@@ -1,0 +1,54 @@
+/**
+ * Lafka checkout tweaks — hide mid-form Google Map.
+ *
+ * The address-field-autocomplete-for-woocommerce 3rd-party plugin
+ * (v1.3.x) injects an interactive Google Map into the WC billing
+ * (and shipping) form, between the address-search input and the
+ * subsequent fields. The map is ~420px tall on mobile and pushes
+ * the rest of the form below the fold.
+ *
+ * The autocomplete dropdown above the input
+ * (#billing_address_map_search_input) handles all address resolution
+ * via the Google Places API, so the visual map is non-actionable —
+ * tapping pins on a 390px viewport doesn't help the user pick an
+ * address any more than typing into the search box.
+ *
+ * Recon (2026-04-30, plugin v1.3.1) confirmed selectors:
+ *   - #billing_address_map_map.address_map (420px tall, visible)
+ *   - #shipping_address_map_map.shipping_address_map.address_map
+ *   - id wildcard pattern: #*_address_map_map
+ *
+ * Hidden inputs (.search_lat, .search_lng, .search_city,
+ * .search_country, .find_location) and the search input itself
+ * remain in DOM so the plugin's geocode handler still wires up.
+ *
+ * Operators wanting the map back: dequeue 'lafka-checkout-tweaks'
+ * from a child theme:
+ *   add_action( 'wp_enqueue_scripts', function () {
+ *     wp_dequeue_style( 'lafka-checkout-tweaks' );
+ *   }, 99 );
+ *
+ * @package Lafka
+ * @since   5.19.0
+ */
+
+/* address-field-autocomplete-for-woocommerce — classic checkout.
+   The .address_map class is shared by both billing and shipping map
+   divs; the id-anchored selectors are defensive in case the plugin
+   later drops the class. !important required because the plugin
+   sets inline `style="height: 420px"` on the map div. */
+.address_map,
+#billing_address_map_map,
+#shipping_address_map_map,
+[id$="_address_map_map"] {
+	display: none !important;
+}
+
+/* WC blocks-based checkout (defensive — operator may switch to
+   block checkout in future; the plugin's block-checkout integration
+   uses these patterns). */
+.wc-block-checkout__shipping-address-block_map,
+.wc-block-checkout__billing-address-block_map,
+[class*="address-field-autocomplete"] [class*="map"] {
+	display: none !important;
+}
