@@ -43,7 +43,7 @@ final class ProductCardImageHelperTest extends TestCase {
 	}
 
 	public function test_helper_emits_lazy_loading_attribute(): void {
-		$this->assertStringContainsString( "'loading' => 'lazy'", $this->src );
+		$this->assertStringContainsString( "'loading'  => 'lazy'", $this->src );
 	}
 
 	public function test_helper_emits_alt_text_from_product_name(): void {
@@ -61,5 +61,19 @@ final class ProductCardImageHelperTest extends TestCase {
 			$src,
 			'functions.php must require the product-card-image helper.'
 		);
+	}
+
+	public function test_helper_emits_decoding_async(): void {
+		// Modern web-perf guidance: loading="lazy" should be paired with
+		// decoding="async" to let the browser decode off the main thread.
+		$this->assertStringContainsString( "'decoding' => 'async'", $this->src );
+		$this->assertStringContainsString( 'decoding="async"', $this->src );
+	}
+
+	public function test_helper_guards_against_non_wc_product(): void {
+		// Without this guard, passing null/false/non-WC_Product fatals with
+		// "Call to a member function get_name() on null" — fatal in a product
+		// loop blanks the entire shop page.
+		$this->assertStringContainsString( "is_a( \$product, 'WC_Product' )", $this->src );
 	}
 }

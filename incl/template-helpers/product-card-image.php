@@ -20,11 +20,22 @@ if ( ! function_exists( 'lafka_product_card_image_html' ) ) {
 	 * @return string             HTML of the <img> tag (already escaped).
 	 */
 	function lafka_product_card_image_html( $product, $size = 'woocommerce_thumbnail' ) {
+		// Guard: if $product isn't a WC_Product (e.g. wc_get_product() returned
+		// false for an invalid ID), fall through to the bundled SVG with empty
+		// alt rather than fataling on get_name() in a product loop.
+		if ( ! is_a( $product, 'WC_Product' ) ) {
+			return sprintf(
+				'<img class="lafka-product-card__img lafka-product-card__img--fallback" src="%s" loading="lazy" decoding="async" alt="" width="200" height="200">',
+				esc_url( get_template_directory_uri() . '/assets/images/product-card-fallback.svg' )
+			);
+		}
+
 		$alt = esc_attr( $product->get_name() );
 		$attr = array(
-			'class'   => 'lafka-product-card__img',
-			'loading' => 'lazy',
-			'alt'     => $alt,
+			'class'    => 'lafka-product-card__img',
+			'loading'  => 'lazy',
+			'decoding' => 'async',
+			'alt'      => $alt,
 		);
 
 		// 1. Try the product's own featured image.
@@ -47,7 +58,7 @@ if ( ! function_exists( 'lafka_product_card_image_html' ) ) {
 
 		// 3. Bundled SVG placeholder.
 		return sprintf(
-			'<img class="lafka-product-card__img lafka-product-card__img--fallback" src="%s" loading="lazy" alt="%s" width="200" height="200">',
+			'<img class="lafka-product-card__img lafka-product-card__img--fallback" src="%s" loading="lazy" decoding="async" alt="%s" width="200" height="200">',
 			esc_url( get_template_directory_uri() . '/assets/images/product-card-fallback.svg' ),
 			$alt
 		);
