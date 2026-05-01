@@ -324,7 +324,7 @@ while ( have_posts() ) :
 												<?php if ( ( $lafka_ext_link_button_title && $lafka_ext_link_url ) ) : ?>
 													<li>
 														<?php if ( $lafka_ext_link_button_title && $lafka_ext_link_url ) : ?>
-															<a class="button" target="_blank" href="<?php echo esc_url( $lafka_ext_link_url ); ?>" title="<?php echo esc_attr( $lafka_ext_link_button_title ); ?>"><?php echo esc_attr( $lafka_ext_link_button_title ); ?></a>
+															<a class="button" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( $lafka_ext_link_url ); ?>" title="<?php echo esc_attr( $lafka_ext_link_button_title ); ?>"><?php echo esc_html( $lafka_ext_link_button_title ); ?></a>
 														<?php endif; ?>
 													</li>
 												<?php endif; ?>

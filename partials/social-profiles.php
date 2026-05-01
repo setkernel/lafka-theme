@@ -56,7 +56,7 @@ $lafka_social_profiles = array(
 	<ul>
 		<?php foreach ( $lafka_social_profiles as $lafka_social_name => $lafka_details ) : ?>
 			<?php if ( lafka_get_option( $lafka_social_name . '_profile' ) ) : ?>
-				<li><a title="<?php echo esc_attr( $lafka_details['title'] ); ?>" class="<?php echo esc_attr( $lafka_social_name ); ?>" target="_blank"  href="<?php echo esc_url( lafka_get_option( $lafka_social_name . '_profile' ) ); ?>"><i class="<?php echo esc_attr( $lafka_details['class'] ); ?>"></i></a></li>
+				<li><a title="<?php echo esc_attr( $lafka_details['title'] ); ?>" class="<?php echo esc_attr( $lafka_social_name ); ?>" target="_blank" rel="noopener noreferrer" href="<?php echo esc_url( lafka_get_option( $lafka_social_name . '_profile' ) ); ?>"><i class="<?php echo esc_attr( $lafka_details['class'] ); ?>"></i></a></li>
 			<?php endif; ?>
 		<?php endforeach; ?>
 	</ul>
