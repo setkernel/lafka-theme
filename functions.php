@@ -83,7 +83,13 @@ if ( ! function_exists( 'lafka_pagination' ) ) {
 			$html .= '</div></div>';
 		}
 
-		echo apply_filters( 'lafka_pagination', $html );
+		// Each $html piece is built via esc_url() / esc_html / sprintf with
+		// integer-coerced numeric values, so it's safe at construction. The
+		// `lafka_pagination` filter lets third parties replace the markup
+		// — wrap in wp_kses_post() so a buggy or malicious filter can't
+		// inject script tags. Aligns with the v9.7.20 share-links
+		// defense-in-depth wrapper pattern.
+		echo wp_kses_post( apply_filters( 'lafka_pagination', $html ) );
 	}
 
 }
