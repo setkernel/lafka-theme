@@ -1788,3 +1788,21 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_get_theme( get_template() )->get( 'Version' )
 	);
 }, 30 );
+
+/**
+ * Closed-store messaging — load the visual treatment unconditionally.
+ *
+ * The CSS only fires when the body has the lafka-store-closed class
+ * (added by lafka-plugin's Lafka_Order_Hours when is_shop_open() is false).
+ * No PHP gate needed; the body class IS the gate. Small file, cacheable.
+ *
+ * @since 5.18.0
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	wp_enqueue_style(
+		'lafka-store-closed',
+		get_template_directory_uri() . '/styles/store-closed.css',
+		array( 'lafka-style' ),
+		wp_get_theme( get_template() )->get( 'Version' )
+	);
+}, 30 );

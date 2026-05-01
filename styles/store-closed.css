@@ -1,0 +1,48 @@
+/**
+ * Lafka closed-store messaging — calm informational card.
+ *
+ * Pairs with the lafka-store-closed-card markup emitted by
+ * lafka-plugin >= 9.7.26 (Lafka_Order_Hours::echo_closed_store_message).
+ *
+ * No JS. CSS handles the disabled-button treatment via the
+ * lafka-store-closed body class (added by the plugin).
+ *
+ * @package Lafka
+ * @since   5.18.0
+ */
+
+.lafka-store-closed-card {
+	background: #fff8e1;
+	border-left: 4px solid var(--lafka-primary, #c98a00);
+	border-radius: 8px;
+	padding: 12px 14px;
+	margin: 12px 0;
+	font-size: 14px;
+	line-height: 1.45;
+}
+
+.lafka-store-closed-card__title {
+	margin: 0;
+	font-weight: 700;
+	color: #1a1a1a;
+}
+
+.lafka-store-closed-card__subtitle {
+	margin: 2px 0 0;
+	font-weight: 400;
+	color: #6a6a6a;
+}
+
+.lafka-store-closed-card__countdown {
+	margin-top: 8px;
+}
+
+/* Visually disable the PDP add-to-cart button when the store is closed
+ * AND the operator has NOT enabled disable_add_to_cart. (When that
+ * option is on, the button is removed server-side; this CSS no-ops.) */
+body.lafka-store-closed .single_add_to_cart_button,
+body.lafka-store-closed .quantity input[name="quantity"] {
+	opacity: 0.5;
+	pointer-events: none;
+	cursor: not-allowed;
+}
