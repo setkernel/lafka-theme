@@ -33,6 +33,9 @@ require_once get_template_directory() . '/incl/system/config.php';
  */
 require_once get_template_directory() . '/incl/customizer-editorial.php';
 
+// Product card image helper (v5.17.0).
+require_once get_template_directory() . '/incl/template-helpers/product-card-image.php';
+
 /**
  * Echo the pagination
  */

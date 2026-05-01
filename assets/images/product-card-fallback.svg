@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" role="img" aria-label="Product image placeholder">
+  <rect width="200" height="200" fill="#f5f5f5"/>
+  <g transform="translate(100,100)" stroke="#bdbdbd" stroke-width="3" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="0" cy="0" r="48"/>
+    <circle cx="0" cy="0" r="36"/>
+    <line x1="-22" y1="-8" x2="22" y2="-8"/>
+    <line x1="-22" y1="0" x2="22" y2="0"/>
+    <line x1="-22" y1="8" x2="22" y2="8"/>
+  </g>
+</svg>
