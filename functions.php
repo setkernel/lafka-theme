@@ -1806,3 +1806,23 @@ add_action( 'wp_enqueue_scripts', function () {
 		wp_get_theme( get_template() )->get( 'Version' )
 	);
 }, 30 );
+
+/**
+ * Cart line-item card — conditional asset enqueue.
+ *
+ * Loads only on the cart page. Replaces WC's table-based row layout
+ * with a list of cards via woocommerce/cart/cart.php override.
+ *
+ * @since 5.19.0
+ */
+add_action( 'wp_enqueue_scripts', function () {
+	if ( ! function_exists( 'is_cart' ) || ! is_cart() ) {
+		return;
+	}
+	wp_enqueue_style(
+		'lafka-cart-item',
+		get_template_directory_uri() . '/styles/cart-item.css',
+		array( 'lafka-style' ),
+		wp_get_theme( get_template() )->get( 'Version' )
+	);
+}, 30 );
