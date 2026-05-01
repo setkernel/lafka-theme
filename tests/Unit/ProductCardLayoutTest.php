@@ -79,4 +79,16 @@ final class ProductCardLayoutTest extends TestCase {
 			'woocommerce_template_loop_add_to_cart must be removed; whole-card is the tap target'
 		);
 	}
+
+	public function test_legacy_lafka_shop_loop_image_filter_removed(): void {
+		// lafka_shop_loop_image emits its own .image > a > img block on
+		// woocommerce_before_shop_loop_item. The new content-product.php
+		// renders the image directly via lafka_product_card_image_html(),
+		// so the legacy filter must be removed to avoid double thumbnails.
+		$this->assertMatchesRegularExpression(
+			"/remove_filter\(\s*['\"]woocommerce_before_shop_loop_item['\"]\s*,\s*['\"]lafka_shop_loop_image['\"]\s*,\s*10/",
+			$this->wc_fns,
+			'lafka_shop_loop_image filter must be removed; new card renders the image directly.'
+		);
+	}
 }
