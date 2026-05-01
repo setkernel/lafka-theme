@@ -24,6 +24,15 @@ if ( ! function_exists( 'lafka_optionsframework_init' ) ) {
 /* Load configuration */
 require_once get_template_directory() . '/incl/system/config.php';
 
+/*
+ * Editorial templates Customizer panels (P6-UX-1, P6-UX-4 — migrated from
+ * lafka-child v5.10.6 -> lafka-theme v5.16.0, Task A5). Registers two
+ * panels (Editorial Home / Editorial Contact) globally for all operators;
+ * admin-only cost, no front-end overhead since the templates only consume
+ * the settings when assigned via Page Attributes.
+ */
+require_once get_template_directory() . '/incl/customizer-editorial.php';
+
 /**
  * Echo the pagination
  */
