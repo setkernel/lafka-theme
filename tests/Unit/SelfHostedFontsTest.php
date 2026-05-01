@@ -12,15 +12,17 @@ use PHPUnit\Framework\TestCase;
 final class SelfHostedFontsTest extends TestCase {
 
 	public function test_style_css_has_rubik_font_face_for_three_weights(): void {
+		// Quotes around 'Rubik' are optional in CSS — both forms are valid.
+		// Regex allows unquoted (current state) or single/double quoted.
 		$css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
-		$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]Rubik[\'"][^}]*font-weight:\s*400/s', $css );
-		$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]Rubik[\'"][^}]*font-weight:\s*600/s', $css );
-		$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]Rubik[\'"][^}]*font-weight:\s*700/s', $css );
+		$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-weight:\s*400/s', $css );
+		$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-weight:\s*600/s', $css );
+		$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-weight:\s*700/s', $css );
 	}
 
 	public function test_style_css_uses_font_display_optional_for_rubik(): void {
 		$css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
-		preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]Rubik[\'"][^}]*\}/s', $css, $matches );
+		preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*\}/s', $css, $matches );
 		$this->assertCount( 3, $matches[0], 'Expected exactly 3 @font-face for Rubik' );
 		foreach ( $matches[0] as $face ) {
 			$this->assertMatchesRegularExpression( '/font-display:\s*optional/', $face );

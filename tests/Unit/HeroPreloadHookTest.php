@@ -22,9 +22,13 @@ use PHPUnit\Framework\TestCase;
 final class HeroPreloadHookTest extends TestCase {
 
 	private const HEADER_PHP     = __DIR__ . '/../../header.php';
-	private const CHILD_FUNCS    = __DIR__ . '/../../../lafka-child/functions.php';
 
 	// ─── header.php assertions ──────────────────────────────────────────────
+	//
+	// The child-side filter callback (originally tested below in tests 4-7)
+	// moved to lafka-plugin v9.7.25 (incl/perf/lcp-preload.php) as part of
+	// the v5.16.0/v6.0.0 child→parent split. The plugin's LcpPreloadTest
+	// now covers those assertions on the canonical home.
 
 	public function test_header_applies_lcp_image_filter(): void {
 		$src = file_get_contents( self::HEADER_PHP );
@@ -57,60 +61,4 @@ final class HeroPreloadHookTest extends TestCase {
 		);
 	}
 
-	// ─── child theme assertions ──────────────────────────────────────────────
-
-	public function test_child_registers_lcp_image_filter(): void {
-		$src = $this->read_child_functions();
-		self::assertStringContainsString(
-			"add_filter( 'lafka_lcp_image_url'",
-			$src,
-			'lafka-child/functions.php must register the lafka_lcp_image_url filter — P6-PERF-1'
-		);
-	}
-
-	public function test_child_returns_hero_url_on_front_page(): void {
-		$src = $this->read_child_functions();
-		self::assertStringContainsString(
-			'is_front_page()',
-			$src,
-			'lafka-child/functions.php must gate the hero URL on is_front_page() — P6-PERF-1'
-		);
-		// W2-T1: hero URL now comes from Customizer (lafka_homepage_hero_image),
-		// not a hardcoded literal. Verify the filter pulls from get_theme_mod().
-		self::assertStringContainsString(
-			"get_theme_mod( 'lafka_homepage_hero_image'",
-			$src,
-			'lafka-child/functions.php must read the hero image from the lafka_homepage_hero_image Customizer setting — P6-PERF-1 / W2-T1'
-		);
-	}
-
-	public function test_child_registers_attachment_attributes_filter(): void {
-		$src = $this->read_child_functions();
-		self::assertStringContainsString(
-			"add_filter( 'wp_get_attachment_image_attributes'",
-			$src,
-			'lafka-child/functions.php must register wp_get_attachment_image_attributes filter — P6-PERF-1'
-		);
-	}
-
-	public function test_child_sets_fetchpriority_high_on_hero(): void {
-		$src = $this->read_child_functions();
-		// Match the actual array-assignment syntax: $attr['fetchpriority'] = 'high'
-		self::assertMatchesRegularExpression(
-			"/\\\$attr\\['fetchpriority'\\]\\s*=\\s*'high'/",
-			$src,
-			"lafka-child/functions.php must set \$attr['fetchpriority'] = 'high' — P6-PERF-1"
-		);
-	}
-
-	// ─── helpers ────────────────────────────────────────────────────────────
-
-	private function read_child_functions(): string {
-		if ( ! file_exists( self::CHILD_FUNCS ) ) {
-			self::markTestSkipped( 'lafka-child/functions.php not found — run from monorepo root.' );
-		}
-		$src = file_get_contents( self::CHILD_FUNCS );
-		self::assertNotFalse( $src, 'lafka-child/functions.php unreadable' );
-		return $src;
-	}
 }

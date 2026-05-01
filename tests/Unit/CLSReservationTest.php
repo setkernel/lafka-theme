@@ -37,27 +37,16 @@ final class CLSReservationTest extends TestCase {
         );
     }
 
-    public function test_child_functions_registers_image_dimensions_filter(): void {
-        $fns = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-child/functions.php' );
-        $this->assertStringContainsString( 'lafka_inject_image_dimensions', $fns );
-        $this->assertMatchesRegularExpression(
-            "/add_filter\(\s*['\"]the_content['\"]\s*,\s*['\"]lafka_inject_image_dimensions['\"]/",
-            $fns
-        );
-    }
-
-    public function test_image_dimensions_helper_uses_local_path_only(): void {
-        // Defensive: getimagesize() must not be invoked on remote URLs (would
-        // hit the network on every page render).
-        $fns = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-child/functions.php' );
-        $this->assertStringContainsString( 'lafka_url_to_local_path', $fns );
-        $this->assertStringContainsString( 'wp_get_upload_dir', $fns );
-    }
+    // image-dimensions filter + helper moved to lafka-plugin v9.7.25
+    // (incl/perf/image-dimensions.php). The plugin's ImageDimensionsTest
+    // covers those assertions on the canonical home — no need to test
+    // them from this theme test class.
 
     public function test_rubik_font_display_optional_still_present(): void {
-        // Sanity: confirm W1-T10 self-hosted Rubik @font-face still uses font-display: optional
-        $css = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-theme/style.css' );
-        $occurrences = preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]Rubik[\'"][^}]*font-display:\s*optional/s', $css );
+        // Sanity: confirm W1-T10 self-hosted Rubik @font-face still uses font-display: optional.
+        // Quotes around 'Rubik' are optional in CSS — regex allows both forms.
+        $css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
+        $occurrences = preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-display:\s*optional/s', $css );
         $this->assertGreaterThanOrEqual( 3, $occurrences,
             'Rubik @font-face blocks must keep font-display: optional (P6-PERF-3 + P6-PERF-2 dependency)' );
     }
