@@ -116,4 +116,39 @@ final class CartItemTemplateTest extends TestCase {
 			'remove link must include aria-label sprintf %s placeholder for the product name'
 		);
 	}
+
+	public function test_template_fires_after_cart_item_name_action(): void {
+		// Per-item action hooked by Subscriptions, WC Deposits, Product Add-Ons,
+		// gift-wrap plugins. Must fire inside the body, after the title.
+		$this->assertStringContainsString( 'woocommerce_after_cart_item_name', $this->src );
+	}
+
+	public function test_template_renders_backorder_notification(): void {
+		// Backorder availability message must surface for backorderable products.
+		// Filter contract preserved for plugins that customize the message.
+		$this->assertStringContainsString( 'woocommerce_cart_item_backorder_notification', $this->src );
+		$this->assertStringContainsString( 'backorders_require_notification', $this->src );
+	}
+
+	public function test_template_applies_cart_item_price_filter(): void {
+		// Per-unit price filter for plugins that customize unit-price display.
+		$this->assertStringContainsString( 'woocommerce_cart_item_price', $this->src );
+	}
+
+	public function test_template_remove_link_has_role_button(): void {
+		// a11y: remove link triggers a state change (cart removal via GET);
+		// role="button" signals action vs navigation to screen readers.
+		$this->assertStringContainsString( 'role="button"', $this->src );
+	}
+
+	public function test_template_aria_label_uses_filtered_product_name(): void {
+		// The aria-label on the remove link must use the filtered product name
+		// (woocommerce_cart_item_name) so plugins that customize names are
+		// announced to screen readers.
+		$this->assertMatchesRegularExpression(
+			"/wp_strip_all_tags\(\s*\\\$product_name\s*\)/",
+			$this->src,
+			'aria-label must use $product_name (filtered) not $_product->get_name() (raw)'
+		);
+	}
 }
