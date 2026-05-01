@@ -14,6 +14,33 @@ defined( 'ABSPATH' ) || exit;
 
 add_action( 'customize_register', 'lafka_product_listings_customizer_register' );
 
+if ( ! function_exists( 'lafka_sanitize_attachment_id_from_url' ) ) {
+	/**
+	 * Sanitize a value that may be either an attachment ID (int) or an
+	 * attachment URL (string), returning the integer attachment ID.
+	 *
+	 * WP_Customize_Image_Control stores the URL string of the picked
+	 * attachment. To keep the storage type as a clean integer ID (matching
+	 * the *_image_id setting name and the consuming helper's expectation),
+	 * we resolve URLs through attachment_url_to_postid() at save time.
+	 * Returns 0 when input is empty, non-resolvable, or invalid.
+	 *
+	 * @param mixed $value Numeric ID, URL string, or empty.
+	 * @return int Attachment ID, or 0.
+	 */
+	function lafka_sanitize_attachment_id_from_url( $value ) {
+		if ( is_numeric( $value ) ) {
+			return absint( $value );
+		}
+		$url = (string) $value;
+		if ( '' === trim( $url ) ) {
+			return 0;
+		}
+		$id = function_exists( 'attachment_url_to_postid' ) ? attachment_url_to_postid( $url ) : 0;
+		return $id ? (int) $id : 0;
+	}
+}
+
 /**
  * Register the product-listings Customizer section + setting.
  *
@@ -29,7 +56,7 @@ function lafka_product_listings_customizer_register( WP_Customize_Manager $wp_cu
 
 	$wp_customize->add_setting( 'lafka_product_card_fallback_image_id', array(
 		'default' => 0,
-		'sanitize_callback' => 'absint',
+		'sanitize_callback' => 'lafka_sanitize_attachment_id_from_url',
 		'transport' => 'refresh',
 	) );
 

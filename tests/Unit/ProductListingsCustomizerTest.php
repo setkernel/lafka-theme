@@ -21,8 +21,28 @@ final class ProductListingsCustomizerTest extends TestCase {
 		$this->assertStringContainsString( "'lafka_product_card_fallback_image_id'", $this->src );
 	}
 
-	public function test_setting_uses_absint_sanitization(): void {
-		$this->assertStringContainsString( "'sanitize_callback' => 'absint'", $this->src );
+	public function test_setting_uses_url_to_id_sanitizer(): void {
+		// WP_Customize_Image_Control stores the URL string, not an ID. Using
+		// 'absint' here would silently zero every save (absint of a URL → 0).
+		// We use a custom sanitizer that resolves URL → attachment ID via
+		// attachment_url_to_postid().
+		$this->assertStringContainsString(
+			"'sanitize_callback' => 'lafka_sanitize_attachment_id_from_url'",
+			$this->src,
+			'sanitize_callback must be the URL→ID resolver, NOT absint — image control stores URLs.'
+		);
+		$this->assertStringNotContainsString(
+			"'sanitize_callback' => 'absint'",
+			$this->src,
+			'absint sanitizer would silently zero URL-string saves from WP_Customize_Image_Control.'
+		);
+	}
+
+	public function test_url_to_id_sanitizer_is_defined(): void {
+		// The custom sanitizer must be defined in this same file so it's
+		// available when customize_register fires.
+		$this->assertStringContainsString( 'function lafka_sanitize_attachment_id_from_url', $this->src );
+		$this->assertStringContainsString( 'attachment_url_to_postid', $this->src );
 	}
 
 	public function test_uses_wp_customize_cropped_or_image_control(): void {
