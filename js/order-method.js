@@ -1,7 +1,7 @@
-/* lafka-child/js/order-method.js
+/* lafka-theme/js/order-method.js
  * Method-switch modal — DOM construction via createElement to avoid innerHTML.
  *
- * @since lafka-child 5.8.0
+ * @since 5.16.0
  */
 (function () {
   'use strict';
@@ -38,7 +38,7 @@
     modal.appendChild(el('h3', { id: 'lafka-method-modal-title' }, 'How are you getting your order?'));
 
     // Operator-specific labels come from wp_localize_script (resolver-backed).
-    // Never hardcode literals — lafka-child is public OSS. Falls back to a
+    // Never hardcode literals — lafka-theme is public OSS. Falls back to a
     // generic label if the localized data is missing.
     var localized   = (typeof window.lafkaOrderMethodLabels === 'object') ? window.lafkaOrderMethodLabels : {};
     var pickupAddr  = (localized.pickupLabel || '').trim();

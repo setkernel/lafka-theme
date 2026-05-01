@@ -2,11 +2,11 @@
  * PDP Redesign — Direction A (Modern Delivery App)
  *
  * Loaded only when lafka_pdp_redesign_enabled() returns true. Enqueued
- * conditionally from lafka-child/functions.php (W4-T21). All component
+ * conditionally from lafka-theme/functions.php (W4-T21). All component
  * styles for the redesigned product detail page live here. Subsequent
  * tasks (W4-T11..T20) append component sections to this file.
  *
- * @since lafka-child 5.8.0
+ * @since 5.16.0
  */
 
 :root {

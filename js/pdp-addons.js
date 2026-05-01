@@ -26,7 +26,7 @@
  * Currency formatting honours lafkaPdpCurrency localized in
  * functions.php so non-USD shops render correctly.
  *
- * @since lafka-child 5.10.4
+ * @since 5.16.0
  */
 ( function ( $ ) {
 	'use strict';

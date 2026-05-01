@@ -1,4 +1,4 @@
-/* lafka-child/js/pdp-pickers.js
+/* lafka-theme/js/pdp-pickers.js
  * Variation/addon pickers — live price + required-state + per-size topping prices.
  *
  * Reads variation prices from .lafka-pdp-pickers[data-prices] (JSON map of
@@ -7,7 +7,7 @@
  *
  * Uses ONLY textContent for dynamic updates; never innerHTML.
  *
- * @since lafka-child 5.8.0
+ * @since 5.16.0
  */
 (function () {
   'use strict';
@@ -16,7 +16,7 @@
   if (!root) return;
 
   // Currency formatter — reads symbol, position, separators, and decimal
-  // count from a localized var (wired in lafka-child/functions.php from
+  // count from a localized var (wired in lafka-theme/functions.php from
   // WC's settings). Falls back to a USD-style default if the localized
   // data isn't present (e.g. third-party page builder that doesn't
   // enqueue our script in the standard way).

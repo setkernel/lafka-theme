@@ -9,8 +9,8 @@
  * to render the Pizza Toppings group via lafka-plugin's existing addon
  * markup; we only restyle visually (chip CSS).
  *
- * @package LafkaChild\Partials
- * @since   5.8.0
+ * @package Lafka\Partials
+ * @since   5.16.0
  */
 
 defined( 'ABSPATH' ) || exit;

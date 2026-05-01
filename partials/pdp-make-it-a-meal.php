@@ -5,8 +5,8 @@
  * Delegates to lafka_pdp_render_upsell_row() in lafka-plugin (W4-T6).
  * Visual styling lives in pdp-redesign.css (this task).
  *
- * @package LafkaChild\Partials
- * @since   5.8.0
+ * @package Lafka\Partials
+ * @since   5.16.0
  */
 
 defined( 'ABSPATH' ) || exit;

@@ -2,11 +2,11 @@
 /**
  * Always-sticky address/method bar.
  *
- * Hooked to wp_body_open in lafka-child/functions.php (W4-T21).
+ * Hooked to wp_body_open in lafka-theme/functions.php (W4-T21).
  * Reads from lafka_get_restaurant_info() for store address + hours.
  *
- * @package LafkaChild\Partials
- * @since   5.8.0
+ * @package Lafka\Partials
+ * @since   5.16.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -35,8 +35,8 @@ if ( preg_match( '/-(\d{2}:\d{2})$/', $today_hours, $m ) ) {
             </span>
             <span class="lafka-order-method-bar__method-label">
                 <?php echo 'pickup' === $method
-                    ? esc_html__( 'Pickup at', 'lafka-child' )
-                    : esc_html__( 'Delivery to', 'lafka-child' ); ?>
+                    ? esc_html__( 'Pickup at', 'lafka' )
+                    : esc_html__( 'Delivery to', 'lafka' ); ?>
             </span>
             <span class="lafka-order-method-bar__location">
                 <?php
@@ -53,7 +53,7 @@ if ( preg_match( '/-(\d{2}:\d{2})$/', $today_hours, $m ) ) {
                 }
                 ?>
             </span>
-            <span class="lafka-order-method-bar__switch"><?php esc_html_e( 'Switch', 'lafka-child' ); ?></span>
+            <span class="lafka-order-method-bar__switch"><?php esc_html_e( 'Switch', 'lafka' ); ?></span>
         </button>
         <div class="lafka-order-method-bar__right">
             <?php if ( ! empty( $info['phone_display'] ) ): ?>
@@ -61,11 +61,11 @@ if ( preg_match( '/-(\d{2}:\d{2})$/', $today_hours, $m ) ) {
             <?php endif; ?>
             <span class="lafka-order-method-bar__hours">
                 <?php if ( $is_open && $close_time ): ?>
-                    <?php printf( esc_html__( 'Open until %s', 'lafka-child' ), esc_html( $close_time ) ); ?>
+                    <?php printf( esc_html__( 'Open until %s', 'lafka' ), esc_html( $close_time ) ); ?>
                 <?php elseif ( $is_open ): ?>
-                    <?php esc_html_e( 'Open', 'lafka-child' ); ?>
+                    <?php esc_html_e( 'Open', 'lafka' ); ?>
                 <?php else: ?>
-                    <?php esc_html_e( 'Closed — opens 11:00 AM', 'lafka-child' ); ?>
+                    <?php esc_html_e( 'Closed', 'lafka' ); ?>
                 <?php endif; ?>
             </span>
         </div>

@@ -1,9 +1,9 @@
-/* lafka-child/js/upsell-modal.js
+/* lafka-theme/js/upsell-modal.js
  * +Add buttons in upsell row: AJAX-add for simple products, navigate for variable.
  *
  * Uses textContent for all dynamic updates; never innerHTML.
  *
- * @since lafka-child 5.8.0
+ * @since 5.16.0
  */
 (function ($) {
 	'use strict';

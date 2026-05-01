@@ -12,8 +12,8 @@
  * relies on woocommerce_before_variations_form firing first) get the same
  * lifecycle they expect. All standard hooks fire in the same order.
  *
- * @package LafkaChild\Partials
- * @since   5.8.0
+ * @package Lafka\Partials
+ * @since   5.16.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -48,7 +48,7 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
         <span data-lafka-live-price><?php echo wp_kses_post( wc_price( $product->get_price() ) ); ?></span>
         <?php if ( $is_variable ): ?>
             <small><?php printf(
-                esc_html__( 'starting at %s', 'lafka-child' ),
+                esc_html__( 'starting at %s', 'lafka' ),
                 wp_kses_post( wc_price( $product->get_variation_price( 'min', true ) ) )
             ); ?></small>
         <?php endif; ?>
@@ -87,23 +87,23 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
 
                     <div class="lafka-pdp-summary__cart-row">
                         <div class="quantity lafka-pdp-summary__qty">
-                            <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease quantity', 'lafka-child' ); ?>">−</button>
+                            <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease quantity', 'lafka' ); ?>">−</button>
                             <input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input">
-                            <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka-child' ); ?>">+</button>
+                            <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
                         </div>
                         <button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
-                            <span data-lafka-cta-label><?php esc_html_e( 'Pick a size to continue', 'lafka-child' ); ?></span>
+                            <span data-lafka-cta-label><?php esc_html_e( 'Pick a size to continue', 'lafka' ); ?></span>
                         </button>
                     </div>
 
                     <div class="lafka-pdp-mobile-cta">
                         <div class="lafka-pdp-mobile-cta__qty">
-                            <button type="button" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease', 'lafka-child' ); ?>">−</button>
+                            <button type="button" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease', 'lafka' ); ?>">−</button>
                             <span data-lafka-qty-display>1</span>
-                            <button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka-child' ); ?>">+</button>
+                            <button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka' ); ?>">+</button>
                         </div>
                         <button type="submit" class="lafka-pdp-mobile-cta__btn" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
-                            <span data-lafka-cta-label><?php esc_html_e( 'Pick a size', 'lafka-child' ); ?></span>
+                            <span data-lafka-cta-label><?php esc_html_e( 'Pick a size', 'lafka' ); ?></span>
                         </button>
                     </div>
 
@@ -172,23 +172,23 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
 
             <div class="lafka-pdp-summary__cart-row">
                 <div class="quantity lafka-pdp-summary__qty">
-                    <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease quantity', 'lafka-child' ); ?>">−</button>
+                    <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease quantity', 'lafka' ); ?>">−</button>
                     <input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input">
-                    <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka-child' ); ?>">+</button>
+                    <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
                 </div>
                 <button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart>
-                    <span data-lafka-cta-label><?php esc_html_e( 'Add to Cart', 'lafka-child' ); ?></span>
+                    <span data-lafka-cta-label><?php esc_html_e( 'Add to Cart', 'lafka' ); ?></span>
                 </button>
             </div>
 
             <div class="lafka-pdp-mobile-cta">
                 <div class="lafka-pdp-mobile-cta__qty">
-                    <button type="button" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease', 'lafka-child' ); ?>">−</button>
+                    <button type="button" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease', 'lafka' ); ?>">−</button>
                     <span data-lafka-qty-display>1</span>
-                    <button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka-child' ); ?>">+</button>
+                    <button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka' ); ?>">+</button>
                 </div>
                 <button type="submit" class="lafka-pdp-mobile-cta__btn" data-lafka-add-to-cart>
-                    <span data-lafka-cta-label><?php esc_html_e( 'Add to Cart', 'lafka-child' ); ?></span>
+                    <span data-lafka-cta-label><?php esc_html_e( 'Add to Cart', 'lafka' ); ?></span>
                 </button>
             </div>
 

@@ -5,8 +5,8 @@
  * When the redesign feature flag is OFF, falls through to the parent theme's
  * legacy template via locate_template().
  *
- * @package LafkaChild\WooCommerce
- * @since   5.8.0
+ * @package Lafka\WooCommerce
+ * @since   5.16.0
  */
 
 defined( 'ABSPATH' ) || exit;

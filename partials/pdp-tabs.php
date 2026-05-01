@@ -5,8 +5,8 @@
  * Drops Allergens + Nutrition tabs for v1; those become Phase 2 once
  * operator-curated dietary data is populated per product.
  *
- * @package LafkaChild\Partials
- * @since   5.8.0
+ * @package Lafka\Partials
+ * @since   5.16.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,13 +20,13 @@ $reviews_enabled = comments_open() && get_option( 'woocommerce_enable_reviews' )
 <div class="lafka-pdp-tabs">
     <div class="lafka-pdp-tabs__buttons" role="tablist">
         <button type="button" role="tab" aria-selected="true" aria-controls="lafka-pdp-tab-description" id="lafka-pdp-tab-button-description">
-            <?php esc_html_e( 'Description', 'lafka-child' ); ?>
+            <?php esc_html_e( 'Description', 'lafka' ); ?>
         </button>
         <?php if ( $reviews_enabled ): ?>
             <button type="button" role="tab" aria-selected="false" aria-controls="lafka-pdp-tab-reviews" id="lafka-pdp-tab-button-reviews">
                 <?php
                 $count = $product->get_review_count();
-                printf( esc_html__( 'Reviews (%d)', 'lafka-child' ), (int) $count );
+                printf( esc_html__( 'Reviews (%d)', 'lafka' ), (int) $count );
                 ?>
             </button>
         <?php endif; ?>

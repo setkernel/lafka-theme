@@ -20643,7 +20643,7 @@ small.includes_tax .woocommerce-Price-amount {
 
 
 /*
- * ADDON STYLES live in lafka-child/styles/pdp-redesign.css.
+ * ADDON STYLES live in lafka-theme/styles/pdp-redesign.css.
  * The lafka-theme parent stays addon-agnostic — themes that ship the
  * modern lafka-pdp redesign (or other custom addon UIs) own all visual
  * decisions. The legacy 2-column-grid + floating-tab-heading rules

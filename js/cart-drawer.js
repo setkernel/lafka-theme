@@ -1,11 +1,11 @@
-/* lafka-child/js/cart-drawer.js
+/* lafka-theme/js/cart-drawer.js
  * Cart drawer slide-in + focus trap + WC fragment listener.
  *
  * Listens to WC's added_to_cart jQuery event to auto-open the drawer
  * after AJAX add-to-cart. Also handles [data-lafka-cart-open] triggers
  * (e.g., header cart icon).
  *
- * @since lafka-child 5.8.0
+ * @since 5.16.0
  */
 (function ($) {
   'use strict';
