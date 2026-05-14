@@ -141,6 +141,7 @@ ul.products {
 
 /* Desktop: switch to a multi-column grid of cards (cards still list-row internally). */
 @media (min-width: 768px) {
+
 	.products.columns-1,
 	.products.columns-2,
 	.products.columns-3,
