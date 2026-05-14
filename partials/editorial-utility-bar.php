@@ -13,8 +13,8 @@ defined( 'ABSPATH' ) || exit;
 $info = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 
 $address       = ! empty( $info['address_display'] ) ? $info['address_display'] : '';
-$phone_e164    = ! empty( $info['phone_e164'] )      ? $info['phone_e164']      : '';
-$phone_display = ! empty( $info['phone_display'] )   ? $info['phone_display']   : $phone_e164;
+$phone_e164    = ! empty( $info['phone_e164'] ) ? $info['phone_e164'] : '';
+$phone_display = ! empty( $info['phone_display'] ) ? $info['phone_display'] : $phone_e164;
 ?>
 <div class="editorial-utility">
     <?php if ( $address ) : ?>

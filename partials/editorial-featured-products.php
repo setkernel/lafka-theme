@@ -14,13 +14,15 @@ if ( ! function_exists( 'wc_get_products' ) ) {
     return; // WooCommerce not active
 }
 
-$products = wc_get_products( array(
-    'featured' => true,
-    'limit'    => 3,
-    'status'   => 'publish',
-    'orderby'  => 'date',
-    'order'    => 'DESC',
-) );
+$products = wc_get_products(
+    array(
+		'featured' => true,
+		'limit'    => 3,
+		'status'   => 'publish',
+		'orderby'  => 'date',
+		'order'    => 'DESC',
+    ) 
+);
 
 if ( empty( $products ) ) {
     return;
@@ -35,13 +37,14 @@ if ( empty( $products ) ) {
     </div>
 
     <div class="products-grid">
-        <?php foreach ( $products as $product ) :
+        <?php
+        foreach ( $products as $product ) :
             $thumb_url = get_the_post_thumbnail_url( $product->get_id(), 'medium_large' );
             $price_html = $product->get_price_html();
             $name       = $product->get_name();
             $desc       = wp_strip_all_tags( $product->get_short_description() );
             $url        = get_permalink( $product->get_id() );
-        ?>
+			?>
         <article class="product-card">
             <a href="<?php echo esc_url( $url ); ?>" class="product-photo">
                 <?php if ( $thumb_url ) : ?>

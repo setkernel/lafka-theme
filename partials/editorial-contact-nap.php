@@ -11,11 +11,11 @@ defined( 'ABSPATH' ) || exit;
 
 $info = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 
-$phone_e164    = ! empty( $info['phone_e164'] )      ? $info['phone_e164']      : '';
-$phone_display = ! empty( $info['phone_display'] )   ? $info['phone_display']   : $phone_e164;
-$email         = ! empty( $info['email'] )           ? $info['email']           : '';
+$phone_e164    = ! empty( $info['phone_e164'] ) ? $info['phone_e164'] : '';
+$phone_display = ! empty( $info['phone_display'] ) ? $info['phone_display'] : $phone_e164;
+$email         = ! empty( $info['email'] ) ? $info['email'] : '';
 $address       = ! empty( $info['address_display'] ) ? $info['address_display'] : '';
-$hours         = ! empty( $info['hours'] )           ? $info['hours']           : array();
+$hours         = ! empty( $info['hours'] ) ? $info['hours'] : array();
 
 $today_name = wp_date( 'l' );
 ?>
@@ -52,9 +52,10 @@ $today_name = wp_date( 'l' );
         <div class="block-label"><?php esc_html_e( 'Hours', 'lafka' ); ?></div>
         <div class="block-value">
             <div class="contact-hours">
-                <?php foreach ( $hours as $day => $time ) :
+                <?php
+                foreach ( $hours as $day => $time ) :
                     $is_today = ( strtolower( $today_name ) === strtolower( $day ) );
-                ?>
+					?>
                 <div class="<?php echo $is_today ? 'day today' : 'day'; ?>"><?php echo esc_html( $day ); ?></div>
                 <div class="<?php echo $is_today ? 'time today' : 'time'; ?>"><?php echo esc_html( $time ); ?></div>
                 <?php endforeach; ?>

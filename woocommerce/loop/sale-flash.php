@@ -24,11 +24,20 @@ global $post, $product;
 ?>
 <?php if ( $product->is_on_sale() ) : ?>
 	<?php if ( $product->is_type( 'grouped' ) ) : ?>
-		<?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' ); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; default markup uses esc_html__; filter consumers responsible for safe output.
+		echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' );
+		?>
 	<?php elseif ( $product->is_type( 'combo' ) ) : ?>
-		<?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' ); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; default markup uses esc_html__; filter consumers responsible for safe output.
+		echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' );
+		?>
 	<?php else : ?>
-		<?php echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . ' -' . lafka_get_product_saving( $product ) . '%</span>', $post, $product ); ?>
+		<?php
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; default markup uses literal int from lafka_get_product_saving(); filter consumers responsible for safe output.
+		echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . ' -' . (int) lafka_get_product_saving( $product ) . '%</span>', $post, $product );
+		?>
 	<?php endif ?>
 <?php endif; ?>
 

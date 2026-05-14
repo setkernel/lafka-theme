@@ -222,7 +222,7 @@
 												<?php
 												if ( lafka_get_option( 'top_bar_message_phone_link' ) ) :
 													?>
-													<a href="tel:<?php echo preg_replace( '/[^0-9+-]/', '', esc_html( lafka_get_option( 'top_bar_message_phone' ) ) ); ?>"><?php endif; ?>
+													<a href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+-]/', '', (string) lafka_get_option( 'top_bar_message_phone' ) ) ); ?>"><?php endif; ?>
 											<?php echo esc_html( lafka_get_option( 'top_bar_message_phone' ) ); ?>
 											<?php
 											if ( lafka_get_option( 'top_bar_message_phone_link' ) ) :
@@ -286,10 +286,10 @@
 										$lafka_account_holder_classes[] = 'lafka-user-not-logged';
 									}
 									?>
-									<div id="lafka-account-holder" 
+									<div id="lafka-account-holder"
 									<?php
 									if ( count( $lafka_account_holder_classes ) ) {
-										echo 'class="' . implode( ' ', $lafka_account_holder_classes ) . '"';}
+										echo 'class="' . esc_attr( implode( ' ', $lafka_account_holder_classes ) ) . '"';}
 									?>
 									>
 										<a href="<?php echo esc_url( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) ); ?>" title="<?php esc_attr_e( 'My Account', 'lafka' ); ?>" aria-label="<?php esc_attr_e( 'My Account', 'lafka' ); ?>">
@@ -307,7 +307,10 @@
 													<?php if ( LAFKA_IS_WC_MARKETPLACE && is_user_wcmp_vendor( $current_user ) ) : ?>
 														<li class="lafka-header-account-wcmp-dash">
 															<?php $lafka_wcmp_dashboard_page_link = wcmp_vendor_dashboard_page_id() ? get_permalink( wcmp_vendor_dashboard_page_id() ) : '#'; ?>
-															<?php echo apply_filters( 'wcmp_vendor_goto_dashboard', '<a href="' . esc_url( $lafka_wcmp_dashboard_page_link ) . '">' . esc_html__( 'Vendor Dashboard', 'lafka' ) . '</a>' ); ?>
+															<?php
+															// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- default markup uses esc_url/esc_html__; filter consumers responsible for safe output.
+															echo apply_filters( 'wcmp_vendor_goto_dashboard', '<a href="' . esc_url( $lafka_wcmp_dashboard_page_link ) . '">' . esc_html__( 'Vendor Dashboard', 'lafka' ) . '</a>' );
+															?>
 														</li>
 													<?php elseif ( LAFKA_IS_WC_VENDORS_PRO && WCV_Vendors::is_vendor( $current_user->ID ) ) : ?>
 														<li class="lafka-header-account-vcvendors-pro-dash">
@@ -325,7 +328,7 @@
 														</li>
 													<?php endif; ?>
 													<?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
-														<li class="<?php echo wc_get_account_menu_item_classes( $endpoint ); ?>">
+														<li class="<?php echo esc_attr( wc_get_account_menu_item_classes( $endpoint ) ); ?>">
 															<a href="<?php echo esc_url( wc_get_account_endpoint_url( $endpoint ) ); ?>"><?php echo esc_html( $label ); ?></a>
 														</li>
 													<?php endforeach; ?>

@@ -33,11 +33,11 @@ global $product;
 		$size_tags = count( $product->get_tag_ids() );
 
 	if ( $categories ) {
-		echo '<span class="posted_in">' . _n( 'Category:', 'Categories:', $size_categories, 'lafka' ) . '</span>' . $categories;
+		echo '<span class="posted_in">' . esc_html( _n( 'Category:', 'Categories:', $size_categories, 'lafka' ) ) . '</span>' . wp_kses_post( $categories );
 	}
 
 	if ( $tags ) {
-		echo '<span class="tagged_as">' . _n( 'Tag:', 'Tags:', $size_tags, 'lafka' ) . '</span>' . $tags;
+		echo '<span class="tagged_as">' . esc_html( _n( 'Tag:', 'Tags:', $size_tags, 'lafka' ) ) . '</span>' . wp_kses_post( $tags );
 	}
 	?>
 	<?php if ( wc_product_sku_enabled() && ( $product->get_sku() || $product->is_type( ProductType::VARIABLE ) ) ) : ?>

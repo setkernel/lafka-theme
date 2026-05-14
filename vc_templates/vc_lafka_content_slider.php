@@ -117,5 +117,5 @@ $inline_js = '(function ($) {
 	})(window.jQuery);';
 wp_add_inline_script( 'owl-carousel', $inline_js );
 
-// This variable has been safely escaped in the following file: lafka/vc_templates/vc_lafka_content_slider.php Line: 40 - 47
-echo $output_escaped; // All dynamic data escaped.
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $output_escaped built with per-piece esc_attr/esc_url/esc_html escaping in lines 40-47 above.
+echo $output_escaped;

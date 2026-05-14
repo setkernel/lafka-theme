@@ -65,7 +65,8 @@ if ( $product->is_downloadable() ) {
 			<?php endforeach; ?>
 			<?php
 		} else {
-			echo apply_filters( 'woocommerce_single_product_image_html', sprintf( '<img src="%s" alt="%s" />', wc_placeholder_img_src(), esc_html__( 'Placeholder', 'lafka' ) ), $product->get_id() );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- default markup uses esc_url/esc_html__ for placeholder image; filter consumers responsible for safe output.
+			echo apply_filters( 'woocommerce_single_product_image_html', sprintf( '<img src="%s" alt="%s" />', esc_url( wc_placeholder_img_src() ), esc_attr__( 'Placeholder', 'lafka' ) ), $product->get_id() );
 		}
 		?>
 	</div>

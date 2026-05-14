@@ -52,7 +52,7 @@ if ( ( lafka_get_option( 'show_author_avatar' ) ) || ( is_singular() && ! lafka_
 			<?php the_tags( '<i class="fa fa-tags"></i> ' ); ?>
 			<span class="count_comments"><i class="fa fa-comments"></i> <a
 						href="<?php echo esc_url( get_comments_link() ); ?>"
-						title="<?php esc_attr_e( 'View comments', 'lafka' ); ?>"><?php echo get_comments_number(); ?></a></span>
+						title="<?php esc_attr_e( 'View comments', 'lafka' ); ?>"><?php echo (int) get_comments_number(); ?></a></span>
 		<?php endif; ?>
 	<?php endif; ?>
 

@@ -369,7 +369,7 @@ if ( ! class_exists( 'Lafka_Transfer_Content' ) ) {
 		 */
 		public function doImportDemo( $demo_name = 'one' ) {
 
-			echo 'import started ' . date( DATE_RFC2822 ) . '<br/>';
+			echo 'import started ' . esc_html( gmdate( DATE_RFC2822 ) ) . '<br/>';
 
 			// Delete current menus
 			$all_pages_menu_for_del = wp_get_nav_menu_object( 'Main menu' );
@@ -423,7 +423,7 @@ if ( ! class_exists( 'Lafka_Transfer_Content' ) ) {
 
 			$this->importWPContent( $this->getDemoLocation() . '/' . $demo_name . '/demo.xml' );
 
-			echo 'lafka_wp_xml_import_success ' . date( DATE_RFC2822 ) . '<br/>';
+			echo 'lafka_wp_xml_import_success ' . esc_html( gmdate( DATE_RFC2822 ) ) . '<br/>';
 
 			// Get Widget menus IDs so we can pass them to widget import, so we have popper options set
 			$widget_menu_1 = wp_get_nav_menu_object( 'Information' );
@@ -435,7 +435,7 @@ if ( ! class_exists( 'Lafka_Transfer_Content' ) ) {
 				echo 'lafka_settings_import_error';
 				return false;
 			}
-			echo 'lafka_settings_import_success ' . date( DATE_RFC2822 ) . '<br/>';
+			echo 'lafka_settings_import_success ' . esc_html( gmdate( DATE_RFC2822 ) ) . '<br/>';
 
 			// Install woocommerce pages
 			if ( defined( 'LAFKA_IS_WOOCOMMERCE' ) && LAFKA_IS_WOOCOMMERCE ) {
@@ -538,12 +538,12 @@ if ( ! class_exists( 'Lafka_Transfer_Content' ) ) {
 				$menu_items = wp_get_nav_menu_items( $all_pages_menu->term_id );
 
 				foreach ( $menu_items as $item ) {
-					if ( in_array( $item->title, array( 'Pizza', 'Burgers', 'Combos' ) ) ) {
+					if ( in_array( $item->title, array( 'Pizza', 'Burgers', 'Combos' ), true ) ) {
 						update_post_meta( $item->ID, '_lafka-menu-item-is_megamenu', 'active' );
 					}
 
 					// Menu descriptions that contain banners
-					if ( in_array( $item->title, array( 'image 1', 'image 2', 'image 3', 'about pizza text', 'sub 1', 'sub 2', 'sub 3', 'burgers text', 'sub1' ) ) ) {
+					if ( in_array( $item->title, array( 'image 1', 'image 2', 'image 3', 'about pizza text', 'sub 1', 'sub 2', 'sub 3', 'burgers text', 'sub1' ), true ) ) {
 						update_post_meta( $item->ID, '_lafka-menu-item-is_description', 'active' );
 					}
 

@@ -25,9 +25,10 @@ global $product;
 $aria_describedby = isset( $args['aria-describedby_text'] ) ? sprintf( 'aria-describedby="woocommerce_loop_add_to_cart_link_describedby_%s"', esc_attr( $product->get_id() ) ) : '';
 
 echo '<div class="links">';
-echo apply_filters( 'lafka_links_before_add_to_cart', '' );
+echo wp_kses_post( apply_filters( 'lafka_links_before_add_to_cart', '' ) );
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern (woocommerce/templates/loop/add-to-cart.php); sprintf args are esc_url/esc_attr escaped; filter consumers responsible for safe output.
 echo apply_filters(
-	'woocommerce_loop_add_to_cart_link', // WPCS: XSS ok.
+	'woocommerce_loop_add_to_cart_link',
 	sprintf(
 		'<a href="%s" %s data-quantity="%s" class="%s" title="%s" %s>%s</a>',
 		esc_url( $product->add_to_cart_url() ),

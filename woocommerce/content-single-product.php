@@ -27,7 +27,8 @@ global $product;
 do_action( 'woocommerce_before_single_product' );
 
 if ( post_password_required() ) {
-	echo get_the_password_form(); // WPCS: XSS ok.
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_the_password_form() returns trusted WP-core HTML.
+	echo get_the_password_form();
 
 	return;
 }
@@ -50,7 +51,7 @@ if ( lafka_get_option( 'hide_product_price_on_zero' ) && $product->get_price() =
 		<div class="lafka-product-summary-wrapper
 		<?php
 		if ( ! empty( $lafka_single_product_gallery_classes ) ) {
-			echo ' ' . implode( ' ', $lafka_single_product_gallery_classes );}
+			echo ' ' . esc_attr( implode( ' ', $lafka_single_product_gallery_classes ) );}
 		?>
 		">
 			<?php if ( lafka_get_option( 'show_breadcrumb' ) ) : ?>

@@ -34,9 +34,11 @@ if ( preg_match( '/-(\d{2}:\d{2})$/', $today_hours, $m ) ) {
                 <?php echo 'pickup' === $method ? '🏪' : '🚚'; ?>
             </span>
             <span class="lafka-order-method-bar__method-label">
-                <?php echo 'pickup' === $method
+                <?php
+                echo 'pickup' === $method
                     ? esc_html__( 'Pickup at', 'lafka' )
-                    : esc_html__( 'Delivery to', 'lafka' ); ?>
+                    : esc_html__( 'Delivery to', 'lafka' );
+				?>
             </span>
             <span class="lafka-order-method-bar__location">
                 <?php
@@ -56,15 +58,15 @@ if ( preg_match( '/-(\d{2}:\d{2})$/', $today_hours, $m ) ) {
             <span class="lafka-order-method-bar__switch"><?php esc_html_e( 'Switch', 'lafka' ); ?></span>
         </button>
         <div class="lafka-order-method-bar__right">
-            <?php if ( ! empty( $info['phone_display'] ) ): ?>
+            <?php if ( ! empty( $info['phone_display'] ) ) : ?>
                 <a class="lafka-order-method-bar__phone" href="tel:<?php echo esc_attr( $info['phone_e164'] ); ?>">📞 <?php echo esc_html( $info['phone_display'] ); ?></a>
             <?php endif; ?>
             <span class="lafka-order-method-bar__hours">
-                <?php if ( $is_open && $close_time ): ?>
+                <?php if ( $is_open && $close_time ) : ?>
                     <?php printf( esc_html__( 'Open until %s', 'lafka' ), esc_html( $close_time ) ); ?>
-                <?php elseif ( $is_open ): ?>
+                <?php elseif ( $is_open ) : ?>
                     <?php esc_html_e( 'Open', 'lafka' ); ?>
-                <?php else: ?>
+                <?php else : ?>
                     <?php
                     esc_html_e( 'Closed', 'lafka' );
 

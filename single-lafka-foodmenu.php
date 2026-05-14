@@ -166,7 +166,10 @@ while ( have_posts() ) :
 										$lafka_image_link  = wp_get_attachment_url( get_post_thumbnail_id() );
 										$lafka_image       = get_the_post_thumbnail( null, 'lafka-foodmenu-single-thumb' );
 										?>
-										<?php printf( '<a id="zoom1" href="%s" itemprop="image" class="cloud-zoom " title="%s"  rel="position: \'inside\' , showTitle: false, adjustX:-4, adjustY:-4">%s</a>', esc_url( $lafka_image_link ), esc_attr( $lafka_image_title ), $lafka_image ); ?>
+										<?php
+										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_image is get_the_post_thumbnail() output (trusted WP-core HTML with attrs pre-escaped).
+										printf( '<a id="zoom1" href="%s" itemprop="image" class="cloud-zoom " title="%s"  rel="position: \'inside\' , showTitle: false, adjustX:-4, adjustY:-4">%s</a>', esc_url( $lafka_image_link ), esc_attr( $lafka_image_title ), $lafka_image );
+										?>
 
 										<?php if ( ! empty( $lafka_featured_flex_slider_imgs ) ) : // If there are additional images show CloudZoom gallery ?>
 											<ul class="additional-images">
@@ -183,7 +186,10 @@ while ( have_posts() ) :
 													$lafka_thumb_image      = wp_get_attachment_image( $lafka_img_id, 'lafka-widgets-thumb' );
 													?>
 													<li>
-														<?php printf( '<a rel="useZoom: \'zoom1\', smallImage: \'%s\'" title="%s" class="cloud-zoom-gallery" href="%s">%s</a>', esc_url( $lafka_small_image_link ), esc_attr( $lafka_image_title ), esc_url( $lafka_image_link ), $lafka_thumb_image ); ?>
+														<?php
+														// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_thumb_image is wp_get_attachment_image() output (trusted WP-core HTML with attrs pre-escaped).
+														printf( '<a rel="useZoom: \'zoom1\', smallImage: \'%s\'" title="%s" class="cloud-zoom-gallery" href="%s">%s</a>', esc_url( $lafka_small_image_link ), esc_attr( $lafka_image_title ), esc_url( $lafka_image_link ), $lafka_thumb_image );
+														?>
 													</li>
 												<?php endforeach; ?>
 											</ul>
@@ -219,7 +225,10 @@ while ( have_posts() ) :
 												);
 												?>
 												<?php $lafka_img_tag = wp_get_attachment_image( get_post_thumbnail_id(), 'lafka-foodmenu-single-thumb' ); ?>
-												<?php printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), $lafka_img_tag ); ?>
+												<?php
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_img_tag is wp_get_attachment_image() output (trusted WP-core HTML with attrs pre-escaped).
+												printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), $lafka_img_tag );
+												?>
 											<?php endif; ?>
 											<?php foreach ( $lafka_featured_flex_slider_imgs as $lafka_img_att_id ) : ?>
 												<?php $lafka_attach_url = wp_get_attachment_url( $lafka_img_att_id ); ?>
@@ -232,7 +241,10 @@ while ( have_posts() ) :
 												);
 												?>
 												<?php $lafka_img_tag = wp_get_attachment_image( $lafka_img_att_id, 'lafka-foodmenu-single-thumb' ); ?>
-												<?php printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), $lafka_img_tag ); ?>
+												<?php
+												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_img_tag is wp_get_attachment_image() output (trusted WP-core HTML with attrs pre-escaped).
+												printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), $lafka_img_tag );
+												?>
 											<?php endforeach; ?>
 										</div>
 									<?php elseif ( has_post_thumbnail() ) : ?>
@@ -423,7 +435,7 @@ while ( have_posts() ) :
 									<?php if ( $lafka_foodmenu_first_category !== null ) : ?>
 										<a class="lafka-related-browse"
 											href="<?php echo esc_url( get_term_link( $lafka_foodmenu_first_category ) ); ?>"
-											title="<?php printf( esc_attr__( 'Browse more "%s"', 'lafka' ), $lafka_foodmenu_first_category->name ); ?>">
+											title="<?php printf( esc_attr__( 'Browse more "%s"', 'lafka' ), esc_attr( $lafka_foodmenu_first_category->name ) ); ?>">
 											<?php echo esc_html( $lafka_foodmenu_first_category->name ); ?>
 										</a>
 									<?php else : ?>
@@ -471,7 +483,7 @@ while ( have_posts() ) :
 													<h4>
 														<?php the_title(); ?>
 														<?php if ( $post->lafka_item_single_price ) : ?>
-															<span><?php echo lafka_get_formatted_price( $post->lafka_item_single_price ); ?></span>
+															<span><?php echo wp_kses_post( lafka_get_formatted_price( $post->lafka_item_single_price ) ); ?></span>
 														<?php endif; ?>
 													</h4>
 												</a>
@@ -507,7 +519,7 @@ while ( have_posts() ) :
 
 			<!-- Previous / Next links -->
 			<?php if ( lafka_get_option( 'show_prev_next' ) ) : ?>
-				<?php echo lafka_post_nav(); ?>
+				<?php echo wp_kses_post( lafka_post_nav() ); ?>
 			<?php endif; ?>
 		</div>
 	</div>

@@ -30,10 +30,10 @@ $el_class = $this->getExtraClass( $el_class ) . $this->getCSSAnimation( $css_ani
 
 $bar_options = array();
 $options     = explode( ',', $options );
-if ( in_array( 'animated', $options ) ) {
+if ( in_array( 'animated', $options, true ) ) {
 	$bar_options[] = 'animated';
 }
-if ( in_array( 'striped', $options ) ) {
+if ( in_array( 'striped', $options, true ) ) {
 	$bar_options[] = 'striped';
 }
 
@@ -65,8 +65,14 @@ if ( ! empty( $el_id ) ) {
 
 ob_start();
 ?>
-<div class="<?php echo esc_attr( $css_class ); ?>" <?php echo implode( ' ', $wrapper_attributes ); ?>>
+<div class="<?php echo esc_attr( $css_class ); ?>" 
+<?php
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $wrapper_attributes built with esc_attr per piece above; matches VC core vc_progress_bar.php pattern.
+echo implode( ' ', $wrapper_attributes );
+?>
+>
 	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wpb_widget_title() is VC's title-rendering helper; matches VC core pattern.
 	echo wpb_widget_title(
 		array(
 			'title'      => $title,
@@ -119,4 +125,5 @@ ob_start();
 	<?php endforeach ?>
 </div>
 <?php
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- captured ob_start() block above; all dynamic data escaped at construction.
 echo ob_get_clean();

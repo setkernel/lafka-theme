@@ -19,7 +19,7 @@ $lafka_title_background_image    = '';
 $lafka_title_alignment           = 'left_title';
 $lafka_featured_flex_slider_imgs = array();
 
-if ( is_singular() && in_array( $lafka_current_post_type, array( 'page', 'tribe_events' ) ) ) {
+if ( is_singular() && in_array( $lafka_current_post_type, array( 'page', 'tribe_events' ), true ) ) {
 
 	if ( isset( $lafka_page_options['lafka_show_title_page'] ) && trim( $lafka_page_options['lafka_show_title_page'][0] ) != '' ) {
 		$lafka_show_title_page = $lafka_page_options['lafka_show_title_page'][0];
@@ -92,7 +92,8 @@ if ( LAFKA_IS_EVENTS && in_array(
 		'MAIN_EVENTS',
 		'CATEGORY_EVENTS',
 		'SINGLE_EVENT_DAYS',
-	)
+	),
+	true
 )
 ) {
 	$lafka_img = wp_get_attachment_image_src( lafka_get_option( 'events_title_background_imgid' ), 'full' );
@@ -132,7 +133,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 					<!-- END OF BREADCRUMB -->
 					<!-- TITLE -->
 					<?php if ( $lafka_show_title_page == 'yes' ) : ?>
-						<h1 class="heading-title"><?php echo wp_filter_post_kses( $lafka_title ); ?></h1>
+						<h1 class="heading-title"><?php echo wp_kses_post( wp_filter_post_kses( $lafka_title ) ); ?></h1>
 						<?php if ( $lafka_subtitle ) : ?>
 							<h6><?php echo esc_html( $lafka_subtitle ); ?></h6>
 						<?php endif; ?>
@@ -202,7 +203,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 
 		<!-- Previous / Next links -->
 		<?php if ( lafka_get_option( 'show_prev_next' ) ) : ?>
-			<?php echo lafka_post_nav(); ?>
+			<?php echo wp_kses_post( lafka_post_nav() ); ?>
 		<?php endif; ?>
 	</div>
 </div>

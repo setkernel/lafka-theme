@@ -561,7 +561,7 @@ if ( ! function_exists( 'lafka_get_taxonomy_parents' ) ) {
 			$name = $parent->name;
 		}
 
-		if ( $parent->parent && ( $parent->parent != $parent->term_id ) && ! in_array( $parent->parent, $visited ) ) {
+		if ( $parent->parent && ( $parent->parent != $parent->term_id ) && ! in_array( $parent->parent, $visited, true ) ) {
 			$visited[] = $parent->parent;
 			$chain    .= lafka_get_taxonomy_parents( $parent->parent, $taxonomy, $link, $separator, $nicename, $visited );
 		}
@@ -946,7 +946,7 @@ if ( ! function_exists( 'lafka_typography_google_fonts_url' ) ) {
 			// Check each of the unique fonts against the defined Google fonts
 			// If it is a Google font, go ahead and call the function to enqueue it
 			foreach ( $selected_fonts as $font ) {
-				if ( in_array( $font, $all_google_fonts ) ) {
+				if ( in_array( $font, $all_google_fonts, true ) ) {
 					$font_families[] = $font;
 				}
 			}
@@ -1012,14 +1012,14 @@ if ( ! function_exists( 'lafka_typography_enqueue_google_font' ) ) {
 add_filter( 'style_loader_tag', 'lafka_style_loader_tag_filter', 10, 2 );
 if ( ! function_exists( 'lafka_style_loader_tag_filter' ) ) {
 	function lafka_style_loader_tag_filter( $html, $handle ) {
-		if ( in_array( $handle, array( 'lafka-fonts', 'font_awesome_6_v4shims', 'font_awesome_6', 'et-line-font', 'flaticon' ) ) ) {
+		if ( in_array( $handle, array( 'lafka-fonts', 'font_awesome_6_v4shims', 'font_awesome_6', 'et-line-font', 'flaticon' ), true ) ) {
 			$link_stylesheet = str_replace( "rel='stylesheet'", "rel='stylesheet' onload=\"this.media='all'\"", $html );
 			$link_preload    = str_replace( "rel='stylesheet'", "rel='preload' as='style'", $html );
 			$link_preload    = str_replace( "media='print'", '', $link_preload );
 			$link_preload    = str_replace( "id='" . $handle . "-css'", '', $link_preload );
 
 			return $link_preload . $link_stylesheet;
-		} elseif ( in_array( $handle, array( 'feather', 'tiza' ) ) ) {
+		} elseif ( in_array( $handle, array( 'feather', 'tiza' ), true ) ) {
 			$link_preload = str_replace( "rel='stylesheet'", "rel='preload' as='font'", $html );
 			$link_preload = str_replace( "type='text/css'", "type='font/woff' crossorigin='anonymous'", $link_preload );
 			$link_preload = str_replace( "media='all'", '', $link_preload );
@@ -1299,6 +1299,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		}
 
 		$is_compare = false;
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- YITH WooCompare view detection from $_GET['action']; read-only display gating, no state mutation.
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'yith-woocompare-view-table' ) {
 			$is_compare = true;
 		}
@@ -1675,7 +1676,7 @@ if ( ! function_exists( 'lafka_set_menu_on_primary' ) ) {
 			if ( LAFKA_IS_EVENTS ) {
 				$mode_and_title = lafka_get_current_events_display_mode_and_title();
 				$events_mode    = $mode_and_title['display_mode'];
-				if ( in_array( $events_mode, array( 'MAIN_CALENDAR', 'CALENDAR_CATEGORY', 'MAIN_EVENTS', 'CATEGORY_EVENTS', 'SINGLE_EVENT_DAYS' ) ) ) {
+				if ( in_array( $events_mode, array( 'MAIN_CALENDAR', 'CALENDAR_CATEGORY', 'MAIN_EVENTS', 'CATEGORY_EVENTS', 'SINGLE_EVENT_DAYS' ), true ) ) {
 					return lafka_set_menu_on_primary_helper( $args, lafka_get_option( 'events_top_menu' ) );
 				}
 			}

@@ -28,7 +28,7 @@ foreach ( $variations as $v ) {
 }
 ?>
 <div class="lafka-pdp-pickers" data-prices='<?php echo esc_attr( wp_json_encode( $prices_by_attrs ) ); ?>'>
-    <?php foreach ( $attributes as $attr_name => $options ): ?>
+    <?php foreach ( $attributes as $attr_name => $options ) : ?>
         <?php
         // $attr_name from get_variation_attributes() is the taxonomy slug
         // (e.g. "pa_size") — no "attribute_" prefix. Use it directly as the
@@ -49,7 +49,7 @@ foreach ( $variations as $v ) {
         <fieldset class="lafka-pdp-picker" data-attribute="<?php echo esc_attr( $field_name ); ?>" data-required="true">
             <legend class="lafka-pdp-picker__label"><?php echo esc_html( $label ); ?></legend>
             <div class="lafka-pdp-picker__chips" role="radiogroup" aria-required="true">
-                <?php foreach ( $options as $opt ): ?>
+                <?php foreach ( $options as $opt ) : ?>
                     <?php
                     $term       = taxonomy_exists( $taxonomy ) ? get_term_by( 'slug', $opt, $taxonomy ) : null;
                     $opt_label  = $term ? $term->name : $opt;
@@ -65,7 +65,7 @@ foreach ( $variations as $v ) {
                         <input type="radio" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $opt ); ?>">
                         <span class="lafka-pdp-chip__inner">
                             <span class="lafka-pdp-chip__name"><?php echo esc_html( $opt_label ); ?></span>
-                            <?php if ( $option_price ): ?>
+                            <?php if ( $option_price ) : ?>
                                 <span class="lafka-pdp-chip__price"><?php echo wp_kses_post( $option_price ); ?></span>
                             <?php endif; ?>
                         </span>

@@ -45,7 +45,10 @@ if ( ! function_exists( 'lafka_megamenu_item_custom_fields' ) ) {
 			?>
 			<p class="description description-thin lafka_megamenu_image">
 				<?php echo esc_html( $title ); ?><br>
-				<?php echo lafka_medialibrary_uploader( 'edit-' . esc_attr( $key . '-' . $item_id ), $value, '', $key . '[' . $item_id . ']', false, true ); ?>
+				<?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- lafka_medialibrary_uploader() returns admin-only media-uploader markup with attrs pre-escaped.
+				echo lafka_medialibrary_uploader( 'edit-' . esc_attr( $key . '-' . $item_id ), $value, '', $key . '[' . $item_id . ']', false, true );
+				?>
 			</p>
 			<?php
 			$title = esc_html__( 'Set as Mega Menu', 'lafka' );
@@ -82,6 +85,10 @@ if ( ! function_exists( 'lafka_megamenu_item_custom_fields' ) ) {
 add_action( 'wp_update_nav_menu_item', 'lafka_update_mega_menu_item', 100, 3 );
 if ( ! function_exists( 'lafka_update_mega_menu_item' ) ) {
 	function lafka_update_mega_menu_item( $menu_id, $menu_item_db ) {
+		// CSRF: hooked to wp_update_nav_menu_item which fires from
+		// wp_update_nav_menu() called via wp-admin/nav-menus.php. WP core
+		// verifies the `update-nav_menu` nonce upstream before the hook fires.
+		// phpcs:disable WordPress.Security.NonceVerification.Missing -- WP core verifies update-nav_menu nonce upstream.
 		$fields = array( 'is_megamenu', 'is_description', 'custom_label', 'label_color', 'highlight', 'icon', 'image' );
 
 		foreach ( $fields as $field ) {
@@ -103,6 +110,7 @@ if ( ! function_exists( 'lafka_update_mega_menu_item' ) ) {
 
 			update_post_meta( $menu_item_db, '_lafka-menu-item-' . $field, $value );
 		}
+		// phpcs:enable WordPress.Security.NonceVerification.Missing
 	}
 }
 

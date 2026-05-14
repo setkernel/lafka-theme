@@ -69,10 +69,12 @@ do_action( 'woocommerce_before_cart' );
 							<div class="lafka-cart-item__unit-price">
 								<?php
 								// translators: %s: per-unit price
-								echo wp_kses_post( sprintf(
-									__( '%s each', 'lafka' ),
-									apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
-								) );
+								echo wp_kses_post(
+                                    sprintf(
+                                        __( '%s each', 'lafka' ),
+                                        apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
+                                    ) 
+                                );
 								?>
 							</div>
 						<?php endif; ?>

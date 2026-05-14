@@ -28,9 +28,11 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
 ?>
 <div class="lafka-pdp-summary">
 
-    <?php if ( function_exists( 'lafka_pdp_render_bestseller_eyebrow' ) ) {
+    <?php
+    if ( function_exists( 'lafka_pdp_render_bestseller_eyebrow' ) ) {
         lafka_pdp_render_bestseller_eyebrow( $product->get_id() );
-    } ?>
+    }
+    ?>
 
     <h1 class="lafka-pdp-summary__title"><?php echo esc_html( $product->get_name() ); ?></h1>
 
@@ -39,24 +41,30 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
     </div>
 
     <div class="lafka-pdp-summary__price">
-        <?php // Currency symbol/position MUST come from WC settings (wc_price()
+        <?php
+        // Currency symbol/position MUST come from WC settings (wc_price()
               // honours woocommerce_currency_pos + currency code). Hardcoding
               // `$` leaks the operator's currency and breaks any non-USD shop.
               // JS replaces this textContent on size change via the formatter
               // localized in functions.php — same currency settings, same
-              // output shape. ?>
+              // output shape. 
+		?>
         <span data-lafka-live-price><?php echo wp_kses_post( wc_price( $product->get_price() ) ); ?></span>
-        <?php if ( $is_variable ): ?>
-            <small><?php printf(
+        <?php if ( $is_variable ) : ?>
+            <small>
+            <?php
+            printf(
                 esc_html__( 'starting at %s', 'lafka' ),
                 wp_kses_post( wc_price( $product->get_variation_price( 'min', true ) ) )
-            ); ?></small>
+            );
+			?>
+            </small>
         <?php endif; ?>
     </div>
 
     <?php require __DIR__ . '/pdp-last-order-card.php'; ?>
 
-    <?php if ( $is_variable ): ?>
+    <?php if ( $is_variable ) : ?>
         <?php
         // Fire BEFORE the form opens — this triggers the lafka-plugin addon
         // system's reposition_display_for_variable_product(), which moves
@@ -70,7 +78,12 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
               method="post"
               enctype="multipart/form-data"
               data-product_id="<?php echo absint( $product->get_id() ); ?>"
-              data-product_variations="<?php echo function_exists( 'wc_esc_json' ) ? wc_esc_json( wp_json_encode( $product->get_available_variations() ) ) : esc_attr( wp_json_encode( $product->get_available_variations() ) ); ?>">
+              data-product_variations="
+              <?php
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_esc_json() is WC's attribute-context escape function; esc_attr fallback when not available.
+				echo function_exists( 'wc_esc_json' ) ? wc_esc_json( wp_json_encode( $product->get_available_variations() ) ) : esc_attr( wp_json_encode( $product->get_available_variations() ) );
+				?>
+                ">
 
             <?php do_action( 'woocommerce_before_variations_table' ); ?>
             <?php require __DIR__ . '/pdp-pickers.php'; ?>
@@ -160,7 +173,7 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
         </form>
         <?php do_action( 'woocommerce_after_variations_form' ); ?>
 
-    <?php else: /* simple / combo / etc. */ ?>
+    <?php else : /* simple / combo / etc. */ ?>
 
         <form class="cart"
               action="<?php echo esc_url( $form_action ); ?>"
@@ -201,8 +214,10 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
     <?php endif; ?>
 
     <div class="lafka-pdp-summary__trust">
-        <?php if ( function_exists( 'lafka_pdp_render_prep_time' ) ) {
+        <?php
+        if ( function_exists( 'lafka_pdp_render_prep_time' ) ) {
             lafka_pdp_render_prep_time( $product->get_id() );
-        } ?>
+        }
+        ?>
     </div>
 </div>

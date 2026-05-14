@@ -22,7 +22,7 @@ $reviews_enabled = comments_open() && get_option( 'woocommerce_enable_reviews' )
         <button type="button" role="tab" aria-selected="true" aria-controls="lafka-pdp-tab-description" id="lafka-pdp-tab-button-description">
             <?php esc_html_e( 'Description', 'lafka' ); ?>
         </button>
-        <?php if ( $reviews_enabled ): ?>
+        <?php if ( $reviews_enabled ) : ?>
             <button type="button" role="tab" aria-selected="false" aria-controls="lafka-pdp-tab-reviews" id="lafka-pdp-tab-button-reviews">
                 <?php
                 $count = $product->get_review_count();
@@ -39,7 +39,7 @@ $reviews_enabled = comments_open() && get_option( 'woocommerce_enable_reviews' )
             echo wp_kses_post( wpautop( $content ) );
             ?>
         </div>
-        <?php if ( $reviews_enabled ): ?>
+        <?php if ( $reviews_enabled ) : ?>
             <div role="tabpanel" id="lafka-pdp-tab-reviews" aria-labelledby="lafka-pdp-tab-button-reviews" class="lafka-pdp-tabs__panel" hidden>
                 <?php comments_template(); ?>
             </div>

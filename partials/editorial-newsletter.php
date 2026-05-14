@@ -13,7 +13,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $heading   = get_theme_mod( 'lafka_editorial_home_newsletter_heading', '' );
-$intro     = get_theme_mod( 'lafka_editorial_home_newsletter_intro',   '' );
+$intro     = get_theme_mod( 'lafka_editorial_home_newsletter_intro', '' );
 $form_html = get_theme_mod( 'lafka_editorial_home_newsletter_form_html', '' );
 
 if ( ! $heading && ! $form_html ) {

@@ -21,7 +21,12 @@ $lafka_aria_req  = ( $lafka_req ? " aria-required='true'" : '' );
 	<?php if ( have_comments() && $lafka_comments_meta['valid_comments'] ) : ?>
 		<h3 class="heading-title">
 			<?php
-			printf( _n( '%1$s thought on %2$s', '%1$s thoughts on %2$s', $lafka_comments_meta['valid_comments_count'], 'lafka' ), '<span class="lafka_comments_count">' . number_format_i18n( $lafka_comments_meta['valid_comments_count'] ) . '</span>', '<span>' . get_the_title() . '</span>' );
+			printf(
+				/* translators: 1: number of comments, 2: post title */
+				esc_html( _n( '%1$s thought on %2$s', '%1$s thoughts on %2$s', $lafka_comments_meta['valid_comments_count'], 'lafka' ) ),
+				'<span class="lafka_comments_count">' . esc_html( number_format_i18n( $lafka_comments_meta['valid_comments_count'] ) ) . '</span>',
+				'<span>' . esc_html( get_the_title() ) . '</span>'
+			);
 			?>
 		</h3>
 

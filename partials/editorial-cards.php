@@ -38,14 +38,15 @@ if ( ! $has_content ) {
 ?>
 <section>
     <div class="cards-wrap">
-        <?php foreach ( $cards as $card ) :
+        <?php
+        foreach ( $cards as $card ) :
             if ( ! $card['label'] && ! $card['image'] ) {
                 continue; // skip unconfigured slots
             }
             $class = $card['spotlight'] ? 'card spotlight' : 'card';
             $tag   = $card['url'] ? 'a' : 'div';
             $href  = $card['url'] ? ' href="' . esc_url( $card['url'] ) . '"' : '';
-        ?>
+			?>
         <<?php echo esc_attr( $tag ); ?> class="<?php echo esc_attr( $class ); ?>"<?php echo $href; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- href already escaped ?>>
             <?php if ( $card['image'] ) : ?>
             <div class="photo" style="background-image: url('<?php echo esc_url( $card['image'] ); ?>')"></div>

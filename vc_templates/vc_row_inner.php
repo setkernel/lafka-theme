@@ -105,8 +105,16 @@ $wrapper_attributes[] = 'class="' . esc_attr( trim( $css_class ) ) . '"';
 
 ob_start();
 ?>
-<div <?php echo implode( ' ', $wrapper_attributes ); ?> >
-	<?php echo wpb_js_remove_wpautop( $content ); ?>
+<div 
+<?php
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- $wrapper_attributes built with esc_attr/esc_url per piece above; matches VC core vc_row_inner.php pattern.
+echo implode( ' ', $wrapper_attributes );
+?>
+>
+	<?php
+	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wpb_js_remove_wpautop() is VC's HTML-processing helper; matches VC core pattern.
+	echo wpb_js_remove_wpautop( $content );
+	?>
 </div>
 
 <?php echo wp_kses_post( $after_output ); ?>
@@ -116,4 +124,5 @@ ob_start();
 <?php endif ?>
 
 <?php
-echo ob_get_clean(); // All dynamic data escaped
+// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- captured ob_start() block above; all dynamic data escaped at construction.
+echo ob_get_clean();

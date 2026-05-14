@@ -35,7 +35,10 @@ get_header( 'shop' );
 ?>
 <div class="lafka-pdp">
     <main class="lafka-pdp__main">
-        <?php while ( have_posts() ) : the_post(); ?>
+        <?php
+        while ( have_posts() ) :
+			the_post();
+			?>
 
             <nav class="lafka-pdp__breadcrumb"><?php woocommerce_breadcrumb(); ?></nav>
 

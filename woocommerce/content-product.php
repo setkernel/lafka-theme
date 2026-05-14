@@ -33,7 +33,10 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 	<a class="lafka-product-card__link" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( $product->get_name() ); ?>">
 		<div class="lafka-product-card__img-wrap">
 			<?php do_action( 'woocommerce_before_shop_loop_item_title' ); ?>
-			<?php echo lafka_product_card_image_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped — helper returns escaped HTML ?>
+			<?php
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- lafka_product_card_image_html() returns img markup with all attributes pre-escaped (see incl/template-helpers/product-card-image.php).
+			echo lafka_product_card_image_html( $product );
+			?>
 		</div>
 		<div class="lafka-product-card__body">
 			<div class="lafka-product-card__head">

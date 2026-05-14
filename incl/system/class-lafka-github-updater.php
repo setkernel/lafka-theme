@@ -109,6 +109,7 @@ class Lafka_GitHub_Updater {
 		}
 
 		// Success message after manual cache flush.
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- success banner flag from admin-post redirect; the flush action itself is nonce-verified upstream.
 		if ( ! empty( $_GET['lafka_cache_flushed'] ) ) {
 			echo '<div class="notice notice-success is-dismissible"><p><strong>Lafka Updater:</strong> Update cache cleared. WordPress will check GitHub for new releases on the next update check.</p></div>';
 		}
@@ -121,11 +122,13 @@ class Lafka_GitHub_Updater {
 		$type    = in_array( $notice['type'], array( 'error', 'warning', 'info' ), true ) ? $notice['type'] : 'warning';
 		$message = wp_kses_post( $notice['message'] );
 
+		// phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped -- $message wp_kses_post'd above; $type esc_attr'd inline.
 		printf(
 			'<div class="notice notice-%s is-dismissible"><p><strong>Lafka Updater:</strong> %s</p></div>',
 			esc_attr( $type ),
 			$message
 		);
+		// phpcs:enable WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**

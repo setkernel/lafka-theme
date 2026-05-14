@@ -16,6 +16,7 @@ $lafka_search_params = array(
 		<input type="submit" id="searchsubmit"  value="<?php esc_attr_e( 'Search', 'lafka' ); ?>"/>
 		<input type="text" id="s" name="<?php echo esc_attr( $lafka_search_params['search_id'] ); ?>" value="
 		<?php
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- WP search form rendering; $_GET['s'] is the public search query for state preservation, no state mutation.
 		if ( ! empty( $_GET['s'] ) ) {
 			echo esc_attr( get_search_query() );}
 		?>

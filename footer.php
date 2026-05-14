@@ -101,6 +101,7 @@ global $lafka_is_blank;
 <!-- END OF MAIN WRAPPER -->
 <?php
 $lafka_is_compare = false;
+// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- YITH WooCompare view detection from $_GET['action']; read-only display gating, no state mutation.
 if ( isset( $_GET['action'] ) && $_GET['action'] === 'yith-woocompare-view-table' ) {
 	$lafka_is_compare = true;
 }

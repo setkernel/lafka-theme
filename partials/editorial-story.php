@@ -12,14 +12,14 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$label     = get_theme_mod( 'lafka_editorial_home_story_label',     '' );
+$label     = get_theme_mod( 'lafka_editorial_home_story_label', '' );
 $h2_before = get_theme_mod( 'lafka_editorial_home_story_h2_before', '' );
-$h2_em     = get_theme_mod( 'lafka_editorial_home_story_h2_em',     '' );
-$h2_after  = get_theme_mod( 'lafka_editorial_home_story_h2_after',  '' );
-$p1        = get_theme_mod( 'lafka_editorial_home_story_p1',        '' );
+$h2_em     = get_theme_mod( 'lafka_editorial_home_story_h2_em', '' );
+$h2_after  = get_theme_mod( 'lafka_editorial_home_story_h2_after', '' );
+$p1        = get_theme_mod( 'lafka_editorial_home_story_p1', '' );
 $pullquote = get_theme_mod( 'lafka_editorial_home_story_pullquote', '' );
-$p2        = get_theme_mod( 'lafka_editorial_home_story_p2',        '' );
-$image     = get_theme_mod( 'lafka_editorial_home_story_image',     '' );
+$p2        = get_theme_mod( 'lafka_editorial_home_story_p2', '' );
+$image     = get_theme_mod( 'lafka_editorial_home_story_image', '' );
 
 if ( ! $h2_before && ! $h2_em && ! $h2_after && ! $p1 && ! $p2 && ! $image ) {
     return;

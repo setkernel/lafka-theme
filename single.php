@@ -242,7 +242,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 
 			<!-- Previous / Next links -->
 			<?php if ( lafka_get_option( 'show_prev_next' ) ) : ?>
-				<?php echo lafka_post_nav(); ?>
+				<?php echo wp_kses_post( lafka_post_nav() ); ?>
 			<?php endif; ?>
 		</div>
 		<!-- END OF CONTENT WRAPPER -->

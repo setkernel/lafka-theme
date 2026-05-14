@@ -15,11 +15,11 @@ defined( 'ABSPATH' ) || exit;
 $info = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 
 $map_url       = get_theme_mod( 'lafka_editorial_home_map_embed_url', '' );
-$phone_e164    = ! empty( $info['phone_e164'] )      ? $info['phone_e164']      : '';
-$phone_display = ! empty( $info['phone_display'] )   ? $info['phone_display']   : $phone_e164;
+$phone_e164    = ! empty( $info['phone_e164'] ) ? $info['phone_e164'] : '';
+$phone_display = ! empty( $info['phone_display'] ) ? $info['phone_display'] : $phone_e164;
 $address       = ! empty( $info['address_display'] ) ? $info['address_display'] : '';
-$hours         = ! empty( $info['hours'] )           ? $info['hours']           : array();
-$address_h2    = ! empty( $info['address_short'] )   ? $info['address_short']   : $address;
+$hours         = ! empty( $info['hours'] ) ? $info['hours'] : array();
+$address_h2    = ! empty( $info['address_short'] ) ? $info['address_short'] : $address;
 
 if ( ! $map_url && ! $phone_e164 && ! $address && empty( $hours ) ) {
     return;
@@ -71,11 +71,12 @@ $today_name = wp_date( 'l' ); // e.g. "Monday"
                 <div class="small-label"><?php esc_html_e( 'Hours', 'lafka' ); ?></div>
                 <div class="value">
                     <div class="hours-table">
-                        <?php foreach ( $hours as $day => $time ) :
+                        <?php
+                        foreach ( $hours as $day => $time ) :
                             $is_today = ( strtolower( $today_name ) === strtolower( $day ) );
                             $day_class  = $is_today ? 'day today' : 'day';
                             $time_class = $is_today ? 'time today' : 'time';
-                        ?>
+							?>
                         <div class="<?php echo esc_attr( $day_class ); ?>">
                             <?php echo esc_html( $day ); ?>
                             <?php if ( $is_today ) : ?>

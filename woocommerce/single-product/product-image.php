@@ -59,7 +59,8 @@ $lafka_product_video_url = get_post_meta( $product->get_id(), 'lafka_product_vid
 			$html             .= '</div>';
 		}
 
-		echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $post_thumbnail_id ); // phpcs:disable WordPress.XSS.EscapeOutput.OutputNotEscaped
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; $html is built with esc_url/esc_html__ above; filter consumers responsible for safe output.
+		echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $post_thumbnail_id );
 
 		do_action( 'woocommerce_product_thumbnails' );
 		?>

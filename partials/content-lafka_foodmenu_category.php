@@ -300,7 +300,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 												<span class="lafka-item-weight-list"><?php echo esc_html( $lafka_weight . ' ' . $lafka_weight_unit ); ?></span>
 											<?php endif; ?>
 											<?php if ( $lafka_main_price ) : ?>
-												<span><?php echo lafka_get_formatted_price( $lafka_main_price ); ?></span>
+												<span><?php echo wp_kses_post( lafka_get_formatted_price( $lafka_main_price ) ); ?></span>
 											<?php endif; ?>
 										</h4>
 										<?php if ( $lafka_ingredients ) : ?>
