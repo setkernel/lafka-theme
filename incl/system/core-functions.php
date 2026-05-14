@@ -1150,7 +1150,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			$order_hours_cart_update = 'yes';
 		}
 
-		$lafka_front_deps = array( 'jquery', 'jquery-ui-tabs' );
+		// jquery-ui-tabs was a transitive dep of the legacy mobile-menu tab
+		// switcher (the jQuery UI .tabs() widget). P6-A11Y-3 (W2) replaced
+		// that with a native IIFE + ARIA tab pattern in lafka-front.js
+		// (see comment at line 808). The dependency is therefore dead
+		// weight — WP no longer needs to enqueue ~40 KB of jQuery UI Tabs
+		// CSS + JS on every page render. Confirmed by grep: no .tabs( call
+		// remains in lafka-front.js or anywhere else in the theme.
+		$lafka_front_deps = array( 'jquery' );
 		if ( LAFKA_IS_VC ) {
 			$lafka_front_deps[] = 'wpb_composer_front_js';
 		}
