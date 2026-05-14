@@ -46,6 +46,9 @@ require_once get_template_directory() . '/incl/customizer-menu-landing.php';
 require_once get_template_directory() . '/incl/customizer-order-flow.php';
 require_once get_template_directory() . '/template-parts/lafka-sticky-cart.php';
 
+// PDP sticky CTA partial (v5.27.0).
+require_once get_template_directory() . '/template-parts/lafka-pdp-cta.php';
+
 /**
  * Echo the pagination
  */

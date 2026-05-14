@@ -1,0 +1,91 @@
+/*
+ * lafka-theme/styles/lafka-pdp-cta.css
+ * Sticky bottom CTA on single-product pages — replaces the buried
+ * Add-to-Cart button with an always-visible "Add — $XX.XX" pill.
+ *
+ * All values from the design system (lafka-tokens.css). The CTA reads
+ * --lafka-color-accent-500 for the primary surface so it always meets
+ * AA contrast regardless of operator brand choices.
+ *
+ * @since 5.27.0
+ */
+
+.lafka-pdp-cta {
+	position: fixed;
+	inset: auto 0 0 0;
+	z-index: var(--lafka-z-sticky-cta);
+	background: var(--lafka-color-surface-raised);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	box-shadow: var(--lafka-shadow-2);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	padding-bottom: calc(var(--lafka-space-3) + env(safe-area-inset-bottom, 0px));
+}
+
+.lafka-pdp-cta__btn {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lafka-space-2);
+	width: 100%;
+	min-height: var(--lafka-tap-target);
+	max-width: var(--lafka-container-max);
+	margin: 0 auto;
+	padding: var(--lafka-space-3) var(--lafka-space-5);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-base);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-snug);
+	cursor: pointer;
+	font-variant-numeric: tabular-nums;
+	transition:
+		background-color var(--lafka-duration-fast) var(--lafka-ease-out),
+		transform var(--lafka-duration-fast) var(--lafka-ease-out),
+		opacity var(--lafka-duration-fast) var(--lafka-ease-out);
+}
+
+.lafka-pdp-cta__btn:focus-visible {
+	outline: 3px solid var(--lafka-color-accent-500);
+	outline-offset: 3px;
+}
+
+.lafka-pdp-cta__btn[disabled] {
+	background: var(--lafka-color-surface-active);
+	color: var(--lafka-color-text-muted);
+	cursor: not-allowed;
+	opacity: 0.9;
+}
+
+.lafka-pdp-cta__price {
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+/* Visual press feedback (only when interactive). */
+@media (hover: hover) {
+
+	.lafka-pdp-cta__btn:not([disabled]):hover {
+		background: var(--lafka-color-accent-600);
+	}
+}
+
+.lafka-pdp-cta__btn:not([disabled]):active {
+	background: var(--lafka-color-accent-700);
+	transform: scale(0.99);
+}
+
+/* Body bottom-padding so the bar doesn't cover content. The bar is
+ * always present on PDPs so we toggle the class server-side via the
+ * partial render condition. JS does the body class toggle for parity
+ * with the cart-bar pattern. */
+body.lafka-has-pdp-cta {
+	padding-bottom: 88px;
+}
+
+/* Out-of-stock state — strikethrough-ish visual hint. */
+.lafka-pdp-cta[data-state="out-of-stock"] .lafka-pdp-cta__btn {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-secondary);
+}

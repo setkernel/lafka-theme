@@ -30,6 +30,12 @@ if ( ! function_exists( 'lafka_sticky_cart_render' ) ) {
 		if ( is_cart() || is_checkout() ) {
 			return;
 		}
+		// v5.27.0: on single-product pages the PDP CTA is the primary
+		// action — suppress the global cart bar so we don't double-stack
+		// two competing sticky CTAs at the bottom of the viewport.
+		if ( function_exists( 'is_product' ) && is_product() && (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true ) ) {
+			return;
+		}
 		if ( ! (bool) get_theme_mod( 'lafka_sticky_cart_enabled', true ) ) {
 			return;
 		}

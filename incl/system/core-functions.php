@@ -1054,15 +1054,47 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if ( $lafka_sticky_cart_active ) {
 			wp_enqueue_style( 'lafka-sticky-cart', get_template_directory_uri() . '/styles/lafka-sticky-cart.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-sticky-cart.css' ) );
 			wp_enqueue_script(
-                'lafka-sticky-cart',
-                get_template_directory_uri() . '/js/lafka-sticky-cart.js',
-                array( 'jquery' ),
-                lafka_asset_version( '/js/lafka-sticky-cart.js' ),
-                array(
+				'lafka-sticky-cart',
+				get_template_directory_uri() . '/js/lafka-sticky-cart.js',
+				array( 'jquery' ),
+				lafka_asset_version( '/js/lafka-sticky-cart.js' ),
+				array(
 					'in_footer' => true,
-					'strategy' => 'defer',
-                ) 
-            );
+					'strategy'  => 'defer',
+				)
+			);
+		}
+
+		// v5.27.0: PDP sticky CTA — conditionally enqueued on single-product
+		// pages only. Skips the asset cost everywhere else.
+		$lafka_pdp_cta_active = function_exists( 'is_product' ) && is_product()
+			&& (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true );
+		if ( $lafka_pdp_cta_active ) {
+			wp_enqueue_style( 'lafka-pdp-cta', get_template_directory_uri() . '/styles/lafka-pdp-cta.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-pdp-cta.css' ) );
+			wp_enqueue_script(
+				'lafka-pdp-cta',
+				get_template_directory_uri() . '/js/lafka-pdp-cta.js',
+				array( 'jquery' ),
+				lafka_asset_version( '/js/lafka-pdp-cta.js' ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
+			$lafka_pdp_strategy             = get_theme_mod( 'lafka_pdp_default_variation_strategy', 'median' );
+			$lafka_pdp_default_variation_id = (int) apply_filters( 'lafka_pdp_default_variation', 0, get_the_ID() );
+			wp_localize_script(
+				'lafka-pdp-cta',
+				'lafkaPdpCtaConfig',
+				array(
+					'defaultStrategy'    => $lafka_pdp_strategy,
+					'defaultVariationId' => $lafka_pdp_default_variation_id,
+					'currencySymbol'     => function_exists( 'get_woocommerce_currency_symbol' ) ? html_entity_decode( get_woocommerce_currency_symbol() ) : '$',
+					'addLabel'           => __( 'Add', 'lafka' ),
+					'pickLabel'          => __( 'Select options', 'lafka' ),
+					'outOfStockLabel'    => __( 'Out of stock', 'lafka' ),
+				)
+			);
 		}
 
 		// Preloader style
