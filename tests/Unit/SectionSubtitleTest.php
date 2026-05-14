@@ -44,7 +44,11 @@ final class SectionSubtitleTest extends TestCase {
     }
 
     public function test_section_subtitle_css_class_defined(): void {
-        $child_css = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-child/style.css' );
+        $child_css_path = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
+        if ( ! file_exists( $child_css_path ) ) {
+            $this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
+        }
+        $child_css = file_get_contents( $child_css_path );
         $this->assertMatchesRegularExpression(
             '/\.section-subtitle\s*\{/',
             $child_css,

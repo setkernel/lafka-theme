@@ -31,10 +31,12 @@ final class ContrastFixesTest extends TestCase {
 
 	protected function setUp(): void {
 		parent::setUp();
+		$child_css_path = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
+		if ( ! file_exists( $child_css_path ) ) {
+			$this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
+		}
 		$this->theme_css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
-		$this->child_css = file_get_contents(
-			dirname( __DIR__, 3 ) . '/lafka-child/style.css'
-		);
+		$this->child_css = file_get_contents( $child_css_path );
 	}
 
 	// ------------------------------------------------------------------

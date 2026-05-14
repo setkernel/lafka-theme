@@ -11,6 +11,13 @@ use PHPUnit\Framework\TestCase;
  */
 final class CLSReservationTest extends TestCase {
 
+    protected function setUp(): void {
+        $child_css = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
+        if ( ! file_exists( $child_css ) ) {
+            $this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
+        }
+    }
+
     public function test_child_css_reserves_owl_carousel_aspect_ratio(): void {
         $css = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-child/style.css' );
         $this->assertMatchesRegularExpression(
