@@ -49,6 +49,9 @@ require_once get_template_directory() . '/template-parts/lafka-sticky-cart.php';
 // PDP sticky CTA partial (v5.27.0).
 require_once get_template_directory() . '/template-parts/lafka-pdp-cta.php';
 
+// Archive card quick-add CTA (v5.28.0).
+require_once get_template_directory() . '/incl/woocommerce/lafka-archive-quickadd.php';
+
 /**
  * Echo the pagination
  */

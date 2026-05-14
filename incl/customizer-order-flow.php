@@ -92,6 +92,38 @@ function lafka_order_flow_customizer_register( WP_Customize_Manager $wp_customiz
 		)
 	);
 
+	// ---------------------------------------------------------------------
+	// Section: Archive cards (category & shop loops) — v5.28.0
+	// ---------------------------------------------------------------------
+
+	$wp_customize->add_section(
+		'lafka_order_flow_archive',
+		array(
+			'title'       => __( 'Archive cards', 'lafka' ),
+			'description' => __( 'Quick-add CTA pill on product loop cards (category archives, shop, related products).', 'lafka' ),
+			'panel'       => 'lafka_order_flow',
+			'priority'    => 30,
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_archive_quickadd_enabled',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_archive_quickadd_enabled',
+		array(
+			'label'       => __( 'Show quick-add pill on cards', 'lafka' ),
+			'description' => __( 'Simple products: one-tap add to cart. Variable products: a "Choose" link that opens the product page.', 'lafka' ),
+			'section'     => 'lafka_order_flow_archive',
+			'type'        => 'checkbox',
+		)
+	);
+
 	$wp_customize->add_setting(
 		'lafka_pdp_default_variation_strategy',
 		array(

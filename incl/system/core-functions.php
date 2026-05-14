@@ -1065,6 +1065,20 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.28.0: archive-card quick-add — conditionally enqueued on
+		// product loop pages. Skips the cost on home / cart / etc.
+		$lafka_archive_quickadd_active = function_exists( 'is_woocommerce' )
+			&& ( is_shop() || is_product_category() || is_product_tag() || is_product_taxonomy() )
+			&& (bool) get_theme_mod( 'lafka_archive_quickadd_enabled', true );
+		if ( $lafka_archive_quickadd_active ) {
+			wp_enqueue_style(
+				'lafka-archive-quickadd',
+				get_template_directory_uri() . '/styles/lafka-archive-quickadd.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-archive-quickadd.css' )
+			);
+		}
+
 		// v5.27.0: PDP sticky CTA — conditionally enqueued on single-product
 		// pages only. Skips the asset cost everywhere else.
 		$lafka_pdp_cta_active = function_exists( 'is_product' ) && is_product()
