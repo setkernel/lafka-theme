@@ -109,12 +109,26 @@ if ( LAFKA_IS_EVENTS && in_array(
 <?php if ( $lafka_has_offcanvas_sidebar ) : ?>
 	<?php get_sidebar( 'offcanvas' ); ?>
 <?php endif; ?>
-<div id="content" 
+<div id="content"
 <?php
 if ( ! empty( $lafka_sidebar_classes ) ) {
 	echo 'class="' . esc_attr( implode( ' ', $lafka_sidebar_classes ) ) . '"';}
 ?>
 >
+	<?php
+	// SEO + A11y: always emit a single <h1> for the page even when the
+	// visual title bar is suppressed (operators commonly turn off
+	// `lafka_show_title_page` for transparent-header / fullwidth-hero
+	// designs, leaving the page with zero <h1>). Without this fallback the
+	// page fails WCAG heading-order, caps Lighthouse SEO ≤92, and confuses
+	// search-engine + voice-assistant content extraction. When the visual
+	// title bar IS shown, this fallback is suppressed to avoid duplicates.
+	if ( 'yes' !== $lafka_show_title_page && ! empty( $lafka_title ) ) :
+		?>
+		<h1 class="screen-reader-text"><?php echo esc_html( $lafka_title ); ?></h1>
+		<?php
+	endif;
+	?>
 	<?php if ( $lafka_show_title_page == 'yes' || $lafka_show_breadcrumb == 'yes' ) : ?>
 		<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( $lafka_title_alignment ); ?>
 		<?php

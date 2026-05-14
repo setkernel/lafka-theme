@@ -71,7 +71,7 @@ $lafka_sidebar_classes[] = apply_filters( 'lafka_left_sidebar_position_class', '
 <?php if ( $lafka_has_offcanvas_sidebar ) : ?>
 	<?php get_sidebar( 'offcanvas' ); ?>
 <?php endif; ?>
-<div id="content" 
+<div id="content"
 <?php
 if ( ! empty( $lafka_sidebar_classes ) ) {
 	echo 'class="' . esc_attr( implode( ' ', $lafka_sidebar_classes ) ) . '"';}
@@ -80,6 +80,14 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 	<?php
 	while ( have_posts() ) :
 		the_post();
+		?>
+		<?php
+		// SEO + A11y H1 fallback — see page.php for rationale.
+		if ( 'yes' !== $lafka_show_title_page ) :
+			?>
+			<h1 class="screen-reader-text"><?php the_title(); ?></h1>
+			<?php
+		endif;
 		?>
 		<?php if ( $lafka_show_title_page == 'yes' || $lafka_show_breadcrumb == 'yes' ) : ?>
 			<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( $lafka_title_alignment ); ?>
