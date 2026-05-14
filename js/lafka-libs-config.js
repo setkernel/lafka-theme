@@ -65,23 +65,26 @@
 		}
 
 		/**************************
-		 * "lafka-magnific-popup"
+		 * "lafka-dialog" image lightboxes
 		 **************************/
-		// Guard: magnific is registered conditionally (only on product/singular
-		// pages). Without the guard this throws on home/blog. Session 4 audit.
-		if ( typeof $.fn.magnificPopup === 'function' ) {
-			$('a.lafka-magnific-gallery-item').magnificPopup({
-				mainClass: 'mfp-fade',
-				type: 'image',
-				gallery: {
-					enabled: true
-				}
+		// P3-04: replaced Magnific Popup with native <dialog> via lafkaDialog
+		// (see js/lafka-dialog.js). Drops jQuery dep + 27 KB vendor weight.
+		if ( typeof window.lafkaDialog !== 'undefined' ) {
+			// Gallery: collect all items, open at the clicked index.
+			$(document).on('click', 'a.lafka-magnific-gallery-item', function (e) {
+				e.preventDefault();
+				var $links = $('a.lafka-magnific-gallery-item');
+				var items = $links.map(function () {
+					return { src: this.href, alt: $(this).find('img').attr('alt') || '' };
+				}).get();
+				var startIndex = $links.index(this);
+				window.lafkaDialog.gallery(items, startIndex);
 			});
 
 			/* for foodmenu list */
-			$('a.foodmenu-lightbox-link').magnificPopup({
-				mainClass: 'mfp-fade',
-				type: 'image'
+			$(document).on('click', 'a.foodmenu-lightbox-link', function (e) {
+				e.preventDefault();
+				window.lafkaDialog.image(this.href, { alt: $(this).find('img').attr('alt') || '' });
 			});
 		}
 
@@ -199,28 +202,24 @@
 				$.post(
 								lafka_quickview.lafka_ajax_url, data, function (response) {
 
-									if ( typeof $.magnificPopup === 'undefined' ) {
-										// Quickview without magnific would silently fail; fall back
+									if ( typeof window.lafkaDialog === 'undefined' ) {
+										// Quickview without dialog helper would silently fail; fall back
 										// to navigating to the product page (Session 4 audit guard).
 										return;
 									}
-									$.magnificPopup.open({
-										mainClass: 'lafka-quick-view-lightbox mfp-fade',
-										items: {
-											src: '<div class="lafka-quickview-product-pop">' + response + '</div>',
-											type: 'inline'
-										},
-										callbacks: {
-                                            open: function () {
-                                                $(this.content).find('form').each( function() {
-                                                    $( this ).lafka_wc_variation_form();
-                                                });
-
-												lafkaInitSmallCountdowns($(this.content).find('div.lafka-closed-store-message'));
-                                            }
-										},
-										removalDelay: 300
+									// P3-04: lafkaDialog.inline replaces $.magnificPopup.open({inline}).
+									// The response is server-rendered WC product HTML (trusted) — the
+									// helper parses it inside an inert <template> so any inline scripts
+									// don't execute.
+									var dlg = window.lafkaDialog.inline(
+										'<div class="lafka-quickview-product-pop">' + response + '</div>',
+										{ className: 'lafka-quick-view-lightbox' }
+									);
+									var $content = $(dlg).find('.lafka-dialog__content');
+									$content.find('form').each(function () {
+										$(this).lafka_wc_variation_form();
 									});
+									lafkaInitSmallCountdowns($content.find('div.lafka-closed-store-message'));
 
 									$('.prod_hold.loading').removeClass('loading');
 									$(window).trigger('lafka_quickview_loaded');

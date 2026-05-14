@@ -1157,7 +1157,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// weight — WP no longer needs to enqueue ~40 KB of jQuery UI Tabs
 		// CSS + JS on every page render. Confirmed by grep: no .tabs( call
 		// remains in lafka-front.js or anywhere else in the theme.
-		$lafka_front_deps = array( 'jquery' );
+		$lafka_front_deps = array( 'jquery', 'lafka-dialog' );
 		if ( LAFKA_IS_VC ) {
 			$lafka_front_deps[] = 'wpb_composer_front_js';
 		}
@@ -1251,11 +1251,13 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_script( 'countdown' );
 		}
 
-		// magnific — same constraint as flexslider/owl: lafka-libs-config calls
-		// `.magnificPopup()` unconditionally. Keep enqueued; defer is the win.
-		wp_enqueue_script( 'magnific', get_template_directory_uri() . '/js/magnific/jquery.magnific-popup.min.js', array( 'jquery' ), lafka_asset_version( '/js/magnific/jquery.magnific-popup.min.js' ), $footer_defer );
-		wp_enqueue_style( 'magnific', get_template_directory_uri() . '/styles/magnific/magnific-popup.css', array(), lafka_asset_version( '/styles/magnific/magnific-popup.css' ) );
-		$magnific_enqueue = true;
+		// P3-04: magnific replaced by lafka-dialog (native <dialog>). The
+		// vendor magnific.js + css are still registered (plugin side) so
+		// the branch-locations modal — which is a critical-path ordering
+		// flow and ships as a pre-minified vendor file — can still depend
+		// on it. Everywhere else uses window.lafkaDialog.
+		wp_enqueue_script( 'lafka-dialog', get_template_directory_uri() . '/js/lafka-dialog' . $suffix . '.js', array(), lafka_asset_version( '/js/lafka-dialog' . $suffix . '.js' ), $footer_defer );
+		wp_enqueue_style( 'lafka-dialog', get_template_directory_uri() . '/styles/lafka-dialog.css', array(), lafka_asset_version( '/styles/lafka-dialog.css' ) );
 
 		// jquery.appear + isInViewport replaced by lafkaOnVisible() (IntersectionObserver)
 		// inside lafka-front.js — see P3-05. No standalone scripts to enqueue.
@@ -1338,9 +1340,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			$lafka_libs_deps[] = 'cloud-zoom';
 			$lafka_libs_deps[] = 'countdown';
 		}
-		if ( $magnific_enqueue ) {
-			$lafka_libs_deps[] = 'magnific';
-		}
+		// lafka-libs-config calls window.lafkaDialog — depend on it explicitly
+		// so the script load order is correct even when defer is on.
+		$lafka_libs_deps[] = 'lafka-dialog';
 		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config' . $suffix . '.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config' . $suffix . '.js' ), $footer_defer );
 
 		// send is_rtl to js for owl carousel
