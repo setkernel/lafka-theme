@@ -66,21 +66,6 @@ if ( ! function_exists( 'lafka_menu_landing_render_grid' ) ) {
 			<ul class="lafka-menu-landing__grid" role="list">
 				<?php foreach ( $categories as $cat ) : ?>
 					<?php
-					$thumbnail_id = (int) get_term_meta( $cat->term_id, 'thumbnail_id', true );
-					$image_html   = '';
-					if ( $thumbnail_id ) {
-						$image_html = wp_get_attachment_image(
-							$thumbnail_id,
-							'woocommerce_thumbnail',
-							false,
-							array(
-								'loading'  => 'lazy',
-								'decoding' => 'async',
-								'class'    => 'lafka-menu-landing__card-image',
-								'alt'      => $cat->name,
-							)
-						);
-					}
 					$count_label = sprintf(
 						/* translators: %d: number of items in this menu category */
 						_n( '%d item', '%d items', (int) $cat->count, 'lafka' ),
@@ -90,24 +75,42 @@ if ( ! function_exists( 'lafka_menu_landing_render_grid' ) ) {
 					if ( is_wp_error( $term_link ) ) {
 						continue;
 					}
+					$children = get_terms(
+						array(
+							'taxonomy'   => 'product_cat',
+							'hide_empty' => true,
+							'parent'     => (int) $cat->term_id,
+							'orderby'    => 'menu_order',
+						)
+					);
+					$has_children = ! is_wp_error( $children ) && ! empty( $children );
+					$card_classes = 'lafka-menu-landing__card';
+					if ( $has_children ) {
+						$card_classes .= ' lafka-menu-landing__card--has-children';
+					}
 					?>
-					<li class="lafka-menu-landing__card">
+					<li class="<?php echo esc_attr( $card_classes ); ?>">
 						<a class="lafka-menu-landing__card-link" href="<?php echo esc_url( $term_link ); ?>">
-							<span class="lafka-menu-landing__card-media">
-								<?php
-								if ( $image_html ) {
-									// wp_get_attachment_image() returns pre-escaped markup.
-									echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								} else {
-									echo '<span class="lafka-menu-landing__card-image lafka-menu-landing__card-image--placeholder" aria-hidden="true"></span>';
-								}
-								?>
-							</span>
-							<span class="lafka-menu-landing__card-body">
-								<span class="lafka-menu-landing__card-title"><?php echo esc_html( $cat->name ); ?></span>
-								<span class="lafka-menu-landing__card-count"><?php echo esc_html( $count_label ); ?></span>
-							</span>
+							<span class="lafka-menu-landing__card-title"><?php echo esc_html( $cat->name ); ?></span>
+							<span class="lafka-menu-landing__card-count"><?php echo esc_html( $count_label ); ?></span>
 						</a>
+						<?php if ( $has_children ) : ?>
+							<ul class="lafka-menu-landing__subcats" role="list">
+								<?php foreach ( $children as $child ) : ?>
+									<?php
+									$child_link = get_term_link( $child );
+									if ( is_wp_error( $child_link ) ) {
+										continue;
+									}
+									?>
+									<li class="lafka-menu-landing__subcat">
+										<a class="lafka-menu-landing__subcat-link" href="<?php echo esc_url( $child_link ); ?>">
+											<?php echo esc_html( $child->name ); ?>
+										</a>
+									</li>
+								<?php endforeach; ?>
+							</ul>
+						<?php endif; ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>
