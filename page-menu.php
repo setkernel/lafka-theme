@@ -29,12 +29,27 @@ if ( ! function_exists( 'lafka_menu_landing_render_grid' ) ) {
 			return $content;
 		}
 
+		// Hide WC's default "uncategorized" slug — it's a system bucket and
+		// looks like a real category to customers. Operators can configure
+		// the default via WC settings; we read it dynamically so renames
+		// (or non-default values) are still excluded.
+		$default_cat_id = (int) get_option( 'default_product_cat', 0 );
+		$exclude_ids    = array();
+		if ( $default_cat_id ) {
+			$exclude_ids[] = $default_cat_id;
+		}
+		$uncategorized_term = get_term_by( 'slug', 'uncategorized', 'product_cat' );
+		if ( $uncategorized_term && ! in_array( (int) $uncategorized_term->term_id, $exclude_ids, true ) ) {
+			$exclude_ids[] = (int) $uncategorized_term->term_id;
+		}
+
 		$categories = get_terms(
 			array(
 				'taxonomy'   => 'product_cat',
 				'hide_empty' => true,
 				'parent'     => 0,
 				'orderby'    => 'menu_order',
+				'exclude'    => $exclude_ids,
 			)
 		);
 
