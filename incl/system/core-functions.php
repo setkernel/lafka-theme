@@ -1040,13 +1040,38 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 	function lafka_enqueue_scripts_and_styles() {
 		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
 
+		// v5.26.0: design-system tokens — enqueued FIRST so every other
+		// Lafka stylesheet can read --lafka-* custom properties. See
+		// styles/lafka-tokens.css for the full token list.
+		wp_enqueue_style( 'lafka-tokens', get_template_directory_uri() . '/styles/lafka-tokens.css', array(), lafka_asset_version( '/styles/lafka-tokens.css' ) );
+
+		// v5.26.0: sticky cart bar — opt-out via Customizer "Lafka — Order
+		// Flow". Skips the asset cost on cart/checkout where the bar is
+		// suppressed anyway (the partial early-returns there too).
+		$lafka_sticky_cart_active = ! ( function_exists( 'is_cart' ) && is_cart() )
+			&& ! ( function_exists( 'is_checkout' ) && is_checkout() )
+			&& (bool) get_theme_mod( 'lafka_sticky_cart_enabled', true );
+		if ( $lafka_sticky_cart_active ) {
+			wp_enqueue_style( 'lafka-sticky-cart', get_template_directory_uri() . '/styles/lafka-sticky-cart.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-sticky-cart.css' ) );
+			wp_enqueue_script(
+                'lafka-sticky-cart',
+                get_template_directory_uri() . '/js/lafka-sticky-cart.js',
+                array( 'jquery' ),
+                lafka_asset_version( '/js/lafka-sticky-cart.js' ),
+                array(
+					'in_footer' => true,
+					'strategy' => 'defer',
+                ) 
+            );
+		}
+
 		// Preloader style
 		if ( lafka_get_option( 'show_preloader' ) ) {
-			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array(), lafka_asset_version( '/styles/lafka-preloader.css' ) );
+			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
 		}
 
 		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
-		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', array(), wp_get_theme( get_template() )->get( 'Version' ) );
+		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', array( 'lafka-tokens' ), wp_get_theme( get_template() )->get( 'Version' ) );
 		// Load the rtl stylesheet.
 		if ( is_rtl() ) {
 			wp_enqueue_style( 'lafka-rtl', get_template_directory_uri() . '/styles/rtl.css', array( 'lafka-style' ), wp_get_theme()->get( 'Version' ) );

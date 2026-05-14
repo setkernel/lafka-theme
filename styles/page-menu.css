@@ -14,20 +14,24 @@
  */
 
 .lafka-menu-landing {
-	--lafka-menu-accent: #fccc4c;
-	--lafka-menu-card-bg: #fff;
-	--lafka-menu-card-radius: 10px;
-	--lafka-menu-card-border: rgba(0, 0, 0, 0.08);
-	--lafka-menu-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-	--lafka-menu-card-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.06);
-	--lafka-menu-title: #1a1a1a;
-	--lafka-menu-muted: #888;
-	--lafka-menu-chip-bg: #f4f4f4;
-	--lafka-menu-chip-text: #555;
 
-	max-width: 1200px;
+	/* v5.26.0: per-component tokens now alias onto the root design system
+	 * (lafka-tokens.css). Operator's Customizer "Accent colour" still wins
+	 * for --lafka-menu-accent via wp_add_inline_style in page-menu.php. */
+	--lafka-menu-accent: var(--lafka-color-accent-500);
+	--lafka-menu-card-bg: var(--lafka-color-surface-raised);
+	--lafka-menu-card-radius: var(--lafka-radius-md);
+	--lafka-menu-card-border: var(--lafka-color-border-subtle);
+	--lafka-menu-card-shadow: var(--lafka-shadow-1);
+	--lafka-menu-card-shadow-hover: var(--lafka-shadow-2);
+	--lafka-menu-title: var(--lafka-color-text-primary);
+	--lafka-menu-muted: var(--lafka-color-text-muted);
+	--lafka-menu-chip-bg: var(--lafka-color-surface-muted);
+	--lafka-menu-chip-text: var(--lafka-color-text-secondary);
+
+	max-width: var(--lafka-container-max);
 	margin: 0 auto;
-	padding: 16px 12px 48px;
+	padding: var(--lafka-space-4) var(--lafka-space-3) var(--lafka-space-12);
 }
 
 .lafka-menu-landing__intro {
@@ -94,7 +98,10 @@
 }
 
 .lafka-menu-landing__card-link:focus-visible {
-	outline: 3px solid var(--lafka-menu-accent);
+
+	/* Focus uses the global accent (AA-safe) rather than --lafka-menu-accent
+	 * so a low-contrast brand colour doesn't break keyboard accessibility. */
+	outline: 3px solid var(--lafka-color-accent-500);
 	outline-offset: 2px;
 	border-radius: var(--lafka-menu-card-radius);
 }
@@ -147,7 +154,7 @@
 }
 
 .lafka-menu-landing__subcat-link:focus-visible {
-	outline: 2px solid var(--lafka-menu-accent);
+	outline: 2px solid var(--lafka-color-accent-500);
 	outline-offset: 2px;
 }
 

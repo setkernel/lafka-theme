@@ -1,0 +1,128 @@
+/*
+ * lafka-theme/styles/lafka-sticky-cart.css
+ * Sticky-bottom cart bar — appears once WC cart > 0.
+ *
+ * Reads from the design-system tokens (lafka-tokens.css). The bar uses
+ * the accent CTA colour so the "View cart" affordance reads as the
+ * primary action on the page when active.
+ *
+ * @since 5.26.0
+ */
+
+.lafka-sticky-cart {
+	position: fixed;
+	inset: auto 0 0 0;
+	z-index: var(--lafka-z-sticky-cta);
+	background: var(--lafka-color-surface-raised);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	box-shadow: var(--lafka-shadow-2);
+	padding: env(safe-area-inset-bottom, 0);
+	transform: translateY(0);
+	transition: transform var(--lafka-duration-normal) var(--lafka-ease-out);
+}
+
+.lafka-sticky-cart[hidden] {
+	display: none;
+}
+
+.lafka-sticky-cart__link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lafka-space-3);
+	min-height: 56px;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	max-width: var(--lafka-container-max);
+	margin: 0 auto;
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+	font-family: var(--lafka-font-sans);
+}
+
+.lafka-sticky-cart__link:hover,
+.lafka-sticky-cart__link:focus-visible {
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-sticky-cart__link:focus-visible {
+	outline: 3px solid var(--lafka-color-accent-500);
+	outline-offset: -3px;
+}
+
+.lafka-sticky-cart__summary {
+	display: inline-flex;
+	align-items: baseline;
+	gap: var(--lafka-space-2);
+	font-size: var(--lafka-font-size-base);
+	font-weight: var(--lafka-font-weight-medium);
+
+	/* Tabular numerals so the count + price column-align across updates. */
+	font-variant-numeric: tabular-nums;
+}
+
+.lafka-sticky-cart__count {
+	font-weight: var(--lafka-font-weight-semibold);
+}
+
+.lafka-sticky-cart__count-label {
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-sticky-cart__separator {
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-sticky-cart__subtotal {
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-sticky-cart__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
+	padding: var(--lafka-space-2) var(--lafka-space-4);
+	border-radius: var(--lafka-radius-pill);
+	font-size: var(--lafka-font-size-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-snug);
+	white-space: nowrap;
+	transition: background-color var(--lafka-duration-fast) var(--lafka-ease-out);
+}
+
+.lafka-sticky-cart__arrow {
+	flex: 0 0 auto;
+}
+
+/* Visual press feedback — purely token-driven so it adapts to dark mode. */
+@media (hover: hover) {
+
+	.lafka-sticky-cart__link:hover .lafka-sticky-cart__cta {
+		background: var(--lafka-color-accent-600);
+	}
+}
+
+.lafka-sticky-cart__link:active .lafka-sticky-cart__cta {
+	background: var(--lafka-color-accent-700);
+}
+
+/* Narrow viewports: compress secondary text so the CTA stays primary. */
+@media (max-width: 380px) {
+
+	.lafka-sticky-cart__count-label,
+	.lafka-sticky-cart__separator {
+		display: none;
+	}
+
+	.lafka-sticky-cart__link {
+		padding: var(--lafka-space-3);
+	}
+}
+
+/* Theme-page bottom padding so the sticky bar doesn't cover content.
+ * Apply at body level only when the bar is active (toggled by JS). */
+body.lafka-has-sticky-cart {
+	padding-bottom: 64px;
+}

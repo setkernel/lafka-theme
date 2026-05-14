@@ -42,6 +42,10 @@ require_once get_template_directory() . '/incl/customizer-product-listings.php';
 // Menu Landing Customizer settings (v5.25.0).
 require_once get_template_directory() . '/incl/customizer-menu-landing.php';
 
+// Order Flow Customizer settings + sticky cart bar partial (v5.26.0).
+require_once get_template_directory() . '/incl/customizer-order-flow.php';
+require_once get_template_directory() . '/template-parts/lafka-sticky-cart.php';
+
 /**
  * Echo the pagination
  */

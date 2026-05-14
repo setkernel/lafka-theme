@@ -134,10 +134,13 @@ function lafka_menu_landing_customizer_register( WP_Customize_Manager $wp_custom
 		)
 	);
 
+	// v5.26.0: default flipped from #fccc4c (Peppery yellow, 1.47:1 contrast,
+	// fails WCAG AA) to the design-system accent #dc2626 (4.83:1 AA pass).
+	// Existing operator overrides are unaffected.
 	$wp_customize->add_setting(
 		'lafka_menu_landing_accent',
 		array(
-			'default'           => '#fccc4c',
+			'default'           => '#dc2626',
 			'sanitize_callback' => 'sanitize_hex_color',
 			'transport'         => 'refresh',
 		)

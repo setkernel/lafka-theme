@@ -216,8 +216,8 @@ add_action(
 		// Emit the Customizer accent colour as a CSS custom property so
 		// stylesheet can stay static and operators get live re-skin via
 		// the Customizer's "Accent colour" control. Fallback is the
-		// shipped default (#fccc4c) — see customizer-menu-landing.php.
-		$accent = get_theme_mod( 'lafka_menu_landing_accent', '#fccc4c' );
+		// shipped default (#dc2626) — see customizer-menu-landing.php.
+		$accent = get_theme_mod( 'lafka_menu_landing_accent', '#dc2626' );
 		$accent = sanitize_hex_color( $accent );
 		if ( $accent ) {
 			wp_add_inline_style(
