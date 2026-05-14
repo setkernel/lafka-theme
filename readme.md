@@ -67,6 +67,27 @@ lafka/
 └── style.css               # Main stylesheet (v4.5.7)
 ```
 
+## Development
+
+Standard local checks:
+
+```bash
+composer install        # PHPCS + WPCS + PHPUnit + Brain Monkey
+npm ci                  # ESLint + Stylelint
+
+composer phpcs          # full WordPress-Extra ruleset (security sniffs enforced)
+composer test           # PHPUnit (Brain Monkey)
+npm run lint            # ESLint + Stylelint
+```
+
+A pre-push git hook is shipped under `.githooks/` that runs all four gates before any push — install once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+To bypass for a single push: `git push --no-verify`.
+
 ## License
 
 GPL v2 or later. See [LICENSE](LICENSE).
