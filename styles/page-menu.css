@@ -1,0 +1,132 @@
+/*
+ * lafka-theme/styles/page-menu.css
+ * Mobile-first menu landing grid — used by page-menu.php to render
+ * all WC product categories as a responsive tap-target card grid.
+ *
+ * Design principles:
+ *  - Mobile-first, single column on small screens
+ *  - CSS Grid with auto-fill — no fixed breakpoints, grows with viewport
+ *  - Square media via aspect-ratio so cards align even when images vary
+ *  - Tap targets ≥ 280 px wide on the smallest layout (no fat-finger misses)
+ *  - Subtle hover lift on devices that support hover
+ *
+ * @since 5.23.0
+ */
+
+.lafka-menu-landing {
+	max-width: 1200px;
+	margin: 0 auto;
+	padding: 16px 12px 48px;
+}
+
+.lafka-menu-landing__intro {
+	font-size: 1.05rem;
+	line-height: 1.5;
+	color: #555;
+	text-align: center;
+	margin: 8px 0 28px;
+	max-width: 56ch;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.lafka-menu-landing__grid {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: 16px;
+	grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+}
+
+.lafka-menu-landing__card {
+	margin: 0;
+	padding: 0;
+}
+
+.lafka-menu-landing__card-link {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: #fff;
+	border-radius: 12px;
+	overflow: hidden;
+	color: inherit;
+	text-decoration: none;
+	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+	transition: transform 180ms ease, box-shadow 180ms ease;
+	border: 1px solid rgba(0, 0, 0, 0.04);
+}
+
+.lafka-menu-landing__card-link:focus-visible {
+	outline: 3px solid #fccc4c;
+	outline-offset: 3px;
+}
+
+.lafka-menu-landing__card-media {
+	display: block;
+	position: relative;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	background: #f3f3f3;
+}
+
+.lafka-menu-landing__card-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 240ms ease;
+}
+
+.lafka-menu-landing__card-image--placeholder {
+	background: linear-gradient(135deg, #f3f3f3 0%, #e9e9e9 100%);
+}
+
+.lafka-menu-landing__card-body {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: 14px 16px 18px;
+}
+
+.lafka-menu-landing__card-title {
+	font-size: 1.15rem;
+	font-weight: 600;
+	line-height: 1.25;
+	color: #1a1a1a;
+}
+
+.lafka-menu-landing__card-count {
+	font-size: 0.85rem;
+	color: #777;
+	letter-spacing: 0.02em;
+}
+
+@media (hover: hover) {
+
+	.lafka-menu-landing__card-link:hover {
+		transform: translateY(-3px);
+		box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.05);
+	}
+
+	.lafka-menu-landing__card-link:hover .lafka-menu-landing__card-image {
+		transform: scale(1.03);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.lafka-menu-landing__card-link,
+	.lafka-menu-landing__card-image {
+		transition: none;
+	}
+
+	.lafka-menu-landing__card-link:hover {
+		transform: none;
+	}
+
+	.lafka-menu-landing__card-link:hover .lafka-menu-landing__card-image {
+		transform: none;
+	}
+}
