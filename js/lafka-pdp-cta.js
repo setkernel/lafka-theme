@@ -65,13 +65,29 @@
 	function applyDefaultVariation(form, variations) {
 		var strategy = DEFAULT_STRATEGY;
 		var override = CONFIG.defaultVariationId ? parseInt(CONFIG.defaultVariationId, 10) : 0;
-		var chosen;
+		var wcDefaults = CONFIG.wcDefaultAttrs || {};
+		var chosen = null;
+
+		// Priority 1: explicit filter override (lafka_pdp_default_variation).
 		if (override) {
 			chosen = variations.find(function (v) { return v.variation_id === override; });
 		}
+
+		// Priority 2: operator-set WC default form values. Match a variation
+		// where every supplied default attribute matches.
+		if (!chosen && Object.keys(wcDefaults).length) {
+			chosen = variations.find(function (v) {
+				return Object.keys(wcDefaults).every(function (k) {
+					return v.attributes[k] === wcDefaults[k] || !v.attributes[k];
+				});
+			});
+		}
+
+		// Priority 3: algorithmic strategy (median / lowest / highest).
 		if (!chosen) {
 			chosen = pickDefault(variations, strategy);
 		}
+
 		if (!chosen) { return; }
 		Object.keys(chosen.attributes).forEach(function (attrName) {
 			var value = chosen.attributes[attrName];
@@ -111,11 +127,26 @@
 		});
 	}
 
+	function getToppingPrice(checkbox) {
+		// Prefer the price text rendered in the topping's label — the
+		// Lafka/Pizza-Addons plugin re-renders these on variation change
+		// (e.g. premium toppings cost more on gluten-free crust). The
+		// data-price attribute is stale for unchecked items in that
+		// scenario, which would cause the live total to under-count and
+		// produce sticker shock at the cart.
+		var label = checkbox.closest('label');
+		if (label) {
+			var match = label.textContent.match(/\$(\d+(?:\.\d+)?)/);
+			if (match) { return parseFloat(match[1]); }
+		}
+		var fallback = parseFloat(checkbox.dataset.price);
+		return isNaN(fallback) ? 0 : fallback;
+	}
+
 	function getToppingTotal() {
 		var total = 0;
 		document.querySelectorAll('input[type="checkbox"][data-price]:checked').forEach(function (c) {
-			var p = parseFloat(c.dataset.price);
-			if (!isNaN(p)) { total += p; }
+			total += getToppingPrice(c);
 		});
 		return total;
 	}

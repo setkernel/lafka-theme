@@ -1083,12 +1083,33 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 			$lafka_pdp_strategy             = get_theme_mod( 'lafka_pdp_default_variation_strategy', 'median' );
 			$lafka_pdp_default_variation_id = (int) apply_filters( 'lafka_pdp_default_variation', 0, get_the_ID() );
+
+			// v5.27.1: read WC's product-level "Default form values" first.
+			// These are operator-set per product (WooCommerce → Product →
+			// Variations → Default form values) and represent the intended
+			// initial selection. Falling back to algorithmic median only
+			// when these aren't set avoids surfacing niche choices
+			// (e.g. gluten-free crust) as the auto-select.
+			$lafka_pdp_wc_defaults = array();
+			if ( function_exists( 'wc_get_product' ) ) {
+				$lafka_pdp_product = wc_get_product( get_the_ID() );
+				if ( $lafka_pdp_product && method_exists( $lafka_pdp_product, 'get_default_attributes' ) ) {
+					$lafka_pdp_raw_defaults = (array) $lafka_pdp_product->get_default_attributes();
+					foreach ( $lafka_pdp_raw_defaults as $lafka_pdp_attr_name => $lafka_pdp_attr_value ) {
+						if ( $lafka_pdp_attr_value ) {
+							$lafka_pdp_wc_defaults[ 'attribute_' . $lafka_pdp_attr_name ] = $lafka_pdp_attr_value;
+						}
+					}
+				}
+			}
+
 			wp_localize_script(
 				'lafka-pdp-cta',
 				'lafkaPdpCtaConfig',
 				array(
 					'defaultStrategy'    => $lafka_pdp_strategy,
 					'defaultVariationId' => $lafka_pdp_default_variation_id,
+					'wcDefaultAttrs'     => $lafka_pdp_wc_defaults,
 					'currencySymbol'     => function_exists( 'get_woocommerce_currency_symbol' ) ? html_entity_decode( get_woocommerce_currency_symbol() ) : '$',
 					'addLabel'           => __( 'Add', 'lafka' ),
 					'pickLabel'          => __( 'Select options', 'lafka' ),
