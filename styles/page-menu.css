@@ -1,23 +1,30 @@
 /*
  * lafka-theme/styles/page-menu.css
- * Typography-first menu landing — used by page-menu.php to render
- * all WC product categories as a dense, scannable, image-free card grid.
+ * Menu landing — used by page-menu.php to render WC product categories
+ * as a mobile-first responsive grid.
  *
- * Design principles:
- *  - Mobile-first, 2 columns from 0 px → 3 columns @ 640 px → 4 @ 1024 px
- *  - No category images: text scans faster than images at the *category*
- *    level (item-level photos still live on the category archive pages
- *    where they help with the buy decision).
- *  - Subcategories surfaced inline as small links so users discover
- *    the breadth (e.g. Pizza → NY Style, Classic, Speciality, Vegan).
- *  - 44 px min height per tap target (Apple HIG) — cards run taller
- *    by default to give thumb-room.
- *  - Subtle accent border + hover lift on hover-capable devices.
+ * Design tokens are CSS custom properties so child themes / Customizer
+ * outputs can re-skin without rewriting selectors. Operators control
+ * card style ("text" vs "image") and accent colour via the
+ * "Lafka — Menu Landing" Customizer panel.
  *
- * @since 5.24.0
+ * @since 5.23.0
+ * @since 5.24.0 Typography-first card layout + inline subcategories.
+ * @since 5.25.0 CSS custom properties + image-card variant.
  */
 
 .lafka-menu-landing {
+	--lafka-menu-accent: #fccc4c;
+	--lafka-menu-card-bg: #fff;
+	--lafka-menu-card-radius: 10px;
+	--lafka-menu-card-border: rgba(0, 0, 0, 0.08);
+	--lafka-menu-card-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+	--lafka-menu-card-shadow-hover: 0 4px 10px rgba(0, 0, 0, 0.06);
+	--lafka-menu-title: #1a1a1a;
+	--lafka-menu-muted: #888;
+	--lafka-menu-chip-bg: #f4f4f4;
+	--lafka-menu-chip-text: #555;
+
 	max-width: 1200px;
 	margin: 0 auto;
 	padding: 16px 12px 48px;
@@ -60,14 +67,15 @@
 .lafka-menu-landing__card {
 	margin: 0;
 	padding: 0;
-	background: #fff;
-	border-radius: 10px;
-	border: 1px solid rgba(0, 0, 0, 0.08);
-	box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+	background: var(--lafka-menu-card-bg);
+	border-radius: var(--lafka-menu-card-radius);
+	border: 1px solid var(--lafka-menu-card-border);
+	box-shadow: var(--lafka-menu-card-shadow);
 	transition: transform 160ms ease, box-shadow 160ms ease, border-color 160ms ease;
 	display: flex;
 	flex-direction: column;
 	min-height: 88px;
+	overflow: hidden;
 }
 
 .lafka-menu-landing__card-link {
@@ -81,16 +89,16 @@
 }
 
 .lafka-menu-landing__card-link:focus-visible {
-	outline: 3px solid #fccc4c;
+	outline: 3px solid var(--lafka-menu-accent);
 	outline-offset: 2px;
-	border-radius: 10px;
+	border-radius: var(--lafka-menu-card-radius);
 }
 
 .lafka-menu-landing__card-title {
 	font-size: 1.05rem;
 	font-weight: 600;
 	line-height: 1.25;
-	color: #1a1a1a;
+	color: var(--lafka-menu-title);
 }
 
 @media (min-width: 640px) {
@@ -102,19 +110,19 @@
 
 .lafka-menu-landing__card-count {
 	font-size: 0.8rem;
-	color: #888;
+	color: var(--lafka-menu-muted);
 	letter-spacing: 0.02em;
 }
 
+/* Subcategory chips (always available; only rendered when present). */
 .lafka-menu-landing__subcats {
 	list-style: none;
 	margin: 0;
-	padding: 0 14px 12px;
+	padding: 10px 14px 12px;
 	display: flex;
 	flex-wrap: wrap;
 	gap: 4px 6px;
 	border-top: 1px solid rgba(0, 0, 0, 0.05);
-	padding-top: 10px;
 }
 
 .lafka-menu-landing__subcat {
@@ -125,41 +133,83 @@
 	display: inline-block;
 	font-size: 0.78rem;
 	line-height: 1.2;
-	color: #555;
+	color: var(--lafka-menu-chip-text);
 	text-decoration: none;
 	padding: 4px 8px;
 	border-radius: 999px;
-	background: #f4f4f4;
+	background: var(--lafka-menu-chip-bg);
 	transition: background 140ms ease, color 140ms ease;
 }
 
 .lafka-menu-landing__subcat-link:focus-visible {
-	outline: 2px solid #fccc4c;
+	outline: 2px solid var(--lafka-menu-accent);
 	outline-offset: 2px;
+}
+
+/* Image-card variant — opt-in via Customizer "Card style: With category images" */
+.lafka-menu-landing--style-image .lafka-menu-landing__card-link {
+	padding: 0;
+}
+
+.lafka-menu-landing--style-image .lafka-menu-landing__card-media {
+	display: block;
+	position: relative;
+	aspect-ratio: 4 / 3;
+	overflow: hidden;
+	background: #f3f3f3;
+}
+
+.lafka-menu-landing--style-image .lafka-menu-landing__card-image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+	transition: transform 240ms ease;
+}
+
+.lafka-menu-landing--style-image .lafka-menu-landing__card-image--placeholder {
+	background: linear-gradient(135deg, #f3f3f3 0%, #e9e9e9 100%);
+}
+
+.lafka-menu-landing--style-image .lafka-menu-landing__card-title {
+	padding: 12px 14px 0;
+}
+
+.lafka-menu-landing--style-image .lafka-menu-landing__card-count {
+	padding: 0 14px 14px;
 }
 
 @media (hover: hover) {
 
 	.lafka-menu-landing__card:hover {
 		transform: translateY(-2px);
-		box-shadow: 0 4px 10px rgba(0, 0, 0, 0.06);
+		box-shadow: var(--lafka-menu-card-shadow-hover);
 		border-color: rgba(0, 0, 0, 0.12);
 	}
 
 	.lafka-menu-landing__subcat-link:hover {
-		background: #fccc4c;
-		color: #1a1a1a;
+		background: var(--lafka-menu-accent);
+		color: var(--lafka-menu-title);
+	}
+
+	.lafka-menu-landing--style-image .lafka-menu-landing__card:hover .lafka-menu-landing__card-image {
+		transform: scale(1.03);
 	}
 }
 
 @media (prefers-reduced-motion: reduce) {
 
 	.lafka-menu-landing__card,
-	.lafka-menu-landing__subcat-link {
+	.lafka-menu-landing__subcat-link,
+	.lafka-menu-landing__card-image {
 		transition: none;
 	}
 
 	.lafka-menu-landing__card:hover {
+		transform: none;
+	}
+
+	.lafka-menu-landing--style-image .lafka-menu-landing__card:hover .lafka-menu-landing__card-image {
 		transform: none;
 	}
 }

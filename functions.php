@@ -39,6 +39,9 @@ require_once get_template_directory() . '/incl/template-helpers/product-card-ima
 // Product listings Customizer settings (v5.17.0).
 require_once get_template_directory() . '/incl/customizer-product-listings.php';
 
+// Menu Landing Customizer settings (v5.25.0).
+require_once get_template_directory() . '/incl/customizer-menu-landing.php';
+
 /**
  * Echo the pagination
  */
