@@ -107,6 +107,24 @@ function lafka_order_flow_customizer_register( WP_Customize_Manager $wp_customiz
 	);
 
 	$wp_customize->add_setting(
+		'lafka_cart_empty_popular_enabled',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_cart_empty_popular_enabled',
+		array(
+			'label'       => __( 'Show popular products on empty cart', 'lafka' ),
+			'description' => __( 'When a customer lands on /cart/ with nothing in it, surface the top-selling products instead of a dead-end message.', 'lafka' ),
+			'section'     => 'lafka_order_flow_sticky_cart',
+			'type'        => 'checkbox',
+		)
+	);
+
+	$wp_customize->add_setting(
 		'lafka_archive_quickadd_enabled',
 		array(
 			'default'           => true,

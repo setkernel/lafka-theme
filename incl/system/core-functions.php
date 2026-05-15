@@ -1093,6 +1093,20 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// pages only. Skips the asset cost everywhere else.
 		$lafka_pdp_cta_active = function_exists( 'is_product' ) && is_product()
 			&& (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true );
+		// v5.32.0: empty-cart "Popular" — only on /cart/ and only when
+		// the toggle is on. We can't easily know in advance if the cart
+		// will be empty server-side, so enqueue on all cart pages.
+		$lafka_cart_empty_popular_active = function_exists( 'is_cart' ) && is_cart()
+			&& (bool) get_theme_mod( 'lafka_cart_empty_popular_enabled', true );
+		if ( $lafka_cart_empty_popular_active ) {
+			wp_enqueue_style(
+				'lafka-cart-empty-popular',
+				get_template_directory_uri() . '/styles/lafka-cart-empty-popular.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-cart-empty-popular.css' )
+			);
+		}
+
 		// v5.30.0: service ETA strip — enqueued anywhere the strip might
 		// appear (header on every page, cart/checkout via WC hooks). Tiny
 		// stylesheet (~1 KB), only loads when operator has configured

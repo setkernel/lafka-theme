@@ -1,0 +1,134 @@
+/*
+ * lafka-theme/styles/lafka-cart-empty-popular.css
+ * Empty-cart "Popular" grid — conversion audit #10.
+ *
+ * Replaces the dead-end "Your cart is currently empty" page with
+ * a 6-product entry-point grid sorted by total_sales.
+ *
+ * Token-driven; mobile-first responsive grid.
+ *
+ * @since 5.32.0
+ */
+
+.lafka-cart-empty-popular {
+	max-width: var(--lafka-container-max);
+	margin: var(--lafka-space-8) auto 0;
+	padding: 0 var(--lafka-space-3);
+}
+
+.lafka-cart-empty-popular__title {
+	font-size: var(--lafka-font-size-h3);
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+	margin: 0 0 var(--lafka-space-2);
+	letter-spacing: var(--lafka-letter-spacing-snug);
+}
+
+.lafka-cart-empty-popular__intro {
+	font-size: var(--lafka-font-size-base);
+	color: var(--lafka-color-text-secondary);
+	margin: 0 0 var(--lafka-space-6);
+}
+
+.lafka-cart-empty-popular__grid {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: grid;
+	gap: var(--lafka-space-3);
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 640px) {
+
+	.lafka-cart-empty-popular__grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-cart-empty-popular__grid {
+		grid-template-columns: repeat(6, minmax(0, 1fr));
+	}
+}
+
+.lafka-cart-empty-popular__item {
+	margin: 0;
+	padding: 0;
+}
+
+.lafka-cart-empty-popular__link {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-2);
+	height: 100%;
+	padding: var(--lafka-space-3);
+	background: var(--lafka-color-surface-raised);
+	border-radius: var(--lafka-radius-md);
+	border: 1px solid var(--lafka-color-border-subtle);
+	box-shadow: var(--lafka-shadow-1);
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+	transition:
+		transform var(--lafka-duration-fast) var(--lafka-ease-out),
+		box-shadow var(--lafka-duration-fast) var(--lafka-ease-out);
+}
+
+.lafka-cart-empty-popular__link:focus-visible {
+	outline: 3px solid var(--lafka-color-accent-500);
+	outline-offset: 2px;
+}
+
+.lafka-cart-empty-popular__media {
+	display: block;
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	border-radius: var(--lafka-radius-sm);
+	overflow: hidden;
+	background: var(--lafka-color-surface-sunken);
+}
+
+.lafka-cart-empty-popular__img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.lafka-cart-empty-popular__img--placeholder {
+	background: linear-gradient(135deg, var(--lafka-color-surface-sunken), var(--lafka-color-surface-muted));
+}
+
+.lafka-cart-empty-popular__name {
+	font-size: var(--lafka-font-size-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	line-height: 1.25;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-cart-empty-popular__price {
+	font-size: var(--lafka-font-size-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-accent-500);
+	margin-top: auto;
+	font-variant-numeric: tabular-nums;
+}
+
+@media (hover: hover) {
+
+	.lafka-cart-empty-popular__link:hover {
+		transform: translateY(-2px);
+		box-shadow: var(--lafka-shadow-2);
+		border-color: var(--lafka-color-border-default);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.lafka-cart-empty-popular__link,
+	.lafka-cart-empty-popular__link:hover {
+		transition: none;
+		transform: none;
+	}
+}
