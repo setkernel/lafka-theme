@@ -334,37 +334,44 @@
 	--lafka-status-info-border: var(--lafka-color-info-500);
 }
 
-/* -------- Dark mode -------------------------------------------------------
- * Activates via prefers-color-scheme: dark OR a [data-theme="dark"] flag on
- * <html>. Operators who don't want dark mode can null the second selector
- * out via Customizer (future). */
-@media (prefers-color-scheme: dark) {
+/* -------- Dark mode (opt-in) ----------------------------------------------
+ * v5.81.0: dark mode is now strictly opt-in via [data-theme="dark"] on
+ * <html>. Previously it activated automatically via
+ * prefers-color-scheme: dark, but most components hardcode assumptions
+ * about which surface is light (e.g. PDP chip active state uses
+ * --lafka-color-text-primary as bg expecting ink black). In auto-dark
+ * mode those tokens inverted to #fafafa and the chip active state
+ * became near-white on white — visually invisible.
+ *
+ * The handoff design language is light-mode-only (warm food photography
+ * on light surfaces, red accent). Dark mode shipped here is a forward
+ * hook for operators who explicitly want it — they add data-theme="dark"
+ * to <html> (via a Customizer toggle or admin checkbox) and these
+ * overrides activate. */
+:root[data-theme="dark"] {
+	--lafka-color-text-primary: #fafafa;
+	--lafka-color-text-secondary: #d4d4d8;
+	--lafka-color-text-muted: #a1a1aa;
 
-	:root:not([data-theme="light"]) {
-		--lafka-color-text-primary: #fafafa;
-		--lafka-color-text-secondary: #d4d4d8;
-		--lafka-color-text-muted: #a1a1aa;
+	--lafka-color-surface-page: #0f0f10;
+	--lafka-color-surface-raised: #18181b;
+	--lafka-color-surface-sunken: #09090b;
+	--lafka-color-surface-muted: #27272a;
+	--lafka-color-surface-hover: #27272a;
+	--lafka-color-surface-active: #3f3f46;
+	--lafka-color-surface-overlay: rgba(0, 0, 0, 0.7);
 
-		--lafka-color-surface-page: #0f0f10;
-		--lafka-color-surface-raised: #18181b;
-		--lafka-color-surface-sunken: #09090b;
-		--lafka-color-surface-muted: #27272a;
-		--lafka-color-surface-hover: #27272a;
-		--lafka-color-surface-active: #3f3f46;
-		--lafka-color-surface-overlay: rgba(0, 0, 0, 0.7);
+	--lafka-color-border-subtle: #27272a;
+	--lafka-color-border-default: #3f3f46;
+	--lafka-color-border-strong: #52525b;
 
-		--lafka-color-border-subtle: #27272a;
-		--lafka-color-border-default: #3f3f46;
-		--lafka-color-border-strong: #52525b;
+	--lafka-color-accent-500: #ef4444;
+	--lafka-color-accent-600: #f87171;
 
-		--lafka-color-accent-500: #ef4444;
-		--lafka-color-accent-600: #f87171;
-
-		--lafka-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
-		--lafka-shadow-2: 0 2px 6px rgba(0, 0, 0, 0.45);
-		--lafka-shadow-3: 0 6px 16px rgba(0, 0, 0, 0.5);
-		--lafka-shadow-4: 0 12px 32px rgba(0, 0, 0, 0.6);
-	}
+	--lafka-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+	--lafka-shadow-2: 0 2px 6px rgba(0, 0, 0, 0.45);
+	--lafka-shadow-3: 0 6px 16px rgba(0, 0, 0, 0.5);
+	--lafka-shadow-4: 0 12px 32px rgba(0, 0, 0, 0.6);
 }
 
 /* -------- Motion safety — zero durations under reduce ------------------- */
