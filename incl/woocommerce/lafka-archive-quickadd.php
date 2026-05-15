@@ -9,13 +9,18 @@
  * navigates to the PDP (where the v5.27 sticky CTA + auto-selected
  * default variation take over).
  *
- * Hooks into `woocommerce_after_shop_loop_item` at priority 10 — the
- * standard WC extension point that content-product.php deliberately
- * leaves open for operators to re-add the loop CTA.
+ * Called from woocommerce/content-product.php inside .lafka-product-card
+ * __bottom so the pill flows naturally with the existing flex layout.
+ * Rendered as a <span role="button"> (not a nested <a> / <button>) because
+ * the card's outer wrapper is itself an <a>, and nested interactive
+ * elements would be invalid HTML.
  *
- * Quick-add for simple products piggybacks on WC's own AJAX add-to-cart
- * (the `add_to_cart_button ajax_add_to_cart` classes + data-product_id
- * are what WC's built-in JS listens for) — no new server endpoint.
+ * Pure-vanilla JS at js/lafka-archive-quickadd.js intercepts clicks on
+ * the pill (capture phase, stopPropagation) so taps don't bubble up
+ * and navigate the card's outer link. For simple products it calls
+ * WooCommerce's wc-ajax `add_to_cart` endpoint directly — same path
+ * WC's own add-to-cart button uses, so the `added_to_cart` jQuery
+ * event still fires and the cart drawer + sticky cart bar refresh.
  *
  * Filter surface:
  *   lafka_archive_quickadd_enabled(bool)               — toggle whole feature
@@ -28,11 +33,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-add_action( 'woocommerce_after_shop_loop_item', 'lafka_archive_quickadd_render', 10 );
-
 if ( ! function_exists( 'lafka_archive_quickadd_render' ) ) {
 	/**
-	 * Render the quick-add pill at the end of a loop product card.
+	 * Render the quick-add pill inside a loop product card's __bottom row.
 	 */
 	function lafka_archive_quickadd_render() {
 		global $product;
@@ -51,76 +54,37 @@ if ( ! function_exists( 'lafka_archive_quickadd_render' ) ) {
 			return;
 		}
 
-		$is_variable        = $product->is_type( 'variable' );
-		$is_purchasable     = $product->is_purchasable();
-		$is_in_stock        = $product->is_in_stock();
-		$can_quick_add      = ! $is_variable && $is_purchasable && $is_in_stock;
-		$label              = $can_quick_add ? __( 'Add', 'lafka' ) : __( 'Choose', 'lafka' );
-		$label              = (string) apply_filters( 'lafka_archive_quickadd_label', $label, $product );
-		$price_html         = '';
-		if ( $is_variable ) {
-			$min_price = $product->get_variation_price( 'min' );
-			if ( '' !== $min_price ) {
-				/* translators: %s: starting price for a variable product */
-				$price_html = sprintf( esc_html__( 'from %s', 'lafka' ), wc_price( $min_price ) );
-			}
-		} else {
-			$price = $product->get_price();
-			if ( '' !== $price ) {
-				$price_html = wc_price( $price );
-			}
-		}
+		$is_variable    = $product->is_type( 'variable' );
+		$is_purchasable = $product->is_purchasable();
+		$is_in_stock    = $product->is_in_stock();
+		$can_quick_add  = ! $is_variable && $is_purchasable && $is_in_stock;
+		$label          = $can_quick_add ? __( 'Add', 'lafka' ) : __( 'Choose', 'lafka' );
+		$label          = (string) apply_filters( 'lafka_archive_quickadd_label', $label, $product );
+
+		$aria_label_template = $can_quick_add
+			/* translators: %s: product name */
+			? __( 'Add %s to cart', 'lafka' )
+			/* translators: %s: product name */
+			: __( 'Choose options for %s', 'lafka' );
+		$aria_label = sprintf( $aria_label_template, wp_strip_all_tags( $product->get_name() ) );
+
+		$action  = $can_quick_add ? 'add' : 'choose';
+		$variant = $can_quick_add ? 'lafka-archive-quickadd--add' : 'lafka-archive-quickadd--choose';
 
 		ob_start();
-		if ( $can_quick_add ) {
-			// WC's built-in AJAX add-to-cart JS triggers on these classes +
-			// data-product_id. The added_to_cart event then surfaces in the
-			// cart drawer + sticky cart bar.
-			?>
-			<a
-				class="lafka-archive-quickadd lafka-archive-quickadd--add button add_to_cart_button ajax_add_to_cart"
-				href="<?php echo esc_url( $product->add_to_cart_url() ); ?>"
-				data-product_id="<?php echo esc_attr( (string) $product->get_id() ); ?>"
-				data-product_sku="<?php echo esc_attr( (string) $product->get_sku() ); ?>"
-				data-quantity="1"
-				rel="nofollow"
-				aria-label="
-                <?php
-					/* translators: %s: product name */
-					echo esc_attr( sprintf( __( 'Add %s to cart', 'lafka' ), wp_strip_all_tags( $product->get_name() ) ) );
-				?>
-                "
-			>
-				<span class="lafka-archive-quickadd__label"><?php echo esc_html( $label ); ?></span>
-				<?php if ( $price_html ) : ?>
-					<span class="lafka-archive-quickadd__separator" aria-hidden="true">·</span>
-					<span class="lafka-archive-quickadd__price"><?php echo wp_kses_post( $price_html ); ?></span>
-				<?php endif; ?>
-			</a>
-			<?php
-		} else {
-			// Variable / not-purchasable / out-of-stock: link to PDP. On
-			// the PDP, the v5.27 sticky CTA + auto-default variation
-			// minimize the extra friction.
-			?>
-			<a
-				class="lafka-archive-quickadd lafka-archive-quickadd--choose"
-				href="<?php echo esc_url( $product->get_permalink() ); ?>"
-				aria-label="
-                <?php
-					/* translators: %s: product name */
-					echo esc_attr( sprintf( __( 'Choose options for %s', 'lafka' ), wp_strip_all_tags( $product->get_name() ) ) );
-				?>
-                "
-			>
-				<span class="lafka-archive-quickadd__label"><?php echo esc_html( $label ); ?></span>
-				<?php if ( $price_html ) : ?>
-					<span class="lafka-archive-quickadd__separator" aria-hidden="true">·</span>
-					<span class="lafka-archive-quickadd__price"><?php echo wp_kses_post( $price_html ); ?></span>
-				<?php endif; ?>
-			</a>
-			<?php
-		}
+		?>
+		<span
+			class="lafka-archive-quickadd <?php echo esc_attr( $variant ); ?>"
+			role="button"
+			tabindex="0"
+			data-lafka-quickadd-action="<?php echo esc_attr( $action ); ?>"
+			data-lafka-quickadd-product-id="<?php echo esc_attr( (string) $product->get_id() ); ?>"
+			data-lafka-quickadd-url="<?php echo esc_url( $can_quick_add ? $product->add_to_cart_url() : $product->get_permalink() ); ?>"
+			aria-label="<?php echo esc_attr( $aria_label ); ?>"
+		>
+			<span class="lafka-archive-quickadd__label"><?php echo esc_html( $label ); ?></span>
+		</span>
+		<?php
 		$html = (string) ob_get_clean();
 		echo apply_filters( 'lafka_archive_quickadd_html', $html, $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}

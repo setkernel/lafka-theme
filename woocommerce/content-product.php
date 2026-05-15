@@ -51,6 +51,18 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 					<span class="lafka-product-card__price"><?php woocommerce_template_loop_price(); ?></span>
 				<?php endif; ?>
 				<?php lafka_shop_sale_countdown(); ?>
+				<?php
+				// v5.28.0: quick-add pill rendered as a span[role=button]
+				// inside the existing flex `__bottom` row. A real <a> or
+				// <button> here would be nested inside the card's outer
+				// <a class="lafka-product-card__link"> which is invalid
+				// HTML. The JS in js/lafka-archive-quickadd.js intercepts
+				// pill clicks (capture phase, stopPropagation) so taps on
+				// the pill don't bubble up and navigate the parent link.
+				if ( function_exists( 'lafka_archive_quickadd_render' ) ) {
+					lafka_archive_quickadd_render();
+				}
+				?>
 			</div>
 		</div>
 	</a>

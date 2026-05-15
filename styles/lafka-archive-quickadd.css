@@ -2,10 +2,15 @@
  * lafka-theme/styles/lafka-archive-quickadd.css
  * Quick-add CTA pill on product loop cards — conversion audit QW3.
  *
- * Positioning: absolute bottom-right of the .lafka-product-card so the
- * pill always sits in the thumb-reach zone regardless of card height.
- * Sibling of the card's main `<a>` (the underlying click-the-whole-card
- * link) so tapping the pill never accidentally navigates to the PDP.
+ * Renders inside .lafka-product-card__bottom (the existing flex row
+ * that holds price + countdown). Pill aligns to the right of the row.
+ * No absolute positioning — would have collided with the card's
+ * `display: grid` + `.lafka-product-card__link { display: contents }`
+ * layout (see v5.28.0 retro in lafka-archive-quickadd.php).
+ *
+ * Pill is a <span role="button"> because the card's outer <a> wrap
+ * forbids nested interactive elements. JS handles the click via
+ * capture-phase stopPropagation.
  *
  * All values from the design system. The pill uses the accent CTA
  * surface so it reads as the primary action on the card.
@@ -13,38 +18,34 @@
  * @since 5.28.0
  */
 
-.lafka-product-card {
-	position: relative;
+.lafka-product-card__bottom {
+	gap: var(--lafka-space-2);
+	flex-wrap: wrap;
+	align-items: center;
 }
 
 .lafka-archive-quickadd {
-	position: absolute;
-	right: var(--lafka-space-3);
-	bottom: var(--lafka-space-3);
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: var(--lafka-space-1);
-	z-index: var(--lafka-z-raised);
-	min-height: var(--lafka-tap-target);
-	padding: var(--lafka-space-2) var(--lafka-space-4);
+	margin-left: auto;
+	min-height: 36px;
+	padding: 6px var(--lafka-space-3);
 	background: var(--lafka-color-accent-500);
 	color: var(--lafka-color-text-on-accent);
 	border-radius: var(--lafka-radius-pill);
 	font-family: var(--lafka-font-sans);
 	font-size: var(--lafka-font-size-sm);
 	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-snug);
 	text-decoration: none;
 	white-space: nowrap;
-	box-shadow: var(--lafka-shadow-2);
-	font-variant-numeric: tabular-nums;
+	cursor: pointer;
+	user-select: none;
 	transition:
 		background-color var(--lafka-duration-fast) var(--lafka-ease-out),
 		transform var(--lafka-duration-fast) var(--lafka-ease-out);
-}
-
-.lafka-archive-quickadd:hover,
-.lafka-archive-quickadd:focus-visible {
-	color: var(--lafka-color-text-on-accent);
 }
 
 .lafka-archive-quickadd:focus-visible {
@@ -52,17 +53,6 @@
 	outline-offset: 2px;
 }
 
-.lafka-archive-quickadd__price {
-	font-weight: var(--lafka-font-weight-bold);
-}
-
-.lafka-archive-quickadd__separator {
-	opacity: 0.6;
-}
-
-/* Variable-product pills are secondary in intent — same surface, slightly
- * less emphatic. Same colour family for visual consistency.
- * Could also swap to a ghost variant; keeping solid for now. */
 .lafka-archive-quickadd--choose .lafka-archive-quickadd__label::after {
 	content: " →";
 }
@@ -80,24 +70,16 @@
 	transform: scale(0.97);
 }
 
-/* WC AJAX "loading" state — WC adds .loading to the button during the
- * fetch + .added when it succeeds. Both should look intentional. */
+/* AJAX loading / added states (set by lafka-archive-quickadd.js). */
 .lafka-archive-quickadd.loading {
 	opacity: 0.75;
 	pointer-events: none;
 }
 
-.lafka-archive-quickadd.added::after {
-	content: "✓";
-	margin-left: var(--lafka-space-1);
+.lafka-archive-quickadd.added {
+	background: var(--lafka-color-success);
 }
 
-/* Narrow viewports: hide the separator + price (the price is already in
- * the card body) so the pill stays compact next to the thumb. */
-@media (max-width: 480px) {
-
-	.lafka-archive-quickadd__separator,
-	.lafka-archive-quickadd__price {
-		display: none;
-	}
+.lafka-archive-quickadd.added .lafka-archive-quickadd__label::after {
+	content: " ✓";
 }

@@ -1077,6 +1077,16 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				array( 'lafka-tokens' ),
 				lafka_asset_version( '/styles/lafka-archive-quickadd.css' )
 			);
+			wp_enqueue_script(
+				'lafka-archive-quickadd',
+				get_template_directory_uri() . '/js/lafka-archive-quickadd.js',
+				array( 'jquery' ),
+				lafka_asset_version( '/js/lafka-archive-quickadd.js' ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
 		}
 
 		// v5.27.0: PDP sticky CTA — conditionally enqueued on single-product
