@@ -142,9 +142,19 @@ ul.products {
  * bottom flex row. Without this reset, the price collapses to 0×0
  * (an absolutely-positioned only child gives its inline-span parent
  * zero intrinsic size) and is invisible to customers.
+ *
+ * v5.42.0: also undo `display: none` on .related.products .prod_hold
+ * .price_hold (style.css:11059-11063). Legacy related-products section
+ * hid the price on purpose for the old overlay design; our list-row
+ * cards need the price visible everywhere (related, upsell, cross-sell).
  */
 .lafka-product-card .price_hold,
-.lafka-product-card__price .price_hold {
+.lafka-product-card__price .price_hold,
+.related.products .lafka-product-card .price_hold,
+.related.products .lafka-product-card__price .price_hold,
+.upsells .lafka-product-card .price_hold,
+.upsells .lafka-product-card__price .price_hold {
+	display: block;
 	position: static;
 	top: auto;
 	left: auto;
