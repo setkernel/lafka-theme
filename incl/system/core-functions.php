@@ -1265,6 +1265,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				array( 'lafka-tokens', 'lafka-home-v2' ),
 				lafka_asset_version( '/styles/lafka-menu-archive.css' )
 			);
+			// v5.68.0: menu controls — fulfilment toggle + search + dietary chips.
+			wp_enqueue_script(
+				'lafka-menu-controls',
+				get_template_directory_uri() . '/js/lafka-menu-controls.js',
+				array(),
+				lafka_asset_version( '/js/lafka-menu-controls.js' ),
+				true
+			);
 		}
 
 		// v5.62.0: PDP handoff polish — layered on top of pdp-redesign.css
@@ -1285,6 +1293,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				get_template_directory_uri() . '/styles/lafka-cart-handoff.css',
 				array( 'lafka-tokens' ),
 				lafka_asset_version( '/styles/lafka-cart-handoff.css' )
+			);
+			// v5.68.0: cart page controls — pickup/delivery tabs + clear-order.
+			wp_enqueue_script(
+				'lafka-cart-controls',
+				get_template_directory_uri() . '/js/lafka-cart-controls.js',
+				array(),
+				lafka_asset_version( '/js/lafka-cart-controls.js' ),
+				true
 			);
 		}
 

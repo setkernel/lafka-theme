@@ -106,6 +106,106 @@
 	}
 }
 
+/* -------- Pickup / Delivery tabs (above items list) ---------------------
+ * v5.68.0 — Phase A.2 handoff feature. Mirrors menu archive segmented control. */
+.lafka-cart-tabs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0;
+	padding: 4px;
+	background: var(--lafka-color-surface-muted);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
+	margin-bottom: var(--lafka-space-5);
+}
+
+.lafka-cart-tab {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 2px;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border: 0;
+	background: transparent;
+	border-radius: var(--lafka-radius-sm);
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	color: var(--lafka-color-text-secondary);
+	text-align: left;
+}
+
+.lafka-cart-tab:hover {
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-cart-tab.is-active {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-cart-tab.is-active .lafka-cart-tab__meta {
+	color: rgba(255, 255, 255, 0.78);
+}
+
+.lafka-cart-tab__label {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: -0.005em;
+}
+
+.lafka-cart-tab__meta {
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-cart-tab:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* -------- Bottom actions row (+ Add more items / Clear order) ---------- */
+.lafka-cart-bottom-actions {
+	display: flex;
+	gap: var(--lafka-space-4);
+	flex-wrap: wrap;
+	margin-block: var(--lafka-space-4);
+}
+
+.lafka-cart-bottom-actions__add,
+.lafka-cart-bottom-actions__clear {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	padding: var(--lafka-space-2) var(--lafka-space-4);
+	border: 1px solid var(--lafka-color-border-default);
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-primary);
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	cursor: pointer;
+	text-decoration: none;
+	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-cart-bottom-actions__add:hover {
+	border-color: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-cart-bottom-actions__clear {
+	color: var(--lafka-color-text-muted);
+	border-color: transparent;
+}
+
+.lafka-cart-bottom-actions__clear:hover {
+	color: var(--lafka-color-error-500);
+}
+
 /* -------- Items list — 88×88 thumb rows -------------------------------- */
 .woocommerce-cart .lafka-cart,
 .woocommerce-cart ul.lafka-cart {

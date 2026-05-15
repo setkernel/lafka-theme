@@ -20,6 +20,53 @@ do_action( 'woocommerce_before_cart' );
 ?>
 
 <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
+
+	<?php
+	/* v5.68.0: handoff pickup/delivery tabs above items list.
+	 * State persists to localStorage.peppery.fulfilment via lafka-menu-controls.js
+	 * (loaded on menu archive) — cart page uses lafka-cart-controls.js for the same. */
+	$lafka_cart_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
+	$lafka_cart_addr_short = isset( $lafka_cart_info['address_short'] ) ? (string) $lafka_cart_info['address_short'] : '';
+	$lafka_cart_city       = isset( $lafka_cart_info['city'] ) ? (string) $lafka_cart_info['city'] : '';
+	$lafka_cart_eta        = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
+	$lafka_cart_pickup_eta = $lafka_cart_eta && ! empty( $lafka_cart_eta['pickup'] ) ? (string) $lafka_cart_eta['pickup'] : '';
+	$lafka_cart_threshold  = (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 30 );
+	$lafka_cart_threshold_label = function_exists( 'wc_price' )
+		? wp_strip_all_tags( wc_price( $lafka_cart_threshold ) )
+		: sprintf( '$%s', number_format_i18n( $lafka_cart_threshold, 0 ) );
+	?>
+	<div class="lafka-cart-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Fulfilment method', 'lafka' ); ?>" data-lafka-cart-tabs>
+		<button type="button" class="lafka-cart-tab is-active" role="tab" aria-selected="true" data-lafka-fulfilment="pickup">
+			<span class="lafka-cart-tab__label"><?php esc_html_e( 'Pickup', 'lafka' ); ?></span>
+			<span class="lafka-cart-tab__meta">
+				<?php
+				if ( '' !== $lafka_cart_pickup_eta ) {
+					/* translators: %s — pickup ETA, e.g. "~25 min" */
+					printf( esc_html__( 'Ready in %s', 'lafka' ), esc_html( $lafka_cart_pickup_eta ) );
+					if ( '' !== $lafka_cart_addr_short ) {
+						echo ' · ' . esc_html( $lafka_cart_addr_short );
+					}
+				} elseif ( '' !== $lafka_cart_addr_short ) {
+					echo esc_html( $lafka_cart_addr_short );
+				}
+				?>
+			</span>
+		</button>
+		<button type="button" class="lafka-cart-tab" role="tab" aria-selected="false" data-lafka-fulfilment="delivery">
+			<span class="lafka-cart-tab__label"><?php esc_html_e( 'Delivery', 'lafka' ); ?></span>
+			<span class="lafka-cart-tab__meta">
+				<?php
+				/* translators: 1: free-delivery threshold; 2: city. */
+				printf(
+					esc_html__( 'Free over %1$s%2$s', 'lafka' ),
+					esc_html( $lafka_cart_threshold_label ),
+					'' !== $lafka_cart_city ? ' · ' . esc_html( $lafka_cart_city ) : ''
+				);
+				?>
+			</span>
+		</button>
+	</div>
+
 	<?php do_action( 'woocommerce_before_cart_table' ); ?>
 
 	<ul class="lafka-cart">
@@ -138,6 +185,28 @@ do_action( 'woocommerce_before_cart' );
 
 		<?php do_action( 'woocommerce_after_cart_contents' ); ?>
 	</ul>
+
+	<?php
+	/* v5.68.0: handoff "+ Add more items" / "Clear order" row.
+	 * The first action links to the shop / menu. The second posts to the
+	 * cart URL with empty quantities — WC's standard "Update cart" with
+	 * zero qty removes lines. */
+	$lafka_cart_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/menu/' );
+	?>
+	<div class="lafka-cart-bottom-actions">
+		<a class="lafka-cart-bottom-actions__add" href="<?php echo esc_url( $lafka_cart_shop_url ); ?>">
+			<span aria-hidden="true">+</span>
+			<?php esc_html_e( 'Add more items', 'lafka' ); ?>
+		</a>
+		<button
+			type="button"
+			class="lafka-cart-bottom-actions__clear"
+			data-lafka-cart-clear
+		>
+			<span aria-hidden="true">🗑</span>
+			<?php esc_html_e( 'Clear order', 'lafka' ); ?>
+		</button>
+	</div>
 
 	<div class="lafka-cart__actions">
 		<?php if ( wc_coupons_enabled() ) { ?>

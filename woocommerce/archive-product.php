@@ -83,6 +83,11 @@ $lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 		</div>
 	</header>
 
+	<?php
+	// v5.68.0: menu controls (fulfilment toggle + search + dietary filter chips).
+	get_template_part( 'partials/menu-controls' );
+	?>
+
 	<?php if ( ! empty( $lafka_arch_terms ) ) : ?>
 		<nav class="lafka-menu__cats" aria-label="<?php esc_attr_e( 'Categories', 'lafka' ); ?>">
 			<div class="lafka-container">

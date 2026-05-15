@@ -58,6 +58,220 @@
 	max-width: 60ch;
 }
 
+/* -------- Menu controls (fulfilment / search / filter chips) -----------
+ * v5.68.0 — Phase A.1 functional additions per handoff "Menu page" spec. */
+.lafka-menu__controls {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-3);
+	margin-block: var(--lafka-space-5) var(--lafka-space-3);
+}
+
+@media (min-width: 768px) {
+
+	.lafka-menu__controls {
+		gap: var(--lafka-space-4);
+	}
+}
+
+/* Fulfilment toggle — segmented control */
+.lafka-menu__tabs {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 0;
+	background: var(--lafka-color-surface-muted);
+	border-radius: var(--lafka-radius-md);
+	padding: 4px;
+	border: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-menu__tab {
+	display: flex;
+	flex-direction: column;
+	align-items: flex-start;
+	gap: 2px;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border: none;
+	background: transparent;
+	border-radius: var(--lafka-radius-sm);
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	color: var(--lafka-color-text-secondary);
+	text-align: left;
+}
+
+.lafka-menu__tab:hover {
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-menu__tab.is-active {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-menu__tab.is-active .lafka-menu__tab-meta {
+	color: rgba(255, 255, 255, 0.78);
+}
+
+.lafka-menu__tab-label {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: -0.005em;
+}
+
+.lafka-menu__tab-meta {
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	font-weight: var(--lafka-font-weight-regular);
+}
+
+.lafka-menu__tab:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* Search */
+.lafka-menu__search {
+	display: flex;
+}
+
+.lafka-menu__search-label {
+	display: flex;
+	align-items: center;
+	width: 100%;
+	background: var(--lafka-color-surface-sunken);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
+	padding: 0 var(--lafka-space-3);
+	gap: var(--lafka-space-2);
+	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-menu__search-label:focus-within {
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-menu__search-icon {
+	color: var(--lafka-color-text-muted);
+	font-size: 16px;
+	line-height: 1;
+}
+
+.lafka-menu__search-input {
+	flex: 1 1 auto;
+	min-width: 0;
+	background: transparent;
+	border: 0;
+	padding: var(--lafka-space-3) 0;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	color: var(--lafka-color-text-primary);
+	outline: none;
+}
+
+.lafka-menu__search-input::placeholder {
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-menu__search-clear {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border: 0;
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-muted);
+	border-radius: var(--lafka-radius-pill);
+	font-size: 14px;
+	line-height: 1;
+	cursor: pointer;
+	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-menu__search-clear:hover {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+/* Dietary filter chips */
+.lafka-menu__filters {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	flex-wrap: wrap;
+}
+
+.lafka-menu__filters-label {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-muted);
+	margin-inline-end: var(--lafka-space-1);
+}
+
+.lafka-menu__chip {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-1);
+	padding: var(--lafka-space-2) var(--lafka-space-3);
+	border: 1px solid var(--lafka-color-border-default);
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-primary);
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-menu__chip:hover {
+	border-color: var(--lafka-color-text-primary);
+}
+
+.lafka-menu__chip[aria-pressed="true"],
+.lafka-menu__chip.is-on {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+	border-color: var(--lafka-color-text-primary);
+}
+
+.lafka-menu__chip:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-menu__clear-filters {
+	border: 0;
+	background: transparent;
+	color: var(--lafka-color-accent-500);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	cursor: pointer;
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	margin-inline-start: var(--lafka-space-1);
+}
+
+.lafka-menu__clear-filters:hover {
+	color: var(--lafka-color-accent-600);
+}
+
+/* Hidden by filter — cards smoothly fade out */
+.lafka-favs__item.is-hidden-by-filter,
+.lafka-menu__grid > li.is-hidden-by-filter {
+	display: none;
+}
+
 /* -------- Sticky category chip strip ------------------------------------ */
 .lafka-menu__cats {
 	position: sticky;

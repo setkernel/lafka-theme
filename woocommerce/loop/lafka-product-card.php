@@ -25,8 +25,25 @@ if ( '' === $lafka_arch_short ) {
 }
 $lafka_arch_price    = $lafka_arch_p->get_price_html();
 $lafka_arch_featured = $lafka_arch_p->is_featured();
+
+// v5.68.0: emit data-* attributes for menu-controls JS filter matching.
+// Tags come from WC product_tag slugs ('popular', 'vegetarian', 'vegan', 'spicy').
+// Featured products auto-tagged 'popular' regardless of WC tag.
+$lafka_arch_tag_slugs = array();
+$lafka_arch_tags = function_exists( 'wp_get_post_terms' ) ? wp_get_post_terms( $lafka_arch_p->get_id(), 'product_tag', array( 'fields' => 'slugs' ) ) : array();
+if ( ! is_wp_error( $lafka_arch_tags ) && is_array( $lafka_arch_tags ) ) {
+	$lafka_arch_tag_slugs = array_map( 'strtolower', $lafka_arch_tags );
+}
+if ( $lafka_arch_featured && ! in_array( 'popular', $lafka_arch_tag_slugs, true ) ) {
+	$lafka_arch_tag_slugs[] = 'popular';
+}
+$lafka_arch_tags_attr = implode( ',', $lafka_arch_tag_slugs );
 ?>
-<li class="lafka-favs__item">
+<li
+	class="lafka-favs__item"
+	data-lafka-product-name="<?php echo esc_attr( $lafka_arch_name ); ?>"
+	data-lafka-product-tags="<?php echo esc_attr( $lafka_arch_tags_attr ); ?>"
+>
 	<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_arch_url ); ?>">
 		<div class="lafka-favs__media">
 			<?php if ( $lafka_arch_img ) : ?>
