@@ -1,28 +1,27 @@
 /* =========================================================================
- * Header chrome — restyle the legacy #header to match handoff spec.
+ * Header chrome — handoff-spec rebuild (v5.55.0).
  * /design_handoff_peppery_ordering/README.md "Header"
  *
- * Strategy: pure CSS overrides. No PHP rewrite — preserve existing
- * integrations (WPML, vendor plugins, theme-options framework). Two
- * legacy strips (#header_top "Delivery to..." + .lafka-top-bar-message
- * "Order Online or Call Now") are now duplicated by the v5.54.0
- * announce bar — hide them.
+ * Pairs with the new header.php (replaces the 364-line legacy header).
+ * Legacy markup is kept under header-legacy.php for reference.
+ *
+ * Layout (single row, 64 mobile / 72 desktop):
+ *  [☰ mobile only]  [logo]  [primary nav]  [actions]
  *
  * @since 5.55.0
  * ========================================================================= */
 
-/* -------- Hide legacy strips superseded by the announce bar -------------- */
+/* -------- Hide any legacy chrome elements that still render via plugins --
+ * (the new header.php doesn't emit these but defensive in case a plugin
+ *  hooks into them.) */
 #header_top,
 .lafka-top-bar-message,
 .lafka-order-method-bar {
 	display: none !important;
 }
 
-/* The "Switch pickup/delivery" affordance that lived in .lafka-order-method-bar
- * moves to the cart/checkout fulfilment toggle per handoff. Removed here. */
-
 /* -------- Sticky header with backdrop blur ------------------------------- */
-#header {
+.lafka-header {
 	position: sticky;
 	top: 0;
 	z-index: var(--lafka-z-header);
@@ -34,148 +33,142 @@
 	transition: box-shadow var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-/* Slim the main row to handoff height (64 mobile / 72 desktop). */
-#header .main_menu_holder.inner {
+.lafka-header__inner {
 	display: flex;
 	align-items: center;
-	gap: var(--lafka-space-4);
+	gap: var(--lafka-space-3);
 	min-height: var(--lafka-header-h);
-	max-width: var(--lafka-container-max);
-	margin-inline: auto;
 	padding-block: var(--lafka-space-2);
-	padding-inline: var(--lafka-gutter-mobile);
 }
 
 @media (min-width: 768px) {
 
-	#header .main_menu_holder.inner {
+	.lafka-header__inner {
 		min-height: var(--lafka-header-h-desk);
-		padding-inline: var(--lafka-gutter-laptop);
+		gap: var(--lafka-space-4);
 	}
 }
 
-/* -------- Logo — strip the legacy absolute "drop badge" positioning ------
- * Legacy theme renders #logo as an absolutely-positioned floating badge
- * (top: -8px; left: 50%; background: red shield). Handoff wants a
- * straightforward inline logo, left-aligned in the header row. */
-#header #logo,
-#header #lafka_logo_container,
-#header .lafka-logo-holder,
-#header #lafka_logo {
-	position: static !important;
-	transform: none !important;
-	flex: 0 0 auto;
-	margin: 0;
-	margin-inline-end: var(--lafka-space-4);
-	background: transparent !important;
-	width: auto !important;
-	height: auto !important;
-	top: auto !important;
-	left: auto !important;
-	right: auto !important;
-	bottom: auto !important;
-	order: -1; /* always first in flex row */
-}
-
-#header #logo > a,
-#header #lafka_logo_container > a,
-#header #lafka_logo > a {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--lafka-space-2);
-}
-
-#header #logo img,
-#header #lafka_logo_container img,
-#header .lafka-logo-holder img,
-#header #lafka_logo img {
-	max-height: 44px;
-	max-width: 160px;
-	width: auto;
-	height: auto;
-	display: block;
-}
-
-@media (min-width: 768px) {
-
-	#header #logo img,
-	#header #lafka_logo_container img,
-	#header .lafka-logo-holder img,
-	#header #lafka_logo img {
-		max-height: 52px;
-		max-width: 200px;
-	}
-}
-
-/* -------- Primary nav --------------------------------------------------
- * Legacy theme paints #main-menu yellow (rgb(255,202,60)) and gives it
- * width: 100% so it wraps to its own row. Override both to transparent
- * and shrinkable so it sits inline with the cart cluster.
- *
- * Higher specificity (`body #header` chain) to win against legacy theme
- * selectors that use `!important`. */
-body #header #main-menu,
-body #header .menu-main-menu-container,
-body #header #main_nav {
-	display: flex;
-	align-items: center;
-	gap: var(--lafka-space-1);
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	background: transparent !important;
-	background-color: transparent !important;
-	background-image: none !important;
-	width: auto !important;
-	max-width: 100% !important;
-	flex: 1 1 0 !important;
-	min-width: 0 !important;
-	justify-content: center;
-	min-height: 0 !important;
-	height: auto !important;
-	overflow-x: auto;
-	overflow-y: hidden;
-	scrollbar-width: none;
-	-ms-overflow-style: none;
-}
-
-body #header #main-menu::-webkit-scrollbar,
-body #header #main_nav::-webkit-scrollbar {
+/* -------- Mobile menu toggle (hamburger) -------------------------------- */
+.lafka-header__menu-toggle {
 	display: none;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	flex: 0 0 auto;
+	border: none;
+	background: transparent;
+	color: var(--lafka-color-text-primary);
+	font-size: 20px;
+	border-radius: var(--lafka-radius-pill);
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-body #header #main-menu ul.menu,
-body #header #main_nav ul,
-body #header #main_nav.menu,
-body #header ul#main_nav {
-	display: flex;
-	align-items: center;
-	gap: var(--lafka-space-1);
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	background: transparent !important;
-	background-color: transparent !important;
-	flex-wrap: nowrap;
-	min-width: 0;
+.lafka-header__menu-toggle:hover {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-accent-500);
+}
+
+.lafka-header__menu-toggle:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
 }
 
 @media (max-width: 767px) {
 
-	#header #main-menu,
-	#header #main_nav {
+	.lafka-header__menu-toggle {
+		display: inline-flex;
+	}
+}
+
+/* -------- Logo + wordmark ------------------------------------------------ */
+.lafka-header__logo {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	flex: 0 0 auto;
+	text-decoration: none;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-header__logo-img {
+	display: block;
+	width: auto;
+	height: auto;
+	max-height: 36px;
+	max-width: 100px;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-header__logo-img {
+		max-height: 44px;
+		max-width: 140px;
+	}
+}
+
+.lafka-header__wordmark {
+	display: none;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.25rem;
+	letter-spacing: -0.01em;
+	color: var(--lafka-color-text-primary);
+	line-height: 1;
+	text-transform: lowercase;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-header__wordmark {
+		display: inline-block;
+		font-size: 1.5rem;
+	}
+}
+
+/* -------- Primary nav --------------------------------------------------- */
+.lafka-header__nav {
+	flex: 1 1 0;
+	min-width: 0;
+	display: flex;
+	justify-content: center;
+}
+
+@media (max-width: 767px) {
+
+	.lafka-header__nav {
 		display: none;
 	}
 }
 
-#header #main-menu li,
-#header #main_nav li {
+.lafka-header__nav-list {
+	list-style: none;
 	margin: 0;
 	padding: 0;
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-1);
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+	max-width: 100%;
 }
 
-#header #main-menu li > a,
-#header #main_nav li > a {
+.lafka-header__nav-list::-webkit-scrollbar {
+	display: none;
+}
+
+.lafka-header__nav-list > li {
+	margin: 0;
+	padding: 0;
+	flex: 0 0 auto;
+}
+
+.lafka-header__nav-list > li > a {
 	display: inline-flex;
 	align-items: center;
 	padding: var(--lafka-space-2) var(--lafka-space-3);
@@ -183,32 +176,31 @@ body #header ul#main_nav {
 	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-medium);
 	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+	text-transform: none;
 	letter-spacing: -0.005em;
 	border-radius: var(--lafka-radius-md);
-	text-transform: none;
 	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	white-space: nowrap;
 }
 
-#header #main-menu li > a:hover,
-#header #main_nav li > a:hover {
+.lafka-header__nav-list > li > a:hover {
 	color: var(--lafka-color-accent-500);
 	background: var(--lafka-color-surface-muted);
 }
 
-#header #main-menu li.current-menu-item > a,
-#header #main_nav li.current-menu-item > a,
-#header #main-menu li.current_page_item > a,
-#header #main_nav li.current_page_item > a {
+.lafka-header__nav-list > li.current-menu-item > a,
+.lafka-header__nav-list > li.current_page_item > a,
+.lafka-header__nav-list > li.current-menu-ancestor > a {
 	color: var(--lafka-color-accent-500);
 	font-weight: var(--lafka-font-weight-semibold);
 	position: relative;
 }
 
-#header #main-menu li.current-menu-item > a::after,
-#header #main_nav li.current-menu-item > a::after,
-#header #main-menu li.current_page_item > a::after,
-#header #main_nav li.current_page_item > a::after {
+.lafka-header__nav-list > li.current-menu-item > a::after,
+.lafka-header__nav-list > li.current_page_item > a::after,
+.lafka-header__nav-list > li.current-menu-ancestor > a::after {
 	content: "";
 	position: absolute;
 	left: var(--lafka-space-3);
@@ -219,53 +211,17 @@ body #header ul#main_nav {
 	border-radius: var(--lafka-radius-pill);
 }
 
-/* -------- Right side cluster (search/cart/account) ---------------------- */
-
-/* Legacy theme sets this absolute — undo so flex layout flows correctly. */
-body #header .lafka-search-cart-holder {
-	position: static !important;
-	top: auto !important;
-	right: auto !important;
-	left: auto !important;
-	bottom: auto !important;
-	transform: none !important;
+/* -------- Right-side actions cluster ------------------------------------ */
+.lafka-header__actions {
 	display: flex;
 	align-items: center;
 	gap: var(--lafka-space-2);
 	flex: 0 0 auto;
 	margin-inline-start: auto;
-	margin-block: 0;
-	order: 99; /* always last in flex row */
 }
 
-/* Parent row — kill legacy floats / clearfix that force wrap */
-body #header .main_menu_holder.inner {
-	flex-wrap: nowrap !important;
-	height: auto !important;
-}
-
-body #header .main_menu_holder.inner::after,
-body #header .main_menu_holder.inner::before {
-	display: none !important;
-}
-
-/* Cart icon — slim 40×40 button with badge */
-#header #cart-module,
-#header .site-header-cart {
-	margin: 0;
-	padding: 0;
-	list-style: none;
-	position: relative;
-}
-
-#header #cart-module > li,
-#header .site-header-cart > li {
-	margin: 0;
-	padding: 0;
-}
-
-#header #cart-module a.cart-contents,
-#header .site-header-cart a.cart-contents {
+.lafka-header__icon-btn,
+.lafka-header__cart {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -274,25 +230,32 @@ body #header .main_menu_holder.inner::before {
 	border-radius: var(--lafka-radius-pill);
 	background: transparent;
 	color: var(--lafka-color-text-primary);
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	text-decoration: none;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 	position: relative;
 }
 
-#header #cart-module a.cart-contents:hover,
-#header .site-header-cart a.cart-contents:hover {
+.lafka-header__icon-btn:hover,
+.lafka-header__cart:hover {
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-accent-500);
 }
 
-#header #cart-module a.cart-contents i,
-#header .site-header-cart a.cart-contents i {
+.lafka-header__icon-btn i,
+.lafka-header__cart i {
 	font-size: 18px;
 	line-height: 1;
 }
 
-#header #cart-module .lafka-mini-cart-count,
-#header .site-header-cart .count,
-#header .site-header-cart .lafka-cart-count {
+.lafka-header__icon-btn:focus-visible,
+.lafka-header__cart:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* Cart badge */
+.lafka-header__cart-count {
 	position: absolute;
 	top: -2px;
 	right: -2px;
@@ -310,73 +273,34 @@ body #header .main_menu_holder.inner::before {
 	align-items: center;
 	justify-content: center;
 	box-shadow: 0 0 0 2px var(--lafka-color-surface-page);
+	pointer-events: none;
+	animation: lafka-cart-pop 250ms var(--lafka-motion-ease-out);
 }
 
-/* Search/account/wishlist icon buttons — uniform 40×40 */
-#header .lafka-search-trigger,
-#header #lafka-account-holder,
-#header .lafka-wishlist-counter {
-	display: inline-flex;
-}
-
-#header .lafka-search-trigger > a,
-#header #lafka-account-holder > a,
-#header .lafka-wishlist-counter > a {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 40px;
-	height: 40px;
-	border-radius: var(--lafka-radius-pill);
-	color: var(--lafka-color-text-primary);
-	background: transparent;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-#header .lafka-search-trigger > a:hover,
-#header #lafka-account-holder > a:hover,
-#header .lafka-wishlist-counter > a:hover {
-	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-accent-500);
-}
-
-#header .lafka-search-trigger i,
-#header #lafka-account-holder > a i,
-#header .lafka-wishlist-counter i {
-	font-size: 16px;
-	line-height: 1;
-}
-
-/* -------- Mobile menu toggle (hamburger) -------------------------------- */
-#header .mob-menu-toggle {
+.lafka-header__cart-count[data-empty="1"],
+.lafka-header__cart-count:empty {
 	display: none;
-	align-items: center;
-	justify-content: center;
-	width: 40px;
-	height: 40px;
-	border-radius: var(--lafka-radius-pill);
-	background: transparent;
-	color: var(--lafka-color-text-primary);
-	flex: 0 0 auto;
-	font-size: 18px;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-#header .mob-menu-toggle:hover {
-	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-accent-500);
-}
+@keyframes lafka-cart-pop {
 
-@media (max-width: 767px) {
+	0% {
+		transform: scale(0.6);
+		opacity: 0;
+	}
 
-	#header .mob-menu-toggle {
-		display: inline-flex;
+	60% {
+		transform: scale(1.15);
+		opacity: 1;
+	}
+
+	100% {
+		transform: scale(1);
 	}
 }
 
-/* -------- "Order now" CTA (injected by lafka-header-chrome.js) ---------- */
-.lafka-header-cta {
+/* -------- "Order now" CTA ----------------------------------------------- */
+.lafka-header__cta {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--lafka-space-2);
@@ -392,49 +316,40 @@ body #header .main_menu_holder.inner::before {
 	white-space: nowrap;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		transform 60ms var(--lafka-motion-ease-out);
-	margin-inline-start: var(--lafka-space-2);
+	margin-inline-start: var(--lafka-space-1);
 }
 
-.lafka-header-cta:hover {
+.lafka-header__cta:hover {
 	background: var(--lafka-color-accent-600);
 	color: var(--lafka-color-text-inverse);
 }
 
-.lafka-header-cta:active {
+.lafka-header__cta:active {
 	transform: translateY(1px);
 }
 
-.lafka-header-cta:focus-visible {
+.lafka-header__cta:focus-visible {
 	outline: none;
 	box-shadow: var(--lafka-shadow-focus);
 }
 
-.lafka-header-cta__arrow {
+.lafka-header__cta-arrow {
 	display: inline-block;
 	transition: transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-.lafka-header-cta:hover .lafka-header-cta__arrow {
+.lafka-header__cta:hover .lafka-header__cta-arrow {
 	transform: translateX(2px);
 }
 
 @media (max-width: 767px) {
 
-	.lafka-header-cta {
+	.lafka-header__cta {
 		display: none;
 	}
 }
 
-/* -------- Hide the legacy yellow category strip below the header -------
- * This is a WPBakery-built secondary nav. The handoff puts categories
- * inside the menu/mobile-drawer instead. */
-#header + .vc_row[style*="background"],
-#header + .vc_row.yellow-strip,
-.lafka-legacy-category-strip {
-	display: none !important;
-}
-
-/* Push main content below sticky header without overlap */
-body:not(.lafka-no-sticky-offset) #main {
-	scroll-padding-top: var(--lafka-header-h);
+/* -------- Scroll-shadow polish ------------------------------------------ */
+.lafka-header.is-scrolled {
+	box-shadow: 0 4px 12px rgba(24, 24, 27, 0.06);
 }
