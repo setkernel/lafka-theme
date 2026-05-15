@@ -181,7 +181,7 @@ defined( 'ABSPATH' ) || exit;
 						class="lafka-header__cart"
 						href="<?php echo esc_url( wc_get_cart_url() ); ?>"
 						aria-label="<?php esc_attr_e( 'View cart', 'lafka' ); ?>"
-						data-lafka-cart-toggle
+						data-lafka-cart-open
 					>
 						<i class="fa fa-shopping-bag" aria-hidden="true"></i>
 						<span class="lafka-header__cart-count" data-lafka-cart-count>

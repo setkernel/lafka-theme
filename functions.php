@@ -1794,12 +1794,15 @@ add_action(
 );
 
 /**
- * PDP redesign — cart-drawer partial via wp_footer.
+ * Cart drawer partial via wp_footer (v5.57.0 — handoff: drawer on every page).
  */
 add_action(
     'wp_footer',
     function () {
-		if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
+		if ( is_admin() ) {
+			return;
+		}
+		if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 			return;
 		}
 		$partial = get_template_directory() . '/partials/cart-drawer.php';
@@ -1807,7 +1810,7 @@ add_action(
 			include $partial;
 		}
 	},
-    5 
+    5
 );
 
 /**

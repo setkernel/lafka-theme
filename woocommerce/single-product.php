@@ -57,7 +57,7 @@ get_header( 'shop' );
         <?php endwhile; ?>
     </main>
 
-    <?php require get_template_directory() . '/partials/cart-drawer.php'; ?>
+    <?php /* Cart drawer now renders globally via wp_footer — see functions.php (v5.57.0). */ ?>
 </div>
 <?php
 get_footer( 'shop' );

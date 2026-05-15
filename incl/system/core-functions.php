@@ -1204,6 +1204,25 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			true
 		);
 
+		// v5.57.0: cart drawer (right slide-out, WC AJAX). CSS + JS run
+		// on every page so the .lafka-header__cart icon can open it
+		// from anywhere — used to be PDP-gated.
+		if ( defined( 'LAFKA_IS_WOOCOMMERCE' ) && LAFKA_IS_WOOCOMMERCE ) {
+			wp_enqueue_style(
+				'lafka-cart-drawer',
+				get_template_directory_uri() . '/styles/lafka-cart-drawer.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-cart-drawer.css' )
+			);
+			wp_enqueue_script(
+				'lafka-cart-drawer',
+				get_template_directory_uri() . '/js/cart-drawer.js',
+				array( 'jquery' ),
+				lafka_asset_version( '/js/cart-drawer.js' ),
+				true
+			);
+		}
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
