@@ -534,11 +534,14 @@
 }
 
 /* =========================================================================
- * Cart-empty layout polish — single column when empty (v5.65.0 carry-over)
+ * Cart-empty layout polish — single column when empty (v5.71.0 fix)
+ * The cart-empty class is on a wrapper <p>, not body. Use :has() to detect.
  * ========================================================================= */
-.woocommerce-cart.cart-empty .woocommerce {
+.woocommerce-cart .woocommerce:has(.cart-empty),
+.woocommerce-cart .woocommerce:has(.lafka-cart-empty-popular),
+.woocommerce-cart .woocommerce:has(.wc-empty-cart-message) {
 	display: block;
-	max-width: 720px;
+	max-width: 100%;
 }
 
 .woocommerce-cart .cart-empty {

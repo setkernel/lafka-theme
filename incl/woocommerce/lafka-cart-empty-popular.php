@@ -50,8 +50,8 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 
 		ob_start();
 		?>
-		<section class="lafka-cart-empty-popular" aria-label="<?php esc_attr_e( 'Popular orders', 'lafka' ); ?>">
-			<h2 class="lafka-cart-empty-popular__title"><?php esc_html_e( 'Popular orders', 'lafka' ); ?></h2>
+		<section class="lafka-cart-empty-popular" aria-label="<?php esc_attr_e( 'Add a side', 'lafka' ); ?>">
+			<h2 class="lafka-cart-empty-popular__title"><?php esc_html_e( 'Add a side?', 'lafka' ); ?></h2>
 			<p class="lafka-cart-empty-popular__intro"><?php esc_html_e( 'Pick up where the regulars left off — tap to start a new order.', 'lafka' ); ?></p>
 			<ul class="lafka-cart-empty-popular__grid" role="list">
 				<?php foreach ( $products as $product ) : ?>
