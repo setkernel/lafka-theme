@@ -85,7 +85,32 @@ $lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 
 	<?php
 	// v5.68.0: menu controls (fulfilment toggle + search + dietary filter chips).
-	get_template_part( 'partials/menu-controls' );
+	// v5.74.0: wrapped in .lafka-container so controls sit within page gutter.
+	?>
+	<div class="lafka-container">
+		<?php get_template_part( 'partials/menu-controls' ); ?>
+	</div>
+
+	<?php
+	// v5.74.0: JUMP TO anchor strip — second horizontal nav for fast-scroll.
+	if ( $lafka_arch_is_shop && ! empty( $lafka_arch_terms ) ) :
+		?>
+		<nav class="lafka-menu__toc" aria-label="<?php esc_attr_e( 'Jump to category', 'lafka' ); ?>">
+			<div class="lafka-container lafka-menu__toc-inner">
+				<span class="lafka-menu__toc-label"><?php esc_html_e( 'Jump to', 'lafka' ); ?></span>
+				<ul class="lafka-menu__toc-list" role="list">
+					<?php foreach ( $lafka_arch_terms as $lafka_arch_toc_term ) : ?>
+						<li>
+							<a class="lafka-menu__toc-link" href="#<?php echo esc_attr( 'lafka-menu-cat-' . $lafka_arch_toc_term->slug ); ?>">
+								<?php echo esc_html( $lafka_arch_toc_term->name ); ?>
+							</a>
+						</li>
+					<?php endforeach; ?>
+				</ul>
+			</div>
+		</nav>
+		<?php
+	endif;
 	?>
 
 	<?php if ( ! empty( $lafka_arch_terms ) ) : ?>
@@ -144,8 +169,9 @@ $lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 						<header class="lafka-menu__group-head">
 							<h2 id="<?php echo esc_attr( $lafka_arch_group_id . '-h' ); ?>" class="lafka-menu__group-title">
 								<?php echo esc_html( $lafka_arch_group->name ); ?>
-								<span class="lafka-menu__group-count"><?php echo esc_html( (string) $lafka_arch_group->count ); ?></span>
 							</h2>
+							<span class="lafka-menu__group-rule" aria-hidden="true"></span>
+							<span class="lafka-menu__group-count"><?php echo esc_html( (string) $lafka_arch_group->count ); ?></span>
 							<?php if ( '' !== $lafka_arch_group->description ) : ?>
 								<p class="lafka-menu__group-blurb"><?php echo wp_kses_post( $lafka_arch_group->description ); ?></p>
 							<?php endif; ?>
@@ -172,10 +198,10 @@ $lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 					<?php endwhile; ?>
 				</ul>
 			<?php else : ?>
-				<div class="lafka-menu__empty">
+				<div class="lafka-menu__empty" data-lafka-menu-empty>
 					<span class="lafka-menu__empty-icon" aria-hidden="true">🤔</span>
-					<h3 class="lafka-menu__empty-title"><?php esc_html_e( 'Nothing here yet', 'lafka' ); ?></h3>
-					<p class="lafka-menu__empty-hint"><?php esc_html_e( "We couldn't find any items in this category.", 'lafka' ); ?></p>
+					<h3 class="lafka-menu__empty-title"><?php esc_html_e( 'Nothing matches', 'lafka' ); ?></h3>
+					<p class="lafka-menu__empty-hint"><?php esc_html_e( 'Try clearing filters or searching for something else.', 'lafka' ); ?></p>
 					<a class="lafka-menu__empty-cta" href="<?php echo esc_url( $lafka_arch_shop_url ); ?>">
 						<?php esc_html_e( 'Back to all items', 'lafka' ); ?>
 					</a>

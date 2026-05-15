@@ -155,6 +155,15 @@
 	position: relative;
 }
 
+/* v5.74.0: subtle bottom gradient overlay on card image (handoff) */
+.lafka-favs__media::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(180deg, transparent 55%, rgba(0, 0, 0, 0.08));
+	pointer-events: none;
+}
+
 .lafka-favs__img {
 	width: 100%;
 	height: 100%;
@@ -174,12 +183,12 @@
 
 .lafka-favs__badge {
 	position: absolute;
-	top: var(--lafka-space-2);
-	left: var(--lafka-space-2);
-	padding: 4px var(--lafka-space-2);
+	top: var(--lafka-space-3); /* v5.74.0: 12px per handoff (was 8) */
+	left: var(--lafka-space-3);
+	padding: 4px 9px; /* v5.74.0: 9px right per handoff */
 	background: var(--lafka-color-text-primary);
 	color: var(--lafka-color-text-inverse);
-	font-size: 11px;
+	font-size: var(--lafka-font-size-caption); /* v5.74.0: 13px per handoff */
 	font-weight: var(--lafka-font-weight-semibold);
 	border-radius: var(--lafka-radius-pill);
 	letter-spacing: 0.02em;
@@ -196,7 +205,7 @@
 .lafka-favs__name {
 	margin: 0;
 	font-family: var(--lafka-font-family-display);
-	font-weight: var(--lafka-font-weight-semibold);
+	font-weight: 700; /* v5.74.0: handoff spec is 700 (was semibold/600) */
 	font-size: 1.125rem;
 	line-height: 1.25;
 	color: var(--lafka-color-text-primary);
@@ -222,9 +231,9 @@
 }
 
 .lafka-favs__price {
-	font-family: var(--lafka-font-family-display);
-	font-weight: var(--lafka-font-weight-semibold);
-	font-size: 1rem;
+	font-family: var(--lafka-font-family-body); /* v5.74.0: body (Rubik) per handoff (was Fraunces) */
+	font-weight: 700; /* v5.74.0: 700 per handoff */
+	font-size: var(--lafka-font-size-body-sm); /* v5.74.0: 15px per handoff */
 	color: var(--lafka-color-text-primary);
 }
 
@@ -237,10 +246,14 @@
 	border-radius: var(--lafka-radius-pill);
 	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-semibold);
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
+/* v5.74.0: handoff hover is darker ink + slight scale, NOT red. */
 .lafka-favs__card:hover .lafka-favs__cta {
-	background: var(--lafka-color-accent-500);
+	background: #27272a;
+	transform: scale(1.04);
 }
 
 /* =========================================================================
