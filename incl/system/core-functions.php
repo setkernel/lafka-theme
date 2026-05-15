@@ -1223,6 +1223,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.58.0: footer chrome — handoff-spec 4-col dark footer.
+		wp_enqueue_style(
+			'lafka-footer-chrome',
+			get_template_directory_uri() . '/styles/lafka-footer-chrome.css',
+			array( 'lafka-tokens' ),
+			lafka_asset_version( '/styles/lafka-footer-chrome.css' )
+		);
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
