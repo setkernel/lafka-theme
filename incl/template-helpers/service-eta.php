@@ -121,3 +121,33 @@ add_action( 'wp_body_open', 'lafka_service_eta_render_header', 50 );
 // Cart + checkout — render above the WC cart totals area.
 add_action( 'woocommerce_before_cart_totals', 'lafka_service_eta_render_cart' );
 add_action( 'woocommerce_review_order_before_payment', 'lafka_service_eta_render_cart' );
+
+if ( ! function_exists( 'lafka_service_eta_checkout_button_text' ) ) {
+	/**
+	 * Append the ETA to the checkout "Place order" button. Prefers the
+	 * delivery ETA (typically the longer / more conservative value);
+	 * falls back to pickup ETA if only pickup is configured.
+	 *
+	 * @param string $text Original button text from WC.
+	 * @return string Decorated text or unchanged if nothing configured.
+	 */
+	function lafka_service_eta_checkout_button_text( $text ) {
+		if ( ! (bool) get_theme_mod( 'lafka_service_eta_show_cart', true ) ) {
+			return $text;
+		}
+		if ( ! function_exists( 'lafka_service_eta_get_data' ) ) {
+			return $text;
+		}
+		$data = lafka_service_eta_get_data();
+		if ( ! $data ) {
+			return $text;
+		}
+		$eta = '' !== $data['delivery'] ? $data['delivery'] : $data['pickup'];
+		if ( '' === $eta ) {
+			return $text;
+		}
+		/* translators: 1: original button text (e.g. "Place order"), 2: ETA (e.g. "30 min") */
+		return sprintf( __( '%1$s · ETA %2$s', 'lafka' ), $text, $eta );
+	}
+}
+add_filter( 'woocommerce_order_button_text', 'lafka_service_eta_checkout_button_text' );

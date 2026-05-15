@@ -76,7 +76,7 @@ body {
 
 /* ── CSS DESIGN TOKENS (subset needed above-fold) ── */
 :root {
-    --lafka-accent-color: #f2002d;
+    --lafka-accent-color: #dc2626;
     --lafka-menu-bg-color: #ffca3c;
     --lafka-menu-link-color: #61443e;
     --lafka-header-bg-color: #fff;
@@ -108,7 +108,7 @@ body {
     transform: translateX(-50%);
     z-index: 100000;
     padding: 12px 24px;
-    background: var(--lafka-accent-color, #f2002d);
+    background: var(--lafka-accent-color, #dc2626);
     color: #fff;
     font-weight: 600;
     text-decoration: none;
@@ -118,7 +118,7 @@ body {
 
 .skip-link:focus {
     top: 0;
-    outline: 3px solid var(--lafka-accent-color, #f2002d);
+    outline: 3px solid var(--lafka-accent-color, #dc2626);
     outline-offset: 2px;
 }
 
