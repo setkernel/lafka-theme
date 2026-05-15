@@ -45,9 +45,10 @@
 	}
 }
 
-/* Inject a page header before the cart form via ::before pseudo */
+/* v5.67.0: handoff uses "Your order" terminology (not "Your cart") +
+ * adds a lead paragraph. Injected via two ::before/::after pseudos. */
 .woocommerce-cart .woocommerce-cart-form::before {
-	content: "Your cart";
+	content: "Your order";
 	display: block;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
@@ -55,7 +56,17 @@
 	line-height: 1.05;
 	letter-spacing: -0.02em;
 	color: var(--lafka-color-text-primary);
+	margin-bottom: var(--lafka-space-2);
+}
+
+.woocommerce-cart .woocommerce-cart-form::after {
+	content: "Review your items, choose pickup or delivery, then check out.";
+	display: block;
+	font-size: var(--lafka-font-size-body-lg);
+	color: var(--lafka-color-text-secondary);
 	margin-bottom: var(--lafka-space-6);
+	max-width: 60ch;
+	order: -1;
 }
 
 /* -------- 2-col layout (items + sticky summary) ------------------------ */
@@ -386,7 +397,10 @@
 	background: var(--lafka-color-accent-600) !important;
 }
 
-/* -------- "Popular orders" cross-sells (empty cart upsell) ------------- */
+/* -------- "Add a side?" cross-sells (handoff name) ----------------------
+ * Handoff calls this section "Add a side?" not "Popular orders". Override
+ * the WC default h2.cross-sells__heading text via ::before + visually
+ * hide the original text. */
 .woocommerce-cart .cross-sells > h2,
 .woocommerce-cart h2.cross-sells__heading {
 	font-family: var(--lafka-font-family-display);
@@ -394,6 +408,17 @@
 	font-size: 1.5rem;
 	color: var(--lafka-color-text-primary);
 	margin-block: var(--lafka-space-12) var(--lafka-space-3);
+	position: relative;
+	font-size: 0; /* hide WC default text */
+	line-height: 0;
+}
+
+.woocommerce-cart .cross-sells > h2::before,
+.woocommerce-cart h2.cross-sells__heading::before {
+	content: "Add a side?";
+	display: block;
+	font-size: 1.5rem;
+	line-height: 1.2;
 }
 
 /* WC notices polish */

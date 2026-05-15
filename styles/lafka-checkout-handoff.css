@@ -27,11 +27,10 @@
 	display: none !important;
 }
 
-/* Cart empty-state heading: when WC renders the empty notice without
- * the .woocommerce-cart-form wrapper our ::before pseudo can't show a
- * Fraunces "Your cart" heading. Inject one before the empty block. */
+/* v5.67.0: Handoff uses "Your order" not "Your cart". Inject as ::before
+ * on .woocommerce wrapper when empty, on .woocommerce-cart-form when full. */
 .woocommerce-cart .woocommerce::before {
-	content: "Your cart";
+	content: "Your order";
 	display: block;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
@@ -39,11 +38,21 @@
 	line-height: 1.05;
 	letter-spacing: -0.02em;
 	color: var(--lafka-color-text-primary);
-	margin: 0 0 var(--lafka-space-6) 0;
+	margin: 0 0 var(--lafka-space-2) 0;
+}
+
+.woocommerce-cart .woocommerce::after {
+	content: "Review your items, choose pickup or delivery, then check out.";
+	display: block;
+	font-size: var(--lafka-font-size-body-lg);
+	color: var(--lafka-color-text-secondary);
+	margin: 0 0 var(--lafka-space-8) 0;
+	max-width: 60ch;
 }
 
 /* When the cart form IS present, hide the wrapper ::before (avoid double) */
-.woocommerce-cart .woocommerce:has(.woocommerce-cart-form)::before {
+.woocommerce-cart .woocommerce:has(.woocommerce-cart-form)::before,
+.woocommerce-cart .woocommerce:has(.woocommerce-cart-form)::after {
 	display: none;
 }
 

@@ -10,14 +10,11 @@
  * @since 5.62.0
  * ========================================================================= */
 
-/* v5.66.3: redefine --lafka-pdp-accent (was red) to text-primary at :root
- * level — same as where pdp-redesign.css defines it. Since this file is
- * enqueued AFTER pdp-redesign, later wins at equal specificity.
- * The previous v5.66.2 attempt scoped to .lafka-pdp was silently dropped
- * by some CSS parser/minifier (possibly the form.cart selector). */
-:root {
-	--lafka-pdp-accent: #18181b;
-}
+/* v5.67.0: REVERT v5.66.3 ink override. After comparing prod to the
+ * canonical handoff render (localhost:9123/#/product/meat-lovers), the
+ * active size/crust state IS red-filled, not ink as the README text
+ * implied. Restoring the existing pdp-redesign.css behavior (which
+ * leaves --lafka-pdp-accent at accent-500). Comment kept for history. */
 
 /* -------- 2-col layout: gallery + sticky buy box ------------------------ */
 @media (min-width: 1024px) {
