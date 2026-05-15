@@ -1288,6 +1288,20 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.65.0: checkout + order-received — handoff. Same CSS file
+		// covers both pages. Also re-applied on cart for empty-state polish.
+		$lafka_is_checkout_flow = ( function_exists( 'is_checkout' ) && is_checkout() )
+			|| ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) )
+			|| ( function_exists( 'is_cart' ) && is_cart() );
+		if ( $lafka_is_checkout_flow ) {
+			wp_enqueue_style(
+				'lafka-checkout-handoff',
+				get_template_directory_uri() . '/styles/lafka-checkout-handoff.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-checkout-handoff.css' )
+			);
+		}
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
