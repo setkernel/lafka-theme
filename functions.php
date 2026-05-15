@@ -66,6 +66,9 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-cart-empty-popu
 // Exclude WC default "Uncategorized" from customer-facing listings (v5.37.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-exclude-uncategorized.php';
 
+// Variable-product price formatting — "from $X" instead of range (v5.38.0).
+require_once get_template_directory() . '/incl/woocommerce/lafka-variable-price-from.php';
+
 /**
  * Echo the pagination
  */

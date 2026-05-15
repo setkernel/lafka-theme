@@ -244,3 +244,18 @@
 	background: var(--lafka-color-accent-600);
 	color: var(--lafka-color-text-on-accent);
 }
+
+/* -------- "from $X" variable price formatting (v5.38.0) --------------- */
+.lafka-price-from {
+	white-space: nowrap;
+	font-variant-numeric: tabular-nums;
+}
+
+.lafka-price-from__label {
+	font-size: 0.75em;
+	font-weight: var(--lafka-font-weight-medium);
+	opacity: 0.7;
+	text-transform: lowercase;
+	letter-spacing: 0.02em;
+	margin-right: 0.15em;
+}
