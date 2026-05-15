@@ -79,6 +79,36 @@
     }
 }
 
+/* v5.51.0: menu overflow fix.
+ * Operator has 12 long category labels that can't fit one row at 1280-1439
+ * but DO fit at 1440+. Instead of hiding the menu in that range (jarring
+ * UX), we let it scroll horizontally with a fade-mask on the right edge.
+ * Hamburger still kicks in at ≤1279 as before. */
+@media only screen and (min-width: 1280px) and (max-width: 1439px) {
+
+    #main-menu {
+        text-align: left;
+    }
+
+    #main-menu ul.menu {
+        white-space: nowrap;
+        overflow-x: auto;
+        overflow-y: hidden;
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+        mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
+    }
+
+    #main-menu ul.menu::-webkit-scrollbar {
+        display: none;
+    }
+
+    #main-menu ul.menu > li {
+        flex-shrink: 0;
+    }
+}
+
 @media only screen and (max-width: 1279px) {
 
     #main-menu, #main-menu #main_nav.menu, ul.lafka-top-menu, .video_controlls, .lafka-wishlist-counter, #lafka-account-holder {

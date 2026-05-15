@@ -1150,6 +1150,17 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.51.0: site-wide promo bar. Renders via wp_body_open on every
+		// page (or hides itself if not enabled in Customizer). Tiny CSS
+		// (~1.5 KB), zero cost when disabled because the partial returns
+		// early before any markup.
+		wp_enqueue_style(
+			'lafka-promo-bar',
+			get_template_directory_uri() . '/styles/lafka-promo-bar.css',
+			array( 'lafka-tokens' ),
+			lafka_asset_version( '/styles/lafka-promo-bar.css' )
+		);
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.

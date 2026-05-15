@@ -92,19 +92,38 @@ if ( $lafka_hero_image_src && $lafka_hero_overlay ) {
 		<header class="lafka-section-head lafka-section-head--start">
 
 			<?php
-			if ( $lafka_hero_service_data ) :
-				$lafka_is_open = ! empty( $lafka_hero_service_data['is_open'] );
-				$lafka_pickup  = isset( $lafka_hero_service_data['pickup_minutes'] ) ? (int) $lafka_hero_service_data['pickup_minutes'] : 0;
+			// v5.51.0: read CORRECT keys (pickup, delivery — both strings).
+			// Previously read non-existent keys is_open/pickup_minutes →
+			// status pill never rendered. Helper returns null when no ETA
+			// configured, so fall through to eyebrow naturally.
+			$lafka_hero_pickup_eta = $lafka_hero_service_data && ! empty( $lafka_hero_service_data['pickup'] ) ? $lafka_hero_service_data['pickup'] : '';
+			$lafka_hero_delivery_eta = $lafka_hero_service_data && ! empty( $lafka_hero_service_data['delivery'] ) ? $lafka_hero_service_data['delivery'] : '';
+			if ( '' !== $lafka_hero_pickup_eta || '' !== $lafka_hero_delivery_eta ) :
 				?>
-				<p class="lafka-status-pill <?php echo $lafka_is_open ? 'lafka-status-pill--open' : 'lafka-status-pill--closed'; ?>">
+				<p class="lafka-status-pill lafka-status-pill--open">
 					<span class="lafka-status-pill__dot" aria-hidden="true"></span>
-					<?php if ( $lafka_is_open && $lafka_pickup ) : ?>
-						<?php printf( esc_html__( 'Open now · Pickup ~%d min', 'lafka' ), (int) $lafka_pickup ); ?>
-					<?php elseif ( $lafka_is_open ) : ?>
-						<?php esc_html_e( 'Open now', 'lafka' ); ?>
-					<?php else : ?>
-						<?php esc_html_e( 'Closed — order ahead', 'lafka' ); ?>
-					<?php endif; ?>
+					<?php
+					if ( '' !== $lafka_hero_pickup_eta && '' !== $lafka_hero_delivery_eta ) {
+						printf(
+							/* translators: 1: pickup ETA, 2: delivery ETA */
+							esc_html__( 'Open · Pickup %1$s · Delivery %2$s', 'lafka' ),
+							esc_html( $lafka_hero_pickup_eta ),
+							esc_html( $lafka_hero_delivery_eta )
+						);
+					} elseif ( '' !== $lafka_hero_pickup_eta ) {
+						printf(
+							/* translators: %s pickup ETA */
+							esc_html__( 'Open · Pickup %s', 'lafka' ),
+							esc_html( $lafka_hero_pickup_eta )
+						);
+					} else {
+						printf(
+							/* translators: %s delivery ETA */
+							esc_html__( 'Open · Delivery %s', 'lafka' ),
+							esc_html( $lafka_hero_delivery_eta )
+						);
+					}
+					?>
 				</p>
 			<?php elseif ( '' !== $lafka_hero_eyebrow ) : ?>
 				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_hero_eyebrow ); ?></p>

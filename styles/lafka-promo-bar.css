@@ -1,0 +1,87 @@
+/*
+ * Lafka site-wide promo bar (v5.51.0)
+ *
+ * Red full-bleed strip rendered via wp_body_open above the existing
+ * #header. Hidden when no operator-set deal text or outside date window.
+ * See partials/promo-bar.php + incl/customizer-promo-bar.php.
+ */
+
+.lafka-promo-bar {
+	display: block;
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-inverse);
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-medium);
+	position: relative;
+	z-index: 30;
+}
+
+.lafka-promo-bar__inner {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-3);
+	min-height: 36px;
+	padding-block: var(--lafka-space-2);
+}
+
+.lafka-promo-bar__icon {
+	font-size: 1.125rem;
+	line-height: 1;
+	flex-shrink: 0;
+}
+
+.lafka-promo-bar__text {
+	flex: 1;
+	line-height: 1.4;
+	min-width: 0;
+}
+
+.lafka-promo-bar__cta {
+	color: var(--lafka-color-text-inverse);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+	white-space: nowrap;
+	flex-shrink: 0;
+}
+
+.lafka-promo-bar__cta:hover {
+	color: var(--lafka-color-brand-100);
+}
+
+.lafka-promo-bar__close {
+	flex-shrink: 0;
+	width: 32px;
+	height: 32px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	font-size: 1.5rem;
+	line-height: 1;
+	color: var(--lafka-color-text-inverse);
+	background: transparent;
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	cursor: pointer;
+	opacity: 0.85;
+	transition: background var(--lafka-duration-fast) var(--lafka-ease-out),
+		opacity var(--lafka-duration-fast) var(--lafka-ease-out);
+}
+
+.lafka-promo-bar__close:hover {
+	background: rgba(255, 255, 255, 0.15);
+	opacity: 1;
+}
+
+.lafka-promo-bar__close:focus-visible {
+	outline: 2px solid var(--lafka-color-text-inverse);
+	outline-offset: 2px;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-promo-bar__inner {
+		min-height: 40px;
+	}
+}

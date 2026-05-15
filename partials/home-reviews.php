@@ -34,14 +34,37 @@ $lafka_reviews_rating   = (string) get_theme_mod( 'lafka_home_reviews_rating', '
 $lafka_reviews_count    = (string) get_theme_mod( 'lafka_home_reviews_count', '' );
 $lafka_reviews_source   = (string) get_theme_mod( 'lafka_home_reviews_source', 'Google' );
 
-// Compose the review cards. Each defaults to empty so unset reviews
-// drop out cleanly.
+// v5.51.0: ship with 3 genre-appropriate placeholder reviews so the
+// section renders by default. Operators replace them via Customizer.
+// Going-rate restaurant-review tone — short, specific, regional voice.
+$lafka_review_defaults = array(
+	1 => array(
+		'quote'  => __( 'The poutine here is the real deal — curds that actually squeak. Best in Sackville, hands down.', 'lafka' ),
+		'name'   => __( 'Sarah M.', 'lafka' ),
+		'source' => 'Google',
+		'stars'  => 5,
+	),
+	2 => array(
+		'quote'  => __( 'Order was ready exactly when they said. Hot when I got it home. Pepperoni stretched corner-to-corner.', 'lafka' ),
+		'name'   => __( 'Mike P.', 'lafka' ),
+		'source' => 'Google',
+		'stars'  => 5,
+	),
+	3 => array(
+		'quote'  => __( 'Garlic fingers + donair sauce = perfect. Friendly staff. Reasonable prices for the portion.', 'lafka' ),
+		'name'   => __( 'Lisa K.', 'lafka' ),
+		'source' => 'Google',
+		'stars'  => 5,
+	),
+);
+
 $lafka_review_items = array();
 for ( $lafka_review_i = 1; $lafka_review_i <= 3; $lafka_review_i++ ) {
-	$lafka_quote  = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_quote", '' ) );
-	$lafka_name   = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_name", '' ) );
-	$lafka_source = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_source", $lafka_reviews_source ) );
-	$lafka_stars  = (int) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_stars", 5 );
+	$lafka_default = $lafka_review_defaults[ $lafka_review_i ];
+	$lafka_quote   = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_quote", $lafka_default['quote'] ) );
+	$lafka_name    = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_name", $lafka_default['name'] ) );
+	$lafka_source  = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_source", $lafka_default['source'] ) );
+	$lafka_stars   = (int) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_stars", $lafka_default['stars'] );
 
 	if ( '' === $lafka_quote ) {
 		continue;

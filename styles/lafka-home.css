@@ -1,5 +1,5 @@
 /*
- * Lafka home page (v5.50.0)
+ * Lafka home page (v5.51.0)
  *
  * Phase B native home — hero / trust / categories / featured / story /
  * reviews / closer. Verified at 375/768/1280.
@@ -339,12 +339,13 @@
 
 /* =========================================================================
  * 3. Categories
- * Cap at 4 desktop cols so titles have room (was 6 — too cramped).
- * Equal-height tiles via grid + flex card body.
+ * v5.51.0: auto-fit with min(220px, 100%) so all categories render —
+ * grid redistributes empty cells automatically, no broken-looking
+ * partial rows. min(220px, 100%) prevents overflow on narrow viewports.
  * ========================================================================= */
 .lafka-home-categories__grid {
 	display: grid;
-	grid-template-columns: repeat(2, 1fr);
+	grid-template-columns: repeat(auto-fit, minmax(min(220px, 100%), 1fr));
 	gap: var(--lafka-space-3);
 	list-style: none;
 	margin: 0;
@@ -426,7 +427,6 @@
 @media (min-width: 600px) {
 
 	.lafka-home-categories__grid {
-		grid-template-columns: repeat(3, 1fr);
 		gap: var(--lafka-space-4);
 	}
 }
@@ -434,7 +434,7 @@
 @media (min-width: 1024px) {
 
 	.lafka-home-categories__grid {
-		grid-template-columns: repeat(4, 1fr);
+		gap: var(--lafka-space-5);
 	}
 }
 
@@ -468,6 +468,32 @@
 	.lafka-home-featured__grid {
 		grid-template-columns: repeat(3, 1fr);
 		gap: var(--lafka-space-5);
+	}
+
+	/* v5.51.0: desktop featured cards switch to VERTICAL stack (image top,
+	 * body bottom). Overrides the default horizontal list-row layout
+	 * from product-card.css so featured products have shelf-presence. */
+	.lafka-home-featured .lafka-product-card {
+		grid-template-columns: 1fr;
+		grid-template-rows: auto 1fr;
+	}
+
+	.lafka-home-featured .lafka-product-card__img-wrap,
+	.lafka-home-featured .lafka-product-card__img {
+		width: 100%;
+		height: auto;
+		aspect-ratio: 16 / 10;
+	}
+
+	.lafka-home-featured .lafka-product-card__body {
+		padding: var(--lafka-space-4);
+		min-height: 0;
+	}
+
+	.lafka-home-featured .lafka-product-card__title {
+		font-size: 1rem;
+		line-height: var(--lafka-line-height-tight);
+		-webkit-line-clamp: 2;
 	}
 }
 
@@ -626,3 +652,7 @@
 	justify-content: center;
 	gap: var(--lafka-space-3);
 }
+
+/* Promo bar styles moved to styles/lafka-promo-bar.css (loads globally;
+ * the home stylesheet only loads on is_front_page so it can't host
+ * site-wide partials). */

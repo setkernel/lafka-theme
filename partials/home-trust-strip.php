@@ -49,18 +49,26 @@ if ( function_exists( 'WC' ) ) {
 	<div class="lafka-container">
 		<ul class="lafka-home-trust__grid" role="list">
 
-			<?php if ( $lafka_trust_eta && ! empty( $lafka_trust_eta['pickup_minutes'] ) ) : ?>
+			<?php
+			// v5.51.0: correct key is `pickup` (string), not `pickup_minutes`.
+			// Render whichever ETA values the operator has configured.
+			$lafka_trust_pickup_eta   = ( $lafka_trust_eta && ! empty( $lafka_trust_eta['pickup'] ) ) ? $lafka_trust_eta['pickup'] : '';
+			$lafka_trust_delivery_eta = ( $lafka_trust_eta && ! empty( $lafka_trust_eta['delivery'] ) ) ? $lafka_trust_eta['delivery'] : '';
+			?>
+
+			<?php if ( '' !== $lafka_trust_pickup_eta ) : ?>
 				<li class="lafka-home-trust__item">
 					<span class="lafka-home-trust__icon" aria-hidden="true">⏱</span>
-					<span class="lafka-home-trust__label"><?php esc_html_e( 'Ready in', 'lafka' ); ?></span>
-					<span class="lafka-home-trust__value">
-						<?php
-						printf(
-							esc_html__( '%d min pickup', 'lafka' ),
-							(int) $lafka_trust_eta['pickup_minutes']
-						);
-						?>
-					</span>
+					<span class="lafka-home-trust__label"><?php esc_html_e( 'Pickup ready in', 'lafka' ); ?></span>
+					<span class="lafka-home-trust__value"><?php echo esc_html( $lafka_trust_pickup_eta ); ?></span>
+				</li>
+			<?php endif; ?>
+
+			<?php if ( '' !== $lafka_trust_delivery_eta ) : ?>
+				<li class="lafka-home-trust__item">
+					<span class="lafka-home-trust__icon" aria-hidden="true">🚗</span>
+					<span class="lafka-home-trust__label"><?php esc_html_e( 'Delivery in', 'lafka' ); ?></span>
+					<span class="lafka-home-trust__value"><?php echo esc_html( $lafka_trust_delivery_eta ); ?></span>
 				</li>
 			<?php endif; ?>
 
