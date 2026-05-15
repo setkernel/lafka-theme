@@ -60,6 +60,25 @@ if ( is_wp_error( $lafka_cat_terms ) || empty( $lafka_cat_terms ) ) {
 				$lafka_cat_url   = get_term_link( $lafka_cat_term );
 				$lafka_thumb_id  = (int) get_term_meta( $lafka_cat_term->term_id, 'thumbnail_id', true );
 				$lafka_thumb_src = $lafka_thumb_id ? wp_get_attachment_image_url( $lafka_thumb_id, 'medium' ) : '';
+
+				// v5.52.0: fall back to the first product image in the
+				// category when the term has no thumbnail. Operators don't
+				// have to upload separate category images.
+				if ( '' === $lafka_thumb_src && function_exists( 'wc_get_products' ) ) {
+					$lafka_cat_first_prod = wc_get_products(
+						array(
+							'status'   => 'publish',
+							'limit'    => 1,
+							'category' => array( $lafka_cat_term->slug ),
+							'orderby'  => 'menu_order',
+							'order'    => 'ASC',
+						)
+					);
+					if ( ! empty( $lafka_cat_first_prod ) ) {
+						$lafka_thumb_src = (string) get_the_post_thumbnail_url( $lafka_cat_first_prod[0]->get_id(), 'medium' );
+					}
+				}
+
 				$lafka_cat_count = (int) $lafka_cat_term->count;
 				?>
 				<li class="lafka-home-categories__item">

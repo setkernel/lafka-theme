@@ -25,6 +25,16 @@ if ( ! (bool) get_theme_mod( 'lafka_home_story_visible', true ) ) {
 	return;
 }
 
+// v5.52.0: auto-hide when operator hasn't set BOTH a custom headline
+// AND a body text. Without either, the section is just the default
+// placeholder copy — reads as filler, makes the page feel empty.
+$lafka_story_custom_headline = trim( (string) get_theme_mod( 'lafka_home_story_headline', '' ) );
+$lafka_story_custom_body     = trim( (string) get_theme_mod( 'lafka_home_story_body', '' ) );
+$lafka_story_custom_image    = (int) get_theme_mod( 'lafka_home_story_image_id', 0 );
+if ( '' === $lafka_story_custom_headline && '' === $lafka_story_custom_body && ! $lafka_story_custom_image ) {
+	return;
+}
+
 $lafka_story_eyebrow  = (string) get_theme_mod( 'lafka_home_story_eyebrow', __( 'Made here', 'lafka' ) );
 $lafka_story_headline = (string) get_theme_mod(
 	'lafka_home_story_headline',

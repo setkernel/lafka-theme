@@ -40,11 +40,11 @@
 	}
 }
 
-/* Section rhythm: one rule, no per-section padding override.
- * Trust strip / hero / closer adjust within their own ::before
- * (compact-mode marker) — but vertical padding is consistent. */
+/* v5.52.0: tightened section padding. Previous 48px/64px values left
+ * the page reading as long whitespace runs between sections. Now
+ * 32px/48px so sections breathe but content stays dense.  */
 .lafka-front-page > section {
-	padding-block: var(--lafka-space-12);
+	padding-block: var(--lafka-space-8);
 }
 
 .lafka-front-page > section:first-child {
@@ -54,7 +54,7 @@
 @media (min-width: 768px) {
 
 	.lafka-front-page > section {
-		padding-block: var(--lafka-space-16);
+		padding-block: var(--lafka-space-12);
 	}
 }
 
@@ -67,7 +67,7 @@
 	overflow: hidden;
 	background: var(--lafka-color-brand-50);
 	color: var(--lafka-color-text-primary);
-	min-height: 360px;
+	min-height: 480px;
 	display: flex;
 	align-items: center;
 }
@@ -95,10 +95,31 @@
 	width: 100%;
 	height: 100%;
 	object-fit: cover;
+	object-position: center;
 }
 
+/* Stronger darkening + gradient scrim so headline + CTAs stay readable
+ * on any food photo (light or dark). v5.52.0. */
 .lafka-home-hero--has-overlay .lafka-home-hero__image {
-	filter: brightness(0.65);
+	filter: brightness(0.55) saturate(1.05);
+}
+
+.lafka-home-hero--has-overlay::after {
+	content: "";
+	position: absolute;
+	inset: 0;
+	background: linear-gradient(
+		135deg,
+		rgba(24, 24, 27, 0.65) 0%,
+		rgba(24, 24, 27, 0.35) 45%,
+		rgba(24, 24, 27, 0) 75%
+	);
+	z-index: 1;
+	pointer-events: none;
+}
+
+.lafka-home-hero--has-overlay .lafka-home-hero__inner {
+	z-index: 2;
 }
 
 .lafka-home-hero__inner {
@@ -133,7 +154,7 @@
 @media (min-width: 768px) {
 
 	.lafka-home-hero {
-		min-height: clamp(420px, 56vh, 640px);
+		min-height: clamp(560px, 72vh, 760px);
 	}
 
 	.lafka-section-headline--display {
