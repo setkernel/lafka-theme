@@ -85,6 +85,9 @@ require_once get_template_directory() . '/incl/customizer-promo-bar.php';
 // Site-wide announce bar (v5.54.0 — open/closed status + delivery + phone).
 require_once get_template_directory() . '/incl/customizer-announce-bar.php';
 
+// Mobile slide-out nav drawer (v5.56.0 — handoff "Header > Mobile slide-out nav").
+require_once get_template_directory() . '/incl/mobile-nav-loader.php';
+
 /**
  * Echo the pagination
  */

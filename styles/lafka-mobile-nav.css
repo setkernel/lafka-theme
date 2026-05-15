@@ -1,0 +1,243 @@
+/* =========================================================================
+ * Mobile slide-out nav drawer (v5.56.0)
+ * /design_handoff_peppery_ordering/README.md "Header > Mobile slide-out nav"
+ *
+ * Left-edge slide-in drawer triggered by .lafka-header__menu-toggle.
+ * Hidden by default (translateX: -100%), reveals when [data-lafka-mobile-nav-open].
+ *
+ * @since 5.56.0
+ * ========================================================================= */
+
+.lafka-mobile-nav {
+	position: fixed;
+	inset: 0;
+	z-index: var(--lafka-z-drawer);
+	pointer-events: none;
+	visibility: hidden;
+	transition: visibility var(--lafka-motion-duration-slow) var(--lafka-motion-ease-in-out);
+}
+
+.lafka-mobile-nav.is-open {
+	pointer-events: auto;
+	visibility: visible;
+}
+
+/* Scrim — dark blur backdrop. Click to close. */
+.lafka-mobile-nav__scrim {
+	position: absolute;
+	inset: 0;
+	background: rgba(15, 15, 16, 0.55);
+	backdrop-filter: blur(4px);
+	-webkit-backdrop-filter: blur(4px);
+	opacity: 0;
+	transition: opacity var(--lafka-motion-duration-slow) var(--lafka-motion-ease-in-out);
+}
+
+.lafka-mobile-nav.is-open .lafka-mobile-nav__scrim {
+	opacity: 1;
+}
+
+/* Panel — slide in from left */
+.lafka-mobile-nav__panel {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	width: min(86vw, 360px);
+	background: var(--lafka-color-surface-page);
+	box-shadow: 4px 0 24px rgba(24, 24, 27, 0.25);
+	display: flex;
+	flex-direction: column;
+	transform: translateX(-100%);
+	transition: transform var(--lafka-motion-duration-slow) var(--lafka-motion-ease-in-out);
+	overflow: hidden;
+}
+
+.lafka-mobile-nav.is-open .lafka-mobile-nav__panel {
+	transform: translateX(0);
+}
+
+/* Header — logo + close button */
+.lafka-mobile-nav__header {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	padding: var(--lafka-space-4) var(--lafka-space-4);
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	flex: 0 0 auto;
+}
+
+.lafka-mobile-nav__brand {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	text-decoration: none;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-mobile-nav__logo {
+	display: block;
+	width: auto;
+	height: auto;
+	max-height: 36px;
+	max-width: 80px;
+}
+
+.lafka-mobile-nav__wordmark {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.125rem;
+	letter-spacing: -0.01em;
+	text-transform: lowercase;
+	line-height: 1;
+}
+
+.lafka-mobile-nav__close {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	border: none;
+	background: transparent;
+	border-radius: var(--lafka-radius-pill);
+	color: var(--lafka-color-text-primary);
+	font-size: 28px;
+	line-height: 1;
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-mobile-nav__close:hover {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-accent-500);
+}
+
+.lafka-mobile-nav__close:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* Body — scrollable nav lists */
+.lafka-mobile-nav__body {
+	flex: 1 1 auto;
+	overflow-y: auto;
+	padding-block: var(--lafka-space-3);
+}
+
+.lafka-mobile-nav__section + .lafka-mobile-nav__section {
+	margin-top: var(--lafka-space-4);
+	padding-top: var(--lafka-space-4);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-mobile-nav__section-title {
+	margin: 0;
+	padding: var(--lafka-space-1) var(--lafka-space-4) var(--lafka-space-2);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-mobile-nav__list,
+.lafka-mobile-nav__nav .menu {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.lafka-mobile-nav__list > li,
+.lafka-mobile-nav__nav .menu > li {
+	margin: 0;
+}
+
+.lafka-mobile-nav__list > li > a,
+.lafka-mobile-nav__nav .menu > li > a {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lafka-space-3);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-medium);
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-mobile-nav__list > li > a:hover,
+.lafka-mobile-nav__nav .menu > li > a:hover {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-accent-500);
+}
+
+.lafka-mobile-nav__list > li.current-menu-item > a,
+.lafka-mobile-nav__nav .menu > li.current-menu-item > a {
+	color: var(--lafka-color-accent-500);
+	font-weight: var(--lafka-font-weight-semibold);
+}
+
+.lafka-mobile-nav__count {
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	font-weight: var(--lafka-font-weight-regular);
+}
+
+/* Footer — sticky phone CTA */
+.lafka-mobile-nav__footer {
+	flex: 0 0 auto;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-mobile-nav__phone {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-3);
+	width: 100%;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border-radius: var(--lafka-radius-md);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-inverse);
+	text-decoration: none;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-mobile-nav__phone:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-mobile-nav__phone-icon {
+	font-size: 1.25rem;
+	line-height: 1;
+}
+
+.lafka-mobile-nav__phone-label {
+	display: flex;
+	flex-direction: column;
+	line-height: 1.25;
+}
+
+.lafka-mobile-nav__phone-hint {
+	font-size: var(--lafka-font-size-caption);
+	opacity: 0.85;
+}
+
+.lafka-mobile-nav__phone-number {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.125rem;
+	letter-spacing: -0.01em;
+}
+
+/* Body scroll-lock when drawer open — applied to body via JS */
+body.lafka-mobile-nav-open {
+	overflow: hidden;
+}

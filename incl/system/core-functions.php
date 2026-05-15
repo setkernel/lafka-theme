@@ -1188,6 +1188,22 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			lafka_asset_version( '/styles/lafka-header-chrome.css' )
 		);
 
+		// v5.56.0: mobile slide-out nav drawer. CSS + small JS for the
+		// toggle / scroll-lock / ESC-close behaviour.
+		wp_enqueue_style(
+			'lafka-mobile-nav',
+			get_template_directory_uri() . '/styles/lafka-mobile-nav.css',
+			array( 'lafka-tokens' ),
+			lafka_asset_version( '/styles/lafka-mobile-nav.css' )
+		);
+		wp_enqueue_script(
+			'lafka-mobile-nav',
+			get_template_directory_uri() . '/js/lafka-mobile-nav.js',
+			array(),
+			lafka_asset_version( '/js/lafka-mobile-nav.js' ),
+			true
+		);
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
