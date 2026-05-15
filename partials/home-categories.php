@@ -1,19 +1,17 @@
 <?php
 /**
- * Partial: Home category quick-pick grid
+ * Partial: Home categories — "What are you craving?" (v5.60.0 handoff rebuild).
  *
- * Renders the top N WooCommerce product categories as visual tiles.
- * Auto-discovers categories with at least one published product, excludes
- * "Uncategorized" (uses lafka_uncategorized_excluded_ids() if available).
+ * Per handoff /design_handoff_peppery_ordering/README.md "Home page > 2. Categories":
+ *   - 6-tile grid (2 cols mobile, 3 tablet, 6 laptop+)
+ *   - brand-50 background per tile, no border
+ *   - 40px emoji icon, Fraunces 700 17px name, caption count
+ *   - hover: brand-100 bg, translateY(-3px), shadow-2
  *
- * Reads:
- *  - lafka_home_categories_eyebrow  (default: "Browse the menu")
- *  - lafka_home_categories_headline (default: "What are you craving?")
- *  - lafka_home_categories_limit    (int, default: 6)
- *  - lafka_home_categories_orderby  (default: 'count' — popular first)
+ * Categories auto-discovered from product_cat with ≥1 published product.
  *
  * @package Lafka
- * @since   5.46.0
+ * @since   5.60.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -25,14 +23,13 @@ if ( ! taxonomy_exists( 'product_cat' ) ) {
 $lafka_cat_eyebrow  = (string) get_theme_mod( 'lafka_home_categories_eyebrow', __( 'Browse the menu', 'lafka' ) );
 $lafka_cat_headline = (string) get_theme_mod( 'lafka_home_categories_headline', __( 'What are you craving?', 'lafka' ) );
 $lafka_cat_limit    = (int) get_theme_mod( 'lafka_home_categories_limit', 6 );
-$lafka_cat_orderby  = (string) get_theme_mod( 'lafka_home_categories_orderby', 'count' );
 
 $lafka_cat_args = array(
 	'taxonomy'   => 'product_cat',
 	'number'     => max( 1, $lafka_cat_limit ),
 	'hide_empty' => true,
-	'orderby'    => $lafka_cat_orderby,
-	'order'      => 'count' === $lafka_cat_orderby ? 'DESC' : 'ASC',
+	'orderby'    => 'count',
+	'order'      => 'DESC',
 );
 
 if ( function_exists( 'lafka_uncategorized_excluded_ids' ) ) {
@@ -43,74 +40,72 @@ $lafka_cat_terms = get_terms( $lafka_cat_args );
 if ( is_wp_error( $lafka_cat_terms ) || empty( $lafka_cat_terms ) ) {
 	return;
 }
+
+// Emoji map for common category names — first hit wins. Operator can
+// override per-term via lafka_category_emoji filter.
+$lafka_cat_emoji_map = array(
+	'pizza'    => '🍕',
+	'poutine'  => '🍟',
+	'burger'   => '🍔',
+	'donair'   => '🥙',
+	'wing'     => '🍗',
+	'fish'     => '🐟',
+	'salad'    => '🥗',
+	'dessert'  => '🍰',
+	'drink'    => '🥤',
+	'beer'     => '🍺',
+	'wine'     => '🍷',
+	'combo'    => '🍽',
+	'side'     => '🍞',
+	'appetizer' => '🍤',
+	'sub'      => '🥖',
+	'sauce'    => '🥫',
+	'kid'      => '🥪',
+);
 ?>
-<section class="lafka-home-categories" aria-labelledby="lafka-home-categories-heading">
+<section class="lafka-cats" aria-labelledby="lafka-cats-heading">
 	<div class="lafka-container">
 
 		<header class="lafka-section-head">
-			<?php if ( '' !== $lafka_cat_eyebrow ) : ?>
-				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_cat_eyebrow ); ?></p>
-			<?php endif; ?>
-			<h2 id="lafka-home-categories-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_cat_headline ); ?></h2>
+			<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_cat_eyebrow ); ?></p>
+			<h2 id="lafka-cats-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_cat_headline ); ?></h2>
 		</header>
 
-		<ul class="lafka-home-categories__grid" role="list">
+		<ul class="lafka-cats__grid" role="list">
 			<?php
-			foreach ( $lafka_cat_terms as $lafka_cat_term ) :
-				$lafka_cat_url   = get_term_link( $lafka_cat_term );
-				$lafka_thumb_id  = (int) get_term_meta( $lafka_cat_term->term_id, 'thumbnail_id', true );
-				$lafka_thumb_src = $lafka_thumb_id ? wp_get_attachment_image_url( $lafka_thumb_id, 'medium' ) : '';
+            foreach ( $lafka_cat_terms as $lafka_cat_term ) :
+				$lafka_cat_url  = get_term_link( $lafka_cat_term );
+				$lafka_cat_slug = strtolower( (string) $lafka_cat_term->slug );
 
-				// v5.52.0: fall back to the first product image in the
-				// category when the term has no thumbnail. Operators don't
-				// have to upload separate category images.
-				if ( '' === $lafka_thumb_src && function_exists( 'wc_get_products' ) ) {
-					$lafka_cat_first_prod = wc_get_products(
-						array(
-							'status'   => 'publish',
-							'limit'    => 1,
-							'category' => array( $lafka_cat_term->slug ),
-							'orderby'  => 'menu_order',
-							'order'    => 'ASC',
-						)
-					);
-					if ( ! empty( $lafka_cat_first_prod ) ) {
-						$lafka_thumb_src = (string) get_the_post_thumbnail_url( $lafka_cat_first_prod[0]->get_id(), 'medium' );
+				// Pick emoji by fuzzy-matching name/slug to map.
+				$lafka_cat_emoji = '';
+				foreach ( $lafka_cat_emoji_map as $needle => $glyph ) {
+					if ( false !== strpos( $lafka_cat_slug, $needle ) || false !== stripos( $lafka_cat_term->name, $needle ) ) {
+						$lafka_cat_emoji = $glyph;
+						break;
 					}
 				}
-
-				$lafka_cat_count = (int) $lafka_cat_term->count;
+				$lafka_cat_emoji = (string) apply_filters( 'lafka_category_emoji', $lafka_cat_emoji, $lafka_cat_term );
+				if ( '' === $lafka_cat_emoji ) {
+					$lafka_cat_emoji = '🍽';
+				}
 				?>
-				<li class="lafka-home-categories__item">
-					<a class="lafka-home-categories__tile" href="<?php echo esc_url( $lafka_cat_url ); ?>">
-						<div class="lafka-home-categories__media">
-							<?php if ( $lafka_thumb_src ) : ?>
-								<img
-									class="lafka-home-categories__image"
-									src="<?php echo esc_url( $lafka_thumb_src ); ?>"
-									alt=""
-									loading="lazy"
-									decoding="async"
-								>
-							<?php else : ?>
-								<span class="lafka-home-categories__image-placeholder" aria-hidden="true">🍴</span>
-							<?php endif; ?>
-						</div>
-						<div class="lafka-home-categories__body">
-							<span class="lafka-home-categories__name"><?php echo esc_html( $lafka_cat_term->name ); ?></span>
-							<span class="lafka-home-categories__count">
-								<?php
-								printf(
-									esc_html( _n( '%d item', '%d items', $lafka_cat_count, 'lafka' ) ),
-									(int) $lafka_cat_count
-								);
-								?>
-							</span>
-						</div>
+				<li>
+					<a class="lafka-cats__tile" href="<?php echo esc_url( $lafka_cat_url ); ?>">
+						<span class="lafka-cats__icon" aria-hidden="true"><?php echo esc_html( $lafka_cat_emoji ); ?></span>
+						<span class="lafka-cats__name"><?php echo esc_html( $lafka_cat_term->name ); ?></span>
+						<span class="lafka-cats__count">
+							<?php
+							printf(
+								esc_html( _n( '%d item', '%d items', (int) $lafka_cat_term->count, 'lafka' ) ),
+								(int) $lafka_cat_term->count
+							);
+							?>
+						</span>
 					</a>
 				</li>
 			<?php endforeach; ?>
 		</ul>
 
-	</div><!-- .lafka-container -->
+	</div>
 </section>

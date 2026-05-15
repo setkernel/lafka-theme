@@ -1231,14 +1231,21 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			lafka_asset_version( '/styles/lafka-footer-chrome.css' )
 		);
 
-		// v5.59.0: home hero — handoff "Home page > 1. Hero". Only loads
-		// on the front page where the partial actually renders.
+		// v5.59.0+: home page sections — handoff rebuild. Hero in its own
+		// file, sections 2–7 in lafka-home-v2.css. Only loads on the
+		// front page.
 		if ( is_front_page() ) {
 			wp_enqueue_style(
 				'lafka-hero',
 				get_template_directory_uri() . '/styles/lafka-hero.css',
 				array( 'lafka-tokens' ),
 				lafka_asset_version( '/styles/lafka-hero.css' )
+			);
+			wp_enqueue_style(
+				'lafka-home-v2',
+				get_template_directory_uri() . '/styles/lafka-home-v2.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-home-v2.css' )
 			);
 		}
 

@@ -1,128 +1,86 @@
 <?php
 /**
- * Partial: Home reviews wall (v5.49.0)
+ * Partial: Home reviews — typography-only (v5.60.0 handoff rebuild).
  *
- * 3 static review cards with Fraunces-italic pull-quotes + reviewer
- * name + star rating + source. A Customizer repeater feeds them; the
- * partial returns early if the operator hasn't entered any reviews
- * (no "empty state" — better to hide than show fake testimonials).
- *
- * Customizer reads:
- *  - lafka_home_reviews_visible (boolean — default true)
- *  - lafka_home_reviews_eyebrow
- *  - lafka_home_reviews_headline
- *  - lafka_home_reviews_rating       (e.g. "4.9")
- *  - lafka_home_reviews_count        (e.g. "230")
- *  - lafka_home_reviews_source       (e.g. "Google")
- *  - lafka_home_reviews_1_quote/name/source/stars
- *  - lafka_home_reviews_2_*  (same shape)
- *  - lafka_home_reviews_3_*  (same shape)
+ * Per handoff /design_handoff_peppery_ordering/README.md "Home page > 6. Reviews":
+ *   - warm brand-50 band
+ *   - Center-aligned section head: inline rating row + h2
+ *   - 3-up grid (1/3 cols at 0/768)
+ *   - Each review: brand-700 stars + Fraunces 600 20px blockquote with curly quotes,
+ *     caption-sized author + date below
+ *   - NO CARD BOXES — pure typography
  *
  * @package Lafka
- * @since   5.49.0
+ * @since   5.60.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! (bool) get_theme_mod( 'lafka_home_reviews_visible', true ) ) {
+$lafka_rev_visible = (bool) get_theme_mod( 'lafka_home_reviews_visible', true );
+if ( ! $lafka_rev_visible ) {
 	return;
 }
 
-$lafka_reviews_eyebrow  = (string) get_theme_mod( 'lafka_home_reviews_eyebrow', __( 'Loved locally', 'lafka' ) );
-$lafka_reviews_headline = (string) get_theme_mod( 'lafka_home_reviews_headline', __( 'What our neighbors say', 'lafka' ) );
-$lafka_reviews_rating   = (string) get_theme_mod( 'lafka_home_reviews_rating', '' );
-$lafka_reviews_count    = (string) get_theme_mod( 'lafka_home_reviews_count', '' );
-$lafka_reviews_source   = (string) get_theme_mod( 'lafka_home_reviews_source', 'Google' );
+$lafka_rev_avg   = (float) get_theme_mod( 'lafka_home_reviews_avg', 4.8 );
+$lafka_rev_count = (int) get_theme_mod( 'lafka_home_reviews_count', 500 );
+$lafka_rev_headline = (string) get_theme_mod( 'lafka_home_reviews_headline', __( 'People keep coming back.', 'lafka' ) );
 
-// v5.51.0: ship with 3 genre-appropriate placeholder reviews so the
-// section renders by default. Operators replace them via Customizer.
-// Going-rate restaurant-review tone — short, specific, regional voice.
-$lafka_review_defaults = array(
-	1 => array(
-		'quote'  => __( 'The poutine here is the real deal — curds that actually squeak. Best in Sackville, hands down.', 'lafka' ),
-		'name'   => __( 'Sarah M.', 'lafka' ),
-		'source' => 'Google',
-		'stars'  => 5,
-	),
-	2 => array(
-		'quote'  => __( 'Order was ready exactly when they said. Hot when I got it home. Pepperoni stretched corner-to-corner.', 'lafka' ),
-		'name'   => __( 'Mike P.', 'lafka' ),
-		'source' => 'Google',
-		'stars'  => 5,
-	),
-	3 => array(
-		'quote'  => __( 'Garlic fingers + donair sauce = perfect. Friendly staff. Reasonable prices for the portion.', 'lafka' ),
-		'name'   => __( 'Lisa K.', 'lafka' ),
-		'source' => 'Google',
-		'stars'  => 5,
-	),
+$lafka_reviews = (array) apply_filters(
+	'lafka_home_reviews',
+	array(
+		array(
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_1_quote', __( 'Best pizza in Lower Sackville, hands down. The dough is perfect and the toppings are always fresh.', 'lafka' ) ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_1_author', __( 'Sarah M.', 'lafka' ) ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_1_date', __( '2 weeks ago', 'lafka' ) ),
+		),
+		array(
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_2_quote', __( 'Order shows up fast and hot. The poutine is the real deal.', 'lafka' ) ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_2_author', __( 'David K.', 'lafka' ) ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_2_date', __( '1 month ago', 'lafka' ) ),
+		),
+		array(
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_3_quote', __( 'Family favourite for years. Friendly staff, great prices, never a bad meal.', 'lafka' ) ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_3_author', __( 'Amy R.', 'lafka' ) ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_3_date', __( '3 months ago', 'lafka' ) ),
+		),
+	)
 );
 
-$lafka_review_items = array();
-for ( $lafka_review_i = 1; $lafka_review_i <= 3; $lafka_review_i++ ) {
-	$lafka_default = $lafka_review_defaults[ $lafka_review_i ];
-	$lafka_quote   = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_quote", $lafka_default['quote'] ) );
-	$lafka_name    = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_name", $lafka_default['name'] ) );
-	$lafka_source  = trim( (string) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_source", $lafka_default['source'] ) );
-	$lafka_stars   = (int) get_theme_mod( "lafka_home_reviews_{$lafka_review_i}_stars", $lafka_default['stars'] );
-
-	if ( '' === $lafka_quote ) {
-		continue;
-	}
-	$lafka_review_items[] = array(
-		'quote'  => $lafka_quote,
-		'name'   => $lafka_name,
-		'source' => $lafka_source,
-		'stars'  => max( 1, min( 5, $lafka_stars ) ),
-	);
-}
-
-if ( empty( $lafka_review_items ) ) {
+if ( empty( $lafka_reviews ) ) {
 	return;
 }
 ?>
-<section class="lafka-home-reviews" aria-labelledby="lafka-home-reviews-heading">
+<section class="lafka-revs" aria-labelledby="lafka-revs-heading">
 	<div class="lafka-container">
 
 		<header class="lafka-section-head">
-			<?php if ( '' !== $lafka_reviews_eyebrow ) : ?>
-				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_reviews_eyebrow ); ?></p>
-			<?php endif; ?>
-			<h2 id="lafka-home-reviews-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_reviews_headline ); ?></h2>
-
-			<?php if ( '' !== $lafka_reviews_rating ) : ?>
-				<p class="lafka-home-reviews__aggregate">
-					<span class="lafka-home-reviews__aggregate-stars" aria-hidden="true">★ ★ ★ ★ ★</span>
-					<strong><?php echo esc_html( $lafka_reviews_rating ); ?></strong>
-					<?php if ( '' !== $lafka_reviews_count ) : ?>
-						<span class="lafka-home-reviews__aggregate-count">
-							<?php printf( esc_html__( 'from %1$s reviews on %2$s', 'lafka' ), esc_html( $lafka_reviews_count ), esc_html( $lafka_reviews_source ) ); ?>
-						</span>
-					<?php endif; ?>
-				</p>
-			<?php endif; ?>
+			<p class="lafka-revs__rating">
+				<span class="lafka-revs__stars" aria-hidden="true">★★★★★</span>
+				<strong class="lafka-revs__avg"><?php echo esc_html( number_format_i18n( $lafka_rev_avg, 1 ) ); ?></strong>
+				<span class="lafka-revs__count">
+					<?php
+					/* translators: %s — review count formatted */
+					printf( esc_html__( '· %s reviews', 'lafka' ), esc_html( number_format_i18n( $lafka_rev_count ) ) );
+					?>
+				</span>
+			</p>
+			<h2 id="lafka-revs-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_rev_headline ); ?></h2>
 		</header>
 
-		<ul class="lafka-home-reviews__grid" role="list">
-			<?php foreach ( $lafka_review_items as $lafka_review ) : ?>
-				<li class="lafka-home-reviews__card">
-					<span class="lafka-home-reviews__stars" aria-label="<?php echo esc_attr( sprintf( _n( '%d star', '%d stars', $lafka_review['stars'], 'lafka' ), $lafka_review['stars'] ) ); ?>">
-						<?php echo esc_html( str_repeat( '★ ', $lafka_review['stars'] ) ); ?>
-					</span>
-					<blockquote class="lafka-home-reviews__quote">
-						<?php echo esc_html( $lafka_review['quote'] ); ?>
+		<ul class="lafka-revs__grid" role="list">
+			<?php foreach ( $lafka_reviews as $lafka_rev ) : ?>
+				<li class="lafka-revs__item">
+					<span class="lafka-revs__item-stars" aria-hidden="true">★★★★★</span>
+					<blockquote class="lafka-revs__quote">
+						<?php echo esc_html( $lafka_rev['quote'] ); ?>
 					</blockquote>
-					<footer class="lafka-home-reviews__attribution">
-						<?php if ( '' !== $lafka_review['name'] ) : ?>
-							<strong><?php echo esc_html( $lafka_review['name'] ); ?></strong>
-						<?php endif; ?>
-						<?php if ( '' !== $lafka_review['source'] ) : ?>
-							<span class="lafka-home-reviews__source"><?php echo esc_html( $lafka_review['source'] ); ?></span>
-						<?php endif; ?>
-					</footer>
+					<p class="lafka-revs__attribution">
+						<span class="lafka-revs__author"><?php echo esc_html( $lafka_rev['author'] ); ?></span>
+						<span class="lafka-revs__date"> · <?php echo esc_html( $lafka_rev['date'] ); ?></span>
+					</p>
 				</li>
 			<?php endforeach; ?>
 		</ul>
 
-	</div><!-- .lafka-container -->
+	</div>
 </section>
