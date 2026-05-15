@@ -20,7 +20,10 @@
  *
  * Theme version: 5.47.0
  * ========================================================================= */
-.lafka-front-page {
+
+/* #main + class for ID-specificity match against style.css:2976
+ * (#main { padding-top: 0 }), which would otherwise wipe our offset. */
+#main.lafka-front-page {
 	background: var(--lafka-color-surface-page);
 	color: var(--lafka-color-text-primary);
 	padding-top: 220px;
@@ -28,7 +31,7 @@
 
 @media (min-width: 768px) {
 
-	.lafka-front-page {
+	#main.lafka-front-page {
 		padding-top: 280px;
 	}
 }
