@@ -1249,6 +1249,24 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.61.0: menu archive — handoff. Loads on shop + product
+		// taxonomies. Also pulls in lafka-home-v2 because product cards
+		// reuse the .lafka-favs__card component.
+		if ( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) ) {
+			wp_enqueue_style(
+				'lafka-home-v2',
+				get_template_directory_uri() . '/styles/lafka-home-v2.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-home-v2.css' )
+			);
+			wp_enqueue_style(
+				'lafka-menu-archive',
+				get_template_directory_uri() . '/styles/lafka-menu-archive.css',
+				array( 'lafka-tokens', 'lafka-home-v2' ),
+				lafka_asset_version( '/styles/lafka-menu-archive.css' )
+			);
+		}
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
