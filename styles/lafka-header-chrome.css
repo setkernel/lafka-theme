@@ -220,12 +220,33 @@ body #header ul#main_nav {
 }
 
 /* -------- Right side cluster (search/cart/account) ---------------------- */
-#header .lafka-search-cart-holder {
+
+/* Legacy theme sets this absolute — undo so flex layout flows correctly. */
+body #header .lafka-search-cart-holder {
+	position: static !important;
+	top: auto !important;
+	right: auto !important;
+	left: auto !important;
+	bottom: auto !important;
+	transform: none !important;
 	display: flex;
 	align-items: center;
 	gap: var(--lafka-space-2);
 	flex: 0 0 auto;
 	margin-inline-start: auto;
+	margin-block: 0;
+	order: 99; /* always last in flex row */
+}
+
+/* Parent row — kill legacy floats / clearfix that force wrap */
+body #header .main_menu_holder.inner {
+	flex-wrap: nowrap !important;
+	height: auto !important;
+}
+
+body #header .main_menu_holder.inner::after,
+body #header .main_menu_holder.inner::before {
+	display: none !important;
 }
 
 /* Cart icon — slim 40×40 button with badge */
