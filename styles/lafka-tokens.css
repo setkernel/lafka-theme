@@ -387,13 +387,14 @@
  * is preserved by the .lafka-section-eyebrow utility below.
  * ========================================================================= */
 
-/* v5.71.0: body color base. WordPress block editor sets
- * --wp--preset--color--text-primary: #333333 via wp_global_styles_render_svg_filters,
- * which then becomes the body color via the inline `body { color: var(...) }`.
- * Override here with the canonical zinc text-primary. Specificity 0,0,1 +
- * unlayered = beats the WP inline rule (also 0,0,1, but earlier in cascade). */
-body,
-.lafka-body {
+/* v5.71.0/5.73.0: body color base. WordPress block editor injects an
+ * inline rule `body { color: var(--wp--preset--color--text-primary) }`
+ * AFTER our enqueued stylesheets, with --wp--preset--color--text-primary
+ * hardcoded to #333. To beat it on cascade order alone we'd lose (later
+ * wins at equal specificity). v5.73.0: bump to `html body` (0,0,2 vs
+ * 0,0,1) so we win by specificity regardless of source order. */
+html body,
+html .lafka-body {
 	color: var(--lafka-color-text-primary);
 }
 
