@@ -1093,6 +1093,21 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// pages only. Skips the asset cost everywhere else.
 		$lafka_pdp_cta_active = function_exists( 'is_product' ) && is_product()
 			&& (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true );
+		// v5.30.0: service ETA strip — enqueued anywhere the strip might
+		// appear (header on every page, cart/checkout via WC hooks). Tiny
+		// stylesheet (~1 KB), only loads when operator has configured
+		// pickup or delivery values.
+		$lafka_service_eta_active = function_exists( 'lafka_service_eta_get_data' )
+			&& lafka_service_eta_get_data();
+		if ( $lafka_service_eta_active ) {
+			wp_enqueue_style(
+				'lafka-service-eta',
+				get_template_directory_uri() . '/styles/lafka-service-eta.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-service-eta.css' )
+			);
+		}
+
 		// v5.29.0: social-proof widget — enqueued where the widget can render
 		// (PDPs for now). Cheap stylesheet (~1 KB), only loads when the
 		// operator has configured a rating or review count.

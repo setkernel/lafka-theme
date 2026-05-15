@@ -1,0 +1,72 @@
+/*
+ * lafka-theme/styles/lafka-service-eta.css
+ * Pickup / delivery ETA strip — token-driven inline pill.
+ *
+ * Surfaces:
+ *   - Header (.lafka-service-eta--header) — small inline strip
+ *     rendered at the top of <body>, visually appended to the
+ *     existing site header info bar via spacing tokens.
+ *   - Cart (.lafka-service-eta--cart) — same component, styled as
+ *     a callout above the cart totals area.
+ *
+ * @since 5.30.0
+ */
+
+.lafka-service-eta {
+	display: inline-flex;
+	align-items: center;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-2);
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-sm);
+	color: var(--lafka-color-text-secondary);
+	line-height: 1.4;
+}
+
+.lafka-service-eta__item {
+	display: inline-flex;
+	align-items: baseline;
+	gap: var(--lafka-space-1);
+}
+
+.lafka-service-eta__label {
+	color: var(--lafka-color-text-muted);
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+.lafka-service-eta__value {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-variant-numeric: tabular-nums;
+}
+
+.lafka-service-eta__separator {
+	color: var(--lafka-color-text-muted);
+}
+
+/* Header context: small text strip aligned right, sits above the
+ * main header so it doesn't compete with logo / nav. */
+.lafka-service-eta--header {
+	display: flex;
+	justify-content: flex-end;
+	padding: var(--lafka-space-2) var(--lafka-space-4);
+	background: var(--lafka-color-surface-sunken);
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	font-size: var(--lafka-font-size-caption);
+}
+
+/* Cart / checkout context: callout box above the totals area. */
+.lafka-service-eta--cart {
+	display: flex;
+	gap: var(--lafka-space-3);
+	margin: 0 0 var(--lafka-space-3);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	background: var(--lafka-color-success-bg);
+	border-left: 3px solid var(--lafka-color-success);
+	border-radius: var(--lafka-radius-sm);
+	font-size: var(--lafka-font-size-sm);
+}
+
+.lafka-service-eta--cart .lafka-service-eta__value {
+	color: var(--lafka-color-success);
+}

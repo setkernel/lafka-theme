@@ -56,6 +56,10 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-archive-quickad
 require_once get_template_directory() . '/incl/customizer-social-proof.php';
 require_once get_template_directory() . '/incl/template-helpers/social-proof.php';
 
+// Service ETA — pickup + delivery time estimates (v5.30.0).
+require_once get_template_directory() . '/incl/customizer-service-eta.php';
+require_once get_template_directory() . '/incl/template-helpers/service-eta.php';
+
 /**
  * Echo the pagination
  */
