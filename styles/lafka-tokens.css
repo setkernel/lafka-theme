@@ -5,7 +5,7 @@
  * and z-index. Components MUST read from these. No hex literals or magic
  * pixel values in component CSS.
  *
- * Reference: DESIGN_SYSTEM.md at the theme root.
+ * Reference: /design_handoff_peppery_ordering/README.md (2026-05-15 lock).
  * Layer order: tokens (this file) -> primitives -> components.
  * Enqueued at high priority before every other Lafka stylesheet — see
  * lafka_enqueue_scripts_and_styles() in incl/system/core-functions.php.
@@ -15,8 +15,15 @@
  *    knobs (brand colour, accent colour). For deeper re-skins, override
  *    any --lafka-* property in a child theme stylesheet.
  *
+ * Naming convention (v5.53.0 reconciliation):
+ *  - Handoff-native: --lafka-font-family-body, --lafka-font-size-body,
+ *    --lafka-motion-duration-base, --lafka-color-success-500
+ *  - Legacy aliases retained: --lafka-font-sans, --lafka-font-size-base,
+ *    --lafka-duration-normal, --lafka-color-success — these forward to
+ *    the handoff-native names so existing components keep compiling.
+ *
  * @since 5.26.0
- * @locked 5.43.0 (Phase A design system foundation)
+ * @locked 5.53.0 (Design handoff lift — Peppery ordering site)
  * ========================================================================= */
 
 /* -------- Self-hosted display family — Fraunces (variable serif) ----------
@@ -45,10 +52,13 @@
 	 * WCAG: text-primary (#18181b) on brand-50 = 16.1:1 (AAA)
 	 *       text-primary (#18181b) on brand-500 = 7.92:1 (AAA)
 	 *       brand-900 (#451a03) on brand-50    = 13.2:1 (AAA)
-	 *       white          on brand-500       = 2.04:1  ❌  (use dark text on yellow) */
+	 *       white          on brand-500       = 2.04:1  ❌  (use dark text on yellow)
+	 * Note: brand-300 = #fdba74 (orange-300) per handoff 2026-05-15
+	 * lock. Previously #fcd34d (yellow-300). Hover overlays will read
+	 * warmer/peachier after this change. */
 	--lafka-color-brand-50: #fff7ed;
 	--lafka-color-brand-100: #ffedd5;
-	--lafka-color-brand-300: #fcd34d;
+	--lafka-color-brand-300: #fdba74;
 	--lafka-color-brand-500: #f59e0b;
 	--lafka-color-brand-600: #d97706;
 	--lafka-color-brand-700: #b45309;
@@ -65,10 +75,14 @@
 	--lafka-color-accent-700: #991b1b;
 	--lafka-color-accent-contrast: #fff;
 
-	/* ------- Colour: text (verified AAA on surface-page #fff) ----------- */
+	/* ------- Colour: text -----------------------------------------------
+	 * Note: handoff specifies text-muted #71717a (4.48:1 on white — sub-AA
+	 * for body sizes ≤17px). Adopted verbatim per 2026-05-15 design lock.
+	 * If accessibility audit flags, raise to #65656b (5.07:1, AA) via
+	 * Customizer override or revisit lock. */
 	--lafka-color-text-primary: #18181b;   /* AAA 16.6:1 */
 	--lafka-color-text-secondary: #3f3f46; /* AAA 10.4:1 */
-	--lafka-color-text-muted: #65656b;     /* AA  4.7:1 (was #71717a / 4.48 — sub-AA fix v5.50.0) */
+	--lafka-color-text-muted: #71717a;     /* AA-ish 4.48:1 — handoff value */
 	--lafka-color-text-inverse: #fff;
 	--lafka-color-text-on-accent: #fff;
 
@@ -81,10 +95,12 @@
 	--lafka-color-surface-active: #e4e4e7;
 	--lafka-color-surface-overlay: rgba(24, 24, 27, 0.55);
 	--lafka-color-surface-brand-soft: var(--lafka-color-brand-50);
-	--lafka-color-surface-dark: #0f0f10;            /* charcoal — dark sections */
-	--lafka-color-surface-cream: #fdf8ed;           /* warm cream — story sections */
-	--lafka-color-scrim-bottom: linear-gradient(to top, rgba(24, 24, 27, 0.78) 0%, rgba(24, 24, 27, 0.0) 60%);
-	--lafka-color-scrim-left: linear-gradient(to right, rgba(24, 24, 27, 0.72) 0%, rgba(24, 24, 27, 0.0) 60%);
+
+	/* Extras not in handoff — preserved for existing dark-section components */
+	--lafka-color-surface-dark: #0f0f10;
+	--lafka-color-surface-cream: #fdf8ed;
+	--lafka-color-scrim-bottom: linear-gradient(to top, rgba(24, 24, 27, 0.78) 0%, rgba(24, 24, 27, 0) 60%);
+	--lafka-color-scrim-left: linear-gradient(to right, rgba(24, 24, 27, 0.72) 0%, rgba(24, 24, 27, 0) 60%);
 
 	/* ------- Colour: border --------------------------------------------- */
 	--lafka-color-border-subtle: #e4e4e7;
@@ -93,39 +109,39 @@
 	--lafka-color-border-focus: var(--lafka-color-accent-500);
 
 	/* ------- Colour: semantic ------------------------------------------- */
-	--lafka-color-success: #047857;
-	--lafka-color-success-bg: #ecfdf5;
-	--lafka-color-warning: #b45309;
-	--lafka-color-warning-bg: #fffbeb;
-	--lafka-color-error: #b91c1c;
-	--lafka-color-error-bg: #fef2f2;
-	--lafka-color-info: #1d4ed8;
-	--lafka-color-info-bg: #eff6ff;
+	--lafka-color-success-500: #047857;
+	--lafka-color-success-50: #ecfdf5;
+	--lafka-color-error-500: #b91c1c;
+	--lafka-color-error-50: #fef2f2;
+	--lafka-color-warning-500: #b45309;
+	--lafka-color-warning-50: #fffbeb;
+	--lafka-color-info-500: #1d4ed8;
+	--lafka-color-info-50: #eff6ff;
 
 	/* ------- Typography ------------------------------------------------ */
-	--lafka-font-sans:
+	--lafka-font-family-body:
 		"Rubik", system-ui, -apple-system, "Segoe UI", roboto,
 		"Helvetica Neue", arial, sans-serif;
-	--lafka-font-display:
+	--lafka-font-family-display:
 		"Fraunces", "Iowan Old Style", "Palatino Linotype", "Book Antiqua",
 		palatino, georgia, serif;
-	--lafka-font-mono:
+	--lafka-font-family-mono:
 		ui-monospace, sfmono-regular, "SF Mono", menlo, consolas, monospace;
 
-	/* Modular scale, ratio 1.25 (major third), base 16 px / 1 rem.
-	 * Mobile values; desktop bumps applied in components via clamp().
-	 * See DESIGN_SYSTEM.md for the full responsive table. */
-	--lafka-font-size-caption: 0.8125rem;    /* 13 px */
-	--lafka-font-size-sm: 0.9375rem;         /* 15 px */
-	--lafka-font-size-base: 1rem;            /* 16 px */
-	--lafka-font-size-lg: 1.0625rem;         /* 17 px */
-	--lafka-font-size-h4: 1.125rem;          /* 18 px */
-	--lafka-font-size-h3: 1.25rem;           /* 20 px */
-	--lafka-font-size-h2: 1.5rem;            /* 24 px */
-	--lafka-font-size-h1: 2rem;              /* 32 px */
-	--lafka-font-size-display: 2.5rem;       /* 40 px */
+	/* Mobile-first type scale; desktop bumps applied via @media in components
+	 * (or via the *-desk tokens below). See handoff README "Typography". */
+	--lafka-font-size-caption: 0.8125rem;     /* 13 px */
+	--lafka-font-size-body-sm: 0.9375rem;     /* 15 px */
+	--lafka-font-size-body: 1rem;             /* 16 px */
+	--lafka-font-size-body-lg: 1.0625rem;     /* 17 px */
+	--lafka-font-size-h4: 1.125rem;           /* 18 px */
+	--lafka-font-size-h3: 1.25rem;            /* 20 px */
+	--lafka-font-size-h2: 1.5rem;             /* 24 px */
+	--lafka-font-size-h1: 2rem;               /* 32 px */
+	--lafka-font-size-display: 2.5rem;        /* 40 px */
 
-	/* Desktop type-scale (≥768px) — apply via @media in components. */
+	/* Desktop type-scale (≥768px) — components apply via @media. */
+	--lafka-font-size-body-lg-desk: 1.125rem; /* 18 px */
 	--lafka-font-size-h4-desk: 1.25rem;       /* 20 px */
 	--lafka-font-size-h3-desk: 1.5rem;        /* 24 px */
 	--lafka-font-size-h2-desk: 2rem;          /* 32 px */
@@ -138,30 +154,39 @@
 	--lafka-font-weight-bold: 700;
 	--lafka-font-weight-display: 800;
 
-	--lafka-line-height-display: 1.1;
-	--lafka-line-height-tight: 1.15;
+	/* Line heights — handoff names + legacy semantic names. */
+	--lafka-line-display: 1.1;
+	--lafka-line-heading: 1.15;
+	--lafka-line-body: 1.5;
+	--lafka-line-small: 1.4;
+
+	/* Semantic line-height aliases used by existing components. */
+	--lafka-line-height-display: var(--lafka-line-display);
+	--lafka-line-height-tight: var(--lafka-line-heading);
 	--lafka-line-height-snug: 1.3;
-	--lafka-line-height-normal: 1.5;
+	--lafka-line-height-normal: var(--lafka-line-body);
 	--lafka-line-height-relaxed: 1.65;
 
-	--lafka-letter-spacing-tight: -0.02em;
+	--lafka-letter-spacing-tight: -0.025em;
 	--lafka-letter-spacing-snug: -0.01em;
 	--lafka-letter-spacing-normal: 0;
 	--lafka-letter-spacing-wide: 0.04em;
 
-	/* ------- Spacing (8 px base, rem output) ---------------------------- */
+	/* ------- Spacing (8 px base, px output per handoff lock) -----------
+	 * Handoff specifies px units. Kept identical to prior rem values
+	 * (4px = 0.25rem at 16px root, etc.) so no layout shift. */
+	--lafka-space-1: 4px;
+	--lafka-space-2: 8px;
+	--lafka-space-3: 12px;
+	--lafka-space-4: 16px;
+	--lafka-space-5: 20px;
+	--lafka-space-6: 24px;
+	--lafka-space-8: 32px;
+	--lafka-space-10: 40px;
+	--lafka-space-12: 48px;
+	--lafka-space-16: 64px;
+	--lafka-space-20: 80px;
 	--lafka-space-0: 0;
-	--lafka-space-1: 0.25rem;
-	--lafka-space-2: 0.5rem;
-	--lafka-space-3: 0.75rem;
-	--lafka-space-4: 1rem;
-	--lafka-space-5: 1.25rem;
-	--lafka-space-6: 1.5rem;
-	--lafka-space-8: 2rem;
-	--lafka-space-10: 2.5rem;
-	--lafka-space-12: 3rem;
-	--lafka-space-16: 4rem;
-	--lafka-space-20: 5rem;
 
 	/* Semantic spacing aliases — components reference these, not raw scale */
 	--lafka-gap-inline: var(--lafka-space-2);
@@ -181,22 +206,18 @@
 
 	/* ------- Shadows / elevation ---------------------------------------- */
 	--lafka-shadow-0: none;
-	--lafka-shadow-1: 0 1px 2px rgba(24, 24, 27, 0.04), 0 1px 3px rgba(24, 24, 27, 0.06);
+	--lafka-shadow-1: 0 1px 2px rgba(24, 24, 27, 0.04), 0 1px 1px rgba(24, 24, 27, 0.05);
 	--lafka-shadow-2: 0 2px 4px rgba(24, 24, 27, 0.05), 0 4px 12px rgba(24, 24, 27, 0.06);
-	--lafka-shadow-3: 0 6px 16px rgba(24, 24, 27, 0.08), 0 12px 24px rgba(24, 24, 27, 0.06);
-	--lafka-shadow-4: 0 12px 32px rgba(24, 24, 27, 0.14), 0 24px 48px rgba(24, 24, 27, 0.10);
+	--lafka-shadow-3: 0 6px 16px rgba(24, 24, 27, 0.08), 0 12px 32px rgba(24, 24, 27, 0.08);
+	--lafka-shadow-4: 0 12px 32px rgba(24, 24, 27, 0.12), 0 28px 64px rgba(24, 24, 27, 0.12);
 	--lafka-shadow-focus: 0 0 0 3px rgba(220, 38, 38, 0.35);
 
 	/* ------- Motion ----------------------------------------------------- */
-	--lafka-duration-instant: 80ms;
-	--lafka-duration-fast: 160ms;
-	--lafka-duration-normal: 240ms;
-	--lafka-duration-slow: 400ms;
-
-	--lafka-ease-out: cubic-bezier(0.16, 1, 0.3, 1);
-	--lafka-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
-	--lafka-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
-	--lafka-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+	--lafka-motion-duration-fast: 120ms;
+	--lafka-motion-duration-base: 200ms;
+	--lafka-motion-duration-slow: 320ms;
+	--lafka-motion-ease-out: cubic-bezier(0.2, 0.8, 0.4, 1);
+	--lafka-motion-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
 	/* ------- Z-index scale (gapped to allow plugin insertions) ---------- */
 	--lafka-z-base: 0;
@@ -212,9 +233,47 @@
 
 	/* ------- Layout ----------------------------------------------------- */
 	--lafka-container-max: 1440px;
-	--lafka-container-px: var(--lafka-space-4);
-	--lafka-container-px-desk: var(--lafka-space-8);
+	--lafka-gutter-mobile: 16px;
+	--lafka-gutter-laptop: 32px;
+	--lafka-container-px: var(--lafka-gutter-mobile);
+	--lafka-container-px-desk: var(--lafka-gutter-laptop);
+	--lafka-header-h: 64px;
+	--lafka-header-h-desk: 72px;
 	--lafka-tap-target: 44px;
+
+	/* =====================================================================
+	 * Legacy name aliases — keep existing component CSS compiling without
+	 * a wholesale rewrite. New code should reference the handoff-native
+	 * names above. Aliases will be removed after a full component sweep.
+	 * ===================================================================== */
+
+	/* Typography legacy → handoff */
+	--lafka-font-sans: var(--lafka-font-family-body);
+	--lafka-font-display: var(--lafka-font-family-display);
+	--lafka-font-mono: var(--lafka-font-family-mono);
+	--lafka-font-size-sm: var(--lafka-font-size-body-sm);
+	--lafka-font-size-base: var(--lafka-font-size-body);
+	--lafka-font-size-lg: var(--lafka-font-size-body-lg);
+
+	/* Motion legacy → handoff (+ instant/spring/in not in handoff, kept) */
+	--lafka-duration-instant: 80ms;
+	--lafka-duration-fast: var(--lafka-motion-duration-fast);
+	--lafka-duration-normal: var(--lafka-motion-duration-base);
+	--lafka-duration-slow: var(--lafka-motion-duration-slow);
+	--lafka-ease-out: var(--lafka-motion-ease-out);
+	--lafka-ease-in-out: var(--lafka-motion-ease-in-out);
+	--lafka-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
+	--lafka-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+
+	/* Semantic colour legacy → handoff */
+	--lafka-color-success: var(--lafka-color-success-500);
+	--lafka-color-success-bg: var(--lafka-color-success-50);
+	--lafka-color-error: var(--lafka-color-error-500);
+	--lafka-color-error-bg: var(--lafka-color-error-50);
+	--lafka-color-warning: var(--lafka-color-warning-500);
+	--lafka-color-warning-bg: var(--lafka-color-warning-50);
+	--lafka-color-info: var(--lafka-color-info-500);
+	--lafka-color-info-bg: var(--lafka-color-info-50);
 }
 
 /* -------- Dark mode -------------------------------------------------------
@@ -254,10 +313,10 @@
 @media (prefers-reduced-motion: reduce) {
 
 	:root {
+		--lafka-motion-duration-fast: 0ms;
+		--lafka-motion-duration-base: 0ms;
+		--lafka-motion-duration-slow: 0ms;
 		--lafka-duration-instant: 0ms;
-		--lafka-duration-fast: 0ms;
-		--lafka-duration-normal: 0ms;
-		--lafka-duration-slow: 0ms;
 	}
 }
 
@@ -272,20 +331,20 @@
 h1,
 .lafka-h1,
 .lafka-display {
-	font-family: var(--lafka-font-display);
+	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
 	font-size: var(--lafka-font-size-h1);
-	line-height: var(--lafka-line-height-display);
+	line-height: var(--lafka-line-display);
 	letter-spacing: var(--lafka-letter-spacing-tight);
 	color: var(--lafka-color-text-primary);
 }
 
 h2,
 .lafka-h2 {
-	font-family: var(--lafka-font-display);
+	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
 	font-size: var(--lafka-font-size-h2);
-	line-height: var(--lafka-line-height-tight);
+	line-height: var(--lafka-line-heading);
 	letter-spacing: var(--lafka-letter-spacing-snug);
 	color: var(--lafka-color-text-primary);
 }
@@ -346,7 +405,7 @@ h2,
 
 .lafka-section-eyebrow {
 	display: inline-block;
-	font-family: var(--lafka-font-sans);
+	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-bold);
 	letter-spacing: var(--lafka-letter-spacing-wide);
@@ -361,10 +420,10 @@ h2,
 
 .lafka-section-headline {
 	margin: 0;
-	font-family: var(--lafka-font-display);
+	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
 	font-size: var(--lafka-font-size-h2);
-	line-height: var(--lafka-line-height-tight);
+	line-height: var(--lafka-line-heading);
 	letter-spacing: var(--lafka-letter-spacing-snug);
 	color: var(--lafka-color-text-primary);
 }
@@ -382,7 +441,7 @@ h2,
 
 .lafka-section-subhead {
 	margin: 0;
-	font-size: var(--lafka-font-size-lg);
+	font-size: var(--lafka-font-size-body-lg);
 	line-height: var(--lafka-line-height-snug);
 	color: var(--lafka-color-text-secondary);
 	max-width: 56ch;
