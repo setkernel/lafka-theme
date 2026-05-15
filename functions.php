@@ -94,6 +94,9 @@ require_once get_template_directory() . '/incl/template-helpers/address-filters.
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
 require_once get_template_directory() . '/incl/contact-template-loader.php';
 
+// Strip WPBakery shortcodes from rendered content (v5.66.3).
+require_once get_template_directory() . '/incl/wpbakery-strip.php';
+
 /**
  * Echo the pagination
  */
