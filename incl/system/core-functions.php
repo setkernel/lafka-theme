@@ -1358,7 +1358,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		$lafka_is_static_page = is_singular( 'page' )
 			&& ! ( function_exists( 'is_front_page' ) && is_front_page() )
 			&& ! $lafka_skip_page_css;
-		if ( $lafka_is_static_page ) {
+		// v5.76.0: also load lafka-page.css for single blog posts —
+		// single.php reuses .lafka-page primitives + adds .lafka-post__*.
+		$lafka_is_blog_single = function_exists( 'is_single' ) ? is_single() : false;
+		if ( $lafka_is_static_page || $lafka_is_blog_single ) {
 			wp_enqueue_style(
 				'lafka-page',
 				get_template_directory_uri() . '/styles/lafka-page.css',

@@ -1,260 +1,148 @@
-<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
+/**
+ * Single post template — handoff-spec rebuild (v5.76.0).
+ *
+ * Drops the legacy Revolution Slider, FlexSlider, sidebar holster, and
+ * featured-image zoomable-background block. Single posts now render as
+ * a reading layout aligned with page.php but with post meta (author,
+ * date, category badge) and a clean prev/next nav.
+ *
+ * Shares lafka-page.css for typography + container. Post-specific
+ * blocks (.lafka-post__meta, .lafka-post__nav, .lafka-post__tags) are
+ * defined in the same stylesheet.
+ *
+ * Legacy template preserved as single-legacy.php.
+ *
+ * @package Lafka
+ * @since   5.76.0
+ */
+
+defined( 'ABSPATH' ) || exit;
+
 get_header();
 
-// Default to single post
-// Get the lafka custom options
-$lafka_page_options = get_post_custom( get_the_ID() );
+while ( have_posts() ) :
+	the_post();
+	$lafka_pst_id    = get_the_ID();
+	$lafka_pst_title = get_the_title();
+	$lafka_pst_thumb = '';
+	if ( has_post_thumbnail( $lafka_pst_id ) ) {
+		$lafka_pst_thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $lafka_pst_id ), 'full' );
+		$lafka_pst_thumb     = $lafka_pst_thumb_src ? (string) $lafka_pst_thumb_src[0] : '';
+	}
+	$lafka_pst_has_hero = ( '' !== $lafka_pst_thumb );
+	$lafka_pst_excerpt  = has_excerpt( $lafka_pst_id ) ? get_the_excerpt( $lafka_pst_id ) : '';
+	$lafka_pst_cats     = get_the_category( $lafka_pst_id );
+	$lafka_pst_tags     = get_the_tags( $lafka_pst_id );
+	$lafka_pst_author   = (int) get_the_author_meta( 'ID' );
+	$lafka_pst_avatar   = get_avatar( $lafka_pst_author, 40 );
+	?>
+	<main id="main" class="lafka-page lafka-page--post<?php echo $lafka_pst_has_hero ? ' lafka-page--has-hero' : ''; ?>" role="main">
 
-$lafka_show_title_page        = 'yes';
-$lafka_show_breadcrumb        = 'yes';
-$lafka_featured_slider        = 'none';
-$lafka_subtitle               = '';
-$lafka_show_title_background  = 0;
-$lafka_title_background_image = '';
-$lafka_title_alignment        = 'left_title';
-
-if ( isset( $lafka_page_options['lafka_show_title_page'] ) && trim( $lafka_page_options['lafka_show_title_page'][0] ) != '' ) {
-	$lafka_show_title_page = $lafka_page_options['lafka_show_title_page'][0];
-}
-
-if ( isset( $lafka_page_options['lafka_show_breadcrumb'] ) && trim( $lafka_page_options['lafka_show_breadcrumb'][0] ) != '' ) {
-	$lafka_show_breadcrumb = $lafka_page_options['lafka_show_breadcrumb'][0];
-}
-
-if ( isset( $lafka_page_options['lafka_rev_slider'] ) && trim( $lafka_page_options['lafka_rev_slider'][0] ) != '' ) {
-	$lafka_featured_slider = $lafka_page_options['lafka_rev_slider'][0];
-}
-
-
-if ( isset( $lafka_page_options['lafka_page_subtitle'] ) && trim( $lafka_page_options['lafka_page_subtitle'][0] ) != '' ) {
-	$lafka_subtitle = $lafka_page_options['lafka_page_subtitle'][0];
-}
-
-if ( isset( $lafka_page_options['lafka_title_background_imgid'] ) && trim( $lafka_page_options['lafka_title_background_imgid'][0] ) != '' ) {
-	$lafka_img                    = wp_get_attachment_image_src( $lafka_page_options['lafka_title_background_imgid'][0], 'full' );
-	$lafka_title_background_image = $lafka_img ? $lafka_img[0] : $lafka_img;
-}
-
-if ( isset( $lafka_page_options['lafka_title_alignment'] ) && trim( $lafka_page_options['lafka_title_alignment'][0] ) != '' ) {
-	$lafka_title_alignment = $lafka_page_options['lafka_title_alignment'][0];
-}
-
-$lafka_sidebar_choice = apply_filters( 'lafka_has_sidebar', '' );
-
-if ( $lafka_sidebar_choice != 'none' ) {
-	$lafka_has_sidebar = is_active_sidebar( $lafka_sidebar_choice );
-} else {
-	$lafka_has_sidebar = false;
-}
-
-
-$lafka_offcanvas_sidebar_choice = apply_filters( 'lafka_has_offcanvas_sidebar', '' );
-
-if ( $lafka_offcanvas_sidebar_choice != 'none' ) {
-	$lafka_has_offcanvas_sidebar = is_active_sidebar( $lafka_offcanvas_sidebar_choice );
-} else {
-	$lafka_has_offcanvas_sidebar = false;
-}
-
-$lafka_sidebar_classes = array();
-if ( $lafka_has_sidebar ) {
-	$lafka_sidebar_classes[] = 'has-sidebar';
-}
-if ( $lafka_has_offcanvas_sidebar ) {
-	$lafka_sidebar_classes[] = 'has-off-canvas-sidebar';
-}
-
-// Sidebar position
-$lafka_sidebar_classes[] = apply_filters( 'lafka_left_sidebar_position_class', '' );
-?>
-<?php if ( $lafka_has_offcanvas_sidebar ) : ?>
-	<?php get_sidebar( 'offcanvas' ); ?>
-<?php endif; ?>
-<div id="content"
-<?php
-if ( ! empty( $lafka_sidebar_classes ) ) {
-	echo 'class="' . esc_attr( implode( ' ', $lafka_sidebar_classes ) ) . '"';}
-?>
->
-	<?php
-	while ( have_posts() ) :
-		the_post();
-		?>
-		<?php
-		// SEO + A11y H1 fallback — see page.php for rationale.
-		if ( 'yes' !== $lafka_show_title_page ) :
-			?>
-			<h1 class="screen-reader-text"><?php the_title(); ?></h1>
-			<?php
-		endif;
-		?>
-		<?php if ( $lafka_show_title_page == 'yes' || $lafka_show_breadcrumb == 'yes' ) : ?>
-			<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( $lafka_title_alignment ); ?>
-			<?php
-			if ( $lafka_title_background_image ) :
-				?>
-				title_has_image<?php endif; ?>">
-				<?php
-				if ( $lafka_title_background_image ) :
-					?>
-					<div class="lafka-zoomable-background" style="background-image: url('<?php echo esc_url( $lafka_title_background_image ); ?>');"></div><?php endif; ?>
-				<div class="inner fixed">
-					<div class="lafka-title-text-container">
-						<!-- BREADCRUMB -->
-						<?php if ( $lafka_show_breadcrumb == 'yes' ) : ?>
-							<?php lafka_breadcrumb(); ?>
-						<?php endif; ?>
-						<!-- END OF BREADCRUMB -->
-						<?php if ( $lafka_show_title_page == 'yes' ) : ?>
-							<h1	class="heading-title">
-								<a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>"><?php the_title(); ?></a>
-							</h1>
-							<?php if ( $lafka_subtitle ) : ?>
-								<h6><?php echo esc_html( $lafka_subtitle ); ?></h6>
-							<?php endif; ?>
-						<?php endif; ?>
-					</div>
-					<?php get_template_part( 'partials/blog-post-meta-bottom' ); ?>
-				</div>
-			</div>
-		<?php endif; ?>
-		<div class="inner">
-			<!-- CONTENT WRAPPER -->
-			<div id="main" class="fixed box box-common">
-				<div class="content_holder">
-					<?php get_template_part( 'content', get_post_format() ); ?>
-					<?php
-					if ( comments_open() || get_comments_number() ) :
-						comments_template( '', true );
-					endif;
-					?>
-					<?php if ( lafka_get_option( 'show_related_posts' ) ) : ?>
-						<?php
-						// PERF-6: random related posts. `ORDER BY RAND()` with a
-						// tax_query JOIN is a filesort that the MySQL query
-						// cache can't dedupe. Cache a list of `N + buffer`
-						// candidate IDs from the same category in a transient
-						// (15 min) keyed on the current post's first category
-						// slug, then pick `posts_per_page` from the cached list
-						// here at request time. The "random" feel survives —
-						// just rotated on a 15-minute cadence per category —
-						// and we get one DB query per category per 15min
-						// instead of one filesort per pageview.
-						$lafka_rp_count = (int) lafka_get_option( 'number_related_posts' );
-						if ( $lafka_rp_count <= 0 ) {
-							$lafka_rp_count = 4;
-						}
-						$lafka_get_terms_args = array(
-							'orderby' => 'name',
-							'order'   => 'ASC',
-							'fields'  => 'slugs',
-						);
-						$lafka_categories     = wp_get_post_terms( $post->ID, 'category', $lafka_get_terms_args );
-						$lafka_cat_key        = ( ! is_wp_error( $lafka_categories ) && ! empty( $lafka_categories ) )
-							? md5( implode( '|', (array) $lafka_categories ) )
-							: 'no-cat';
-						$lafka_rp_cache_key   = 'lafka_related_posts_' . $lafka_cat_key;
-						$lafka_rp_pool        = get_transient( $lafka_rp_cache_key );
-						if ( false === $lafka_rp_pool || ! is_array( $lafka_rp_pool ) ) {
-							$lafka_rp_pool_args = array(
-								'posts_per_page'         => max( 24, $lafka_rp_count * 4 ),
-								'orderby'                => 'date',
-								'order'                  => 'DESC',
-								'post_type'              => 'post',
-								'post_status'            => 'publish',
-								'fields'                 => 'ids',
-								'no_found_rows'          => true,
-								'update_post_meta_cache' => false,
-								'update_post_term_cache' => false,
-							);
-							if ( ! is_wp_error( $lafka_categories ) && ! empty( $lafka_categories ) ) {
-								$lafka_rp_pool_args['tax_query'] = array(
-									array(
-										'taxonomy' => 'category',
-										'field'    => 'slug',
-										'terms'    => $lafka_categories,
-									),
-								);
-							}
-							$lafka_rp_pool_query = new WP_Query( $lafka_rp_pool_args );
-							$lafka_rp_pool       = $lafka_rp_pool_query->posts;
-							set_transient( $lafka_rp_cache_key, $lafka_rp_pool, 15 * MINUTE_IN_SECONDS );
-						}
-
-						// Filter out the current post and shuffle a slice.
-						$lafka_rp_candidates = array_values( array_diff( (array) $lafka_rp_pool, array( $post->ID ) ) );
-						shuffle( $lafka_rp_candidates );
-						$lafka_rp_ids = array_slice( $lafka_rp_candidates, 0, $lafka_rp_count );
-
-						$lafka_related_posts_args = array(
-							'posts_per_page'         => $lafka_rp_count,
-							'post__in'               => ! empty( $lafka_rp_ids ) ? $lafka_rp_ids : array( 0 ),
-							'orderby'                => 'post__in',
-							'post_type'              => 'post',
-							'post_status'            => 'publish',
-							'no_found_rows'          => true,
-							'update_post_meta_cache' => true,
-							'update_post_term_cache' => true,
-						);
-
-						$lafka_is_latest_posts = true;
-						$lafka_related_query   = new WP_Query( $lafka_related_posts_args );
-						?>
-						<?php if ( $lafka_related_query->have_posts() ) : ?>
-							<?php
-							// owl carousel
-							wp_localize_script(
-								'lafka-libs-config',
-								'lafka_owl_carousel',
-								array(
-									'include' => 'true',
-								)
-							);
-							?>
-							<div class="lafka-related-blog-posts lafka_shortcode_latest_posts lafka_blog_masonry full_width">
-								<h4><?php esc_html_e( 'Related posts', 'lafka' ); ?></h4>
-								<div 
-								<?php
-								if ( lafka_get_option( 'owl_carousel' ) ) :
-									?>
-									class="owl-carousel lafka-owl-carousel" <?php endif; ?>>
-
-								<?php while ( $lafka_related_query->have_posts() ) : ?>
-									<?php $lafka_related_query->the_post(); ?>
-									<?php get_template_part( 'content', 'related-posts' ); ?>
-								<?php endwhile; ?>
-
-								</div>
-								<div class="clear"></div>
-							</div>
-						<?php endif; ?>
-					<?php endif; ?>
-					<?php wp_reset_postdata(); ?>
-				</div>
-
-				<!-- SIDEBARS -->
-				<?php if ( $lafka_has_sidebar ) : ?>
-					<?php get_sidebar(); ?>
-				<?php endif; ?>
-				<?php if ( $lafka_has_offcanvas_sidebar ) : ?>
-					<a class="sidebar-trigger" href="#"><?php echo esc_html__( 'show', 'lafka' ); ?></a>
-				<?php endif; ?>
-				<!-- END OF SIDEBARS -->
-
-				<div class="clear"></div>
-				<?php if ( function_exists( 'lafka_share_links' ) ) : ?>
-					<?php lafka_share_links( the_title_attribute( 'echo=0' ), get_permalink() ); ?>
-				<?php endif; ?>
-			</div>
-
-			<!-- Previous / Next links -->
-			<?php if ( lafka_get_option( 'show_prev_next' ) ) : ?>
-				<?php echo wp_kses_post( lafka_post_nav() ); ?>
+		<header class="lafka-page__header">
+			<?php if ( $lafka_pst_has_hero ) : ?>
+				<div class="lafka-page__hero" role="img" aria-label="<?php echo esc_attr( $lafka_pst_title ); ?>" style="background-image:url('<?php echo esc_url( $lafka_pst_thumb ); ?>');"></div>
+				<div class="lafka-page__hero-scrim" aria-hidden="true"></div>
 			<?php endif; ?>
-		</div>
-		<!-- END OF CONTENT WRAPPER -->
-	<?php endwhile; // end of the loop. ?>
-</div>
-<?php
+			<div class="lafka-container lafka-page__header-inner">
+				<nav class="lafka-page__crumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>">
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'lafka' ); ?></a>
+					<?php if ( ! empty( $lafka_pst_cats ) ) : ?>
+						<span aria-hidden="true">/</span>
+						<a href="<?php echo esc_url( get_category_link( $lafka_pst_cats[0]->term_id ) ); ?>"><?php echo esc_html( $lafka_pst_cats[0]->name ); ?></a>
+					<?php endif; ?>
+					<span aria-hidden="true">/</span>
+					<span><?php echo esc_html( $lafka_pst_title ); ?></span>
+				</nav>
+				<h1 class="lafka-page__title"><?php echo esc_html( $lafka_pst_title ); ?></h1>
+				<?php if ( '' !== $lafka_pst_excerpt ) : ?>
+					<p class="lafka-page__subtitle"><?php echo wp_kses_post( $lafka_pst_excerpt ); ?></p>
+				<?php endif; ?>
+				<div class="lafka-post__meta">
+					<?php
+					if ( $lafka_pst_avatar ) {
+						// get_avatar() returns safe HTML built from WP core.
+						echo '<span class="lafka-post__avatar">' . wp_kses(
+							$lafka_pst_avatar,
+							array(
+								'img' => array(
+									'src'      => true,
+									'srcset'   => true,
+									'sizes'    => true,
+									'class'    => true,
+									'alt'      => true,
+									'width'    => true,
+									'height'   => true,
+									'loading'  => true,
+									'decoding' => true,
+								),
+							)
+						) . '</span>';
+					}
+					?>
+					<span class="lafka-post__author"><?php echo esc_html( get_the_author() ); ?></span>
+					<span class="lafka-post__sep" aria-hidden="true">·</span>
+					<time class="lafka-post__date" datetime="<?php echo esc_attr( get_the_date( 'c' ) ); ?>"><?php echo esc_html( get_the_date() ); ?></time>
+				</div>
+			</div>
+		</header>
+
+		<article id="post-<?php the_ID(); ?>" <?php post_class( 'lafka-page__article' ); ?>>
+			<div class="lafka-container">
+				<div class="lafka-page__content entry-content">
+					<?php the_content(); ?>
+					<?php
+					wp_link_pages(
+						array(
+							'before' => '<nav class="lafka-page__pagination" aria-label="' . esc_attr__( 'Page sections', 'lafka' ) . '"><span>' . esc_html__( 'Pages:', 'lafka' ) . '</span>',
+							'after'  => '</nav>',
+						)
+					);
+					?>
+				</div>
+
+				<?php if ( ! empty( $lafka_pst_tags ) ) : ?>
+					<div class="lafka-post__tags">
+						<span class="lafka-post__tags-label"><?php esc_html_e( 'Tagged', 'lafka' ); ?></span>
+						<ul class="lafka-post__tags-list" role="list">
+							<?php foreach ( $lafka_pst_tags as $lafka_pst_tag ) : ?>
+								<li><a class="lafka-post__tag" href="<?php echo esc_url( get_tag_link( $lafka_pst_tag->term_id ) ); ?>">#<?php echo esc_html( $lafka_pst_tag->name ); ?></a></li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				<?php endif; ?>
+
+				<nav class="lafka-post__nav" aria-label="<?php esc_attr_e( 'Post navigation', 'lafka' ); ?>">
+					<?php
+					$lafka_pst_prev = get_previous_post();
+					$lafka_pst_next = get_next_post();
+					?>
+					<?php if ( $lafka_pst_prev instanceof WP_Post ) : ?>
+						<a class="lafka-post__nav-link lafka-post__nav-link--prev" href="<?php echo esc_url( get_permalink( $lafka_pst_prev ) ); ?>" rel="prev">
+							<span class="lafka-post__nav-label"><?php esc_html_e( '← Previous', 'lafka' ); ?></span>
+							<span class="lafka-post__nav-title"><?php echo esc_html( get_the_title( $lafka_pst_prev ) ); ?></span>
+						</a>
+					<?php else : ?>
+						<span></span>
+					<?php endif; ?>
+					<?php if ( $lafka_pst_next instanceof WP_Post ) : ?>
+						<a class="lafka-post__nav-link lafka-post__nav-link--next" href="<?php echo esc_url( get_permalink( $lafka_pst_next ) ); ?>" rel="next">
+							<span class="lafka-post__nav-label"><?php esc_html_e( 'Next →', 'lafka' ); ?></span>
+							<span class="lafka-post__nav-title"><?php echo esc_html( get_the_title( $lafka_pst_next ) ); ?></span>
+						</a>
+					<?php endif; ?>
+				</nav>
+
+				<?php if ( comments_open() || get_comments_number() ) : ?>
+					<div class="lafka-page__comments">
+						<?php comments_template(); ?>
+					</div>
+				<?php endif; ?>
+			</div>
+		</article>
+
+	</main>
+	<?php
+endwhile;
+
 get_footer();
