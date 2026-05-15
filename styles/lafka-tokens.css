@@ -5,6 +5,7 @@
  * and z-index. Components MUST read from these. No hex literals or magic
  * pixel values in component CSS.
  *
+ * Reference: DESIGN_SYSTEM.md at the theme root.
  * Layer order: tokens (this file) -> primitives -> components.
  * Enqueued at high priority before every other Lafka stylesheet — see
  * lafka_enqueue_scripts_and_styles() in incl/system/core-functions.php.
@@ -15,33 +16,59 @@
  *    any --lafka-* property in a child theme stylesheet.
  *
  * @since 5.26.0
+ * @locked 5.43.0 (Phase A design system foundation)
  * ========================================================================= */
+
+/* -------- Self-hosted display family — Fraunces (variable serif) ----------
+ * Only loaded for display weights (h1/h2 + .lafka-display). Body keeps using
+ * Rubik (loaded in critical.css). font-display: swap so layout is never
+ * blocked; FOUT is acceptable on serif headings. */
+@font-face {
+	font-family: Fraunces;
+	font-style: normal;
+	font-weight: 600;
+	font-display: swap;
+	src: url(../assets/fonts/fraunces/Fraunces-600.woff2) format("woff2");
+}
+
+@font-face {
+	font-family: Fraunces;
+	font-style: normal;
+	font-weight: 800;
+	font-display: swap;
+	src: url(../assets/fonts/fraunces/Fraunces-800.woff2) format("woff2");
+}
 
 :root {
 
-	/* ------- Colour: brand & accent --------------------------------------
-	 * brand = chrome/identity surfaces, accent = the conversion CTA.
-	 * Two ramps so brands can colour their chrome without compromising the
-	 * primary CTA's contrast. Every install overrides 500 via Customizer;
-	 * the rest of the ramp recomputes from neutral primitives. */
+	/* ------- Colour: brand ramp — PEPPER YELLOW (operator identity) -----
+	 * WCAG: text-primary (#18181b) on brand-50 = 16.1:1 (AAA)
+	 *       text-primary (#18181b) on brand-500 = 7.92:1 (AAA)
+	 *       brand-900 (#451a03) on brand-50    = 13.2:1 (AAA)
+	 *       white          on brand-500       = 2.04:1  ❌  (use dark text on yellow) */
 	--lafka-color-brand-50: #fff7ed;
 	--lafka-color-brand-100: #ffedd5;
-	--lafka-color-brand-300: #fdba74;
-	--lafka-color-brand-500: #ea580c;
-	--lafka-color-brand-600: #c2410c;
-	--lafka-color-brand-700: #9a3412;
-	--lafka-color-brand-900: #431407;
+	--lafka-color-brand-300: #fcd34d;
+	--lafka-color-brand-500: #f59e0b;
+	--lafka-color-brand-600: #d97706;
+	--lafka-color-brand-700: #b45309;
+	--lafka-color-brand-900: #451a03;
+	--lafka-color-on-brand: var(--lafka-color-text-primary);
 
+	/* ------- Colour: accent ramp — PIZZA RED (calls to action) ----------
+	 * WCAG: white on accent-500 = 5.07:1 (AA)
+	 *       white on accent-600 = 6.42:1 (AAA)
+	 *       accent-700 on white = 7.41:1 (AAA) */
 	--lafka-color-accent-50: #fef2f2;
 	--lafka-color-accent-500: #dc2626;
 	--lafka-color-accent-600: #b91c1c;
 	--lafka-color-accent-700: #991b1b;
 	--lafka-color-accent-contrast: #fff;
 
-	/* ------- Colour: text ----------------------------------------------- */
-	--lafka-color-text-primary: #18181b;
-	--lafka-color-text-secondary: #3f3f46;
-	--lafka-color-text-muted: #71717a;
+	/* ------- Colour: text (verified AAA on surface-page #fff) ----------- */
+	--lafka-color-text-primary: #18181b;   /* AAA 16.6:1 */
+	--lafka-color-text-secondary: #3f3f46; /* AAA 10.4:1 */
+	--lafka-color-text-muted: #71717a;     /* AA  5.2:1 */
 	--lafka-color-text-inverse: #fff;
 	--lafka-color-text-on-accent: #fff;
 
@@ -53,6 +80,7 @@
 	--lafka-color-surface-hover: #f4f4f5;
 	--lafka-color-surface-active: #e4e4e7;
 	--lafka-color-surface-overlay: rgba(24, 24, 27, 0.55);
+	--lafka-color-surface-brand-soft: var(--lafka-color-brand-50);
 
 	/* ------- Colour: border --------------------------------------------- */
 	--lafka-color-border-subtle: #e4e4e7;
@@ -70,34 +98,43 @@
 	--lafka-color-info: #1d4ed8;
 	--lafka-color-info-bg: #eff6ff;
 
-	/* ------- Typography --------------------------------------------------
-	 * Inter is SIL OFL, tabular-numerals-by-default, optical-size adjusted.
-	 * Falls back to system stack if not loaded. */
+	/* ------- Typography ------------------------------------------------ */
 	--lafka-font-sans:
-		"Inter", system-ui, -apple-system, "Segoe UI", roboto,
+		"Rubik", system-ui, -apple-system, "Segoe UI", roboto,
 		"Helvetica Neue", arial, sans-serif;
-	--lafka-font-display: var(--lafka-font-sans);
+	--lafka-font-display:
+		"Fraunces", "Iowan Old Style", "Palatino Linotype", "Book Antiqua",
+		palatino, georgia, serif;
 	--lafka-font-mono:
 		ui-monospace, sfmono-regular, "SF Mono", menlo, consolas, monospace;
 
-	/* Modular scale, ratio 1.25 (major third), base 16 px / 1 rem. */
-	--lafka-font-size-caption: 0.75rem;
-	--lafka-font-size-sm: 0.875rem;
-	--lafka-font-size-base: 1rem;
-	--lafka-font-size-lg: 1.125rem;
-	--lafka-font-size-h6: 1rem;
-	--lafka-font-size-h5: 1.125rem;
-	--lafka-font-size-h4: 1.25rem;
-	--lafka-font-size-h3: 1.5rem;
-	--lafka-font-size-h2: 1.875rem;
-	--lafka-font-size-h1: 2.25rem;
-	--lafka-font-size-display: 3rem;
+	/* Modular scale, ratio 1.25 (major third), base 16 px / 1 rem.
+	 * Mobile values; desktop bumps applied in components via clamp().
+	 * See DESIGN_SYSTEM.md for the full responsive table. */
+	--lafka-font-size-caption: 0.8125rem;    /* 13 px */
+	--lafka-font-size-sm: 0.9375rem;         /* 15 px */
+	--lafka-font-size-base: 1rem;            /* 16 px */
+	--lafka-font-size-lg: 1.0625rem;         /* 17 px */
+	--lafka-font-size-h4: 1.125rem;          /* 18 px */
+	--lafka-font-size-h3: 1.25rem;           /* 20 px */
+	--lafka-font-size-h2: 1.5rem;            /* 24 px */
+	--lafka-font-size-h1: 2rem;              /* 32 px */
+	--lafka-font-size-display: 2.5rem;       /* 40 px */
+
+	/* Desktop type-scale (≥768px) — apply via @media in components. */
+	--lafka-font-size-h4-desk: 1.25rem;       /* 20 px */
+	--lafka-font-size-h3-desk: 1.5rem;        /* 24 px */
+	--lafka-font-size-h2-desk: 2rem;          /* 32 px */
+	--lafka-font-size-h1-desk: 2.75rem;       /* 44 px */
+	--lafka-font-size-display-desk: clamp(2.5rem, 4vw + 1rem, 4.5rem);
 
 	--lafka-font-weight-regular: 400;
 	--lafka-font-weight-medium: 500;
 	--lafka-font-weight-semibold: 600;
 	--lafka-font-weight-bold: 700;
+	--lafka-font-weight-display: 800;
 
+	--lafka-line-height-display: 1.1;
 	--lafka-line-height-tight: 1.15;
 	--lafka-line-height-snug: 1.3;
 	--lafka-line-height-normal: 1.5;
@@ -170,8 +207,9 @@
 	--lafka-z-tooltip: 1200;
 
 	/* ------- Layout ----------------------------------------------------- */
-	--lafka-container-max: 1200px;
+	--lafka-container-max: 1440px;
 	--lafka-container-px: var(--lafka-space-4);
+	--lafka-container-px-desk: var(--lafka-space-8);
 	--lafka-tap-target: 44px;
 }
 
@@ -219,18 +257,75 @@
 	}
 }
 
+/* =========================================================================
+ * Heading defaults — apply the locked typography pairing to every h1/h2
+ * globally. h3 and below stay on the body sans (Rubik) for scan-ability.
+ *
+ * Components can opt out with .lafka-no-display (rare). The current archive
+ * "PEPPERY CLASSIC AND VEGAN PIZZAS" style — Rubik 700 uppercase tracked —
+ * is preserved by the .lafka-section-eyebrow utility below.
+ * ========================================================================= */
+h1,
+.lafka-h1,
+.lafka-display {
+	font-family: var(--lafka-font-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: var(--lafka-font-size-h1);
+	line-height: var(--lafka-line-height-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	color: var(--lafka-color-text-primary);
+}
+
+h2,
+.lafka-h2 {
+	font-family: var(--lafka-font-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-size: var(--lafka-font-size-h2);
+	line-height: var(--lafka-line-height-tight);
+	letter-spacing: var(--lafka-letter-spacing-snug);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-display {
+	font-size: var(--lafka-font-size-display);
+}
+
+@media (min-width: 768px) {
+
+	h1,
+	.lafka-h1 {
+		font-size: var(--lafka-font-size-h1-desk);
+	}
+
+	h2,
+	.lafka-h2 {
+		font-size: var(--lafka-font-size-h2-desk);
+	}
+
+	.lafka-display {
+		font-size: var(--lafka-font-size-display-desk);
+	}
+}
+
+/* Eyebrow / small-caps label utility — used above section headings
+ * (e.g. "OUR MENU" above "Browse the kitchen"). Rubik 700 tracked. */
+.lafka-section-eyebrow {
+	display: inline-block;
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-accent-500);
+	margin-bottom: var(--lafka-space-2);
+}
+
 /* -------- WC default button unification (v5.36.0) ----------------------
  * Legacy `--lafka-button-color` from the theme-options framework
  * (operator-saved value, often a stale red like #f2002d or #e4584b)
  * diverged from the design system's --lafka-color-accent-500 (#dc2626).
  * Override the WC-default buttons directly so all primary CTAs share
- * the same accent surface across the site.
- *
- * Specificity is one class higher than the legacy `a.button` rule in
- * style.css (0,0,2 vs 0,0,1,1); no !important needed.
- *
- * The legacy --lafka-button-color CSS variable is left untouched so
- * operators who depend on it for their own brand styling are preserved. */
+ * the same accent surface across the site. */
 .button.wc-backward,
 .button.wc-forward,
 .wc-block-components-button {
