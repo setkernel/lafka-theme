@@ -386,6 +386,17 @@
  * "PEPPERY CLASSIC AND VEGAN PIZZAS" style — Rubik 700 uppercase tracked —
  * is preserved by the .lafka-section-eyebrow utility below.
  * ========================================================================= */
+
+/* v5.71.0: body color base. WordPress block editor sets
+ * --wp--preset--color--text-primary: #333333 via wp_global_styles_render_svg_filters,
+ * which then becomes the body color via the inline `body { color: var(...) }`.
+ * Override here with the canonical zinc text-primary. Specificity 0,0,1 +
+ * unlayered = beats the WP inline rule (also 0,0,1, but earlier in cascade). */
+body,
+.lafka-body {
+	color: var(--lafka-color-text-primary);
+}
+
 h1,
 .lafka-h1,
 .lafka-display {
