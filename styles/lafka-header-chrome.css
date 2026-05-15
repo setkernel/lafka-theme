@@ -20,17 +20,35 @@
 	display: none !important;
 }
 
-/* -------- Sticky header with backdrop blur ------------------------------- */
-.lafka-header {
-	position: sticky;
-	top: 0;
-	z-index: var(--lafka-z-header);
-	background: rgba(255, 255, 255, 0.92);
+/* -------- Sticky header with backdrop blur -------------------------------
+ * `!important` on position/background overrides legacy `body.lafka_transparent_header #header`
+ * and `body.lafka_logo_center_menu_below #header` rules that would otherwise force
+ * position: absolute and transparent bg. */
+.lafka-header,
+body .lafka-header {
+	position: sticky !important;
+	top: 0 !important;
+	left: auto !important;
+	right: auto !important;
+	z-index: var(--lafka-z-header) !important;
+	background: rgba(255, 255, 255, 0.92) !important;
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
 	border-bottom: 1px solid var(--lafka-color-border-subtle);
 	box-shadow: 0 1px 2px rgba(24, 24, 27, 0.04);
 	transition: box-shadow var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	width: 100% !important;
+	height: auto !important;
+	min-height: 0 !important;
+	max-width: none !important;
+	margin: 0 !important;
+	padding: 0 !important;
+	overflow: visible !important;
+}
+
+.lafka-header::before,
+.lafka-header::after {
+	display: none !important;
 }
 
 .lafka-header__inner {
