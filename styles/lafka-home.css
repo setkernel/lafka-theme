@@ -9,10 +9,28 @@
 
 /* =========================================================================
  * Front-page wrapper
+ *
+ * The theme's #header is `position: absolute` and the logo banner
+ * extends downward past the header's bottom edge. Pages built via
+ * page.php compensate via a .lafka_title_holder block; we have to
+ * provide the same clearance ourselves so the hero copy isn't eaten by
+ * the header. Measured offsets:
+ *   mobile (≤600px) — top bar ~28px + header ~190px = ~220px
+ *   tablet/desktop (≥768px) — top bar 36px + header 227px = ~265px
+ *
+ * Theme version: 5.47.0
  * ========================================================================= */
 .lafka-front-page {
 	background: var(--lafka-color-surface-page);
 	color: var(--lafka-color-text-primary);
+	padding-top: 220px;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-front-page {
+		padding-top: 280px;
+	}
 }
 
 /* Section rhythm: every direct child of .lafka-front-page gets

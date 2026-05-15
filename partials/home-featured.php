@@ -34,6 +34,24 @@ $lafka_feat_products = wc_get_products(
 	)
 );
 
+// Smart fallback: if operator hasn't marked any products as "Featured",
+// fall through to top sellers (highest total_sales). This way the
+// section ALWAYS has meaningful content on first install.
+if ( empty( $lafka_feat_products ) ) {
+	$lafka_feat_products = wc_get_products(
+		array(
+			'status'  => 'publish',
+			'limit'   => max( 1, $lafka_feat_limit ),
+			'orderby' => 'meta_value_num',
+			'meta_key' => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'order'   => 'DESC',
+		)
+	);
+	// Replace the eyebrow/headline so the user knows what they're seeing.
+	$lafka_feat_eyebrow  = (string) get_theme_mod( 'lafka_home_featured_eyebrow_fallback', __( 'Most ordered', 'lafka' ) );
+	$lafka_feat_headline = (string) get_theme_mod( 'lafka_home_featured_headline_fallback', __( 'Customer favorites', 'lafka' ) );
+}
+
 if ( empty( $lafka_feat_products ) ) {
 	return;
 }

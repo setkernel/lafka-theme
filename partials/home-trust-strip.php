@@ -18,16 +18,31 @@ defined( 'ABSPATH' ) || exit;
 // Reuse existing service-ETA data if available.
 $lafka_trust_eta = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
 
-// Phone from Customizer (set by operator).
+// Phone fallback chain (most-specific → least-specific):
+//   1. Customizer mod `lafka_contact_phone` (new field, set by operator)
+//   2. Legacy theme-options `top_bar_message_phone` (existing prod data)
 $lafka_trust_phone = (string) get_theme_mod( 'lafka_contact_phone', '' );
 if ( '' === $lafka_trust_phone && function_exists( 'lafka_get_option' ) ) {
-	$lafka_trust_phone = (string) lafka_get_option( 'header_phone' );
+	$lafka_trust_phone = (string) lafka_get_option( 'top_bar_message_phone' );
 }
 
-// Address — WC store settings preferred.
+// Address — compose full street address from WC store settings.
+// Plain `woocommerce_store_address` often holds just street; we want
+// "<street>, <city>, <state> <postcode>" for the trust strip.
 $lafka_trust_address = '';
-if ( function_exists( 'WC' ) && WC()->countries ) {
-	$lafka_trust_address = (string) get_option( 'woocommerce_store_address', '' );
+if ( function_exists( 'WC' ) ) {
+	$lafka_trust_addr_parts = array_filter(
+		array(
+			trim( (string) get_option( 'woocommerce_store_address', '' ) ),
+			trim( (string) get_option( 'woocommerce_store_address_2', '' ) ),
+			trim( (string) get_option( 'woocommerce_store_city', '' ) ),
+			trim( (string) get_option( 'woocommerce_store_postcode', '' ) ),
+		),
+		static function ( $part ) {
+			return '' !== $part;
+		}
+	);
+	$lafka_trust_address    = implode( ', ', $lafka_trust_addr_parts );
 }
 ?>
 <section class="lafka-home-trust" aria-label="<?php esc_attr_e( 'Service info', 'lafka' ); ?>">
