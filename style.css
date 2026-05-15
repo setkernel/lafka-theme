@@ -43,6 +43,32 @@ Tags: e-commerce, woocommerce, restaurant, food, full-width-template, custom-men
     src: url(assets/fonts/rubik/Rubik-700.woff2) format('woff2');
 }
 
+
+/* =========================================================================
+ * v5.68.0 CSS @layer cascade — consolidation architecture.
+ *
+ * All legacy CSS in this file is wrapped in @layer legacy. Newer
+ * lafka-* component / page files are unlayered (default = highest
+ * priority), so they automatically win over this 21k-line legacy file
+ * without needing !important. This eliminates the ~150 !important
+ * declarations previously added to override legacy selectors.
+ *
+ * Layer order (lowest → highest):
+ *   legacy   = this file (theAlThemist 2024 baseline)
+ *   tokens   = lafka-tokens.css
+ *   base     = resets / typography / utilities
+ *   components = reusable: btn, card, drawer, header, footer, etc.
+ *   pages    = home, menu, pdp, cart, checkout, contact, 404
+ *   polish   = handoff overrides + WC-specific fights
+ *
+ * Unlayered rules (no @layer wrap) always beat layered rules, so the
+ * 38 lafka-*.css files do not need to be wrapped — they automatically
+ * win over this layer. This single edit is the architectural fix.
+ * ========================================================================= */
+@layer legacy, tokens, base, components, pages, polish;
+
+@layer legacy {
+
 /*------------------------------------------------------------------
 [Table of contents]
 
@@ -21599,4 +21625,6 @@ button.single_add_to_cart_button, .foodmenu_top .project-data .project-details a
         transition-duration: 0.01ms !important;
         scroll-behavior: auto !important;
     }
+}
+
 }

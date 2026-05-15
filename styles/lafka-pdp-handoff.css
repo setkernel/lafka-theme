@@ -49,25 +49,25 @@
 .lafka-pdp-summary .product_title,
 .lafka-pdp-summary h1.product_title,
 .lafka-pdp-summary .lafka-pdp-summary__title {
-	font-family: var(--lafka-font-family-display) !important;
-	font-weight: var(--lafka-font-weight-display) !important;
-	font-size: clamp(2rem, 3vw + 1rem, 3rem) !important;
-	line-height: 1.05 !important;
-	letter-spacing: -0.02em !important;
-	color: var(--lafka-color-text-primary) !important;
-	margin: 0 0 var(--lafka-space-3) 0 !important;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: clamp(2rem, 3vw + 1rem, 3rem);
+	line-height: 1.05;
+	letter-spacing: -0.02em;
+	color: var(--lafka-color-text-primary);
+	margin: 0 0 var(--lafka-space-3) 0;
 }
 
 /* Live price — Fraunces 32px dark, NOT red (handoff spec) */
 .lafka-pdp-summary .price,
 .lafka-pdp-summary p.price,
 .lafka-pdp-summary .lafka-pdp-summary__price {
-	font-family: var(--lafka-font-family-display) !important;
-	font-weight: var(--lafka-font-weight-display) !important;
-	font-size: 2rem !important;
-	color: var(--lafka-color-text-primary) !important;
-	line-height: 1 !important;
-	margin: 0 0 var(--lafka-space-5) 0 !important;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 2rem;
+	color: var(--lafka-color-text-primary);
+	line-height: 1;
+	margin: 0 0 var(--lafka-space-5) 0;
 }
 
 .lafka-pdp-summary .price ins,
@@ -87,25 +87,25 @@
 .lafka-pdp-summary .single_add_to_cart_button,
 .lafka-pdp-summary button.alt,
 .lafka-pdp-summary .button.alt {
-	background: var(--lafka-color-accent-500) !important;
-	color: var(--lafka-color-text-inverse) !important;
-	border-radius: var(--lafka-radius-pill) !important;
-	padding: var(--lafka-space-4) var(--lafka-space-6) !important;
-	font-family: var(--lafka-font-family-body) !important;
-	font-size: var(--lafka-font-size-body-lg) !important;
-	font-weight: var(--lafka-font-weight-semibold) !important;
-	min-height: 52px !important;
-	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28) !important;
-	letter-spacing: 0 !important;
-	text-transform: none !important;
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-inverse);
+	border-radius: var(--lafka-radius-pill);
+	padding: var(--lafka-space-4) var(--lafka-space-6);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-semibold);
+	min-height: 52px;
+	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28);
+	letter-spacing: 0;
+	text-transform: none;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform 60ms var(--lafka-motion-ease-out) !important;
+		transform 60ms var(--lafka-motion-ease-out);
 }
 
 .lafka-pdp-summary .single_add_to_cart_button:hover,
 .lafka-pdp-summary button.alt:hover {
-	background: var(--lafka-color-accent-600) !important;
-	color: var(--lafka-color-text-inverse) !important;
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-inverse);
 }
 
 .lafka-pdp-summary .single_add_to_cart_button:active {
@@ -150,9 +150,9 @@
 .lafka-pdp-summary .lafka-pdp-chip.is-active .lafka-pdp-chip__inner,
 .lafka-pdp-summary .lafka-pdp-chip[aria-pressed="true"] .lafka-pdp-chip__inner,
 .lafka-pdp-summary .lafka-pdp-chip:has(input:checked) .lafka-pdp-chip__inner {
-	background: var(--lafka-color-text-primary) !important;
-	color: var(--lafka-color-text-inverse) !important;
-	border-color: var(--lafka-color-text-primary) !important;
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+	border-color: var(--lafka-color-text-primary);
 	box-shadow: var(--lafka-shadow-1);
 	position: relative;
 }
@@ -205,7 +205,7 @@
 /* -------- Addons list — handoff vertical rows --------------------------- */
 .lafka-pdp-summary .wc-pao-addon-checkbox-label,
 .lafka-pdp-summary .product-addon label {
-	display: flex !important;
+	display: flex;
 	align-items: center;
 	gap: var(--lafka-space-3);
 	padding: var(--lafka-space-3) 0;
@@ -227,7 +227,7 @@
 /* -------- Qty stepper --------------------------------------------------- */
 .lafka-pdp-summary .quantity,
 .lafka-pdp-summary form.cart .quantity {
-	display: inline-flex !important;
+	display: inline-flex;
 	align-items: center;
 	border: 1px solid var(--lafka-color-border-default);
 	border-radius: var(--lafka-radius-pill);
@@ -237,14 +237,14 @@
 }
 
 .lafka-pdp-summary .quantity input[type="number"] {
-	border: none !important;
-	background: transparent !important;
-	width: 56px !important;
-	text-align: center !important;
+	border: none;
+	background: transparent;
+	width: 56px;
+	text-align: center;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
 	font-size: var(--lafka-font-size-body-lg);
-	height: 52px !important;
+	height: 52px;
 }
 
 /* -------- Trust line / assurances grid ---------------------------------- */
@@ -287,7 +287,7 @@
 	.lafka-pdp-mobile-cta,
 	.lafka-pdp .lafka-pdp-sticky-cta,
 	.lafka-pdp-mobile-cta__btn {
-		display: none !important;
+		display: none;
 	}
 }
 
@@ -302,9 +302,9 @@
 
 	.lafka-pdp-mobile-cta__btn,
 	.lafka-pdp .lafka-pdp-sticky-cta .single_add_to_cart_button {
-		background: var(--lafka-color-accent-500) !important;
-		color: var(--lafka-color-text-inverse) !important;
-		border-radius: var(--lafka-radius-pill) !important;
+		background: var(--lafka-color-accent-500);
+		color: var(--lafka-color-text-inverse);
+		border-radius: var(--lafka-radius-pill);
 	}
 }
 

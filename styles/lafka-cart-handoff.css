@@ -21,7 +21,7 @@
 .woocommerce-cart > h1.entry-title,
 .woocommerce-cart .page-title,
 .woocommerce-cart h1.heading-title {
-	display: none !important;
+	display: none;
 }
 
 /* -------- Page wrapper -------------------------------------------------- */
@@ -88,14 +88,14 @@
 	.woocommerce-cart .woocommerce-cart-form {
 		grid-column: 1;
 		min-width: 0;
-		width: 100% !important;
-		float: none !important;
+		width: 100%;
+		float: none;
 	}
 
 	.woocommerce-cart .cart-collaterals {
 		grid-column: 2;
-		width: 100% !important;
-		float: none !important;
+		width: 100%;
+		float: none;
 		position: sticky;
 		top: calc(var(--lafka-header-h-desk) + var(--lafka-space-4));
 	}
@@ -187,11 +187,11 @@
 
 .woocommerce-cart .lafka-cart input.qty,
 .woocommerce-cart .lafka-cart .quantity input[type="number"] {
-	border: 0 !important;
-	background: transparent !important;
-	width: 44px !important;
-	height: 36px !important;
-	text-align: center !important;
+	border: 0;
+	background: transparent;
+	width: 44px;
+	height: 36px;
+	text-align: center;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
 }
@@ -216,8 +216,8 @@
 
 .woocommerce-cart .lafka-cart .product-remove a:hover,
 .woocommerce-cart .lafka-cart a.remove:hover {
-	background: var(--lafka-color-error-50) !important;
-	color: var(--lafka-color-error-500) !important;
+	background: var(--lafka-color-error-50);
+	color: var(--lafka-color-error-500);
 }
 
 /* -------- Coupon row + bottom actions ----------------------------------- */
@@ -238,11 +238,11 @@
 
 .woocommerce-cart button[name="apply_coupon"],
 .woocommerce-cart button[name="update_cart"] {
-	background: var(--lafka-color-surface-page) !important;
-	color: var(--lafka-color-text-primary) !important;
-	border: 1px solid var(--lafka-color-border-default) !important;
-	border-radius: var(--lafka-radius-pill) !important;
-	padding: var(--lafka-space-3) var(--lafka-space-5) !important;
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-primary);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-pill);
+	padding: var(--lafka-space-3) var(--lafka-space-5);
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-semibold);
@@ -250,7 +250,7 @@
 
 .woocommerce-cart button[name="apply_coupon"]:hover,
 .woocommerce-cart button[name="update_cart"]:hover {
-	border-color: var(--lafka-color-text-primary) !important;
+	border-color: var(--lafka-color-text-primary);
 }
 
 /* -------- Cart totals summary card -------------------------------------- */
@@ -274,16 +274,16 @@
 .woocommerce-cart .cart_totals table.shop_table,
 .woocommerce-cart .cart_totals .shop_table {
 	width: 100%;
-	border: 0 !important;
+	border: 0;
 	margin: 0;
 }
 
 .woocommerce-cart .cart_totals .shop_table th,
 .woocommerce-cart .cart_totals .shop_table td {
 	padding: var(--lafka-space-2) 0;
-	border: 0 !important;
-	border-bottom: 1px solid var(--lafka-color-border-subtle) !important;
-	background: transparent !important;
+	border: 0;
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	background: transparent;
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body);
 	color: var(--lafka-color-text-secondary);
@@ -303,7 +303,7 @@
 .woocommerce-cart .cart_totals .order-total th,
 .woocommerce-cart .cart_totals .order-total td {
 	padding-top: var(--lafka-space-3);
-	border-bottom: 0 !important;
+	border-bottom: 0;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
 	font-size: 1.25rem;
@@ -318,30 +318,30 @@
 
 .woocommerce-cart .wc-proceed-to-checkout .checkout-button,
 .woocommerce-cart a.checkout-button {
-	display: flex !important;
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: var(--lafka-space-2);
 	width: 100%;
-	background: var(--lafka-color-accent-500) !important;
-	color: var(--lafka-color-text-inverse) !important;
-	padding: var(--lafka-space-4) var(--lafka-space-6) !important;
-	border-radius: var(--lafka-radius-pill) !important;
-	font-family: var(--lafka-font-family-body) !important;
-	font-size: var(--lafka-font-size-body-lg) !important;
-	font-weight: var(--lafka-font-weight-semibold) !important;
-	min-height: 52px !important;
-	text-decoration: none !important;
-	text-transform: none !important;
-	letter-spacing: 0 !important;
-	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28) !important;
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-inverse);
+	padding: var(--lafka-space-4) var(--lafka-space-6);
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-semibold);
+	min-height: 52px;
+	text-decoration: none;
+	text-transform: none;
+	letter-spacing: 0;
+	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28);
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
 .woocommerce-cart .wc-proceed-to-checkout .checkout-button:hover,
 .woocommerce-cart a.checkout-button:hover {
-	background: var(--lafka-color-accent-600) !important;
-	color: var(--lafka-color-text-inverse) !important;
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-inverse);
 }
 
 /* Trust line below checkout button */
@@ -359,9 +359,9 @@
 .woocommerce-cart .cart-empty {
 	text-align: center;
 	padding: var(--lafka-space-12) var(--lafka-space-5);
-	background: var(--lafka-color-surface-muted) !important;
+	background: var(--lafka-color-surface-muted);
 	border-radius: var(--lafka-radius-lg);
-	border: 0 !important;
+	border: 0;
 	color: var(--lafka-color-text-secondary);
 }
 
@@ -382,19 +382,19 @@
 
 .woocommerce-cart .return-to-shop .button,
 .woocommerce-cart a.return-to-shop {
-	display: inline-flex !important;
+	display: inline-flex;
 	align-items: center;
-	padding: var(--lafka-space-3) var(--lafka-space-6) !important;
-	background: var(--lafka-color-accent-500) !important;
-	color: var(--lafka-color-text-inverse) !important;
-	border-radius: var(--lafka-radius-pill) !important;
-	font-weight: var(--lafka-font-weight-semibold) !important;
-	text-decoration: none !important;
+	padding: var(--lafka-space-3) var(--lafka-space-6);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-inverse);
+	border-radius: var(--lafka-radius-pill);
+	font-weight: var(--lafka-font-weight-semibold);
+	text-decoration: none;
 	margin-top: var(--lafka-space-4);
 }
 
 .woocommerce-cart .return-to-shop .button:hover {
-	background: var(--lafka-color-accent-600) !important;
+	background: var(--lafka-color-accent-600);
 }
 
 /* -------- "Add a side?" cross-sells (handoff name) ----------------------

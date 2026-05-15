@@ -25,23 +25,26 @@ $lafka_rev_avg   = (float) get_theme_mod( 'lafka_home_reviews_avg', 4.8 );
 $lafka_rev_count = (int) get_theme_mod( 'lafka_home_reviews_count', 500 );
 $lafka_rev_headline = (string) get_theme_mod( 'lafka_home_reviews_headline', __( 'People keep coming back.', 'lafka' ) );
 
+/* v5.68.0: defaults are restaurant-agnostic per OSS-bundle policy.
+ * Operators replace via Customizer per-review fields, or via the
+ * `lafka_home_reviews` filter (intended path for child themes). */
 $lafka_reviews = (array) apply_filters(
 	'lafka_home_reviews',
 	array(
 		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_review_1_quote', __( 'Best pizza in Lower Sackville, hands down. The dough is perfect and the toppings are always fresh.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_home_review_1_author', __( 'Sarah M.', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_home_review_1_date', __( '2 weeks ago', 'lafka' ) ),
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_1_quote', __( 'Hot, fresh, and delivered fast. The dough is perfect and the toppings are always fresh.', 'lafka' ) ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_1_author', __( 'Regular customer', 'lafka' ) ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_1_date', __( 'Recently', 'lafka' ) ),
 		),
 		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_review_2_quote', __( 'Order shows up fast and hot. The poutine is the real deal.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_home_review_2_author', __( 'David K.', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_home_review_2_date', __( '1 month ago', 'lafka' ) ),
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_2_quote', __( 'Order showed up fast and hot. The poutine is the real deal.', 'lafka' ) ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_2_author', __( 'Local diner', 'lafka' ) ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_2_date', __( 'Recently', 'lafka' ) ),
 		),
 		array(
 			'quote'  => (string) get_theme_mod( 'lafka_home_review_3_quote', __( 'Family favourite for years. Friendly staff, great prices, never a bad meal.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_home_review_3_author', __( 'Amy R.', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_home_review_3_date', __( '3 months ago', 'lafka' ) ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_3_author', __( 'Long-time customer', 'lafka' ) ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_3_date', __( 'Recently', 'lafka' ) ),
 		),
 	)
 );

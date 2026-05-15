@@ -24,7 +24,7 @@
 .woocommerce-order-received .lafka-title-text-container,
 .woocommerce-order-received > h1.entry-title,
 .woocommerce-order-received h1.heading-title {
-	display: none !important;
+	display: none;
 }
 
 /* v5.67.0: Handoff uses "Your order" not "Your cart". Inject as ::before
@@ -201,11 +201,11 @@
 .woocommerce-checkout .form-row textarea,
 .woocommerce-checkout .form-row select,
 .woocommerce-checkout .select2-selection {
-	width: 100% !important;
-	padding: var(--lafka-space-3) var(--lafka-space-4) !important;
-	background: var(--lafka-color-surface-sunken) !important;
-	border: 1px solid var(--lafka-color-border-default) !important;
-	border-radius: var(--lafka-radius-md) !important;
+	width: 100%;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	background: var(--lafka-color-surface-sunken);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body);
 	color: var(--lafka-color-text-primary);
@@ -218,10 +218,10 @@
 .woocommerce-checkout .form-row input:focus,
 .woocommerce-checkout .form-row textarea:focus,
 .woocommerce-checkout .form-row select:focus {
-	border-color: var(--lafka-color-text-primary) !important;
-	background: var(--lafka-color-surface-page) !important;
-	outline: none !important;
-	box-shadow: var(--lafka-shadow-focus) !important;
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-page);
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* -------- Order review (right column / sticky summary) ----------------- */
@@ -252,9 +252,9 @@
 .woocommerce-checkout #order_review .shop_table th,
 .woocommerce-checkout #order_review .shop_table td {
 	padding: var(--lafka-space-2) 0;
-	border: 0 !important;
-	border-bottom: 1px solid var(--lafka-color-border-subtle) !important;
-	background: transparent !important;
+	border: 0;
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	background: transparent;
 	color: var(--lafka-color-text-secondary);
 }
 
@@ -275,17 +275,17 @@
 
 .woocommerce-checkout #order_review .order-total th,
 .woocommerce-checkout #order_review .order-total td {
-	padding-top: var(--lafka-space-3) !important;
-	border-bottom: 0 !important;
+	padding-top: var(--lafka-space-3);
+	border-bottom: 0;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
 	font-size: 1.25rem;
-	color: var(--lafka-color-text-primary) !important;
+	color: var(--lafka-color-text-primary);
 }
 
 /* -------- Payment methods --------------------------------------------- */
 .woocommerce-checkout-payment {
-	background: var(--lafka-color-surface-page) !important;
+	background: var(--lafka-color-surface-page);
 	border-radius: var(--lafka-radius-md);
 	margin-top: var(--lafka-space-5);
 }
@@ -296,9 +296,9 @@
 	gap: var(--lafka-space-2);
 	margin: 0;
 	padding: 0;
-	border: 0 !important;
+	border: 0;
 	list-style: none;
-	background: transparent !important;
+	background: transparent;
 }
 
 .woocommerce-checkout-payment ul.payment_methods > li {
@@ -329,9 +329,9 @@
 .woocommerce-checkout-payment .payment_box {
 	margin-top: var(--lafka-space-3);
 	padding: var(--lafka-space-3);
-	background: var(--lafka-color-surface-page) !important;
+	background: var(--lafka-color-surface-page);
 	border-radius: var(--lafka-radius-sm);
-	border: 1px solid var(--lafka-color-border-subtle) !important;
+	border: 1px solid var(--lafka-color-border-subtle);
 	font-size: var(--lafka-font-size-body-sm);
 	color: var(--lafka-color-text-secondary);
 }
@@ -339,29 +339,29 @@
 /* -------- Place order CTA --------------------------------------------- */
 .woocommerce-checkout #place_order,
 .woocommerce-checkout button#place_order {
-	display: flex !important;
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	gap: var(--lafka-space-2);
 	width: 100%;
-	background: var(--lafka-color-accent-500) !important;
-	color: var(--lafka-color-text-inverse) !important;
-	padding: var(--lafka-space-4) var(--lafka-space-6) !important;
-	border-radius: var(--lafka-radius-pill) !important;
-	font-family: var(--lafka-font-family-body) !important;
-	font-size: var(--lafka-font-size-body-lg) !important;
-	font-weight: var(--lafka-font-weight-semibold) !important;
-	min-height: 56px !important;
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-inverse);
+	padding: var(--lafka-space-4) var(--lafka-space-6);
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-semibold);
+	min-height: 56px;
 	margin-top: var(--lafka-space-4);
-	text-transform: none !important;
-	letter-spacing: 0 !important;
-	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28) !important;
+	text-transform: none;
+	letter-spacing: 0;
+	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28);
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
 .woocommerce-checkout #place_order:hover {
-	background: var(--lafka-color-accent-600) !important;
-	color: var(--lafka-color-text-inverse) !important;
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-inverse);
 }
 
 /* Trust line after Place order */
@@ -381,16 +381,16 @@
 /* -------- Login / coupon prompts --------------------------------------- */
 .woocommerce-checkout .woocommerce-form-login-toggle,
 .woocommerce-checkout .woocommerce-form-coupon-toggle {
-	background: var(--lafka-color-info-50) !important;
-	border-left: 4px solid var(--lafka-color-info-500) !important;
-	padding: var(--lafka-space-3) var(--lafka-space-4) !important;
+	background: var(--lafka-color-info-50);
+	border-left: 4px solid var(--lafka-color-info-500);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
 	border-radius: var(--lafka-radius-md);
 	margin-bottom: var(--lafka-space-4);
 }
 
 .woocommerce-checkout .woocommerce-info {
-	background: var(--lafka-color-info-50) !important;
-	border-left: 4px solid var(--lafka-color-info-500) !important;
+	background: var(--lafka-color-info-50);
+	border-left: 4px solid var(--lafka-color-info-500);
 	color: var(--lafka-color-text-primary);
 	border-radius: var(--lafka-radius-md);
 }
@@ -407,9 +407,9 @@
 	align-items: center;
 	text-align: center;
 	padding: var(--lafka-space-12) var(--lafka-space-5);
-	background: var(--lafka-color-success-50) !important;
+	background: var(--lafka-color-success-50);
 	border-radius: var(--lafka-radius-lg);
-	border: 0 !important;
+	border: 0;
 	color: var(--lafka-color-text-primary);
 	font-size: var(--lafka-font-size-body-lg);
 	gap: var(--lafka-space-3);
@@ -444,21 +444,21 @@
 /* Order details list */
 .woocommerce-order-received ul.order_details,
 .woocommerce-order-received .woocommerce-order-overview {
-	list-style: none !important;
-	margin: var(--lafka-space-8) 0 var(--lafka-space-6) !important;
-	padding: var(--lafka-space-5) !important;
-	background: var(--lafka-color-surface-muted) !important;
-	border: 0 !important;
-	border-radius: var(--lafka-radius-lg) !important;
-	display: grid !important;
+	list-style: none;
+	margin: var(--lafka-space-8) 0 var(--lafka-space-6);
+	padding: var(--lafka-space-5);
+	background: var(--lafka-color-surface-muted);
+	border: 0;
+	border-radius: var(--lafka-radius-lg);
+	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
 	gap: var(--lafka-space-4);
 }
 
 .woocommerce-order-received ul.order_details > li {
-	margin: 0 !important;
-	padding: 0 !important;
-	border: 0 !important;
+	margin: 0;
+	padding: 0;
+	border: 0;
 	display: flex;
 	flex-direction: column;
 	gap: 2px;
@@ -480,20 +480,20 @@
 /* Order receipt table */
 .woocommerce-order-received table.woocommerce-table--order-details,
 .woocommerce-order-received table.shop_table {
-	border: 1px solid var(--lafka-color-border-subtle) !important;
+	border: 1px solid var(--lafka-color-border-subtle);
 	border-radius: var(--lafka-radius-lg);
 	overflow: hidden;
 }
 
 .woocommerce-order-received table.shop_table th,
 .woocommerce-order-received table.shop_table td {
-	padding: var(--lafka-space-3) var(--lafka-space-4) !important;
-	border-bottom: 1px solid var(--lafka-color-border-subtle) !important;
-	background: transparent !important;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	background: transparent;
 }
 
 .woocommerce-order-received table.shop_table thead th {
-	background: var(--lafka-color-surface-muted) !important;
+	background: var(--lafka-color-surface-muted);
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-bold);
@@ -504,10 +504,10 @@
 
 .woocommerce-order-received .order-total td,
 .woocommerce-order-received .order-total th {
-	font-family: var(--lafka-font-family-display) !important;
-	font-weight: var(--lafka-font-weight-display) !important;
-	font-size: 1.25rem !important;
-	color: var(--lafka-color-text-primary) !important;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.25rem;
+	color: var(--lafka-color-text-primary);
 }
 
 /* Customer details */
@@ -537,28 +537,28 @@
  * Cart-empty layout polish — single column when empty (v5.65.0 carry-over)
  * ========================================================================= */
 .woocommerce-cart.cart-empty .woocommerce {
-	display: block !important;
+	display: block;
 	max-width: 720px;
 }
 
 .woocommerce-cart .cart-empty {
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
-	font-size: 1.25rem !important;
+	font-size: 1.25rem;
 	color: var(--lafka-color-text-primary);
 }
 
 /* Cross-sells: tighter grid on cart page so cards aren't 6-in-a-row tiny */
 .woocommerce-cart .cross-sells ul.products {
-	display: grid !important;
+	display: grid;
 	grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 	gap: var(--lafka-space-4);
 	list-style: none;
-	margin: 0 !important;
+	margin: 0;
 	padding: 0;
 }
 
 .woocommerce-cart .cross-sells ul.products > li {
-	width: 100% !important;
-	margin: 0 !important;
+	width: 100%;
+	margin: 0;
 }

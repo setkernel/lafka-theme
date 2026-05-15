@@ -34,28 +34,32 @@ $lafka_c_logo  = function_exists( 'lafka_get_option' ) ? lafka_get_option( 'them
 $lafka_c_photo_id = (int) get_theme_mod( 'lafka_contact_photo_id', 0 );
 $lafka_c_photo    = $lafka_c_photo_id ? wp_get_attachment_image_url( $lafka_c_photo_id, 'large' ) : '';
 
+/* v5.68.0: defaults are now restaurant-agnostic per OSS-bundle policy.
+ * Operators can override per FAQ in Customizer, or via the
+ * `lafka_contact_faqs` filter (intended path for child themes that want
+ * to set site-specific copy). */
 $lafka_faqs = (array) apply_filters(
 	'lafka_contact_faqs',
 	array(
 		array(
 			'q' => (string) get_theme_mod( 'lafka_contact_faq_1_q', __( 'How long do orders take?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_1_a', __( 'Pickup orders are typically ready in about 25 minutes. Delivery takes 35–50 minutes depending on demand and where you are in Lower Sackville.', 'lafka' ) ),
+			'a' => (string) get_theme_mod( 'lafka_contact_faq_1_a', __( 'Pickup is typically ready in about 25 minutes. Delivery times vary by location and demand.', 'lafka' ) ),
 		),
 		array(
 			'q' => (string) get_theme_mod( 'lafka_contact_faq_2_q', __( 'Do you deliver?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_2_a', __( 'Yes — we deliver across Lower Sackville. Free delivery on orders over $30. There is a $4.99 fee on smaller orders.', 'lafka' ) ),
+			'a' => (string) get_theme_mod( 'lafka_contact_faq_2_a', __( 'Yes — see our delivery area and fees during checkout.', 'lafka' ) ),
 		),
 		array(
 			'q' => (string) get_theme_mod( 'lafka_contact_faq_3_q', __( 'Are vegan / vegetarian options available?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_3_a', __( 'Absolutely. Look for the 🌱 and 🥬 marks on the menu, and you can swap toppings on any pizza for plant-based alternatives.', 'lafka' ) ),
+			'a' => (string) get_theme_mod( 'lafka_contact_faq_3_a', __( 'Yes — look for the 🌱 and 🥬 marks on the menu, and you can swap toppings on most items.', 'lafka' ) ),
 		),
 		array(
 			'q' => (string) get_theme_mod( 'lafka_contact_faq_4_q', __( 'How do I track my order?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_4_a', __( 'After you place an order you will see a status tracker. We will also send an email and SMS update when your order moves through each stage.', 'lafka' ) ),
+			'a' => (string) get_theme_mod( 'lafka_contact_faq_4_a', __( 'After you place an order you will see a status tracker on the confirmation page and receive an email update.', 'lafka' ) ),
 		),
 		array(
 			'q' => (string) get_theme_mod( 'lafka_contact_faq_5_q', __( 'Can I order for catering or large groups?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_5_a', __( 'Yes — give us a call ahead of time so we can plan your order. We do parties, office lunches, and team events.', 'lafka' ) ),
+			'a' => (string) get_theme_mod( 'lafka_contact_faq_5_a', __( 'Yes — give us a call ahead of time so we can plan your order.', 'lafka' ) ),
 		),
 	)
 );
