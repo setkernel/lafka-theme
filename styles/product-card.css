@@ -135,6 +135,29 @@ ul.products {
 	text-decoration: none;
 }
 
+/*
+ * v5.41.0: override legacy `.prod_hold .price_hold` absolute positioning
+ * (style.css:9094-9104). The legacy archive overlaid the price on the
+ * product image; our new list-row design needs the price in the body's
+ * bottom flex row. Without this reset, the price collapses to 0×0
+ * (an absolutely-positioned only child gives its inline-span parent
+ * zero intrinsic size) and is invisible to customers.
+ */
+.lafka-product-card .price_hold,
+.lafka-product-card__price .price_hold {
+	position: static;
+	top: auto;
+	left: auto;
+	right: auto;
+	padding: 0;
+	background: none;
+	font-size: inherit;
+	font-weight: inherit;
+	border-radius: 0;
+	z-index: auto;
+	color: inherit;
+}
+
 /* Sale flash positioning inside the image wrap. */
 .lafka-product-card__img-wrap .onsale {
 	position: absolute;

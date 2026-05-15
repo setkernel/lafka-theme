@@ -1203,6 +1203,28 @@ and (orientation: landscape) {
 
 @media only screen and (max-width: 600px) {
 
+    /* v5.41.0: tighten the global .inner gutter on phones. The desktop
+     * default of `padding: 0 40px` (style.css:2966) eats 80px from a
+     * 375px viewport — combined with WPBakery row + column padding it
+     * leaves product cards under 70% of the screen. 16px is the
+     * iOS/Material standard for thumb-reachable content edges. */
+    .inner,
+    .dokan-dashboard #container > .dokan-dashboard-wrap {
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    /* v5.41.0: clamp operator-set WPBakery row padding on phones.
+     * Operators often set `padding: 80px 40px` on rows for hero
+     * sections; on mobile that leaves cards in those rows starved for
+     * width. We keep vertical padding (visual rhythm) but clamp
+     * horizontal padding to 16px max. The vc_column-inner default
+     * `padding: 35px 15px 0` is already mobile-friendly. */
+    .vc_row.vc_row-fluid {
+        padding-left: max(16px, env(safe-area-inset-left, 0px)) !important;
+        padding-right: max(16px, env(safe-area-inset-right, 0px)) !important;
+    }
+
     body.admin-bar #header.lafka-sticksy {
         top: 0 !important;
     }
