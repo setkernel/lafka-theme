@@ -63,6 +63,9 @@ require_once get_template_directory() . '/incl/template-helpers/service-eta.php'
 // Empty-cart "Popular" entry-points (v5.32.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-cart-empty-popular.php';
 
+// Exclude WC default "Uncategorized" from customer-facing listings (v5.37.0).
+require_once get_template_directory() . '/incl/woocommerce/lafka-exclude-uncategorized.php';
+
 /**
  * Echo the pagination
  */
