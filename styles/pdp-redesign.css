@@ -9,23 +9,30 @@
  * @since 5.16.0
  */
 
+/*
+ * v5.33.0: PDP redesign tokens now alias onto the root design system
+ * (lafka-tokens.css). Previously these were hardcoded coral / grey
+ * values that drifted visually from the unified token palette — the
+ * design audit specifically flagged this as "token chaos." Anything
+ * still PDP-specific (bar heights, CTA height) stays as a raw value.
+ */
 :root {
-  --lafka-pdp-accent: #e4584b;
-  --lafka-pdp-accent-dark: #c73d31;
-  --lafka-pdp-text: #1a1a1a;
-  --lafka-pdp-muted: #666;
-  --lafka-pdp-border: #e0e0e0;
-  --lafka-pdp-bg-soft: #fafafa;
-  --lafka-pdp-bg-warm: #fff5f0;
-  --lafka-pdp-bg-dark: #1a1a1a;
-  --lafka-pdp-radius: 8px;
-  --lafka-pdp-radius-chip: 6px;
-  --lafka-pdp-shadow-card: 0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04);
-  --lafka-pdp-z-bar: 100;
-  --lafka-pdp-z-drawer: 1000;
-  --lafka-pdp-bar-h: 36px;
-  --lafka-pdp-bar-h-mobile: 32px;
-  --lafka-pdp-cta-h-mobile: 64px;
+	--lafka-pdp-accent: var(--lafka-color-accent-500);
+	--lafka-pdp-accent-dark: var(--lafka-color-accent-700);
+	--lafka-pdp-text: var(--lafka-color-text-primary);
+	--lafka-pdp-muted: var(--lafka-color-text-muted);
+	--lafka-pdp-border: var(--lafka-color-border-subtle);
+	--lafka-pdp-bg-soft: var(--lafka-color-surface-sunken);
+	--lafka-pdp-bg-warm: var(--lafka-color-accent-50);
+	--lafka-pdp-bg-dark: var(--lafka-color-text-primary);
+	--lafka-pdp-radius: var(--lafka-radius-md);
+	--lafka-pdp-radius-chip: var(--lafka-radius-md);
+	--lafka-pdp-shadow-card: var(--lafka-shadow-1);
+	--lafka-pdp-z-bar: var(--lafka-z-dropdown);
+	--lafka-pdp-z-drawer: var(--lafka-z-drawer);
+	--lafka-pdp-bar-h: 36px;
+	--lafka-pdp-bar-h-mobile: 32px;
+	--lafka-pdp-cta-h-mobile: 64px;
 }
 
 /*

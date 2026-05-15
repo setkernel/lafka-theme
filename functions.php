@@ -1658,11 +1658,13 @@ add_action(
 			return file_exists( $f ) ? (string) filemtime( $f ) : (string) time();
 		};
 
+		// v5.33.0: depend on lafka-tokens so the --lafka-pdp-* aliases
+		// can resolve their referenced design-system tokens.
 		wp_enqueue_style(
-            'lafka-pdp-redesign',
-            $tpl_uri . '/styles/pdp-redesign.css',
-            array(),
-            $ver_for( 'styles/pdp-redesign.css' )
+			'lafka-pdp-redesign',
+			$tpl_uri . '/styles/pdp-redesign.css',
+			array( 'lafka-tokens' ),
+			$ver_for( 'styles/pdp-redesign.css' )
 		);
 
 		wp_enqueue_script(
