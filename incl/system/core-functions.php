@@ -1138,6 +1138,20 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.39.0: tokenized account & WC forms — login / register /
+		// lost-password / order-tracking / dashboard. is_account_page()
+		// covers every WC account endpoint plus the order-tracking page.
+		$lafka_account_styles_active = function_exists( 'is_account_page' )
+			&& ( is_account_page() || ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-tracking' ) ) );
+		if ( $lafka_account_styles_active ) {
+			wp_enqueue_style(
+				'lafka-account',
+				get_template_directory_uri() . '/styles/lafka-account.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-account.css' )
+			);
+		}
+
 		// v5.31.0: topping chip grid — CSS-only transformation of the
 		// WC Product Add-Ons checkbox groups into a 2-col chip toggle.
 		// Cheap stylesheet, only on PDPs, opt-out via Customizer.

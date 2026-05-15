@@ -1,0 +1,280 @@
+/*
+ * Lafka Account & WC Forms
+ * v5.39.0 — tokenized styling for login / register / lost-password /
+ * order-tracking / my-account dashboard. Reads design tokens from
+ * styles/lafka-tokens.css. Operator overrides via Customizer or
+ * CSS custom-property cascade.
+ */
+
+.woocommerce-account .woocommerce,
+.woocommerce-page .woocommerce-form-login,
+.woocommerce-page .woocommerce-form-register,
+.woocommerce-page .woocommerce-ResetPassword,
+.woocommerce-page .woocommerce-OrderTracking {
+	color: var(--lafka-color-text-primary);
+	font-family: var(--lafka-font-sans);
+}
+
+/* Section headings: "Login", "Register", etc. */
+.woocommerce-account h2,
+.woocommerce-account .woocommerce > h2,
+.woocommerce-form-login + h2,
+.u-column1 > h2,
+.u-column2 > h2 {
+	font-size: var(--lafka-font-size-h3, 1.5rem);
+	font-weight: var(--lafka-font-weight-bold, 700);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	margin: 0 0 var(--lafka-space-5);
+	color: var(--lafka-color-text-primary);
+}
+
+/* Form card wrapper */
+.woocommerce-form-login,
+.woocommerce-form-register,
+.woocommerce-ResetPassword,
+.woocommerce-OrderTracking {
+	background: var(--lafka-color-surface-raised);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	padding: var(--lafka-space-6);
+	box-shadow: var(--lafka-shadow-1);
+	max-width: 480px;
+}
+
+/* Form row spacing */
+.woocommerce-form-row,
+.woocommerce-form__label-for-checkbox {
+	margin: 0 0 var(--lafka-space-4);
+}
+
+/* Labels */
+.woocommerce form .form-row label,
+.woocommerce-page form .form-row label {
+	display: block;
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-semibold, 600);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-secondary);
+	margin-bottom: var(--lafka-space-2);
+}
+
+/* Required asterisk */
+.required {
+	color: var(--lafka-color-error);
+	border: 0;
+	text-decoration: none;
+}
+
+/* Inputs */
+.woocommerce form .form-row input.input-text,
+.woocommerce form .form-row textarea,
+.woocommerce-page form .form-row input.input-text,
+.woocommerce-page form .form-row textarea,
+.woocommerce-OrderTracking input.input-text {
+	width: 100%;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	font-size: 1rem;
+	line-height: 1.4;
+	color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-page);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
+	box-shadow: none;
+	transition: border-color 150ms ease, box-shadow 150ms ease;
+	box-sizing: border-box;
+}
+
+.woocommerce form .form-row input.input-text:hover,
+.woocommerce-page form .form-row input.input-text:hover {
+	border-color: var(--lafka-color-border-strong);
+}
+
+.woocommerce form .form-row input.input-text:focus,
+.woocommerce form .form-row textarea:focus,
+.woocommerce-page form .form-row input.input-text:focus,
+.woocommerce-page form .form-row textarea:focus,
+.woocommerce-OrderTracking input.input-text:focus {
+	outline: none;
+	border-color: var(--lafka-color-border-focus);
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* Inline checkbox + label (Remember me) */
+.woocommerce-form__label-for-checkbox {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	cursor: pointer;
+	font-size: 0.9375rem;
+	color: var(--lafka-color-text-secondary);
+	text-transform: none;
+	letter-spacing: 0;
+	font-weight: var(--lafka-font-weight-medium, 500);
+	margin: 0;
+}
+
+.woocommerce-form__input-checkbox {
+	width: 1.125rem;
+	height: 1.125rem;
+	accent-color: var(--lafka-color-accent-500);
+	cursor: pointer;
+	margin: 0;
+}
+
+/* Action row (button + lost password) */
+.woocommerce-form-login .form-row,
+.woocommerce-form-register .form-row {
+	margin-bottom: var(--lafka-space-4);
+}
+
+.woocommerce-form-login .clear,
+.woocommerce-form-register .clear {
+	clear: both;
+}
+
+/* Lost password link styling */
+.woocommerce-LostPassword.lost_password {
+	margin: var(--lafka-space-2) 0 0;
+}
+
+.woocommerce-LostPassword.lost_password a {
+	color: var(--lafka-color-accent-500);
+	font-weight: var(--lafka-font-weight-medium, 500);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
+.woocommerce-LostPassword.lost_password a:hover {
+	color: var(--lafka-color-accent-600);
+}
+
+/* Primary submit button uniformity */
+.woocommerce-form-login .button[type="submit"],
+.woocommerce-form-register .button[type="submit"],
+.woocommerce-ResetPassword .button[type="submit"],
+.woocommerce-OrderTracking .button[type="submit"],
+.woocommerce-EditAccountForm .button[type="submit"] {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 44px;
+	padding: var(--lafka-space-3) var(--lafka-space-6);
+	font-size: 1rem;
+	font-weight: var(--lafka-font-weight-semibold, 600);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-accent-contrast);
+	background: var(--lafka-color-accent-500);
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	box-shadow: var(--lafka-shadow-1);
+	cursor: pointer;
+	transition: background 150ms ease, transform 80ms ease, box-shadow 150ms ease;
+}
+
+.woocommerce-form-login .button[type="submit"]:hover,
+.woocommerce-form-register .button[type="submit"]:hover,
+.woocommerce-ResetPassword .button[type="submit"]:hover,
+.woocommerce-OrderTracking .button[type="submit"]:hover,
+.woocommerce-EditAccountForm .button[type="submit"]:hover {
+	background: var(--lafka-color-accent-600);
+	box-shadow: var(--lafka-shadow-2);
+}
+
+.woocommerce-form-login .button[type="submit"]:active,
+.woocommerce-form-register .button[type="submit"]:active {
+	transform: translateY(1px);
+	box-shadow: var(--lafka-shadow-0);
+}
+
+/* My Account dashboard layout */
+.woocommerce-MyAccount-navigation {
+	background: var(--lafka-color-surface-raised);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	padding: var(--lafka-space-3);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.woocommerce-MyAccount-navigation ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.woocommerce-MyAccount-navigation li {
+	margin: 0;
+}
+
+.woocommerce-MyAccount-navigation li a {
+	display: block;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	color: var(--lafka-color-text-secondary);
+	font-weight: var(--lafka-font-weight-medium, 500);
+	border-radius: var(--lafka-radius-md);
+	text-decoration: none;
+	transition: background 120ms ease, color 120ms ease;
+}
+
+.woocommerce-MyAccount-navigation li a:hover {
+	background: var(--lafka-color-surface-hover);
+	color: var(--lafka-color-text-primary);
+}
+
+.woocommerce-MyAccount-navigation li.is-active a,
+.woocommerce-MyAccount-navigation li.woocommerce-MyAccount-navigation-link--dashboard.is-active a {
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-contrast);
+}
+
+.woocommerce-MyAccount-content {
+	background: var(--lafka-color-surface-raised);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	padding: var(--lafka-space-6);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.myaccount_user {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-4);
+}
+
+.lafka-account-avatar img {
+	border-radius: var(--lafka-radius-pill);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+/* Bottom safe-zone so sticky cart bar doesn't overlap form actions */
+.woocommerce-account,
+body.woocommerce-page.woocommerce-account {
+	padding-bottom: var(--lafka-space-16);
+}
+
+/* Hide unrendered legacy shortcodes that surface as literal text.
+ * v5.39.0: catch [mc4wp_form id="..."] when the MC4WP plugin is absent.
+ * Operators can install the plugin to restore the embed; in the meantime
+ * the bare bracket fragment shouldn't leak through.
+ */
+.lafka-shortcode-fallback {
+	display: none;
+}
+
+/* Mobile tightening */
+@media (max-width: 600px) {
+
+	.woocommerce-form-login,
+	.woocommerce-form-register,
+	.woocommerce-ResetPassword,
+	.woocommerce-OrderTracking,
+	.woocommerce-MyAccount-content {
+		padding: var(--lafka-space-5);
+		border-radius: var(--lafka-radius-md);
+	}
+
+	.woocommerce-MyAccount-navigation {
+		padding: var(--lafka-space-2);
+	}
+}
