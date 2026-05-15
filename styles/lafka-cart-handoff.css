@@ -1,0 +1,398 @@
+/* =========================================================================
+ * Cart page (v5.64.0)
+ * /design_handoff_peppery_ordering/README.md "Cart page (/cart)"
+ *
+ * Layered on top of the existing v5.19.0 list-row cart.php. Restyles to:
+ *   - 2-col grid ≥1024 (1.4fr 1fr)
+ *   - Left: items list with 88×88 thumbs, qty stepper, line prices
+ *   - Right: sticky summary card with totals + Continue to checkout CTA
+ *   - Below: cross-sells as upsell strip
+ *
+ * @since 5.64.0
+ * ========================================================================= */
+
+/* -------- Hide legacy "CART" title block ------------------------------- */
+.woocommerce-cart .lafka_title_holder,
+.woocommerce-cart > h1.entry-title,
+.woocommerce-cart .page-title {
+	display: none;
+}
+
+/* -------- Page wrapper -------------------------------------------------- */
+.woocommerce-cart main#content,
+.woocommerce-cart #content,
+.woocommerce-cart #main {
+	background: var(--lafka-color-surface-page);
+	padding-block: var(--lafka-space-10);
+}
+
+.woocommerce-cart .woocommerce {
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: var(--lafka-gutter-mobile);
+}
+
+@media (min-width: 768px) {
+
+	.woocommerce-cart .woocommerce {
+		padding-inline: var(--lafka-gutter-laptop);
+	}
+}
+
+/* Inject a page header before the cart form via ::before pseudo */
+.woocommerce-cart .woocommerce-cart-form::before {
+	content: "Your cart";
+	display: block;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: clamp(2rem, 4vw + 1rem, 3rem);
+	line-height: 1.05;
+	letter-spacing: -0.02em;
+	color: var(--lafka-color-text-primary);
+	margin-bottom: var(--lafka-space-6);
+}
+
+/* -------- 2-col layout (items + sticky summary) ------------------------ */
+@media (min-width: 1024px) {
+
+	.woocommerce-cart .woocommerce-cart-form,
+	.woocommerce-cart .cart-collaterals {
+		display: inline-block;
+		vertical-align: top;
+	}
+
+	.woocommerce-cart .woocommerce {
+		display: grid;
+		grid-template-columns: 1.4fr 1fr;
+		gap: var(--lafka-space-10);
+		align-items: start;
+	}
+
+	.woocommerce-cart .woocommerce-cart-form {
+		grid-column: 1;
+		min-width: 0;
+		width: 100% !important;
+		float: none !important;
+	}
+
+	.woocommerce-cart .cart-collaterals {
+		grid-column: 2;
+		width: 100% !important;
+		float: none !important;
+		position: sticky;
+		top: calc(var(--lafka-header-h-desk) + var(--lafka-space-4));
+	}
+
+	/* The page-header ::before should span both columns. */
+	.woocommerce-cart .woocommerce-cart-form::before {
+		grid-column: 1 / -1;
+	}
+}
+
+/* -------- Items list — 88×88 thumb rows -------------------------------- */
+.woocommerce-cart .lafka-cart,
+.woocommerce-cart ul.lafka-cart {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: 0;
+	background: var(--lafka-color-surface-page);
+}
+
+.woocommerce-cart .lafka-cart > li,
+.woocommerce-cart .lafka-cart .cart_item {
+	display: grid;
+	grid-template-columns: 88px 1fr auto;
+	gap: var(--lafka-space-4);
+	align-items: center;
+	padding: var(--lafka-space-4) 0;
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	background: transparent;
+	margin: 0;
+}
+
+.woocommerce-cart .lafka-cart .product-thumbnail img {
+	width: 88px;
+	height: 88px;
+	border-radius: var(--lafka-radius-md);
+	object-fit: cover;
+	display: block;
+}
+
+.woocommerce-cart .lafka-cart .product-name,
+.woocommerce-cart .lafka-cart .product-title {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+	line-height: 1.3;
+}
+
+.woocommerce-cart .lafka-cart .product-name a {
+	color: inherit;
+	text-decoration: none;
+}
+
+.woocommerce-cart .lafka-cart .product-name a:hover {
+	color: var(--lafka-color-accent-500);
+}
+
+.woocommerce-cart .lafka-cart .variation,
+.woocommerce-cart .lafka-cart .product-meta,
+.woocommerce-cart .lafka-cart .wc-item-meta {
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-muted);
+	margin-top: 4px;
+}
+
+.woocommerce-cart .lafka-cart .product-price,
+.woocommerce-cart .lafka-cart .product-subtotal {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-size: var(--lafka-font-size-body-lg);
+	color: var(--lafka-color-text-primary);
+	font-variant-numeric: tabular-nums;
+	white-space: nowrap;
+}
+
+/* Qty stepper inside cart row */
+.woocommerce-cart .lafka-cart .quantity,
+.woocommerce-cart .lafka-cart .product-quantity {
+	display: inline-flex;
+	align-items: center;
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-pill);
+	height: 36px;
+	overflow: hidden;
+}
+
+.woocommerce-cart .lafka-cart input.qty,
+.woocommerce-cart .lafka-cart .quantity input[type="number"] {
+	border: 0 !important;
+	background: transparent !important;
+	width: 44px !important;
+	height: 36px !important;
+	text-align: center !important;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-semibold);
+}
+
+/* Remove link */
+.woocommerce-cart .lafka-cart .product-remove a,
+.woocommerce-cart .lafka-cart a.remove {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 28px;
+	height: 28px;
+	border-radius: var(--lafka-radius-pill);
+	background: transparent;
+	color: var(--lafka-color-text-muted);
+	font-size: 18px;
+	line-height: 1;
+	text-decoration: none;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.woocommerce-cart .lafka-cart .product-remove a:hover,
+.woocommerce-cart .lafka-cart a.remove:hover {
+	background: var(--lafka-color-error-50) !important;
+	color: var(--lafka-color-error-500) !important;
+}
+
+/* -------- Coupon row + bottom actions ----------------------------------- */
+.woocommerce-cart .coupon {
+	margin-block: var(--lafka-space-4);
+	display: flex;
+	gap: var(--lafka-space-2);
+	flex-wrap: wrap;
+}
+
+.woocommerce-cart .coupon .input-text {
+	flex: 1 1 240px;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
+	background: var(--lafka-color-surface-sunken);
+}
+
+.woocommerce-cart button[name="apply_coupon"],
+.woocommerce-cart button[name="update_cart"] {
+	background: var(--lafka-color-surface-page) !important;
+	color: var(--lafka-color-text-primary) !important;
+	border: 1px solid var(--lafka-color-border-default) !important;
+	border-radius: var(--lafka-radius-pill) !important;
+	padding: var(--lafka-space-3) var(--lafka-space-5) !important;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+}
+
+.woocommerce-cart button[name="apply_coupon"]:hover,
+.woocommerce-cart button[name="update_cart"]:hover {
+	border-color: var(--lafka-color-text-primary) !important;
+}
+
+/* -------- Cart totals summary card -------------------------------------- */
+.woocommerce-cart .cart_totals {
+	background: var(--lafka-color-surface-page);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	padding: var(--lafka-space-6);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.woocommerce-cart .cart_totals h2 {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.375rem;
+	letter-spacing: -0.01em;
+	margin: 0 0 var(--lafka-space-4) 0;
+	color: var(--lafka-color-text-primary);
+}
+
+.woocommerce-cart .cart_totals table.shop_table,
+.woocommerce-cart .cart_totals .shop_table {
+	width: 100%;
+	border: 0 !important;
+	margin: 0;
+}
+
+.woocommerce-cart .cart_totals .shop_table th,
+.woocommerce-cart .cart_totals .shop_table td {
+	padding: var(--lafka-space-2) 0;
+	border: 0 !important;
+	border-bottom: 1px solid var(--lafka-color-border-subtle) !important;
+	background: transparent !important;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	color: var(--lafka-color-text-secondary);
+	text-align: left;
+}
+
+.woocommerce-cart .cart_totals .shop_table th {
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+.woocommerce-cart .cart_totals .shop_table td {
+	text-align: right;
+	color: var(--lafka-color-text-primary);
+	font-variant-numeric: tabular-nums;
+}
+
+.woocommerce-cart .cart_totals .order-total th,
+.woocommerce-cart .cart_totals .order-total td {
+	padding-top: var(--lafka-space-3);
+	border-bottom: 0 !important;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.25rem;
+	color: var(--lafka-color-text-primary);
+}
+
+/* Checkout primary CTA */
+.woocommerce-cart .wc-proceed-to-checkout {
+	margin-top: var(--lafka-space-5);
+	padding: 0;
+}
+
+.woocommerce-cart .wc-proceed-to-checkout .checkout-button,
+.woocommerce-cart a.checkout-button {
+	display: flex !important;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lafka-space-2);
+	width: 100%;
+	background: var(--lafka-color-accent-500) !important;
+	color: var(--lafka-color-text-inverse) !important;
+	padding: var(--lafka-space-4) var(--lafka-space-6) !important;
+	border-radius: var(--lafka-radius-pill) !important;
+	font-family: var(--lafka-font-family-body) !important;
+	font-size: var(--lafka-font-size-body-lg) !important;
+	font-weight: var(--lafka-font-weight-semibold) !important;
+	min-height: 52px !important;
+	text-decoration: none !important;
+	text-transform: none !important;
+	letter-spacing: 0 !important;
+	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28) !important;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.woocommerce-cart .wc-proceed-to-checkout .checkout-button:hover,
+.woocommerce-cart a.checkout-button:hover {
+	background: var(--lafka-color-accent-600) !important;
+	color: var(--lafka-color-text-inverse) !important;
+}
+
+/* Trust line below checkout button */
+.woocommerce-cart .cart_totals::after {
+	content: "🔒 Secure checkout · Apple Pay · Visa · Mastercard";
+	display: block;
+	margin-top: var(--lafka-space-3);
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	text-align: center;
+}
+
+/* -------- Empty cart state --------------------------------------------- */
+.woocommerce-cart .wc-empty-cart-message,
+.woocommerce-cart .cart-empty {
+	text-align: center;
+	padding: var(--lafka-space-12) var(--lafka-space-5);
+	background: var(--lafka-color-surface-muted) !important;
+	border-radius: var(--lafka-radius-lg);
+	border: 0 !important;
+	color: var(--lafka-color-text-secondary);
+}
+
+.woocommerce-cart .cart-empty::before {
+	content: "🛒";
+	display: block;
+	font-size: 56px;
+	margin-bottom: var(--lafka-space-3);
+	line-height: 1;
+}
+
+.woocommerce-cart .wc-empty-cart-message {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-size: 1.25rem;
+	color: var(--lafka-color-text-primary);
+}
+
+.woocommerce-cart .return-to-shop .button,
+.woocommerce-cart a.return-to-shop {
+	display: inline-flex !important;
+	align-items: center;
+	padding: var(--lafka-space-3) var(--lafka-space-6) !important;
+	background: var(--lafka-color-accent-500) !important;
+	color: var(--lafka-color-text-inverse) !important;
+	border-radius: var(--lafka-radius-pill) !important;
+	font-weight: var(--lafka-font-weight-semibold) !important;
+	text-decoration: none !important;
+	margin-top: var(--lafka-space-4);
+}
+
+.woocommerce-cart .return-to-shop .button:hover {
+	background: var(--lafka-color-accent-600) !important;
+}
+
+/* -------- "Popular orders" cross-sells (empty cart upsell) ------------- */
+.woocommerce-cart .cross-sells > h2,
+.woocommerce-cart h2.cross-sells__heading {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.5rem;
+	color: var(--lafka-color-text-primary);
+	margin-block: var(--lafka-space-12) var(--lafka-space-3);
+}
+
+/* WC notices polish */
+.woocommerce-cart .woocommerce-info,
+.woocommerce-cart .woocommerce-message {
+	border-radius: var(--lafka-radius-md);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+}
