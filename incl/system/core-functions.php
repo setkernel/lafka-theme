@@ -1335,6 +1335,38 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.75.0: static page reading layout (About / FAQ / Privacy /
+		// Terms / generic). Loads on any singular page except the
+		// front page and custom templates that supply their own
+		// stylesheet (contact, menu page, editorial templates).
+		$lafka_skip_page_css = false;
+		if ( function_exists( 'is_page_template' ) ) {
+			$lafka_skip_page_templates = array(
+				'template-contact.php',
+				'page-menu.php',
+				'page_templates/template-editorial-home.php',
+				'page_templates/template-editorial-contact.php',
+				'page_templates/blank-page.php',
+			);
+			foreach ( $lafka_skip_page_templates as $lafka_skip_tpl ) {
+				if ( is_page_template( $lafka_skip_tpl ) ) {
+					$lafka_skip_page_css = true;
+					break;
+				}
+			}
+		}
+		$lafka_is_static_page = is_singular( 'page' )
+			&& ! ( function_exists( 'is_front_page' ) && is_front_page() )
+			&& ! $lafka_skip_page_css;
+		if ( $lafka_is_static_page ) {
+			wp_enqueue_style(
+				'lafka-page',
+				get_template_directory_uri() . '/styles/lafka-page.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-page.css' )
+			);
+		}
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.

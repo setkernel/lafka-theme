@@ -1,0 +1,320 @@
+/* =========================================================================
+ * Static page (v5.75.0)
+ *
+ * Reading layout for About / FAQ / Privacy / Terms / generic static
+ * pages. Single-column, 65ch prose body, optional featured-image hero.
+ *
+ * Pairs with page.php.
+ *
+ * @since 5.75.0
+ * ========================================================================= */
+
+.lafka-page {
+	padding-block: 0;
+}
+
+/* -------- Page header (with optional hero) ------------------------------ */
+.lafka-page__header {
+	background: var(--lafka-color-surface-page);
+	padding-block: var(--lafka-space-10) var(--lafka-space-6);
+	position: relative;
+}
+
+.lafka-page--has-hero .lafka-page__header {
+	padding-block: 0;
+	min-height: clamp(280px, 35vw, 420px);
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-end;
+	overflow: hidden;
+}
+
+.lafka-page__hero {
+	position: absolute;
+	inset: 0;
+	background-size: cover;
+	background-position: center;
+	z-index: 0;
+}
+
+.lafka-page__hero-scrim {
+	position: absolute;
+	inset: 0;
+	z-index: 1;
+	background: linear-gradient(180deg, rgba(0, 0, 0, 0.18) 0%, rgba(0, 0, 0, 0.55) 100%);
+	pointer-events: none;
+}
+
+.lafka-page__header-inner {
+	position: relative;
+	z-index: 2;
+}
+
+.lafka-page--has-hero .lafka-page__header-inner {
+	padding-block: var(--lafka-space-8) var(--lafka-space-8);
+}
+
+/* -------- Breadcrumbs --------------------------------------------------- */
+.lafka-page__crumbs {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	margin-bottom: var(--lafka-space-4);
+}
+
+.lafka-page__crumbs a {
+	color: var(--lafka-color-text-secondary);
+	text-decoration: none;
+}
+
+.lafka-page__crumbs a:hover {
+	color: var(--lafka-color-accent-500);
+}
+
+.lafka-page__crumbs span[aria-hidden] {
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-page--has-hero .lafka-page__crumbs,
+.lafka-page--has-hero .lafka-page__crumbs a,
+.lafka-page--has-hero .lafka-page__crumbs span[aria-hidden] {
+	color: rgba(255, 255, 255, 0.82);
+}
+
+.lafka-page--has-hero .lafka-page__crumbs a:hover {
+	color: #fff;
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+/* -------- Title + subtitle --------------------------------------------- */
+.lafka-page__title {
+	margin: 0 0 var(--lafka-space-3) 0;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: clamp(2.25rem, 4vw + 0.5rem, 3.25rem);
+	line-height: 1.05;
+	letter-spacing: -0.02em;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-page--has-hero .lafka-page__title {
+	color: #fff;
+	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+}
+
+.lafka-page__subtitle {
+	margin: 0;
+	font-size: var(--lafka-font-size-body-lg);
+	color: var(--lafka-color-text-muted);
+	line-height: var(--lafka-line-body);
+	max-width: 60ch;
+}
+
+.lafka-page--has-hero .lafka-page__subtitle {
+	color: rgba(255, 255, 255, 0.92);
+}
+
+/* -------- Article body -------------------------------------------------- */
+.lafka-page__article {
+	padding-block: var(--lafka-space-8) var(--lafka-space-12);
+}
+
+.lafka-page__content {
+	max-width: 65ch;
+	margin: 0 auto;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	line-height: var(--lafka-line-body);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-page__content > * + * {
+	margin-top: var(--lafka-space-4);
+}
+
+.lafka-page__content > * + h2,
+.lafka-page__content > * + h3 {
+	margin-top: var(--lafka-space-8);
+}
+
+.lafka-page__content h2 {
+	font-family: var(--lafka-font-family-display);
+	font-size: 1.875rem; /* 30px — between display and h3 */
+	font-weight: var(--lafka-font-weight-display);
+	line-height: 1.15;
+	letter-spacing: -0.015em;
+	color: var(--lafka-color-text-primary);
+	margin-bottom: var(--lafka-space-3);
+}
+
+.lafka-page__content h3 {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-bold);
+	color: var(--lafka-color-text-primary);
+	margin-bottom: var(--lafka-space-2);
+}
+
+.lafka-page__content p {
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-page__content a:not(.wp-block-button__link) {
+	color: var(--lafka-color-accent-500);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	text-decoration-thickness: 1px;
+	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-page__content a:not(.wp-block-button__link):hover {
+	color: var(--lafka-color-accent-600);
+	text-decoration-thickness: 2px;
+}
+
+.lafka-page__content ul,
+.lafka-page__content ol {
+	padding-left: var(--lafka-space-5);
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-page__content li + li {
+	margin-top: var(--lafka-space-2);
+}
+
+.lafka-page__content blockquote {
+	margin: var(--lafka-space-6) 0;
+	padding: var(--lafka-space-4) var(--lafka-space-5);
+	border-left: 3px solid var(--lafka-color-accent-500);
+	background: var(--lafka-color-surface-sunken);
+	border-radius: var(--lafka-radius-md);
+	font-style: italic;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-page__content blockquote p {
+	color: inherit;
+}
+
+.lafka-page__content img,
+.lafka-page__content figure {
+	max-width: 100%;
+	height: auto;
+	border-radius: var(--lafka-radius-md);
+}
+
+.lafka-page__content figure {
+	margin-block: var(--lafka-space-5);
+}
+
+.lafka-page__content figcaption {
+	margin-top: var(--lafka-space-2);
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	text-align: center;
+}
+
+.lafka-page__content code,
+.lafka-page__content kbd {
+	font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+	font-size: 0.9em;
+	padding: 2px 6px;
+	background: var(--lafka-color-surface-muted);
+	border-radius: var(--lafka-radius-sm);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-page__content hr {
+	margin-block: var(--lafka-space-8);
+	border: 0;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-page__content table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-block: var(--lafka-space-5);
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.lafka-page__content table th,
+.lafka-page__content table td {
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	text-align: left;
+}
+
+.lafka-page__content table th {
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-sunken);
+}
+
+/* -------- Page pagination (wp_link_pages) ------------------------------ */
+.lafka-page__pagination {
+	margin-top: var(--lafka-space-8);
+	padding-top: var(--lafka-space-5);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lafka-space-3);
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-page__pagination span {
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-page__pagination a {
+	color: var(--lafka-color-text-secondary);
+	text-decoration: none;
+	padding: var(--lafka-space-1) var(--lafka-space-2);
+	border-radius: var(--lafka-radius-sm);
+}
+
+.lafka-page__pagination a:hover {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-primary);
+}
+
+/* -------- Comments block (rare on static pages) ------------------------ */
+.lafka-page__comments {
+	max-width: 65ch;
+	margin: var(--lafka-space-10) auto 0;
+	padding-top: var(--lafka-space-8);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+}
+
+/* -------- Desktop polish ------------------------------------------------ */
+@media (min-width: 768px) {
+
+	.lafka-page__header {
+		padding-block: var(--lafka-space-12) var(--lafka-space-8);
+	}
+
+	.lafka-page--has-hero .lafka-page__header {
+		padding-block: 0;
+	}
+
+	.lafka-page--has-hero .lafka-page__header-inner {
+		padding-block: var(--lafka-space-10) var(--lafka-space-10);
+	}
+
+	.lafka-page__article {
+		padding-block: var(--lafka-space-12) var(--lafka-space-16);
+	}
+
+	.lafka-page__content {
+		font-size: var(--lafka-font-size-body-lg-desk);
+	}
+
+	.lafka-page__content h2 {
+		font-size: 2.25rem;
+	}
+}
