@@ -15,9 +15,35 @@
 
 /* -------- Hide legacy CHECKOUT title block ----------------------------- */
 .woocommerce-checkout .lafka_title_holder,
+.woocommerce-checkout #lafka_page_title,
+.woocommerce-checkout .lafka-title-text-container,
 .woocommerce-checkout > h1.entry-title,
+.woocommerce-checkout h1.heading-title,
 .woocommerce-order-received .lafka_title_holder,
-.woocommerce-order-received > h1.entry-title {
+.woocommerce-order-received #lafka_page_title,
+.woocommerce-order-received .lafka-title-text-container,
+.woocommerce-order-received > h1.entry-title,
+.woocommerce-order-received h1.heading-title {
+	display: none !important;
+}
+
+/* Cart empty-state heading: when WC renders the empty notice without
+ * the .woocommerce-cart-form wrapper our ::before pseudo can't show a
+ * Fraunces "Your cart" heading. Inject one before the empty block. */
+.woocommerce-cart .woocommerce::before {
+	content: "Your cart";
+	display: block;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: clamp(2rem, 4vw + 1rem, 3rem);
+	line-height: 1.05;
+	letter-spacing: -0.02em;
+	color: var(--lafka-color-text-primary);
+	margin: 0 0 var(--lafka-space-6) 0;
+}
+
+/* When the cart form IS present, hide the wrapper ::before (avoid double) */
+.woocommerce-cart .woocommerce:has(.woocommerce-cart-form)::before {
 	display: none;
 }
 

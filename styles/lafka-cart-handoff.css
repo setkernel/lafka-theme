@@ -11,11 +11,17 @@
  * @since 5.64.0
  * ========================================================================= */
 
-/* -------- Hide legacy "CART" title block ------------------------------- */
+/* -------- Hide legacy "CART" title block -------------------------------
+ * Legacy theme renders <div id="lafka_page_title" class="lafka_title_holder">
+ * containing <h1 class="heading-title">. v5.66.2: more aggressive selectors
+ * because the wrapper varies per template. */
 .woocommerce-cart .lafka_title_holder,
+.woocommerce-cart #lafka_page_title,
+.woocommerce-cart .lafka-title-text-container,
 .woocommerce-cart > h1.entry-title,
-.woocommerce-cart .page-title {
-	display: none;
+.woocommerce-cart .page-title,
+.woocommerce-cart h1.heading-title {
+	display: none !important;
 }
 
 /* -------- Page wrapper -------------------------------------------------- */

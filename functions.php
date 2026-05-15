@@ -91,6 +91,9 @@ require_once get_template_directory() . '/incl/mobile-nav-loader.php';
 // Strip country code from address_display for local-restaurant display (v5.63.0).
 require_once get_template_directory() . '/incl/template-helpers/address-filters.php';
 
+// Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
+require_once get_template_directory() . '/incl/contact-template-loader.php';
+
 /**
  * Echo the pagination
  */

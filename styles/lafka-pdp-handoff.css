@@ -10,6 +10,20 @@
  * @since 5.62.0
  * ========================================================================= */
 
+/* v5.66.2: redefine --lafka-pdp-accent (was red) to text-primary so the
+ * existing PDP CSS rule
+ *   .lafka-pdp-chip:has(:checked) .lafka-pdp-chip__inner
+ *     { background: var(--lafka-pdp-accent) }
+ * paints active size/crust chips with INK fill per handoff. The earlier
+ * v5.63.0 attempt at overriding via additional selectors didn't always
+ * win specificity — redefining the variable is bulletproof. */
+.lafka-pdp,
+.lafka-pdp-summary,
+.lafka-pdp-summary form.cart {
+	--lafka-pdp-accent: var(--lafka-color-text-primary);
+	--lafka-pdp-accent-text: var(--lafka-color-text-inverse);
+}
+
 /* -------- 2-col layout: gallery + sticky buy box ------------------------ */
 @media (min-width: 1024px) {
 
