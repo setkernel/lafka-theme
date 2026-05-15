@@ -40,17 +40,20 @@ if ( '' === $lafka_closer_phone && function_exists( 'lafka_get_option' ) ) {
 $lafka_closer_phone_link = preg_replace( '/[^0-9+]/', '', $lafka_closer_phone );
 ?>
 <section class="lafka-home-closer" aria-labelledby="lafka-home-closer-heading">
-	<div class="lafka-home-closer__inner">
+	<div class="lafka-container lafka-home-closer__inner">
+		<header class="lafka-section-head">
 
-		<?php if ( '' !== $lafka_closer_eyebrow ) : ?>
-			<p class="lafka-home-closer__eyebrow"><?php echo esc_html( $lafka_closer_eyebrow ); ?></p>
-		<?php endif; ?>
+			<?php if ( '' !== $lafka_closer_eyebrow ) : ?>
+				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_closer_eyebrow ); ?></p>
+			<?php endif; ?>
 
-		<h2 id="lafka-home-closer-heading" class="lafka-home-closer__headline lafka-display"><?php echo esc_html( $lafka_closer_headline ); ?></h2>
+			<h2 id="lafka-home-closer-heading" class="lafka-section-headline lafka-section-headline--display"><?php echo esc_html( $lafka_closer_headline ); ?></h2>
 
-		<?php if ( '' !== $lafka_closer_subhead ) : ?>
-			<p class="lafka-home-closer__subhead"><?php echo esc_html( $lafka_closer_subhead ); ?></p>
-		<?php endif; ?>
+			<?php if ( '' !== $lafka_closer_subhead ) : ?>
+				<p class="lafka-section-subhead"><?php echo esc_html( $lafka_closer_subhead ); ?></p>
+			<?php endif; ?>
+
+		</header>
 
 		<div class="lafka-home-closer__actions">
 			<?php if ( '' !== $lafka_closer_cta_url ) : ?>

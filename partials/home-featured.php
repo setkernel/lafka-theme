@@ -57,13 +57,13 @@ if ( empty( $lafka_feat_products ) ) {
 }
 ?>
 <section class="lafka-home-featured" aria-labelledby="lafka-home-featured-heading">
-	<div class="lafka-home-featured__inner">
+	<div class="lafka-container">
 
-		<header class="lafka-home-featured__head">
+		<header class="lafka-section-head">
 			<?php if ( '' !== $lafka_feat_eyebrow ) : ?>
 				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_feat_eyebrow ); ?></p>
 			<?php endif; ?>
-			<h2 id="lafka-home-featured-heading" class="lafka-home-featured__headline"><?php echo esc_html( $lafka_feat_headline ); ?></h2>
+			<h2 id="lafka-home-featured-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_feat_headline ); ?></h2>
 		</header>
 
 		<ul class="lafka-home-featured__grid products" role="list">
@@ -105,5 +105,5 @@ if ( empty( $lafka_feat_products ) ) {
 			<?php endforeach; ?>
 		</ul>
 
-	</div>
+	</div><!-- .lafka-container -->
 </section>

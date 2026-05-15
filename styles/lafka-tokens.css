@@ -68,7 +68,7 @@
 	/* ------- Colour: text (verified AAA on surface-page #fff) ----------- */
 	--lafka-color-text-primary: #18181b;   /* AAA 16.6:1 */
 	--lafka-color-text-secondary: #3f3f46; /* AAA 10.4:1 */
-	--lafka-color-text-muted: #71717a;     /* AA  5.2:1 */
+	--lafka-color-text-muted: #65656b;     /* AA  4.7:1 (was #71717a / 4.48 — sub-AA fix v5.50.0) */
 	--lafka-color-text-inverse: #fff;
 	--lafka-color-text-on-accent: #fff;
 
@@ -311,8 +311,39 @@ h2,
 	}
 }
 
-/* Eyebrow / small-caps label utility — used above section headings
- * (e.g. "OUR MENU" above "Browse the kitchen"). Rubik 700 tracked. */
+/* =========================================================================
+ * Section primitives — the canonical pattern for every page section's
+ * head block. Eliminates the 4-place duplication we had in v5.49.0
+ * (hero / categories / featured / story / reviews / closer each
+ * defining their own eyebrow + headline rules). v5.50.0.
+ *
+ * Usage:
+ *   <header class="lafka-section-head [lafka-section-head--start]">
+ *     <p class="lafka-section-eyebrow">…</p>
+ *     <h2 class="lafka-section-headline">…</h2>
+ *     <p class="lafka-section-subhead">…</p>
+ *   </header>
+ *
+ * Variants:
+ *   --inverse  → eyebrow flips to brand-300 for dark backgrounds
+ *   --start    → left-aligns the head (hero only)
+ * ========================================================================= */
+.lafka-section-head {
+	text-align: center;
+	max-width: 720px;
+	margin-inline: auto;
+	margin-bottom: var(--lafka-space-8);
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-3);
+}
+
+.lafka-section-head--start {
+	text-align: start;
+	margin-inline: 0;
+	align-items: flex-start;
+}
+
 .lafka-section-eyebrow {
 	display: inline-block;
 	font-family: var(--lafka-font-sans);
@@ -321,7 +352,64 @@ h2,
 	letter-spacing: var(--lafka-letter-spacing-wide);
 	text-transform: uppercase;
 	color: var(--lafka-color-accent-500);
-	margin-bottom: var(--lafka-space-2);
+	margin: 0;
+}
+
+.lafka-section-head--inverse .lafka-section-eyebrow {
+	color: var(--lafka-color-brand-300);
+}
+
+.lafka-section-headline {
+	margin: 0;
+	font-family: var(--lafka-font-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-size: var(--lafka-font-size-h2);
+	line-height: var(--lafka-line-height-tight);
+	letter-spacing: var(--lafka-letter-spacing-snug);
+	color: var(--lafka-color-text-primary);
+}
+
+@media (min-width: 768px) {
+
+	.lafka-section-headline {
+		font-size: var(--lafka-font-size-h2-desk);
+	}
+}
+
+.lafka-section-head--inverse .lafka-section-headline {
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-section-subhead {
+	margin: 0;
+	font-size: var(--lafka-font-size-lg);
+	line-height: var(--lafka-line-height-snug);
+	color: var(--lafka-color-text-secondary);
+	max-width: 56ch;
+	margin-inline: auto;
+}
+
+.lafka-section-head--start .lafka-section-subhead {
+	margin-inline: 0;
+}
+
+.lafka-section-head--inverse .lafka-section-subhead {
+	color: rgba(255, 255, 255, 0.85);
+}
+
+/* Container utility — section content inner wrap, shared by every
+ * front-page section so gutter/max-width is identical everywhere. */
+.lafka-container {
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: var(--lafka-container-px);
+}
+
+@media (min-width: 768px) {
+
+	.lafka-container {
+		padding-inline: var(--lafka-container-px-desk);
+	}
 }
 
 /* -------- WC default button unification (v5.36.0) ----------------------

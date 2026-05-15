@@ -1,8 +1,13 @@
 /*
- * Lafka home page
- * v5.46.0 — Phase B native home page styles. Hero, trust strip,
- * category showcase, featured products. Token-driven, mobile-first,
- * verified at 375/768/1280. No WPBakery dependency.
+ * Lafka home page (v5.50.0)
+ *
+ * Phase B native home — hero / trust / categories / featured / story /
+ * reviews / closer. Verified at 375/768/1280.
+ *
+ * v5.50.0 consistency sweep: all section heads use the .lafka-section-head
+ * + .lafka-section-eyebrow + .lafka-section-headline + .lafka-section-subhead
+ * utilities from lafka-tokens.css. This file only carries layout-specific
+ * rules per section — no duplicated typography/eyebrow rules.
  *
  * Layer order: lafka-tokens.css → lafka-home.css → component CSS.
  */
@@ -10,34 +15,34 @@
 /* =========================================================================
  * Front-page wrapper
  *
- * The theme's #header is `position: absolute` and the logo banner
- * extends downward past the header's bottom edge. Pages built via
- * page.php compensate via a .lafka_title_holder block; we have to
- * provide the same clearance ourselves so the hero copy isn't eaten by
- * the header. Measured offsets:
- *   mobile (≤600px) — top bar ~28px + header ~190px = ~220px
- *   tablet/desktop (≥768px) — top bar 36px + header 227px = ~265px
+ * The theme's #header is `position: absolute` so it overlays body
+ * content. Pages built via page.php compensate via .lafka_title_holder;
+ * we provide the same clearance for front-page.php with --lafka-header-offset.
  *
- * Theme version: 5.47.0
+ * #main + class for ID-specificity match against style.css:2976
+ * (#main { padding-top: 0 }), which would otherwise wipe our offset.
  * ========================================================================= */
+:root {
+	--lafka-header-offset-mobile: 220px;
+	--lafka-header-offset-desk: 280px;
+}
 
-/* #main + class for ID-specificity match against style.css:2976
- * (#main { padding-top: 0 }), which would otherwise wipe our offset. */
 #main.lafka-front-page {
 	background: var(--lafka-color-surface-page);
 	color: var(--lafka-color-text-primary);
-	padding-top: 220px;
+	padding-top: var(--lafka-header-offset-mobile);
 }
 
 @media (min-width: 768px) {
 
 	#main.lafka-front-page {
-		padding-top: 280px;
+		padding-top: var(--lafka-header-offset-desk);
 	}
 }
 
-/* Section rhythm: every direct child of .lafka-front-page gets
- * vertical breathing room without needing per-section padding. */
+/* Section rhythm: one rule, no per-section padding override.
+ * Trust strip / hero / closer adjust within their own ::before
+ * (compact-mode marker) — but vertical padding is consistent. */
 .lafka-front-page > section {
 	padding-block: var(--lafka-space-12);
 }
@@ -55,17 +60,20 @@
 
 /* =========================================================================
  * 1. Hero
+ * Layout-specific only — typography handled by .lafka-section-head*.
  * ========================================================================= */
 .lafka-home-hero {
 	position: relative;
 	overflow: hidden;
 	background: var(--lafka-color-brand-50);
 	color: var(--lafka-color-text-primary);
-	padding-block: var(--lafka-space-10) var(--lafka-space-12);
+	min-height: 360px;
+	display: flex;
+	align-items: center;
 }
 
-/* Image present but overlay OFF — keep brand-yellow text colors,
- * image is decorative texture (e.g. our default yellow-texture wash). */
+/* Image present but overlay OFF — bg is decorative texture (e.g. our
+ * default yellow-texture wash). Text colors stay primary. */
 .lafka-home-hero--has-image {
 	background: var(--lafka-color-brand-50);
 }
@@ -96,79 +104,45 @@
 .lafka-home-hero__inner {
 	position: relative;
 	z-index: 1;
-	max-width: var(--lafka-container-max);
-	margin-inline: auto;
-	padding-inline: var(--lafka-container-px);
 }
 
-.lafka-home-hero__copy {
-	max-width: 640px;
+.lafka-home-hero--has-overlay .lafka-section-headline,
+.lafka-home-hero--has-overlay .lafka-section-subhead {
+	color: var(--lafka-color-text-inverse);
 }
 
-.lafka-home-hero__eyebrow {
-	display: inline-block;
-	font-family: var(--lafka-font-sans);
-	font-size: var(--lafka-font-size-caption);
-	font-weight: var(--lafka-font-weight-bold);
-	text-transform: uppercase;
-	letter-spacing: var(--lafka-letter-spacing-wide);
-	color: var(--lafka-color-accent-500);
-	margin: 0 0 var(--lafka-space-3);
-}
-
-.lafka-home-hero--has-image .lafka-home-hero__eyebrow {
+.lafka-home-hero--has-overlay .lafka-section-eyebrow {
 	color: var(--lafka-color-brand-300);
-}
-
-.lafka-home-hero__headline {
-	margin: 0 0 var(--lafka-space-4);
-	font-family: var(--lafka-font-display);
-	font-weight: var(--lafka-font-weight-display);
-	font-size: var(--lafka-font-size-display);
-	line-height: var(--lafka-line-height-display);
-	letter-spacing: var(--lafka-letter-spacing-tight);
-}
-
-.lafka-home-hero__subhead {
-	margin: 0 0 var(--lafka-space-6);
-	font-size: var(--lafka-font-size-lg);
-	line-height: var(--lafka-line-height-snug);
-	color: var(--lafka-color-text-secondary);
-	max-width: 540px;
-}
-
-.lafka-home-hero--has-image .lafka-home-hero__subhead {
-	color: rgba(255, 255, 255, 0.85);
 }
 
 .lafka-home-hero__actions {
 	display: flex;
 	flex-wrap: wrap;
 	gap: var(--lafka-space-3);
+	margin-top: var(--lafka-space-3);
+}
+
+/* Display-size headline modifier — for hero + closer only. */
+.lafka-section-headline--display {
+	font-size: var(--lafka-font-size-display);
+	font-weight: var(--lafka-font-weight-display);
+	line-height: var(--lafka-line-height-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
 }
 
 @media (min-width: 768px) {
 
 	.lafka-home-hero {
-		padding-block: var(--lafka-space-16) var(--lafka-space-20);
-		min-height: clamp(420px, 60vh, 640px);
-		display: flex;
-		align-items: center;
+		min-height: clamp(420px, 56vh, 640px);
 	}
 
-	.lafka-home-hero__inner {
-		padding-inline: var(--lafka-container-px-desk);
-	}
-
-	.lafka-home-hero__headline {
+	.lafka-section-headline--display {
 		font-size: var(--lafka-font-size-display-desk);
 	}
 }
 
 /* =========================================================================
- * Button primitives (used by hero + featured grid)
- * Defined here because home is their first appearance; future ships
- * will hoist these into a shared lafka-primitives.css file.
+ * Button primitives
  * ========================================================================= */
 .lafka-btn {
 	display: inline-flex;
@@ -225,7 +199,7 @@
 	border-color: var(--lafka-color-text-primary);
 }
 
-.lafka-home-hero--has-image .lafka-btn--ghost {
+.lafka-home-hero--has-overlay .lafka-btn--ghost {
 	color: var(--lafka-color-text-inverse);
 	border-color: var(--lafka-color-text-inverse);
 }
@@ -235,31 +209,35 @@
 	color: var(--lafka-color-text-inverse);
 }
 
-.lafka-home-hero--has-image .lafka-btn--ghost:hover {
+.lafka-home-hero--has-overlay .lafka-btn--ghost:hover {
 	background: var(--lafka-color-text-inverse);
 	color: var(--lafka-color-text-primary);
 }
 
+/* On the brand-yellow closer band the ghost button needs dark text
+ * with brand-900 border for contrast. */
+.lafka-home-closer .lafka-btn--ghost {
+	color: var(--lafka-color-brand-900);
+	border-color: var(--lafka-color-brand-900);
+}
+
+.lafka-home-closer .lafka-btn--ghost:hover {
+	background: var(--lafka-color-brand-900);
+	color: var(--lafka-color-brand-50);
+}
+
 /* =========================================================================
- * 2. Trust strip — dark band (v5.49.0)
- * Charcoal bg breaks the cream/yellow monotone above; gives the page
- * visual rhythm and reads as professional contrast.
+ * 2. Trust strip — dark band
+ * auto-fit so 2-item layout (no ETA) fills cleanly without 3rd-col gap.
  * ========================================================================= */
 .lafka-home-trust {
 	background: var(--lafka-color-surface-dark);
 	color: var(--lafka-color-text-inverse);
-	padding-block: var(--lafka-space-6) !important;
-}
-
-.lafka-home-trust__inner {
-	max-width: var(--lafka-container-max);
-	margin-inline: auto;
-	padding-inline: var(--lafka-container-px);
 }
 
 .lafka-home-trust__grid {
 	display: grid;
-	grid-template-columns: 1fr;
+	grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 	gap: var(--lafka-space-3);
 	list-style: none;
 	margin: 0;
@@ -277,7 +255,6 @@
 	background: rgba(255, 255, 255, 0.06);
 	border: 1px solid rgba(255, 255, 255, 0.1);
 	border-radius: var(--lafka-radius-md);
-	box-shadow: none;
 }
 
 .lafka-home-trust__icon {
@@ -302,43 +279,25 @@
 }
 
 .lafka-home-trust__value--link {
-	color: var(--lafka-color-brand-300);
+	color: var(--lafka-color-text-inverse);
 	text-decoration: none;
 }
 
 .lafka-home-trust__value--link:hover {
-	color: var(--lafka-color-brand-100);
+	color: var(--lafka-color-brand-300);
 	text-decoration: underline;
 }
 
-@media (min-width: 600px) {
-
-	.lafka-home-trust__grid {
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--lafka-space-4);
-	}
-}
-
-@media (min-width: 768px) {
-
-	.lafka-home-trust__inner {
-		padding-inline: var(--lafka-container-px-desk);
-	}
-
-	.lafka-home-trust__grid {
-		gap: var(--lafka-space-5);
-	}
-}
-
 /* =========================================================================
- * Service status pill (used by hero — "Open now · Pickup ~20 min")
+ * Service status pill (used by hero)
  * ========================================================================= */
 .lafka-status-pill {
 	display: inline-flex;
 	align-items: center;
 	gap: var(--lafka-space-2);
-	margin: 0 0 var(--lafka-space-4);
+	margin: 0;
 	padding: var(--lafka-space-2) var(--lafka-space-4);
+	font-family: var(--lafka-font-sans);
 	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-semibold);
 	letter-spacing: var(--lafka-letter-spacing-wide);
@@ -352,9 +311,8 @@
 .lafka-status-pill__dot {
 	width: 8px;
 	height: 8px;
-	border-radius: 999px;
+	border-radius: var(--lafka-radius-pill);
 	background: var(--lafka-color-success);
-	box-shadow: 0 0 0 0 var(--lafka-color-success);
 	animation: lafka-pulse 2.4s ease-out infinite;
 }
 
@@ -365,11 +323,11 @@
 
 @keyframes lafka-pulse {
 
-	0% { box-shadow: 0 0 0 0 rgba(4, 120, 87, 0.5); }
+	0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lafka-color-success) 50%, transparent); }
 
-	75% { box-shadow: 0 0 0 8px rgba(4, 120, 87, 0); }
+	75% { box-shadow: 0 0 0 8px color-mix(in srgb, var(--lafka-color-success) 0%, transparent); }
 
-	100% { box-shadow: 0 0 0 0 rgba(4, 120, 87, 0); }
+	100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--lafka-color-success) 0%, transparent); }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -380,304 +338,10 @@
 }
 
 /* =========================================================================
- * Ghost-light button variant — for dark sections (CTA closer phone link)
+ * 3. Categories
+ * Cap at 4 desktop cols so titles have room (was 6 — too cramped).
+ * Equal-height tiles via grid + flex card body.
  * ========================================================================= */
-.lafka-btn--ghost-light {
-	background: transparent;
-	color: var(--lafka-color-text-primary);
-	border-color: rgba(24, 24, 27, 0.4);
-}
-
-.lafka-btn--ghost-light:hover {
-	background: rgba(24, 24, 27, 0.08);
-	color: var(--lafka-color-text-primary);
-	border-color: var(--lafka-color-text-primary);
-}
-
-/* Hero scrim overlay (when overlay enabled on dark photo backgrounds) */
-.lafka-home-hero__scrim {
-	position: absolute;
-	inset: 0;
-	background: var(--lafka-color-scrim-left);
-	z-index: 1;
-}
-
-.lafka-home-hero--has-overlay .lafka-home-hero__inner {
-	position: relative;
-	z-index: 2;
-}
-
-.lafka-home-hero--has-overlay .lafka-home-hero__copy,
-.lafka-home-hero--has-overlay .lafka-home-hero__headline,
-.lafka-home-hero--has-overlay .lafka-home-hero__subhead {
-	color: var(--lafka-color-text-inverse);
-}
-
-.lafka-home-hero--has-overlay .lafka-home-hero__subhead {
-	color: rgba(255, 255, 255, 0.88);
-}
-
-/* =========================================================================
- * 5. Story split — 2-col on desktop, image-then-copy stack on mobile
- * ========================================================================= */
-.lafka-home-story {
-	background: var(--lafka-color-surface-cream);
-}
-
-.lafka-home-story__inner {
-	max-width: var(--lafka-container-max);
-	margin-inline: auto;
-	padding-inline: var(--lafka-container-px);
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--lafka-space-8);
-	align-items: center;
-}
-
-.lafka-home-story__media {
-	border-radius: var(--lafka-radius-xl);
-	overflow: hidden;
-	box-shadow: var(--lafka-shadow-3);
-	aspect-ratio: 4 / 3;
-}
-
-.lafka-home-story__image {
-	width: 100%;
-	height: 100%;
-	object-fit: cover;
-	display: block;
-}
-
-.lafka-home-story__headline {
-	margin: var(--lafka-space-2) 0 var(--lafka-space-4);
-	font-family: var(--lafka-font-display);
-	font-weight: var(--lafka-font-weight-semibold);
-	font-size: var(--lafka-font-size-h1);
-	line-height: var(--lafka-line-height-tight);
-	letter-spacing: var(--lafka-letter-spacing-snug);
-	color: var(--lafka-color-text-primary);
-}
-
-.lafka-home-story__body {
-	margin: 0 0 var(--lafka-space-6);
-	font-size: var(--lafka-font-size-lg);
-	line-height: var(--lafka-line-height-relaxed);
-	color: var(--lafka-color-text-secondary);
-	max-width: 56ch;
-}
-
-@media (min-width: 768px) {
-
-	.lafka-home-story__inner {
-		padding-inline: var(--lafka-container-px-desk);
-		grid-template-columns: 1fr 1fr;
-		gap: var(--lafka-space-12);
-	}
-
-	.lafka-home-story__headline {
-		font-size: var(--lafka-font-size-h1-desk);
-	}
-}
-
-/* =========================================================================
- * 6. Reviews wall
- * ========================================================================= */
-.lafka-home-reviews {
-	background: var(--lafka-color-surface-page);
-}
-
-.lafka-home-reviews__inner {
-	max-width: var(--lafka-container-max);
-	margin-inline: auto;
-	padding-inline: var(--lafka-container-px);
-}
-
-.lafka-home-reviews__head {
-	text-align: center;
-	margin-bottom: var(--lafka-space-8);
-}
-
-.lafka-home-reviews__headline {
-	margin: 0 0 var(--lafka-space-3);
-	font-family: var(--lafka-font-display);
-	font-weight: var(--lafka-font-weight-semibold);
-	font-size: var(--lafka-font-size-h1);
-	line-height: var(--lafka-line-height-tight);
-}
-
-.lafka-home-reviews__aggregate {
-	display: inline-flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	gap: var(--lafka-space-2);
-	margin: var(--lafka-space-2) 0 0;
-	font-size: var(--lafka-font-size-sm);
-	color: var(--lafka-color-text-secondary);
-}
-
-.lafka-home-reviews__aggregate-stars {
-	color: var(--lafka-color-brand-500);
-	letter-spacing: 0.1em;
-}
-
-.lafka-home-reviews__aggregate strong {
-	font-family: var(--lafka-font-display);
-	font-weight: var(--lafka-font-weight-bold);
-	font-size: var(--lafka-font-size-h3);
-	color: var(--lafka-color-text-primary);
-}
-
-.lafka-home-reviews__grid {
-	display: grid;
-	grid-template-columns: 1fr;
-	gap: var(--lafka-space-4);
-	list-style: none;
-	margin: 0;
-	padding: 0;
-}
-
-.lafka-home-reviews__card {
-	padding: var(--lafka-space-6);
-	background: var(--lafka-color-surface-cream);
-	border-radius: var(--lafka-radius-lg);
-	box-shadow: var(--lafka-shadow-1);
-	display: flex;
-	flex-direction: column;
-	gap: var(--lafka-space-3);
-}
-
-.lafka-home-reviews__stars {
-	color: var(--lafka-color-brand-500);
-	font-size: 1rem;
-	letter-spacing: 0.1em;
-}
-
-.lafka-home-reviews__quote {
-	margin: 0;
-	font-family: var(--lafka-font-display);
-	font-style: italic;
-	font-size: var(--lafka-font-size-lg);
-	line-height: var(--lafka-line-height-snug);
-	color: var(--lafka-color-text-primary);
-}
-
-.lafka-home-reviews__attribution {
-	display: flex;
-	gap: var(--lafka-space-2);
-	align-items: baseline;
-	font-size: var(--lafka-font-size-sm);
-	color: var(--lafka-color-text-secondary);
-}
-
-.lafka-home-reviews__source {
-	color: var(--lafka-color-text-muted);
-}
-
-@media (min-width: 768px) {
-
-	.lafka-home-reviews__inner {
-		padding-inline: var(--lafka-container-px-desk);
-	}
-
-	.lafka-home-reviews__headline {
-		font-size: var(--lafka-font-size-h1-desk);
-	}
-
-	.lafka-home-reviews__grid {
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--lafka-space-6);
-	}
-}
-
-/* =========================================================================
- * 7. CTA closer band — full-bleed brand yellow
- * ========================================================================= */
-.lafka-home-closer {
-	background: var(--lafka-color-brand-500);
-	color: var(--lafka-color-on-brand);
-	text-align: center;
-}
-
-.lafka-home-closer__inner {
-	max-width: 720px;
-	margin-inline: auto;
-	padding-inline: var(--lafka-container-px);
-	padding-block: var(--lafka-space-4);
-}
-
-.lafka-home-closer__eyebrow {
-	margin: 0 0 var(--lafka-space-3);
-	font-family: var(--lafka-font-sans);
-	font-size: var(--lafka-font-size-caption);
-	font-weight: var(--lafka-font-weight-bold);
-	letter-spacing: var(--lafka-letter-spacing-wide);
-	text-transform: uppercase;
-	color: var(--lafka-color-brand-900);
-	opacity: 0.78;
-}
-
-.lafka-home-closer__headline {
-	margin: 0 0 var(--lafka-space-4);
-	font-family: var(--lafka-font-display);
-	font-weight: var(--lafka-font-weight-display);
-	font-size: var(--lafka-font-size-display);
-	line-height: var(--lafka-line-height-display);
-	color: var(--lafka-color-brand-900);
-}
-
-.lafka-home-closer__subhead {
-	margin: 0 0 var(--lafka-space-6);
-	font-size: var(--lafka-font-size-lg);
-	line-height: var(--lafka-line-height-snug);
-	color: var(--lafka-color-text-primary);
-	max-width: 48ch;
-	margin-inline: auto;
-	margin-bottom: var(--lafka-space-6);
-}
-
-.lafka-home-closer__actions {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-	gap: var(--lafka-space-3);
-}
-
-@media (min-width: 768px) {
-
-	.lafka-home-closer__inner {
-		padding-inline: var(--lafka-container-px-desk);
-	}
-
-	.lafka-home-closer__headline {
-		font-size: var(--lafka-font-size-display-desk);
-	}
-}
-
-/* =========================================================================
- * 3. Category showcase
- * ========================================================================= */
-.lafka-home-categories__inner {
-	max-width: var(--lafka-container-max);
-	margin-inline: auto;
-	padding-inline: var(--lafka-container-px);
-}
-
-.lafka-home-categories__head {
-	text-align: center;
-	margin-bottom: var(--lafka-space-8);
-}
-
-.lafka-home-categories__headline {
-	margin: 0;
-	font-family: var(--lafka-font-display);
-	font-weight: var(--lafka-font-weight-semibold);
-	font-size: var(--lafka-font-size-h1);
-	line-height: var(--lafka-line-height-tight);
-	letter-spacing: var(--lafka-letter-spacing-snug);
-	color: var(--lafka-color-text-primary);
-}
-
 .lafka-home-categories__grid {
 	display: grid;
 	grid-template-columns: repeat(2, 1fr);
@@ -689,12 +353,13 @@
 
 .lafka-home-categories__item {
 	margin: 0;
+	display: flex;
 }
 
 .lafka-home-categories__tile {
 	display: flex;
 	flex-direction: column;
-	height: 100%;
+	width: 100%;
 	background: var(--lafka-color-surface-raised);
 	border: 1px solid var(--lafka-color-border-subtle);
 	border-radius: var(--lafka-radius-lg);
@@ -741,7 +406,8 @@
 	display: flex;
 	flex-direction: column;
 	gap: var(--lafka-space-1);
-	padding: var(--lafka-space-3) var(--lafka-space-4);
+	padding: var(--lafka-space-4);
+	flex: 1;
 }
 
 .lafka-home-categories__name {
@@ -765,66 +431,21 @@
 	}
 }
 
-@media (min-width: 768px) {
-
-	.lafka-home-categories__inner {
-		padding-inline: var(--lafka-container-px-desk);
-	}
-
-	.lafka-home-categories__headline {
-		font-size: var(--lafka-font-size-h1-desk);
-	}
-
-	.lafka-home-categories__grid {
-		grid-template-columns: repeat(3, 1fr);
-		gap: var(--lafka-space-5);
-	}
-
-	.lafka-home-categories__body {
-		padding: var(--lafka-space-4) var(--lafka-space-5);
-	}
-
-	.lafka-home-categories__name {
-		font-size: var(--lafka-font-size-lg);
-	}
-}
-
 @media (min-width: 1024px) {
 
 	.lafka-home-categories__grid {
-		grid-template-columns: repeat(6, 1fr);
+		grid-template-columns: repeat(4, 1fr);
 	}
 }
 
 /* =========================================================================
  * 4. Featured products
+ * Cap at 3 desktop cols (was 4 — too sparse).
  * ========================================================================= */
 .lafka-home-featured {
 	background: var(--lafka-color-surface-sunken);
 }
 
-.lafka-home-featured__inner {
-	max-width: var(--lafka-container-max);
-	margin-inline: auto;
-	padding-inline: var(--lafka-container-px);
-}
-
-.lafka-home-featured__head {
-	margin-bottom: var(--lafka-space-8);
-}
-
-.lafka-home-featured__headline {
-	margin: 0;
-	font-family: var(--lafka-font-display);
-	font-weight: var(--lafka-font-weight-semibold);
-	font-size: var(--lafka-font-size-h1);
-	line-height: var(--lafka-line-height-tight);
-	letter-spacing: var(--lafka-letter-spacing-snug);
-	color: var(--lafka-color-text-primary);
-}
-
-/* Override the global ul.products list-row layout for this grid:
- * featured products want a 2-up tile pattern, not the menu list. */
 .lafka-home-featured__grid {
 	display: grid;
 	grid-template-columns: 1fr;
@@ -842,15 +463,7 @@
 	}
 }
 
-@media (min-width: 768px) {
-
-	.lafka-home-featured__inner {
-		padding-inline: var(--lafka-container-px-desk);
-	}
-
-	.lafka-home-featured__headline {
-		font-size: var(--lafka-font-size-h1-desk);
-	}
+@media (min-width: 1024px) {
 
 	.lafka-home-featured__grid {
 		grid-template-columns: repeat(3, 1fr);
@@ -858,9 +471,158 @@
 	}
 }
 
-@media (min-width: 1024px) {
+/* =========================================================================
+ * 5. Story split
+ * 2-col when image present, single-column centered when image absent.
+ * ========================================================================= */
+.lafka-home-story {
+	background: var(--lafka-color-surface-cream);
+}
 
-	.lafka-home-featured__grid {
-		grid-template-columns: repeat(4, 1fr);
+.lafka-home-story__inner {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lafka-space-8);
+	align-items: center;
+}
+
+.lafka-home-story__media {
+	border-radius: var(--lafka-radius-xl);
+	overflow: hidden;
+	box-shadow: var(--lafka-shadow-3);
+	aspect-ratio: 4 / 3;
+}
+
+.lafka-home-story__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.lafka-home-story__copy {
+	max-width: 56ch;
+}
+
+.lafka-home-story--text-only .lafka-home-story__copy {
+	margin-inline: auto;
+	text-align: center;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-home-story:not(.lafka-home-story--text-only) .lafka-home-story__inner {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--lafka-space-12);
 	}
+}
+
+/* =========================================================================
+ * 6. Reviews
+ * ========================================================================= */
+.lafka-home-reviews {
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-home-reviews__aggregate {
+	display: inline-flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	margin: 0;
+	font-size: var(--lafka-font-size-sm);
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-home-reviews__aggregate-stars {
+	color: var(--lafka-color-brand-500);
+	letter-spacing: 0.1em;
+}
+
+.lafka-home-reviews__aggregate strong {
+	font-family: var(--lafka-font-display);
+	font-weight: var(--lafka-font-weight-bold);
+	font-size: var(--lafka-font-size-h3);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-home-reviews__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lafka-space-4);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.lafka-home-reviews__card {
+	padding: var(--lafka-space-6);
+	background: var(--lafka-color-surface-cream);
+	border-radius: var(--lafka-radius-lg);
+	box-shadow: var(--lafka-shadow-1);
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-3);
+}
+
+.lafka-home-reviews__stars {
+	color: var(--lafka-color-brand-500);
+	font-size: var(--lafka-font-size-base);
+	letter-spacing: 0.1em;
+}
+
+.lafka-home-reviews__quote {
+	margin: 0;
+	font-family: var(--lafka-font-display);
+	font-style: italic;
+	font-size: var(--lafka-font-size-lg);
+	line-height: var(--lafka-line-height-snug);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-home-reviews__attribution {
+	display: flex;
+	gap: var(--lafka-space-2);
+	align-items: baseline;
+	font-size: var(--lafka-font-size-sm);
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-home-reviews__source {
+	color: var(--lafka-color-text-muted);
+}
+
+@media (min-width: 768px) {
+
+	.lafka-home-reviews__grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--lafka-space-6);
+	}
+}
+
+/* =========================================================================
+ * 7. CTA closer
+ * ========================================================================= */
+.lafka-home-closer {
+	background: var(--lafka-color-brand-500);
+	color: var(--lafka-color-on-brand);
+	text-align: center;
+}
+
+.lafka-home-closer .lafka-section-eyebrow {
+	color: var(--lafka-color-brand-900);
+	opacity: 0.85;
+}
+
+.lafka-home-closer .lafka-section-headline,
+.lafka-home-closer .lafka-section-subhead {
+	color: var(--lafka-color-brand-900);
+}
+
+.lafka-home-closer__actions {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--lafka-space-3);
 }

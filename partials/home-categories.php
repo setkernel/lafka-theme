@@ -45,13 +45,13 @@ if ( is_wp_error( $lafka_cat_terms ) || empty( $lafka_cat_terms ) ) {
 }
 ?>
 <section class="lafka-home-categories" aria-labelledby="lafka-home-categories-heading">
-	<div class="lafka-home-categories__inner">
+	<div class="lafka-container">
 
-		<header class="lafka-home-categories__head">
+		<header class="lafka-section-head">
 			<?php if ( '' !== $lafka_cat_eyebrow ) : ?>
 				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_cat_eyebrow ); ?></p>
 			<?php endif; ?>
-			<h2 id="lafka-home-categories-heading" class="lafka-home-categories__headline"><?php echo esc_html( $lafka_cat_headline ); ?></h2>
+			<h2 id="lafka-home-categories-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_cat_headline ); ?></h2>
 		</header>
 
 		<ul class="lafka-home-categories__grid" role="list">
@@ -93,5 +93,5 @@ if ( is_wp_error( $lafka_cat_terms ) || empty( $lafka_cat_terms ) ) {
 			<?php endforeach; ?>
 		</ul>
 
-	</div>
+	</div><!-- .lafka-container -->
 </section>

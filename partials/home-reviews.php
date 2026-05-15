@@ -59,13 +59,13 @@ if ( empty( $lafka_review_items ) ) {
 }
 ?>
 <section class="lafka-home-reviews" aria-labelledby="lafka-home-reviews-heading">
-	<div class="lafka-home-reviews__inner">
+	<div class="lafka-container">
 
-		<header class="lafka-home-reviews__head">
+		<header class="lafka-section-head">
 			<?php if ( '' !== $lafka_reviews_eyebrow ) : ?>
 				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_reviews_eyebrow ); ?></p>
 			<?php endif; ?>
-			<h2 id="lafka-home-reviews-heading" class="lafka-home-reviews__headline"><?php echo esc_html( $lafka_reviews_headline ); ?></h2>
+			<h2 id="lafka-home-reviews-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_reviews_headline ); ?></h2>
 
 			<?php if ( '' !== $lafka_reviews_rating ) : ?>
 				<p class="lafka-home-reviews__aggregate">
@@ -101,5 +101,5 @@ if ( empty( $lafka_review_items ) ) {
 			<?php endforeach; ?>
 		</ul>
 
-	</div>
+	</div><!-- .lafka-container -->
 </section>

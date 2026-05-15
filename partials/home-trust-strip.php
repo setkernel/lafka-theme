@@ -46,7 +46,7 @@ if ( function_exists( 'WC' ) ) {
 }
 ?>
 <section class="lafka-home-trust" aria-label="<?php esc_attr_e( 'Service info', 'lafka' ); ?>">
-	<div class="lafka-home-trust__inner">
+	<div class="lafka-container">
 		<ul class="lafka-home-trust__grid" role="list">
 
 			<?php if ( $lafka_trust_eta && ! empty( $lafka_trust_eta['pickup_minutes'] ) ) : ?>

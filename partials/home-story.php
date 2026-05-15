@@ -45,8 +45,16 @@ $lafka_story_cta_url   = (string) get_theme_mod( 'lafka_home_story_cta_url', '' 
 $lafka_story_image_id  = (int) get_theme_mod( 'lafka_home_story_image_id', 0 );
 $lafka_story_image_src = $lafka_story_image_id ? wp_get_attachment_image_url( $lafka_story_image_id, 'large' ) : '';
 ?>
-<section class="lafka-home-story" aria-labelledby="lafka-home-story-heading">
-	<div class="lafka-home-story__inner">
+<?php
+// Variant: when no image is set, render single-column centered to avoid
+// the awkward half-empty 2-col layout from v5.49.0.
+$lafka_story_classes = array( 'lafka-home-story' );
+if ( ! $lafka_story_image_src ) {
+	$lafka_story_classes[] = 'lafka-home-story--text-only';
+}
+?>
+<section class="<?php echo esc_attr( implode( ' ', $lafka_story_classes ) ); ?>" aria-labelledby="lafka-home-story-heading">
+	<div class="lafka-container lafka-home-story__inner">
 
 		<?php if ( $lafka_story_image_src ) : ?>
 			<div class="lafka-home-story__media">
@@ -60,18 +68,18 @@ $lafka_story_image_src = $lafka_story_image_id ? wp_get_attachment_image_url( $l
 			</div>
 		<?php endif; ?>
 
-		<div class="lafka-home-story__copy">
+		<header class="lafka-section-head <?php echo $lafka_story_image_src ? 'lafka-section-head--start' : ''; ?> lafka-home-story__copy">
 			<?php if ( '' !== $lafka_story_eyebrow ) : ?>
 				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_story_eyebrow ); ?></p>
 			<?php endif; ?>
-			<h2 id="lafka-home-story-heading" class="lafka-home-story__headline"><?php echo esc_html( $lafka_story_headline ); ?></h2>
-			<p class="lafka-home-story__body"><?php echo esc_html( $lafka_story_body ); ?></p>
+			<h2 id="lafka-home-story-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_story_headline ); ?></h2>
+			<p class="lafka-section-subhead"><?php echo esc_html( $lafka_story_body ); ?></p>
 
 			<?php if ( '' !== $lafka_story_cta_url ) : ?>
 				<a class="lafka-btn lafka-btn--ghost" href="<?php echo esc_url( $lafka_story_cta_url ); ?>">
 					<?php echo esc_html( $lafka_story_cta_label ); ?>
 				</a>
 			<?php endif; ?>
-		</div>
+		</header>
 	</div>
 </section>

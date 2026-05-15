@@ -88,11 +88,11 @@ if ( $lafka_hero_image_src && $lafka_hero_overlay ) {
 		</div>
 	<?php endif; ?>
 
-	<div class="lafka-home-hero__inner">
-		<div class="lafka-home-hero__copy">
+	<div class="lafka-container lafka-home-hero__inner">
+		<header class="lafka-section-head lafka-section-head--start">
 
 			<?php
-            if ( $lafka_hero_service_data ) :
+			if ( $lafka_hero_service_data ) :
 				$lafka_is_open = ! empty( $lafka_hero_service_data['is_open'] );
 				$lafka_pickup  = isset( $lafka_hero_service_data['pickup_minutes'] ) ? (int) $lafka_hero_service_data['pickup_minutes'] : 0;
 				?>
@@ -107,13 +107,13 @@ if ( $lafka_hero_image_src && $lafka_hero_overlay ) {
 					<?php endif; ?>
 				</p>
 			<?php elseif ( '' !== $lafka_hero_eyebrow ) : ?>
-				<p class="lafka-home-hero__eyebrow"><?php echo esc_html( $lafka_hero_eyebrow ); ?></p>
+				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_hero_eyebrow ); ?></p>
 			<?php endif; ?>
 
-			<h1 class="lafka-home-hero__headline lafka-display"><?php echo esc_html( $lafka_hero_headline ); ?></h1>
+			<h1 class="lafka-section-headline lafka-section-headline--display"><?php echo esc_html( $lafka_hero_headline ); ?></h1>
 
 			<?php if ( '' !== $lafka_hero_subhead ) : ?>
-				<p class="lafka-home-hero__subhead"><?php echo esc_html( $lafka_hero_subhead ); ?></p>
+				<p class="lafka-section-subhead"><?php echo esc_html( $lafka_hero_subhead ); ?></p>
 			<?php endif; ?>
 
 			<div class="lafka-home-hero__actions">
@@ -131,6 +131,6 @@ if ( $lafka_hero_image_src && $lafka_hero_overlay ) {
 				<?php endif; ?>
 
 			</div>
-		</div>
+		</header>
 	</div>
 </section>
