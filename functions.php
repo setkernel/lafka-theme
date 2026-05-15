@@ -82,6 +82,9 @@ require_once get_template_directory() . '/incl/lafka-home-defaults.php';
 // Site-wide promo / deal bar (v5.51.0 — Customizer panel + wp_body_open hook).
 require_once get_template_directory() . '/incl/customizer-promo-bar.php';
 
+// Site-wide announce bar (v5.54.0 — open/closed status + delivery + phone).
+require_once get_template_directory() . '/incl/customizer-announce-bar.php';
+
 /**
  * Echo the pagination
  */

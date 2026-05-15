@@ -1161,6 +1161,23 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			lafka_asset_version( '/styles/lafka-promo-bar.css' )
 		);
 
+		// v5.54.0: site-wide announce bar (dark strip with live open/closed
+		// status, delivery info, phone). Renders via wp_body_open priority 5
+		// so it sits above the promo bar. CSS + JS are both tiny.
+		wp_enqueue_style(
+			'lafka-announce-bar',
+			get_template_directory_uri() . '/styles/lafka-announce-bar.css',
+			array( 'lafka-tokens' ),
+			lafka_asset_version( '/styles/lafka-announce-bar.css' )
+		);
+		wp_enqueue_script(
+			'lafka-announce-bar',
+			get_template_directory_uri() . '/js/lafka-announce-bar.js',
+			array(),
+			lafka_asset_version( '/js/lafka-announce-bar.js' ),
+			true
+		);
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
