@@ -126,9 +126,16 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		$logo_font_weight     = $text_logo_style ? esc_attr( $text_logo_style['font-weight'] ) : 'normal';
 		$logo_font_style      = $text_logo_style ? esc_attr( $text_logo_style['font-style'] ) : 'normal';
 
-		// Headings font
-		$headings_font        = lafka_get_option( 'headings_font' );
-		$headings_font_family = ! empty( $headings_font['face'] ) ? '"' . esc_attr( $headings_font['face'] ) . '", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : 'inherit';
+		// Headings font.
+		// v5.44.0: the legacy theme-options "Headings Font" picker is now
+		// inert — design system defines h1/h2 typography via
+		// --lafka-font-display (Fraunces, see DESIGN_SYSTEM.md). Operators
+		// wanting custom heading typography override --lafka-font-display
+		// in a child-theme stylesheet. The legacy CSS variable name
+		// `--lafka-headings-font-family` is kept (style.css:21214 still
+		// references it via that name across thousands of selectors), but
+		// routed through the design token so a single source of truth wins.
+		$headings_font_family = 'var(--lafka-font-display)';
 
 		// H1-H6 fonts
 		$h_vars = '';
