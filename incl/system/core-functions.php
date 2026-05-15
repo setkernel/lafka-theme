@@ -1138,17 +1138,18 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		// v5.46.0: native home page styles (Phase B). Enqueued only on
-		// the static front page (where front-page.php takes over). Reads
-		// hero/categories/featured tokens from lafka-tokens.css.
-		if ( is_front_page() ) {
-			wp_enqueue_style(
-				'lafka-home',
-				get_template_directory_uri() . '/styles/lafka-home.css',
-				array( 'lafka-tokens' ),
-				lafka_asset_version( '/styles/lafka-home.css' )
-			);
-		}
+		// v5.70.0: lafka-home.css deleted (deprecated by v5.59 hero +
+		// v5.60 sections 2–7 rebuild). Reusable primitives (.lafka-btn,
+		// .lafka-status-pill) moved into lafka-components.css and now
+		// loaded site-wide below.
+
+		// v5.70.0: shared component primitives (.lafka-btn, .lafka-status-pill).
+		wp_enqueue_style(
+			'lafka-components',
+			get_template_directory_uri() . '/styles/lafka-components.css',
+			array( 'lafka-tokens' ),
+			lafka_asset_version( '/styles/lafka-components.css' )
+		);
 
 		// v5.51.0: site-wide promo bar. Renders via wp_body_open on every
 		// page (or hides itself if not enabled in Customizer). Tiny CSS

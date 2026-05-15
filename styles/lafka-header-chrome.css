@@ -13,10 +13,14 @@
 
 /* -------- Hide any legacy chrome elements that still render via plugins --
  * (the new header.php doesn't emit these but defensive in case a plugin
- *  hooks into them.) */
-#header_top,
-.lafka-top-bar-message,
-.lafka-order-method-bar {
+ *  hooks into them.)
+ *
+ * v5.70.0: bumped to `body` prefix so we beat pdp-redesign.css's
+ * `.lafka-order-method-bar { display: flex }` rule which loads later in
+ * the same unlayered cascade. Without the prefix we lose on load-order. */
+body #header_top,
+body .lafka-top-bar-message,
+body .lafka-order-method-bar {
 	display: none;
 }
 

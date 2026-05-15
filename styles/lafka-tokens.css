@@ -274,6 +274,64 @@
 	--lafka-color-warning-bg: var(--lafka-color-warning-50);
 	--lafka-color-info: var(--lafka-color-info-500);
 	--lafka-color-info-bg: var(--lafka-color-info-50);
+
+	/* =====================================================================
+	 * v5.70.0: Legacy style.css :root namespace bridge.
+	 *
+	 * The legacy style.css declares its own --lafka-* tokens (text-primary,
+	 * border-light, space-xs, etc.) with pre-handoff values (#333 text,
+	 * 4px spacing, etc.). Since style.css is now in @layer legacy and
+	 * THIS file is unlayered, our redeclarations win at the cascade —
+	 * pointing every legacy :root token at the canonical handoff value.
+	 *
+	 * Result: all 21k lines of legacy style.css instantly inherit the
+	 * canonical design system colours / spacing / typography without
+	 * touching any individual selector.
+	 * ===================================================================== */
+
+	/* Text */
+	--lafka-text-primary: var(--lafka-color-text-primary);
+	--lafka-text-secondary: var(--lafka-color-text-secondary);
+	--lafka-text-muted: var(--lafka-color-text-muted);
+	--lafka-text-heading: var(--lafka-color-text-primary);
+	--lafka-text-heading-alt: var(--lafka-color-text-secondary);
+
+	/* Borders */
+	--lafka-border-light: var(--lafka-color-border-subtle);
+	--lafka-border-default: var(--lafka-color-border-default);
+	--lafka-border-medium: var(--lafka-color-border-default);
+	--lafka-border-dark: var(--lafka-color-border-strong);
+
+	/* Surfaces / backgrounds */
+	--lafka-bg-white: var(--lafka-color-surface-page);
+	--lafka-bg-subtle: var(--lafka-color-surface-sunken);
+	--lafka-bg-input: var(--lafka-color-surface-sunken);
+	--lafka-disabled-bg: var(--lafka-color-surface-muted);
+	--lafka-disabled-text: var(--lafka-color-text-muted);
+
+	/* Spacing aliases (legacy t-shirt scale → handoff numeric) */
+	--lafka-space-xs: var(--lafka-space-1);
+	--lafka-space-sm: var(--lafka-space-2);
+	--lafka-space-md: var(--lafka-space-4);
+	--lafka-space-lg: var(--lafka-space-6);
+	--lafka-space-xl: var(--lafka-space-8);
+	--lafka-section-gap: var(--lafka-space-12);
+	--lafka-container-padding: var(--lafka-container-px);
+	--lafka-card-padding: var(--lafka-space-5);
+
+	/* Status palette aliases */
+	--lafka-status-success: var(--lafka-color-success-500);
+	--lafka-status-success-bg: var(--lafka-color-success-50);
+	--lafka-status-success-border: var(--lafka-color-success-500);
+	--lafka-status-error: var(--lafka-color-error-500);
+	--lafka-status-error-bg: var(--lafka-color-error-50);
+	--lafka-status-error-border: var(--lafka-color-error-500);
+	--lafka-status-warning: var(--lafka-color-warning-500);
+	--lafka-status-warning-bg: var(--lafka-color-warning-50);
+	--lafka-status-warning-border: var(--lafka-color-warning-500);
+	--lafka-status-info: var(--lafka-color-info-500);
+	--lafka-status-info-bg: var(--lafka-color-info-50);
+	--lafka-status-info-border: var(--lafka-color-info-500);
 }
 
 /* -------- Dark mode -------------------------------------------------------

@@ -1,0 +1,140 @@
+/* =========================================================================
+ * Lafka reusable components (v5.70.0)
+ *
+ * Primitive components consumed by multiple page templates. Extracted
+ * from the deprecated lafka-home.css (v5.51 home) so the .lafka-btn
+ * system + .lafka-status-pill survive the home rebuild deletion.
+ *
+ * Layer: unlayered (default = highest priority over @layer legacy).
+ * Load: every page (cheap, ~3 KB).
+ *
+ * @since 5.70.0
+ * ========================================================================= */
+
+/* =========================================================================
+ * Button primitives — .lafka-btn
+ *
+ * Used by: hero CTAs, closer CTAs, ghost phone buttons on hero / closer.
+ * The v5.59+ hero markup uses bespoke `.lafka-hero__cta` / `.lafka-closer__cta`
+ * for the homepage red pills; this primitive system is for OSS-bundle use
+ * and any partial that wants the legacy `.lafka-btn` API.
+ * ========================================================================= */
+
+.lafka-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lafka-space-2);
+	min-height: var(--lafka-tap-target);
+	padding: var(--lafka-space-3) var(--lafka-space-6);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	text-decoration: none;
+	border: 1px solid transparent;
+	border-radius: var(--lafka-radius-pill);
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform var(--lafka-duration-instant) var(--lafka-motion-ease-out);
+}
+
+.lafka-btn:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-btn:active {
+	transform: translateY(1px);
+}
+
+.lafka-btn--lg {
+	min-height: 52px;
+	padding: var(--lafka-space-4) var(--lafka-space-8);
+	font-size: var(--lafka-font-size-body);
+}
+
+.lafka-btn--primary {
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-contrast);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.lafka-btn--primary:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-accent-contrast);
+	box-shadow: var(--lafka-shadow-2);
+}
+
+.lafka-btn--ghost {
+	background: transparent;
+	color: var(--lafka-color-text-primary);
+	border-color: var(--lafka-color-text-primary);
+}
+
+.lafka-btn--ghost:hover {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+/* =========================================================================
+ * Service status pill — .lafka-status-pill
+ *
+ * Used by: any partial that wants the open/closed indicator (hero already
+ * uses bespoke .lafka-hero__status; this is the OSS primitive).
+ * ========================================================================= */
+
+.lafka-status-pill {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	margin: 0;
+	padding: var(--lafka-space-2) var(--lafka-space-4);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	background: var(--lafka-color-surface-raised);
+	border-radius: var(--lafka-radius-pill);
+	box-shadow: var(--lafka-shadow-1);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-status-pill__dot {
+	width: 8px;
+	height: 8px;
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-success-500);
+	animation: lafka-pulse 2.4s ease-out infinite;
+}
+
+.lafka-status-pill--closed .lafka-status-pill__dot {
+	background: var(--lafka-color-text-muted);
+	animation: none;
+}
+
+@keyframes lafka-pulse {
+
+	0% {
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--lafka-color-success-500) 50%, transparent);
+	}
+
+	75% {
+		box-shadow: 0 0 0 8px color-mix(in srgb, var(--lafka-color-success-500) 0%, transparent);
+	}
+
+	100% {
+		box-shadow: 0 0 0 0 color-mix(in srgb, var(--lafka-color-success-500) 0%, transparent);
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.lafka-status-pill__dot {
+		animation: none;
+	}
+}
