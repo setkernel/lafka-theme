@@ -88,6 +88,9 @@ require_once get_template_directory() . '/incl/customizer-announce-bar.php';
 // Mobile slide-out nav drawer (v5.56.0 — handoff "Header > Mobile slide-out nav").
 require_once get_template_directory() . '/incl/mobile-nav-loader.php';
 
+// Strip country code from address_display for local-restaurant display (v5.63.0).
+require_once get_template_directory() . '/incl/template-helpers/address-filters.php';
+
 /**
  * Echo the pagination
  */

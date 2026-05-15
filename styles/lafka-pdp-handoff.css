@@ -127,7 +127,44 @@
 	}
 }
 
-/* Picker button — bordered, active = ink fill */
+/* Picker button — bordered, active = INK fill (v5.63.0 polish: handoff
+ * spec says active state is ink-filled with checkmark, NOT red. Existing
+ * PDP redesign rendered active as accent-500 red — overriding here.) */
+
+.lafka-pdp-summary .lafka-pdp-chip__inner,
+.lafka-pdp-summary input:checked + .lafka-pdp-chip__inner {
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+/* Active state — ink fill (override the existing red treatment) */
+.lafka-pdp-summary input:checked + .lafka-pdp-chip__inner,
+.lafka-pdp-summary .lafka-pdp-chip--checked .lafka-pdp-chip__inner,
+.lafka-pdp-summary .lafka-pdp-chip.is-active .lafka-pdp-chip__inner,
+.lafka-pdp-summary .lafka-pdp-chip[aria-pressed="true"] .lafka-pdp-chip__inner,
+.lafka-pdp-summary .lafka-pdp-chip:has(input:checked) .lafka-pdp-chip__inner {
+	background: var(--lafka-color-text-primary) !important;
+	color: var(--lafka-color-text-inverse) !important;
+	border-color: var(--lafka-color-text-primary) !important;
+	box-shadow: var(--lafka-shadow-1);
+	position: relative;
+}
+
+/* Checkmark badge on active chip */
+.lafka-pdp-summary input:checked + .lafka-pdp-chip__inner::after,
+.lafka-pdp-summary .lafka-pdp-chip:has(input:checked) .lafka-pdp-chip__inner::after,
+.lafka-pdp-summary .lafka-pdp-chip[aria-pressed="true"] .lafka-pdp-chip__inner::after {
+	content: "✓";
+	position: absolute;
+	top: 6px;
+	right: 8px;
+	font-size: 11px;
+	line-height: 1;
+	color: var(--lafka-color-text-inverse);
+	opacity: 0.9;
+}
+
 .lafka-pdp-summary .lafka-pdp-pick,
 .lafka-pdp-summary button.lafka-pdp-option,
 .lafka-pdp-summary .lafka-variation-option {
@@ -234,15 +271,30 @@
 	color: var(--lafka-color-accent-500);
 }
 
-/* -------- Mobile sticky add-bar polish ---------------------------------- */
+/* -------- Mobile sticky add-bar — desktop hidden ----------------------- */
+
+/* Handoff: sticky add-bar is MOBILE ONLY. Existing PDP redesign showed it
+ * on desktop too, which conflicted with the inline Add-to-Cart in the
+ * buy box. Hide on ≥1024px. */
+@media (min-width: 1024px) {
+
+	.lafka-pdp-mobile-cta,
+	.lafka-pdp .lafka-pdp-sticky-cta,
+	.lafka-pdp-mobile-cta__btn {
+		display: none !important;
+	}
+}
+
 @media (max-width: 1023px) {
 
+	.lafka-pdp-mobile-cta,
 	.lafka-pdp .lafka-pdp-sticky-cta {
 		background: var(--lafka-color-surface-page);
 		border-top: 1px solid var(--lafka-color-border-subtle);
 		box-shadow: var(--lafka-shadow-3);
 	}
 
+	.lafka-pdp-mobile-cta__btn,
 	.lafka-pdp .lafka-pdp-sticky-cta .single_add_to_cart_button {
 		background: var(--lafka-color-accent-500) !important;
 		color: var(--lafka-color-text-inverse) !important;
