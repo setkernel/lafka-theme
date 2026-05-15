@@ -161,7 +161,12 @@ body .lafka-header {
 	text-transform: lowercase;
 }
 
-@media (min-width: 768px) {
+/* v5.80.0: wordmark only appears at ≥1024px (was ≥768px). On tablets
+ * the logo image + wordmark together took ~338px, squeezing the
+ * primary nav to ~145px and forcing horizontal scroll on items. Below
+ * 1024 the logo image alone takes ~140px, leaving the nav real
+ * estate it needs. */
+@media (min-width: 1024px) {
 
 	.lafka-header__wordmark {
 		display: inline-block;
