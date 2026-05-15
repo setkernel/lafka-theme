@@ -1302,6 +1302,22 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.66.0: contact (template-contact.php) + 404. Single CSS file
+		// covers both pages. Contact via page-template check, 404 via is_404().
+		$lafka_is_404 = function_exists( 'is_404' ) ? is_404() : false;
+		$lafka_is_contact_tpl = false;
+		if ( function_exists( 'is_page_template' ) ) {
+			$lafka_is_contact_tpl = is_page_template( 'template-contact.php' );
+		}
+		if ( $lafka_is_404 || $lafka_is_contact_tpl ) {
+			wp_enqueue_style(
+				'lafka-404-contact',
+				get_template_directory_uri() . '/styles/lafka-404-contact.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-404-contact.css' )
+			);
+		}
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
