@@ -125,6 +125,24 @@ function lafka_order_flow_customizer_register( WP_Customize_Manager $wp_customiz
 	);
 
 	$wp_customize->add_setting(
+		'lafka_pdp_topping_chips',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_pdp_topping_chips',
+		array(
+			'label'       => __( 'Use chip toggles for toppings', 'lafka' ),
+			'description' => __( 'Render WooCommerce Product Add-Ons checkbox groups as a 2-column grid of chip-style toggles instead of a single column of native checkboxes. Audit #9 — replaces the 34-checkbox wall on pizza PDPs with a scannable chip grid.', 'lafka' ),
+			'section'     => 'lafka_order_flow_pdp',
+			'type'        => 'checkbox',
+		)
+	);
+
+	$wp_customize->add_setting(
 		'lafka_pdp_default_variation_strategy',
 		array(
 			'default'           => 'median',

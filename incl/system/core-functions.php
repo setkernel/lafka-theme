@@ -1124,6 +1124,20 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.31.0: topping chip grid — CSS-only transformation of the
+		// WC Product Add-Ons checkbox groups into a 2-col chip toggle.
+		// Cheap stylesheet, only on PDPs, opt-out via Customizer.
+		$lafka_pdp_topping_chips_active = function_exists( 'is_product' ) && is_product()
+			&& (bool) get_theme_mod( 'lafka_pdp_topping_chips', true );
+		if ( $lafka_pdp_topping_chips_active ) {
+			wp_enqueue_style(
+				'lafka-pdp-toppings',
+				get_template_directory_uri() . '/styles/lafka-pdp-toppings.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-pdp-toppings.css' )
+			);
+		}
+
 		if ( $lafka_pdp_cta_active ) {
 			wp_enqueue_style( 'lafka-pdp-cta', get_template_directory_uri() . '/styles/lafka-pdp-cta.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-pdp-cta.css' ) );
 			wp_enqueue_script(
