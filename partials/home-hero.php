@@ -53,7 +53,7 @@ if ( '' === $lafka_hero_image_src ) {
 $lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value', '~25' );
 $lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', __( 'min average', 'lafka' ) );
 $lafka_hero_stat_2_value = (string) get_theme_mod( 'lafka_home_hero_stat_2_value', '$30' );
-$lafka_hero_stat_2_label = (string) get_theme_mod( 'lafka_home_hero_stat_2_label', __( 'free delivery over', 'lafka' ) );
+$lafka_hero_stat_2_label = (string) get_theme_mod( 'lafka_home_hero_stat_2_label', __( 'min for free delivery', 'lafka' ) );
 $lafka_hero_stat_3_value = (string) get_theme_mod( 'lafka_home_hero_stat_3_value', '4.8' );
 $lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label', __( 'avg rating', 'lafka' ) );
 ?>

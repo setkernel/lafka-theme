@@ -458,7 +458,7 @@
 .woocommerce-cart .wc-empty-cart-message,
 .woocommerce-cart .cart-empty {
 	text-align: center;
-	padding: var(--lafka-space-12) var(--lafka-space-5);
+	padding: var(--lafka-space-8) var(--lafka-space-5); /* v5.77.0: was space-12 — felt cavernous on mobile */
 	background: var(--lafka-color-surface-muted);
 	border-radius: var(--lafka-radius-lg);
 	border: 0;

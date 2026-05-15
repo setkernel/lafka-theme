@@ -444,11 +444,10 @@ body { padding-top: var(--lafka-pdp-bar-h); }
   font-size: 13px;
 }
 
-.product-addon p.form-row > label .lafka-addon-price sup {
-  font-size: 0.7em;
-  vertical-align: super;
-  font-weight: 500;
-}
+/* v5.77.0: orphan rule removed — no <sup> is emitted anymore (the source
+ * filter formatted_woocommerce_price → lafka_superscript_wc_formatted_price
+ * was removed in incl/woocommerce-functions.php). Addon prices render
+ * inline like $3.00 rather than as superscripted cents. */
 
 .product-addon p.form-row > label:has(:checked) .lafka-addon-price {
   color: var(--lafka-pdp-accent);

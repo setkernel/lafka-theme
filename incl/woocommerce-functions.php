@@ -1074,21 +1074,12 @@ if ( ! function_exists( 'lafka_add_to_cart_separator' ) ) {
 remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 10 );
 add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_rating', 8 );
 
-add_filter( 'formatted_woocommerce_price', 'lafka_superscript_wc_formatted_price', 10, 5 );
-if ( ! function_exists( 'lafka_superscript_wc_formatted_price' ) ) {
-	function lafka_superscript_wc_formatted_price( $formatted_price, $price, $decimal_places, $decimal_separator, $thousand_separator ) {
-		// Format units, including thousands separator if necessary.
-		$unit = number_format( intval( $price ), 0, $decimal_separator, $thousand_separator );
-		// Format decimals, with leading zeros as necessary (e.g. for 2 decimals, 0 becomes 00, 3 becomes 03 etc).
-		$decimal      = '';
-		$num_decimals = wc_get_price_decimals();
-		if ( $num_decimals ) {
-			$decimal = sprintf( '<sup>%s%0' . $num_decimals . '.0f</sup>', $decimal_separator, ( $price - intval( $price ) ) * 100 );
-		}
-
-		return $unit . $decimal;
-	}
-}
+// v5.77.0: removed the lafka_superscript_wc_formatted_price filter that
+// wrapped cents in <sup>. Superscript cents read as a typographical
+// error on addon labels (e.g. "+$3.⁰⁰" beside a topping). The plugin's
+// lafka_normalize_price_html stripped <sup> from public price HTML
+// already; with the source filter gone, no downstream stripping is
+// needed and addon templates render clean prices ($3.00) inline.
 
 add_filter( 'yith_wcwl_positions', 'lafka_redefine_wishlist_link_position', 10 );
 if ( ! function_exists( 'lafka_redefine_wishlist_link_position' ) ) {
