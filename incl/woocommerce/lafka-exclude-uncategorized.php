@@ -26,7 +26,12 @@ defined( 'ABSPATH' ) || exit;
 if ( ! function_exists( 'lafka_uncategorized_excluded_ids' ) ) {
 	/**
 	 * Resolve the term IDs to exclude. Caches the result for the
-	 * current request to avoid repeated DB hits.
+	 * current request.
+	 *
+	 * IMPORTANT: this function MUST NOT call get_term_by() / get_terms()
+	 * because we're invoked from inside a `get_terms_args` filter — any
+	 * recursive get_terms() call would re-trigger that filter and blow
+	 * the stack (500 error). Resolve via direct option lookups only.
 	 *
 	 * @return int[]
 	 */
@@ -36,13 +41,13 @@ if ( ! function_exists( 'lafka_uncategorized_excluded_ids' ) ) {
 			return $cached;
 		}
 		$ids = array();
+		// `default_product_cat` is the WC option pointing at the Uncategorized
+		// term ID. WC sets this on activation and updates it if the operator
+		// renames the default category. Reading it via get_option avoids the
+		// recursive get_terms() pitfall (v5.37.0 regression).
 		$default_cat = (int) get_option( 'default_product_cat', 0 );
 		if ( $default_cat ) {
 			$ids[] = $default_cat;
-		}
-		$uncategorized = get_term_by( 'slug', 'uncategorized', 'product_cat' );
-		if ( $uncategorized && ! in_array( (int) $uncategorized->term_id, $ids, true ) ) {
-			$ids[] = (int) $uncategorized->term_id;
 		}
 		$cached = (array) apply_filters( 'lafka_uncategorized_term_ids', $ids );
 		return $cached;
