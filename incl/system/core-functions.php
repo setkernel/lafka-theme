@@ -1231,6 +1231,17 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			lafka_asset_version( '/styles/lafka-footer-chrome.css' )
 		);
 
+		// v5.59.0: home hero — handoff "Home page > 1. Hero". Only loads
+		// on the front page where the partial actually renders.
+		if ( is_front_page() ) {
+			wp_enqueue_style(
+				'lafka-hero',
+				get_template_directory_uri() . '/styles/lafka-hero.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-hero.css' )
+			);
+		}
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.

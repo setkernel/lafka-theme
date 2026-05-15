@@ -1,155 +1,147 @@
 <?php
 /**
- * Partial: Home hero (v5.49.0)
+ * Partial: Home hero (v5.59.0 — handoff rebuild).
  *
- * Full-bleed hero with optional background image, optional service-status
- * pill, headline, subhead, and primary/secondary CTAs. The default
- * background image preserves the operator's existing brand visual
- * (yellow textured wash uploaded 2021-06 to /wp-content/uploads/) so
- * the home page doesn't feel emptier than the WPBakery version it
- * replaced.
+ * Per handoff spec at /design_handoff_peppery_ordering/README.md
+ * "Home page > 1. Hero":
  *
- * Customizer reads (all in panel "Lafka — Home Page" → Hero):
- *  - lafka_home_hero_eyebrow         (text)
- *  - lafka_home_hero_headline        (text)
- *  - lafka_home_hero_subhead         (textarea)
- *  - lafka_home_hero_primary_cta_*   (label + url)
- *  - lafka_home_hero_secondary_cta_* (label + url)
- *  - lafka_home_hero_image_id        (media)
- *  - lafka_home_hero_bg_url          (text — string URL default, when no
- *    media uploaded yet, lets operators preview the OSS bundle look
- *    without picking an image)
- *  - lafka_home_hero_overlay         (boolean — scrim toggle for dark
- *    bg images; off for the default light yellow texture)
- *  - lafka_home_hero_show_status     (boolean — render the open/closed
- *    status pill via lafka_service_eta_get_data())
+ *   - warm brand-50 bg
+ *   - 2-col grid (1.1fr 1fr) ≥900px, stacked below
+ *   - Left:
+ *       - status pill (white bg, success dot, "Open now · until 11:00 pm")
+ *       - H1 Fraunces 800 clamp(2.5rem, 6vw, 4.25rem)
+ *           "Pizza, poutine & <em class='lafka-hero__accent'>everything craveable</em>."
+ *       - Lead paragraph
+ *       - Two CTAs: primary red pill + ghost phone
+ *       - 3-item stats row (icon-disc + Fraunces bold number + caption)
+ *   - Right: square aspect-ratio photo with brand-300 bg, radius-xl, shadow-3 + red glow
  *
  * @package Lafka
- * @since   5.46.0
+ * @since   5.59.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-$lafka_hero_eyebrow      = (string) get_theme_mod( 'lafka_home_hero_eyebrow', __( 'Order online', 'lafka' ) );
-$lafka_hero_headline     = (string) get_theme_mod( 'lafka_home_hero_headline', get_bloginfo( 'name' ) );
-$lafka_hero_subhead      = (string) get_theme_mod( 'lafka_home_hero_subhead', get_bloginfo( 'description' ) );
-$lafka_hero_primary_label = (string) get_theme_mod( 'lafka_home_hero_primary_cta_label', __( 'Order Now', 'lafka' ) );
-$lafka_hero_primary_url   = (string) get_theme_mod( 'lafka_home_hero_primary_cta_url', function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ) );
-$lafka_hero_secondary_label = (string) get_theme_mod( 'lafka_home_hero_secondary_cta_label', __( 'View Menu', 'lafka' ) );
+$lafka_hero_status      = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
+$lafka_hero_info        = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
+$lafka_hero_phone       = isset( $lafka_hero_info['phone_display'] ) ? (string) $lafka_hero_info['phone_display'] : '';
+$lafka_hero_phone_tel   = isset( $lafka_hero_info['phone_e164'] ) ? (string) $lafka_hero_info['phone_e164'] : $lafka_hero_phone;
 
-$lafka_hero_secondary_default = '';
-$lafka_hero_menu_page         = get_page_by_path( 'menu' );
-if ( $lafka_hero_menu_page instanceof WP_Post ) {
-	$lafka_hero_secondary_default = get_permalink( $lafka_hero_menu_page );
-}
-$lafka_hero_secondary_url = (string) get_theme_mod( 'lafka_home_hero_secondary_cta_url', $lafka_hero_secondary_default );
+$lafka_hero_headline_default = sprintf(
+	/* translators: HTML allowed — second clause wrapped in an <em> for the accent treatment. */
+	__( 'Pizza, poutine & %s.', 'lafka' ),
+	'<em class="lafka-hero__accent">' . esc_html__( 'everything craveable', 'lafka' ) . '</em>'
+);
+$lafka_hero_headline = (string) get_theme_mod( 'lafka_home_hero_headline', $lafka_hero_headline_default );
 
-// Background image — Customizer media picker preferred, falls back to a
-// Customizer text-URL field, falls back to a theme-defined default via
-// `lafka_home_hero_default_bg_url` filter. The filter is the OSS-bundle
-// hook for shipping a brand-aligned default without the operator
-// having to upload anything.
+$lafka_hero_lead = (string) get_theme_mod(
+	'lafka_home_hero_lead',
+	__( 'Fresh dough, locally-sourced toppings, and recipes refined over years of serving our neighbors. Ready in about 25 minutes.', 'lafka' )
+);
+
+$lafka_hero_cta_primary_label = (string) get_theme_mod( 'lafka_home_hero_primary_cta_label', __( 'Start your order', 'lafka' ) );
+$lafka_hero_cta_primary_url   = (string) get_theme_mod( 'lafka_home_hero_primary_cta_url', home_url( '/menu/' ) );
+
 $lafka_hero_image_id  = (int) get_theme_mod( 'lafka_home_hero_image_id', 0 );
-$lafka_hero_image_src = $lafka_hero_image_id ? wp_get_attachment_image_url( $lafka_hero_image_id, 'full' ) : '';
+$lafka_hero_image_src = $lafka_hero_image_id ? wp_get_attachment_image_url( $lafka_hero_image_id, 'large' ) : '';
 if ( '' === $lafka_hero_image_src ) {
-	$lafka_hero_image_src = (string) get_theme_mod(
-		'lafka_home_hero_bg_url',
-		(string) apply_filters( 'lafka_home_hero_default_bg_url', '' )
-	);
+	$lafka_hero_image_src = (string) apply_filters( 'lafka_home_hero_default_bg_url', '' );
 }
 
-$lafka_hero_overlay      = (bool) get_theme_mod( 'lafka_home_hero_overlay', false );
-$lafka_hero_show_status  = (bool) get_theme_mod( 'lafka_home_hero_show_status', true );
-$lafka_hero_service_data = ( $lafka_hero_show_status && function_exists( 'lafka_service_eta_get_data' ) ) ? lafka_service_eta_get_data() : null;
-
-$lafka_hero_classes = array( 'lafka-home-hero' );
-if ( $lafka_hero_image_src ) {
-	$lafka_hero_classes[] = 'lafka-home-hero--has-image';
-}
-if ( $lafka_hero_image_src && $lafka_hero_overlay ) {
-	$lafka_hero_classes[] = 'lafka-home-hero--has-overlay';
-}
+// Stats — operator may override via Customizer. Defaults derive from
+// existing data sources where possible.
+$lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value', '~25' );
+$lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', __( 'min average', 'lafka' ) );
+$lafka_hero_stat_2_value = (string) get_theme_mod( 'lafka_home_hero_stat_2_value', '$30' );
+$lafka_hero_stat_2_label = (string) get_theme_mod( 'lafka_home_hero_stat_2_label', __( 'free delivery over', 'lafka' ) );
+$lafka_hero_stat_3_value = (string) get_theme_mod( 'lafka_home_hero_stat_3_value', '4.8' );
+$lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label', __( 'avg rating', 'lafka' ) );
 ?>
-<section class="<?php echo esc_attr( implode( ' ', $lafka_hero_classes ) ); ?>" aria-label="<?php esc_attr_e( 'Welcome', 'lafka' ); ?>">
+<section class="lafka-hero" aria-label="<?php esc_attr_e( 'Welcome', 'lafka' ); ?>">
+	<div class="lafka-container lafka-hero__inner">
 
-	<?php if ( $lafka_hero_image_src ) : ?>
-		<div class="lafka-home-hero__media" aria-hidden="true">
-			<img
-				class="lafka-home-hero__image"
-				src="<?php echo esc_url( $lafka_hero_image_src ); ?>"
-				alt=""
-				role="presentation"
-				loading="eager"
-				fetchpriority="high"
-			>
-			<?php if ( $lafka_hero_overlay ) : ?>
-				<div class="lafka-home-hero__scrim"></div>
+		<div class="lafka-hero__copy">
+
+			<?php if ( $lafka_hero_status ) : ?>
+				<p class="lafka-hero__status">
+					<span
+						class="lafka-hero__status-dot"
+						aria-hidden="true"
+						style="<?php echo esc_attr( '--lafka-dot: ' . $lafka_hero_status['dot_color'] ); ?>"
+					></span>
+					<span class="lafka-hero__status-text"><?php echo esc_html( $lafka_hero_status['label'] ); ?></span>
+				</p>
+			<?php endif; ?>
+
+			<h1 class="lafka-hero__headline">
+				<?php
+				// Headline allows a single <em class="lafka-hero__accent"> for the red italic span.
+				echo wp_kses(
+					$lafka_hero_headline,
+					array(
+						'em'     => array( 'class' => array() ),
+						'span'   => array( 'class' => array() ),
+						'strong' => array( 'class' => array() ),
+						'br'     => array(),
+					)
+				);
+				?>
+			</h1>
+
+			<p class="lafka-hero__lead"><?php echo esc_html( $lafka_hero_lead ); ?></p>
+
+			<div class="lafka-hero__actions">
+				<a class="lafka-hero__cta" href="<?php echo esc_url( $lafka_hero_cta_primary_url ); ?>">
+					<?php echo esc_html( $lafka_hero_cta_primary_label ); ?>
+					<span class="lafka-hero__cta-arrow" aria-hidden="true">→</span>
+				</a>
+				<?php if ( '' !== $lafka_hero_phone ) : ?>
+					<a class="lafka-hero__cta-ghost" href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_hero_phone_tel ) ); ?>">
+						<span class="lafka-hero__cta-ghost-icon" aria-hidden="true">📞</span>
+						<?php echo esc_html( $lafka_hero_phone ); ?>
+					</a>
+				<?php endif; ?>
+			</div>
+
+			<dl class="lafka-hero__stats">
+				<div class="lafka-hero__stat">
+					<dt class="lafka-hero__stat-icon" aria-hidden="true">⏱</dt>
+					<dd class="lafka-hero__stat-body">
+						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_1_value ); ?></span>
+						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_1_label ); ?></span>
+					</dd>
+				</div>
+				<div class="lafka-hero__stat">
+					<dt class="lafka-hero__stat-icon" aria-hidden="true">🚚</dt>
+					<dd class="lafka-hero__stat-body">
+						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_2_value ); ?></span>
+						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_2_label ); ?></span>
+					</dd>
+				</div>
+				<div class="lafka-hero__stat">
+					<dt class="lafka-hero__stat-icon" aria-hidden="true">⭐</dt>
+					<dd class="lafka-hero__stat-body">
+						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_3_value ); ?></span>
+						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_3_label ); ?></span>
+					</dd>
+				</div>
+			</dl>
+
+		</div>
+
+		<div class="lafka-hero__media" aria-hidden="true">
+			<?php if ( $lafka_hero_image_src ) : ?>
+				<img
+					class="lafka-hero__image"
+					src="<?php echo esc_url( $lafka_hero_image_src ); ?>"
+					alt=""
+					loading="eager"
+					fetchpriority="high"
+				>
+			<?php else : ?>
+				<div class="lafka-hero__image-placeholder">🍕</div>
 			<?php endif; ?>
 		</div>
-	<?php endif; ?>
 
-	<div class="lafka-container lafka-home-hero__inner">
-		<header class="lafka-section-head lafka-section-head--start">
-
-			<?php
-			// v5.51.0: read CORRECT keys (pickup, delivery — both strings).
-			// Previously read non-existent keys is_open/pickup_minutes →
-			// status pill never rendered. Helper returns null when no ETA
-			// configured, so fall through to eyebrow naturally.
-			$lafka_hero_pickup_eta = $lafka_hero_service_data && ! empty( $lafka_hero_service_data['pickup'] ) ? $lafka_hero_service_data['pickup'] : '';
-			$lafka_hero_delivery_eta = $lafka_hero_service_data && ! empty( $lafka_hero_service_data['delivery'] ) ? $lafka_hero_service_data['delivery'] : '';
-			if ( '' !== $lafka_hero_pickup_eta || '' !== $lafka_hero_delivery_eta ) :
-				?>
-				<p class="lafka-status-pill lafka-status-pill--open">
-					<span class="lafka-status-pill__dot" aria-hidden="true"></span>
-					<?php
-					if ( '' !== $lafka_hero_pickup_eta && '' !== $lafka_hero_delivery_eta ) {
-						printf(
-							/* translators: 1: pickup ETA, 2: delivery ETA */
-							esc_html__( 'Open · Pickup %1$s · Delivery %2$s', 'lafka' ),
-							esc_html( $lafka_hero_pickup_eta ),
-							esc_html( $lafka_hero_delivery_eta )
-						);
-					} elseif ( '' !== $lafka_hero_pickup_eta ) {
-						printf(
-							/* translators: %s pickup ETA */
-							esc_html__( 'Open · Pickup %s', 'lafka' ),
-							esc_html( $lafka_hero_pickup_eta )
-						);
-					} else {
-						printf(
-							/* translators: %s delivery ETA */
-							esc_html__( 'Open · Delivery %s', 'lafka' ),
-							esc_html( $lafka_hero_delivery_eta )
-						);
-					}
-					?>
-				</p>
-			<?php elseif ( '' !== $lafka_hero_eyebrow ) : ?>
-				<p class="lafka-section-eyebrow"><?php echo esc_html( $lafka_hero_eyebrow ); ?></p>
-			<?php endif; ?>
-
-			<h1 class="lafka-section-headline lafka-section-headline--display"><?php echo esc_html( $lafka_hero_headline ); ?></h1>
-
-			<?php if ( '' !== $lafka_hero_subhead ) : ?>
-				<p class="lafka-section-subhead"><?php echo esc_html( $lafka_hero_subhead ); ?></p>
-			<?php endif; ?>
-
-			<div class="lafka-home-hero__actions">
-
-				<?php if ( '' !== $lafka_hero_primary_url ) : ?>
-					<a class="lafka-btn lafka-btn--primary lafka-btn--lg" href="<?php echo esc_url( $lafka_hero_primary_url ); ?>">
-						<?php echo esc_html( $lafka_hero_primary_label ); ?>
-					</a>
-				<?php endif; ?>
-
-				<?php if ( '' !== $lafka_hero_secondary_url ) : ?>
-					<a class="lafka-btn lafka-btn--ghost lafka-btn--lg" href="<?php echo esc_url( $lafka_hero_secondary_url ); ?>">
-						<?php echo esc_html( $lafka_hero_secondary_label ); ?>
-					</a>
-				<?php endif; ?>
-
-			</div>
-		</header>
 	</div>
 </section>

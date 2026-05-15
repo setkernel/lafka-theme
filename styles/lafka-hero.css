@@ -1,0 +1,264 @@
+/* =========================================================================
+ * Home hero (v5.59.0)
+ * /design_handoff_peppery_ordering/README.md "Home page > 1. Hero"
+ *
+ * 2-col grid (1.1fr 1fr) ≥900px, stacked below. Warm brand-50 background.
+ *
+ * @since 5.59.0
+ * ========================================================================= */
+
+.lafka-hero {
+	background: var(--lafka-color-brand-50);
+	padding-block: var(--lafka-space-12) var(--lafka-space-16);
+	overflow: hidden;
+}
+
+@media (min-width: 900px) {
+
+	.lafka-hero {
+		padding-block: var(--lafka-space-20);
+	}
+}
+
+.lafka-hero__inner {
+	display: grid;
+	gap: var(--lafka-space-10);
+	grid-template-columns: 1fr;
+	align-items: center;
+}
+
+@media (min-width: 900px) {
+
+	.lafka-hero__inner {
+		grid-template-columns: 1.1fr 1fr;
+		gap: var(--lafka-space-16);
+	}
+}
+
+/* -------- Copy column --------------------------------------------------- */
+.lafka-hero__copy {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-5);
+	max-width: 560px;
+}
+
+.lafka-hero__status {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	padding: var(--lafka-space-1) var(--lafka-space-3);
+	background: var(--lafka-color-surface-page);
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-body);
+	font-size: 13px;
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+	box-shadow: var(--lafka-shadow-1);
+	margin: 0;
+	width: max-content;
+}
+
+.lafka-hero__status-dot {
+	display: inline-block;
+	width: 8px;
+	height: 8px;
+	border-radius: 50%;
+	background: var(--lafka-dot, var(--lafka-color-success-500));
+	flex: 0 0 auto;
+}
+
+.lafka-hero__headline {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: clamp(2.5rem, 6vw, 4.25rem);
+	line-height: 1.02;
+	letter-spacing: -0.025em;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-hero__accent {
+	color: var(--lafka-color-accent-500);
+	font-style: italic;
+	font-family: var(--lafka-font-family-display);
+}
+
+.lafka-hero__lead {
+	margin: 0;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	line-height: var(--lafka-line-body);
+	color: var(--lafka-color-text-secondary);
+	max-width: 520px;
+}
+
+/* -------- CTAs ----------------------------------------------------------- */
+.lafka-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-3);
+	margin-top: var(--lafka-space-2);
+}
+
+.lafka-hero__cta {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	padding: var(--lafka-space-4) var(--lafka-space-6);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-inverse);
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-semibold);
+	text-decoration: none;
+	min-height: 52px;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform 60ms var(--lafka-motion-ease-out);
+	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28);
+}
+
+.lafka-hero__cta:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-hero__cta:active {
+	transform: translateY(1px);
+}
+
+.lafka-hero__cta:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-hero__cta-arrow {
+	transition: transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-hero__cta:hover .lafka-hero__cta-arrow {
+	transform: translateX(2px);
+}
+
+.lafka-hero__cta-ghost {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	padding: var(--lafka-space-4) var(--lafka-space-6);
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-primary);
+	border-radius: var(--lafka-radius-pill);
+	border: 1px solid var(--lafka-color-border-default);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	font-weight: var(--lafka-font-weight-semibold);
+	text-decoration: none;
+	min-height: 52px;
+	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-hero__cta-ghost:hover {
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-hero__cta-ghost-icon {
+	font-size: 1.125em;
+}
+
+/* -------- Stats row ----------------------------------------------------- */
+.lafka-hero__stats {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-6);
+	margin: 0;
+	margin-top: var(--lafka-space-4);
+	padding: 0;
+}
+
+.lafka-hero__stat {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-3);
+}
+
+.lafka-hero__stat-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 32px;
+	height: 32px;
+	background: var(--lafka-color-surface-page);
+	border-radius: var(--lafka-radius-pill);
+	font-size: 16px;
+	flex: 0 0 auto;
+	margin: 0;
+	box-shadow: var(--lafka-shadow-1);
+	color: var(--lafka-color-brand-700);
+}
+
+.lafka-hero__stat-body {
+	display: flex;
+	flex-direction: column;
+	margin: 0;
+	line-height: 1.1;
+}
+
+.lafka-hero__stat-value {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.25rem;
+	color: var(--lafka-color-text-primary);
+	letter-spacing: -0.01em;
+}
+
+.lafka-hero__stat-label {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	margin-top: 2px;
+}
+
+/* -------- Media column -------------------------------------------------- */
+.lafka-hero__media {
+	position: relative;
+	aspect-ratio: 1 / 1;
+	background: var(--lafka-color-brand-300);
+	border-radius: var(--lafka-radius-xl);
+	overflow: hidden;
+	box-shadow:
+		var(--lafka-shadow-3),
+		0 30px 60px -20px rgba(220, 38, 38, 0.35);
+	max-width: 560px;
+	justify-self: end;
+	width: 100%;
+}
+
+@media (max-width: 899px) {
+
+	.lafka-hero__media {
+		justify-self: stretch;
+		max-width: none;
+		margin-inline: auto;
+	}
+}
+
+.lafka-hero__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.lafka-hero__image-placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+	font-size: 96px;
+	background: linear-gradient(135deg, var(--lafka-color-brand-300) 0%, var(--lafka-color-brand-500) 100%);
+	color: rgba(255, 255, 255, 0.85);
+}
