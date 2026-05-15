@@ -13,9 +13,13 @@
 
 /* -------- Hide legacy strips superseded by the announce bar -------------- */
 #header_top,
-.lafka-top-bar-message {
+.lafka-top-bar-message,
+.lafka-order-method-bar {
 	display: none !important;
 }
+
+/* The "Switch pickup/delivery" affordance that lived in .lafka-order-method-bar
+ * moves to the cart/checkout fulfilment toggle per handoff. Removed here. */
 
 /* -------- Sticky header with backdrop blur ------------------------------- */
 #header {
@@ -50,33 +54,65 @@
 	}
 }
 
-/* -------- Logo — slimmer + always left-aligned --------------------------- */
+/* -------- Logo — strip the legacy absolute "drop badge" positioning ------
+ * Legacy theme renders #logo as an absolutely-positioned floating badge
+ * (top: -8px; left: 50%; background: red shield). Handoff wants a
+ * straightforward inline logo, left-aligned in the header row. */
+#header #logo,
 #header #lafka_logo_container,
 #header .lafka-logo-holder,
 #header #lafka_logo {
+	position: static !important;
+	transform: none !important;
 	flex: 0 0 auto;
+	margin: 0;
 	margin-inline-end: var(--lafka-space-4);
+	background: transparent !important;
+	width: auto !important;
+	height: auto !important;
+	top: auto !important;
+	left: auto !important;
+	right: auto !important;
+	bottom: auto !important;
+	order: -1; /* always first in flex row */
 }
 
+#header #logo > a,
+#header #lafka_logo_container > a,
+#header #lafka_logo > a {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+}
+
+#header #logo img,
 #header #lafka_logo_container img,
 #header .lafka-logo-holder img,
 #header #lafka_logo img {
 	max-height: 44px;
+	max-width: 160px;
 	width: auto;
+	height: auto;
 	display: block;
 }
 
 @media (min-width: 768px) {
 
+	#header #logo img,
 	#header #lafka_logo_container img,
 	#header .lafka-logo-holder img,
 	#header #lafka_logo img {
 		max-height: 52px;
+		max-width: 200px;
 	}
 }
 
-/* -------- Primary nav -------------------------------------------------- */
+/* -------- Primary nav --------------------------------------------------
+ * Legacy theme paints #main-menu yellow (rgb(255,202,60)) and gives it
+ * width: 100% so it wraps to its own row. Override both to transparent
+ * and shrinkable so it sits inline with the cart cluster. */
 #header #main-menu,
+#header .menu-main-menu-container,
 #header #main_nav {
 	display: flex;
 	align-items: center;
@@ -84,8 +120,25 @@
 	margin: 0;
 	padding: 0;
 	list-style: none;
+	background: transparent !important;
+	width: auto !important;
 	flex: 1 1 auto;
 	justify-content: center;
+	min-height: 0 !important;
+	height: auto !important;
+}
+
+#header #main-menu ul.menu,
+#header #main_nav ul,
+#header #main_nav.menu {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-1);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	background: transparent !important;
+	flex-wrap: nowrap;
 }
 
 @media (max-width: 767px) {
