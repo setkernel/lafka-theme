@@ -22,22 +22,20 @@
  * #main + class for ID-specificity match against style.css:2976
  * (#main { padding-top: 0 }), which would otherwise wipe our offset.
  * ========================================================================= */
-:root {
-	--lafka-header-offset-mobile: 220px;
-	--lafka-header-offset-desk: 280px;
-}
 
+/* v5.67.0: header is now position: sticky (was position: absolute in
+ * the legacy theme). No top-offset needed on the front-page main —
+ * the sticky header occupies its own layout space, content flows
+ * directly after it.
+ *
+ * Old --lafka-header-offset-mobile (220px) + -desk (280px) tokens
+ * removed. The padding-top rule below was leaving ~220px of white
+ * space between the header and hero on mobile after the v5.55.0
+ * header rebuild. */
 #main.lafka-front-page {
 	background: var(--lafka-color-surface-page);
 	color: var(--lafka-color-text-primary);
-	padding-top: var(--lafka-header-offset-mobile);
-}
-
-@media (min-width: 768px) {
-
-	#main.lafka-front-page {
-		padding-top: var(--lafka-header-offset-desk);
-	}
+	padding-top: 0;
 }
 
 /* v5.52.0: tightened section padding. Previous 48px/64px values left
