@@ -591,12 +591,25 @@
 
 .lafka-revs__quote {
 	margin: 0;
+	padding: 0;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
 	font-size: 1.25rem;
 	line-height: 1.4;
 	color: var(--lafka-color-text-primary);
+	background: transparent;
+	border: 0;
 	quotes: "\201C" "\201D";
+}
+
+/* Defensive: legacy theme has a giant mass-selector that paints every
+ * <blockquote> with --lafka-accent-color. Counter it specifically here
+ * inside the reviews section so the typography-only handoff treatment
+ * lands. Without this, quotes render as red blocks. */
+.lafka-revs blockquote.lafka-revs__quote,
+.lafka-revs .lafka-revs__quote::before,
+.lafka-revs .lafka-revs__quote::after {
+	background: transparent !important;
 }
 
 .lafka-revs__quote::before {
