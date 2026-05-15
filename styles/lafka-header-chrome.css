@@ -110,10 +110,13 @@
 /* -------- Primary nav --------------------------------------------------
  * Legacy theme paints #main-menu yellow (rgb(255,202,60)) and gives it
  * width: 100% so it wraps to its own row. Override both to transparent
- * and shrinkable so it sits inline with the cart cluster. */
-#header #main-menu,
-#header .menu-main-menu-container,
-#header #main_nav {
+ * and shrinkable so it sits inline with the cart cluster.
+ *
+ * Higher specificity (`body #header` chain) to win against legacy theme
+ * selectors that use `!important`. */
+body #header #main-menu,
+body #header .menu-main-menu-container,
+body #header #main_nav {
 	display: flex;
 	align-items: center;
 	gap: var(--lafka-space-1);
@@ -121,16 +124,30 @@
 	padding: 0;
 	list-style: none;
 	background: transparent !important;
+	background-color: transparent !important;
+	background-image: none !important;
 	width: auto !important;
-	flex: 1 1 auto;
+	max-width: 100% !important;
+	flex: 1 1 0 !important;
+	min-width: 0 !important;
 	justify-content: center;
 	min-height: 0 !important;
 	height: auto !important;
+	overflow-x: auto;
+	overflow-y: hidden;
+	scrollbar-width: none;
+	-ms-overflow-style: none;
 }
 
-#header #main-menu ul.menu,
-#header #main_nav ul,
-#header #main_nav.menu {
+body #header #main-menu::-webkit-scrollbar,
+body #header #main_nav::-webkit-scrollbar {
+	display: none;
+}
+
+body #header #main-menu ul.menu,
+body #header #main_nav ul,
+body #header #main_nav.menu,
+body #header ul#main_nav {
 	display: flex;
 	align-items: center;
 	gap: var(--lafka-space-1);
@@ -138,7 +155,9 @@
 	padding: 0;
 	list-style: none;
 	background: transparent !important;
+	background-color: transparent !important;
 	flex-wrap: nowrap;
+	min-width: 0;
 }
 
 @media (max-width: 767px) {

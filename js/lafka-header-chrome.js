@@ -11,7 +11,18 @@
 ( function () {
 	'use strict';
 
-	function init() {
+	function relocateLogo() {
+		// Legacy theme renders #logo inside #header_top .inner when the
+		// operator has "show top header" enabled. We hide #header_top so
+		// the logo would disappear with it. Move it into the main row.
+		var logo = document.getElementById( 'logo' );
+		var mmh = document.querySelector( '#header .main_menu_holder.inner' );
+		if ( logo && mmh && logo.parentElement !== mmh ) {
+			mmh.insertBefore( logo, mmh.firstChild );
+		}
+	}
+
+	function injectCta() {
 		var holder = document.querySelector( '#header .lafka-search-cart-holder' );
 		if ( ! holder ) {
 			return;
@@ -39,6 +50,11 @@
 		cta.appendChild( arrowSpan );
 
 		holder.appendChild( cta );
+	}
+
+	function init() {
+		relocateLogo();
+		injectCta();
 	}
 
 	if ( document.readyState === 'loading' ) {
