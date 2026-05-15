@@ -1178,6 +1178,23 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			true
 		);
 
+		// v5.55.0: header chrome restyle. Pure CSS overrides on the
+		// existing #header markup + a JS "Order now" CTA injected next
+		// to the cart icon. Loads on every page.
+		wp_enqueue_style(
+			'lafka-header-chrome',
+			get_template_directory_uri() . '/styles/lafka-header-chrome.css',
+			array( 'lafka-tokens' ),
+			lafka_asset_version( '/styles/lafka-header-chrome.css' )
+		);
+		wp_enqueue_script(
+			'lafka-header-chrome',
+			get_template_directory_uri() . '/js/lafka-header-chrome.js',
+			array(),
+			lafka_asset_version( '/js/lafka-header-chrome.js' ),
+			true
+		);
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.
