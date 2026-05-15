@@ -1138,6 +1138,18 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// v5.46.0: native home page styles (Phase B). Enqueued only on
+		// the static front page (where front-page.php takes over). Reads
+		// hero/categories/featured tokens from lafka-tokens.css.
+		if ( is_front_page() ) {
+			wp_enqueue_style(
+				'lafka-home',
+				get_template_directory_uri() . '/styles/lafka-home.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-home.css' )
+			);
+		}
+
 		// v5.39.0: tokenized account & WC forms — login / register /
 		// lost-password / order-tracking / dashboard. is_account_page()
 		// covers every WC account endpoint plus the order-tracking page.

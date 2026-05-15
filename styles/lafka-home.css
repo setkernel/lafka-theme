@@ -1,0 +1,498 @@
+/*
+ * Lafka home page
+ * v5.46.0 — Phase B native home page styles. Hero, trust strip,
+ * category showcase, featured products. Token-driven, mobile-first,
+ * verified at 375/768/1280. No WPBakery dependency.
+ *
+ * Layer order: lafka-tokens.css → lafka-home.css → component CSS.
+ */
+
+/* =========================================================================
+ * Front-page wrapper
+ * ========================================================================= */
+.lafka-front-page {
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-primary);
+}
+
+/* Section rhythm: every direct child of .lafka-front-page gets
+ * vertical breathing room without needing per-section padding. */
+.lafka-front-page > section {
+	padding-block: var(--lafka-space-12);
+}
+
+.lafka-front-page > section:first-child {
+	padding-top: 0;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-front-page > section {
+		padding-block: var(--lafka-space-16);
+	}
+}
+
+/* =========================================================================
+ * 1. Hero
+ * ========================================================================= */
+.lafka-home-hero {
+	position: relative;
+	overflow: hidden;
+	background: var(--lafka-color-brand-50);
+	color: var(--lafka-color-text-primary);
+	padding-block: var(--lafka-space-10) var(--lafka-space-12);
+}
+
+.lafka-home-hero--has-image {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-home-hero__media {
+	position: absolute;
+	inset: 0;
+	z-index: 0;
+}
+
+.lafka-home-hero__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	filter: brightness(0.55);
+}
+
+.lafka-home-hero__inner {
+	position: relative;
+	z-index: 1;
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: var(--lafka-container-px);
+}
+
+.lafka-home-hero__copy {
+	max-width: 640px;
+}
+
+.lafka-home-hero__eyebrow {
+	display: inline-block;
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-bold);
+	text-transform: uppercase;
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	color: var(--lafka-color-accent-500);
+	margin: 0 0 var(--lafka-space-3);
+}
+
+.lafka-home-hero--has-image .lafka-home-hero__eyebrow {
+	color: var(--lafka-color-brand-300);
+}
+
+.lafka-home-hero__headline {
+	margin: 0 0 var(--lafka-space-4);
+	font-family: var(--lafka-font-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: var(--lafka-font-size-display);
+	line-height: var(--lafka-line-height-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+}
+
+.lafka-home-hero__subhead {
+	margin: 0 0 var(--lafka-space-6);
+	font-size: var(--lafka-font-size-lg);
+	line-height: var(--lafka-line-height-snug);
+	color: var(--lafka-color-text-secondary);
+	max-width: 540px;
+}
+
+.lafka-home-hero--has-image .lafka-home-hero__subhead {
+	color: rgba(255, 255, 255, 0.85);
+}
+
+.lafka-home-hero__actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-3);
+}
+
+@media (min-width: 768px) {
+
+	.lafka-home-hero {
+		padding-block: var(--lafka-space-16) var(--lafka-space-20);
+		min-height: clamp(420px, 60vh, 640px);
+		display: flex;
+		align-items: center;
+	}
+
+	.lafka-home-hero__inner {
+		padding-inline: var(--lafka-container-px-desk);
+	}
+
+	.lafka-home-hero__headline {
+		font-size: var(--lafka-font-size-display-desk);
+	}
+}
+
+/* =========================================================================
+ * Button primitives (used by hero + featured grid)
+ * Defined here because home is their first appearance; future ships
+ * will hoist these into a shared lafka-primitives.css file.
+ * ========================================================================= */
+.lafka-btn {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: var(--lafka-space-2);
+	min-height: var(--lafka-tap-target);
+	padding: var(--lafka-space-3) var(--lafka-space-6);
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	text-decoration: none;
+	border: 1px solid transparent;
+	border-radius: var(--lafka-radius-pill);
+	cursor: pointer;
+	transition: background var(--lafka-duration-fast) var(--lafka-ease-out),
+		color var(--lafka-duration-fast) var(--lafka-ease-out),
+		border-color var(--lafka-duration-fast) var(--lafka-ease-out),
+		transform var(--lafka-duration-instant) var(--lafka-ease-out);
+}
+
+.lafka-btn:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-btn:active {
+	transform: translateY(1px);
+}
+
+.lafka-btn--lg {
+	min-height: 52px;
+	padding: var(--lafka-space-4) var(--lafka-space-8);
+	font-size: var(--lafka-font-size-base);
+}
+
+.lafka-btn--primary {
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-contrast);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.lafka-btn--primary:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-accent-contrast);
+	box-shadow: var(--lafka-shadow-2);
+}
+
+.lafka-btn--ghost {
+	background: transparent;
+	color: var(--lafka-color-text-primary);
+	border-color: var(--lafka-color-text-primary);
+}
+
+.lafka-home-hero--has-image .lafka-btn--ghost {
+	color: var(--lafka-color-text-inverse);
+	border-color: var(--lafka-color-text-inverse);
+}
+
+.lafka-btn--ghost:hover {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-home-hero--has-image .lafka-btn--ghost:hover {
+	background: var(--lafka-color-text-inverse);
+	color: var(--lafka-color-text-primary);
+}
+
+/* =========================================================================
+ * 2. Trust strip
+ * ========================================================================= */
+.lafka-home-trust {
+	background: var(--lafka-color-surface-muted);
+	padding-block: var(--lafka-space-6) !important;
+}
+
+.lafka-home-trust__inner {
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: var(--lafka-container-px);
+}
+
+.lafka-home-trust__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lafka-space-4);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.lafka-home-trust__item {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	grid-template-rows: auto auto;
+	column-gap: var(--lafka-space-3);
+	row-gap: var(--lafka-space-1);
+	align-items: center;
+	padding: var(--lafka-space-4);
+	background: var(--lafka-color-surface-raised);
+	border-radius: var(--lafka-radius-md);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.lafka-home-trust__icon {
+	grid-row: 1 / 3;
+	font-size: 1.5rem;
+	line-height: 1;
+}
+
+.lafka-home-trust__label {
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-home-trust__value {
+	font-size: var(--lafka-font-size-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-home-trust__value--link {
+	color: var(--lafka-color-accent-500);
+	text-decoration: none;
+}
+
+.lafka-home-trust__value--link:hover {
+	color: var(--lafka-color-accent-600);
+	text-decoration: underline;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-home-trust__inner {
+		padding-inline: var(--lafka-container-px-desk);
+	}
+
+	.lafka-home-trust__grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--lafka-space-6);
+	}
+}
+
+/* =========================================================================
+ * 3. Category showcase
+ * ========================================================================= */
+.lafka-home-categories__inner {
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: var(--lafka-container-px);
+}
+
+.lafka-home-categories__head {
+	text-align: center;
+	margin-bottom: var(--lafka-space-8);
+}
+
+.lafka-home-categories__headline {
+	margin: 0;
+	font-family: var(--lafka-font-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-size: var(--lafka-font-size-h1);
+	line-height: var(--lafka-line-height-tight);
+	letter-spacing: var(--lafka-letter-spacing-snug);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-home-categories__grid {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--lafka-space-3);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.lafka-home-categories__item {
+	margin: 0;
+}
+
+.lafka-home-categories__tile {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+	background: var(--lafka-color-surface-raised);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	overflow: hidden;
+	text-decoration: none;
+	color: inherit;
+	box-shadow: var(--lafka-shadow-1);
+	transition: transform var(--lafka-duration-fast) var(--lafka-ease-out),
+		box-shadow var(--lafka-duration-fast) var(--lafka-ease-out);
+}
+
+.lafka-home-categories__tile:hover {
+	transform: translateY(-2px);
+	box-shadow: var(--lafka-shadow-3);
+}
+
+.lafka-home-categories__tile:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-home-categories__media {
+	aspect-ratio: 4 / 3;
+	background: var(--lafka-color-surface-muted);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	overflow: hidden;
+}
+
+.lafka-home-categories__image {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
+}
+
+.lafka-home-categories__image-placeholder {
+	font-size: 2.5rem;
+	opacity: 0.45;
+}
+
+.lafka-home-categories__body {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-1);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+}
+
+.lafka-home-categories__name {
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-base);
+	font-weight: var(--lafka-font-weight-bold);
+	color: var(--lafka-color-text-primary);
+	line-height: var(--lafka-line-height-tight);
+}
+
+.lafka-home-categories__count {
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+}
+
+@media (min-width: 600px) {
+
+	.lafka-home-categories__grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--lafka-space-4);
+	}
+}
+
+@media (min-width: 768px) {
+
+	.lafka-home-categories__inner {
+		padding-inline: var(--lafka-container-px-desk);
+	}
+
+	.lafka-home-categories__headline {
+		font-size: var(--lafka-font-size-h1-desk);
+	}
+
+	.lafka-home-categories__grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--lafka-space-5);
+	}
+
+	.lafka-home-categories__body {
+		padding: var(--lafka-space-4) var(--lafka-space-5);
+	}
+
+	.lafka-home-categories__name {
+		font-size: var(--lafka-font-size-lg);
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-home-categories__grid {
+		grid-template-columns: repeat(6, 1fr);
+	}
+}
+
+/* =========================================================================
+ * 4. Featured products
+ * ========================================================================= */
+.lafka-home-featured {
+	background: var(--lafka-color-surface-sunken);
+}
+
+.lafka-home-featured__inner {
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: var(--lafka-container-px);
+}
+
+.lafka-home-featured__head {
+	margin-bottom: var(--lafka-space-8);
+}
+
+.lafka-home-featured__headline {
+	margin: 0;
+	font-family: var(--lafka-font-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-size: var(--lafka-font-size-h1);
+	line-height: var(--lafka-line-height-tight);
+	letter-spacing: var(--lafka-letter-spacing-snug);
+	color: var(--lafka-color-text-primary);
+}
+
+/* Override the global ul.products list-row layout for this grid:
+ * featured products want a 2-up tile pattern, not the menu list. */
+.lafka-home-featured__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lafka-space-3);
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-home-featured__grid {
+		grid-template-columns: repeat(2, 1fr);
+		gap: var(--lafka-space-4);
+	}
+}
+
+@media (min-width: 768px) {
+
+	.lafka-home-featured__inner {
+		padding-inline: var(--lafka-container-px-desk);
+	}
+
+	.lafka-home-featured__headline {
+		font-size: var(--lafka-font-size-h1-desk);
+	}
+
+	.lafka-home-featured__grid {
+		grid-template-columns: repeat(3, 1fr);
+		gap: var(--lafka-space-5);
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-home-featured__grid {
+		grid-template-columns: repeat(4, 1fr);
+	}
+}

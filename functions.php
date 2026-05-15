@@ -72,6 +72,9 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-variable-price-
 // No-op fallbacks for orphan 3rd-party shortcodes (v5.40.0).
 require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
 
+// Customizer panel for the native home page (v5.46.0 — Phase B).
+require_once get_template_directory() . '/incl/customizer-home.php';
+
 /**
  * Echo the pagination
  */
