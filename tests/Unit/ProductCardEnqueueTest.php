@@ -39,14 +39,29 @@ final class ProductCardEnqueueTest extends TestCase {
 		$this->assertStringContainsString( 'styles/product-card.css', $this->src );
 	}
 
-	public function test_enqueue_gated_to_archive_contexts(): void {
-		// Must NOT load on cart, checkout, account pages.
-		// Should load on shop, product taxonomies, all-products page,
-		// and PDP (for the related-products section, which uses the same
-		// content-product.php template).
-		$this->assertStringContainsString( 'is_shop()', $this->src );
-		$this->assertStringContainsString( 'is_product_taxonomy()', $this->src );
-		$this->assertStringContainsString( 'is_product()', $this->src );
+	public function test_enqueue_loads_universally(): void {
+		// v5.35.0: enqueue is unconditional. The .lafka-product-card markup
+		// can appear on any page via WPBakery product-listing shortcodes,
+		// widgets, or related-product surfaces — not just WC archive/PDP.
+		// Previously gating on is_shop / is_product_taxonomy / is_product
+		// caused the home page (which uses VC shortcodes to showcase
+		// categories) to collapse cards to ~50 px on mobile because WC's
+		// 20%-wide `.columns-5 li.product` rule applied unopposed.
+		$this->assertMatchesRegularExpression(
+			"/wp_enqueue_style\(\s*['\"]lafka-product-card['\"]\s*,\s*get_template_directory_uri\(\)\s*\.\s*['\"]\/styles\/product-card\.css['\"]/",
+			$this->src,
+			'product-card.css must be enqueued via the lafka-product-card handle.'
+		);
+		// The lafka-product-card enqueue block must NOT contain is_shop /
+		// is_product_taxonomy / is_product gates — those broke the home
+		// page rendering of cards in v5.28.x. Match the surrounding context
+		// to scope the assertion.
+		if ( preg_match( "/wp_enqueue_style\(\s*['\"]lafka-product-card['\"][\s\S]{0,500}/", $this->src, $m ) ) {
+			$block = $m[0];
+			$this->assertStringNotContainsString( 'is_shop()', $block,
+				'lafka-product-card enqueue must not be gated on is_shop().'
+			);
+		}
 	}
 
 	public function test_no_hardcoded_brand_color_in_css(): void {

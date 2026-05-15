@@ -1840,25 +1840,24 @@ add_action(
  * @since 5.17.0
  */
 add_action(
-    'wp_enqueue_scripts',
-    function () {
-		if ( ! function_exists( 'is_shop' ) || ! function_exists( 'is_product' ) ) {
-			return;
-		}
-		// Includes PDP because the related-products section uses the same
-		// content-product.php template via wc_get_template_part('content','product').
-		$is_archive_context = is_shop() || is_product_taxonomy() || is_product();
-		if ( ! $is_archive_context ) {
-			return;
-		}
+	'wp_enqueue_scripts',
+	function () {
+		// v5.35.0: Enqueue unconditionally. The .lafka-product-card markup
+		// rendered by content-product.php can appear on ANY page via
+		// WPBakery product-listing shortcodes, widgets, or related-product
+		// surfaces — not just WC archive/PDP. The previous archive-only
+		// gate caused the home page (which uses VC shortcodes to showcase
+		// categories) to collapse cards to ~50 px on mobile because WC's
+		// 20%-wide `.columns-5 li.product` rule applied unopposed.
+		// Stylesheet is small (~4 KB); always-on cost is negligible.
 		wp_enqueue_style(
-            'lafka-product-card',
-            get_template_directory_uri() . '/styles/product-card.css',
-            array( 'lafka-style' ),
-            wp_get_theme( get_template() )->get( 'Version' )
+			'lafka-product-card',
+			get_template_directory_uri() . '/styles/product-card.css',
+			array( 'lafka-style' ),
+			wp_get_theme( get_template() )->get( 'Version' )
 		);
 	},
-    30 
+	30
 );
 
 /**
