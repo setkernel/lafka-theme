@@ -21,9 +21,16 @@ if ( ! function_exists( 'lafka_dynamic_css_bust_on_options_save' ) ) {
 if ( ! function_exists( 'lafka_add_custom_css' ) ) {
 
 	function lafka_add_custom_css() {
-		// Cache key includes options-version so a settings save invalidates immediately.
-		$version   = get_option( 'lafka_dynamic_css_version', '0' );
-		$cache_key = 'lafka_dyncss_v' . $version . '_' . get_locale();
+		// Cache key includes:
+		// - options-version: bumped by lafka_dynamic_css_bust_on_options_save when
+		//   the operator saves theme options.
+		// - theme version: bumped on every theme upgrade so dynamic-css.php code
+		//   changes invalidate stale transients (v5.45.0). Without this, any
+		//   PHP-level edit to the dynamic-css builder silently no-ops until the
+		//   transient expires (was up to a week).
+		$opts_version  = get_option( 'lafka_dynamic_css_version', '0' );
+		$theme_version = wp_get_theme( get_template() )->get( 'Version' );
+		$cache_key     = 'lafka_dyncss_v' . $opts_version . '_t' . $theme_version . '_' . get_locale();
 
 		$custom_css = wp_cache_get( $cache_key, 'lafka' );
 		if ( $custom_css === false ) {
