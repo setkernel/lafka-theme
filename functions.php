@@ -52,6 +52,10 @@ require_once get_template_directory() . '/template-parts/lafka-pdp-cta.php';
 // Archive card quick-add CTA (v5.28.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-archive-quickadd.php';
 
+// Social proof widget — star rating + review count (v5.29.0).
+require_once get_template_directory() . '/incl/customizer-social-proof.php';
+require_once get_template_directory() . '/incl/template-helpers/social-proof.php';
+
 /**
  * Echo the pagination
  */

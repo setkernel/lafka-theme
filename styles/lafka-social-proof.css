@@ -1,0 +1,80 @@
+/*
+ * lafka-theme/styles/lafka-social-proof.css
+ * Star rating + review count widget — token-driven.
+ *
+ * Stars use a layered text technique: an empty-stars layer (default
+ * muted colour) under a clipped filled-stars layer (gold/warning).
+ * Width of the filled layer is set inline based on rating percentage,
+ * so any rating from 0.0-5.0 renders with half-pixel precision and
+ * no SVG/raster cost.
+ *
+ * Linked variant (when operator provides a reviews URL) adds an
+ * underline-on-hover affordance.
+ *
+ * @since 5.29.0
+ */
+
+.lafka-social-proof {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	font-family: var(--lafka-font-sans);
+	font-size: var(--lafka-font-size-sm);
+	color: var(--lafka-color-text-secondary);
+	line-height: 1.4;
+	margin: 0 0 var(--lafka-space-3);
+	flex-wrap: wrap;
+}
+
+.lafka-social-proof--linked {
+	text-decoration: none;
+	transition: color var(--lafka-duration-fast) var(--lafka-ease-out);
+}
+
+.lafka-social-proof--linked:hover,
+.lafka-social-proof--linked:focus-visible {
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-social-proof--linked:focus-visible {
+	outline: 3px solid var(--lafka-color-accent-500);
+	outline-offset: 2px;
+	border-radius: var(--lafka-radius-sm);
+}
+
+.lafka-social-proof__stars {
+	display: inline-block;
+	position: relative;
+	font-size: var(--lafka-font-size-base);
+	letter-spacing: 1px;
+	line-height: 1;
+
+	/* Set a stable width so both layers align — based on 5 chars + 4 gaps. */
+	font-feature-settings: "tnum";
+}
+
+.lafka-social-proof__stars-empty {
+	color: var(--lafka-color-border-default);
+}
+
+.lafka-social-proof__stars-filled {
+	position: absolute;
+	inset: 0 auto 0 0;
+	color: var(--lafka-color-warning);
+	overflow: hidden;
+	white-space: nowrap;
+}
+
+.lafka-social-proof__rating {
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+	font-variant-numeric: tabular-nums;
+}
+
+.lafka-social-proof__separator {
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-social-proof__count {
+	color: var(--lafka-color-text-muted);
+}

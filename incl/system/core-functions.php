@@ -1093,6 +1093,22 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// pages only. Skips the asset cost everywhere else.
 		$lafka_pdp_cta_active = function_exists( 'is_product' ) && is_product()
 			&& (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true );
+		// v5.29.0: social-proof widget — enqueued where the widget can render
+		// (PDPs for now). Cheap stylesheet (~1 KB), only loads when the
+		// operator has configured a rating or review count.
+		$lafka_social_proof_active = function_exists( 'is_product' ) && is_product()
+			&& (bool) get_theme_mod( 'lafka_social_proof_show_pdp', true )
+			&& function_exists( 'lafka_social_proof_get_data' )
+			&& lafka_social_proof_get_data();
+		if ( $lafka_social_proof_active ) {
+			wp_enqueue_style(
+				'lafka-social-proof',
+				get_template_directory_uri() . '/styles/lafka-social-proof.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-social-proof.css' )
+			);
+		}
+
 		if ( $lafka_pdp_cta_active ) {
 			wp_enqueue_style( 'lafka-pdp-cta', get_template_directory_uri() . '/styles/lafka-pdp-cta.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-pdp-cta.css' ) );
 			wp_enqueue_script(
