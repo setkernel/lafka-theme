@@ -1,0 +1,262 @@
+/* =========================================================================
+ * PDP handoff polish (v5.62.0)
+ * /design_handoff_peppery_ordering/README.md "Product detail (/product/:id)"
+ *
+ * Layered ON TOP of styles/pdp-redesign.css. The existing PDP partials
+ * (pdp-summary.php, pdp-pickers.php, pdp-tabs.php, pdp-make-it-a-meal.php)
+ * already supply most of the handoff structure; this file aligns colour,
+ * type, and spacing to spec without rewriting the markup.
+ *
+ * @since 5.62.0
+ * ========================================================================= */
+
+/* -------- 2-col layout: gallery + sticky buy box ------------------------ */
+@media (min-width: 1024px) {
+
+	.lafka-pdp__hero {
+		display: grid;
+		grid-template-columns: 1.1fr 1fr;
+		gap: var(--lafka-space-12);
+		align-items: start;
+	}
+
+	.lafka-pdp__gallery {
+		position: sticky;
+		top: calc(var(--lafka-header-h-desk) + var(--lafka-space-4));
+	}
+
+	.lafka-pdp-summary {
+		position: sticky;
+		top: calc(var(--lafka-header-h-desk) + var(--lafka-space-4));
+		align-self: start;
+	}
+}
+
+/* -------- Gallery image — handoff radius + shadow ----------------------- */
+.lafka-pdp__gallery .woocommerce-product-gallery__image img,
+.lafka-pdp__gallery img.wp-post-image {
+	border-radius: var(--lafka-radius-lg);
+	box-shadow: var(--lafka-shadow-3);
+}
+
+/* -------- Title + price typography -------------------------------------- */
+.lafka-pdp-summary .product_title,
+.lafka-pdp-summary h1.product_title,
+.lafka-pdp-summary .lafka-pdp-summary__title {
+	font-family: var(--lafka-font-family-display) !important;
+	font-weight: var(--lafka-font-weight-display) !important;
+	font-size: clamp(2rem, 3vw + 1rem, 3rem) !important;
+	line-height: 1.05 !important;
+	letter-spacing: -0.02em !important;
+	color: var(--lafka-color-text-primary) !important;
+	margin: 0 0 var(--lafka-space-3) 0 !important;
+}
+
+/* Live price — Fraunces 32px dark, NOT red (handoff spec) */
+.lafka-pdp-summary .price,
+.lafka-pdp-summary p.price,
+.lafka-pdp-summary .lafka-pdp-summary__price {
+	font-family: var(--lafka-font-family-display) !important;
+	font-weight: var(--lafka-font-weight-display) !important;
+	font-size: 2rem !important;
+	color: var(--lafka-color-text-primary) !important;
+	line-height: 1 !important;
+	margin: 0 0 var(--lafka-space-5) 0 !important;
+}
+
+.lafka-pdp-summary .price ins,
+.lafka-pdp-summary p.price ins {
+	text-decoration: none;
+	color: inherit;
+}
+
+.lafka-pdp-summary .price del {
+	color: var(--lafka-color-text-muted);
+	font-size: 0.7em;
+	margin-inline-end: var(--lafka-space-2);
+	opacity: 0.7;
+}
+
+/* -------- Add-to-Cart primary CTA — handoff red pill -------------------- */
+.lafka-pdp-summary .single_add_to_cart_button,
+.lafka-pdp-summary button.alt,
+.lafka-pdp-summary .button.alt {
+	background: var(--lafka-color-accent-500) !important;
+	color: var(--lafka-color-text-inverse) !important;
+	border-radius: var(--lafka-radius-pill) !important;
+	padding: var(--lafka-space-4) var(--lafka-space-6) !important;
+	font-family: var(--lafka-font-family-body) !important;
+	font-size: var(--lafka-font-size-body-lg) !important;
+	font-weight: var(--lafka-font-weight-semibold) !important;
+	min-height: 52px !important;
+	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.28) !important;
+	letter-spacing: 0 !important;
+	text-transform: none !important;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform 60ms var(--lafka-motion-ease-out) !important;
+}
+
+.lafka-pdp-summary .single_add_to_cart_button:hover,
+.lafka-pdp-summary button.alt:hover {
+	background: var(--lafka-color-accent-600) !important;
+	color: var(--lafka-color-text-inverse) !important;
+}
+
+.lafka-pdp-summary .single_add_to_cart_button:active {
+	transform: translateY(1px);
+}
+
+/* -------- Size / option pickers — handoff opt-grid ---------------------- */
+.lafka-pdp-summary .variations,
+.lafka-pdp-summary .lafka-pdp-variation-pickers {
+	margin-block: var(--lafka-space-4);
+}
+
+.lafka-pdp-summary .lafka-pdp-variation-grid,
+.lafka-pdp-summary .lafka-pdp-pickers {
+	display: grid;
+	gap: var(--lafka-space-2);
+	grid-template-columns: repeat(3, 1fr);
+}
+
+@media (max-width: 599px) {
+
+	.lafka-pdp-summary .lafka-pdp-variation-grid,
+	.lafka-pdp-summary .lafka-pdp-pickers {
+		grid-template-columns: repeat(2, 1fr);
+	}
+}
+
+/* Picker button — bordered, active = ink fill */
+.lafka-pdp-summary .lafka-pdp-pick,
+.lafka-pdp-summary button.lafka-pdp-option,
+.lafka-pdp-summary .lafka-variation-option {
+	background: var(--lafka-color-surface-page);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	cursor: pointer;
+	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	color: var(--lafka-color-text-primary);
+	text-align: left;
+}
+
+.lafka-pdp-summary .lafka-pdp-pick:hover,
+.lafka-pdp-summary button.lafka-pdp-option:hover {
+	border-color: var(--lafka-color-text-primary);
+}
+
+.lafka-pdp-summary .lafka-pdp-pick.is-active,
+.lafka-pdp-summary .lafka-pdp-pick[aria-pressed="true"],
+.lafka-pdp-summary button.lafka-pdp-option.is-active {
+	border-color: var(--lafka-color-text-primary);
+	border-width: 2px;
+	background: var(--lafka-color-surface-page);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+/* -------- Addons list — handoff vertical rows --------------------------- */
+.lafka-pdp-summary .wc-pao-addon-checkbox-label,
+.lafka-pdp-summary .product-addon label {
+	display: flex !important;
+	align-items: center;
+	gap: var(--lafka-space-3);
+	padding: var(--lafka-space-3) 0;
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	cursor: pointer;
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.lafka-pdp-summary .wc-pao-addon-price {
+	margin-inline-start: auto;
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-secondary);
+	padding: 2px var(--lafka-space-2);
+	border-radius: var(--lafka-radius-pill);
+	font-size: var(--lafka-font-size-caption);
+	font-variant-numeric: tabular-nums;
+}
+
+/* -------- Qty stepper --------------------------------------------------- */
+.lafka-pdp-summary .quantity,
+.lafka-pdp-summary form.cart .quantity {
+	display: inline-flex !important;
+	align-items: center;
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-pill);
+	overflow: hidden;
+	background: var(--lafka-color-surface-page);
+	height: 52px;
+}
+
+.lafka-pdp-summary .quantity input[type="number"] {
+	border: none !important;
+	background: transparent !important;
+	width: 56px !important;
+	text-align: center !important;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-size: var(--lafka-font-size-body-lg);
+	height: 52px !important;
+}
+
+/* -------- Trust line / assurances grid ---------------------------------- */
+.lafka-pdp-summary .lafka-pdp-trust,
+.lafka-pdp-summary .lafka-pdp-assurances {
+	display: grid;
+	grid-template-columns: repeat(2, 1fr);
+	gap: var(--lafka-space-3);
+	margin-top: var(--lafka-space-6);
+	padding-top: var(--lafka-space-5);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-muted);
+}
+
+/* -------- Breadcrumb polish --------------------------------------------- */
+.lafka-pdp__breadcrumb,
+.lafka-pdp__breadcrumb .woocommerce-breadcrumb {
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	margin-block: var(--lafka-space-4) var(--lafka-space-6);
+}
+
+.lafka-pdp__breadcrumb a {
+	color: var(--lafka-color-text-secondary);
+	text-decoration: none;
+}
+
+.lafka-pdp__breadcrumb a:hover {
+	color: var(--lafka-color-accent-500);
+}
+
+/* -------- Mobile sticky add-bar polish ---------------------------------- */
+@media (max-width: 1023px) {
+
+	.lafka-pdp .lafka-pdp-sticky-cta {
+		background: var(--lafka-color-surface-page);
+		border-top: 1px solid var(--lafka-color-border-subtle);
+		box-shadow: var(--lafka-shadow-3);
+	}
+
+	.lafka-pdp .lafka-pdp-sticky-cta .single_add_to_cart_button {
+		background: var(--lafka-color-accent-500) !important;
+		color: var(--lafka-color-text-inverse) !important;
+		border-radius: var(--lafka-radius-pill) !important;
+	}
+}
+
+/* -------- Related products — match handoff favs cards ------------------- */
+.lafka-pdp .related.products > h2,
+.related.products > h2 {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: clamp(1.5rem, 2vw + 0.5rem, 2rem);
+	letter-spacing: -0.015em;
+	color: var(--lafka-color-text-primary);
+	margin-block: var(--lafka-space-12) var(--lafka-space-6);
+}
