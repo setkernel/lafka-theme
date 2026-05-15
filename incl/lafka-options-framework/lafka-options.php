@@ -696,13 +696,16 @@ function lafka_optionsframework_options() {
 	$options[] = array(
 			'name' => esc_html_x('Site Main Accent Color', 'theme-options', 'lafka'),
 			'id' => 'accent_color',
-			'std' => '#e4584b',
+			// v5.36.0: align with design system --lafka-color-accent-500.
+			// Existing operator-saved values are unaffected; only fresh
+			// installs get the unified default.
+			'std' => '#dc2626',
 			'type' => 'color'
 	);
 	$options[] = array(
 			'name' => esc_html_x('Links Color', 'theme-options', 'lafka'),
 			'id' => 'links_color',
-			'std' => '#e4584b',
+			'std' => '#dc2626',
 			'type' => 'color'
 	);
 	$options[] = array(
@@ -731,25 +734,25 @@ function lafka_optionsframework_options() {
 	$options[] = array(
 			'name' => esc_html_x('Default Buttons Color', 'theme-options', 'lafka'),
 			'id' => 'all_buttons_color',
-			'std' => '#e4584b',
+			'std' => '#dc2626',
 			'type' => 'color'
 	);
 	$options[] = array(
 			'name' => esc_html_x('Default Buttons Hover Color', 'theme-options', 'lafka'),
 			'id' => 'all_buttons_hover_color',
-			'std' => '#22272d',
+			'std' => '#b91c1c',
 			'type' => 'color'
 	);
 	$options[] = array(
 			'name' => esc_html_x('NEW Label Color', 'theme-options', 'lafka'),
 			'id' => 'new_label_color',
-			'std' => '#e4584b',
+			'std' => '#047857',
 			'type' => 'color'
 	);
 	$options[] = array(
 			'name' => esc_html_x('SALE Label Color', 'theme-options', 'lafka'),
 			'id' => 'sale_label_color',
-			'std' => '#fccc4c',
+			'std' => '#dc2626',
 			'type' => 'color'
 	);
 	$options[] = array(

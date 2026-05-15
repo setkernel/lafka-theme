@@ -218,3 +218,29 @@
 		--lafka-duration-slow: 0ms;
 	}
 }
+
+/* -------- WC default button unification (v5.36.0) ----------------------
+ * Legacy `--lafka-button-color` from the theme-options framework
+ * (operator-saved value, often a stale red like #f2002d or #e4584b)
+ * diverged from the design system's --lafka-color-accent-500 (#dc2626).
+ * Override the WC-default buttons directly so all primary CTAs share
+ * the same accent surface across the site.
+ *
+ * Specificity is one class higher than the legacy `a.button` rule in
+ * style.css (0,0,2 vs 0,0,1,1); no !important needed.
+ *
+ * The legacy --lafka-button-color CSS variable is left untouched so
+ * operators who depend on it for their own brand styling are preserved. */
+.button.wc-backward,
+.button.wc-forward,
+.wc-block-components-button {
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
+}
+
+.button.wc-backward:hover,
+.button.wc-forward:hover,
+.wc-block-components-button:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-on-accent);
+}
