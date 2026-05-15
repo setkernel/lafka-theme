@@ -31,7 +31,14 @@ ul.products {
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 	overflow: hidden;
 	transition: box-shadow 0.15s ease;
-	width: 100%;
+
+	/* WC core CSS sets `.woocommerce ul.products.columns-4 li.product`
+	 * to ~22% width (its 4-up archive grid). That selector has higher
+	 * specificity than `.lafka-product-card`, so cards collapse on
+	 * mobile where Lafka intends them full-width per the v5.17.0
+	 * list-row design. The !important is targeted: only Lafka cards,
+	 * only width, and only as an override of WC's columns-N rules. */
+	width: 100% !important;
 	margin: 0;
 }
 
