@@ -51,10 +51,13 @@
 	gap: 12px;
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 
-	/* Don't stretch rows to the tallest card. Each card sizes to its own
-	 * content so cards with subcategory chips look "rich" rather than
-	 * making their plain siblings look "empty". */
-	align-items: start;
+	/* v5.78.0: stretch all cards in a row to equal height. Combined with
+	 * subcats becoming a single-row horizontal-scroll strip below, cards
+	 * end up uniform across the grid even when some have subcategories
+	 * and some don't. Was align-items:start (each card its own height) —
+	 * created the "Pizza balloons while siblings stay small" issue. */
+	align-items: stretch;
+	grid-auto-rows: 1fr;
 }
 
 @media (min-width: 640px) {
@@ -126,19 +129,32 @@
 	letter-spacing: 0.02em;
 }
 
-/* Subcategory chips (always available; only rendered when present). */
+/* Subcategory chips (always available; only rendered when present).
+ * v5.78.0: single-row horizontal scroll instead of wrapping. Keeps card
+ * height uniform with subcat-less siblings; users can swipe to see more.
+ * Scrollbar is hidden; fade-out on the right edge hints scrollability. */
 .lafka-menu-landing__subcats {
 	list-style: none;
 	margin: 0;
 	padding: 10px 14px 12px;
 	display: flex;
-	flex-wrap: wrap;
-	gap: 4px 6px;
+	flex-wrap: nowrap;
+	overflow-x: auto;
+	gap: 6px;
 	border-top: 1px solid rgba(0, 0, 0, 0.05);
+	scrollbar-width: none; /* Firefox */
+	-webkit-overflow-scrolling: touch;
+	-ms-overflow-style: none; /* IE/old Edge */
+	mask-image: linear-gradient(to right, #000 0, #000 calc(100% - 24px), transparent 100%);
+}
+
+.lafka-menu-landing__subcats::-webkit-scrollbar {
+	display: none;
 }
 
 .lafka-menu-landing__subcat {
 	margin: 0;
+	flex: 0 0 auto;
 }
 
 .lafka-menu-landing__subcat-link {
@@ -151,6 +167,7 @@
 	border-radius: 999px;
 	background: var(--lafka-menu-chip-bg);
 	transition: background 140ms ease, color 140ms ease;
+	white-space: nowrap;
 }
 
 .lafka-menu-landing__subcat-link:focus-visible {
