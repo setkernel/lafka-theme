@@ -75,6 +75,10 @@ require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
 // Customizer panel for the native home page (v5.46.0 — Phase B).
 require_once get_template_directory() . '/incl/customizer-home.php';
 
+// Home-page defaults filter scaffolding (v5.49.0 — child themes
+// override at higher priority for site-specific brand images).
+require_once get_template_directory() . '/incl/lafka-home-defaults.php';
+
 /**
  * Echo the pagination
  */

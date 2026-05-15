@@ -81,6 +81,10 @@
 	--lafka-color-surface-active: #e4e4e7;
 	--lafka-color-surface-overlay: rgba(24, 24, 27, 0.55);
 	--lafka-color-surface-brand-soft: var(--lafka-color-brand-50);
+	--lafka-color-surface-dark: #0f0f10;            /* charcoal — dark sections */
+	--lafka-color-surface-cream: #fdf8ed;           /* warm cream — story sections */
+	--lafka-color-scrim-bottom: linear-gradient(to top, rgba(24, 24, 27, 0.78) 0%, rgba(24, 24, 27, 0.0) 60%);
+	--lafka-color-scrim-left: linear-gradient(to right, rgba(24, 24, 27, 0.72) 0%, rgba(24, 24, 27, 0.0) 60%);
 
 	/* ------- Colour: border --------------------------------------------- */
 	--lafka-color-border-subtle: #e4e4e7;

@@ -27,10 +27,21 @@ get_header();
 <main id="main" class="lafka-front-page" role="main">
 
 	<?php
+	// Section order follows UX spec from v5.49.0 design pass:
+	//  1. Hero — convert in 2 seconds
+	//  2. Trust strip — dark band, breaks monotone, addresses "are you open?"
+	//  3. Categories — primary menu funnel
+	//  4. Featured products — social proof + direct add
+	//  5. Story — local-brand differentiation
+	//  6. Reviews — social proof (only renders if operator entered any)
+	//  7. CTA closer — yellow band, catches scrollers who didn't tap above
 	get_template_part( 'partials/home-hero' );
 	get_template_part( 'partials/home-trust-strip' );
 	get_template_part( 'partials/home-categories' );
 	get_template_part( 'partials/home-featured' );
+	get_template_part( 'partials/home-story' );
+	get_template_part( 'partials/home-reviews' );
+	get_template_part( 'partials/home-cta-closer' );
 	?>
 
 </main>

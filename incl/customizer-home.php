@@ -126,6 +126,379 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			)
 		);
 
+		// v5.49.0: text-URL fallback for hero bg — lets operators preview
+		// the OSS bundle look without uploading. Default applied via
+		// `lafka_home_hero_default_bg_url` filter so child themes can
+		// inject a brand-specific fallback without overriding operator's
+		// Customizer choice. On pepperypizzapoutine.com the operator's
+		// existing yellow-texture upload (uploaded 2021-06 for WPBakery
+		// hero) is the right default.
+		$lafka_home_hero_bg_default = (string) apply_filters(
+			'lafka_home_hero_default_bg_url',
+			''
+		);
+		$wp_customize->add_setting(
+			'lafka_home_hero_bg_url',
+			array(
+				'default'           => $lafka_home_hero_bg_default,
+				'sanitize_callback' => 'esc_url_raw',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_home_hero_bg_url',
+			array(
+				'label'       => __( 'Hero background image URL (used when no media uploaded above)', 'lafka' ),
+				'section'     => 'lafka_home_hero',
+				'type'        => 'url',
+				'description' => __( 'For OSS bundle defaults. Operators with their own images should use the media picker above.', 'lafka' ),
+			)
+		);
+
+		$wp_customize->add_setting(
+			'lafka_home_hero_overlay',
+			array(
+				'default'           => false,
+				'sanitize_callback' => 'wp_validate_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_home_hero_overlay',
+			array(
+				'label'       => __( 'Darken background image with overlay (for photo-style heroes)', 'lafka' ),
+				'section'     => 'lafka_home_hero',
+				'type'        => 'checkbox',
+			)
+		);
+
+		$wp_customize->add_setting(
+			'lafka_home_hero_show_status',
+			array(
+				'default'           => true,
+				'sanitize_callback' => 'wp_validate_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_home_hero_show_status',
+			array(
+				'label'       => __( 'Show open/closed status pill above headline', 'lafka' ),
+				'section'     => 'lafka_home_hero',
+				'type'        => 'checkbox',
+				'description' => __( 'Pulls live data from Service ETA plugin if installed.', 'lafka' ),
+			)
+		);
+
+		// -----------------------------------------------------------------
+		// 4. Story split
+		// -----------------------------------------------------------------
+		$wp_customize->add_section(
+			'lafka_home_story',
+			array(
+				'title'       => __( 'Story (Made Here)', 'lafka' ),
+				'description' => __( 'Local-brand differentiation block — kitchen photo + short story. Hide entirely via the toggle below if you prefer.', 'lafka' ),
+				'panel'       => 'lafka_home',
+				'priority'    => 40,
+			)
+		);
+
+		$wp_customize->add_setting(
+			'lafka_home_story_visible',
+			array(
+				'default'           => true,
+				'sanitize_callback' => 'wp_validate_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_home_story_visible',
+			array(
+				'label'   => __( 'Show this section', 'lafka' ),
+				'section' => 'lafka_home_story',
+				'type'    => 'checkbox',
+			)
+		);
+
+		$lafka_home_story_fields = array(
+			'lafka_home_story_eyebrow'   => array(
+				'label' => __( 'Eyebrow', 'lafka' ),
+				'default' => __( 'Made here', 'lafka' ),
+				'type' => 'text',
+			),
+			'lafka_home_story_headline'  => array(
+				'label' => __( 'Headline', 'lafka' ),
+				'default' => '',
+				'type' => 'text',
+			),
+			'lafka_home_story_body'      => array(
+				'label' => __( 'Body paragraph', 'lafka' ),
+				'default' => '',
+				'type' => 'textarea',
+			),
+			'lafka_home_story_cta_label' => array(
+				'label' => __( 'CTA label', 'lafka' ),
+				'default' => __( 'Visit us', 'lafka' ),
+				'type' => 'text',
+			),
+			'lafka_home_story_cta_url'   => array(
+				'label' => __( 'CTA URL (leave blank to hide CTA)', 'lafka' ),
+				'default' => '',
+				'type' => 'url',
+			),
+		);
+		foreach ( $lafka_home_story_fields as $lafka_setting_id => $lafka_field ) {
+			$wp_customize->add_setting(
+				$lafka_setting_id,
+				array(
+					'default'           => $lafka_field['default'],
+					'sanitize_callback' => 'url' === $lafka_field['type'] ? 'esc_url_raw' : ( 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field' ),
+					'transport'         => 'refresh',
+				)
+			);
+			$wp_customize->add_control(
+				$lafka_setting_id,
+				array(
+					'label'   => $lafka_field['label'],
+					'section' => 'lafka_home_story',
+					'type'    => $lafka_field['type'],
+				)
+			);
+		}
+
+		$wp_customize->add_setting(
+			'lafka_home_story_image_id',
+			array(
+				'default'           => 0,
+				'sanitize_callback' => 'absint',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			new WP_Customize_Media_Control(
+				$wp_customize,
+				'lafka_home_story_image_id',
+				array(
+					'label'     => __( 'Story image (kitchen, owner portrait, etc.)', 'lafka' ),
+					'section'   => 'lafka_home_story',
+					'mime_type' => 'image',
+				)
+			)
+		);
+
+		// -----------------------------------------------------------------
+		// 5. Reviews wall
+		// -----------------------------------------------------------------
+		$wp_customize->add_section(
+			'lafka_home_reviews',
+			array(
+				'title'       => __( 'Reviews', 'lafka' ),
+				'description' => __( 'Up to 3 customer review cards plus an optional aggregate rating callout. Section is hidden automatically when no reviews entered.', 'lafka' ),
+				'panel'       => 'lafka_home',
+				'priority'    => 50,
+			)
+		);
+
+		$wp_customize->add_setting(
+			'lafka_home_reviews_visible',
+			array(
+				'default'           => true,
+				'sanitize_callback' => 'wp_validate_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_home_reviews_visible',
+			array(
+				'label'   => __( 'Show this section', 'lafka' ),
+				'section' => 'lafka_home_reviews',
+				'type'    => 'checkbox',
+			)
+		);
+
+		$lafka_home_reviews_fields = array(
+			'lafka_home_reviews_eyebrow'  => array(
+				'label' => __( 'Eyebrow', 'lafka' ),
+				'default' => __( 'Loved locally', 'lafka' ),
+				'type' => 'text',
+			),
+			'lafka_home_reviews_headline' => array(
+				'label' => __( 'Headline', 'lafka' ),
+				'default' => __( 'What our neighbors say', 'lafka' ),
+				'type' => 'text',
+			),
+			'lafka_home_reviews_rating'   => array(
+				'label' => __( 'Aggregate rating (e.g. 4.9)', 'lafka' ),
+				'default' => '',
+				'type' => 'text',
+			),
+			'lafka_home_reviews_count'    => array(
+				'label' => __( 'Number of reviews (e.g. 230)', 'lafka' ),
+				'default' => '',
+				'type' => 'text',
+			),
+			'lafka_home_reviews_source'   => array(
+				'label' => __( 'Review source (e.g. Google, Yelp)', 'lafka' ),
+				'default' => 'Google',
+				'type' => 'text',
+			),
+		);
+		foreach ( $lafka_home_reviews_fields as $lafka_setting_id => $lafka_field ) {
+			$wp_customize->add_setting(
+				$lafka_setting_id,
+				array(
+					'default'           => $lafka_field['default'],
+					'sanitize_callback' => 'sanitize_text_field',
+					'transport'         => 'refresh',
+				)
+			);
+			$wp_customize->add_control(
+				$lafka_setting_id,
+				array(
+					'label'   => $lafka_field['label'],
+					'section' => 'lafka_home_reviews',
+					'type'    => $lafka_field['type'],
+				)
+			);
+		}
+
+		// Three review cards (quote + name + source + stars).
+		for ( $lafka_r = 1; $lafka_r <= 3; $lafka_r++ ) {
+			$lafka_review_card_fields = array(
+				"lafka_home_reviews_{$lafka_r}_quote"  => array(
+					'label' => sprintf( __( 'Review %d — quote', 'lafka' ), $lafka_r ),
+					'default' => '',
+					'type' => 'textarea',
+				),
+				"lafka_home_reviews_{$lafka_r}_name"   => array(
+					'label' => sprintf( __( 'Review %d — reviewer name', 'lafka' ), $lafka_r ),
+					'default' => '',
+					'type' => 'text',
+				),
+				"lafka_home_reviews_{$lafka_r}_source" => array(
+					'label' => sprintf( __( 'Review %d — source (Google/Yelp/etc.)', 'lafka' ), $lafka_r ),
+					'default' => '',
+					'type' => 'text',
+				),
+			);
+			foreach ( $lafka_review_card_fields as $lafka_setting_id => $lafka_field ) {
+				$wp_customize->add_setting(
+					$lafka_setting_id,
+					array(
+						'default'           => $lafka_field['default'],
+						'sanitize_callback' => 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field',
+						'transport'         => 'refresh',
+					)
+				);
+				$wp_customize->add_control(
+					$lafka_setting_id,
+					array(
+						'label'   => $lafka_field['label'],
+						'section' => 'lafka_home_reviews',
+						'type'    => $lafka_field['type'],
+					)
+				);
+			}
+
+			$wp_customize->add_setting(
+				"lafka_home_reviews_{$lafka_r}_stars",
+				array(
+					'default'           => 5,
+					'sanitize_callback' => 'absint',
+					'transport'         => 'refresh',
+				)
+			);
+			$wp_customize->add_control(
+				"lafka_home_reviews_{$lafka_r}_stars",
+				array(
+					'label'       => sprintf( __( 'Review %d — star rating (1–5)', 'lafka' ), $lafka_r ),
+					'section'     => 'lafka_home_reviews',
+					'type'        => 'number',
+					'input_attrs' => array(
+						'min' => 1,
+						'max' => 5,
+						'step' => 1,
+					),
+				)
+			);
+		}
+
+		// -----------------------------------------------------------------
+		// 6. CTA closer band
+		// -----------------------------------------------------------------
+		$wp_customize->add_section(
+			'lafka_home_closer',
+			array(
+				'title'       => __( 'CTA Closer Band', 'lafka' ),
+				'description' => __( 'Full-bleed brand-yellow band at the bottom of the home — catches scrollers who didn\'t tap a CTA above.', 'lafka' ),
+				'panel'       => 'lafka_home',
+				'priority'    => 60,
+			)
+		);
+
+		$wp_customize->add_setting(
+			'lafka_home_closer_visible',
+			array(
+				'default'           => true,
+				'sanitize_callback' => 'wp_validate_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_home_closer_visible',
+			array(
+				'label'   => __( 'Show this section', 'lafka' ),
+				'section' => 'lafka_home_closer',
+				'type'    => 'checkbox',
+			)
+		);
+
+		$lafka_home_closer_fields = array(
+			'lafka_home_closer_eyebrow'   => array(
+				'label' => __( 'Eyebrow', 'lafka' ),
+				'default' => __( "Don't wait", 'lafka' ),
+				'type' => 'text',
+			),
+			'lafka_home_closer_headline'  => array(
+				'label' => __( 'Headline', 'lafka' ),
+				'default' => __( 'Hungry yet?', 'lafka' ),
+				'type' => 'text',
+			),
+			'lafka_home_closer_subhead'   => array(
+				'label' => __( 'Sub-headline', 'lafka' ),
+				'default' => __( 'Order online for pickup or delivery — ready when you are.', 'lafka' ),
+				'type' => 'textarea',
+			),
+			'lafka_home_closer_cta_label' => array(
+				'label' => __( 'CTA label', 'lafka' ),
+				'default' => __( 'Order Now', 'lafka' ),
+				'type' => 'text',
+			),
+			'lafka_home_closer_cta_url'   => array(
+				'label' => __( 'CTA URL', 'lafka' ),
+				'default' => '',
+				'type' => 'url',
+			),
+		);
+		foreach ( $lafka_home_closer_fields as $lafka_setting_id => $lafka_field ) {
+			$wp_customize->add_setting(
+				$lafka_setting_id,
+				array(
+					'default'           => $lafka_field['default'],
+					'sanitize_callback' => 'url' === $lafka_field['type'] ? 'esc_url_raw' : ( 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field' ),
+					'transport'         => 'refresh',
+				)
+			);
+			$wp_customize->add_control(
+				$lafka_setting_id,
+				array(
+					'label'   => $lafka_field['label'],
+					'section' => 'lafka_home_closer',
+					'type'    => $lafka_field['type'],
+				)
+			);
+		}
+
 		// -----------------------------------------------------------------
 		// 2. Category showcase
 		// -----------------------------------------------------------------

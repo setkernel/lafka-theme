@@ -1,22 +1,28 @@
 <?php
 /**
- * Partial: Home hero
+ * Partial: Home hero (v5.49.0)
  *
- * Edge-to-edge hero with contained text area. Headline + subhead + primary
- * CTA + secondary CTA + optional featured image. All copy comes from the
- * Customizer panel "Lafka — Home Page" with smart defaults from site
- * identity (blog name / tagline) and WC ("Order Online" → /shop).
+ * Full-bleed hero with optional background image, optional service-status
+ * pill, headline, subhead, and primary/secondary CTAs. The default
+ * background image preserves the operator's existing brand visual
+ * (yellow textured wash uploaded 2021-06 to /wp-content/uploads/) so
+ * the home page doesn't feel emptier than the WPBakery version it
+ * replaced.
  *
- * Reads:
- *  - lafka_home_hero_eyebrow   (text, default: "Order online")
- *  - lafka_home_hero_headline  (text, default: get_bloginfo('name'))
- *  - lafka_home_hero_subhead   (textarea, default: get_bloginfo('description'))
- *  - lafka_home_hero_primary_cta_label  (text, default: "Order Now")
- *  - lafka_home_hero_primary_cta_url    (url, default: wc_get_page_permalink('shop'))
- *  - lafka_home_hero_secondary_cta_label (text, default: "View Menu")
- *  - lafka_home_hero_secondary_cta_url   (url, default: /menu/ if exists else '')
- *  - lafka_home_hero_image_id (image attachment, default: 0 — falls back
- *    to a placeholder gradient if no image set)
+ * Customizer reads (all in panel "Lafka — Home Page" → Hero):
+ *  - lafka_home_hero_eyebrow         (text)
+ *  - lafka_home_hero_headline        (text)
+ *  - lafka_home_hero_subhead         (textarea)
+ *  - lafka_home_hero_primary_cta_*   (label + url)
+ *  - lafka_home_hero_secondary_cta_* (label + url)
+ *  - lafka_home_hero_image_id        (media)
+ *  - lafka_home_hero_bg_url          (text — string URL default, when no
+ *    media uploaded yet, lets operators preview the OSS bundle look
+ *    without picking an image)
+ *  - lafka_home_hero_overlay         (boolean — scrim toggle for dark
+ *    bg images; off for the default light yellow texture)
+ *  - lafka_home_hero_show_status     (boolean — render the open/closed
+ *    status pill via lafka_service_eta_get_data())
  *
  * @package Lafka
  * @since   5.46.0
@@ -38,13 +44,36 @@ if ( $lafka_hero_menu_page instanceof WP_Post ) {
 }
 $lafka_hero_secondary_url = (string) get_theme_mod( 'lafka_home_hero_secondary_cta_url', $lafka_hero_secondary_default );
 
+// Background image — Customizer media picker preferred, falls back to a
+// Customizer text-URL field, falls back to a theme-defined default via
+// `lafka_home_hero_default_bg_url` filter. The filter is the OSS-bundle
+// hook for shipping a brand-aligned default without the operator
+// having to upload anything.
 $lafka_hero_image_id  = (int) get_theme_mod( 'lafka_home_hero_image_id', 0 );
 $lafka_hero_image_src = $lafka_hero_image_id ? wp_get_attachment_image_url( $lafka_hero_image_id, 'full' ) : '';
+if ( '' === $lafka_hero_image_src ) {
+	$lafka_hero_image_src = (string) get_theme_mod(
+		'lafka_home_hero_bg_url',
+		(string) apply_filters( 'lafka_home_hero_default_bg_url', '' )
+	);
+}
+
+$lafka_hero_overlay      = (bool) get_theme_mod( 'lafka_home_hero_overlay', false );
+$lafka_hero_show_status  = (bool) get_theme_mod( 'lafka_home_hero_show_status', true );
+$lafka_hero_service_data = ( $lafka_hero_show_status && function_exists( 'lafka_service_eta_get_data' ) ) ? lafka_service_eta_get_data() : null;
+
+$lafka_hero_classes = array( 'lafka-home-hero' );
+if ( $lafka_hero_image_src ) {
+	$lafka_hero_classes[] = 'lafka-home-hero--has-image';
+}
+if ( $lafka_hero_image_src && $lafka_hero_overlay ) {
+	$lafka_hero_classes[] = 'lafka-home-hero--has-overlay';
+}
 ?>
-<section class="lafka-home-hero<?php echo $lafka_hero_image_src ? ' lafka-home-hero--has-image' : ' lafka-home-hero--no-image'; ?>" aria-label="<?php esc_attr_e( 'Welcome', 'lafka' ); ?>">
+<section class="<?php echo esc_attr( implode( ' ', $lafka_hero_classes ) ); ?>" aria-label="<?php esc_attr_e( 'Welcome', 'lafka' ); ?>">
 
 	<?php if ( $lafka_hero_image_src ) : ?>
-		<div class="lafka-home-hero__media">
+		<div class="lafka-home-hero__media" aria-hidden="true">
 			<img
 				class="lafka-home-hero__image"
 				src="<?php echo esc_url( $lafka_hero_image_src ); ?>"
@@ -53,13 +82,31 @@ $lafka_hero_image_src = $lafka_hero_image_id ? wp_get_attachment_image_url( $laf
 				loading="eager"
 				fetchpriority="high"
 			>
+			<?php if ( $lafka_hero_overlay ) : ?>
+				<div class="lafka-home-hero__scrim"></div>
+			<?php endif; ?>
 		</div>
 	<?php endif; ?>
 
 	<div class="lafka-home-hero__inner">
 		<div class="lafka-home-hero__copy">
 
-			<?php if ( '' !== $lafka_hero_eyebrow ) : ?>
+			<?php
+            if ( $lafka_hero_service_data ) :
+				$lafka_is_open = ! empty( $lafka_hero_service_data['is_open'] );
+				$lafka_pickup  = isset( $lafka_hero_service_data['pickup_minutes'] ) ? (int) $lafka_hero_service_data['pickup_minutes'] : 0;
+				?>
+				<p class="lafka-status-pill <?php echo $lafka_is_open ? 'lafka-status-pill--open' : 'lafka-status-pill--closed'; ?>">
+					<span class="lafka-status-pill__dot" aria-hidden="true"></span>
+					<?php if ( $lafka_is_open && $lafka_pickup ) : ?>
+						<?php printf( esc_html__( 'Open now · Pickup ~%d min', 'lafka' ), (int) $lafka_pickup ); ?>
+					<?php elseif ( $lafka_is_open ) : ?>
+						<?php esc_html_e( 'Open now', 'lafka' ); ?>
+					<?php else : ?>
+						<?php esc_html_e( 'Closed — order ahead', 'lafka' ); ?>
+					<?php endif; ?>
+				</p>
+			<?php elseif ( '' !== $lafka_hero_eyebrow ) : ?>
 				<p class="lafka-home-hero__eyebrow"><?php echo esc_html( $lafka_hero_eyebrow ); ?></p>
 			<?php endif; ?>
 
