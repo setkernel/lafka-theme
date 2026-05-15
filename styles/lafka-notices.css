@@ -1,0 +1,121 @@
+/*
+ * Lafka WC Notices
+ * v5.40.0 — tokenized styling for WC's three notice types
+ * (woocommerce-message, woocommerce-error, woocommerce-info)
+ * site-wide. Loads after lafka-style.css so source order wins
+ * over legacy WC notice rules without bumping specificity.
+ *
+ * Variants:
+ *   .woocommerce-message → success (green)
+ *   .woocommerce-error   → error (red)
+ *   .woocommerce-info    → info (blue)
+ */
+
+.woocommerce-message,
+.woocommerce-error,
+.woocommerce-info,
+.woocommerce-notices-wrapper .woocommerce-message,
+.woocommerce-notices-wrapper .woocommerce-error,
+.woocommerce-notices-wrapper .woocommerce-info {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--lafka-space-3);
+	padding: var(--lafka-space-4) var(--lafka-space-5);
+	margin: 0 0 var(--lafka-space-4);
+	font-family: var(--lafka-font-sans);
+	font-size: 0.9375rem;
+	line-height: 1.5;
+	font-weight: var(--lafka-font-weight-medium, 500);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-left-width: 4px;
+	border-radius: var(--lafka-radius-md);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	box-shadow: var(--lafka-shadow-1);
+	list-style: none;
+}
+
+/* Success */
+.woocommerce-message {
+	border-left-color: var(--lafka-color-success);
+	background: var(--lafka-color-success-bg);
+	color: var(--lafka-color-success);
+}
+
+/* Error */
+.woocommerce-error {
+	border-left-color: var(--lafka-color-error);
+	background: var(--lafka-color-error-bg);
+	color: var(--lafka-color-error);
+}
+
+/* Info */
+.woocommerce-info,
+.woocommerce-noreviews,
+.no-comments {
+	border-left-color: var(--lafka-color-info);
+	background: var(--lafka-color-info-bg);
+	color: var(--lafka-color-info);
+}
+
+/* Notice icon (WC core uses ::before for the dot — override to match
+ * the variant's color cleanly). */
+.woocommerce-message::before,
+.woocommerce-error::before,
+.woocommerce-info::before {
+	color: inherit;
+	font-family: inherit;
+	margin-right: 0;
+}
+
+/* Embedded action button (e.g. "View cart" after add-to-cart) */
+.woocommerce-message .button,
+.woocommerce-error .button,
+.woocommerce-info .button {
+	margin-left: auto;
+	padding: var(--lafka-space-2) var(--lafka-space-4);
+	font-size: 0.875rem;
+	font-weight: var(--lafka-font-weight-semibold, 600);
+	text-transform: uppercase;
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	color: var(--lafka-color-accent-contrast);
+	background: var(--lafka-color-accent-500);
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	text-decoration: none;
+	transition: background 150ms ease;
+}
+
+.woocommerce-message .button:hover,
+.woocommerce-error .button:hover,
+.woocommerce-info .button:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-accent-contrast);
+}
+
+/* WC list-style cleanup */
+ul.woocommerce-error {
+	padding-left: var(--lafka-space-5);
+}
+
+ul.woocommerce-error li {
+	list-style: none;
+}
+
+@media (max-width: 600px) {
+
+	.woocommerce-message,
+	.woocommerce-error,
+	.woocommerce-info {
+		flex-direction: column;
+		align-items: stretch;
+		padding: var(--lafka-space-3) var(--lafka-space-4);
+	}
+
+	.woocommerce-message .button,
+	.woocommerce-error .button,
+	.woocommerce-info .button {
+		margin-left: 0;
+		align-self: flex-start;
+	}
+}

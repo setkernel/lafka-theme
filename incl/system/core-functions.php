@@ -1222,6 +1222,16 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
 		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', array( 'lafka-tokens' ), wp_get_theme( get_template() )->get( 'Version' ) );
+
+		// v5.40.0: tokenized WC notices (success / error / info). Loads
+		// site-wide after lafka-style so source order wins over the legacy
+		// WC notice rules without specificity bumps.
+		wp_enqueue_style(
+			'lafka-notices',
+			get_template_directory_uri() . '/styles/lafka-notices.css',
+			array( 'lafka-style', 'lafka-tokens' ),
+			lafka_asset_version( '/styles/lafka-notices.css' )
+		);
 		// Load the rtl stylesheet.
 		if ( is_rtl() ) {
 			wp_enqueue_style( 'lafka-rtl', get_template_directory_uri() . '/styles/rtl.css', array( 'lafka-style' ), wp_get_theme()->get( 'Version' ) );
