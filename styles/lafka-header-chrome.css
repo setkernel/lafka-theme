@@ -115,6 +115,25 @@ body .lafka-header {
 	color: var(--lafka-color-text-primary);
 }
 
+/* v5.79.0: mobile pattern — hamburger left, logo centered, actions right.
+ * Previously the logo packed-left next to the hamburger and the actions
+ * cluster used margin-inline-start:auto, leaving a ~340px void between
+ * them at 375 viewport. Centering the logo absorbs that whitespace into
+ * symmetric padding around the logo. */
+@media (max-width: 767px) {
+
+	.lafka-header__logo {
+		position: absolute;
+		left: 50%;
+		top: 50%;
+		transform: translate(-50%, -50%);
+	}
+
+	.lafka-header__inner {
+		position: relative;
+	}
+}
+
 .lafka-header__logo-img {
 	display: block;
 	width: auto;

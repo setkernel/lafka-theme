@@ -22,7 +22,15 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$lafka_hero_status      = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
+$lafka_hero_status = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
+
+// v5.79.0: suppress hero status pill when the announce bar is already
+// showing the same open/closed signal sitewide — avoids the duplicated
+// "Open now · until 12:00 am" reading at the top of every home view.
+// Operators who disable the announce bar still see the hero pill.
+if ( $lafka_hero_status && (bool) get_theme_mod( 'lafka_announce_bar_enabled', true ) ) {
+	$lafka_hero_status = null;
+}
 $lafka_hero_info        = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_hero_phone       = isset( $lafka_hero_info['phone_display'] ) ? (string) $lafka_hero_info['phone_display'] : '';
 $lafka_hero_phone_tel   = isset( $lafka_hero_info['phone_e164'] ) ? (string) $lafka_hero_info['phone_e164'] : $lafka_hero_phone;
