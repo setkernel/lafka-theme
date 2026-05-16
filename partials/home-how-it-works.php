@@ -15,7 +15,7 @@
 defined( 'ABSPATH' ) || exit;
 
 $lafka_how_eyebrow  = (string) get_theme_mod( 'lafka_home_how_eyebrow', __( 'How it works', 'lafka' ) );
-$lafka_how_headline = (string) get_theme_mod( 'lafka_home_how_headline', __( 'Hot food in three steps.', 'lafka' ) );
+$lafka_how_headline = (string) get_theme_mod( 'lafka_home_how_headline', __( 'Hot food, three taps away.', 'lafka' ) );
 
 $lafka_how_steps = (array) apply_filters(
 	'lafka_home_how_it_works_steps',
