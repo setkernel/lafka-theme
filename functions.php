@@ -2,6 +2,14 @@
 /* Load core functions */
 require_once get_template_directory() . '/incl/system/core-functions.php';
 
+/*
+ * v5.93.0 (disposable): one-shot Customizer reset migration.
+ * Wipes theme_mods on first request after deploy so the new v5.74–v5.92
+ * defaults take effect site-wide. Remove this require + the file itself
+ * in v5.94.0 once the operator has verified the defaults.
+ */
+require_once get_template_directory() . '/incl/system/migration-v5-93-customizer-reset.php';
+
 /* GitHub auto-updater for theme & plugin */
 require_once get_template_directory() . '/incl/system/class-lafka-github-updater.php';
 if ( is_admin() ) {
