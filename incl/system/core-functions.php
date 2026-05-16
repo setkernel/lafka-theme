@@ -1835,6 +1835,58 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 }
 
+// v5.83.0: dequeue render-blocking assets from plugins that don't apply
+// to the current page context. Saves ~120ms LCP on PDP (per Lighthouse
+// perf audit 2026-05-15). Runs at priority 99 so plugin enqueues fire
+// first and we strip them after.
+add_action( 'wp_enqueue_scripts', 'lafka_dequeue_irrelevant_plugin_assets', 99 );
+if ( ! function_exists( 'lafka_dequeue_irrelevant_plugin_assets' ) ) {
+	function lafka_dequeue_irrelevant_plugin_assets() {
+		if ( is_admin() ) {
+			return;
+		}
+
+		$is_checkout_or_account = false;
+		if ( function_exists( 'is_checkout' ) ) {
+			$is_checkout_or_account = is_checkout()
+				|| ( function_exists( 'is_account_page' ) && is_account_page() )
+				|| ( function_exists( 'is_cart' ) && is_cart() );
+		}
+
+		// Authorize.net CIM gateway assets are only needed on checkout
+		// (card form) + account (saved cards). On every other page they
+		// add ~30KB of render-blocking CSS for nothing.
+		if ( ! $is_checkout_or_account ) {
+			wp_dequeue_style( 'sv-wc-payment-gateway-payment-form' );
+			wp_dequeue_style( 'wc-authorize-net-cim-checkout-block' );
+			wp_dequeue_style( 'wc-authorize-net-cim-credit-card' );
+			wp_dequeue_script( 'sv-wc-payment-gateway-payment-form-v5_15_4' );
+			wp_dequeue_script( 'wc-authorize-net-cim' );
+		}
+
+		// WPBakery (js_composer) frontend assets are only needed on pages
+		// that actually use the visual composer. The handoff rebuild
+		// emits native partials — PDP / cart / checkout / menu / cart
+		// / shop / account / 404 / contact / WC endpoints don't need it.
+		$wpbakery_unused_here = ( function_exists( 'is_product' ) && is_product() )
+			|| ( function_exists( 'is_cart' ) && is_cart() )
+			|| ( function_exists( 'is_checkout' ) && is_checkout() )
+			|| ( function_exists( 'is_shop' ) && is_shop() )
+			|| ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() )
+			|| ( function_exists( 'is_account_page' ) && is_account_page() )
+			|| is_404();
+		if ( $wpbakery_unused_here ) {
+			wp_dequeue_style( 'js_composer_front' );
+			wp_dequeue_style( 'js_composer_custom_css' );
+			wp_dequeue_script( 'wpb_composer_front_js' );
+			wp_dequeue_script( 'vc_woocommerce-add-to-cart-js' );
+			// Visual Composer's own UI libs that ship even when not used:
+			wp_dequeue_script( 'isotope' );
+			wp_dequeue_script( 'jquery-waypoints' );
+		}
+	}
+}
+
 // Deregister additional font awesome registration. We always register our own.
 add_action( 'wp_enqueue_scripts', 'lafka_deregister_plugins_awesome_stylesheet', 20 );
 if ( ! function_exists( 'lafka_deregister_plugins_awesome_stylesheet' ) ) {
