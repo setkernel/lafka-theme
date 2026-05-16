@@ -2,6 +2,16 @@
 /* Load core functions */
 require_once get_template_directory() . '/incl/system/core-functions.php';
 
+/*
+ * v5.95.0 (disposable): one-shot Customizer restore from v5.93 backup.
+ * Restores operator-owned operational fields (NAP, hours, social,
+ * accent, logo, etc.) that the v5.93 wipe killed, while keeping
+ * specific copy/style fields cleared so handoff defaults still apply.
+ * Remove this require + the file itself in v5.96.0 once the restore
+ * has been verified live.
+ */
+require_once get_template_directory() . '/incl/system/migration-v5-95-restore.php';
+
 
 /* GitHub auto-updater for theme & plugin */
 require_once get_template_directory() . '/incl/system/class-lafka-github-updater.php';
