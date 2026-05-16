@@ -19,6 +19,14 @@ require_once get_template_directory() . '/incl/customizer-bridge.php';
  */
 require_once get_template_directory() . '/incl/customizer-bridge-deprecate-theme-options.php';
 
+/*
+ * v6.2.0: Lafka Maintenance Tools page. Replaces the maintenance UI
+ * that lived inside the legacy Theme Options panel (notably the
+ * GitHub release cache flush button). Lives at Tools → Lafka
+ * Maintenance — the canonical WP location for admin utilities.
+ */
+require_once get_template_directory() . '/incl/system/lafka-tools-page.php';
+
 
 
 /* GitHub auto-updater for theme & plugin */
