@@ -2,6 +2,15 @@
 /* Load core functions */
 require_once get_template_directory() . '/incl/system/core-functions.php';
 
+/*
+ * v6.0.0: Customizer bridge to legacy Theme Options storage.
+ * Adds a "Lafka — Site Settings" panel in Customizer whose fields write
+ * directly to wp_options.lafka (the Theme Options storage), so operators
+ * have ONE editing UI and existing read paths (lafka_get_option) keep
+ * working with zero data migration.
+ */
+require_once get_template_directory() . '/incl/customizer-bridge.php';
+
 
 
 /* GitHub auto-updater for theme & plugin */
