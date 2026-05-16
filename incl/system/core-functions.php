@@ -1253,7 +1253,25 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// v5.61.0: menu archive — handoff. Loads on shop + product
 		// taxonomies. Also pulls in lafka-home-v2 because product cards
 		// reuse the .lafka-favs__card component.
-		if ( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) ) {
+		// v5.86.0: also load on the /menu/ slug template (page-menu.php
+		// is now a true template emitting the same handoff structure).
+		// v5.88.0: page-menu.php is a SLUG template (auto-mapped by WP
+		// based on filename), not a registered page-template via meta,
+		// so is_page_template() returns false and is_page('menu') alone
+		// proved unreliable on caching layers. Use the post_name check
+		// directly — the template loader has already resolved which
+		// page is rendering by the time wp_enqueue_scripts fires.
+		$lafka_is_menu_slug = false;
+		if ( function_exists( 'is_page' ) && is_page() ) {
+			$lafka_queried = get_queried_object();
+			if ( $lafka_queried && isset( $lafka_queried->post_name ) && 'menu' === $lafka_queried->post_name ) {
+				$lafka_is_menu_slug = true;
+			}
+		}
+		if (
+			( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) )
+			|| $lafka_is_menu_slug
+		) {
 			wp_enqueue_style(
 				'lafka-home-v2',
 				get_template_directory_uri() . '/styles/lafka-home-v2.css',

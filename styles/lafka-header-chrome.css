@@ -271,8 +271,14 @@ body .lafka-header {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+
+	/* v5.88.0: WCAG 2.5.5 touch target ≥44×44 on mobile. Was 40×40 which
+	 * triggered Lighthouse + axe touch-target warnings. Keeps the icon
+	 * visually 18px but expands the hit area. */
+	min-width: 44px;
+	min-height: 44px;
+	width: 44px;
+	height: 44px;
 	border-radius: var(--lafka-radius-pill);
 	background: transparent;
 	color: var(--lafka-color-text-primary);
