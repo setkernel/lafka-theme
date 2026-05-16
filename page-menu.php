@@ -1,232 +1,190 @@
 <?php
 /**
- * page-menu.php — Custom landing template for the /menu/ slug.
+ * page-menu.php — full menu listing template for the /menu/ slug (v5.86.0).
  *
- * Auto-renders all top-level WC product_cat terms as a mobile-first
- * grid. All operator-tunable knobs live in the "Lafka — Menu Landing"
- * Customizer panel (see incl/customizer-menu-landing.php). All render
- * hooks are filterable so power users can override without forking.
+ * WP template hierarchy: any Page with slug "menu" is automatically rendered
+ * by this file. Was previously a content-filter that injected just a
+ * category-tile grid; that legacy mode is preserved in page-menu-helpers.php
+ * for operators with a custom Customizer config but doesn't ship by default
+ * anymore.
  *
- * Filter surface:
- *   lafka_menu_landing_categories(WP_Term[] $cats)  — re-order/filter the term list
- *   lafka_menu_landing_intro_text(string $text)     — replace the intro tagline
- *   lafka_menu_landing_show_count(bool)             — override item-count visibility
- *   lafka_menu_landing_show_subcats(bool)           — override subcategory chip visibility
- *   lafka_menu_landing_card_html(string, WP_Term)   — replace per-card HTML
- *   lafka_menu_landing_excluded_term_ids(int[])     — extend the excluded-cat list
+ * Emits the full handoff `/#/menu` layout:
+ *   1. Page-head — crumbs + h1 + lead
+ *   2. Menu controls (partials/menu-controls.php) — fulfilment toggle + search + dietary chips
+ *   3. Sticky category chip strip
+ *   4. JUMP TO TOC strip
+ *   5. Per-category sections with product cards
  *
- * @since 5.23.0
- * @since 5.25.0 Customizer integration + filter hooks + CSS custom properties.
+ * Mirrors woocommerce/archive-product.php's "all" view but runs as a page
+ * template (not a WC archive), so it works at any URL (operator can rename
+ * the page or change the slug).
+ *
+ * @package Lafka
+ * @since   5.86.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'lafka_menu_landing_render_grid' ) ) {
-	/**
-	 * Replace the post content with the auto-built product_cat grid.
-	 *
-	 * @param string $content Existing page content.
-	 * @return string Either the grid markup, or the original content if
-	 *                preconditions fail (so secondary loops are untouched).
-	 */
-	function lafka_menu_landing_render_grid( $content ) {
-		if ( ! is_singular( 'page' ) || ! is_main_query() || ! in_the_loop() ) {
-			return $content;
-		}
+get_header();
 
-		// Hide WC's default "uncategorized" bucket plus any operator-added
-		// exclusions. The default-cat ID is read dynamically so renames /
-		// non-default values are still caught.
-		$default_cat_id     = (int) get_option( 'default_product_cat', 0 );
-		$exclude_ids        = array();
-		if ( $default_cat_id ) {
-			$exclude_ids[] = $default_cat_id;
-		}
-		$uncategorized_term = get_term_by( 'slug', 'uncategorized', 'product_cat' );
-		if ( $uncategorized_term && ! in_array( (int) $uncategorized_term->term_id, $exclude_ids, true ) ) {
-			$exclude_ids[] = (int) $uncategorized_term->term_id;
-		}
-		$exclude_ids = (array) apply_filters( 'lafka_menu_landing_excluded_term_ids', $exclude_ids );
+while ( have_posts() ) :
+	the_post();
 
-		$categories = get_terms(
-			array(
-				'taxonomy'   => 'product_cat',
-				'hide_empty' => true,
-				'parent'     => 0,
-				'orderby'    => 'menu_order',
-				'exclude'    => $exclude_ids,
-			)
-		);
-		if ( is_wp_error( $categories ) || ! $categories ) {
-			return $content;
-		}
-
-		$categories = (array) apply_filters( 'lafka_menu_landing_categories', $categories );
-
-		$default_intro = __( 'Fresh, made-to-order. Tap any category to see what we have.', 'lafka' );
-		$intro         = get_theme_mod( 'lafka_menu_landing_intro', '' );
-		if ( '' === $intro ) {
-			$intro = $default_intro;
-		}
-		$intro = (string) apply_filters( 'lafka_menu_landing_intro_text', $intro );
-
-		$show_count   = (bool) apply_filters( 'lafka_menu_landing_show_count', (bool) get_theme_mod( 'lafka_menu_landing_show_count', true ) );
-		$show_subcats = (bool) apply_filters( 'lafka_menu_landing_show_subcats', (bool) get_theme_mod( 'lafka_menu_landing_show_subcats', true ) );
-		$card_style   = (string) get_theme_mod( 'lafka_menu_landing_style', 'text' );
-		$card_style   = in_array( $card_style, array( 'text', 'image' ), true ) ? $card_style : 'text';
-
-		ob_start();
-		?>
-		<section class="lafka-menu-landing lafka-menu-landing--style-<?php echo esc_attr( $card_style ); ?>" aria-label="<?php esc_attr_e( 'Menu categories', 'lafka' ); ?>">
-			<?php if ( $intro ) : ?>
-				<p class="lafka-menu-landing__intro"><?php echo esc_html( $intro ); ?></p>
-			<?php endif; ?>
-			<ul class="lafka-menu-landing__grid" role="list">
-				<?php
-				foreach ( $categories as $cat ) :
-					echo lafka_menu_landing_render_card( $cat, $card_style, $show_count, $show_subcats ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-				endforeach;
-				?>
-			</ul>
-		</section>
-		<?php
-		return (string) ob_get_clean();
+	$lafka_menu_title = (string) get_theme_mod(
+		'lafka_menu_archive_title',
+		get_the_title()
+	);
+	if ( '' === $lafka_menu_title ) {
+		$lafka_menu_title = __( 'The full menu', 'lafka' );
 	}
-}
 
-if ( ! function_exists( 'lafka_menu_landing_render_card' ) ) {
-	/**
-	 * Render a single category card. Filterable via `lafka_menu_landing_card_html`.
-	 *
-	 * @param WP_Term $cat          The category term.
-	 * @param string  $card_style   Either 'text' or 'image'.
-	 * @param bool    $show_count   Whether to render the item-count line.
-	 * @param bool    $show_subcats Whether to surface direct children as inline chips.
-	 * @return string Pre-escaped HTML.
-	 */
-	function lafka_menu_landing_render_card( $cat, $card_style, $show_count, $show_subcats ) {
-		$term_link = get_term_link( $cat );
-		if ( is_wp_error( $term_link ) ) {
-			return '';
+	$lafka_menu_lead = (string) get_theme_mod(
+		'lafka_menu_archive_lead',
+		__( 'Browse everything we make. Tap a category to jump to it or scroll through the whole menu.', 'lafka' )
+	);
+
+	// Build the category list (top-level WC product_cat terms, excluded
+	// "uncategorized" + operator-specified exclusions).
+	$lafka_menu_terms = array();
+	if ( taxonomy_exists( 'product_cat' ) ) {
+		$lafka_menu_term_args = array(
+			'taxonomy'   => 'product_cat',
+			'hide_empty' => true,
+			'parent'     => 0,
+			'orderby'    => 'menu_order',
+		);
+		if ( function_exists( 'lafka_uncategorized_excluded_ids' ) ) {
+			$lafka_menu_term_args['exclude'] = lafka_uncategorized_excluded_ids();
 		}
-
-		$children = array();
-		if ( $show_subcats ) {
-			$kids = get_terms(
-				array(
-					'taxonomy'   => 'product_cat',
-					'hide_empty' => true,
-					'parent'     => (int) $cat->term_id,
-					'orderby'    => 'menu_order',
-				)
-			);
-			if ( ! is_wp_error( $kids ) ) {
-				$children = $kids;
-			}
+		$lafka_menu_terms_raw = get_terms( $lafka_menu_term_args );
+		if ( ! is_wp_error( $lafka_menu_terms_raw ) ) {
+			$lafka_menu_terms = $lafka_menu_terms_raw;
 		}
+	}
 
-		$card_classes = array( 'lafka-menu-landing__card' );
-		if ( $children ) {
-			$card_classes[] = 'lafka-menu-landing__card--has-children';
-		}
+	// Allow operator overrides via the legacy filter for ordering / removal.
+	$lafka_menu_terms = (array) apply_filters( 'lafka_menu_landing_categories', $lafka_menu_terms );
 
-		$image_html = '';
-		if ( 'image' === $card_style ) {
-			$thumbnail_id = (int) get_term_meta( $cat->term_id, 'thumbnail_id', true );
-			if ( $thumbnail_id ) {
-				$image_html = wp_get_attachment_image(
-					$thumbnail_id,
-					'woocommerce_thumbnail',
-					false,
-					array(
-						'loading'  => 'lazy',
-						'decoding' => 'async',
-						'class'    => 'lafka-menu-landing__card-image',
-						'alt'      => $cat->name,
-					)
-				);
-			}
-		}
+	$lafka_menu_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/menu/' );
+	?>
+	<main id="main" class="lafka-menu" role="main">
 
-		$count_label = '';
-		if ( $show_count ) {
-			$count_label = sprintf(
-				/* translators: %d: number of items in this menu category */
-				_n( '%d item', '%d items', (int) $cat->count, 'lafka' ),
-				(int) $cat->count
-			);
-		}
-
-		ob_start();
-		?>
-		<li class="<?php echo esc_attr( implode( ' ', $card_classes ) ); ?>">
-			<a class="lafka-menu-landing__card-link" href="<?php echo esc_url( $term_link ); ?>">
-				<?php if ( 'image' === $card_style ) : ?>
-					<span class="lafka-menu-landing__card-media">
-						<?php
-						if ( $image_html ) {
-							echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						} else {
-							echo '<span class="lafka-menu-landing__card-image lafka-menu-landing__card-image--placeholder" aria-hidden="true"></span>';
-						}
-						?>
-					</span>
+		<header class="lafka-menu__header">
+			<div class="lafka-container">
+				<nav class="lafka-menu__crumbs" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>">
+					<a href="<?php echo esc_url( home_url( '/' ) ); ?>"><?php esc_html_e( 'Home', 'lafka' ); ?></a>
+					<span aria-hidden="true">/</span>
+					<span><?php echo esc_html( $lafka_menu_title ); ?></span>
+				</nav>
+				<h1 class="lafka-menu__title"><?php echo esc_html( $lafka_menu_title ); ?></h1>
+				<?php if ( '' !== $lafka_menu_lead ) : ?>
+					<p class="lafka-menu__lead"><?php echo wp_kses_post( $lafka_menu_lead ); ?></p>
 				<?php endif; ?>
-				<span class="lafka-menu-landing__card-title"><?php echo esc_html( $cat->name ); ?></span>
-				<?php if ( $count_label ) : ?>
-					<span class="lafka-menu-landing__card-count"><?php echo esc_html( $count_label ); ?></span>
-				<?php endif; ?>
-			</a>
-			<?php if ( $children ) : ?>
-				<ul class="lafka-menu-landing__subcats" role="list">
-					<?php foreach ( $children as $child ) : ?>
-						<?php
-						$child_link = get_term_link( $child );
-						if ( is_wp_error( $child_link ) ) {
-							continue;
-						}
-						?>
-						<li class="lafka-menu-landing__subcat">
-							<a class="lafka-menu-landing__subcat-link" href="<?php echo esc_url( $child_link ); ?>">
-								<?php echo esc_html( $child->name ); ?>
+			</div>
+		</header>
+
+		<div class="lafka-container">
+			<?php get_template_part( 'partials/menu-controls' ); ?>
+		</div>
+
+		<?php if ( ! empty( $lafka_menu_terms ) ) : ?>
+			<nav class="lafka-menu__toc" aria-label="<?php esc_attr_e( 'Jump to category', 'lafka' ); ?>">
+				<div class="lafka-container lafka-menu__toc-inner">
+					<span class="lafka-menu__toc-label"><?php esc_html_e( 'Jump to', 'lafka' ); ?></span>
+					<ul class="lafka-menu__toc-list" role="list">
+						<?php foreach ( $lafka_menu_terms as $lafka_menu_toc_term ) : ?>
+							<li>
+								<a class="lafka-menu__toc-link" href="#<?php echo esc_attr( 'lafka-menu-cat-' . $lafka_menu_toc_term->slug ); ?>">
+									<?php echo esc_html( $lafka_menu_toc_term->name ); ?>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</nav>
+
+			<nav class="lafka-menu__cats" aria-label="<?php esc_attr_e( 'Categories', 'lafka' ); ?>">
+				<div class="lafka-container">
+					<ul class="lafka-menu__cats-list" role="list">
+						<li>
+							<a class="lafka-menu__cat-chip is-active" href="#all">
+								<?php esc_html_e( 'All', 'lafka' ); ?>
 							</a>
 						</li>
-					<?php endforeach; ?>
-				</ul>
-			<?php endif; ?>
-		</li>
-		<?php
-		$html = (string) ob_get_clean();
-		return (string) apply_filters( 'lafka_menu_landing_card_html', $html, $cat );
-	}
-}
+						<?php foreach ( $lafka_menu_terms as $lafka_menu_term ) : ?>
+							<li>
+								<a class="lafka-menu__cat-chip" href="<?php echo esc_attr( '#lafka-menu-cat-' . $lafka_menu_term->slug ); ?>">
+									<?php echo esc_html( $lafka_menu_term->name ); ?>
+									<span class="lafka-menu__cat-count"><?php echo esc_html( (string) $lafka_menu_term->count ); ?></span>
+								</a>
+							</li>
+						<?php endforeach; ?>
+					</ul>
+				</div>
+			</nav>
+		<?php endif; ?>
 
-add_filter( 'the_content', 'lafka_menu_landing_render_grid', 99 );
+		<div class="lafka-menu__body">
+			<div class="lafka-container">
 
-add_action(
-	'wp_enqueue_scripts',
-	function () {
-		wp_enqueue_style(
-			'lafka-menu-landing',
-			get_template_directory_uri() . '/styles/page-menu.css',
-			array( 'lafka-style' ),
-			lafka_asset_version( '/styles/page-menu.css' )
-		);
+				<?php
+				if ( ! empty( $lafka_menu_terms ) ) :
+					foreach ( $lafka_menu_terms as $lafka_menu_group ) :
+						$lafka_menu_group_products = function_exists( 'wc_get_products' )
+							? wc_get_products(
+								array(
+									'status'   => 'publish',
+									'limit'    => 24,
+									'category' => array( $lafka_menu_group->slug ),
+									'orderby'  => 'menu_order',
+									'order'    => 'ASC',
+								)
+							)
+							: array();
+						if ( empty( $lafka_menu_group_products ) ) {
+							continue;
+						}
+						$lafka_menu_group_id = 'lafka-menu-cat-' . $lafka_menu_group->slug;
+						?>
+						<section class="lafka-menu__group" id="<?php echo esc_attr( $lafka_menu_group_id ); ?>" aria-labelledby="<?php echo esc_attr( $lafka_menu_group_id . '-h' ); ?>">
+							<header class="lafka-menu__group-head">
+								<h2 id="<?php echo esc_attr( $lafka_menu_group_id . '-h' ); ?>" class="lafka-menu__group-title">
+									<?php echo esc_html( $lafka_menu_group->name ); ?>
+								</h2>
+								<span class="lafka-menu__group-rule" aria-hidden="true"></span>
+								<span class="lafka-menu__group-count"><?php echo esc_html( (string) $lafka_menu_group->count ); ?></span>
+								<?php if ( '' !== $lafka_menu_group->description ) : ?>
+									<p class="lafka-menu__group-blurb"><?php echo wp_kses_post( $lafka_menu_group->description ); ?></p>
+								<?php endif; ?>
+							</header>
 
-		// Emit the Customizer accent colour as a CSS custom property so
-		// stylesheet can stay static and operators get live re-skin via
-		// the Customizer's "Accent colour" control. Fallback is the
-		// shipped default (#dc2626) — see customizer-menu-landing.php.
-		$accent = get_theme_mod( 'lafka_menu_landing_accent', '#dc2626' );
-		$accent = sanitize_hex_color( $accent );
-		if ( $accent ) {
-			wp_add_inline_style(
-				'lafka-menu-landing',
-				sprintf( '.lafka-menu-landing { --lafka-menu-accent: %s; }', $accent )
-			);
-		}
-	},
-	20
-);
+							<ul class="lafka-menu__grid" role="list">
+								<?php foreach ( $lafka_menu_group_products as $lafka_arch_p ) : ?>
+									<?php require __DIR__ . '/woocommerce/loop/lafka-product-card.php'; ?>
+								<?php endforeach; ?>
+							</ul>
+						</section>
+						<?php
+					endforeach;
+				else :
+					?>
+					<div class="lafka-menu__empty" data-lafka-menu-empty>
+						<span class="lafka-menu__empty-icon" aria-hidden="true">🤔</span>
+						<h3 class="lafka-menu__empty-title"><?php esc_html_e( 'Nothing matches', 'lafka' ); ?></h3>
+						<p class="lafka-menu__empty-hint"><?php esc_html_e( 'Try clearing filters or searching for something else.', 'lafka' ); ?></p>
+						<a class="lafka-menu__empty-cta" href="<?php echo esc_url( $lafka_menu_shop_url ); ?>">
+							<?php esc_html_e( 'Back to all items', 'lafka' ); ?>
+						</a>
+					</div>
+					<?php
+				endif;
+				?>
 
-require __DIR__ . '/page.php';
+			</div>
+		</div>
+
+	</main>
+	<?php
+endwhile;
+
+get_footer();
