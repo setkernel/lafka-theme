@@ -761,9 +761,15 @@ body { padding-top: var(--lafka-pdp-bar-h); }
 
 .lafka-pdp-summary__cta {
   flex: 1;
-  background: var(--lafka-pdp-accent); color: #fff;
-  border: none; border-radius: var(--lafka-pdp-radius-chip);
-  padding: 12px 16px; font: inherit; font-weight: 700;
+
+  /* v5.89.0: align with site-wide primary CTA recipe — pill radius
+   * (was --lafka-pdp-radius-chip = 10px), min-height 48px touch
+   * target, body-size text. Matches .lafka-hero__cta and the
+   * .return-to-shop button so customers see a single button language. */
+  background: var(--lafka-color-accent-500); color: var(--lafka-color-accent-contrast);
+  border: none; border-radius: var(--lafka-radius-pill);
+  min-height: 48px;
+  padding: 12px 24px; font: inherit; font-weight: 700;
   cursor: pointer;
   transition: background .12s, opacity .12s;
 }
