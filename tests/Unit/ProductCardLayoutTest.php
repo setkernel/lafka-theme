@@ -64,9 +64,16 @@ final class ProductCardLayoutTest extends TestCase {
 		$this->assertStringContainsString( 'wc_product_class', $this->tpl );
 	}
 
-	public function test_template_aria_label_uses_product_name(): void {
-		// a11y: the wrapping <a> must announce what it links to.
-		$this->assertStringContainsString( 'aria-label="<?php echo esc_attr( $product->get_name() ); ?>"', $this->tpl );
+	public function test_template_link_relies_on_computed_accessible_name(): void {
+		// v5.84.0: a11y — we used to set aria-label="<product name>" on the
+		// wrapping <a>, but that override truncated the SR announcement to
+		// just the name and triggered WCAG 2.5.3 (Label in Name) because
+		// the visible content (h3 + description + price) was longer than
+		// the aria-label. The default computed accessible name is now used
+		// — the h3 product title sits inside the link and is the primary
+		// announcement.
+		$this->assertStringNotContainsString( 'aria-label="<?php echo esc_attr( $product->get_name() ); ?>"', $this->tpl );
+		$this->assertStringContainsString( 'lafka-product-card__title', $this->tpl, 'h3 title must be present inside the link to provide the accessible name' );
 	}
 
 	public function test_loop_add_to_cart_removed_from_after_hook(): void {
