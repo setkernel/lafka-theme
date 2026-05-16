@@ -72,27 +72,34 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			$wp_customize->add_section(
 				'lafka_settings_logos',
 				array(
-					'title'       => esc_html__( 'Logos', 'lafka' ),
-					'description' => esc_html__( 'Replaces the Logo block in Theme Options. Image fields accept either an upload or a media library pick. Mobile logo defaults to the main logo when empty.', 'lafka' ),
+					'title'       => esc_html__( 'Logos (extras)', 'lafka' ),
+					/* translators: %s is the linked label "Site Identity → Logo". */
+					'description' => sprintf(
+						wp_kses(
+							/* translators: %s — link to Customizer Site Identity → Logo */
+							__( 'The main logo is now uploaded via the WP-native %s. This section only houses the mobile and footer variants — there are no WP-core controls for those.', 'lafka' ),
+							array( 'a' => array( 'href' => array() ) )
+						),
+						'<a href="' . esc_url( admin_url( 'customize.php?autofocus[section]=title_tagline' ) ) . '">' . esc_html__( 'Site Identity → Logo', 'lafka' ) . '</a>'
+					),
 					'panel'       => 'lafka_settings',
 					'priority'    => 10,
 				)
 			);
 
-			self::add_image(
-				$wp_customize,
-				'lafka[theme_logo]',
-				'lafka_settings_logos',
-				__( 'Main logo', 'lafka' ),
-				__( 'Shown in the site header. SVG or transparent PNG recommended. Sized to ~140px max width on desktop, ~100px on mobile.', 'lafka' )
-			);
+			// v6.4.0: removed `lafka[theme_logo]` bridge field. Main logo
+			// is now WP's custom-logo theme_mod (see header.php's
+			// custom_logo branch + add_theme_support in core-functions.php).
+			// Operators upload via Customize → Site Identity → Logo.
+			// Legacy data in lafka.theme_logo is still read as fallback
+			// by header.php so we don't lose existing values.
 
 			self::add_image(
 				$wp_customize,
 				'lafka[mobile_theme_logo]',
 				'lafka_settings_logos',
 				__( 'Mobile logo (optional)', 'lafka' ),
-				__( 'Alternate logo for ≤767px viewports. Also used in the sticky/condensed header. Leave empty to reuse the main logo.', 'lafka' )
+				__( 'Alternate logo for ≤767px viewports. Also used in the sticky/condensed header. Leave empty to reuse the main logo from Site Identity.', 'lafka' )
 			);
 
 			self::add_image(
