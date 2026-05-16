@@ -130,14 +130,33 @@ $lafka_faqs = (array) apply_filters(
 								</div>
 							<?php endforeach; ?>
 						</dl>
+						<?php
+						// v5.92.0: hours footnote (handoff). Operator-tunable via filter.
+						$lafka_c_hours_note = (string) apply_filters(
+							'lafka_contact_hours_note',
+							(string) get_theme_mod(
+								'lafka_contact_hours_note',
+								__( 'Last orders 15 min before close. Statutory holidays may differ — call ahead.', 'lafka' )
+							)
+						);
+						if ( '' !== $lafka_c_hours_note ) :
+							?>
+							<p class="lafka-contact__hours-note"><?php echo esc_html( $lafka_c_hours_note ); ?></p>
+						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 
 				<div class="lafka-contact__actions">
+					<?php if ( '' !== $lafka_c_directions ) : ?>
+						<a class="lafka-contact__cta lafka-contact__cta--dark" href="<?php echo esc_url( $lafka_c_directions ); ?>" target="_blank" rel="noopener noreferrer">
+							<span aria-hidden="true">📍</span>
+							<?php esc_html_e( 'Get directions', 'lafka' ); ?>
+						</a>
+					<?php endif; ?>
 					<?php if ( '' !== $lafka_c_phone ) : ?>
 						<a class="lafka-contact__cta lafka-contact__cta--primary" href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_c_tel ) ); ?>">
 							<span aria-hidden="true">📞</span>
-							<?php echo esc_html( $lafka_c_phone ); ?>
+							<?php esc_html_e( 'Call to order', 'lafka' ); ?>
 						</a>
 					<?php endif; ?>
 					<?php if ( '' !== $lafka_c_email ) : ?>

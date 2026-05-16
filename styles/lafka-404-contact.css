@@ -357,6 +357,29 @@
 	border-color: var(--lafka-color-text-primary);
 }
 
+/* v5.92.0: dark variant (handoff "Get directions" button — paired with
+ * primary "Call to order" so the action card has two strong CTAs). */
+.lafka-contact__cta--dark {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-contact__cta--dark:hover {
+	background: #000;
+	color: var(--lafka-color-text-inverse);
+}
+
+/* v5.92.0: hours footnote — small muted line below the hours dl,
+ * acknowledging operational reality (last orders, holidays). */
+.lafka-contact__hours-note {
+	margin: var(--lafka-space-3) 0 0 0;
+	padding-top: var(--lafka-space-3);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	line-height: 1.5;
+}
+
 /* -------- FAQ section --------------------------------------------------- */
 .lafka-contact__faq {
 	padding-block: var(--lafka-space-12);
