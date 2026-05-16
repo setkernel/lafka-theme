@@ -484,7 +484,16 @@
 }
 
 .lafka-pdp-info__review-quote {
+
+	/* v5.97.0: explicit background + padding + radius so the blockquote
+	 * doesn't inherit a global red blockquote rule (legacy theme has
+	 * `blockquote { background: var(--lafka-accent-color) }` which won
+	 * specificity inside the .lafka-pdp surface). */
+	background: var(--lafka-color-surface-page);
+	border-left: 3px solid var(--lafka-color-accent-500);
 	margin: var(--lafka-space-2) 0 var(--lafka-space-2) 0;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border-radius: var(--lafka-radius-md);
 	font-size: var(--lafka-font-size-body-sm);
 	line-height: 1.5;
 	color: var(--lafka-color-text-secondary);

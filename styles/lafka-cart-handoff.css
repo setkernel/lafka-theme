@@ -569,7 +569,11 @@
 	line-height: 1.5;
 }
 
-.lafka-cart-empty__cta {
+/* v5.97.0: escalate selector to `a.lafka-cart-empty__cta` so it beats
+ * the legacy `a { color: var(--lafka-link-color) }` that the dynamic
+ * CSS emits — that rule inherits the operator's accent color and
+ * makes our cart CTA render red-on-red invisible. */
+a.lafka-cart-empty__cta {
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -589,13 +593,13 @@
 		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-.lafka-cart-empty__cta:hover {
+a.lafka-cart-empty__cta:hover {
 	background: var(--lafka-color-accent-600);
 	color: var(--lafka-color-accent-contrast);
 	transform: translateY(-1px);
 }
 
-.lafka-cart-empty__cta:focus-visible {
+a.lafka-cart-empty__cta:focus-visible {
 	outline: none;
 	box-shadow: var(--lafka-shadow-focus);
 }
