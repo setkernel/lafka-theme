@@ -318,3 +318,48 @@
 	color: var(--lafka-color-text-primary);
 	margin-block: var(--lafka-space-12) var(--lafka-space-6);
 }
+
+/* -------- Assurances row (v5.87.0) -------------------------------------
+ * Per handoff /#/product/<id> — 4 trust signals beneath the Add CTA.
+ * Mobile: stacks single-column. Desktop: 2-col grid. */
+.lafka-pdp-summary__assurances {
+	list-style: none;
+	margin: var(--lafka-space-5) 0 0;
+	padding: var(--lafka-space-4) 0 0;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lafka-space-3);
+}
+
+.lafka-pdp-summary__assurances li {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+	line-height: 1.4;
+}
+
+.lafka-pdp-summary__assurance-icon {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 24px;
+	height: 24px;
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-primary);
+	font-size: 13px;
+	line-height: 1;
+	flex: 0 0 auto;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-pdp-summary__assurances {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--lafka-space-3) var(--lafka-space-5);
+	}
+}
