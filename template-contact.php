@@ -73,37 +73,42 @@ $lafka_faqs = (array) apply_filters(
 			<p class="lafka-contact__lead"><?php esc_html_e( 'Address, hours, and the fastest way to reach us — plus answers to the questions we get most.', 'lafka' ); ?></p>
 		</header>
 
-		<section class="lafka-contact__hero">
+		<section class="lafka-contact__hero <?php echo '' === $lafka_c_photo ? 'lafka-contact__hero--no-media' : ''; ?>">
 
-			<div class="lafka-contact__media">
-				<?php if ( '' !== $lafka_c_photo ) : ?>
+			<?php
+			/* v6.5.0: only render the media column when a photo is configured.
+			 * Previously when no photo was set, the placeholder gradient + pin
+			 * overlay rendered alone, producing an orphan circular logo
+			 * floating above/left of the Address card. With no photo we
+			 * collapse the hero to single-column. */
+			?>
+			<?php if ( '' !== $lafka_c_photo ) : ?>
+				<div class="lafka-contact__media">
 					<img class="lafka-contact__photo" src="<?php echo esc_url( $lafka_c_photo ); ?>" alt="" loading="lazy">
-				<?php else : ?>
-					<div class="lafka-contact__photo-placeholder" aria-hidden="true">🍕</div>
-				<?php endif; ?>
 
-				<?php if ( '' !== $lafka_c_short ) : ?>
-					<div class="lafka-contact__pin">
-						<?php if ( $lafka_c_logo ) : ?>
-							<?php
-							echo wp_get_attachment_image(
-								$lafka_c_logo,
-								'thumbnail',
-								false,
-								array(
-									'class' => 'lafka-contact__pin-logo',
-									'alt'   => '',
-								)
-							);
-							?>
-						<?php endif; ?>
-						<div class="lafka-contact__pin-text">
-							<span class="lafka-contact__pin-label"><?php esc_html_e( 'Drop in at', 'lafka' ); ?></span>
-							<span class="lafka-contact__pin-addr"><?php echo esc_html( $lafka_c_short ); ?></span>
+					<?php if ( '' !== $lafka_c_short ) : ?>
+						<div class="lafka-contact__pin">
+							<?php if ( $lafka_c_logo ) : ?>
+								<?php
+								echo wp_get_attachment_image(
+									$lafka_c_logo,
+									'thumbnail',
+									false,
+									array(
+										'class' => 'lafka-contact__pin-logo',
+										'alt'   => '',
+									)
+								);
+								?>
+							<?php endif; ?>
+							<div class="lafka-contact__pin-text">
+								<span class="lafka-contact__pin-label"><?php esc_html_e( 'Drop in at', 'lafka' ); ?></span>
+								<span class="lafka-contact__pin-addr"><?php echo esc_html( $lafka_c_short ); ?></span>
+							</div>
 						</div>
-					</div>
-				<?php endif; ?>
-			</div>
+					<?php endif; ?>
+				</div>
+			<?php endif; ?>
 
 			<div class="lafka-contact__info">
 

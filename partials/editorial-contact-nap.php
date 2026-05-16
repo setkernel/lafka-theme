@@ -4,6 +4,10 @@
  *
  * Reads from lafka_get_restaurant_info() (W2-T1 source-of-truth).
  *
+ * v6.5.0: this partial is used only by the legacy
+ * page_templates/template-editorial-contact.php. The default contact
+ * page renders via template-contact.php which has its own NAP block.
+ *
  * @package Lafka
  */
 

@@ -1,3 +1,5 @@
+/* v6.5.0 — commerce-page max-width unclamp (cart/checkout/account escape 65ch prose constraint) */
+
 /* =========================================================================
  * Static page (v5.75.0)
  *
@@ -129,6 +131,15 @@
 	font-size: var(--lafka-font-size-body);
 	line-height: var(--lafka-line-body);
 	color: var(--lafka-color-text-primary);
+}
+
+/* Commerce pages (cart, checkout, account) own their own layout and should
+ * not be clamped to the prose-readable 65ch width. Each respective handoff
+ * stylesheet provides its own constrained grid. */
+.woocommerce-cart .lafka-page__content,
+.woocommerce-checkout .lafka-page__content,
+.woocommerce-account .lafka-page__content {
+	max-width: none;
 }
 
 .lafka-page__content > * + * {

@@ -1,3 +1,5 @@
+/* v6.5.0 — contact polish: FAQ section anchored & accordion-styled, hero photo placeholder reframed */
+
 /* =========================================================================
  * Contact + 404 (v5.66.0)
  * /design_handoff_peppery_ordering/README.md "Contact (/contact)" + "404 (catch-all)"
@@ -165,6 +167,15 @@
 	.lafka-contact__hero {
 		grid-template-columns: 1.1fr 1fr;
 		gap: var(--lafka-space-10);
+	}
+
+	/* v6.5.0: when no contact photo is configured, the media column is
+	 * suppressed in the template — collapse the hero to single-column so
+	 * the address/hours/CTAs card spans full width. */
+	.lafka-contact__hero--no-media {
+		grid-template-columns: 1fr;
+		max-width: 720px;
+		margin-inline: auto;
 	}
 }
 
@@ -383,23 +394,56 @@
 /* -------- FAQ section --------------------------------------------------- */
 .lafka-contact__faq {
 	padding-block: var(--lafka-space-12);
+	max-width: 760px;
+	margin: 0 auto;
+}
+
+/* v6.5.0: anchor the FAQ section head to the same 760px column as
+ * the items below. Override the global .lafka-section-head centered
+ * layout so the eyebrow + headline sit directly above the first
+ * FAQ item, left-aligned. */
+.lafka-contact__faq .lafka-section-head {
+	text-align: left;
+	max-width: none;
+	margin: 0 0 var(--lafka-space-6);
+	align-items: flex-start;
+}
+
+.lafka-contact__faq .lafka-section-eyebrow {
+	margin: 0 0 var(--lafka-space-2);
+}
+
+.lafka-contact__faq .lafka-section-headline {
+	margin: 0;
 }
 
 .lafka-contact__faq-list {
-	max-width: 760px;
-	margin: 0 auto;
+	margin: 0;
 	display: flex;
 	flex-direction: column;
-	gap: 0;
+	gap: var(--lafka-space-2);
 }
 
+/* v6.5.0: each FAQ item is now a proper card with subtle surface, rounded
+ * corners, and a hover state. Adjacent items separate via the gap above
+ * instead of a hard border-bottom. */
 .lafka-contact__faq-item {
-	border-bottom: 1px solid var(--lafka-color-border-subtle);
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	background: var(--lafka-color-surface-page);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
+	overflow: hidden;
+	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		box-shadow var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-.lafka-contact__faq-item:first-child {
-	border-top: 1px solid var(--lafka-color-border-subtle);
+.lafka-contact__faq-item:hover {
+	border-color: var(--lafka-color-border-default);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.lafka-contact__faq-item[open] {
+	border-color: var(--lafka-color-border-default);
+	box-shadow: var(--lafka-shadow-1);
 }
 
 .lafka-contact__faq-q {
@@ -407,11 +451,11 @@
 	align-items: center;
 	justify-content: space-between;
 	gap: var(--lafka-space-3);
-	padding: var(--lafka-space-5) var(--lafka-space-3);
+	padding: var(--lafka-space-4) var(--lafka-space-5);
 	cursor: pointer;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
-	font-size: 1.125rem;
+	font-size: 1.0625rem;
 	color: var(--lafka-color-text-primary);
 	list-style: none;
 	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
@@ -448,7 +492,7 @@
 }
 
 .lafka-contact__faq-a {
-	padding: 0 var(--lafka-space-3) var(--lafka-space-5);
+	padding: 0 var(--lafka-space-5) var(--lafka-space-5);
 	color: var(--lafka-color-text-secondary);
 	font-size: var(--lafka-font-size-body);
 	line-height: var(--lafka-line-body);

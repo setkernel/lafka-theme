@@ -1,3 +1,5 @@
+/* v6.5.0 — cart qty stepper: circular +/− buttons, reset native input[type=button] glyphs */
+
 /**
  * Lafka cart line-item — mobile-first list-row layout.
  *
@@ -100,11 +102,84 @@
 	white-space: nowrap;
 }
 
-.lafka-cart-item__qty input {
-	width: 56px;
+.lafka-cart-item__qty .quantity {
+	display: inline-flex;
+	align-items: center;
+	gap: 4px;
+}
+
+.lafka-cart-item__qty input.qty,
+.lafka-cart-item__qty .quantity input[type="number"] {
+	width: 48px;
+	height: 36px;
 	padding: 4px 6px;
 	font-size: 14px;
 	text-align: center;
+	border: 1px solid var(--lafka-color-border-default, #e4e4e7);
+	border-radius: var(--lafka-radius-sm, 6px);
+	background: var(--lafka-color-surface-page, #fff);
+	font-variant-numeric: tabular-nums;
+	-moz-appearance: textfield;
+	appearance: textfield;
+}
+
+/* Webkit number spinners hidden — we ship our own +/− buttons */
+.lafka-cart-item__qty input.qty::-webkit-outer-spin-button,
+.lafka-cart-item__qty input.qty::-webkit-inner-spin-button {
+	-webkit-appearance: none;
+	margin: 0;
+}
+
+/* Native input[type="button"] (lafka-qty-plus / lafka-qty-minus) emit
+ * ugly browser-default chrome (the value="+"/"-" text gets clipped on
+ * macOS Safari into a "·|·" glyph). Reset to a clean circular pill
+ * with the +/− character rendered at correct size. */
+.lafka-cart-item__qty .lafka-qty-plus,
+.lafka-cart-item__qty .lafka-qty-minus,
+.lafka-cart-item__qty input.lafka-qty-plus,
+.lafka-cart-item__qty input.lafka-qty-minus {
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	appearance: none;
+	background-clip: padding-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 36px;
+	height: 36px;
+	min-width: 36px;
+	padding: 0;
+	margin: 0;
+	border: 1px solid var(--lafka-color-border-default, #e4e4e7);
+	border-radius: 50%;
+	background: var(--lafka-color-surface-page, #fff);
+	color: var(--lafka-color-accent-text, var(--lafka-color-accent-500, #dc2626));
+	font-family: var(--lafka-font-family-body, system-ui, sans-serif);
+	font-size: 18px;
+	line-height: 1;
+	font-weight: 600;
+	text-align: center;
+	cursor: pointer;
+	box-shadow: none;
+	transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+.lafka-cart-item__qty .lafka-qty-plus:hover,
+.lafka-cart-item__qty .lafka-qty-minus:hover {
+	border-color: var(--lafka-color-accent-500, #dc2626);
+	background: var(--lafka-color-accent-50, #fef2f2);
+}
+
+.lafka-cart-item__qty .lafka-qty-plus:focus-visible,
+.lafka-cart-item__qty .lafka-qty-minus:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus, 0 0 0 3px rgba(220, 38, 38, 0.35));
+}
+
+.lafka-cart-item__qty .lafka-qty-plus:disabled,
+.lafka-cart-item__qty .lafka-qty-minus:disabled {
+	opacity: 0.4;
+	cursor: not-allowed;
 }
 
 .lafka-cart-item__remove {

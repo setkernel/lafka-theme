@@ -1,3 +1,5 @@
+/* v6.5.0 — my-account login form: full-surround card border, lost-password rail cleanup, iconbox callout band */
+
 /*
  * Lafka Account & WC Forms
  * v5.39.0 — tokenized styling for login / register / lost-password /
@@ -28,17 +30,25 @@
 	color: var(--lafka-color-text-primary);
 }
 
-/* Form card wrapper */
+/* Form card wrapper.
+ * v6.5.0: !important on border + center the card on the my-account login
+ * page. Legacy style.css emits a bare `border-left: 1px solid` somewhere
+ * in the .woocommerce form cascade — escalate so we always render a full
+ * 4-side surround. max-width 480px + margin auto sits the form nicely
+ * on the now-uncapped (.woocommerce-account .lafka-page__content) wrap. */
 .woocommerce-form-login,
 .woocommerce-form-register,
 .woocommerce-ResetPassword,
 .woocommerce-OrderTracking {
 	background: var(--lafka-color-surface-raised);
-	border: 1px solid var(--lafka-color-border-subtle);
+	border: 1px solid var(--lafka-color-border-subtle) !important;
+	border-left: 1px solid var(--lafka-color-border-subtle) !important;
 	border-radius: var(--lafka-radius-lg);
 	padding: var(--lafka-space-6);
 	box-shadow: var(--lafka-shadow-1);
 	max-width: 480px;
+	margin-inline: auto;
+	margin-block-end: var(--lafka-space-6);
 }
 
 /* Form row spacing */
@@ -133,9 +143,26 @@
 	clear: both;
 }
 
-/* Lost password link styling */
-.woocommerce-LostPassword.lost_password {
-	margin: var(--lafka-space-2) 0 0;
+/* Lost password link styling.
+ * v6.5.0: explicitly reset any decorative ::before / border-left that
+ * legacy stylesheets or the iconbox sibling might paint over this link,
+ * clipping the "Lo" prefix. Belt-and-braces. */
+.woocommerce-LostPassword.lost_password,
+p.woocommerce-LostPassword.lost_password {
+	margin: var(--lafka-space-4) 0 0;
+	padding: 0;
+	border: 0 !important;
+	background: transparent;
+	position: relative;
+	overflow: visible;
+	line-height: 1.4;
+	font-size: 0.9375rem !important;
+}
+
+.woocommerce-LostPassword.lost_password::before,
+.woocommerce-LostPassword.lost_password::after {
+	content: none !important;
+	display: none !important;
 }
 
 .woocommerce-LostPassword.lost_password a {
@@ -143,6 +170,15 @@
 	font-weight: var(--lafka-font-weight-medium, 500);
 	text-decoration: underline;
 	text-underline-offset: 2px;
+	padding: 0;
+	border: 0;
+	background: transparent;
+}
+
+.woocommerce-LostPassword.lost_password a::before,
+.woocommerce-LostPassword.lost_password a::after {
+	content: none !important;
+	display: none !important;
 }
 
 .woocommerce-LostPassword.lost_password a:hover {
@@ -260,6 +296,75 @@ body.woocommerce-page.woocommerce-account {
  */
 .lafka-shortcode-fallback {
 	display: none;
+}
+
+/* v6.5.0 — Legacy lafka_icon_box callout on my-account page.
+ * The demo content stored a [lafka_icon_box ... icon-left] shortcode below
+ * the login form for the "Love burgers? Like deals?" newsletter copy. By
+ * default `.lafka-iconbox.lafka-icon-box-left` renders the icon absolutely
+ * positioned at left:5px / top:-5px, which on a narrow page overlaps the
+ * "Lost your password?" link above and clips its "Lo" prefix with the
+ * circle's stroke. Reframe the iconbox into a cohesive card band: card
+ * container with muted surface, icon inline at left, copy on right, no
+ * overflow into the form above. */
+.woocommerce-account .lafka-iconbox,
+.woocommerce-account .lafka-iconbox.lafka-icon-box-left,
+.woocommerce-account .lafka-iconbox.lafka-clean-icon.lafka-icon-box-left {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-4);
+	max-width: 480px;
+	margin: var(--lafka-space-6) auto 0;
+	padding: var(--lafka-space-5) var(--lafka-space-5) var(--lafka-space-5) var(--lafka-space-5);
+	background: var(--lafka-color-surface-muted);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
+	box-shadow: none;
+}
+
+.woocommerce-account .lafka-iconbox .icon_wrapper,
+.woocommerce-account .lafka-iconbox.lafka-icon-box-left .icon_wrapper {
+	position: relative;
+	top: auto;
+	left: auto;
+	right: auto;
+	bottom: auto;
+	margin: 0;
+	flex: 0 0 auto;
+	width: 44px;
+	height: 44px;
+	line-height: 44px;
+	border-radius: 50%;
+}
+
+.woocommerce-account .lafka-iconbox .iconbox_text_content,
+.woocommerce-account .lafka-iconbox.lafka-icon-box-left .iconbox_text_content,
+.woocommerce-account .lafka-iconbox h5,
+.woocommerce-account .lafka-iconbox small {
+	text-align: left;
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+	line-height: var(--lafka-line-body);
+	margin: 0;
+}
+
+.woocommerce-account .lafka-iconbox::before,
+.woocommerce-account .lafka-iconbox::after {
+	content: none !important;
+	display: none !important;
+}
+
+/* Newsletter signup band below the form — when MC4WP is missing, the
+ * shortcode emits a `.lafka-shortcode-fallback` span which we hide via
+ * the rule above. The iconbox alone gives the user the visual cue. */
+.woocommerce-account .newsletter-section {
+	max-width: 480px;
+	margin: 0 auto;
+	padding: var(--lafka-space-5);
+	background: var(--lafka-color-surface-muted);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
 }
 
 /* Mobile tightening */
