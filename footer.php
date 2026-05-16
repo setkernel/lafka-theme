@@ -109,7 +109,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 			</div>
 
 			<div class="lafka-footer__col lafka-footer__col--order">
-				<h3 class="lafka-footer__col-title"><?php esc_html_e( 'Order', 'lafka' ); ?></h3>
+				<h2 class="lafka-footer__col-title"><?php esc_html_e( 'Order', 'lafka' ); ?></h2>
 				<ul class="lafka-footer__links">
 					<li><a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>"><?php esc_html_e( 'Full menu', 'lafka' ); ?></a></li>
 					<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
@@ -125,7 +125,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 			</div>
 
 			<div class="lafka-footer__col lafka-footer__col--visit">
-				<h3 class="lafka-footer__col-title"><?php esc_html_e( 'Visit us', 'lafka' ); ?></h3>
+				<h2 class="lafka-footer__col-title"><?php esc_html_e( 'Visit us', 'lafka' ); ?></h2>
 				<?php if ( '' !== $lafka_ft_addr ) : ?>
 					<address class="lafka-footer__address">
 						<?php echo nl2br( esc_html( $lafka_ft_addr ) ); ?>
@@ -145,7 +145,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 			</div>
 
 			<div class="lafka-footer__col lafka-footer__col--reach">
-				<h3 class="lafka-footer__col-title"><?php esc_html_e( 'Reach us', 'lafka' ); ?></h3>
+				<h2 class="lafka-footer__col-title"><?php esc_html_e( 'Reach us', 'lafka' ); ?></h2>
 				<ul class="lafka-footer__contact">
 					<?php if ( '' !== $lafka_ft_phone ) : ?>
 						<li>

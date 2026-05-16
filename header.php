@@ -177,15 +177,26 @@ defined( 'ABSPATH' ) || exit;
 				<?php endif; ?>
 
 				<?php if ( defined( 'LAFKA_IS_WOOCOMMERCE' ) && LAFKA_IS_WOOCOMMERCE && function_exists( 'WC' ) && WC()->cart ) : ?>
+					<?php
+					// v5.82.0: a11y — WCAG 2.5.3 (Label in Name). The visible
+					// text on this link is the count ("0", "3", etc.); the
+					// aria-label has to contain that visible text so screen
+					// readers and voice-input users (who say "click view
+					// cart 0 items") get a match. Old aria-label was just
+					// "View cart" which didn't include the count.
+					$lafka_cart_count = (int) WC()->cart->get_cart_contents_count();
+					/* translators: %d: number of items in the cart */
+					$lafka_cart_aria  = sprintf( _n( 'View cart, %d item', 'View cart, %d items', $lafka_cart_count, 'lafka' ), $lafka_cart_count );
+					?>
 					<a
 						class="lafka-header__cart"
 						href="<?php echo esc_url( wc_get_cart_url() ); ?>"
-						aria-label="<?php esc_attr_e( 'View cart', 'lafka' ); ?>"
+						aria-label="<?php echo esc_attr( $lafka_cart_aria ); ?>"
 						data-lafka-cart-open
 					>
 						<i class="fa fa-shopping-bag" aria-hidden="true"></i>
-						<span class="lafka-header__cart-count" data-lafka-cart-count>
-							<?php echo esc_html( (string) WC()->cart->get_cart_contents_count() ); ?>
+						<span class="lafka-header__cart-count" data-lafka-cart-count aria-hidden="true">
+							<?php echo esc_html( (string) $lafka_cart_count ); ?>
 						</span>
 					</a>
 				<?php endif; ?>

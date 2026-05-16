@@ -28,13 +28,21 @@
 
 /* -------- Self-hosted display family — Fraunces (variable serif) ----------
  * Only loaded for display weights (h1/h2 + .lafka-display). Body keeps using
- * Rubik (loaded in critical.css). font-display: swap so layout is never
- * blocked; FOUT is acceptable on serif headings. */
+ * Rubik (loaded in critical.css).
+ *
+ * v5.82.0: font-display switched from swap → optional. Swap caused a
+ * 0.31-0.48 CLS hit when Fraunces swapped in over the fallback (h1/h2
+ * sizing differs by 6-10px between the fallback metric and Fraunces).
+ * "optional" makes the browser show the fallback if Fraunces isn't
+ * cached within ~100ms; on revisits Fraunces is served from cache
+ * immediately so the perceived hit on cold loads is acceptable for
+ * the CLS payoff. Matches the "optional" setting already used for
+ * Rubik in critical.css and Fraunces in editorial.css. */
 @font-face {
 	font-family: Fraunces;
 	font-style: normal;
 	font-weight: 600;
-	font-display: swap;
+	font-display: optional;
 	src: url(../assets/fonts/fraunces/Fraunces-600.woff2) format("woff2");
 }
 
@@ -42,7 +50,7 @@
 	font-family: Fraunces;
 	font-style: normal;
 	font-weight: 800;
-	font-display: swap;
+	font-display: optional;
 	src: url(../assets/fonts/fraunces/Fraunces-800.woff2) format("woff2");
 }
 
