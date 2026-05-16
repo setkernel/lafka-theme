@@ -162,7 +162,13 @@
 	color: var(--lafka-color-text-secondary);
 }
 
-.lafka-page__content a:not(.wp-block-button__link) {
+/* v5.98.0: scope the prose-link styling tighter so it ONLY paints
+ * inline text links — not BEM-classed CTAs that get inherited when
+ * a WC page (like /cart/) uses page.php as its template and routes
+ * the cart shortcode through .lafka-page__content. Previously the
+ * cart-empty "Browse the menu" button rendered accent-on-accent
+ * invisible because this rule painted its text accent red. */
+.lafka-page__content a:not(.wp-block-button__link, .lafka-cart-empty__cta, [class*="__cta"], [class*="__btn"], .button) {
 	color: var(--lafka-color-accent-500);
 	text-decoration: underline;
 	text-underline-offset: 3px;
@@ -170,7 +176,7 @@
 	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-.lafka-page__content a:not(.wp-block-button__link):hover {
+.lafka-page__content a:not(.wp-block-button__link, .lafka-cart-empty__cta, [class*="__cta"], [class*="__btn"], .button):hover {
 	color: var(--lafka-color-accent-600);
 	text-decoration-thickness: 2px;
 }
