@@ -30,7 +30,15 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 ?>
 <li <?php wc_product_class( 'lafka-product-card', $product ); ?>>
 	<?php do_action( 'woocommerce_before_shop_loop_item' ); ?>
-	<a class="lafka-product-card__link" href="<?php the_permalink(); ?>" aria-label="<?php echo esc_attr( $product->get_name() ); ?>">
+	<?php
+	// v5.84.0: a11y — dropped redundant aria-label="<product name>". The
+	// link's visible content (h3 title + description + price) already
+	// provides the accessible name; an aria-label override stripped the
+	// description/price out of the SR announcement and triggered WCAG
+	// 2.5.3 (Label in Name) since the aria-label was shorter than the
+	// visible text. The default computed accessible name is correct.
+	?>
+	<a class="lafka-product-card__link" href="<?php the_permalink(); ?>">
 		<div class="lafka-product-card__img-wrap">
 			<?php do_action( 'woocommerce_before_shop_loop_item_title' ); ?>
 			<?php

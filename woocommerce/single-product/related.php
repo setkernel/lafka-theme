@@ -40,25 +40,33 @@ if ( $related_products ) :
 			<h2><?php echo wp_kses_post( $heading ); ?></h2>
 		<?php endif; ?>
 
-		<?php woocommerce_product_loop_start(); ?>
-		<!-- Container for flex carousel on related products  -->
-		<div>
+		<?php
+		// v5.84.0: a11y — the carousel container <div> previously sat
+		// INSIDE the <ul class="products">, which is invalid DOM (only
+		// <li> may be a child of <ul>). Screen readers stopped
+		// announcing the products as a list. Wrapper moved outside
+		// the loop start/end so the structure is
+		// <div.lafka-related-carousel><ul class="products"><li>card</li></ul></div>
+		// instead of <ul class="products"><div><li></div></ul>.
+		?>
+		<div class="lafka-related-carousel">
+			<?php woocommerce_product_loop_start(); ?>
 
-			<?php foreach ( $related_products as $related_product ) : ?>
+				<?php foreach ( $related_products as $related_product ) : ?>
 
-				<?php
-				/** @var WC_Product $related_product */
-				$post_object = get_post( $related_product->get_id() );
+					<?php
+					/** @var WC_Product $related_product */
+					$post_object = get_post( $related_product->get_id() );
 
-				setup_postdata( $GLOBALS['post'] = $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
+					setup_postdata( $GLOBALS['post'] = $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 
-				wc_get_template_part( 'content', 'product' );
-				?>
+					wc_get_template_part( 'content', 'product' );
+					?>
 
-			<?php endforeach; ?>
-			<!-- END Container for flex carousel on related products  -->
+				<?php endforeach; ?>
+
+			<?php woocommerce_product_loop_end(); ?>
 		</div>
-		<?php woocommerce_product_loop_end(); ?>
 
 	</section>
 
