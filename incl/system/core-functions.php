@@ -76,6 +76,22 @@ if ( ! function_exists( 'lafka_register_theme_features' ) ) {
 		);
 		add_theme_support( 'custom-background', $background_args );
 
+		// v6.3.0: WP-standard custom-logo (since WP 4.5). Replaces the
+		// legacy lafka_get_option('theme_logo') flow — operator now
+		// uploads via Appearance → Customize → Site Identity → Logo
+		// (the WP-native location for theme branding).
+		add_theme_support(
+			'custom-logo',
+			array(
+				'height'               => 96,
+				'width'                => 360,
+				'flex-height'          => true,
+				'flex-width'           => true,
+				'header-text'          => array( 'site-title' ),
+				'unlink-homepage-logo' => false,
+			)
+		);
+
 		//  Add theme suppport for aside, gallery, link, image, quote, status, video, audio, chat
 		add_theme_support( 'post-formats', array( 'aside', 'gallery', 'link', 'image', 'quote', 'status', 'video', 'audio', 'chat' ) );
 

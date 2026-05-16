@@ -119,22 +119,21 @@ defined( 'ABSPATH' ) || exit;
 
 			<a class="lafka-header__logo" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 				<?php
-				$lafka_logo_id     = function_exists( 'lafka_get_option' ) ? lafka_get_option( 'theme_logo' ) : 0;
-				$lafka_logo_mobile = function_exists( 'lafka_get_option' ) ? lafka_get_option( 'mobile_theme_logo' ) : 0;
+				/*
+				 * v6.3.0: prefer WP-standard custom-logo (Appearance →
+				 * Customize → Site Identity → Logo). Fall back to legacy
+				 * lafka_get_option('theme_logo') so operators with data
+				 * stored in the old framework still see their logo until
+				 * they re-upload via the standard UI. Final fallback is
+				 * the WP Site Icon.
+				 */
+				$lafka_custom_logo_id = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'custom_logo', 0 ) : 0;
+				$lafka_legacy_main    = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'theme_logo' ) : 0;
+				$lafka_legacy_mobile  = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'mobile_theme_logo' ) : 0;
+				$lafka_logo_id        = $lafka_custom_logo_id ?: $lafka_legacy_main ?: $lafka_legacy_mobile;
 				if ( $lafka_logo_id ) {
 					echo wp_get_attachment_image(
 						$lafka_logo_id,
-						'medium',
-						false,
-						array(
-							'class'   => 'lafka-header__logo-img',
-							'alt'     => esc_attr( get_bloginfo( 'name' ) ),
-							'loading' => 'eager',
-						)
-					);
-				} elseif ( $lafka_logo_mobile ) {
-					echo wp_get_attachment_image(
-						$lafka_logo_mobile,
 						'medium',
 						false,
 						array(
