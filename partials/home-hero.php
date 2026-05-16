@@ -56,14 +56,15 @@ if ( '' === $lafka_hero_image_src ) {
 	$lafka_hero_image_src = (string) apply_filters( 'lafka_home_hero_default_bg_url', '' );
 }
 
-// Stats — operator may override via Customizer. Defaults derive from
-// existing data sources where possible.
-$lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value', '~25' );
-$lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', __( 'min average', 'lafka' ) );
-$lafka_hero_stat_2_value = (string) get_theme_mod( 'lafka_home_hero_stat_2_value', '$30' );
-$lafka_hero_stat_2_label = (string) get_theme_mod( 'lafka_home_hero_stat_2_label', __( 'min for free delivery', 'lafka' ) );
-$lafka_hero_stat_3_value = (string) get_theme_mod( 'lafka_home_hero_stat_3_value', '4.8' );
-$lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label', __( 'avg rating', 'lafka' ) );
+// Stats — operator may override via Customizer. Defaults match the
+// handoff prototype order: rating first (trust signal), pickup time
+// (urgency), free delivery (commerce hook).
+$lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value', '4.8' );
+$lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', __( '1,200+ reviews', 'lafka' ) );
+$lafka_hero_stat_2_value = (string) get_theme_mod( 'lafka_home_hero_stat_2_value', '25 min' );
+$lafka_hero_stat_2_label = (string) get_theme_mod( 'lafka_home_hero_stat_2_label', __( 'avg. pickup', 'lafka' ) );
+$lafka_hero_stat_3_value = (string) get_theme_mod( 'lafka_home_hero_stat_3_value', 'Free' );
+$lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label', __( 'delivery $30+', 'lafka' ) );
 ?>
 <section class="lafka-hero" aria-label="<?php esc_attr_e( 'Welcome', 'lafka' ); ?>">
 	<div class="lafka-container lafka-hero__inner">
@@ -113,21 +114,21 @@ $lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label
 
 			<dl class="lafka-hero__stats">
 				<div class="lafka-hero__stat">
-					<dt class="lafka-hero__stat-icon" aria-hidden="true">⏱</dt>
+					<dt class="lafka-hero__stat-icon" aria-hidden="true">⭐</dt>
 					<dd class="lafka-hero__stat-body">
 						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_1_value ); ?></span>
 						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_1_label ); ?></span>
 					</dd>
 				</div>
 				<div class="lafka-hero__stat">
-					<dt class="lafka-hero__stat-icon" aria-hidden="true">🚚</dt>
+					<dt class="lafka-hero__stat-icon" aria-hidden="true">⏱</dt>
 					<dd class="lafka-hero__stat-body">
 						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_2_value ); ?></span>
 						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_2_label ); ?></span>
 					</dd>
 				</div>
 				<div class="lafka-hero__stat">
-					<dt class="lafka-hero__stat-icon" aria-hidden="true">⭐</dt>
+					<dt class="lafka-hero__stat-icon" aria-hidden="true">🚚</dt>
 					<dd class="lafka-hero__stat-body">
 						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_3_value ); ?></span>
 						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_3_label ); ?></span>

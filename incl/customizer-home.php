@@ -461,7 +461,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			),
 			'lafka_home_closer_headline'  => array(
 				'label' => __( 'Headline', 'lafka' ),
-				'default' => __( 'Hungry yet?', 'lafka' ),
+				'default' => __( 'Hungry?', 'lafka' ),
 				'type' => 'text',
 			),
 			'lafka_home_closer_subhead'   => array(

@@ -21,16 +21,16 @@ $lafka_how_steps = (array) apply_filters(
 	'lafka_home_how_it_works_steps',
 	array(
 		array(
-			'title' => (string) get_theme_mod( 'lafka_home_how_1_title', __( 'Order online', 'lafka' ) ),
-			'body'  => (string) get_theme_mod( 'lafka_home_how_1_body', __( 'Browse the menu, customize your size and toppings, and lock in pickup or delivery.', 'lafka' ) ),
+			'title' => (string) get_theme_mod( 'lafka_home_how_1_title', __( 'Pick your favourites', 'lafka' ) ),
+			'body'  => (string) get_theme_mod( 'lafka_home_how_1_body', __( 'Browse pizza, poutine, donair, wings & more. Customize every order, save your favourites.', 'lafka' ) ),
 		),
 		array(
-			'title' => (string) get_theme_mod( 'lafka_home_how_2_title', __( 'We make it fresh', 'lafka' ) ),
-			'body'  => (string) get_theme_mod( 'lafka_home_how_2_body', __( 'Hand-stretched dough, real cheese, never sitting under a heat lamp.', 'lafka' ) ),
+			'title' => (string) get_theme_mod( 'lafka_home_how_2_title', __( 'Pickup or delivery', 'lafka' ) ),
+			'body'  => (string) get_theme_mod( 'lafka_home_how_2_body', __( 'Pickup is fastest. Free delivery on orders over $30.', 'lafka' ) ),
 		),
 		array(
-			'title' => (string) get_theme_mod( 'lafka_home_how_3_title', __( 'Pickup or delivered', 'lafka' ) ),
-			'body'  => (string) get_theme_mod( 'lafka_home_how_3_body', __( 'Grab it on your way home, or let us bring it. Free delivery on orders over $30.', 'lafka' ) ),
+			'title' => (string) get_theme_mod( 'lafka_home_how_3_title', __( 'We start baking', 'lafka' ) ),
+			'body'  => (string) get_theme_mod( 'lafka_home_how_3_body', __( 'Track your order in real time. Most pies are out of the oven in 25 minutes.', 'lafka' ) ),
 		),
 	)
 );

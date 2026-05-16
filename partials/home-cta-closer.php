@@ -22,7 +22,7 @@ $lafka_closer_tel   = isset( $lafka_closer_info['phone_e164'] ) ? (string) $lafk
 
 $lafka_closer_headline_default = sprintf(
 	/* translators: HTML allowed — second clause wrapped in an <em> for the red italic accent. */
-	__( 'Hungry yet? %s', 'lafka' ),
+	__( 'Hungry? %s', 'lafka' ),
 	'<em class="lafka-closer__accent">' . esc_html__( "Let's fix that.", 'lafka' ) . '</em>'
 );
 $lafka_closer_headline = (string) get_theme_mod( 'lafka_home_closer_headline', $lafka_closer_headline_default );
