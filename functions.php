@@ -11,6 +11,14 @@ require_once get_template_directory() . '/incl/system/core-functions.php';
  */
 require_once get_template_directory() . '/incl/customizer-bridge.php';
 
+/*
+ * v6.1.0: Retire the legacy Theme Options admin menu. The framework's
+ * storage + helpers stay loaded (lafka_get_option still reads from
+ * wp_options.lafka), but the operator-visible entry point is removed
+ * and direct URL hits redirect to Customizer.
+ */
+require_once get_template_directory() . '/incl/customizer-bridge-deprecate-theme-options.php';
+
 
 
 /* GitHub auto-updater for theme & plugin */
