@@ -33,7 +33,7 @@
 }
 
 .lafka-menu__crumbs a:hover {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-menu__crumbs span[aria-hidden] {
@@ -557,7 +557,7 @@
 }
 
 .lafka-menu__toc-link:hover {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	text-decoration: underline;
 	text-underline-offset: 4px;
 }

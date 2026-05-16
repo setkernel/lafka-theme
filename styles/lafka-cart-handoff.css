@@ -253,7 +253,7 @@
 }
 
 .woocommerce-cart .lafka-cart .product-name a:hover {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .woocommerce-cart .lafka-cart .variation,

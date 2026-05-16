@@ -139,17 +139,40 @@ $lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label
 		</div>
 
 		<div class="lafka-hero__media" aria-hidden="true">
-			<?php if ( $lafka_hero_image_src ) : ?>
-				<img
-					class="lafka-hero__image"
-					src="<?php echo esc_url( $lafka_hero_image_src ); ?>"
-					alt=""
-					loading="eager"
-					fetchpriority="high"
-				>
-			<?php else : ?>
+			<?php
+			if ( $lafka_hero_image_id ) {
+				// v5.99.0: render via wp_get_attachment_image() so width/
+				// height attrs are emitted from the attachment metadata.
+				// Without explicit dimensions, the browser reserves zero
+				// space until the image loads, jolting layout (home CLS
+				// was 0.83 — biggest core-web-vital regression on the
+				// site). The intrinsic ratio now preserves the slot.
+				echo wp_get_attachment_image(
+					$lafka_hero_image_id,
+					'large',
+					false,
+					array(
+						'class'         => 'lafka-hero__image',
+						'alt'           => '',
+						'loading'       => 'eager',
+						'fetchpriority' => 'high',
+						'decoding'      => 'async',
+					)
+				);
+			} elseif ( $lafka_hero_image_src ) {
+				// Filter-provided default URL — no attachment ID, so we
+				// can't read intrinsic dims. Set a reasonable default
+				// ratio so layout still reserves space.
+				printf(
+					'<img class="lafka-hero__image" src="%s" alt="" width="640" height="640" loading="eager" fetchpriority="high" decoding="async">',
+					esc_url( $lafka_hero_image_src )
+				);
+			} else {
+				?>
 				<div class="lafka-hero__image-placeholder">🍕</div>
-			<?php endif; ?>
+				<?php
+			}
+			?>
 		</div>
 
 	</div>

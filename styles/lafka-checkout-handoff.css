@@ -189,7 +189,7 @@
 }
 
 .woocommerce-checkout .form-row .required {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	text-decoration: none;
 }
 

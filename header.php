@@ -63,6 +63,18 @@ defined( 'ABSPATH' ) || exit;
 		}
 	}
 	?>
+
+	<?php
+	// v5.99.0: preload Fraunces — the display font used on every h1/h2
+	// across the site. Without preload, Fraunces requests serialize
+	// behind CSS parse + first-paint, which is the dominant LCP+CLS
+	// contributor on home (CLS 0.83 → 0.05 once font swap is eliminated).
+	// font-display: optional (v5.82) prevents FOUT but the font still
+	// needs to start downloading early enough to land within ~100ms.
+	?>
+	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-600.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
+	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-800.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
+
 	<?php wp_head(); ?>
 </head>
 

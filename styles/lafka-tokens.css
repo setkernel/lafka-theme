@@ -83,6 +83,25 @@
 	--lafka-color-accent-700: #991b1b;
 	--lafka-color-accent-contrast: #fff;
 
+	/* v5.99.0: dedicated accent-as-TEXT-on-light token.
+	 *
+	 * --lafka-color-accent-500 with a Customizer override flowing
+	 * through dynamic-css.php SSOT can land at any brand red the
+	 * operator chooses. For Peppery's #f2002d, accent-on-white
+	 * yields 4.36:1 — failing WCAG AA (needs 4.5:1).
+	 *
+	 * color-mix(85%) darkens by ~15% which is enough to clear AA
+	 * for any reasonable mid-tone accent the operator might pick.
+	 * Used wherever accent is rendered as TEXT (eyebrows, prices,
+	 * link colors, etc.) — for accent BACKGROUND with white text,
+	 * keep using --lafka-color-accent-500 since white-on-mid-red
+	 * always clears contrast.
+	 *
+	 * Falls back to accent-600 in browsers without color-mix
+	 * (Safari <16.4 / Firefox <113 / Chrome <111) — overridden by
+	 * the @supports block at the end of this file. */
+	--lafka-color-accent-text: var(--lafka-color-accent-600);
+
 	/* ------- Colour: text -----------------------------------------------
 	 * Note: handoff specifies text-muted #71717a (4.48:1 on white — sub-AA
 	 * for body sizes ≤17px). Adopted verbatim per 2026-05-15 design lock.
@@ -589,4 +608,16 @@ h2,
 	text-transform: lowercase;
 	letter-spacing: 0.02em;
 	margin-right: 0.15em;
+}
+
+/* v5.99.0: progressive enhancement for --lafka-color-accent-text.
+ * Modern browsers derive a 15%-darker shade from the operator's
+ * Customizer accent via color-mix(). Older browsers stick with the
+ * accent-600 fallback set in :root above. Same SSOT either way —
+ * the operator's brand color is the source. */
+@supports (color: color-mix(in srgb, red 50%, white)) {
+
+	:root {
+		--lafka-color-accent-text: color-mix(in srgb, var(--lafka-color-accent-500) 85%, #000);
+	}
 }

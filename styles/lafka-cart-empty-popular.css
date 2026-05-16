@@ -110,7 +110,7 @@
 .lafka-cart-empty-popular__price {
 	font-size: var(--lafka-font-size-sm);
 	font-weight: var(--lafka-font-weight-semibold);
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	margin-top: auto;
 	font-variant-numeric: tabular-nums;
 }

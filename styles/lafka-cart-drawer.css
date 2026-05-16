@@ -115,7 +115,7 @@
 
 .lafka-cart-drawer__close:hover {
 	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-cart-drawer__close:focus-visible {
@@ -346,7 +346,7 @@
 }
 
 .lafka-cart-drawer__view-cart:hover {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-cart-drawer__trust {

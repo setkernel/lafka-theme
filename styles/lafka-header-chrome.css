@@ -90,7 +90,7 @@ body .lafka-header {
 
 .lafka-header__menu-toggle:hover {
 	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-header__menu-toggle:focus-visible {
@@ -232,14 +232,14 @@ body .lafka-header {
 }
 
 .lafka-header__nav-list > li > a:hover {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	background: var(--lafka-color-surface-muted);
 }
 
 .lafka-header__nav-list > li.current-menu-item > a,
 .lafka-header__nav-list > li.current_page_item > a,
 .lafka-header__nav-list > li.current-menu-ancestor > a {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	font-weight: var(--lafka-font-weight-semibold);
 	position: relative;
 }
@@ -291,7 +291,7 @@ body .lafka-header {
 .lafka-header__icon-btn:hover,
 .lafka-header__cart:hover {
 	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-header__icon-btn i,

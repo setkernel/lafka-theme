@@ -131,7 +131,7 @@
 	font-weight: var(--lafka-font-weight-bold);
 	letter-spacing: var(--lafka-letter-spacing-wide);
 	text-transform: uppercase;
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-contact__title {
@@ -279,7 +279,7 @@
 }
 
 .lafka-contact__link {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	text-decoration: none;
 	font-weight: var(--lafka-font-weight-semibold);
 	font-size: var(--lafka-font-size-body-sm);
@@ -422,7 +422,7 @@
 }
 
 .lafka-contact__faq-q:hover {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-contact__faq-icon {

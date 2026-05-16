@@ -70,7 +70,7 @@
 }
 
 .lafka-page__crumbs a:hover {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-page__crumbs span[aria-hidden] {
@@ -169,7 +169,7 @@
  * cart-empty "Browse the menu" button rendered accent-on-accent
  * invisible because this rule painted its text accent red. */
 .lafka-page__content a:not(.wp-block-button__link, .lafka-cart-empty__cta, [class*="__cta"], [class*="__btn"], .button) {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	text-decoration: underline;
 	text-underline-offset: 3px;
 	text-decoration-thickness: 1px;

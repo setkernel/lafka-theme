@@ -79,7 +79,7 @@
 }
 
 .lafka-hero__accent {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	font-style: italic;
 	font-family: var(--lafka-font-family-display);
 }

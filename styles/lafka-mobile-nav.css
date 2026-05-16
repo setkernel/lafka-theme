@@ -110,7 +110,7 @@
 
 .lafka-mobile-nav__close:hover {
 	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-mobile-nav__close:focus-visible {
@@ -173,12 +173,12 @@
 .lafka-mobile-nav__list > li > a:hover,
 .lafka-mobile-nav__nav .menu > li > a:hover {
 	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 }
 
 .lafka-mobile-nav__list > li.current-menu-item > a,
 .lafka-mobile-nav__nav .menu > li.current-menu-item > a {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	font-weight: var(--lafka-font-weight-semibold);
 }
 

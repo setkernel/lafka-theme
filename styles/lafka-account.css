@@ -139,7 +139,7 @@
 }
 
 .woocommerce-LostPassword.lost_password a {
-	color: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-text);
 	font-weight: var(--lafka-font-weight-medium, 500);
 	text-decoration: underline;
 	text-underline-offset: 2px;
