@@ -85,11 +85,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   .lafka-order-method-bar__phone { display: none; }
 }
 
-body { padding-top: var(--lafka-pdp-bar-h); }
-
-@media (max-width: 720px) {
-
- body { padding-top: var(--lafka-pdp-bar-h-mobile); } }
+/* v5.96.0: removed unconditional body { padding-top: var(--lafka-pdp-bar-h) }.
+ * The order-method-bar is suppressed site-wide via
+ * styles/lafka-header-chrome.css (`body .lafka-order-method-bar { display: none }`),
+ * so the body padding-top was reserving 36px of dead space at the top of
+ * every page — visible as awkward whitespace above the announce bar. */
 
 /* === Method-switch modal (W4-T11) — built via createElement, no innerHTML === */
 .lafka-method-modal__overlay {
@@ -696,7 +696,11 @@ body { padding-top: var(--lafka-pdp-bar-h); }
   padding: 20px;
   box-shadow: var(--lafka-pdp-shadow-card);
   position: sticky;
-  top: calc(var(--lafka-pdp-bar-h) + var(--lafka-header-h, 80px));
+
+  /* v5.96.0: was calc(bar-h + header-h). The order-method-bar is
+   * site-wide suppressed (see lafka-header-chrome.css), so the
+   * sticky offset only needs to clear the header. */
+  top: var(--lafka-header-h, 80px);
 }
 
 .lafka-pdp-eyebrow--bestseller {

@@ -198,6 +198,14 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 
 		$custom_css  = ':root{';
 		$custom_css .= '--lafka-accent-color:' . $accent_color . ';';
+		// v5.96.0: SSOT — Customizer accent_color drives BOTH the legacy
+		// `--lafka-accent-color` (consumed by WPBakery surfaces + dynamic
+		// rules below) AND the handoff token `--lafka-color-accent-500`
+		// (consumed by every rebuilt page since v5.59.0). Without this
+		// alias, operators who set their brand color in Customizer
+		// see the legacy surfaces change but the handoff pages stay
+		// on the shipped #dc2626 — colour drift across the site.
+		$custom_css .= '--lafka-color-accent-500:' . $accent_color . ';';
 		$custom_css .= '--lafka-logo-bg-color:' . $logo_bg_color . ';';
 		$custom_css .= '--lafka-link-color:' . $links_color . ';';
 		$custom_css .= '--lafka-link-hover-color:' . $links_hover_color . ';';
