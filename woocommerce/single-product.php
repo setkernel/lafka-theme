@@ -50,7 +50,8 @@ get_header( 'shop' );
             </div>
 
             <?php require get_template_directory() . '/partials/pdp-make-it-a-meal.php'; ?>
-            <?php require get_template_directory() . '/partials/pdp-tabs.php'; ?>
+            <?php // v5.91.0: ingredients + reviews 2-card grid (handoff). Replaces the WC tabs. ?>
+            <?php require get_template_directory() . '/partials/pdp-ingredients-reviews.php'; ?>
 
             <?php woocommerce_output_related_products(); ?>
 

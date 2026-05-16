@@ -363,3 +363,161 @@
 		gap: var(--lafka-space-3) var(--lafka-space-5);
 	}
 }
+
+/* =========================================================================
+ * Ingredients + Reviews 2-card grid (v5.91.0)
+ *
+ * Sits between the buy box and related products. Mobile = stacked
+ * single-column; ≥768 = side-by-side 2-col.
+ * ========================================================================= */
+.lafka-pdp-info {
+	padding-block: var(--lafka-space-8) var(--lafka-space-10);
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-pdp-info__grid {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lafka-space-5);
+}
+
+@media (min-width: 768px) {
+
+	.lafka-pdp-info__grid {
+		grid-template-columns: 1fr 1fr;
+		gap: var(--lafka-space-6);
+	}
+}
+
+.lafka-pdp-info__card {
+	background: var(--lafka-color-surface-raised);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	padding: var(--lafka-space-6);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.lafka-pdp-info__card-title {
+	margin: 0 0 var(--lafka-space-3) 0;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: 1.25rem;
+	line-height: 1.2;
+	letter-spacing: -0.01em;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-pdp-info__body {
+	font-size: var(--lafka-font-size-body-sm);
+	line-height: 1.55;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-pdp-info__body p {
+	margin: 0 0 var(--lafka-space-2) 0;
+}
+
+.lafka-pdp-info__body p:last-child {
+	margin-bottom: 0;
+}
+
+.lafka-pdp-info__sublabel {
+	margin: var(--lafka-space-4) 0 var(--lafka-space-2) 0;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-pdp-info__allergens {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-2);
+}
+
+.lafka-pdp-info__allergen-chip {
+	display: inline-block;
+	padding: var(--lafka-space-1) var(--lafka-space-3);
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-primary);
+	border-radius: var(--lafka-radius-pill);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-semibold);
+}
+
+.lafka-pdp-info__allergen-chip--muted {
+	background: transparent;
+	color: var(--lafka-color-text-muted);
+	border: 1px dashed var(--lafka-color-border-default);
+	font-weight: var(--lafka-font-weight-regular);
+}
+
+.lafka-pdp-info__reviews {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-4);
+}
+
+.lafka-pdp-info__review {
+	padding-block: var(--lafka-space-2);
+}
+
+.lafka-pdp-info__review + .lafka-pdp-info__review {
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	padding-top: var(--lafka-space-4);
+}
+
+.lafka-pdp-info__review-stars {
+	display: inline-block;
+	color: var(--lafka-color-warning-500, #f59e0b);
+	font-size: 14px;
+	letter-spacing: 1px;
+	line-height: 1;
+}
+
+.lafka-pdp-info__review-quote {
+	margin: var(--lafka-space-2) 0 var(--lafka-space-2) 0;
+	font-size: var(--lafka-font-size-body-sm);
+	line-height: 1.5;
+	color: var(--lafka-color-text-secondary);
+	font-style: normal;
+	quotes: """ """;
+}
+
+.lafka-pdp-info__review-quote::before {
+	content: open-quote;
+}
+
+.lafka-pdp-info__review-quote::after {
+	content: close-quote;
+}
+
+.lafka-pdp-info__review-attribution {
+	margin: 0;
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-pdp-info__review-count {
+	margin: var(--lafka-space-4) 0 0 0;
+	padding-top: var(--lafka-space-3);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	text-align: center;
+}
+
+/* When the legacy WC tabs are still being rendered by other paths, hide
+ * them on the PDP — the handoff design replaces them with the 2-card grid. */
+.lafka-pdp .woocommerce-tabs,
+.lafka-pdp .lafka-pdp-tabs {
+	display: none;
+}
