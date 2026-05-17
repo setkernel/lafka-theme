@@ -1,3 +1,5 @@
+/* v6.6.0 — coupon input mobile height clamp (force 44px regardless of legacy padding stack) */
+
 /* v6.5.0 — cart polish: unified Update/Apply pill buttons, qty stepper +/− glyph reset, actions row alignment */
 
 /* =========================================================================
@@ -407,14 +409,40 @@
 }
 
 .woocommerce-cart .coupon .input-text,
-.woocommerce-cart .coupon input.input-text {
+.woocommerce-cart .coupon input.input-text,
+.woocommerce-cart .coupon input#coupon_code,
+.woocommerce-cart .coupon input[name="coupon_code"] {
 	flex: 1 1 200px;
 	min-width: 0;
-	padding: var(--lafka-space-3) var(--lafka-space-4);
+	height: 44px;
+	min-height: 44px;
+	max-height: 44px;
+	padding: 10px 14px;
 	border: 1px solid var(--lafka-color-border-default);
 	border-radius: var(--lafka-radius-md);
 	background: var(--lafka-color-surface-sunken);
 	font-size: var(--lafka-font-size-body-sm);
+	line-height: 1.2;
+	box-sizing: border-box;
+}
+
+/* v6.6.0 — at 375 the .coupon container becomes flex-direction: column with
+ * align-items: stretch on the parent. The legacy `input { padding: 15px }`
+ * base + min-height: 50px (from another file) summed to ~150px on the
+ * coupon input. Force a normal 44px input height regardless of cascade. */
+@media (max-width: 600px) {
+
+	.woocommerce-cart .coupon .input-text,
+	.woocommerce-cart .coupon input.input-text,
+	.woocommerce-cart .coupon input#coupon_code,
+	.woocommerce-cart .coupon input[name="coupon_code"] {
+		height: 44px !important;
+		min-height: 44px !important;
+		max-height: 44px !important;
+		padding: 10px 14px !important;
+		width: 100%;
+		flex: 0 0 auto;
+	}
 }
 
 /* Both Update and Apply share the same secondary pill style. Selectors

@@ -1,3 +1,8 @@
+/* v6.6.0 — login card escape: bump specificity + !important so the 480px max-width
+ * + auto centering land over the legacy `.woocommerce-account .woocommerce > form`
+ * cascade; collapse u-columns to single column; rewire iconbox content to a flex
+ * column so h5 + small + body all stack visibly to the right of the icon. */
+
 /* v6.5.0 — my-account login form: full-surround card border, lost-password rail cleanup, iconbox callout band */
 
 /*
@@ -31,24 +36,73 @@
 }
 
 /* Form card wrapper.
- * v6.5.0: !important on border + center the card on the my-account login
- * page. Legacy style.css emits a bare `border-left: 1px solid` somewhere
- * in the .woocommerce form cascade — escalate so we always render a full
- * 4-side surround. max-width 480px + margin auto sits the form nicely
- * on the now-uncapped (.woocommerce-account .lafka-page__content) wrap. */
+ * v6.6.0: legacy `body.woocommerce-account .woocommerce > form.woocommerce-form-login.login`
+ * (specificity 0,2,3) was beating the v6.5.0 single-class rule, so the
+ * max-width: 480px + margin-inline: auto never landed and the form sat
+ * left-aligned at full content width. Escalate the centering + cap with
+ * !important and add a higher-specificity selector that mirrors the legacy
+ * compound. Also pin the matching account form heading ("Login" h2) into
+ * the same column so the heading + card stack neatly.
+ *
+ * The login h2 anchor + the form card share `max-width: 480px; margin-inline: auto`
+ * so the section reads as a single column on a wide page.
+ */
 .woocommerce-form-login,
 .woocommerce-form-register,
 .woocommerce-ResetPassword,
-.woocommerce-OrderTracking {
-	background: var(--lafka-color-surface-raised);
+.woocommerce-OrderTracking,
+form.woocommerce-form-login,
+form.woocommerce-form-register,
+.woocommerce form.woocommerce-form-login,
+.woocommerce form.woocommerce-form-register,
+.woocommerce-account .woocommerce > form.woocommerce-form-login,
+.woocommerce-account .woocommerce > form.woocommerce-form-register {
+	background: var(--lafka-color-surface-raised) !important;
 	border: 1px solid var(--lafka-color-border-subtle) !important;
 	border-left: 1px solid var(--lafka-color-border-subtle) !important;
-	border-radius: var(--lafka-radius-lg);
-	padding: var(--lafka-space-6);
+	border-radius: var(--lafka-radius-lg) !important;
+	padding: var(--lafka-space-6) !important;
 	box-shadow: var(--lafka-shadow-1);
+	max-width: 480px !important;
+	margin-inline: auto !important;
+	margin-block-end: var(--lafka-space-6);
+	box-sizing: border-box;
+	width: auto !important;
+	float: none !important;
+}
+
+/* Center the "Login" / "Register" heading above the card so the section
+ * reads as a unified column on wide viewports. */
+.woocommerce-account #customer_login h2,
+.woocommerce-account .woocommerce > h2,
+.woocommerce-account h2.login-heading,
+.woocommerce-page h2.login-heading {
 	max-width: 480px;
 	margin-inline: auto;
-	margin-block-end: var(--lafka-space-6);
+	margin-block-end: var(--lafka-space-3);
+	text-align: left;
+}
+
+/* When WC renders the login + register pair as `.u-columns.col2-set`,
+ * collapse it to a single centered column on my-account so the login form
+ * isn't squeezed into a 50% half-column. (Register/lost-password live on
+ * separate routes in our flow.) */
+.woocommerce-account #customer_login.u-columns,
+.woocommerce-account #customer_login.col2-set,
+.woocommerce-account #customer_login.u-columns.col2-set {
+	display: block;
+	max-width: 480px;
+	margin-inline: auto;
+}
+
+.woocommerce-account #customer_login .u-column1,
+.woocommerce-account #customer_login .u-column2,
+.woocommerce-account #customer_login .col-1,
+.woocommerce-account #customer_login .col-2 {
+	width: 100% !important;
+	float: none !important;
+	max-width: none;
+	padding: 0;
 }
 
 /* Form row spacing */
@@ -338,14 +392,51 @@ body.woocommerce-page.woocommerce-account {
 	border-radius: 50%;
 }
 
-.woocommerce-account .lafka-iconbox .iconbox_text_content,
-.woocommerce-account .lafka-iconbox.lafka-icon-box-left .iconbox_text_content,
+/* v6.6.0 — give iconbox_content a column flex layout so the h5 heading,
+ * optional small subtitle, and body text stack predictably to the right of
+ * the icon. Without this the legacy cascade kept `iconbox_content` as a
+ * generic block where the h5 inherited heading sizing and could collapse
+ * or visually break in tight columns. */
+.woocommerce-account .lafka-iconbox .iconbox_content {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: 0;
+	flex: 1 1 auto;
+}
+
 .woocommerce-account .lafka-iconbox h5,
-.woocommerce-account .lafka-iconbox small {
+.woocommerce-account .lafka-iconbox .iconbox_content h5 {
+	margin: 0 !important;
+	padding: 0;
+	font-family: var(--lafka-font-family-display);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-semibold);
+	line-height: 1.2;
+	color: var(--lafka-color-text-primary);
+	text-align: left;
+}
+
+.woocommerce-account .lafka-iconbox small,
+.woocommerce-account .lafka-iconbox .iconbox_content small {
+	margin: 0;
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-medium);
+	color: var(--lafka-color-text-muted);
+	letter-spacing: 0.02em;
+	text-align: left;
+}
+
+.woocommerce-account .lafka-iconbox .iconbox_text_content,
+.woocommerce-account .lafka-iconbox.lafka-icon-box-left .iconbox_text_content {
 	text-align: left;
 	font-size: var(--lafka-font-size-body-sm);
 	color: var(--lafka-color-text-secondary);
 	line-height: var(--lafka-line-body);
+	margin: 0;
+}
+
+.woocommerce-account .lafka-iconbox .iconbox_text_content > * {
 	margin: 0;
 }
 

@@ -664,15 +664,81 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   border-radius: var(--lafka-pdp-radius);
   padding: 10px; text-align: center;
   display: flex; flex-direction: column; gap: 6px;
+  min-height: 200px;
 }
 
-.lafka-pdp-upsell__link { color: inherit; text-decoration: none; }
+/* v6.6.0 — bulletproof the link layout. Previously the anchor was inline,
+ * which let legacy `a { ... }` cascade rules collapse its contents to zero
+ * size and made the card render as just the +Add button. Force the link to
+ * flex-column layout so image + name + price always have explicit boxes.
+ * `min-width: 0` lets the flex column shrink properly inside the grid cell. */
+.lafka-pdp-upsell__link {
+  display: flex !important;
+  flex-direction: column;
+  gap: 4px;
+  color: inherit;
+  text-decoration: none;
+  min-width: 0;
+}
 
-.lafka-pdp-upsell__link img { width: 100%; aspect-ratio: 1; object-fit: cover; border-radius: 4px; }
+/* If a product has no featured image, get_the_post_thumbnail returns empty
+ * string and no <img> renders. The card would otherwise sag — paint a soft
+ * image-shaped placeholder via the link's ::before so the layout stays even. */
+.lafka-pdp-upsell__link::before {
+  content: "";
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--lafka-pdp-bg-soft, #f5f1ec);
+  border-radius: 4px;
+  order: -1;
+}
 
-.lafka-pdp-upsell__name { display: block; font-size: 12px; font-weight: 500; margin-top: 4px; }
+.lafka-pdp-upsell__link:has(img)::before {
+  display: none;
+}
 
-.lafka-pdp-upsell__price { display: block; font-size: 11px; color: var(--lafka-pdp-muted); }
+.lafka-pdp-upsell__link img {
+  width: 100% !important;
+  aspect-ratio: 1;
+  object-fit: cover;
+  border-radius: 4px;
+  display: block;
+  height: auto;
+}
+
+.lafka-pdp-upsell__placeholder {
+  display: block;
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--lafka-pdp-bg-soft, #f5f1ec);
+  border-radius: 4px;
+}
+
+/* Force visible text — legacy cascade can dim/zero these spans. */
+.lafka-pdp-upsell__name {
+  display: block !important;
+  font-size: 13px !important;
+  font-weight: 600;
+  line-height: 1.3;
+  margin-top: 4px;
+  color: var(--lafka-pdp-text, var(--lafka-color-text-primary));
+  visibility: visible;
+}
+
+.lafka-pdp-upsell__price {
+  display: block !important;
+  font-size: 12px !important;
+  font-weight: 500;
+  color: var(--lafka-pdp-accent, var(--lafka-color-accent-text));
+  visibility: visible;
+}
+
+.lafka-pdp-upsell__price .woocommerce-Price-amount,
+.lafka-pdp-upsell__price bdi {
+  font-size: inherit;
+  color: inherit;
+}
 
 .lafka-pdp-upsell__add {
   background: #fff;

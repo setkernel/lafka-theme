@@ -1,3 +1,9 @@
+/* v6.6.0 — desktop 2-col grid escape: legacy style.css forced #customer_details
+ * to display:inline-block + calc(100% - 500px) and #order_review to width:495px
+ * inline-block, both of which collapsed the v6.5.0 grid layout into a single
+ * 280px-wide left column with the order_review pushed out of flow below.
+ * Re-anchor with explicit grid-column + grid-row + display:block + width:auto. */
+
 /* =========================================================================
  * Checkout + confirmation (v5.65.0)
  * /design_handoff_peppery_ordering/README.md "Checkout (/checkout)" + "Confirmation"
@@ -95,11 +101,39 @@
 	margin-bottom: var(--lafka-space-6);
 }
 
-/* -------- 2-col layout (form + sticky review) -------------------------- */
+/* -------- 2-col layout (form + sticky review) --------------------------
+ *
+ * v6.6.0 — legacy style.css emits the following baseline cascade that
+ * blows up the grid placement on desktop:
+ *
+ *   form.checkout.woocommerce-checkout #customer_details {
+ *     display: inline-block; width: calc(100% - 500px); padding-right: 30px;
+ *   }
+ *   form.checkout.woocommerce-checkout #order_review {
+ *     width: 495px; display: inline-block;
+ *   }
+ *   h3#order_review_heading { display: none; }
+ *
+ * Together: #customer_details is rendered inline-block ~280px wide (since
+ * the form is itself constrained), and #order_review (containing the items
+ * table + payment radios + Place order button) gets a fixed 495px width
+ * AND inline-block — so it falls out of grid flow and lands wherever the
+ * inline-block layout dumps it, which is below #customer_details center
+ * column on a 1280 viewport. #order_review_heading was display:none, so
+ * "Your order" heading was hidden entirely (the v6.5.0 ::before injection
+ * is the only thing that surfaces it).
+ *
+ * Fix: explicit grid-column slotting + reset of legacy widths/display.
+ * !important is the cheapest path because the legacy selectors are
+ * `form.checkout.woocommerce-checkout #customer_details` (specificity
+ * 0,2,1) which is hard to beat from a handoff stylesheet that doesn't
+ * want to repeat compound selectors.
+ */
 @media (min-width: 1024px) {
 
-	.woocommerce-checkout form.checkout {
-		display: grid;
+	.woocommerce-checkout form.checkout,
+	.woocommerce-checkout form.checkout.woocommerce-checkout {
+		display: grid !important;
 		grid-template-columns: 1.4fr 1fr;
 		gap: var(--lafka-space-10);
 		align-items: start;
@@ -109,20 +143,38 @@
 		grid-column: 1 / -1;
 	}
 
-	.woocommerce-checkout #customer_details {
-		grid-column: 1;
+	.woocommerce-checkout #customer_details,
+	.woocommerce-checkout form.checkout.woocommerce-checkout #customer_details {
+		grid-column: 1 !important;
+		grid-row: 2 !important;
+		display: block !important;
+		width: auto !important;
+		padding-right: 0 !important;
 		min-width: 0;
 	}
 
+	/* The order-review pair lives in the right column. Heading is row 2,
+	 * the review body follows directly underneath (row 3). Together with
+	 * align-items:start they hug the top of the right column. */
 	.woocommerce-checkout h3#order_review_heading,
-	.woocommerce-checkout #order_review {
-		grid-column: 2;
+	.woocommerce-checkout form.checkout h3#order_review_heading {
+		grid-column: 2 !important;
+		grid-row: 2 !important;
+		display: flex !important;
 		min-width: 0;
+		align-self: start;
 	}
 
-	.woocommerce-checkout #order_review {
+	.woocommerce-checkout #order_review,
+	.woocommerce-checkout form.checkout.woocommerce-checkout #order_review {
+		grid-column: 2 !important;
+		grid-row: 3 !important;
+		display: block !important;
+		width: auto !important;
+		min-width: 0;
 		position: sticky;
 		top: calc(var(--lafka-header-h-desk) + var(--lafka-space-4));
+		align-self: start;
 	}
 }
 

@@ -126,3 +126,22 @@
 body.lafka-has-sticky-cart {
 	padding-bottom: 64px;
 }
+
+/* v6.6.0 — hide the sticky-cart bar on desktop. The header cart icon
+ * already shows item count + price + a tap target to /cart/, so the
+ * floating bar duplicates that affordance and (worse) lands mid-page on
+ * routes like /my-account/ and /contact/ where the body content is short
+ * enough that the JS-positioned bar overlaps the next-content section
+ * instead of pinning to the viewport bottom. Mobile keeps the bar — it
+ * still acts as the persistent CTA on narrow viewports. */
+@media (min-width: 1024px) {
+
+	.lafka-sticky-cart,
+	body.lafka-has-sticky-cart .lafka-sticky-cart {
+		display: none !important;
+	}
+
+	body.lafka-has-sticky-cart {
+		padding-bottom: 0;
+	}
+}
