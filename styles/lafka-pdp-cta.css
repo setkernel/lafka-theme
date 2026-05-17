@@ -89,3 +89,35 @@ body.lafka-has-pdp-cta {
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-text-secondary);
 }
+
+/* Hide at desktop — the in-summary Add-to-Cart button is the canonical
+ * desktop CTA. Showing this sticky bar on top of it produced two
+ * competing CTAs and a stray full-width red bar mid-page (v6.7.3).
+ * Mobile (≤720px) is covered by the newer .lafka-pdp-mobile-cta;
+ * tablet (721–1023px) keeps the sticky CTA so addon-heavy products
+ * don't lose the buy-button to scroll. */
+@media (min-width: 1024px) {
+
+	.lafka-pdp-cta {
+		display: none !important;
+	}
+
+	body.lafka-has-pdp-cta {
+		padding-bottom: 0;
+	}
+}
+
+/* Mobile: hide the older sticky CTA so the newer .lafka-pdp-mobile-cta
+ * (with quantity stepper + tap-target sizing) is the only bottom CTA.
+ * Both rendered created an accessibility issue — screen readers
+ * announced two "Add to Cart" buttons at the same screen position. */
+@media (max-width: 720px) {
+
+	.lafka-pdp-cta {
+		display: none !important;
+	}
+
+	body.lafka-has-pdp-cta {
+		padding-bottom: 0;
+	}
+}
