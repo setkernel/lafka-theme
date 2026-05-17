@@ -122,7 +122,11 @@
 .lafka-pdp-summary .lafka-pdp-pickers {
 	display: grid;
 	gap: var(--lafka-space-2);
-	grid-template-columns: repeat(3, 1fr);
+
+	/* auto-fit so 2 pickers (e.g. just CRUST + SIZE on most pizzas) fill the
+	 * row instead of leaving a dead 173px column on the right (v6.7.4).
+	 * 160px floor keeps pills readable on tight viewports. */
+	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
 @media (max-width: 599px) {

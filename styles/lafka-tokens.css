@@ -252,7 +252,13 @@
 	--lafka-z-dropdown: 100;
 	--lafka-z-sticky-cta: 200;
 	--lafka-z-header: 300;
-	--lafka-z-drawer: 900;
+
+	/* Legacy theme stylesheet (style.css line 3418, 3445) hardcodes the
+	 * header element to z-index: 999, ignoring this token. The cart
+	 * drawer must layer above the header when open, so the drawer
+	 * z-index here is 10000 — high enough to escape the 999 wall
+	 * without colliding with the rare 9999 sticky elsewhere in core. */
+	--lafka-z-drawer: 10000;
 	--lafka-z-overlay: 950;
 	--lafka-z-dialog: 1000;
 	--lafka-z-toast: 1100;
