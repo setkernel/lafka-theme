@@ -96,6 +96,9 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-exclude-uncateg
 // Variable-product price formatting — "from $X" instead of range (v5.38.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-variable-price-from.php';
 
+// Block stray /product-category/{slug}/ → /wp-content/uploads/.../{slug}.png redirect (v6.7.1).
+require_once get_template_directory() . '/incl/woocommerce/lafka-fix-category-canonical-redirect.php';
+
 // No-op fallbacks for orphan 3rd-party shortcodes (v5.40.0).
 require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
 
