@@ -1,3 +1,11 @@
+/* v6.7.0 — login form rendered as inline element on desktop. v6.6.0 set
+ * max-width:480px and margin-inline:auto but legacy style.css had
+ * `form.woocommerce-form-login { display: inline; }` which makes width and
+ * max-width irrelevant — inline boxes size to content, not the box model — so
+ * the form stretched to 1216px on a 1280 viewport. Force `display: block`
+ * + width:100% + box-sizing:border-box so the 480px cap actually clamps.
+ * Mirror the rule on form rows so they don't inherit a stretching width. */
+
 /* v6.6.0 — login card escape: bump specificity + !important so the 480px max-width
  * + auto centering land over the legacy `.woocommerce-account .woocommerce > form`
  * cascade; collapse u-columns to single column; rewire iconbox content to a flex
@@ -57,6 +65,7 @@ form.woocommerce-form-register,
 .woocommerce form.woocommerce-form-register,
 .woocommerce-account .woocommerce > form.woocommerce-form-login,
 .woocommerce-account .woocommerce > form.woocommerce-form-register {
+	display: block !important;
 	background: var(--lafka-color-surface-raised) !important;
 	border: 1px solid var(--lafka-color-border-subtle) !important;
 	border-left: 1px solid var(--lafka-color-border-subtle) !important;
@@ -66,9 +75,23 @@ form.woocommerce-form-register,
 	max-width: 480px !important;
 	margin-inline: auto !important;
 	margin-block-end: var(--lafka-space-6);
-	box-sizing: border-box;
-	width: auto !important;
+	box-sizing: border-box !important;
+	width: 100% !important;
 	float: none !important;
+}
+
+/* v6.7.0 — form rows inside the constrained card must fill the 480px parent,
+ * not stretch beyond. Legacy WC + theme rules can make rows compute to wider
+ * widths via float/inline-block on inputs. Pin the wrappers here. */
+.woocommerce-account form.woocommerce-form-login .woocommerce-form-row,
+.woocommerce-account form.woocommerce-form-login .form-row,
+.woocommerce-account form.woocommerce-form-login p,
+.woocommerce-account form.woocommerce-form-register .woocommerce-form-row,
+.woocommerce-account form.woocommerce-form-register .form-row,
+.woocommerce-account form.woocommerce-form-register p {
+	width: 100% !important;
+	max-width: 100% !important;
+	box-sizing: border-box;
 }
 
 /* Center the "Login" / "Register" heading above the card so the section

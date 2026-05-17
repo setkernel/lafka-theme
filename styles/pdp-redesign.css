@@ -698,21 +698,34 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   display: none;
 }
 
+/* v6.7.0 — bulletproof image sizing. Legacy WC + theme cascades can force
+ * `height: auto` with no `min-height`, so a slow-loading or 0-byte image
+ * collapses to 0 before paint. Pin the image to a square via explicit min-height
+ * and order:-1 so it always anchors the card top regardless of flex order. */
 .lafka-pdp-upsell__link img {
   width: 100% !important;
-  aspect-ratio: 1;
+  aspect-ratio: 1 !important;
   object-fit: cover;
   border-radius: 4px;
-  display: block;
+  display: block !important;
   height: auto;
+  min-height: 120px;
+  order: -1;
+  background: var(--lafka-pdp-bg-soft, #f5f1ec);
 }
 
+/* v6.7.0 — when the PHP renderer falls back to <span class="...__placeholder"/>
+ * (no featured image on the upsell product), give it the same explicit square
+ * footprint so the card height stays consistent and the placeholder anchors
+ * the top of the card. */
 .lafka-pdp-upsell__placeholder {
   display: block;
   width: 100%;
-  aspect-ratio: 1;
-  background: var(--lafka-pdp-bg-soft, #f5f1ec);
+  aspect-ratio: 1 / 1;
+  min-height: 120px;
+  background: var(--lafka-pdp-bg-soft, var(--lafka-color-surface-muted, #f5f1ec));
   border-radius: 4px;
+  order: -1;
 }
 
 /* Force visible text — legacy cascade can dim/zero these spans. */

@@ -1,4 +1,14 @@
-/* v6.6.0 — desktop 2-col grid escape: legacy style.css forced #customer_details
+/* v6.7.0 — order_review pushed to bottom of page at desktop. v6.6.0 placed
+ * #customer_details in grid-row 2 and #order_review in grid-row 3, which made
+ * grid-row 2 = max(customer_details height, heading height) ≈ 1605px tall,
+ * so the order_review card (row 3) started 1585px below the heading. The right
+ * column appeared empty above the fold and the summary landed at the bottom.
+ * Fix: hide the standalone `h3#order_review_heading` at desktop (the order_review
+ * card already injects its own header via ::before/internal title) and let
+ * `#customer_details` + `#order_review` both flow into a single grid row, slotted
+ * side-by-side via `grid-row: auto`.
+ *
+ * v6.6.0 — desktop 2-col grid escape: legacy style.css forced #customer_details
  * to display:inline-block + calc(100% - 500px) and #order_review to width:495px
  * inline-block, both of which collapsed the v6.5.0 grid layout into a single
  * 280px-wide left column with the order_review pushed out of flow below.
@@ -143,37 +153,36 @@
 		grid-column: 1 / -1;
 	}
 
+	/* v6.7.0 — kill the standalone "Your order" heading at desktop. The
+	 * #order_review card already paints its own bordered header, and keeping
+	 * the h3 in row 2 forces #order_review into row 3 (below #customer_details).
+	 * Hiding it lets both cards flow into a single grid row via grid-row:auto. */
+	.woocommerce-checkout h3#order_review_heading,
+	.woocommerce-checkout form.checkout h3#order_review_heading {
+		display: none !important;
+	}
+
 	.woocommerce-checkout #customer_details,
 	.woocommerce-checkout form.checkout.woocommerce-checkout #customer_details {
 		grid-column: 1 !important;
-		grid-row: 2 !important;
+		grid-row: auto !important;
 		display: block !important;
 		width: auto !important;
 		padding-right: 0 !important;
 		min-width: 0;
-	}
-
-	/* The order-review pair lives in the right column. Heading is row 2,
-	 * the review body follows directly underneath (row 3). Together with
-	 * align-items:start they hug the top of the right column. */
-	.woocommerce-checkout h3#order_review_heading,
-	.woocommerce-checkout form.checkout h3#order_review_heading {
-		grid-column: 2 !important;
-		grid-row: 2 !important;
-		display: flex !important;
-		min-width: 0;
-		align-self: start;
+		float: none !important;
 	}
 
 	.woocommerce-checkout #order_review,
 	.woocommerce-checkout form.checkout.woocommerce-checkout #order_review {
 		grid-column: 2 !important;
-		grid-row: 3 !important;
+		grid-row: auto !important;
 		display: block !important;
 		width: auto !important;
 		min-width: 0;
+		float: none !important;
 		position: sticky;
-		top: calc(var(--lafka-header-h-desk) + var(--lafka-space-4));
+		top: calc(var(--lafka-header-h-desk, 80px) + var(--lafka-space-4));
 		align-self: start;
 	}
 }
