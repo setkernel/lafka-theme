@@ -1853,6 +1853,32 @@ add_action(
 );
 
 /**
+ * Post-purchase review banner partial via wp_footer (v6.11.0 — Pillar 3D).
+ *
+ * The partial self-gates on:
+ *   1. lafka_review_banner_enabled Customizer toggle (default OFF).
+ *   2. The `lafka_review_prompt_show` cookie (set by lafka-plugin when the
+ *      current user has a completed order within the configured window).
+ *   3. Not on a conversion page (cart / checkout / order-received / my-account).
+ *
+ * Hooked at priority 10 (after the cart drawer at 5) so the cart drawer's
+ * 9000-tier scrim never sits over a banner the user may still be reading.
+ */
+add_action(
+    'wp_footer',
+    function () {
+		if ( is_admin() ) {
+			return;
+		}
+		$partial = get_template_directory() . '/partials/review-banner.php';
+		if ( file_exists( $partial ) ) {
+			include $partial;
+		}
+	},
+    10
+);
+
+/**
  * PDP redesign — body_class signal for redesign-disabled state.
  */
 add_filter(

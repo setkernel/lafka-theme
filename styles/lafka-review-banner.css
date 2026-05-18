@@ -1,0 +1,234 @@
+/* =========================================================================
+ * Post-purchase review banner (Pillar 3D, v6.11.0)
+ *
+ * Small dismissible banner that surfaces in the bottom-right (desktop) or
+ * bottom-center (mobile) of the viewport whenever a customer revisits the site
+ * within `lafka_review_banner_window_days` after a completed order. Plugin
+ * sets the `lafka_review_prompt_show` cookie server-side; theme partial renders
+ * when cookie present.
+ *
+ * Visual distinction from the exit-intent toast (which lives at the same
+ * corner): GREEN/success accent instead of RED — positive intent ("loved your
+ * order") versus the exit-intent's friction ("wait! cart is waiting"). A large
+ * gold star at the left makes the surface read as a rating prompt at a glance.
+ *
+ * Markup contract (built in partials/review-banner.php):
+ *
+ *   <aside class="lafka-review-banner" data-visible="true|undefined"
+ *          data-dismissing="true|undefined"
+ *          role="complementary" aria-live="polite"
+ *          aria-labelledby="lafka-review-banner-copy">
+ *     <div class="lafka-review-banner__inner">
+ *       <span class="lafka-review-banner__star" aria-hidden="true">★</span>
+ *       <div class="lafka-review-banner__body">
+ *         <p class="lafka-review-banner__copy" id="...">…</p>
+ *         <a class="lafka-review-banner__cta" href="…">Leave a review →</a>
+ *       </div>
+ *       <button class="lafka-review-banner__close" aria-label="…">×</button>
+ *     </div>
+ *   </aside>
+ *
+ * Behaviour:
+ *   - Initial state (data-visible unset) renders translated 16px below its
+ *     final position with opacity 0.
+ *   - data-visible="true" → slides up + fades in (200ms ease-out).
+ *   - data-dismissing="true" → slides down + fades out (150ms ease-in)
+ *     before the JS removes the node.
+ *   - prefers-reduced-motion → all transitions disabled; the element
+ *     appears / disappears instantly without translation.
+ *
+ * Positioning:
+ *   - Desktop (≥769px): bottom-right corner, 16px from edges, 320px wide.
+ *   - Mobile (<769px): bottom-center, full-width minus 16px gutters.
+ *
+ * Stacking:
+ *   - z-index 1090 — below the exit-intent toast (1100) so when both feature
+ *     toggles ever overlap, exit-intent (active conversion friction) wins.
+ *
+ * @since 6.11.0
+ * ========================================================================= */
+
+.lafka-review-banner {
+	position: fixed;
+	right: 16px;
+	bottom: 16px;
+	left: auto;
+	width: 320px;
+	max-width: calc(100vw - 32px);
+	z-index: 1090;
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(16px);
+	transition:
+		opacity var(--lafka-motion-duration-base) var(--lafka-motion-ease-out),
+		transform var(--lafka-motion-duration-base) var(--lafka-motion-ease-out);
+}
+
+.lafka-review-banner[data-visible="true"] {
+	pointer-events: auto;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.lafka-review-banner[data-dismissing="true"] {
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(16px);
+	transition:
+		opacity 150ms var(--lafka-motion-ease-in-out),
+		transform 150ms var(--lafka-motion-ease-in-out);
+}
+
+.lafka-review-banner__inner {
+	position: relative;
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-3);
+	padding: var(--lafka-space-4) var(--lafka-space-5) var(--lafka-space-4) var(--lafka-space-4);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	border: 1px solid var(--lafka-color-success-500, #43a047);
+	border-left-width: 4px;
+	border-radius: var(--lafka-radius-lg);
+	box-shadow: var(--lafka-shadow-3);
+}
+
+/* Large gold star icon — anchor of the "rating prompt" affordance.
+ * Size matches the .pdp-summary__price-block headline (32px) so it reads
+ * as a numeric/marker glyph rather than decorative chrome. */
+.lafka-review-banner__star {
+	flex: 0 0 auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 40px;
+	height: 40px;
+	font-size: 32px;
+	line-height: 1;
+	color: #f5b400;
+}
+
+/* Body column — vertical stack of copy + CTA. */
+.lafka-review-banner__body {
+	flex: 1 1 auto;
+	min-width: 0;
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-2);
+}
+
+.lafka-review-banner__copy {
+	margin: 0;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	line-height: var(--lafka-line-height-snug);
+	color: var(--lafka-color-text-primary);
+}
+
+/* Primary CTA — green pill, distinct from the exit-intent red CTA. */
+.lafka-review-banner__cta {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	align-self: flex-start;
+	padding: var(--lafka-space-2) var(--lafka-space-4);
+	background: var(--lafka-color-success-500, #43a047);
+	color: #fff;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	line-height: 1.2;
+	text-decoration: none;
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-review-banner__cta:hover,
+.lafka-review-banner__cta:focus-visible {
+	background: var(--lafka-color-success-600, #388e3c);
+	color: #fff;
+	text-decoration: none;
+}
+
+.lafka-review-banner__cta:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-review-banner__cta:active {
+	transform: translateY(1px);
+}
+
+/* Close × — 28×28 tap target in top-right corner. Stays subtle. */
+.lafka-review-banner__close {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	width: 28px;
+	height: 28px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	color: var(--lafka-color-text-muted);
+	font-size: 20px;
+	line-height: 1;
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-review-banner__close:hover,
+.lafka-review-banner__close:focus-visible {
+	background: var(--lafka-color-surface-hover);
+	color: var(--lafka-color-text-primary);
+	outline: none;
+}
+
+.lafka-review-banner__close:focus-visible {
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* -------------------------------------------------------------------------
+ * Mobile — bottom-center, full-width minus 16px gutters.
+ *
+ * On phones the bottom-right anchor is awkward; bottom-center reads naturally
+ * because mobile thumbs reach the bottom-center most easily.
+ * ------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+	.lafka-review-banner {
+		right: 16px;
+		left: 16px;
+		bottom: 16px;
+		width: auto;
+		max-width: none;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Reduced-motion — no slide-up / slide-down, no transitions.
+ *
+ * Keeps the banner itself; just makes its appearance/dismissal instant.
+ * Per WCAG 2.3.3 — animations triggered by interaction must be defeatable.
+ * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+	.lafka-review-banner,
+	.lafka-review-banner[data-dismissing="true"] {
+		transition: none;
+		transform: none;
+	}
+
+	.lafka-review-banner[data-visible="true"] {
+		transform: none;
+	}
+}

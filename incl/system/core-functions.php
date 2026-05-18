@@ -1321,6 +1321,51 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 					)
 				);
 			}
+
+			// v6.11.0 (Pillar 3D): post-purchase review banner. Loads when the
+			// operator has enabled it AND we're not on a conversion page (the
+			// partial double-gates the same blocklist server-side, but enqueue
+			// is still gated so we don't ship the assets on /cart/ etc.).
+			// The banner is rendered from a wp_footer partial only when the
+			// plugin has set the `lafka_review_prompt_show` cookie (server-side
+			// gate — checks the current user's completed-order recency).
+			$lafka_review_banner_enabled = '1' === (string) get_theme_mod( 'lafka_review_banner_enabled', '0' );
+			$lafka_review_on_conv_page   = ( function_exists( 'is_cart' ) && is_cart() )
+				|| ( function_exists( 'is_checkout' ) && is_checkout() )
+				|| ( function_exists( 'is_account_page' ) && is_account_page() )
+				|| ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) );
+			if ( $lafka_review_banner_enabled && ! $lafka_review_on_conv_page ) {
+				wp_enqueue_style(
+					'lafka-review-banner',
+					get_template_directory_uri() . '/styles/lafka-review-banner.css',
+					array( 'lafka-tokens' ),
+					lafka_asset_version( '/styles/lafka-review-banner.css' )
+				);
+				wp_enqueue_script(
+					'lafka-review-banner',
+					get_template_directory_uri() . '/js/lafka-review-banner.js',
+					array(),
+					lafka_asset_version( '/js/lafka-review-banner.js' ),
+					array(
+						'in_footer' => true,
+						'strategy'  => 'defer',
+					)
+				);
+				wp_localize_script(
+					'lafka-review-banner',
+					'lafkaReviewBannerSettings',
+					array(
+						'restRoot'      => esc_url_raw( rest_url() ),
+						'restNonce'     => function_exists( 'wp_create_nonce' ) ? wp_create_nonce( 'wp_rest' ) : '',
+						'pageBlocklist' => array(
+							'/cart/',
+							'/checkout/',
+							'/order-received/',
+							'/my-account/',
+						),
+					)
+				);
+			}
 		}
 
 		// v5.58.0: footer chrome — handoff-spec 4-col dark footer.
