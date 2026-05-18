@@ -187,6 +187,61 @@ form.woocommerce-form-register,
 	box-shadow: var(--lafka-shadow-focus);
 }
 
+/* v6.7.8 — WC core's "show password" toggle inside the password input
+ * defaults to a 16×6px rectangle with no icon, so it appears as a tiny
+ * grey blob below the password field. Style it as a real eye-toggle:
+ * 36×36 tap target, absolutely positioned at the right edge of the
+ * password input, with a unicode eye glyph that flips between
+ * "show" and "hide" states via the data-toggle attribute. */
+.password-input {
+	position: relative;
+}
+
+.password-input .show-password-input {
+	position: absolute;
+	top: 50%;
+	right: var(--lafka-space-2, 8px);
+	transform: translateY(-50%);
+	width: 36px;
+	height: 36px;
+	min-width: 36px;
+	padding: 0;
+	border: 0;
+	border-radius: 50%;
+	background: transparent;
+	color: var(--lafka-color-text-secondary, #71717a);
+	font-family: var(--lafka-font-sans);
+	font-size: 0;
+	line-height: 1;
+	cursor: pointer;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.password-input .show-password-input::before {
+	content: "👁";
+	font-size: 16px;
+	line-height: 1;
+}
+
+.password-input .show-password-input.display-password::before {
+	content: "🙈";
+}
+
+.password-input .show-password-input:hover,
+.password-input .show-password-input:focus-visible {
+	background: var(--lafka-color-surface-muted, #f4f4f5);
+	outline: 0;
+}
+
+/* Make space inside the password input so the eye toggle doesn't
+ * overlap the typed text. */
+.password-input input[type="password"],
+.password-input input[type="text"] {
+	padding-right: 44px;
+}
+
 /* Inline checkbox + label (Remember me) */
 .woocommerce-form__label-for-checkbox {
 	display: inline-flex;

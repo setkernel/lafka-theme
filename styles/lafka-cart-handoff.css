@@ -765,3 +765,41 @@ a.lafka-cart-empty__cta:focus-visible {
 .lafka-cart-empty ~ .lafka-cart-empty-popular {
 	margin-top: var(--lafka-space-6);
 }
+
+/* =============================================================================
+ * v6.7.8 — operator audit cleanup.
+ * ========================================================================= */
+
+/* Apply coupon + Update cart are functional twins but rendered as two
+ * different styles (Apply = full-width outlined, Update = small ghost
+ * pill). Pair them visually: same height, same pill shape, sit inline
+ * to the right of the coupon code input rather than stacking.
+ *
+ * The structural change is invisible — both buttons stay <button>s, but
+ * .lafka-page__content .coupon becomes a flex row so the input + Apply
+ * line up, with Update wrapping after.  */
+.woocommerce-cart .coupon {
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-2, 8px);
+	align-items: stretch;
+}
+
+.woocommerce-cart .coupon #coupon_code {
+	flex: 1 1 220px;
+	min-width: 0;
+}
+
+.woocommerce-cart .coupon button[name="apply_coupon"] {
+	flex: 0 0 auto;
+	width: auto;
+	min-width: 140px;
+}
+
+/* Update cart button — match Apply Coupon visual weight + height. */
+.woocommerce-cart button[name="update_cart"] {
+	min-height: 44px;
+	min-width: 140px;
+	padding-inline: var(--lafka-space-4, 16px);
+	border-radius: var(--lafka-radius-pill, 9999px);
+}

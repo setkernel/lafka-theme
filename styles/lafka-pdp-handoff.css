@@ -147,12 +147,26 @@
 	width: 100%;
 }
 
+/* v6.7.8: the @media max-599 override that forced 2-col on mobile was
+ * left over from before v6.7.7 stacked the pickers. With it active,
+ * mobile saw each picker compressed to ~210px, dropping SIZE back into
+ * a 2-row chip wrap. Stacked at every breakpoint now. */
 @media (max-width: 599px) {
 
 	.lafka-pdp-summary .lafka-pdp-variation-grid,
 	.lafka-pdp-summary .lafka-pdp-pickers {
-		grid-template-columns: repeat(2, 1fr);
+		grid-template-columns: 1fr;
 	}
+}
+
+/* v6.7.8: when a product has only a single picker option (e.g. Donair
+ * Platter with a lone LARGE size), auto-fit + minmax collapse all but
+ * the first column so the solo chip filled the entire buy-box width
+ * — making it look like a giant button. Cap the row to content width
+ * so the chip stays at its natural size and aligns left. */
+.lafka-pdp-summary .lafka-pdp-picker .lafka-pdp-picker__chips:has(> .lafka-pdp-chip:only-child) {
+	grid-template-columns: max-content;
+	justify-content: start;
 }
 
 /* Picker button — bordered, active = INK fill (v5.63.0 polish: handoff

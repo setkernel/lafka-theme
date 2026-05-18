@@ -567,3 +567,30 @@
 .lafka-menu__body {
 	padding-top: var(--lafka-space-6);
 }
+
+/* =============================================================================
+ * v6.7.8 — scroll fade affordance on the JUMP TO + category-pill rows.
+ *
+ * Both rows use overflow-x:auto with the native scrollbar hidden, so
+ * customers had no signal that more categories existed beyond the right
+ * viewport edge. Add a soft fade-to-page-bg on the right side so the
+ * cut-off is visually communicated. Pure CSS — no JS scroll handler —
+ * so the fade is always-on (acceptable trade-off vs not signalling at
+ * all; a JS-driven directional fade can be a follow-up).
+ * ========================================================================= */
+.lafka-menu__cats,
+.lafka-menu__toc {
+	position: relative;
+}
+
+.lafka-menu__cats::after,
+.lafka-menu__toc::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 48px;
+	background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--lafka-color-surface-page, #fff));
+	pointer-events: none;
+}

@@ -626,3 +626,41 @@
 	width: 100%;
 	margin: 0;
 }
+
+/* =============================================================================
+ * v6.7.8 — operator audit cleanup.
+ * ========================================================================= */
+
+/* The legacy WC checkout template ships a redundant <h3>Checkout</h3>
+ * just before the billing-details fieldset. We already have a big
+ * <h1>Checkout</h1> at the top of the page. Hide the duplicate to
+ * collapse the dead vertical band between header and billing form. */
+.woocommerce-checkout .woocommerce > h3:first-of-type,
+.woocommerce-checkout .lafka-page__content > h3:first-of-type {
+	display: none;
+}
+
+/* Tighten the top of the checkout page — the legacy template injects
+ * ~500px of margin between the lafka header and the page content via
+ * stacked WC default spacers. Pull the first form/notice up. */
+.woocommerce-checkout .lafka-page__content .woocommerce {
+	margin-top: 0;
+}
+
+.woocommerce-checkout .woocommerce-info.showlogin,
+.woocommerce-checkout .woocommerce-info.showcoupon {
+	margin-top: var(--lafka-space-3);
+}
+
+/* "Have a coupon?" / "Click here to login" info banners default to a
+ * cobalt-blue notice colour from WC core. Re-skin to the Lafka accent
+ * (pink/red 50/100) so the banner matches the rest of the brand. */
+.woocommerce-checkout .woocommerce-info {
+	background: var(--lafka-color-accent-50, #fef2f2);
+	border-left-color: var(--lafka-color-accent-500, #ec1d24);
+	color: var(--lafka-color-text-primary);
+}
+
+.woocommerce-checkout .woocommerce-info a {
+	color: var(--lafka-color-accent-600, #d40b14);
+}

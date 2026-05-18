@@ -1355,12 +1355,22 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// v5.66.0: contact (template-contact.php) + 404. Single CSS file
 		// covers both pages. Contact via page-template check, 404 via is_404().
+		// v6.7.8: also enqueue when the page slug is "contact" or "contact-us"
+		// so operators who created the page on the default template (not the
+		// Lafka editorial template) still get FAQ + NAP styling — without
+		// this the .lafka-contact__faq markup emitted from the page content
+		// rendered as an unstyled <details> list with a bare "+" suffix.
 		$lafka_is_404 = function_exists( 'is_404' ) ? is_404() : false;
 		$lafka_is_contact_tpl = false;
 		if ( function_exists( 'is_page_template' ) ) {
 			$lafka_is_contact_tpl = is_page_template( 'template-contact.php' );
 		}
-		if ( $lafka_is_404 || $lafka_is_contact_tpl ) {
+		$lafka_is_contact_slug = false;
+		if ( function_exists( 'is_page' ) && is_page() && function_exists( 'get_post_field' ) ) {
+			$lafka_slug = (string) get_post_field( 'post_name' );
+			$lafka_is_contact_slug = in_array( $lafka_slug, array( 'contact', 'contact-us' ), true );
+		}
+		if ( $lafka_is_404 || $lafka_is_contact_tpl || $lafka_is_contact_slug ) {
 			wp_enqueue_style(
 				'lafka-404-contact',
 				get_template_directory_uri() . '/styles/lafka-404-contact.css',

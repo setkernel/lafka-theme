@@ -82,6 +82,16 @@
 	font-size: 17px;
 	line-height: 1.2;
 	color: var(--lafka-color-text-primary);
+
+	/* v6.7.8 — line-clamp at 2 so a long category name
+	 * ("Peppery's Speciality and Pictou Style Pizzas") doesn't
+	 * push its card to a 3-line title height while the other 5
+	 * cards in the row stay at 1 line, breaking the visual rhythm. */
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+	min-height: calc(1.2em * 2);
 }
 
 .lafka-cats__count {
