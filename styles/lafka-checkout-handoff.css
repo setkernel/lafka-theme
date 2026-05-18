@@ -98,17 +98,17 @@
 	}
 }
 
-/* -------- Page header (injected via ::before) -------------------------- */
+/* -------- Page header (was injected via ::before) ----------------------
+ *
+ * v6.7.10 — the legacy WC checkout template didn't emit a page title,
+ * so a `::before` pseudo-element on form.checkout was used to inject
+ * a "Checkout" heading. The page now ships its own <h1>Checkout</h1>
+ * via lafka-page__title, so the pseudo-element duplicates the heading.
+ * Zero out content + display to remove without losing the rule source.
+ */
 .woocommerce-checkout form.checkout::before {
-	content: "Checkout";
-	display: block;
-	font-family: var(--lafka-font-family-display);
-	font-weight: var(--lafka-font-weight-display);
-	font-size: clamp(2rem, 4vw + 1rem, 3rem);
-	line-height: 1.05;
-	letter-spacing: -0.02em;
-	color: var(--lafka-color-text-primary);
-	margin-bottom: var(--lafka-space-6);
+	content: none;
+	display: none;
 }
 
 /* -------- 2-col layout (form + sticky review) --------------------------
