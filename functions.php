@@ -1879,6 +1879,33 @@ add_action(
 );
 
 /**
+ * Web Push subscribe prompt partial via wp_footer (v6.12.0 — Pillar 3E).
+ *
+ * The partial self-gates on:
+ *   1. lafka_push_enabled Customizer toggle (master, default OFF).
+ *   2. lafka_push_subscribe_prompt_enabled Customizer toggle (default ON
+ *      when master is ON).
+ *   3. lafka_push_vapid_public_key present.
+ *   4. Not on a conversion page (cart / checkout / order-received / my-account).
+ *
+ * Hooked at priority 11 (after the review banner at 10) so its z-index 1080
+ * sits below the banner's 1090 if both happen to render together.
+ */
+add_action(
+    'wp_footer',
+    function () {
+		if ( is_admin() ) {
+			return;
+		}
+		$partial = get_template_directory() . '/partials/push-subscribe-prompt.php';
+		if ( file_exists( $partial ) ) {
+			include $partial;
+		}
+	},
+    11
+);
+
+/**
  * PDP redesign — body_class signal for redesign-disabled state.
  */
 add_filter(

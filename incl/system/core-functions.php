@@ -1366,6 +1366,50 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 					)
 				);
 			}
+
+			// v6.12.0 (Pillar 3E): Web Push subscribe prompt. Loads when both
+			// the master `lafka_push_enabled` toggle AND the prompt channel
+			// toggle are ON, AND the operator has pasted a VAPID public key,
+			// AND we're not on a conversion page. The JS additionally gates on
+			// pageview count + Notification.permission state + 30-day
+			// suppression localStorage.
+			$lafka_push_master_on  = '1' === (string) get_theme_mod( 'lafka_push_enabled', '0' );
+			$lafka_push_prompt_on  = '1' === (string) get_theme_mod( 'lafka_push_subscribe_prompt_enabled', '1' );
+			$lafka_push_vapid_pub  = (string) get_theme_mod( 'lafka_push_vapid_public_key', '' );
+			$lafka_push_on_conv    = ( function_exists( 'is_cart' ) && is_cart() )
+				|| ( function_exists( 'is_checkout' ) && is_checkout() )
+				|| ( function_exists( 'is_account_page' ) && is_account_page() )
+				|| ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) );
+			if ( $lafka_push_master_on && $lafka_push_prompt_on && '' !== $lafka_push_vapid_pub && ! $lafka_push_on_conv ) {
+				wp_enqueue_style(
+					'lafka-push-prompt',
+					get_template_directory_uri() . '/styles/lafka-push-prompt.css',
+					array( 'lafka-tokens' ),
+					lafka_asset_version( '/styles/lafka-push-prompt.css' )
+				);
+				wp_enqueue_script(
+					'lafka-push-subscribe',
+					get_template_directory_uri() . '/js/lafka-push-subscribe.js',
+					array(),
+					lafka_asset_version( '/js/lafka-push-subscribe.js' ),
+					array(
+						'in_footer' => true,
+						'strategy'  => 'defer',
+					)
+				);
+				wp_localize_script(
+					'lafka-push-subscribe',
+					'lafkaPushSettings',
+					array(
+						'enabled'              => true,
+						'applicationServerKey' => $lafka_push_vapid_pub,
+						'restRoot'             => esc_url_raw( rest_url() ),
+						'restNonce'            => function_exists( 'wp_create_nonce' ) ? wp_create_nonce( 'wp_rest' ) : '',
+						'threshold'            => (int) get_theme_mod( 'lafka_push_subscribe_prompt_threshold', 2 ),
+						'swUrl'                => esc_url_raw( get_template_directory_uri() . '/js/sw.js' ),
+					)
+				);
+			}
 		}
 
 		// v5.58.0: footer chrome — handoff-spec 4-col dark footer.

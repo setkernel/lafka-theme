@@ -95,22 +95,62 @@ self.addEventListener('fetch', (event) => {
     }
 });
 
-// ─── Push Notification (existing functionality) ─────────────────────
-self.addEventListener('message', (e) => {
-    const data = e.data;
-    self.registration.showNotification(data.title, {
-        body: data.body,
-        icon: data.icon,
-        data: data.data.url,
-    });
+// ─── Push Notifications (Pillar 3E, v6.12.0) ────────────────────────
+// Wired against the lafka-plugin Web Push protocol sender. The push event
+// receives an encrypted payload (already decrypted by the browser by the
+// time it hits this handler) shaped like:
+//   { title: string, body: string, icon?: string, badge?: string, url?: string, tag?: string }
+self.addEventListener('push', (event) => {
+    if (!event || !event.data) {
+        return;
+    }
+    let payload = {};
+    try {
+        payload = event.data.json();
+    } catch (_err) {
+        // Older sender or malformed payload — fall back to text.
+        try {
+            payload = { title: 'Update', body: event.data.text() };
+        } catch (_err2) {
+            payload = { title: 'Update', body: '' };
+        }
+    }
+
+    const title = (payload && payload.title) ? String(payload.title) : 'Update';
+    const options = {
+        body: (payload && payload.body) ? String(payload.body) : '',
+        icon: (payload && payload.icon) ? String(payload.icon) : undefined,
+        badge: (payload && payload.badge) ? String(payload.badge) : undefined,
+        tag: (payload && payload.tag) ? String(payload.tag) : undefined,
+        data: {
+            url: (payload && payload.url) ? String(payload.url) : '/'
+        }
+    };
+
+    event.waitUntil(self.registration.showNotification(title, options));
 });
 
-// Notification click event listener
-self.addEventListener('notificationclick', (e) => {
-    e.notification.close();
-    e.waitUntil(clients.matchAll({ type: 'window' }).then((clientsArr) => {
-        clients.openWindow(e.notification.data);
-    }));
+self.addEventListener('notificationclick', (event) => {
+    event.notification.close();
+    const targetUrl = (event.notification && event.notification.data && event.notification.data.url)
+        ? event.notification.data.url
+        : '/';
+    event.waitUntil(
+        clients.matchAll({ type: 'window', includeUncontrolled: true }).then((clientList) => {
+            // If a window with the target URL is already open, focus it.
+            for (let i = 0; i < clientList.length; i += 1) {
+                const client = clientList[i];
+                if (client.url === targetUrl && 'focus' in client) {
+                    return client.focus();
+                }
+            }
+            // Otherwise open a new window.
+            if (clients.openWindow) {
+                return clients.openWindow(targetUrl);
+            }
+            return null;
+        })
+    );
 });
 
 // ─── Helpers ────────────────────────────────────────────────────────
