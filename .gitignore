@@ -22,6 +22,8 @@ wp-content/uploads/
 
 # Test artefacts
 .phpunit.result.cache
+.tmp-screenshots/
+.wp-env-uploads/
 
 # Misc
 *.log
