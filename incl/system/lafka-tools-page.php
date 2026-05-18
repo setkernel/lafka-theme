@@ -54,7 +54,16 @@ if ( ! class_exists( 'Lafka_Tools_Page' ) ) {
 			}
 
 			$theme       = wp_get_theme();
-			$theme_ver   = $theme->get( 'Version' );
+			$theme_name  = (string) $theme->get( 'Name' );
+			$theme_ver   = (string) $theme->get( 'Version' );
+
+			// If a child theme is active, surface the parent theme version
+			// too — operators tracking which `lafka` (parent) release ships
+			// with their `lafka-child` need both numbers in one glance.
+			$parent_theme = $theme->parent();
+			$parent_name  = $parent_theme ? (string) $parent_theme->get( 'Name' ) : '';
+			$parent_ver   = $parent_theme ? (string) $parent_theme->get( 'Version' ) : '';
+
 			$plugin_ver  = '—';
 			$plugin_file = WP_PLUGIN_DIR . '/lafka-plugin/lafka-plugin.php';
 			if ( file_exists( $plugin_file ) && function_exists( 'get_plugin_data' ) ) {
@@ -74,9 +83,25 @@ if ( ! class_exists( 'Lafka_Tools_Page' ) ) {
 				<table class="widefat striped" style="max-width: 540px;">
 					<tbody>
 						<tr>
-							<td><strong><?php esc_html_e( 'Theme', 'lafka' ); ?></strong></td>
+							<td>
+								<strong><?php echo $parent_theme ? esc_html__( 'Active (child) theme', 'lafka' ) : esc_html__( 'Theme', 'lafka' ); ?></strong>
+								<?php if ( '' !== $theme_name ) : ?>
+									<br><span class="description"><?php echo esc_html( $theme_name ); ?></span>
+								<?php endif; ?>
+							</td>
 							<td><code><?php echo esc_html( $theme_ver ); ?></code></td>
 						</tr>
+						<?php if ( $parent_theme ) : ?>
+							<tr>
+								<td>
+									<strong><?php esc_html_e( 'Parent theme', 'lafka' ); ?></strong>
+									<?php if ( '' !== $parent_name ) : ?>
+										<br><span class="description"><?php echo esc_html( $parent_name ); ?></span>
+									<?php endif; ?>
+								</td>
+								<td><code><?php echo esc_html( $parent_ver ); ?></code></td>
+							</tr>
+						<?php endif; ?>
 						<tr>
 							<td><strong><?php esc_html_e( 'Plugin', 'lafka' ); ?></strong></td>
 							<td><code><?php echo esc_html( $plugin_ver ); ?></code></td>
