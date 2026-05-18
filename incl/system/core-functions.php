@@ -1261,6 +1261,66 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 					'strategy'  => 'defer',
 				)
 			);
+
+			// v6.10.0 (Pillar 3C): exit-intent reminder toast. Loads when
+			// the operator has enabled it AND we're not on a conversion
+			// page (cart / checkout / order-received / my-account). On a
+			// conversion page the toast would be redundant — the customer
+			// is already in the funnel. Script also bails internally on
+			// missing cartSnapshot, missing payload, or session-shown flag,
+			// so this server-side gate is purely an asset-cost optimisation.
+			$lafka_exit_intent_enabled = (bool) get_theme_mod( 'lafka_exit_intent_enabled', false );
+			$lafka_on_conversion_page  = ( function_exists( 'is_cart' ) && is_cart() )
+				|| ( function_exists( 'is_checkout' ) && is_checkout() )
+				|| ( function_exists( 'is_account_page' ) && is_account_page() )
+				|| ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) );
+			if ( $lafka_exit_intent_enabled && ! $lafka_on_conversion_page ) {
+				wp_enqueue_style(
+					'lafka-exit-intent',
+					get_template_directory_uri() . '/styles/lafka-exit-intent.css',
+					array( 'lafka-tokens' ),
+					lafka_asset_version( '/styles/lafka-exit-intent.css' )
+				);
+				wp_enqueue_script(
+					'lafka-exit-intent',
+					get_template_directory_uri() . '/js/lafka-exit-intent.js',
+					// Depends on lafka-fdp-tracker so cartSnapshot is wired
+					// before the toast tries to read it. fdp-tracker has
+					// jquery as its only dep so we inherit that chain.
+					array( 'lafka-fdp-tracker' ),
+					lafka_asset_version( '/js/lafka-exit-intent.js' ),
+					array(
+						'in_footer' => true,
+						'strategy'  => 'defer',
+					)
+				);
+				$lafka_exit_intent_cart_url = function_exists( 'wc_get_cart_url' )
+					? wc_get_cart_url()
+					: home_url( '/cart/' );
+				wp_localize_script(
+					'lafka-exit-intent',
+					'lafkaExitIntentSettings',
+					array(
+						'enabled'            => true,
+						'gracePeriodSeconds' => (int) get_theme_mod( 'lafka_exit_intent_grace_seconds', 30 ),
+						// Path tokens — JS uses indexOf so a token like
+						// '/cart/' matches '/wp-shop/cart/' on subdir installs.
+						'pageBlocklist'      => array(
+							'/cart/',
+							'/checkout/',
+							'/order-received/',
+							'/my-account/',
+						),
+						'cartUrl'            => $lafka_exit_intent_cart_url,
+						'headlineBelow'      => get_theme_mod( 'lafka_exit_intent_headline_below', __( 'Add {amount} more for free delivery', 'lafka' ) ),
+						'headlineReached'    => get_theme_mod( 'lafka_exit_intent_headline_reached', __( 'Your cart is ready — checkout in 30 seconds', 'lafka' ) ),
+						'bodyText'           => get_theme_mod( 'lafka_exit_intent_body', __( 'Tap below to pick up where you left off.', 'lafka' ) ),
+						'ctaLabel'           => get_theme_mod( 'lafka_exit_intent_cta_label', __( 'Resume checkout', 'lafka' ) ),
+						'dismissLabel'       => get_theme_mod( 'lafka_exit_intent_dismiss_label', __( 'Maybe later', 'lafka' ) ),
+						'closeAriaLabel'     => __( 'Close reminder', 'lafka' ),
+					)
+				);
+			}
 		}
 
 		// v5.58.0: footer chrome — handoff-spec 4-col dark footer.

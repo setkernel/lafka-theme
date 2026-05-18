@@ -1,0 +1,250 @@
+/* =========================================================================
+ * Exit-intent reminder toast (Pillar 3C, v6.10.0)
+ *
+ * Polite, dismissible card that nudges a customer back to /cart/ when they
+ * appear about to leave the site with items in their cart. NOT a modal —
+ * no scrim, no page lock, easy to ignore. Spec calls for "non-intrusive".
+ *
+ * Markup contract (built in js/lafka-exit-intent.js):
+ *
+ *   <div class="lafka-exit-toast" data-state="below|reached"
+ *        data-visible="true" data-dismissing="true|undefined"
+ *        role="dialog" aria-live="polite"
+ *        aria-labelledby="lafka-exit-toast-headline">
+ *     <div class="lafka-exit-toast__inner">
+ *       <button class="lafka-exit-toast__close" aria-label="Close reminder">×</button>
+ *       <p class="lafka-exit-toast__headline" id="...">Add $7.50 more for free delivery</p>
+ *       <p class="lafka-exit-toast__body">Tap below to pick up where you left off.</p>
+ *       <div class="lafka-exit-toast__actions">
+ *         <a class="lafka-exit-toast__primary" href="/cart/">Resume checkout</a>
+ *         <button class="lafka-exit-toast__dismiss">Maybe later</button>
+ *       </div>
+ *     </div>
+ *   </div>
+ *
+ * Behaviour:
+ *   - Initial state (data-visible unset) renders translated 16px below
+ *     its final position with opacity 0.
+ *   - data-visible="true" → slides up + fades in (200ms ease-out).
+ *   - data-dismissing="true" → slides down + fades out (150ms ease-in)
+ *     before the JS removes the node.
+ *   - prefers-reduced-motion → all transitions disabled; the element
+ *     appears / disappears instantly without translation.
+ *
+ * Positioning:
+ *   - Desktop (≥769px): bottom-right corner, 16px from edges, 320px wide.
+ *   - Mobile (<769px): bottom-center, full-width minus 16px gutters.
+ *
+ * Stacking:
+ *   - z-index 1100 sits above sticky cart bar (1000) but below the cart
+ *     drawer's 9000-tier scrim. We don't want to block the drawer.
+ *
+ * @since 6.10.0
+ * ========================================================================= */
+
+.lafka-exit-toast {
+	position: fixed;
+	right: 16px;
+	bottom: 16px;
+	left: auto;
+	width: 320px;
+	max-width: calc(100vw - 32px);
+	z-index: 1100;
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(16px);
+	transition:
+		opacity var(--lafka-motion-duration-base) var(--lafka-motion-ease-out),
+		transform var(--lafka-motion-duration-base) var(--lafka-motion-ease-out);
+}
+
+.lafka-exit-toast[data-visible="true"] {
+	pointer-events: auto;
+	opacity: 1;
+	transform: translateY(0);
+}
+
+.lafka-exit-toast[data-dismissing="true"] {
+	pointer-events: none;
+	opacity: 0;
+	transform: translateY(16px);
+	transition:
+		opacity 150ms var(--lafka-motion-ease-in-out),
+		transform 150ms var(--lafka-motion-ease-in-out);
+}
+
+.lafka-exit-toast__inner {
+	position: relative;
+	padding: var(--lafka-space-5) var(--lafka-space-5) var(--lafka-space-4);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	box-shadow: var(--lafka-shadow-3);
+}
+
+/* Close × — 32×32 tap target in top-right corner. */
+.lafka-exit-toast__close {
+	position: absolute;
+	top: 4px;
+	right: 4px;
+	width: 32px;
+	height: 32px;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: 0;
+	margin: 0;
+	background: transparent;
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	color: var(--lafka-color-text-muted);
+	font-size: 22px;
+	line-height: 1;
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-exit-toast__close:hover,
+.lafka-exit-toast__close:focus-visible {
+	background: var(--lafka-color-surface-hover);
+	color: var(--lafka-color-text-primary);
+	outline: none;
+}
+
+.lafka-exit-toast__close:focus-visible {
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* Headline — Fraunces display family. Accent (red) when below the
+ * threshold (the customer still has work to do); success-green when
+ * threshold reached (encouragement to convert). */
+.lafka-exit-toast__headline {
+	margin: 0 var(--lafka-space-6) var(--lafka-space-2) 0;
+	font-family: var(--lafka-font-family-display);
+	font-size: var(--lafka-font-size-h4);
+	font-weight: var(--lafka-font-weight-semibold);
+	line-height: var(--lafka-line-height-snug);
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-exit-toast[data-state="reached"] .lafka-exit-toast__headline {
+	color: var(--lafka-color-success-500);
+}
+
+/* Body copy — caption-size, muted. Short polite explanation. */
+.lafka-exit-toast__body {
+	margin: 0 0 var(--lafka-space-4) 0;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+	line-height: var(--lafka-line-height-normal);
+}
+
+/* Action row — primary pill + ghost text link, baseline-aligned. */
+.lafka-exit-toast__actions {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lafka-space-3);
+}
+
+/* Primary CTA — matches the cart-page "Proceed to checkout" red pill. */
+.lafka-exit-toast__primary {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	padding: var(--lafka-space-3) var(--lafka-space-5);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	line-height: 1.2;
+	text-decoration: none;
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-exit-toast__primary:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-on-accent);
+	text-decoration: none;
+}
+
+.lafka-exit-toast__primary:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-exit-toast__primary:active {
+	transform: translateY(1px);
+}
+
+/* Ghost dismiss — text link styling, muted colour so the primary
+ * pill leads. */
+.lafka-exit-toast__dismiss {
+	display: inline-flex;
+	align-items: center;
+	padding: var(--lafka-space-2) var(--lafka-space-3);
+	background: transparent;
+	color: var(--lafka-color-text-muted);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	border: 0;
+	border-radius: var(--lafka-radius-pill);
+	cursor: pointer;
+	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-exit-toast__dismiss:hover,
+.lafka-exit-toast__dismiss:focus-visible {
+	color: var(--lafka-color-text-primary);
+	outline: none;
+}
+
+.lafka-exit-toast__dismiss:focus-visible {
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* -------------------------------------------------------------------------
+ * Mobile — bottom-center, full-width minus 16px gutters.
+ *
+ * On phones the bottom-right anchor is awkward because mobile thumbs reach
+ * the bottom-center more naturally and the sticky cart bar (when present)
+ * already lives bottom-aligned. We layer above it with z-index 1100.
+ * ------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+
+	.lafka-exit-toast {
+		right: 16px;
+		left: 16px;
+		bottom: 16px;
+		width: auto;
+		max-width: none;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Reduced-motion — no slide-up / slide-down, no transitions.
+ *
+ * Keeps the toast itself; just makes its appearance/dismissal instant.
+ * Per WCAG 2.3.3 — animations triggered by interaction must be defeatable.
+ * ------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+
+	.lafka-exit-toast,
+	.lafka-exit-toast[data-dismissing="true"] {
+		transition: none;
+		transform: none;
+	}
+
+	.lafka-exit-toast[data-visible="true"] {
+		transform: none;
+	}
+}
