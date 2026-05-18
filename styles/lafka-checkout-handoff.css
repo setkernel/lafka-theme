@@ -185,6 +185,34 @@
 		top: calc(var(--lafka-header-h-desk, 80px) + var(--lafka-space-4));
 		align-self: start;
 	}
+
+	/* v6.7.11 (G09-stack): City / Province / Postal in a 3-col row at
+	 * desktop. WC core renders each as `<p class="form-row form-row-wide"
+	 * id="billing_{slug}_field">` (full-width). Override to inline-block
+	 * thirds with the gutter coming from `--lafka-space-3`. Vertically
+	 * stacked on mobile/tablet via the default form-row-wide rule. */
+	.woocommerce-checkout form.checkout #billing_city_field,
+	.woocommerce-checkout form.checkout #billing_state_field,
+	.woocommerce-checkout form.checkout #billing_postcode_field,
+	.woocommerce-checkout form.checkout #shipping_city_field,
+	.woocommerce-checkout form.checkout #shipping_state_field,
+	.woocommerce-checkout form.checkout #shipping_postcode_field {
+		float: none;
+		display: inline-block;
+		width: calc((100% - 2 * var(--lafka-space-3, 12px)) / 3);
+		clear: none;
+		vertical-align: top;
+	}
+
+	.woocommerce-checkout form.checkout #billing_city_field,
+	.woocommerce-checkout form.checkout #shipping_city_field {
+		margin-right: var(--lafka-space-3, 12px);
+	}
+
+	.woocommerce-checkout form.checkout #billing_state_field,
+	.woocommerce-checkout form.checkout #shipping_state_field {
+		margin-right: var(--lafka-space-3, 12px);
+	}
 }
 
 /* -------- Numbered section headings ------------------------------------ */
@@ -283,6 +311,23 @@
 	background: var(--lafka-color-surface-page);
 	outline: none;
 	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* v6.7.11 (FORM-ERR-new): invalid inputs paint a visible red border.
+ * Without this, WC only flashes the form-row summary block red and the
+ * field itself stays in its default border colour — users have to hunt
+ * for the failing input. Selector covers both the WC core class
+ * (.woocommerce-invalid) and the legacy HTML5 :invalid pseudo on
+ * required fields. */
+.woocommerce-checkout .form-row.woocommerce-invalid input.input-text,
+.woocommerce-checkout .form-row.woocommerce-invalid select,
+.woocommerce-checkout .form-row.woocommerce-invalid textarea,
+.woocommerce-checkout .form-row.woocommerce-invalid .select2-selection,
+.woocommerce-checkout .woocommerce-invalid input.input-text,
+.woocommerce-checkout .woocommerce-invalid select,
+.woocommerce-checkout .woocommerce-invalid textarea {
+	border-color: var(--lafka-color-error-500, #ef4444);
+	background: var(--lafka-color-error-50, #fef2f2);
 }
 
 /* -------- Order review (right column / sticky summary) ----------------- */
@@ -439,13 +484,20 @@
 	margin-top: var(--lafka-space-3);
 }
 
-/* -------- Login / coupon prompts --------------------------------------- */
+/* -------- Login / coupon prompts ---------------------------------------
+ *
+ * v6.7.11 (G03-cobalt): outer wrappers reset to transparent so they no
+ * longer paint the legacy WC cobalt-blue background (info-50 + 4px
+ * info-500 border) AROUND the inner `.woocommerce-info` banner — that
+ * inner banner already carries the brand accent styling (line 658) since
+ * v6.7.8. Keeping the outer wrappers untouched created a double-banner
+ * (cobalt outside, accent inside). */
 .woocommerce-checkout .woocommerce-form-login-toggle,
 .woocommerce-checkout .woocommerce-form-coupon-toggle {
-	background: var(--lafka-color-info-50);
-	border-left: 4px solid var(--lafka-color-info-500);
-	padding: var(--lafka-space-3) var(--lafka-space-4);
-	border-radius: var(--lafka-radius-md);
+	background: transparent;
+	border-left: 0;
+	padding: 0;
+	border-radius: 0;
 	margin-bottom: var(--lafka-space-4);
 }
 

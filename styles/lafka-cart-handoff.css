@@ -49,10 +49,12 @@
 	}
 }
 
-/* v5.67.0: handoff uses "Your order" terminology (not "Your cart") +
- * adds a lead paragraph. Injected via two ::before/::after pseudos. */
-.woocommerce-cart .woocommerce-cart-form::before {
-	content: "Your order";
+/* v6.7.11: real <h2> + <p> replace the v5.67.0 ::before / ::after pseudos
+ * (F02-a11y, HTML-MISORDER). Pseudo-elements aren't announced as headings
+ * or paragraphs by screen readers and broke the page's heading hierarchy
+ * (was h1 → h3 → h2; now h1 → h2 → p → h2). Visuals unchanged — same
+ * tokens / sizes as before. */
+.woocommerce-cart .lafka-cart-form__title {
 	display: block;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
@@ -60,17 +62,15 @@
 	line-height: 1.05;
 	letter-spacing: -0.02em;
 	color: var(--lafka-color-text-primary);
-	margin-bottom: var(--lafka-space-2);
+	margin: 0 0 var(--lafka-space-2);
 }
 
-.woocommerce-cart .woocommerce-cart-form::after {
-	content: "Review your items, choose pickup or delivery, then check out.";
+.woocommerce-cart .lafka-cart-form__intro {
 	display: block;
 	font-size: var(--lafka-font-size-body-lg);
 	color: var(--lafka-color-text-secondary);
-	margin-bottom: var(--lafka-space-6);
+	margin: 0 0 var(--lafka-space-6);
 	max-width: 60ch;
-	order: -1;
 }
 
 /* -------- 2-col layout (items + sticky summary) ------------------------ */
@@ -104,10 +104,6 @@
 		top: calc(var(--lafka-header-h-desk) + var(--lafka-space-4));
 	}
 
-	/* The page-header ::before should span both columns. */
-	.woocommerce-cart .woocommerce-cart-form::before {
-		grid-column: 1 / -1;
-	}
 }
 
 /* -------- Pickup / Delivery tabs (above items list) ---------------------
@@ -312,7 +308,10 @@
 }
 
 /* +/− buttons: native input[type=button] glyphs are broken on macOS — reset
- * to circular pills with proper +/− characters at readable size. */
+ * to circular pills with proper +/− characters at readable size.
+ *
+ * v6.7.11 (F08-tap): 44×44 on mobile (WCAG 2.5.5), 36×36 at ≥768 to keep
+ * the dense cart row layout the operator approved at desktop. */
 .woocommerce-cart .lafka-cart .lafka-qty-plus,
 .woocommerce-cart .lafka-cart .lafka-qty-minus,
 .woocommerce-cart .lafka-cart input.lafka-qty-plus,
@@ -324,9 +323,10 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 36px;
-	height: 36px;
-	min-width: 36px;
+	width: 44px;
+	height: 44px;
+	min-width: 44px;
+	min-height: 44px;
 	padding: 0;
 	margin: 0;
 	border: 1px solid var(--lafka-color-border-default);
@@ -340,6 +340,19 @@
 	text-align: center;
 	cursor: pointer;
 	transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
+}
+
+@media (min-width: 768px) {
+
+	.woocommerce-cart .lafka-cart .lafka-qty-plus,
+	.woocommerce-cart .lafka-cart .lafka-qty-minus,
+	.woocommerce-cart .lafka-cart input.lafka-qty-plus,
+	.woocommerce-cart .lafka-cart input.lafka-qty-minus {
+		width: 36px;
+		height: 36px;
+		min-width: 36px;
+		min-height: 36px;
+	}
 }
 
 .woocommerce-cart .lafka-cart .lafka-qty-plus:hover,
@@ -408,6 +421,9 @@
 	align-items: stretch;
 }
 
+/* v6.7.11 (COUP-INPUT-new): pill radius matches the adjacent Apply
+ * button so the coupon row reads as a single matched control pair (input
+ * + button were 10px / 300px). */
 .woocommerce-cart .coupon .input-text,
 .woocommerce-cart .coupon input.input-text,
 .woocommerce-cart .coupon input#coupon_code,
@@ -417,9 +433,9 @@
 	height: 44px;
 	min-height: 44px;
 	max-height: 44px;
-	padding: 10px 14px;
+	padding: 10px 18px;
 	border: 1px solid var(--lafka-color-border-default);
-	border-radius: var(--lafka-radius-md);
+	border-radius: var(--lafka-radius-pill);
 	background: var(--lafka-color-surface-sunken);
 	font-size: var(--lafka-font-size-body-sm);
 	line-height: 1.2;
@@ -447,7 +463,12 @@
 
 /* Both Update and Apply share the same secondary pill style. Selectors
  * escalated via [class] + ! to beat the legacy theme's .button base
- * (which paints Apply as black-on-black). */
+ * (which paints Apply as black-on-black).
+ *
+ * v6.7.11 (F10): explicit height + box-sizing pin the Apply button to
+ * 44 px (was rendering ~59 px on tablet due to padding + line-height
+ * compounding through the legacy `.button` rules), keeping the coupon row
+ * vertically aligned with Update at the same 44 px. */
 .woocommerce-cart .lafka-cart__actions button[name="apply_coupon"],
 .woocommerce-cart .lafka-cart__actions button[name="update_cart"],
 .woocommerce-cart button[name="apply_coupon"].button,
@@ -455,8 +476,10 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
+	height: 44px;
 	min-height: 44px;
-	padding: var(--lafka-space-3) var(--lafka-space-5);
+	box-sizing: border-box;
+	padding: 0 var(--lafka-space-5);
 	background: var(--lafka-color-surface-page) !important;
 	color: var(--lafka-color-text-primary) !important;
 	border: 1px solid var(--lafka-color-border-default) !important;

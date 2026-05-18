@@ -91,12 +91,17 @@
 	text-underline-offset: 3px;
 }
 
-/* -------- Title + subtitle --------------------------------------------- */
+/* -------- Title + subtitle ---------------------------------------------
+ *
+ * v6.7.11 (H1-new): unified to the --lafka-font-size-h1 token so every
+ * page title uses the same 40–56 px responsive scale. Was a bespoke clamp
+ * here that rendered ~52 px on desktop — fine for cart/checkout but
+ * inconsistent with /menu/ (44) and /contact-us/ (56). */
 .lafka-page__title {
 	margin: 0 0 var(--lafka-space-3) 0;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
-	font-size: clamp(2.25rem, 4vw + 0.5rem, 3.25rem);
+	font-size: var(--lafka-font-size-h1);
 	line-height: 1.05;
 	letter-spacing: -0.02em;
 	color: var(--lafka-color-text-primary);

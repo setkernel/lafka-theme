@@ -22,6 +22,17 @@ do_action( 'woocommerce_before_cart' );
 <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
 
 	<?php
+	/* v6.7.11: real <h2> heading replaces the v5.67.0 CSS ::before pseudo
+	 * (F02-a11y, HTML-MISORDER). Pseudo-elements aren't focusable or
+	 * announceable as headings; combined with `.lafka-cart-item__title`
+	 * being <h3>, the previous DOM was h1 → h3 → h2 — out of order. The
+	 * new sequence is h1 (page) → h2 (Your order) → p (item title styled
+	 * as a heading) → h2 (Cart totals from WC core). */
+	?>
+	<h2 class="lafka-cart-form__title"><?php esc_html_e( 'Your order', 'lafka' ); ?></h2>
+	<p class="lafka-cart-form__intro"><?php esc_html_e( 'Review your items, choose pickup or delivery, then check out.', 'lafka' ); ?></p>
+
+	<?php
 	/* v5.68.0: handoff pickup/delivery tabs above items list.
 	 * State persists to localStorage.peppery.fulfilment via lafka-menu-controls.js
 	 * (loaded on menu archive) — cart page uses lafka-cart-controls.js for the same. */
@@ -94,7 +105,15 @@ do_action( 'woocommerce_before_cart' );
 						?>
 					</div>
 					<div class="lafka-cart-item__body">
-						<h3 class="lafka-cart-item__title">
+						<?php
+						/* v6.7.11: <p> replaces <h3> (HTML-MISORDER). Cart totals
+						 * later in the document is <h2> (WC core), so an h3 here
+						 * created an out-of-order h1 → h3 → h2 sequence. Cart-item
+						 * titles are list-row labels, not section headings, so a
+						 * styled <p> is the correct semantic level. CSS retains
+						 * the existing visual weight via `.lafka-cart-item__title`. */
+						?>
+						<p class="lafka-cart-item__title">
 							<?php
 							if ( ! $product_permalink ) {
 								echo wp_kses_post( $product_name . '&nbsp;' );
@@ -102,7 +121,7 @@ do_action( 'woocommerce_before_cart' );
 								echo wp_kses_post( sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $product_name ) );
 							}
 							?>
-						</h3>
+						</p>
 						<?php do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key ); ?>
 
 						<?php

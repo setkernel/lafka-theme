@@ -38,11 +38,20 @@
 	}
 }
 
-/* -------- Gallery image — handoff radius + shadow ----------------------- */
+/* -------- Gallery image — handoff radius + shadow -----------------------
+ *
+ * v6.7.11 (E02): enforce a 1:1 aspect ratio + object-fit cover on every
+ * gallery image. Source files were already roughly square (600×600) but
+ * the gallery container was being sized from the image intrinsics so a
+ * non-square source produced letterboxing. */
 .lafka-pdp__gallery .woocommerce-product-gallery__image img,
 .lafka-pdp__gallery img.wp-post-image {
 	border-radius: var(--lafka-radius-lg);
 	box-shadow: var(--lafka-shadow-3);
+	aspect-ratio: 1;
+	object-fit: cover;
+	width: 100%;
+	height: auto;
 }
 
 /* -------- Title + price typography -------------------------------------- */

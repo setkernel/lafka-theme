@@ -153,6 +153,15 @@ form.woocommerce-form-register,
 	text-decoration: none;
 }
 
+/* v6.7.11 (FORM-ERR-new): invalid inputs on login/register paint red. */
+.woocommerce-account .woocommerce-invalid input.input-text,
+.woocommerce-account .woocommerce-invalid select,
+.woocommerce-account .woocommerce-invalid textarea,
+.woocommerce-page .woocommerce-form-row.woocommerce-invalid input.input-text {
+	border-color: var(--lafka-color-error-500, #ef4444);
+	background: var(--lafka-color-error-50, #fef2f2);
+}
+
 /* Inputs */
 .woocommerce form .form-row input.input-text,
 .woocommerce form .form-row textarea,
@@ -317,13 +326,19 @@ p.woocommerce-LostPassword.lost_password {
 	color: var(--lafka-color-accent-600);
 }
 
-/* Primary submit button uniformity */
+/* Primary submit button uniformity
+ *
+ * v6.7.11 (I06): full-width inside the 480px account card. Was
+ * `display: inline-flex` which sized to label-width (~109px) and left the
+ * row unbalanced relative to the inputs above. `display: flex; width:
+ * 100%` makes the CTA span the form column. */
 .woocommerce-form-login .button[type="submit"],
 .woocommerce-form-register .button[type="submit"],
 .woocommerce-ResetPassword .button[type="submit"],
 .woocommerce-OrderTracking .button[type="submit"],
 .woocommerce-EditAccountForm .button[type="submit"] {
-	display: inline-flex;
+	display: flex;
+	width: 100%;
 	align-items: center;
 	justify-content: center;
 	min-height: 44px;

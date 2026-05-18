@@ -158,8 +158,11 @@
 	box-shadow: var(--lafka-shadow-2);
 }
 
+/* v6.7.11 (C10): 1:1 aspect ratio matches the product card spec elsewhere
+ * (PDP gallery, archive cards). Was 4:3 which rendered 289×216 — short
+ * and out of step with the rest of the imagery system. */
 .lafka-favs__media {
-	aspect-ratio: 4 / 3;
+	aspect-ratio: 1;
 	background: var(--lafka-color-surface-muted);
 	overflow: hidden;
 	position: relative;
@@ -660,9 +663,15 @@
  * 7. Final CTA closer — .lafka-closer
  * ========================================================================= */
 
+/* v6.7.11 (B16): section bg dark (was white via surface-page). The card
+ * inside still uses surface-dark for its inner panel, but the surrounding
+ * section needs to read as a single dark band before the footer — not a
+ * white frame around a dark card. `--lafka-color-surface-ink` falls back
+ * to #18181b if undefined; otherwise inherits surface-dark from tokens. */
 .lafka-closer {
 	padding-block: var(--lafka-space-16) var(--lafka-space-20);
-	background: var(--lafka-color-surface-page);
+	background: var(--lafka-color-surface-ink, var(--lafka-color-surface-dark, #18181b));
+	color: var(--lafka-color-text-on-ink, var(--lafka-color-text-inverse, #fff));
 }
 
 .lafka-closer__card {

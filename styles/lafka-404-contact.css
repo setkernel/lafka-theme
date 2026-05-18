@@ -51,14 +51,19 @@
 	line-height: var(--lafka-line-body);
 }
 
+/* v6.7.11 (L02): allow long slugs to wrap mid-word instead of forcing
+ * the helper sentence to break awkwardly before "have moved". */
 .lafka-404__path {
 	display: inline-block;
+	max-width: 100%;
 	padding: 2px var(--lafka-space-2);
 	background: var(--lafka-color-surface-muted);
 	border-radius: var(--lafka-radius-sm);
 	font-family: var(--lafka-font-family-mono);
 	font-size: 0.95em;
 	color: var(--lafka-color-text-primary);
+	word-break: break-all;
+	overflow-wrap: anywhere;
 }
 
 .lafka-404__actions {
@@ -271,9 +276,13 @@
 	gap: var(--lafka-space-2);
 }
 
+/* v6.7.11 (H2-new): match site-wide H2 family. The Address / Hours card
+ * titles are semantic <h2> elements but were rendering in Rubik (body
+ * face) — every other h2 on the site uses Fraunces (display face). Visual
+ * weight stays the same via the size + uppercase + tracking treatment. */
 .lafka-contact__card-title {
 	margin: 0;
-	font-family: var(--lafka-font-family-body);
+	font-family: var(--lafka-font-family-display);
 	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-bold);
 	letter-spacing: var(--lafka-letter-spacing-wide);

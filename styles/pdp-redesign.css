@@ -613,7 +613,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-cart-drawer__continue { flex: 1; background: #fff; border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); padding: 12px; cursor: pointer; font: inherit; }
 
-.lafka-cart-drawer__checkout { flex: 1; background: var(--lafka-pdp-accent); color: #fff; border: none; border-radius: var(--lafka-pdp-radius-chip); padding: 12px; text-align: center; font-weight: 600; text-decoration: none; }
+/* v6.7.11 (H-new, CTA-RADIUS-new): pill radius on the drawer Checkout
+ * CTA so it matches the site-wide primary CTAs (hero, cart Proceed, etc).
+ * Was --lafka-pdp-radius-chip (~10px) which was a holdover from the older
+ * PDP-cluster styling. */
+.lafka-cart-drawer__checkout { flex: 1; background: var(--lafka-pdp-accent); color: #fff; border: none; border-radius: var(--lafka-radius-pill); padding: 12px; text-align: center; font-weight: 600; text-decoration: none; }
 
 .lafka-cart-drawer__checkout:hover { background: var(--lafka-pdp-accent-dark); color: #fff; }
 
@@ -836,7 +840,8 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-summary__qty { display: flex; align-items: center; border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); }
 
-.lafka-pdp-qty__btn { background: none; border: none; padding: 8px 12px; cursor: pointer; font: inherit; font-weight: 700; }
+/* v6.7.11 (E15): 44×44 tap target (was 36×47). Hit area now WCAG 2.5.5 */
+.lafka-pdp-qty__btn { background: none; border: none; min-width: 44px; min-height: 44px; padding: 8px 12px; cursor: pointer; font: inherit; font-weight: 700; }
 
 .lafka-pdp-qty__input { width: 36px; text-align: center; border: none; background: none; font: inherit; font-weight: 600; }
 

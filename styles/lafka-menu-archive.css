@@ -40,11 +40,14 @@
 	color: var(--lafka-color-text-muted);
 }
 
+/* v6.7.11 (H1-new): use the unified --lafka-font-size-h1 token. Was
+ * capped at 44 px per the original handoff but the rest of the site
+ * sits at 52–56 — the menu page reading short broke cross-page rhythm. */
 .lafka-menu__title {
 	margin: 0 0 var(--lafka-space-3) 0;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
-	font-size: clamp(2rem, 3vw + 0.5rem, 2.75rem); /* v5.74.0: cap at 44px per handoff */
+	font-size: var(--lafka-font-size-h1);
 	line-height: 1.1;
 	letter-spacing: -0.02em;
 	color: var(--lafka-color-text-primary);
@@ -138,10 +141,14 @@
 	display: flex;
 }
 
+/* v6.7.11 (C03): explicit 44 px min-height. Was rendering 43 px (1 px
+ * short of the WCAG 2.5.5 tap-target floor) because the wrapping label
+ * derived its height from the input's padding rather than a fixed value. */
 .lafka-menu__search-label {
 	display: flex;
 	align-items: center;
 	width: 100%;
+	min-height: 44px;
 	background: var(--lafka-color-surface-sunken);
 	border: 1px solid var(--lafka-color-border-default);
 	border-radius: var(--lafka-radius-md);
@@ -231,6 +238,18 @@
 	cursor: pointer;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+
+	/* v6.7.11 (C04): WCAG 2.5.5 — 44×44 tap target on mobile. The chip
+	 * visual height stays at 31-32px via padding; min-height expands the
+	 * hit area only. Desktop keeps the more compact size for density. */
+	min-height: 44px;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-menu__chip {
+		min-height: 0;
+	}
 }
 
 .lafka-menu__chip:hover {

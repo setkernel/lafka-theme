@@ -278,6 +278,11 @@
 	border-top: 1px solid rgba(255, 255, 255, 0.12);
 }
 
+/* v6.7.11 (A19): explicit 2-col split at ≥768. The flex `space-between`
+ * was already in place but `flex-wrap: wrap` caused the tagline to drop
+ * to row 2 on narrow desktop, leaving both lines left-aligned. Pin
+ * copyright to the start, tagline to the end, and only allow wrap on
+ * mobile where it makes sense. */
 .lafka-footer__bottom-inner {
 	display: flex;
 	align-items: center;
@@ -293,8 +298,28 @@
 	color: rgba(255, 255, 255, 0.5);
 }
 
+.lafka-footer__copyright {
+	text-align: start;
+}
+
 .lafka-footer__tagline {
 	font-style: italic;
+	text-align: end;
+}
+
+@media (min-width: 768px) {
+
+	.lafka-footer__bottom-inner {
+		flex-wrap: nowrap;
+	}
+
+	.lafka-footer__copyright {
+		flex: 1 1 auto;
+	}
+
+	.lafka-footer__tagline {
+		flex: 0 0 auto;
+	}
 }
 
 /* -------- Legacy footer wrappers — kill any stragglers ------------------ */

@@ -164,7 +164,12 @@
 	--lafka-font-size-h4: 1.125rem;           /* 18 px */
 	--lafka-font-size-h3: 1.25rem;            /* 20 px */
 	--lafka-font-size-h2: 1.5rem;             /* 24 px */
-	--lafka-font-size-h1: 2rem;               /* 32 px */
+
+	/* v6.7.11 (H1-new): single responsive H1 token used by every page title
+	 * (.lafka-page__title, .lafka-menu__title). Was 32 px fixed and each
+	 * page had its own clamp() which produced 44/52/56/68 across the site.
+	 * Home hero remains larger because it uses --lafka-font-size-display. */
+	--lafka-font-size-h1: clamp(2.5rem, 5vw, 3.5rem); /* 40–56 px responsive */
 	--lafka-font-size-display: 2.5rem;        /* 40 px */
 
 	/* Desktop type-scale (≥768px) — components apply via @media. */
@@ -172,7 +177,9 @@
 	--lafka-font-size-h4-desk: 1.25rem;       /* 20 px */
 	--lafka-font-size-h3-desk: 1.5rem;        /* 24 px */
 	--lafka-font-size-h2-desk: 2rem;          /* 32 px */
-	--lafka-font-size-h1-desk: 2.75rem;       /* 44 px */
+
+	/* v6.7.11: -desk alias now equals the responsive token (capped at 56). */
+	--lafka-font-size-h1-desk: clamp(2.5rem, 5vw, 3.5rem);
 	--lafka-font-size-display-desk: clamp(2.5rem, 4vw + 1rem, 4.5rem);
 
 	--lafka-font-weight-regular: 400;

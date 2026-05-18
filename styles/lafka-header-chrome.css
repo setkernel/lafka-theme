@@ -71,13 +71,22 @@ body .lafka-header {
 	}
 }
 
-/* -------- Mobile menu toggle (hamburger) -------------------------------- */
+/* -------- Mobile menu toggle (hamburger) --------------------------------
+ *
+ * v6.7.11: bumped 40 → 44 (A11-tap, WCAG 2.5.5) and shifted the show
+ * breakpoint from `max-width:767` → `max-width:1023` (A11 / MNAV-new).
+ * Previously the tablet band (768–1023) had a hidden hamburger AND a
+ * horizontally-overflowing desktop nav with no scroll affordance, leaving
+ * 6 of 12 categories invisible. The new band shows the hamburger on every
+ * viewport below 1024 and reserves the in-row nav for ≥1024 only. */
 .lafka-header__menu-toggle {
 	display: none;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+	width: 44px;
+	height: 44px;
+	min-width: 44px;
+	min-height: 44px;
 	flex: 0 0 auto;
 	border: none;
 	background: transparent;
@@ -98,7 +107,7 @@ body .lafka-header {
 	box-shadow: var(--lafka-shadow-focus);
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
 
 	.lafka-header__menu-toggle {
 		display: inline-flex;
@@ -119,8 +128,12 @@ body .lafka-header {
  * Previously the logo packed-left next to the hamburger and the actions
  * cluster used margin-inline-start:auto, leaving a ~340px void between
  * them at 375 viewport. Centering the logo absorbs that whitespace into
- * symmetric padding around the logo. */
-@media (max-width: 767px) {
+ * symmetric padding around the logo.
+ *
+ * v6.7.11: extended to ≤1023 so the tablet band (where the hamburger now
+ * also appears) inherits the same layout instead of pushing the logo
+ * left-of-nav. */
+@media (max-width: 1023px) {
 
 	.lafka-header__logo {
 		position: absolute;
@@ -174,19 +187,42 @@ body .lafka-header {
 	}
 }
 
-/* -------- Primary nav --------------------------------------------------- */
+/* -------- Primary nav ---------------------------------------------------
+ *
+ * v6.7.11: nav hidden below 1024 (was 768). The tablet (768–1023) band
+ * could not fit 12 categories without horizontal scroll overflow, so we
+ * now drop the in-row nav at that breakpoint and rely on the hamburger
+ * mobile-nav drawer instead. A scroll-fade gradient on `::after` signals
+ * remaining off-screen items in the desktop (1024+) band — mirrors the
+ * pattern already in use on `.lafka-menu__cats` / `.lafka-menu__toc` from
+ * v6.7.8. */
 .lafka-header__nav {
 	flex: 1 1 0;
 	min-width: 0;
 	display: flex;
 	justify-content: center;
+	position: relative;
 }
 
-@media (max-width: 767px) {
+@media (max-width: 1023px) {
 
 	.lafka-header__nav {
 		display: none;
 	}
+}
+
+/* Right-edge scroll fade affordance — signals additional nav items when
+ * the horizontal scroll container clips overflow (12-item nav in a
+ * ~650px slot at 1280). Pure-CSS always-on (matches menu chips pattern). */
+.lafka-header__nav::after {
+	content: '';
+	position: absolute;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	width: 48px;
+	background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--lafka-color-surface-page, #fff));
+	pointer-events: none;
 }
 
 .lafka-header__nav-list {
@@ -306,11 +342,16 @@ body .lafka-header {
 	box-shadow: var(--lafka-shadow-focus);
 }
 
-/* Cart badge */
+/* Cart badge
+ *
+ * v6.7.11 (A06): nudge the badge inside the icon-btn bounds. Previous
+ * right:-2px pushed it 2px past the container so the rightmost glyph
+ * column got clipped by the parent .lafka-header__actions edge at
+ * desktop. right:2px keeps the badge fully inside the 44 px hit area. */
 .lafka-header__cart-count {
 	position: absolute;
-	top: -2px;
-	right: -2px;
+	top: 2px;
+	right: 2px;
 	background: var(--lafka-color-accent-500);
 	color: var(--lafka-color-text-inverse);
 	font-family: var(--lafka-font-family-body);
