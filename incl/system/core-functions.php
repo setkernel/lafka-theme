@@ -1238,6 +1238,29 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				lafka_asset_version( '/js/cart-drawer.js' ),
 				true
 			);
+
+			// v6.9.0 (Pillar 3A): free-delivery progress component CSS +
+			// tracker JS. CSS site-wide because the drawer ships on every
+			// WC page (header cart icon can open it from anywhere). JS
+			// site-wide for the same reason — it also wires
+			// window.lafkaDataLayer.cartSnapshot for the plugin's
+			// sticky_cart_open analytics event.
+			wp_enqueue_style(
+				'lafka-free-delivery-progress',
+				get_template_directory_uri() . '/styles/lafka-free-delivery-progress.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-free-delivery-progress.css' )
+			);
+			wp_enqueue_script(
+				'lafka-fdp-tracker',
+				get_template_directory_uri() . '/js/lafka-fdp-tracker.js',
+				array( 'jquery' ),
+				lafka_asset_version( '/js/lafka-fdp-tracker.js' ),
+				array(
+					'in_footer' => true,
+					'strategy'  => 'defer',
+				)
+			);
 		}
 
 		// v5.58.0: footer chrome — handoff-spec 4-col dark footer.

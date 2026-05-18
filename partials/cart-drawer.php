@@ -20,6 +20,8 @@
  * @package Lafka
  * @since   5.16.0 (markup originally for PDP redesign)
  * @since   5.57.0 (Ship 2d handoff rebuild — drops the PDP-only gate)
+ * @since   6.9.0  (Pillar 3A — rich .lafka-fdp free-delivery progress
+ *                  component replaces the plain threshold text)
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -114,37 +116,39 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 		<footer class="lafka-cart-drawer__footer">
 			<div class="lafka-cart-drawer__total">
 				<?php
-				/* Server-render the subtotal + free-delivery threshold on initial
+				/* Server-render the subtotal + free-delivery progress on initial
 				 * page load so the drawer footer isn't empty when the customer
 				 * opens it without having added anything in this session.
-				 * Fragment replacement on add-to-cart still updates this block. */
+				 *
+				 * Fragment replacement on add-to-cart still updates this block
+				 * (the plugin's lafka-cart-drawer-fragments.php replaces the
+				 * entire .lafka-cart-drawer__total div). After the fragment
+				 * HTML lands, lafka-fdp-tracker.js post-processes the plain-
+				 * text .lafka-cart-drawer__threshold markup into the rich
+				 * .lafka-fdp component — keeping initial-render and AJAX-
+				 * refresh visually consistent without modifying the plugin
+				 * (v6.9.0, Pillar 3A). */
 				if ( ! $lafka_cart_empty ) {
 					$lafka_cart_total = (float) WC()->cart->get_cart_contents_total();
-					$lafka_free_threshold = function_exists( 'get_theme_mod' )
-						? (float) get_theme_mod( 'lafka_pdp_free_delivery_threshold', 0 )
-						: 0.0;
-					$lafka_free_threshold = (float) apply_filters( 'lafka_pdp_free_delivery_threshold', $lafka_free_threshold );
-					$lafka_remaining      = max( 0, $lafka_free_threshold - $lafka_cart_total );
 					?>
 					<div class="lafka-cart-drawer__subtotal">
 						<span><?php esc_html_e( 'Subtotal', 'lafka' ); ?></span>
 						<strong><?php echo wp_kses_post( wc_price( $lafka_cart_total ) ); ?></strong>
 					</div>
-					<?php if ( $lafka_free_threshold > 0 && $lafka_remaining > 0 ) : ?>
-						<div class="lafka-cart-drawer__threshold">
-							<?php
-							printf(
-								esc_html__( 'Add %s more for free delivery', 'lafka' ),
-								wp_kses_post( wc_price( $lafka_remaining ) )
-							);
-							?>
-						</div>
-					<?php elseif ( $lafka_free_threshold > 0 ) : ?>
-						<div class="lafka-cart-drawer__threshold lafka-cart-drawer__threshold--reached">
-							<?php esc_html_e( '✓ Free delivery unlocked', 'lafka' ); ?>
-						</div>
-					<?php endif; ?>
-				<?php } ?>
+					<?php
+					/* v6.9.0: rich progress component replaces the v6.7.4 plain-
+					 * text threshold notice. Partial silently returns if the
+					 * operator hasn't configured a threshold ( <= 0 ). */
+					get_template_part(
+						'partials/free-delivery-progress',
+						null,
+						array(
+							'context'    => 'drawer',
+							'cart_total' => $lafka_cart_total,
+						)
+					);
+				}
+				?>
 			</div>
 
 			<div class="lafka-cart-drawer__actions">

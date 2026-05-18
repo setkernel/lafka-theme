@@ -1,0 +1,180 @@
+/* =========================================================================
+ * Free-delivery progress component (Pillar 3A, v6.9.0)
+ *
+ * A prominent progress signal showing how close the customer is to the
+ * operator-configured free-delivery threshold (Customizer
+ * "lafka_pdp_free_delivery_threshold"). Used in two places:
+ *
+ *   1. Cart drawer footer — server-rendered inside .lafka-cart-drawer__total,
+ *      refreshed on every wc fragment update.
+ *   2. Cart page — emitted above .cart_totals at desktop, before
+ *      .lafka-cart-bottom-actions at mobile (via responsive ordering).
+ *
+ * Markup contract:
+ *
+ *   <div class="lafka-fdp" data-state="below|reached" data-threshold="30"
+ *        data-value="22.50" data-remaining="7.50">
+ *     <div class="lafka-fdp__label">
+ *       <span class="lafka-fdp__title">Add $7.50 more for free delivery</span>
+ *     </div>
+ *     <div class="lafka-fdp__bar" aria-hidden="true">
+ *       <div class="lafka-fdp__fill" style="width: 75%"></div>
+ *     </div>
+ *     <div class="lafka-fdp__sub">$22.50 / $30.00 · 75%</div>
+ *   </div>
+ *
+ * Animation:
+ *   - .lafka-fdp__fill width is set via inline style (server-rendered
+ *     on first load, JS-set on fragment refresh). The transition rule
+ *     here animates the change.
+ *   - When data-state flips to "reached", .lafka-fdp__bar plays a
+ *     one-shot scale+fade pop via @keyframes lafka-fdp-pop.
+ *
+ * @since 6.9.0
+ * ========================================================================= */
+
+.lafka-fdp {
+	display: block;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	background: var(--lafka-color-surface-sunken);
+	border-radius: var(--lafka-radius-md);
+	border: 1px solid var(--lafka-color-border-subtle);
+	margin: 0 0 var(--lafka-space-3) 0;
+}
+
+.lafka-fdp__label {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lafka-space-2);
+	margin: 0 0 var(--lafka-space-2) 0;
+}
+
+.lafka-fdp__title {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+	line-height: var(--lafka-line-height-snug);
+}
+
+.lafka-fdp__bar {
+	position: relative;
+	height: 8px;
+	width: 100%;
+	background: var(--lafka-color-surface-muted);
+	border-radius: var(--lafka-radius-pill);
+	overflow: hidden;
+}
+
+.lafka-fdp__fill {
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	width: 0;
+	border-radius: var(--lafka-radius-pill);
+	background: linear-gradient(
+		90deg,
+		var(--lafka-color-accent-500) 0%,
+		#f97316 100%
+	);
+	transition: width 350ms var(--lafka-motion-ease-out),
+		background 350ms var(--lafka-motion-ease-out);
+}
+
+.lafka-fdp__sub {
+	margin: var(--lafka-space-2) 0 0 0;
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+	font-variant-numeric: tabular-nums;
+}
+
+/* Reached state — bar fully filled with green gradient + label swap.
+ * The reached state is set server-side via data-state="reached" on
+ * initial render; the JS tracker also sets it on fragment refresh
+ * once the cart subtotal crosses the threshold. */
+.lafka-fdp[data-state="reached"] .lafka-fdp__fill {
+	width: 100% !important;
+	background: linear-gradient(
+		90deg,
+		var(--lafka-color-success-500) 0%,
+		#10b981 100%
+	);
+}
+
+.lafka-fdp[data-state="reached"] .lafka-fdp__title {
+	color: var(--lafka-color-success-500);
+}
+
+.lafka-fdp[data-state="reached"] .lafka-fdp__bar {
+	animation: lafka-fdp-pop 480ms var(--lafka-motion-ease-out) 1;
+}
+
+@keyframes lafka-fdp-pop {
+
+	0% {
+		transform: scale(1);
+		opacity: 1;
+	}
+
+	40% {
+		transform: scale(1.04);
+		opacity: 0.85;
+	}
+
+	100% {
+		transform: scale(1);
+		opacity: 1;
+	}
+}
+
+/* Respect users with reduced-motion preference — no pop, instant width swap. */
+@media (prefers-reduced-motion: reduce) {
+
+	.lafka-fdp__fill {
+		transition: none;
+	}
+
+	.lafka-fdp[data-state="reached"] .lafka-fdp__bar {
+		animation: none;
+	}
+}
+
+/* -------------------------------------------------------------------------
+ * Cart drawer footer context — slot inside .lafka-cart-drawer__total.
+ *
+ * The drawer footer already supplies its own padding + border-top, so we
+ * tighten the component's outer margins when it lives there. We also
+ * drop the surrounding card chrome so it reads as a section of the
+ * footer rather than a nested card.
+ * ------------------------------------------------------------------------- */
+.lafka-cart-drawer__total .lafka-fdp {
+	background: transparent;
+	border: 0;
+	padding: 0;
+	margin: 0 0 var(--lafka-space-2) 0;
+}
+
+/* -------------------------------------------------------------------------
+ * Cart page context — emitted above .cart_totals at desktop, below cart
+ * items at mobile. cart-collaterals on /cart/ already stacks the totals
+ * card; we position the FDP above it.
+ *
+ * Desktop: lives above the totals card (server-side ordering — appears
+ *          before .cart-collaterals in the DOM).
+ * Mobile:  cart_totals stacks below items so the FDP sits naturally
+ *          between items and totals, which is the desired mobile order
+ *          ("below line items" per spec).
+ * ------------------------------------------------------------------------- */
+.woocommerce-cart .lafka-fdp--cart-page {
+	margin-top: var(--lafka-space-4);
+	margin-bottom: var(--lafka-space-4);
+}
+
+@media (min-width: 769px) {
+
+	.woocommerce-cart .lafka-fdp--cart-page {
+		margin-bottom: var(--lafka-space-3);
+	}
+}

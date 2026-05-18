@@ -11,7 +11,7 @@
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package Lafka\WooCommerce
- * @version 5.19.0
+ * @version 6.9.0 (Pillar 3A — free-delivery progress component above totals)
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -248,6 +248,25 @@ do_action( 'woocommerce_before_cart' );
 </form>
 
 <?php do_action( 'woocommerce_before_cart_collaterals' ); ?>
+
+<?php
+/* v6.9.0 (Pillar 3A): prominent free-delivery progress component, emitted
+ * above the cart totals card. At desktop the totals card sits to the side
+ * (handoff layout), so the FDP appears directly above it; at mobile the
+ * totals card stacks below the items + bottom-actions, which naturally
+ * places the FDP between line items and totals as the spec requires.
+ *
+ * Partial silently returns if the operator hasn't configured a threshold
+ * ( lafka_pdp_free_delivery_threshold <= 0 ), so removing the feature is
+ * a single Customizer toggle. */
+get_template_part(
+	'partials/free-delivery-progress',
+	null,
+	array(
+		'context' => 'cart',
+	)
+);
+?>
 
 <div class="cart-collaterals">
 	<?php
