@@ -121,12 +121,14 @@
 .lafka-pdp-summary .lafka-pdp-variation-grid,
 .lafka-pdp-summary .lafka-pdp-pickers {
 	display: grid;
-	gap: var(--lafka-space-2);
+	gap: var(--lafka-space-3);
 
-	/* auto-fit so 2 pickers (e.g. just CRUST + SIZE on most pizzas) fill the
-	 * row instead of leaving a dead 173px column on the right (v6.7.4).
-	 * 160px floor keeps pills readable on tight viewports. */
-	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+	/* Stack pickers vertically (v6.7.7). Side-by-side at typical desktop
+	 * buy-box widths (~535px) left each picker only ~264px — too narrow
+	 * for SIZE's 4 chips (X-LARGE etc) on one row, so the 4th chip
+	 * always wrapped. Stacking gives each picker the full buy-box width
+	 * and keeps row counts equal. */
+	grid-template-columns: 1fr;
 }
 
 /* Equal-width chips inside each picker so 3 crust pills or 4 size pills
