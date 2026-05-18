@@ -129,6 +129,22 @@
 	grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
+/* Equal-width chips inside each picker so 3 crust pills or 4 size pills
+ * lay out as a clean N-column grid instead of inline-flex chips with
+ * variable widths that wrap awkwardly (v6.7.6). Higher specificity
+ * (.lafka-pdp-summary prefix, 0,3,0) overrides pdp-redesign.css's
+ * `.lafka-pdp-picker__chips { display: flex }` (0,1,0). */
+.lafka-pdp-summary .lafka-pdp-picker .lafka-pdp-picker__chips {
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+	gap: var(--lafka-space-1);
+}
+
+.lafka-pdp-summary .lafka-pdp-picker .lafka-pdp-chip,
+.lafka-pdp-summary .lafka-pdp-picker .lafka-pdp-chip__inner {
+	width: 100%;
+}
+
 @media (max-width: 599px) {
 
 	.lafka-pdp-summary .lafka-pdp-variation-grid,

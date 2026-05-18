@@ -33,7 +33,18 @@
 	grid-template-columns: repeat(auto-fill, minmax(min(220px, 100%), 1fr));
 	gap: var(--lafka-space-2);
 	margin: 0 0 var(--lafka-space-4);
-	padding: 0;
+
+	/* Restore internal padding around the chip grid (v6.7.6 follow-up).
+	 * v6.7.5 had set this to 0, which collapsed the section so the
+	 * chip pills touched the pink accent bg edge. */
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+
+	/* Softer accent than pdp-redesign.css's `var(--lafka-pdp-bg-warm)` —
+	 * the heavier tint visually competed with the chip pills for
+	 * attention. Use accent-50 at 60% so the section still reads as a
+	 * group but doesn't drown the content. */
+	background: color-mix(in srgb, var(--lafka-color-accent-50) 60%, white);
+	border-radius: var(--lafka-radius-md);
 }
 
 .product-addon.checkbox p.form-row {
