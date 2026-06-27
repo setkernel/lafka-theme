@@ -124,8 +124,6 @@
         $("ul.menu li").has('div').addClass("has-mega");
         $('#main-menu li ul.sub-menu li').has('.lafka-custom-menu-label').addClass('has-menu-label');
 
-        $("div.vc_row").has('.lafka-fullheight-content-slider').addClass("lafka-row-has-full-slider");
-
 
         /*
          * Manipulate the cart
@@ -362,12 +360,6 @@
             });
         });
 
-        $('html.no-touch .wpb_lafka_banner:not(.lafka-from-bottom):not(.lafka-from-left):not(.lafka-from-right):not(.lafka-fade)').each(function() {
-            lafkaOnVisible(this, function() {
-                $(this).addClass('prod_visible');
-            });
-        });
-
         $('.lafka-counter:not(.already_seen)').each(function() {
             lafkaOnVisible(this, function() {
 
@@ -459,7 +451,7 @@
             scrollDuration = 1500;
         }
 
-        $("li.menu-item a[href*='#']:not([href='#']), .wpb_text_column a[href*='#']:not([href='#']), a.vc_btn3[href*='#']:not([href='#']), .vc_icon_element a[href*='#']:not([href='#'])").on('click', function() {
+        $("li.menu-item a[href*='#']:not([href='#'])").on('click', function() {
             if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
                 var hashVal = this.hash;
                 if (!hashVal || !/^#[a-zA-Z0-9_-]+$/.test(hashVal)) return;
@@ -1202,40 +1194,6 @@
         }
     }
 
-    // Full-width vc row elements
-    $(document).on("vc-full-width-row-single", lafka_vc_row_fullwidth_elements);
-
-    function lafka_vc_row_fullwidth_elements(event, {el, offset, marginLeft, marginRight, elFull, width}) {
-        var $rtl = $('body.rtl');
-        var is_boxed = $('body.lafka_boxed').length;
-        var is_left_header = $('body.lafka_header_left').length;
-        var is_vc_stretch_content = el.data('vc-stretch-content');
-        var $content = $(document.body).find('#content');
-        if ($content.length) {
-            // Renamed from `width`/`offset` to avoid shadowing window.{width,offset} (no-redeclare).
-            var contentWidth = $content.width();
-            var row_padding = 40;
-            var contentOffset = -($('#content').width() - $('#content > .inner ').css("width").replace("px", "")) / 2 - row_padding + 15;
-            el.css({"width": contentWidth + "px"});
-            if ((is_boxed || is_left_header) && !is_vc_stretch_content) {
-                el.css({
-                    'padding-left': Math.abs(contentOffset),
-                    'padding-right': Math.abs(contentOffset)
-                });
-            }
-            if ($rtl.length) {
-                el.css({
-                    'left': 0,
-                    'right': offset
-                });
-            } else {
-                el.css({
-                    'left': offset,
-                    'right': 0
-                });
-            }
-        }
-    }
 
     //updates the shopping cart in the sidebar, hooks into the added_to_cart event which is triggered by woocommerce
     function update_cart_dropdown(event) {

@@ -47,13 +47,8 @@ final class ColorContrastTest extends TestCase {
         );
     }
 
-    public function test_brand_orange_button_has_bold_weight(): void {
-        // The orange CTA button must qualify as "large/bold text" via
-        // font-weight: 700 (or higher).
-        $this->assertMatchesRegularExpression(
-            '/vc_btn3-style-custom[^}]*font-weight\s*:\s*(?:bold|700|800|900)/s',
-            $this->style_css,
-            'WPBakery custom button must use font-weight 700+ for AA 3:1 large-text contrast'
-        );
-    }
+    // NOTE: test_brand_orange_button_has_bold_weight (vc_btn3-style-custom) was
+    // removed in v6.19.0 — the theme is WPBakery-free, so the .vc_btn3 button no
+    // longer exists. Native CTA buttons get their bold weight from the button
+    // styles in styles/*.css.
 }

@@ -1810,11 +1810,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// weight — WP no longer needs to enqueue ~40 KB of jQuery UI Tabs
 		// CSS + JS on every page render. Confirmed by grep: no .tabs( call
 		// remains in lafka-front.js or anywhere else in the theme.
-		// v6.14.0 (perf): lafka-front.js only references .vc_* as jQuery selectors
-		// (they no-op when absent) — it does NOT call WPBakery's JS API. The old
-		// hard dependency on wpb_composer_front_js forced WPBakery's front JS onto
-		// EVERY page (lafka-front is global) and undid the native-page dequeue.
-		// Dropped; WPBakery still loads its own JS on pages that actually use it.
+		// v6.14.0 (perf): the old hard dependency on wpb_composer_front_js forced
+		// WPBakery's front JS onto EVERY page (lafka-front is global) and undid the
+		// native-page dequeue. Dropped. v6.18.0: the last dead .vc_* jQuery
+		// selectors were also removed from lafka-front.js (theme is WPBakery-free).
 		$lafka_front_deps = array( 'jquery', 'lafka-dialog' );
 
 		// PERF-26: WP 6.3 native defer strategy. Inline `wp_localize_script`
