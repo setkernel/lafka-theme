@@ -1,0 +1,51 @@
+/*
+ * Active-promo chip strip (lafka-active-promos) — surfaces enabled promotions
+ * at the top of the menu page. Mobile-first; design tokens with fallbacks.
+ */
+
+.lafka-active-promos {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lafka-space-2, 8px);
+	margin: 0 0 var(--lafka-space-4, 20px);
+}
+
+.lafka-active-promos__lead {
+	font-weight: 700;
+	font-size: 0.9rem;
+	color: var(--lafka-color-text, #18181b);
+}
+
+.lafka-active-promos__chip {
+	display: inline-flex;
+	align-items: center;
+	gap: 6px;
+	padding: 6px 12px;
+	border-radius: var(--lafka-radius-pill, 999px);
+	background: var(--lafka-color-surface-brand-soft, #fff7ed);
+	border: 1px solid var(--lafka-color-accent-200, #fecaca);
+	color: var(--lafka-color-text, #27272a);
+	font-size: 0.85rem;
+	font-weight: 600;
+	line-height: 1.2;
+}
+
+.lafka-active-promos__chip-dot {
+	width: 7px;
+	height: 7px;
+	border-radius: 50%;
+	background: var(--lafka-color-accent-500, #dc2626);
+	flex: 0 0 auto;
+}
+
+/* The slow-day "today only" chip gets the strongest emphasis (urgency). */
+.lafka-active-promos__chip[data-lafka-promo="slow_day"] {
+	background: var(--lafka-color-accent-500, #dc2626);
+	border-color: var(--lafka-color-accent-500, #dc2626);
+	color: var(--lafka-color-text-on-accent, #fff);
+}
+
+.lafka-active-promos__chip[data-lafka-promo="slow_day"] .lafka-active-promos__chip-dot {
+	background: var(--lafka-color-text-on-accent, #fff);
+}

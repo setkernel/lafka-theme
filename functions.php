@@ -117,6 +117,10 @@ require_once get_template_directory() . '/incl/customizer-promo-bar.php';
 // data-lafka-order-channel="direct").
 require_once get_template_directory() . '/incl/customizer-direct-value.php';
 
+// Active-promo surfacing (v6.16.0 — shows enabled plugin promos as chips on the
+// menu page so customers see the offers that beat the delivery apps).
+require_once get_template_directory() . '/incl/lafka-active-promos.php';
+
 // Site-wide announce bar (v5.54.0 — open/closed status + delivery + phone).
 require_once get_template_directory() . '/incl/customizer-announce-bar.php';
 

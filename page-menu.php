@@ -84,7 +84,12 @@ while ( have_posts() ) :
 		</header>
 
 		<div class="lafka-container">
-			<?php get_template_part( 'partials/menu-controls' ); ?>
+			<?php
+			if ( function_exists( 'lafka_render_active_promos' ) ) {
+				lafka_render_active_promos( 'menu' );
+			}
+			get_template_part( 'partials/menu-controls' );
+			?>
 		</div>
 
 		<?php if ( ! empty( $lafka_menu_terms ) ) : ?>
