@@ -1334,6 +1334,12 @@ if ( ! function_exists( 'lafka_set_skeleton_styles_events' ) ) {
 
 // Remove &nbsp from titles
 add_filter( 'the_title', 'lafka_remove_nbsp_from_titles', 10, 2 );
+
+// The rebuilt header renders FontAwesome icons (search / account / cart) on
+// every page, so keep FA enqueued site-wide — prevents the plugin's content-scan
+// FA dequeue (lafka-plugin/incl/perf/lafka-asset-pruning.php) from tofu-ing the
+// header icons. Revisit once the header icons move to inline SVG. (Baseline #perf.)
+add_filter( 'lafka_header_renders_fa_icons', '__return_true' );
 if ( ! function_exists( 'lafka_remove_nbsp_from_titles' ) ) {
 	function lafka_remove_nbsp_from_titles( $title, $id ) {
 		return str_replace( '&nbsp;', ' ', $title );
@@ -1722,14 +1728,20 @@ add_action(
 			return file_exists( $f ) ? (string) filemtime( $f ) : (string) time();
 		};
 
-		// v5.33.0: depend on lafka-tokens so the --lafka-pdp-* aliases
-		// can resolve their referenced design-system tokens.
-		wp_enqueue_style(
-			'lafka-pdp-redesign',
-			$tpl_uri . '/styles/pdp-redesign.css',
-			array( 'lafka-tokens' ),
-			$ver_for( 'styles/pdp-redesign.css' )
-		);
+		// v6.14.0 (perf): pdp-redesign.css is PDP-only — it was loading on every
+		// page (~37KB/10.7KB gz of pure waste; the early return above only checks
+		// function_exists('is_product'), never the result). Gate it to product
+		// pages where its --lafka-pdp-* rules actually apply. (Baseline #perf-1.)
+		if ( is_product() ) {
+			// v5.33.0: depend on lafka-tokens so the --lafka-pdp-* aliases
+			// can resolve their referenced design-system tokens.
+			wp_enqueue_style(
+				'lafka-pdp-redesign',
+				$tpl_uri . '/styles/pdp-redesign.css',
+				array( 'lafka-tokens' ),
+				$ver_for( 'styles/pdp-redesign.css' )
+			);
+		}
 
 		wp_enqueue_script(
             'lafka-order-method',
