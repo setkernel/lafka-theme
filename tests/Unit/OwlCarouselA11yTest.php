@@ -44,35 +44,8 @@ final class OwlCarouselA11yTest extends TestCase {
         );
     }
 
-    public function test_content_slider_navtext_uses_screen_reader_text(): void {
-        $php = file_get_contents( dirname( __DIR__, 2 ) . '/vc_templates/vc_lafka_content_slider.php' );
-        $this->assertMatchesRegularExpression(
-            '/screen-reader-text.*Previous slide/',
-            $php,
-            'vc_lafka_content_slider.php navText must use sr-only label for previous'
-        );
-        $this->assertMatchesRegularExpression(
-            '/screen-reader-text.*Next slide/',
-            $php,
-            'vc_lafka_content_slider.php navText must use sr-only label for next'
-        );
-    }
-
-    public function test_content_slider_dots_get_aria_labels(): void {
-        $php = file_get_contents( dirname( __DIR__, 2 ) . '/vc_templates/vc_lafka_content_slider.php' );
-        $this->assertMatchesRegularExpression(
-            '/aria-label.*Go to slide/',
-            $php,
-            'vc_lafka_content_slider.php must add aria-label to owl-dot elements'
-        );
-    }
-
-    public function test_content_slider_removes_presentation_role(): void {
-        $php = file_get_contents( dirname( __DIR__, 2 ) . '/vc_templates/vc_lafka_content_slider.php' );
-        $this->assertMatchesRegularExpression(
-            '/removeAttr\("role"\)/',
-            $php,
-            'vc_lafka_content_slider.php must remove role="presentation" from nav buttons'
-        );
-    }
+    // NOTE: the vc_lafka_content_slider.php a11y tests were removed in v6.18.0
+    // along with the vc_templates/ directory — the theme is WPBakery-free and
+    // that WPBakery slider template no longer exists. The owl-carousel a11y
+    // config (tested above via lafka-libs-config.js) still covers native usage.
 }
