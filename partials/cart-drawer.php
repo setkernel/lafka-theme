@@ -113,6 +113,15 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 
 		</div>
 
+		<?php
+		/* "Complete your meal" one-tap upsell (plugin-rendered; refreshed by the
+		 * woocommerce_add_to_cart_fragments hook on every cart change). Always
+		 * emits its wrapper so the AJAX fragment target exists. (v6.14.0) */
+		if ( function_exists( 'lafka_cart_drawer_render_upsell' ) ) {
+			lafka_cart_drawer_render_upsell();
+		}
+		?>
+
 		<footer class="lafka-cart-drawer__footer">
 			<div class="lafka-cart-drawer__total">
 				<?php

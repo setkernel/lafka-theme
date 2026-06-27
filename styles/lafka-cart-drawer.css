@@ -355,3 +355,99 @@
 	font-size: var(--lafka-font-size-caption);
 	color: var(--lafka-color-text-muted);
 }
+
+/* ── "Complete your meal" upsell row (v6.14.0) ────────────────────────────── */
+.lafka-cart-drawer__upsell {
+	padding: var(--lafka-space-3, 12px) var(--lafka-space-4, 16px) 0;
+}
+
+.lafka-cart-drawer__upsell-heading {
+	margin: 0 0 var(--lafka-space-2, 8px);
+	font-weight: 600;
+	font-size: 0.9rem;
+	color: var(--lafka-color-text, #18181b);
+}
+
+.lafka-cart-drawer__upsell-list {
+	list-style: none;
+	margin: 0;
+	padding: 0 0 var(--lafka-space-1, 4px);
+	display: flex;
+	gap: var(--lafka-space-2, 8px);
+	overflow-x: auto;
+	-webkit-overflow-scrolling: touch;
+	scrollbar-width: thin;
+}
+
+.lafka-cart-drawer__upsell-item {
+	flex: 0 0 112px;
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	padding: var(--lafka-space-2, 8px);
+	border: 1px solid var(--lafka-color-border, #e4e4e7);
+	border-radius: var(--lafka-radius-md, 8px);
+	background: var(--lafka-color-surface-raised, #fff);
+}
+
+.lafka-cart-drawer__upsell-link {
+	display: flex;
+	flex-direction: column;
+	gap: 2px;
+	text-decoration: none;
+	color: inherit;
+}
+
+.lafka-cart-drawer__upsell-img {
+	width: 100%;
+	aspect-ratio: 1 / 1;
+	object-fit: cover;
+	border-radius: var(--lafka-radius-sm, 6px);
+	background: var(--lafka-color-surface-muted, #f4f4f5);
+}
+
+.lafka-cart-drawer__upsell-img--ph {
+	display: block;
+}
+
+.lafka-cart-drawer__upsell-name {
+	font-size: 0.78rem;
+	line-height: 1.2;
+	color: var(--lafka-color-text, #27272a);
+	overflow: hidden;
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+}
+
+.lafka-cart-drawer__upsell-price {
+	font-size: 0.78rem;
+	font-weight: 600;
+	color: var(--lafka-color-text-muted, #52525b);
+}
+
+.lafka-cart-drawer__upsell-add {
+	margin-top: auto;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 36px;
+	padding: 0 10px;
+	border-radius: var(--lafka-radius-pill, 999px);
+	background: var(--lafka-color-accent-500, #dc2626);
+	color: var(--lafka-color-text-on-accent, #fff);
+	font-size: 0.8rem;
+	font-weight: 600;
+	text-decoration: none;
+}
+
+.lafka-cart-drawer__upsell-add.loading {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+.lafka-cart-drawer__upsell-add:hover,
+.lafka-cart-drawer__upsell-add:focus-visible {
+	background: var(--lafka-color-accent-600, #b91c1c);
+	color: var(--lafka-color-text-on-accent, #fff);
+}
