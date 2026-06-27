@@ -1061,6 +1061,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// styles/lafka-tokens.css for the full token list.
 		wp_enqueue_style( 'lafka-tokens', get_template_directory_uri() . '/styles/lafka-tokens.css', array(), lafka_asset_version( '/styles/lafka-tokens.css' ) );
 
+		// v6.13.0: header search overlay — only when the search icon is shown
+		// (Customizer "show_searchform"). Wires the otherwise-dead header
+		// trigger to a native <dialog>. (Audit 2026-06-27 #3.)
+		if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'show_searchform' ) ) {
+			wp_enqueue_style( 'lafka-search', get_template_directory_uri() . '/styles/lafka-search.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-search.css' ) );
+			wp_enqueue_script( 'lafka-search', get_template_directory_uri() . '/js/lafka-search.js', array(), lafka_asset_version( '/js/lafka-search.js' ), true );
+		}
+
 		// v5.26.0: sticky cart bar — opt-out via Customizer "Lafka — Order
 		// Flow". Skips the asset cost on cart/checkout where the bar is
 		// suppressed anyway (the partial early-returns there too).

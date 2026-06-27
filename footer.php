@@ -196,6 +196,28 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 		</div>
 	</footer>
 
+	<?php
+	// Header search overlay — opened by the [data-lafka-search-toggle] icon in
+	// header.php. Native <dialog>: showModal() handles Escape + focus trapping;
+	// the close button is a method="dialog" form. (Audit 2026-06-27 #3.)
+	if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'show_searchform' ) ) :
+		?>
+		<dialog id="lafka-search-dialog" class="lafka-search-dialog" aria-label="<?php esc_attr_e( 'Search', 'lafka' ); ?>">
+			<div class="lafka-search-dialog__panel">
+				<form role="search" method="get" class="lafka-search-dialog__form" action="<?php echo esc_url( home_url( '/' ) ); ?>">
+					<label class="screen-reader-text" for="lafka-search-field"><?php esc_html_e( 'Search for:', 'lafka' ); ?></label>
+					<input type="search" id="lafka-search-field" class="lafka-search-dialog__input" name="s" value="<?php echo esc_attr( get_search_query() ); ?>" placeholder="<?php esc_attr_e( 'Search the menu…', 'lafka' ); ?>" autocomplete="off">
+					<button type="submit" class="lafka-search-dialog__submit"><?php esc_html_e( 'Search', 'lafka' ); ?></button>
+				</form>
+				<form method="dialog" class="lafka-search-dialog__close-form">
+					<button type="submit" class="lafka-search-dialog__close" aria-label="<?php esc_attr_e( 'Close search', 'lafka' ); ?>">&times;</button>
+				</form>
+			</div>
+		</dialog>
+		<?php
+	endif;
+	?>
+
 	<?php wp_footer(); ?>
 </body>
 </html>
