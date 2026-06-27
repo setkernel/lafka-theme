@@ -1,0 +1,122 @@
+/*
+ * "Order Direct & save" value component (lafka-direct).
+ * Three variants: --strip (home), --badge (menu), --line (cart/checkout).
+ * Mobile-first; consumes design tokens with neutral fallbacks.
+ */
+
+/* ── Home value strip ─────────────────────────────────────────────────────── */
+.lafka-direct--strip {
+	background: var(--lafka-color-surface-brand-soft, #fff7ed);
+	padding: var(--lafka-space-6, 32px) 0;
+}
+
+.lafka-direct__inner {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-4, 20px);
+	align-items: flex-start;
+}
+
+.lafka-direct__heading {
+	font-family: var(--lafka-font-display, "Fraunces", Georgia, serif);
+	font-size: var(--lafka-font-size-h3, 1.6rem);
+	line-height: 1.15;
+	margin: 0 0 var(--lafka-space-1, 4px);
+	color: var(--lafka-color-text, #18181b);
+}
+
+.lafka-direct__subheading {
+	margin: 0;
+	color: var(--lafka-color-text-muted, #52525b);
+	font-size: 1rem;
+}
+
+.lafka-direct__points {
+	list-style: none;
+	margin: var(--lafka-space-3, 12px) 0 0;
+	padding: 0;
+	display: grid;
+	gap: var(--lafka-space-2, 8px);
+}
+
+.lafka-direct__point {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--lafka-space-2, 8px);
+	font-size: 0.97rem;
+	color: var(--lafka-color-text, #27272a);
+}
+
+.lafka-direct__check {
+	flex: 0 0 auto;
+	color: var(--lafka-color-success-500, #047857);
+	font-weight: 700;
+	line-height: 1.4;
+}
+
+.lafka-direct__cta {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: 48px;
+	padding: 0 var(--lafka-space-5, 24px);
+	border-radius: var(--lafka-radius-pill, 999px);
+	background: var(--lafka-color-accent-500, #dc2626);
+	color: var(--lafka-color-text-on-accent, #fff);
+	font-weight: 600;
+	text-decoration: none;
+	transition: background 0.18s ease;
+}
+
+.lafka-direct__cta:hover,
+.lafka-direct__cta:focus-visible {
+	background: var(--lafka-color-accent-600, #b91c1c);
+	color: var(--lafka-color-text-on-accent, #fff);
+}
+
+/* ≥768: copy + CTA side by side */
+@media (min-width: 768px) {
+
+	.lafka-direct__inner {
+		flex-direction: row;
+		align-items: center;
+		justify-content: space-between;
+		gap: var(--lafka-space-6, 32px);
+	}
+
+	.lafka-direct__points {
+		grid-auto-flow: column;
+		grid-template-columns: repeat(3, auto);
+	}
+
+	.lafka-direct__cta {
+		flex: 0 0 auto;
+	}
+}
+
+/* ── Menu badge ───────────────────────────────────────────────────────────── */
+.lafka-direct--badge {
+	display: inline-flex;
+	align-items: center;
+	gap: var(--lafka-space-2, 8px);
+	margin: 0 0 var(--lafka-space-3, 12px);
+	padding: 6px 14px;
+	border-radius: var(--lafka-radius-pill, 999px);
+	background: var(--lafka-color-surface-brand-soft, #fff7ed);
+	color: var(--lafka-color-text, #3f3f46);
+	font-size: 0.85rem;
+	font-weight: 500;
+}
+
+/* ── Cart / checkout reassurance line ─────────────────────────────────────── */
+.lafka-direct--line {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-2, 8px);
+	margin: var(--lafka-space-3, 12px) 0;
+	padding: var(--lafka-space-2, 8px) var(--lafka-space-3, 12px);
+	border-radius: var(--lafka-radius-md, 8px);
+	background: var(--lafka-color-success-50, #ecfdf5);
+	color: var(--lafka-color-text, #27272a);
+	font-size: 0.9rem;
+}

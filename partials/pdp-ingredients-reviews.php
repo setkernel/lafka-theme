@@ -63,27 +63,77 @@ foreach ( $lafka_pdp_tags as $lafka_pdp_tag ) {
 	}
 }
 
-// Reviews data from Customizer.
-$lafka_pdp_rating_avg   = (float) get_theme_mod( 'lafka_pdp_rating_avg', 4.8 );
-$lafka_pdp_rating_count = (int) get_theme_mod( 'lafka_pdp_rating_count', 312 );
+/*
+ * Reviews — HONEST social proof only (v6.14.0, audit 2026-06-27 #conversion).
+ *
+ * No fabricated defaults. The rating + testimonials come from REAL data:
+ *   1. the product's actual approved WooCommerce reviews + rating (automatic),
+ *   2. or operator-set Customizer fields (override),
+ *   3. or the `lafka_pdp_reviews` filter.
+ * If none exist, the whole reviews card is omitted (the "What's in it" card
+ * still shows). Defaults are 0 / '' so a fresh install never invents ratings.
+ */
+$lafka_pdp_rating_avg   = (float) get_theme_mod( 'lafka_pdp_rating_avg', 0 );
+$lafka_pdp_rating_count = (int) get_theme_mod( 'lafka_pdp_rating_count', 0 );
+
+// Pull the product's real WC reviews/rating when the operator hasn't overridden.
+global $product;
+if ( ( $lafka_pdp_rating_count <= 0 ) && $product instanceof WC_Product && wc_review_ratings_enabled() ) {
+	$lafka_pdp_rating_avg   = (float) $product->get_average_rating();
+	$lafka_pdp_rating_count = (int) $product->get_review_count();
+}
 
 $lafka_pdp_reviews = (array) apply_filters(
 	'lafka_pdp_reviews',
 	array(
 		array(
-			'quote'  => (string) get_theme_mod( 'lafka_pdp_review_1_quote', __( 'Honestly the best in the area. Crust is perfect every time.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_pdp_review_1_author', __( 'Marcus T.', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_pdp_review_1_date', __( '4 days ago', 'lafka' ) ),
+			'quote'  => (string) get_theme_mod( 'lafka_pdp_review_1_quote', '' ),
+			'author' => (string) get_theme_mod( 'lafka_pdp_review_1_author', '' ),
+			'date'   => (string) get_theme_mod( 'lafka_pdp_review_1_date', '' ),
 		),
 		array(
-			'quote'  => (string) get_theme_mod( 'lafka_pdp_review_2_quote', __( 'Ordered as a treat — kids fought over the last slice.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_pdp_review_2_author', __( 'Priya A.', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_pdp_review_2_date', __( '2 weeks ago', 'lafka' ) ),
+			'quote'  => (string) get_theme_mod( 'lafka_pdp_review_2_quote', '' ),
+			'author' => (string) get_theme_mod( 'lafka_pdp_review_2_author', '' ),
+			'date'   => (string) get_theme_mod( 'lafka_pdp_review_2_date', '' ),
 		),
 	)
 );
 
-$lafka_pdp_reviews_show = (bool) apply_filters( 'lafka_pdp_reviews_visible', true );
+// Drop entries with no real quote text — never render a fabricated testimonial.
+$lafka_pdp_reviews = array_values(
+	array_filter(
+		$lafka_pdp_reviews,
+		static function ( $r ) {
+			return is_array( $r ) && '' !== trim( (string) ( $r['quote'] ?? '' ) );
+		}
+	)
+);
+
+// If the operator set no testimonials, surface real WC review excerpts.
+if ( empty( $lafka_pdp_reviews ) && $product instanceof WC_Product && $lafka_pdp_rating_count > 0 ) {
+	$lafka_pdp_wc_comments = get_comments(
+		array(
+			'post_id'  => $product->get_id(),
+			'status'   => 'approve',
+			'type'     => 'review',
+			'number'   => 3,
+			'meta_key' => 'rating', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- small per-PDP lookup.
+		)
+	);
+	foreach ( (array) $lafka_pdp_wc_comments as $lafka_pdp_c ) {
+		$lafka_pdp_reviews[] = array(
+			'quote'  => wp_trim_words( (string) $lafka_pdp_c->comment_content, 28 ),
+			'author' => (string) $lafka_pdp_c->comment_author,
+			'date'   => human_time_diff( strtotime( $lafka_pdp_c->comment_date_gmt ) ) . ' ' . __( 'ago', 'lafka' ),
+		);
+	}
+}
+
+// Reviews card shows only when there is real data.
+$lafka_pdp_reviews_show = (bool) apply_filters(
+	'lafka_pdp_reviews_visible',
+	( $lafka_pdp_rating_count > 0 || ! empty( $lafka_pdp_reviews ) )
+);
 
 // Bail early if absolutely nothing to show.
 if ( '' === $lafka_pdp_long_desc && empty( $lafka_pdp_allergens ) && ! $lafka_pdp_reviews_show ) {

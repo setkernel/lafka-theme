@@ -112,6 +112,11 @@ require_once get_template_directory() . '/incl/lafka-home-defaults.php';
 // Site-wide promo / deal bar (v5.51.0 — Customizer panel + wp_body_open hook).
 require_once get_template_directory() . '/incl/customizer-promo-bar.php';
 
+// "Order Direct & save vs the delivery apps" value component (v6.14.0 — the
+// core growth lever; rendered on home/menu/cart/checkout, tracked via
+// data-lafka-order-channel="direct").
+require_once get_template_directory() . '/incl/customizer-direct-value.php';
+
 // Site-wide announce bar (v5.54.0 — open/closed status + delivery + phone).
 require_once get_template_directory() . '/incl/customizer-announce-bar.php';
 

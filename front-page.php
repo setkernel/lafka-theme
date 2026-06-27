@@ -37,6 +37,9 @@ get_header();
 	//  6. Reviews         — typography-only, no card boxes
 	//  7. Final CTA       — "Hungry yet?" dark rounded-xl with red glow
 	get_template_part( 'partials/home-hero' );
+	if ( function_exists( 'lafka_render_direct_value' ) ) {
+		lafka_render_direct_value( 'home' ); // "Order direct & save vs the apps" strip
+	}
 	get_template_part( 'partials/home-categories' );
 	get_template_part( 'partials/home-featured' );
 	get_template_part( 'partials/home-how-it-works' );
