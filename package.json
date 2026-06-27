@@ -11,8 +11,29 @@
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:fix": "npm run lint:js:fix && npm run lint:css:fix",
 		"test:e2e": "playwright test",
-		"test:e2e:install": "playwright install --with-deps chromium"
+		"test:e2e:install": "playwright install --with-deps chromium",
+		"sync-version": "node scripts/sync-version.mjs",
+		"check-version": "node scripts/sync-version.mjs --check",
+		"version": "node scripts/sync-version.mjs --stage"
 	},
+	"versionSync": [
+		{
+			"file": "style.css",
+			"pattern": "^\\s*Version:\\s*(\\d+\\.\\d+\\.\\d+[^\\s]*)",
+			"flags": "m",
+			"required": true
+		},
+		{
+			"file": "DESIGN_SYSTEM.md",
+			"pattern": "current theme v(\\d+\\.\\d+\\.\\d+)",
+			"required": false
+		},
+		{
+			"file": "readme.md",
+			"pattern": "Main stylesheet \\(v(\\d+\\.\\d+\\.\\d+)\\)",
+			"required": false
+		}
+	],
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.61.1",
