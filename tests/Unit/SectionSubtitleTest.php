@@ -44,15 +44,14 @@ final class SectionSubtitleTest extends TestCase {
     }
 
     public function test_section_subtitle_css_class_defined(): void {
-        $child_css_path = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
-        if ( ! file_exists( $child_css_path ) ) {
-            $this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
-        }
-        $child_css = file_get_contents( $child_css_path );
+        // Audit 2026-06-27 #6: the PARENT emits .section-subtitle, so the PARENT
+        // must style it — this assertion used to reach into the sibling child
+        // repo and skipped in isolated CI, leaving the a11y guarantee untested.
+        $base_css = file_get_contents( dirname( __DIR__, 2 ) . '/styles/lafka-base.css' );
         $this->assertMatchesRegularExpression(
             '/\.section-subtitle\s*\{/',
-            $child_css,
-            'lafka-child/style.css must define .section-subtitle class'
+            $base_css,
+            'lafka-theme/styles/lafka-base.css must define .section-subtitle (parent emits the markup).'
         );
     }
 }

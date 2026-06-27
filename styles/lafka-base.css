@@ -1,0 +1,63 @@
+/*
+ * Lafka parent baseline — structural a11y + CLS rules the PARENT's own markup
+ * depends on.
+ *
+ * Audit 2026-06-27 #6: the parent emits .section-subtitle (woocommerce/global/
+ * wrapper-start.php, partials/content-lafka_foodmenu_category.php), the
+ * .foodmenu-unit-info .ingredients text, .screen-reader-text labels (Owl/slider
+ * navText), and .lafka-owl-carousel sliders — but these were styled ONLY in
+ * lafka-child, so the OSS parent baseline was non-accessible and CLS-unsafe on
+ * its own. These rules now ship in the parent; the child no longer needs to
+ * provide them (identical values, so no visual change where the child is used).
+ *
+ * Greys here are WCAG-validated neutrals (not brand colours), so they are not
+ * subject to the no-hardcoded-site-values rule.
+ */
+
+/* P6-SEO-9 / P6-A11Y-5: .section-subtitle replaces misused <h6> for visual
+   subtitles under <h1>/<h2>. #5e5e5e ≈ 4.6:1 on white (WCAG AA). */
+.section-subtitle {
+	text-align: center;
+	font-size: 14.3pt;
+	color: #5e5e5e;
+	font-weight: 400;
+	margin: 0 0 1em;
+	line-height: 1.4;
+}
+
+/* P6-SEO-9 / P6-A11Y-5: .ingredients replaces misused <h6> for food-item
+   ingredient text inside .foodmenu-unit-info (descriptive content, italic). */
+.foodmenu-unit-info .ingredients {
+	width: auto !important;
+	margin: 0 0 8px 0 !important;
+	font-size: 15px;
+	font-style: italic;
+	font-weight: 400;
+	color: #5e5e5e; /* 4.6:1 WCAG AA */
+	vertical-align: middle;
+}
+
+/* WP-standard visually-hidden helper. P6-A11Y-1: required for Owl Carousel /
+   content-slider navText labels. Non-decorative but visually invisible. */
+.screen-reader-text {
+	border: 0;
+	clip: rect(1px, 1px, 1px, 1px);
+	-webkit-clip-path: inset(50%);
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute;
+	width: 1px;
+	word-wrap: normal !important;
+}
+
+/* P6-PERF-2: reserve carousel slot height before Owl Carousel mounts so the
+   pre-mount window doesn't shift layout. Owl's inline styles override this once
+   mounted. Override per-instance with .is-hero / .is-product-grid as needed. */
+.lafka-owl-carousel:not(.owl-loaded) {
+	aspect-ratio: 1280 / 500;
+	overflow: hidden;
+	contain: layout;
+}

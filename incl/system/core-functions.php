@@ -1061,6 +1061,12 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// styles/lafka-tokens.css for the full token list.
 		wp_enqueue_style( 'lafka-tokens', get_template_directory_uri() . '/styles/lafka-tokens.css', array(), lafka_asset_version( '/styles/lafka-tokens.css' ) );
 
+		// v6.13.0: parent baseline a11y/CLS rules for markup the parent itself
+		// emits (.section-subtitle, .ingredients, .screen-reader-text, owl
+		// reservation). Previously these lived only in lafka-child, leaving the
+		// OSS parent non-accessible on its own. (Audit 2026-06-27 #6.)
+		wp_enqueue_style( 'lafka-base', get_template_directory_uri() . '/styles/lafka-base.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-base.css' ) );
+
 		// v6.13.0: header search overlay — only when the search icon is shown
 		// (Customizer "show_searchform"). Wires the otherwise-dead header
 		// trigger to a native <dialog>. (Audit 2026-06-27 #3.)

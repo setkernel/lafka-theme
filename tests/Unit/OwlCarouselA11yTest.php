@@ -33,15 +33,14 @@ final class OwlCarouselA11yTest extends TestCase {
     }
 
     public function test_screen_reader_text_helper_defined(): void {
-        $child_css_path = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
-        if ( ! file_exists( $child_css_path ) ) {
-            $this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
-        }
-        $child_css = file_get_contents( $child_css_path );
+        // Audit 2026-06-27 #6: the parent's Owl/slider navText needs the
+        // .screen-reader-text helper, so the PARENT must define it. This used to
+        // assert against the sibling child repo and skipped in isolated CI.
+        $base_css = file_get_contents( dirname( __DIR__, 2 ) . '/styles/lafka-base.css' );
         $this->assertMatchesRegularExpression(
             '/\.screen-reader-text\s*\{/',
-            $child_css,
-            'lafka-child/style.css must define .screen-reader-text helper'
+            $base_css,
+            'lafka-theme/styles/lafka-base.css must define the .screen-reader-text helper.'
         );
     }
 
