@@ -15,9 +15,10 @@
  *   - bottom bar: copyright + tagline, border-top 12% white
  *
  * Email signup is a hookable surface — operators can swap in mc4wp /
- * Klaviyo / etc by filtering `lafka_footer_signup_html`. Default form
- * POSTs to ?action=lafka_footer_subscribe (no server handler shipped —
- * operator wires it up).
+ * Klaviyo / etc by filtering `lafka_footer_signup_html`. The built-in default
+ * form is only emitted when a `lafka_footer_subscribe` AJAX handler is actually
+ * registered, so a fresh install never ships a form that dead-ends on submit
+ * (audit 2026-06-27 #4).
  *
  * @package Lafka
  */
@@ -38,20 +39,26 @@ $lafka_ft_about = (string) get_theme_mod(
 	__( 'Fresh-baked pizza, poutine, donair and more — made to order from scratch in our kitchen.', 'lafka' )
 );
 
-$lafka_ft_signup_default_html = '
+// Only ship the built-in form when an integration has actually registered a
+// subscribe handler — otherwise it would dead-end on submit. Providers that
+// filter `lafka_footer_signup_html` supply their own markup regardless.
+$lafka_ft_signup_default_html = '';
+if ( has_action( 'wp_ajax_nopriv_lafka_footer_subscribe' ) ) {
+	$lafka_ft_signup_default_html = '
 <form class="lafka-footer__signup" action="' . esc_url( admin_url( 'admin-ajax.php?action=lafka_footer_subscribe' ) ) . '" method="post" data-lafka-footer-signup>
 	<label class="lafka-footer__signup-label" for="lafka-footer-signup-email">
-		<span class="lafka-footer__signup-headline">' . esc_html__( 'Get', 'lafka' ) . ' <strong>$5 off</strong> ' . esc_html__( 'your first order', 'lafka' ) . '</span>
-		<span class="lafka-footer__signup-hint">' . esc_html__( 'Plus monthly deals and new-menu drops. Unsubscribe anytime.', 'lafka' ) . '</span>
+		<span class="lafka-footer__signup-headline">' . esc_html__( 'Get our latest deals', 'lafka' ) . '</span>
+		<span class="lafka-footer__signup-hint">' . esc_html__( 'Monthly deals and new-menu drops. Unsubscribe anytime.', 'lafka' ) . '</span>
 	</label>
 	<div class="lafka-footer__signup-row">
 		<input type="email" id="lafka-footer-signup-email" name="email" class="lafka-footer__signup-input" placeholder="' . esc_attr__( 'your@email.com', 'lafka' ) . '" autocomplete="email" required>
 		<button type="submit" class="lafka-footer__signup-button">' . esc_html__( 'Subscribe', 'lafka' ) . '</button>
 	</div>
 	<p class="lafka-footer__signup-success" data-lafka-footer-signup-success hidden>
-		<span aria-hidden="true">✓</span> ' . esc_html__( 'Thanks — check your inbox for your $5-off code.', 'lafka' ) . '
+		<span aria-hidden="true">✓</span> ' . esc_html__( 'Thanks — you are subscribed.', 'lafka' ) . '
 	</p>
 </form>';
+}
 
 $lafka_ft_signup_html = (string) apply_filters( 'lafka_footer_signup_html', $lafka_ft_signup_default_html );
 
