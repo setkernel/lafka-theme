@@ -1804,10 +1804,12 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// weight — WP no longer needs to enqueue ~40 KB of jQuery UI Tabs
 		// CSS + JS on every page render. Confirmed by grep: no .tabs( call
 		// remains in lafka-front.js or anywhere else in the theme.
+		// v6.14.0 (perf): lafka-front.js only references .vc_* as jQuery selectors
+		// (they no-op when absent) — it does NOT call WPBakery's JS API. The old
+		// hard dependency on wpb_composer_front_js forced WPBakery's front JS onto
+		// EVERY page (lafka-front is global) and undid the native-page dequeue.
+		// Dropped; WPBakery still loads its own JS on pages that actually use it.
 		$lafka_front_deps = array( 'jquery', 'lafka-dialog' );
-		if ( LAFKA_IS_VC ) {
-			$lafka_front_deps[] = 'wpb_composer_front_js';
-		}
 
 		// PERF-26: WP 6.3 native defer strategy. Inline `wp_localize_script`
 		// blocks emitted below are plain object literals, so they evaluate
@@ -2098,13 +2100,24 @@ if ( ! function_exists( 'lafka_dequeue_irrelevant_plugin_assets' ) ) {
 		// that actually use the visual composer. The handoff rebuild
 		// emits native partials — PDP / cart / checkout / menu / cart
 		// / shop / account / 404 / contact / WC endpoints don't need it.
-		$wpbakery_unused_here = ( function_exists( 'is_product' ) && is_product() )
+		$wpbakery_unused_here = is_front_page() // native front-page.php — never renders vc content
+			|| ( function_exists( 'is_product' ) && is_product() )
 			|| ( function_exists( 'is_cart' ) && is_cart() )
 			|| ( function_exists( 'is_checkout' ) && is_checkout() )
 			|| ( function_exists( 'is_shop' ) && is_shop() )
 			|| ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() )
 			|| ( function_exists( 'is_account_page' ) && is_account_page() )
 			|| is_404();
+		// v6.14.0 (perf): also drop WPBakery on any singular page/post whose
+		// content carries no [vc_ shortcode — those render from native markup, so
+		// the 455KB js_composer CSS + JS is pure waste. Pages still built in
+		// WPBakery keep it until migrated to native templates.
+		if ( ! $wpbakery_unused_here && is_singular() ) {
+			$lafka_cur_post = get_post();
+			if ( $lafka_cur_post && false === strpos( (string) $lafka_cur_post->post_content, '[vc_' ) ) {
+				$wpbakery_unused_here = true;
+			}
+		}
 		if ( $wpbakery_unused_here ) {
 			wp_dequeue_style( 'js_composer_front' );
 			wp_dequeue_style( 'js_composer_custom_css' );
