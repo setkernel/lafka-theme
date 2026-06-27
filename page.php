@@ -12,8 +12,6 @@
  * an operator set one in the legacy admin UI. New pages don't need it —
  * the post excerpt fills the same role.
  *
- * Legacy template preserved as page-legacy.php.
- *
  * @package Lafka
  * @since   5.75.0
  */

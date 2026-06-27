@@ -2,8 +2,7 @@
 /**
  * Footer — handoff-spec rebuild (v5.58.0).
  *
- * Replaces the legacy theAlThemist footer. Legacy file preserved as
- * footer-legacy.php for emergency rollback.
+ * Replaces the legacy theAlThemist footer.
  *
  * Per handoff spec /design_handoff_peppery_ordering/README.md "Footer":
  *   - dark --lafka-color-text-primary bg, white text

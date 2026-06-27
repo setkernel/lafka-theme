@@ -11,8 +11,6 @@
  * blocks (.lafka-post__meta, .lafka-post__nav, .lafka-post__tags) are
  * defined in the same stylesheet.
  *
- * Legacy template preserved as single-legacy.php.
- *
  * @package Lafka
  * @since   5.76.0
  */

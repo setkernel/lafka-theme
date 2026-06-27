@@ -2,10 +2,8 @@
 /**
  * Header — handoff-spec rebuild (v5.55.0).
  *
- * Replaces the legacy 364-line header from theAlThemist. The legacy file
- * is preserved as header-legacy.php for emergency rollback and historical
- * reference. The new header is a clean handoff implementation of
- * /design_handoff_peppery_ordering/README.md "Header".
+ * Replaces the legacy 364-line header from theAlThemist. A clean handoff
+ * implementation of /design_handoff_peppery_ordering/README.md "Header".
  *
  * Layout (single row, 64px mobile / 72px desktop):
  *  [hamburger (mobile)]  [logo]  [primary nav]  [cart icon]  [Order now CTA]
