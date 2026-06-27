@@ -3,7 +3,7 @@
 Single source of truth for every visual decision in the theme. If you can't
 find an answer here, the answer doesn't exist yet — propose it via PR.
 
-**Locked**: 2026-05-15 (theme v5.43.0).
+**Locked**: 2026-05-15 design lock; current theme v6.13.0.
 
 ## Principles
 
@@ -64,6 +64,42 @@ All values exposed via CSS custom properties in `styles/lafka-tokens.css`.
 
 Success `#047857`, error `#b91c1c`, warning `#b45309`, info `#1d4ed8`.
 Each paired with a 50-tint background; all WCAG-AA on white.
+
+### Operator accent override + `accent-text` derivation
+
+The accent ramp is the one color an operator may override (via Customizer,
+flowing through `styles/dynamic-css.php` as the SSOT). Because an operator can
+pick any brand red — e.g. Peppery's `#f2002d`, which yields only 4.36:1
+accent-on-white (sub-AA) — there is a dedicated **`--lafka-color-accent-text`**
+token for accent rendered as *text* (eyebrows, prices, link colors). It is
+derived 15% darker from the operator's accent:
+
+```css
+--lafka-color-accent-text: var(--lafka-color-accent-600); /* fallback */
+
+@supports (color: color-mix(in srgb, red 50%, white)) {
+  :root {
+    --lafka-color-accent-text:
+      color-mix(in srgb, var(--lafka-color-accent-500) 85%, #000);
+  }
+}
+```
+
+The `color-mix(... 85% ..., #000)` darken clears AA for any reasonable mid-tone
+accent; older browsers (Safari <16.4 / Firefox <113 / Chrome <111) fall back to
+`accent-600`. Use `accent-text` for accent-as-text; keep `accent-500` for accent
+*backgrounds* with white text (white-on-mid-red always clears contrast).
+
+### Dark mode (opt-in)
+
+Dark mode is **strictly opt-in** via `[data-theme="dark"]` on `<html>` (a
+forward hook for operators who explicitly want it — e.g. a Customizer/admin
+toggle). It is *not* driven by `prefers-color-scheme` because the handoff design
+language is light-mode-only (warm food photography on light surfaces, red
+accent) and many components hardcode which surface is light. The override block
+lives in `styles/lafka-tokens.css` (`:root[data-theme="dark"]`) and re-points
+the text, surface, border, accent (`accent-500` → `#ef4444`), and shadow tokens
+to their dark equivalents.
 
 ### Forbidden
 
@@ -180,6 +216,20 @@ These are the only "button"-like primitives. Anything else is a bug.
 **Deprecated as required dependency** (see memory:
 `feedback_wpbakery_deprecated.md`). New default page templates render
 without it. Existing operator content keeps working until migrated.
+
+## Stylesheet entry points
+
+Tokens are the contract; these are the key files that consume them.
+
+| File | Role |
+|------|------|
+| `styles/lafka-tokens.css` | The token SSOT — color/type/space/radii/motion, dark-mode block, accent-text derivation. |
+| `styles/dynamic-css.php` | Emits the operator's Customizer accent override into the cascade. |
+| `styles/lafka-base.css` | **Parent baseline a11y / CLS** — structural rules the parent's own markup depends on (`.section-subtitle`, `.foodmenu-unit-info .ingredients`, `.screen-reader-text`, pre-mount `.lafka-owl-carousel` height reservation). Previously these lived only in lafka-child, leaving the OSS parent non-accessible on its own. |
+| `styles/lafka-search.css` | Header search overlay — native `<dialog>`; consumes tokens with neutral fallbacks. |
+| `styles/pdp-redesign.css` | Redesigned product page. |
+| `styles/editorial.css` | Editorial / long-form page layouts. |
+| `styles/product-card.css`, `styles/lafka-menu-archive.css` | List-card menu archive. |
 
 ## Updating this system
 

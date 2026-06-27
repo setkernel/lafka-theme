@@ -21,9 +21,13 @@ npx @wordpress/env start
 
 ```bash
 npm run lint        # ESLint + Stylelint
-composer phpcs      # WordPress coding standards
+composer phpcs      # WordPress coding standards (security sniffs enforced)
 composer phpcbf     # auto-fix what PHPCS can fix
+npm run test:e2e    # Playwright conversion-path e2e (see playwright.config.js)
 ```
+
+The Playwright suite (`tests/e2e/`) needs browsers installed once:
+`npm run test:e2e:install`.
 
 ## Branching
 
@@ -46,7 +50,8 @@ composer phpcbf     # auto-fix what PHPCS can fix
 | WPBakery / VC element overrides | `vc_templates/` |
 | Custom page templates | `page_templates/` |
 | Frontend JS | `js/` |
-| Frontend CSS | `style.css` (root) + `styles/` (variants) |
+| Frontend CSS | `style.css` (root) + `styles/` (design tokens + variants) |
+| Design tokens / visual SSOT | `styles/lafka-tokens.css` + [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) |
 | Demo content | `store/demo/` |
 | Translations | `languages/` |
 

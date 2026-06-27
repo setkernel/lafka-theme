@@ -33,6 +33,10 @@ These must be purchased separately from their respective vendors.
 
 - **Custom Food Menu System** — Restaurant menu items with categories, prices, ingredients, allergens, and nutrition facts
 - **Deep WooCommerce Integration** — Custom shop layouts, ajax cart, quick view, wishlist, product comparison
+- **Redesigned Product Page (PDP)** — Token-driven single-product layout with topping/size pickers, sticky add-to-cart, ingredients + reviews; partials in `partials/pdp-*.php`, behaviour in `js/pdp-pickers.js`, styles in `styles/pdp-redesign.css`
+- **List-Card Menu Archive** — Image-left / body-right product rows with inline quick-add (`styles/product-card.css`, `styles/lafka-menu-archive.css`)
+- **Editorial Page System** — Long-form / editorial layouts on the design-token system (`styles/editorial.css`)
+- **Design-Token CSS** — Single visual source of truth in `styles/lafka-tokens.css` (color/type/space/radii/motion), with opt-in dark mode and an operator accent override; see `DESIGN_SYSTEM.md`
 - **Mega Menu** — Multi-column menus with icons, images, and custom labels
 - **Multiple Header Styles** — Sticky, transparent, with search, cart, and account dropdowns
 - **Blog Layouts** — Standard, masonry, and mosaic styles
@@ -54,7 +58,10 @@ lafka/
 │   ├── tgm-plugin-activation/   # Plugin installer
 │   └── ...
 ├── js/                     # JavaScript (custom + libraries)
-├── styles/                 # CSS (dynamic, responsive, admin, RTL)
+├── styles/                 # CSS — design tokens (lafka-tokens.css),
+│                           #   parent baseline (lafka-base.css), search
+│                           #   overlay (lafka-search.css), PDP/editorial,
+│                           #   dynamic, responsive, admin, RTL
 ├── woocommerce/            # WooCommerce template overrides
 ├── partials/               # Reusable template parts
 ├── vc_templates/           # WPBakery element templates
@@ -64,8 +71,12 @@ lafka/
 ├── plugins/                # Place commercial plugin zips here
 ├── functions.php           # Main theme functions
 ├── header.php / footer.php # Layout templates
-└── style.css               # Main stylesheet (v4.5.7)
+└── style.css               # Main stylesheet (v6.13.0)
 ```
+
+The visual single source of truth is the `styles/` token system
+(`styles/lafka-tokens.css`) and [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md). Do not
+introduce hex literals or magic spacing — consume the tokens.
 
 ## Development
 
