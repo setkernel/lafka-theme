@@ -56,11 +56,14 @@ if ( '' === $lafka_hero_image_src ) {
 	$lafka_hero_image_src = (string) apply_filters( 'lafka_home_hero_default_bg_url', '' );
 }
 
-// Stats — operator may override via Customizer. Defaults match the
-// handoff prototype order: rating first (trust signal), pickup time
-// (urgency), free delivery (commerce hook).
-$lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value', '4.8' );
-$lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', __( '1,200+ reviews', 'lafka' ) );
+// Stats — operator may override via Customizer. Order matches the handoff
+// prototype: rating first (trust signal), pickup time (urgency), free
+// delivery (commerce hook). The rating stat defaults to EMPTY — shipping a
+// fabricated rating + review count as a default would publish fake social
+// proof on every install (audit 2026-06-27 #5). It renders only once the
+// operator supplies a real value.
+$lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value', '' );
+$lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', '' );
 $lafka_hero_stat_2_value = (string) get_theme_mod( 'lafka_home_hero_stat_2_value', '25 min' );
 $lafka_hero_stat_2_label = (string) get_theme_mod( 'lafka_home_hero_stat_2_label', __( 'avg. pickup', 'lafka' ) );
 $lafka_hero_stat_3_value = (string) get_theme_mod( 'lafka_home_hero_stat_3_value', 'Free' );
@@ -113,27 +116,33 @@ $lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label
 			</div>
 
 			<dl class="lafka-hero__stats">
-				<div class="lafka-hero__stat">
-					<dt class="lafka-hero__stat-icon" aria-hidden="true">⭐</dt>
-					<dd class="lafka-hero__stat-body">
-						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_1_value ); ?></span>
-						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_1_label ); ?></span>
-					</dd>
-				</div>
-				<div class="lafka-hero__stat">
-					<dt class="lafka-hero__stat-icon" aria-hidden="true">⏱</dt>
-					<dd class="lafka-hero__stat-body">
-						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_2_value ); ?></span>
-						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_2_label ); ?></span>
-					</dd>
-				</div>
-				<div class="lafka-hero__stat">
-					<dt class="lafka-hero__stat-icon" aria-hidden="true">🚚</dt>
-					<dd class="lafka-hero__stat-body">
-						<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_3_value ); ?></span>
-						<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_3_label ); ?></span>
-					</dd>
-				</div>
+				<?php if ( '' !== $lafka_hero_stat_1_value ) : ?>
+					<div class="lafka-hero__stat">
+						<dt class="lafka-hero__stat-icon" aria-hidden="true">⭐</dt>
+						<dd class="lafka-hero__stat-body">
+							<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_1_value ); ?></span>
+							<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_1_label ); ?></span>
+						</dd>
+					</div>
+				<?php endif; ?>
+				<?php if ( '' !== $lafka_hero_stat_2_value ) : ?>
+					<div class="lafka-hero__stat">
+						<dt class="lafka-hero__stat-icon" aria-hidden="true">⏱</dt>
+						<dd class="lafka-hero__stat-body">
+							<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_2_value ); ?></span>
+							<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_2_label ); ?></span>
+						</dd>
+					</div>
+				<?php endif; ?>
+				<?php if ( '' !== $lafka_hero_stat_3_value ) : ?>
+					<div class="lafka-hero__stat">
+						<dt class="lafka-hero__stat-icon" aria-hidden="true">🚚</dt>
+						<dd class="lafka-hero__stat-body">
+							<span class="lafka-hero__stat-value"><?php echo esc_html( $lafka_hero_stat_3_value ); ?></span>
+							<span class="lafka-hero__stat-label"><?php echo esc_html( $lafka_hero_stat_3_label ); ?></span>
+						</dd>
+					</div>
+				<?php endif; ?>
 			</dl>
 
 		</div>

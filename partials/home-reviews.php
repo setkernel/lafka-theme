@@ -21,31 +21,42 @@ if ( ! $lafka_rev_visible ) {
 	return;
 }
 
-$lafka_rev_avg   = (float) get_theme_mod( 'lafka_home_reviews_avg', 4.8 );
-$lafka_rev_count = (int) get_theme_mod( 'lafka_home_reviews_count', 500 );
+$lafka_rev_avg   = (float) get_theme_mod( 'lafka_home_reviews_avg', 0 );
+$lafka_rev_count = (int) get_theme_mod( 'lafka_home_reviews_count', 0 );
 $lafka_rev_headline = (string) get_theme_mod( 'lafka_home_reviews_headline', __( 'People keep coming back.', 'lafka' ) );
 
-/* v5.68.0: defaults are restaurant-agnostic per OSS-bundle policy.
- * Operators replace via Customizer per-review fields, or via the
- * `lafka_home_reviews` filter (intended path for child themes). */
+/* v6.13.0 (audit 2026-06-27 #5): NO fabricated social proof in defaults.
+ * The aggregate and every testimonial default to empty, so a fresh install
+ * shows nothing until the operator supplies REAL reviews via the Customizer
+ * per-review fields or the `lafka_home_reviews` filter (the child-theme path). */
 $lafka_reviews = (array) apply_filters(
 	'lafka_home_reviews',
 	array(
 		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_review_1_quote', __( 'Hot, fresh, and delivered fast. The dough is perfect and the toppings are always fresh.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_home_review_1_author', __( 'Regular customer', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_home_review_1_date', __( 'Recently', 'lafka' ) ),
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_1_quote', '' ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_1_author', '' ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_1_date', '' ),
 		),
 		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_review_2_quote', __( 'Order showed up fast and hot. The poutine is the real deal.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_home_review_2_author', __( 'Local diner', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_home_review_2_date', __( 'Recently', 'lafka' ) ),
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_2_quote', '' ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_2_author', '' ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_2_date', '' ),
 		),
 		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_review_3_quote', __( 'Family favourite for years. Friendly staff, great prices, never a bad meal.', 'lafka' ) ),
-			'author' => (string) get_theme_mod( 'lafka_home_review_3_author', __( 'Long-time customer', 'lafka' ) ),
-			'date'   => (string) get_theme_mod( 'lafka_home_review_3_date', __( 'Recently', 'lafka' ) ),
+			'quote'  => (string) get_theme_mod( 'lafka_home_review_3_quote', '' ),
+			'author' => (string) get_theme_mod( 'lafka_home_review_3_author', '' ),
+			'date'   => (string) get_theme_mod( 'lafka_home_review_3_date', '' ),
 		),
+	)
+);
+
+// Drop any entry without real quote text — never render a fabricated review.
+$lafka_reviews = array_values(
+	array_filter(
+		$lafka_reviews,
+		static function ( $lafka_rev ) {
+			return is_array( $lafka_rev ) && '' !== trim( (string) ( $lafka_rev['quote'] ?? '' ) );
+		}
 	)
 );
 
@@ -57,16 +68,18 @@ if ( empty( $lafka_reviews ) ) {
 	<div class="lafka-container">
 
 		<header class="lafka-section-head">
-			<p class="lafka-revs__rating">
-				<span class="lafka-revs__stars" aria-hidden="true">★★★★★</span>
-				<strong class="lafka-revs__avg"><?php echo esc_html( number_format_i18n( $lafka_rev_avg, 1 ) ); ?></strong>
-				<span class="lafka-revs__count">
-					<?php
-					/* translators: %s — review count formatted */
-					printf( esc_html__( '· %s reviews', 'lafka' ), esc_html( number_format_i18n( $lafka_rev_count ) ) );
-					?>
-				</span>
-			</p>
+			<?php if ( $lafka_rev_count > 0 ) : ?>
+				<p class="lafka-revs__rating">
+					<span class="lafka-revs__stars" aria-hidden="true">★★★★★</span>
+					<strong class="lafka-revs__avg"><?php echo esc_html( number_format_i18n( $lafka_rev_avg, 1 ) ); ?></strong>
+					<span class="lafka-revs__count">
+						<?php
+						/* translators: %s — review count formatted */
+						printf( esc_html__( '· %s reviews', 'lafka' ), esc_html( number_format_i18n( $lafka_rev_count ) ) );
+						?>
+					</span>
+				</p>
+			<?php endif; ?>
 			<h2 id="lafka-revs-heading" class="lafka-section-headline"><?php echo esc_html( $lafka_rev_headline ); ?></h2>
 		</header>
 
