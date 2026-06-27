@@ -64,26 +64,27 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 
 		<div class="lafka-cart-drawer__body">
 
-			<?php if ( $lafka_cart_empty ) : ?>
-				<div class="lafka-cart-drawer__empty" data-lafka-cart-empty>
-					<span class="lafka-cart-drawer__empty-icon" aria-hidden="true">🛒</span>
-					<h3 class="lafka-cart-drawer__empty-title"><?php esc_html_e( 'Your cart is empty', 'lafka' ); ?></h3>
-					<p class="lafka-cart-drawer__empty-hint"><?php esc_html_e( 'Add something delicious to get started.', 'lafka' ); ?></p>
-					<a class="lafka-cart-drawer__empty-cta" href="<?php echo esc_url( apply_filters( 'lafka_header_cta_url', home_url( '/menu/' ) ) ); ?>">
-						<?php esc_html_e( 'Browse the menu', 'lafka' ); ?>
-					</a>
-				</div>
-			<?php else : ?>
-				<ul class="lafka-cart-drawer__items">
+			<?php
+			/* ALWAYS render the items <ul> — it is the woocommerce_add_to_cart_
+			 * fragments target. v6.14.0: the empty state now lives INSIDE the <ul>
+			 * so the fragment refresh can swap empty⇄filled. Previously the empty
+			 * branch rendered a <div> instead of the <ul>, so adding the FIRST item
+			 * from an empty cart left the drawer body stuck on "empty" (the refresh
+			 * had no <ul> to replace) — the single most important add.
+			 */
+			?>
+			<ul class="lafka-cart-drawer__items">
+				<?php if ( $lafka_cart_empty ) : ?>
+					<li class="lafka-cart-drawer__empty" data-lafka-cart-empty>
+						<span class="lafka-cart-drawer__empty-icon" aria-hidden="true">🛒</span>
+						<span class="lafka-cart-drawer__empty-title"><?php esc_html_e( 'Your cart is empty', 'lafka' ); ?></span>
+						<span class="lafka-cart-drawer__empty-hint"><?php esc_html_e( 'Add something delicious to get started.', 'lafka' ); ?></span>
+						<a class="lafka-cart-drawer__empty-cta" href="<?php echo esc_url( apply_filters( 'lafka_header_cta_url', home_url( '/menu/' ) ) ); ?>">
+							<?php esc_html_e( 'Browse the menu', 'lafka' ); ?>
+						</a>
+					</li>
+				<?php else : ?>
 					<?php
-					/* Server-render line items on initial page load. The plugin's
-					 * woocommerce_add_to_cart_fragments hook still replaces this
-					 * <ul> on subsequent add-to-cart events via AJAX — keeping
-					 * the markup IN SYNC across both render paths (v6.7.4).
-					 * Without this, customers who opened the drawer on a fresh
-					 * page-load saw an empty body despite the "Your cart / 3"
-					 * count badge.
-					 */
 					foreach ( WC()->cart->get_cart() as $lafka_cart_item_key => $lafka_cart_item ) {
 						$lafka_product = $lafka_cart_item['data'] ?? null;
 						if ( ! $lafka_product ) {
@@ -108,8 +109,8 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 						<?php
 					}
 					?>
-				</ul>
-			<?php endif; ?>
+				<?php endif; ?>
+			</ul>
 
 		</div>
 
