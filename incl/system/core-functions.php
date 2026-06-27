@@ -1095,10 +1095,16 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		// v5.28.0: archive-card quick-add — conditionally enqueued on
-		// product loop pages. Skips the cost on home / cart / etc.
+		// v5.28.0: archive-card quick-add — conditionally enqueued on pages that
+		// render the product card. v6.14.0: added the custom /menu/ page template
+		// + the home featured grid (both use loop/lafka-product-card.php), so the
+		// one-tap pill actually works there (previously dead on /menu/ — the
+		// highest-traffic surface). Still skips cart/checkout/content pages.
+		// page-menu.php is selected via the page-{slug} hierarchy for the 'menu'
+		// page, so is_page('menu') — not is_page_template() — is the right check.
 		$lafka_archive_quickadd_active = function_exists( 'is_woocommerce' )
-			&& ( is_shop() || is_product_category() || is_product_tag() || is_product_taxonomy() )
+			&& ( is_shop() || is_product_category() || is_product_tag() || is_product_taxonomy()
+				|| is_page( 'menu' ) || is_front_page() )
 			&& (bool) get_theme_mod( 'lafka_archive_quickadd_enabled', true );
 		if ( $lafka_archive_quickadd_active ) {
 			wp_enqueue_style(

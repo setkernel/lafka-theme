@@ -38,13 +38,27 @@ if ( $lafka_arch_featured && ! in_array( 'popular', $lafka_arch_tag_slugs, true 
 	$lafka_arch_tag_slugs[] = 'popular';
 }
 $lafka_arch_tags_attr = implode( ',', $lafka_arch_tag_slugs );
+
+// v6.14.0: the quick-add render fn + GA4 select_item both key off global $product.
+$GLOBALS['product'] = $lafka_arch_p;
+
+// select_item tracking contract (docs/TRACKING.md): lafka-dl-client.js reads
+// these on the card link to push GA4 select_item.
+$lafka_arch_cat_names = function_exists( 'wp_get_post_terms' ) ? wp_get_post_terms( $lafka_arch_p->get_id(), 'product_cat', array( 'fields' => 'names' ) ) : array();
+$lafka_arch_cat       = ( ! is_wp_error( $lafka_arch_cat_names ) && ! empty( $lafka_arch_cat_names ) ) ? (string) $lafka_arch_cat_names[0] : '';
+$lafka_arch_list      = ( function_exists( 'is_tax' ) && is_tax( 'product_cat' ) ) ? (string) single_term_title( '', false ) : ( is_page() ? (string) get_the_title() : 'Menu' );
 ?>
 <li
 	class="lafka-favs__item"
 	data-lafka-product-name="<?php echo esc_attr( $lafka_arch_name ); ?>"
 	data-lafka-product-tags="<?php echo esc_attr( $lafka_arch_tags_attr ); ?>"
 >
-	<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_arch_url ); ?>">
+	<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_arch_url ); ?>"
+		data-lafka-item-id="<?php echo esc_attr( (string) $lafka_arch_p->get_id() ); ?>"
+		data-lafka-item-name="<?php echo esc_attr( $lafka_arch_name ); ?>"
+		data-lafka-item-category="<?php echo esc_attr( $lafka_arch_cat ); ?>"
+		data-lafka-item-price="<?php echo esc_attr( (string) wc_get_price_to_display( $lafka_arch_p ) ); ?>"
+		data-lafka-list-name="<?php echo esc_attr( $lafka_arch_list ); ?>">
 		<div class="lafka-favs__media">
 			<?php if ( $lafka_arch_img ) : ?>
 				<img class="lafka-favs__img" src="<?php echo esc_url( $lafka_arch_img ); ?>" alt="" loading="lazy" decoding="async">
@@ -62,7 +76,19 @@ $lafka_arch_tags_attr = implode( ',', $lafka_arch_tag_slugs );
 			<?php endif; ?>
 			<div class="lafka-favs__foot">
 				<span class="lafka-favs__price"><?php echo wp_kses_post( $lafka_arch_price ); ?></span>
-				<span class="lafka-favs__cta"><?php esc_html_e( 'Customize', 'lafka' ); ?></span>
+				<?php
+				// v6.14.0: one-tap quick-add for simple products ("+ Add"), or
+				// "Choose" → PDP for variable/combo. Reuses the proven pill
+				// (js/lafka-archive-quickadd.js intercepts taps). Falls back to a
+				// static label if the helper is unavailable.
+				if ( function_exists( 'lafka_archive_quickadd_render' ) ) {
+					lafka_archive_quickadd_render();
+				} else {
+					?>
+					<span class="lafka-favs__cta"><?php esc_html_e( 'Customize', 'lafka' ); ?></span>
+					<?php
+				}
+				?>
 			</div>
 		</div>
 	</a>
