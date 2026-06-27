@@ -64,6 +64,28 @@ final class CriticalCssTest extends TestCase {
 		$this->assertStringContainsString( '<noscript>', $this->module );
 	}
 
+	/**
+	 * The canonical design-token stylesheet must stay render-blocking.
+	 *
+	 * Audit 2026-06-27 #7: the inlined critical.css targets pre-rebuild markup
+	 * while lafka-tokens.css (every var() depends on it) was deferred, causing
+	 * a FOUC where colors/spacing fall back until the async sheet loads. The
+	 * keep-blocking allowlist must pin 'lafka-tokens' so tokens resolve on the
+	 * first paint.
+	 */
+	public function test_tokens_stylesheet_kept_blocking(): void {
+		$this->assertStringContainsString(
+			"'lafka-tokens'",
+			$this->module,
+			'lafka-tokens must be in the keep-blocking allowlist so design tokens are not deferred.'
+		);
+		$this->assertMatchesRegularExpression(
+			"/add_filter\(\s*['\"]lafka_critical_css_keep_blocking['\"]\s*,\s*['\"][a-z_]*token[a-z_]*['\"]/i",
+			$this->module,
+			'A keep-blocking callback must register lafka-tokens against lafka_critical_css_keep_blocking.'
+		);
+	}
+
 	/** Module is wired via require_once in core-functions.php. */
 	public function test_module_required_from_core_functions(): void {
 		$core = file_get_contents( dirname( __DIR__, 2 ) . '/incl/system/core-functions.php' );

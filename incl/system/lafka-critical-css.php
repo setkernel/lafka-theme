@@ -204,3 +204,37 @@ if ( ! function_exists( 'lafka_keep_payment_css_blocking' ) ) {
 		return $keep;
 	}
 }
+
+/* ──────────────────────────────────────────────────────────────────────────
+ * 4. KEEP-BLOCKING FILTER — CANONICAL DESIGN TOKENS
+ * ────────────────────────────────────────────────────────────────────────── */
+
+add_filter( 'lafka_critical_css_keep_blocking', 'lafka_keep_tokens_css_blocking', 10, 2 );
+if ( ! function_exists( 'lafka_keep_tokens_css_blocking' ) ) {
+	/**
+	 * Prevent deferral of the design-token stylesheet.
+	 *
+	 * styles/lafka-tokens.css declares the :root custom properties that every
+	 * component, the header chrome, and the hero reference via var(). If it is
+	 * deferred along with the component CSS, those var() lookups fall back (or
+	 * resolve to nothing) during the print-media window → a colour/spacing FOUC
+	 * and text reflow on first paint. The file is small (~24 KB of declarations,
+	 * no layout rules), so the render-blocking cost is negligible.
+	 *
+	 * NOTE: the inlined styles/critical.css still targets pre-rebuild markup and
+	 * should be regenerated from the current above-the-fold (header + hero) for
+	 * the complete fix; pinning tokens here removes the worst of the FOUC in the
+	 * meantime. (Audit 2026-06-27 #7.)
+	 *
+	 * @param bool   $keep   Current keep-blocking flag.
+	 * @param string $handle WP style handle.
+	 * @return bool True to keep blocking, false to defer.
+	 */
+	function lafka_keep_tokens_css_blocking( $keep, $handle ) {
+		if ( 'lafka-tokens' === $handle ) {
+			return true;
+		}
+
+		return $keep;
+	}
+}
