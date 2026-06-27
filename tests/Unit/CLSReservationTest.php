@@ -11,36 +11,43 @@ use PHPUnit\Framework\TestCase;
  */
 final class CLSReservationTest extends TestCase {
 
-    protected function setUp(): void {
+    /** Read the sibling child stylesheet, or skip if it isn't checked out. */
+    private function child_css(): string {
         $child_css = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
         if ( ! file_exists( $child_css ) ) {
             $this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
         }
+        return file_get_contents( $child_css );
     }
 
-    public function test_child_css_reserves_owl_carousel_aspect_ratio(): void {
-        $css = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-child/style.css' );
+    public function test_owl_carousel_aspect_ratio_reserved_in_parent(): void {
+        // Audit 2026-06-27 #6: the .lafka-owl-carousel reservation moved from
+        // lafka-child into the PARENT (styles/lafka-base.css) — the parent emits
+        // the carousels. Assert against the parent's own CSS (always present, so
+        // this no longer skips in isolated CI).
+        $css = file_get_contents( dirname( __DIR__, 2 ) . '/styles/lafka-base.css' );
         $this->assertMatchesRegularExpression(
             '/\.lafka-owl-carousel:not\(\.owl-loaded\)[^}]*aspect-ratio/s',
             $css,
-            'lafka-child/style.css must reserve aspect-ratio on .lafka-owl-carousel pre-mount'
+            'styles/lafka-base.css must reserve aspect-ratio on .lafka-owl-carousel pre-mount'
         );
     }
 
     public function test_child_css_reserves_content_slider_aspect_ratio(): void {
-        $css = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-child/style.css' );
+        // WPBakery content-slider reservation is page-builder-specific and stays
+        // in the child; skips when the child repo isn't present.
         $this->assertMatchesRegularExpression(
             '/\[id\^="lafka_content_slider"\]:not\(\.owl-loaded\)[^}]*aspect-ratio/s',
-            $css
+            $this->child_css()
         );
     }
 
     public function test_child_css_reserves_revslider_aspect_ratio(): void {
-        $css = file_get_contents( dirname( __DIR__, 3 ) . '/lafka-child/style.css' );
-        // Either rs-module-wrap or rev_slider_wrapper variant
+        // Revslider reservation is page-builder-specific and stays in the child.
+        // Either rs-module-wrap or rev_slider_wrapper variant.
         $this->assertMatchesRegularExpression(
             '/(rs-module-wrap|rev_slider_wrapper)[^}]*aspect-ratio/s',
-            $css
+            $this->child_css()
         );
     }
 

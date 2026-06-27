@@ -33,7 +33,7 @@
 	font-size: 15px;
 	font-style: italic;
 	font-weight: 400;
-	color: #5e5e5e; /* 4.6:1 WCAG AA */
+	color: #5e5e5e; /* C-A11Y-Audit-2026-04-29: #999 -> #5e5e5e, 4.6:1 WCAG AA (was 2.84:1) */
 	vertical-align: middle;
 }
 

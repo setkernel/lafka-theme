@@ -27,32 +27,33 @@ use PHPUnit\Framework\TestCase;
 final class ContrastFixesTest extends TestCase {
 
 	private string $theme_css;
-	private string $child_css;
+	private string $base_css;
 
 	protected function setUp(): void {
 		parent::setUp();
-		$child_css_path = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
-		if ( ! file_exists( $child_css_path ) ) {
-			$this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
-		}
+		// Audit 2026-06-27 #6: the .foodmenu-unit-info .ingredients rule moved
+		// from lafka-child into the PARENT (styles/lafka-base.css), since the
+		// parent emits that markup. These assertions now run against the parent's
+		// own CSS — both files are always present, so the suite no longer skips
+		// in isolated CI (it used to silently skip when the child was absent).
 		$this->theme_css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
-		$this->child_css = file_get_contents( $child_css_path );
+		$this->base_css  = file_get_contents( dirname( __DIR__, 2 ) . '/styles/lafka-base.css' );
 	}
 
 	// ------------------------------------------------------------------
-	// Child theme: .foodmenu-unit-info .ingredients
+	// Parent baseline: .foodmenu-unit-info .ingredients (styles/lafka-base.css)
 	// ------------------------------------------------------------------
 
 	/** .ingredients must not use #999 for its text color. */
-	public function test_ingredients_color_not_999_in_child(): void {
+	public function test_ingredients_color_not_999_in_base(): void {
 		// Match only the ingredients rule block to avoid false positives.
 		preg_match(
 			'/\.foodmenu-unit-info\s+\.ingredients\s*\{([^}]+)\}/s',
-			$this->child_css,
+			$this->base_css,
 			$m
 		);
 		$ruleBlock = $m[1] ?? '';
-		$this->assertNotEmpty( $ruleBlock, '.foodmenu-unit-info .ingredients rule not found in child style.css' );
+		$this->assertNotEmpty( $ruleBlock, '.foodmenu-unit-info .ingredients rule not found in styles/lafka-base.css' );
 
 		$this->assertDoesNotMatchRegularExpression(
 			'/color\s*:\s*#999\b/',
@@ -62,10 +63,10 @@ final class ContrastFixesTest extends TestCase {
 	}
 
 	/** .ingredients must use #5e5e5e for its text color. */
-	public function test_ingredients_color_is_5e5e5e_in_child(): void {
+	public function test_ingredients_color_is_5e5e5e_in_base(): void {
 		preg_match(
 			'/\.foodmenu-unit-info\s+\.ingredients\s*\{([^}]+)\}/s',
-			$this->child_css,
+			$this->base_css,
 			$m
 		);
 		$ruleBlock = $m[1] ?? '';
@@ -77,12 +78,12 @@ final class ContrastFixesTest extends TestCase {
 		);
 	}
 
-	/** Child style.css must carry the audit provenance comment. */
-	public function test_child_css_audit_comment_present(): void {
+	/** The parent baseline CSS must carry the audit provenance comment. */
+	public function test_base_css_audit_comment_present(): void {
 		$this->assertStringContainsString(
 			'C-A11Y-Audit-2026-04-29',
-			$this->child_css,
-			'lafka-child/style.css must carry C-A11Y-Audit-2026-04-29 provenance comment'
+			$this->base_css,
+			'styles/lafka-base.css must carry the C-A11Y-Audit-2026-04-29 provenance comment'
 		);
 	}
 
