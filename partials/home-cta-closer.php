@@ -16,6 +16,10 @@
 
 defined( 'ABSPATH' ) || exit;
 
+if ( ! (bool) get_theme_mod( 'lafka_home_closer_visible', true ) ) {
+	return;
+}
+
 $lafka_closer_info  = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_closer_phone = isset( $lafka_closer_info['phone_display'] ) ? (string) $lafka_closer_info['phone_display'] : '';
 $lafka_closer_tel   = isset( $lafka_closer_info['phone_e164'] ) ? (string) $lafka_closer_info['phone_e164'] : $lafka_closer_phone;
@@ -31,7 +35,7 @@ $lafka_closer_lead     = (string) get_theme_mod(
 	__( 'Pickup or delivery. Ready in about 25 minutes.', 'lafka' )
 );
 $lafka_closer_cta_label = (string) get_theme_mod( 'lafka_home_closer_cta_label', __( 'Start your order', 'lafka' ) );
-$lafka_closer_cta_url   = (string) get_theme_mod( 'lafka_home_closer_cta_url', home_url( '/menu/' ) );
+$lafka_closer_cta_url   = (string) get_theme_mod( 'lafka_home_closer_cta_url', function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' ) );
 ?>
 <section class="lafka-closer" aria-labelledby="lafka-closer-heading">
 	<div class="lafka-container">

@@ -47,8 +47,8 @@ foreach ( $variations as $v ) {
         $field_name = 'attribute_' . $attr_name;
         ?>
         <fieldset class="lafka-pdp-picker" data-attribute="<?php echo esc_attr( $field_name ); ?>" data-required="true">
-            <legend class="lafka-pdp-picker__label"><?php echo esc_html( $label ); ?></legend>
-            <div class="lafka-pdp-picker__chips" role="radiogroup" aria-required="true">
+            <legend id="lafka-pdp-pick-<?php echo esc_attr( $attr_name ); ?>" class="lafka-pdp-picker__label"><?php echo esc_html( $label ); ?></legend>
+            <div class="lafka-pdp-picker__chips" role="radiogroup" aria-labelledby="lafka-pdp-pick-<?php echo esc_attr( $attr_name ); ?>" aria-required="true">
                 <?php foreach ( $options as $opt ) : ?>
                     <?php
                     $term       = taxonomy_exists( $taxonomy ) ? get_term_by( 'slug', $opt, $taxonomy ) : null;

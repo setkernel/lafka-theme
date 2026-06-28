@@ -16,6 +16,51 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/*
+ * Fulfilment localStorage contract (SSOT).
+ *
+ * The pickup/delivery choice persists under a single brand-neutral key shared
+ * by the menu and cart controllers. It is defined ONCE in PHP and handed to the
+ * JS via window.lafkaCfg (wp_localize_script); the controllers only fall back to
+ * their own literals when this object is missing. `fulfilmentLegacyKey` drives a
+ * one-time migration of the pre-rename value so returning customers keep their
+ * stored choice. Override all three via the 'lafka_fulfilment_js_config' filter
+ * — the single customization point.
+ *
+ * NOTE: the helper is mirrored in partials/menu-controls.php because the shared
+ * enqueue site (incl/system/core-functions.php) is out of scope for this
+ * change; consolidate it there when next touching the enqueue.
+ */
+if ( ! function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
+	/**
+	 * Attach the brand-neutral fulfilment storage contract (window.lafkaCfg)
+	 * to a registered script handle. Idempotent per handle.
+	 *
+	 * @param string $handle Registered script handle to localize.
+	 */
+	function lafka_localize_fulfilment_cfg( $handle ) {
+		static $done = array();
+		if ( isset( $done[ $handle ] ) || ! function_exists( 'wp_localize_script' ) ) {
+			return;
+		}
+		$done[ $handle ] = true;
+		wp_localize_script(
+			$handle,
+			'lafkaCfg',
+			apply_filters(
+				'lafka_fulfilment_js_config',
+				array(
+					'fulfilmentKey'       => 'lafka.fulfilment',
+					'fulfilmentDefault'   => 'pickup',
+					// Pre-rename key, read once for migration only (see JS).
+					'fulfilmentLegacyKey' => 'peppery.fulfilment',
+				)
+			)
+		);
+	}
+}
+lafka_localize_fulfilment_cfg( 'lafka-cart-controls' );
+
 do_action( 'woocommerce_before_cart' );
 ?>
 
@@ -34,14 +79,21 @@ do_action( 'woocommerce_before_cart' );
 
 	<?php
 	/* v5.68.0: handoff pickup/delivery tabs above items list.
-	 * State persists to localStorage.peppery.fulfilment via lafka-menu-controls.js
+	 * State persists to localStorage.lafka.fulfilment via lafka-menu-controls.js
 	 * (loaded on menu archive) — cart page uses lafka-cart-controls.js for the same. */
 	$lafka_cart_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 	$lafka_cart_addr_short = isset( $lafka_cart_info['address_short'] ) ? (string) $lafka_cart_info['address_short'] : '';
 	$lafka_cart_city       = isset( $lafka_cart_info['city'] ) ? (string) $lafka_cart_info['city'] : '';
 	$lafka_cart_eta        = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
 	$lafka_cart_pickup_eta = $lafka_cart_eta && ! empty( $lafka_cart_eta['pickup'] ) ? (string) $lafka_cart_eta['pickup'] : '';
-	$lafka_cart_threshold  = (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 30 );
+	/* SSOT: read the same threshold the plugin's free-delivery rule enforces,
+	 * so the displayed promise can never diverge from what's charged. When the
+	 * plugin isn't loaded, fall back to the single shared theme_mod (0 = off).
+	 * 0 means "no free-delivery promise" — matching enforcement on a fresh
+	 * (unconfigured) install. */
+	$lafka_cart_threshold = function_exists( 'lafka_get_free_delivery_threshold' )
+		? (float) lafka_get_free_delivery_threshold()
+		: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
 	$lafka_cart_threshold_label = function_exists( 'wc_price' )
 		? wp_strip_all_tags( wc_price( $lafka_cart_threshold ) )
 		: sprintf( '$%s', number_format_i18n( $lafka_cart_threshold, 0 ) );
@@ -67,12 +119,16 @@ do_action( 'woocommerce_before_cart' );
 			<span class="lafka-cart-tab__label"><?php esc_html_e( 'Delivery', 'lafka' ); ?></span>
 			<span class="lafka-cart-tab__meta">
 				<?php
-				/* translators: 1: free-delivery threshold; 2: city. */
-				printf(
-					esc_html__( 'Free over %1$s%2$s', 'lafka' ),
-					esc_html( $lafka_cart_threshold_label ),
-					'' !== $lafka_cart_city ? ' · ' . esc_html( $lafka_cart_city ) : ''
-				);
+				if ( $lafka_cart_threshold > 0 ) {
+					/* translators: 1: free-delivery threshold; 2: city. */
+					printf(
+						esc_html__( 'Free over %1$s%2$s', 'lafka' ),
+						esc_html( $lafka_cart_threshold_label ),
+						'' !== $lafka_cart_city ? ' · ' . esc_html( $lafka_cart_city ) : ''
+					);
+				} elseif ( '' !== $lafka_cart_city ) {
+					echo esc_html( $lafka_cart_city );
+				}
 				?>
 			</span>
 		</button>
@@ -210,7 +266,9 @@ do_action( 'woocommerce_before_cart' );
 	 * The first action links to the shop / menu. The second posts to the
 	 * cart URL with empty quantities — WC's standard "Update cart" with
 	 * zero qty removes lines. */
-	$lafka_cart_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/menu/' );
+	// Canonical browse target (f104): the /menu/ page via the shared resolver, so
+	// "Add more items" tracks every other menu CTA instead of the WC shop archive.
+	$lafka_cart_shop_url = function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' );
 	?>
 	<div class="lafka-cart-bottom-actions">
 		<a class="lafka-cart-bottom-actions__add" href="<?php echo esc_url( $lafka_cart_shop_url ); ?>">
@@ -257,8 +315,8 @@ do_action( 'woocommerce_before_cart' );
  * places the FDP between line items and totals as the spec requires.
  *
  * Partial silently returns if the operator hasn't configured a threshold
- * ( lafka_pdp_free_delivery_threshold <= 0 ), so removing the feature is
- * a single Customizer toggle. */
+ * ( the SSOT lafka_get_free_delivery_threshold() resolves to <= 0 ), so
+ * removing the feature is a single Customizer toggle. */
 get_template_part(
 	'partials/free-delivery-progress',
 	null,

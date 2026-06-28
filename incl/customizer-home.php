@@ -8,7 +8,7 @@
  *
  * Panel: "Lafka — Home Page"
  * Sections:
- *   1. Hero (eyebrow, headline, subhead, CTAs, image)
+ *   1. Hero (headline, sub-headline, primary CTA, image, stat row)
  *   2. Category Showcase (eyebrow, headline, limit, ordering)
  *   3. Featured Products (eyebrow, headline, limit)
  *
@@ -49,40 +49,29 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			)
 		);
 
+		// Setting IDs mirror the keys the rebuilt hero partial actually
+		// reads (partials/home-hero.php), and the textarea default mirrors
+		// that partial's get_theme_mod() fallback so the Customizer preview
+		// matches the rendered page.
 		$lafka_home_hero_fields = array(
-			'lafka_home_hero_eyebrow'             => array(
-				'label'   => __( 'Eyebrow (small uppercase label above headline)', 'lafka' ),
-				'default' => __( 'Order online', 'lafka' ),
-				'type'    => 'text',
-			),
-			'lafka_home_hero_headline'            => array(
+			'lafka_home_hero_headline'          => array(
 				'label'   => __( 'Headline', 'lafka' ),
 				'default' => get_bloginfo( 'name' ),
 				'type'    => 'text',
 			),
-			'lafka_home_hero_subhead'             => array(
+			'lafka_home_hero_lead'              => array(
 				'label'   => __( 'Sub-headline', 'lafka' ),
-				'default' => get_bloginfo( 'description' ),
+				'default' => __( 'Fresh dough, locally-sourced toppings, and recipes refined over years of serving our neighbors. Ready in about 25 minutes.', 'lafka' ),
 				'type'    => 'textarea',
 			),
-			'lafka_home_hero_primary_cta_label'   => array(
+			'lafka_home_hero_primary_cta_label' => array(
 				'label'   => __( 'Primary CTA label', 'lafka' ),
 				'default' => __( 'Order Now', 'lafka' ),
 				'type'    => 'text',
 			),
-			'lafka_home_hero_primary_cta_url'     => array(
+			'lafka_home_hero_primary_cta_url'   => array(
 				'label'   => __( 'Primary CTA URL', 'lafka' ),
 				'default' => function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/' ),
-				'type'    => 'url',
-			),
-			'lafka_home_hero_secondary_cta_label' => array(
-				'label'   => __( 'Secondary CTA label (leave blank to hide)', 'lafka' ),
-				'default' => __( 'View Menu', 'lafka' ),
-				'type'    => 'text',
-			),
-			'lafka_home_hero_secondary_cta_url'   => array(
-				'label'   => __( 'Secondary CTA URL', 'lafka' ),
-				'default' => '',
 				'type'    => 'url',
 			),
 		);
@@ -92,7 +81,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 				$lafka_setting_id,
 				array(
 					'default'           => $lafka_field['default'],
-					'sanitize_callback' => 'url' === $lafka_field['type'] ? 'esc_url_raw' : 'sanitize_text_field',
+					'sanitize_callback' => 'url' === $lafka_field['type'] ? 'esc_url_raw' : ( 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field' ),
 					'transport'         => 'refresh',
 				)
 			);
@@ -189,6 +178,57 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 				'description' => __( 'Pulls live data from Service ETA plugin if installed.', 'lafka' ),
 			)
 		);
+
+		// Hero stat row (rating / pickup time / delivery). Defaults mirror
+		// partials/home-hero.php so preview == render. Stat 1 (the rating
+		// slot) ships EMPTY on purpose — seeding a number here would publish
+		// fabricated social proof on every fresh install (see
+		// HomeSocialProofHonestyTest). Each stat renders only when its value
+		// is non-empty, so leaving a value blank hides that stat.
+		$lafka_home_hero_stat_fields = array(
+			'lafka_home_hero_stat_1_value' => array(
+				'label'   => __( 'Stat 1 — value (e.g. 4.9 ★) — leave blank to hide', 'lafka' ),
+				'default' => '',
+			),
+			'lafka_home_hero_stat_1_label' => array(
+				'label'   => __( 'Stat 1 — caption', 'lafka' ),
+				'default' => '',
+			),
+			'lafka_home_hero_stat_2_value' => array(
+				'label'   => __( 'Stat 2 — value', 'lafka' ),
+				'default' => __( '25 min', 'lafka' ),
+			),
+			'lafka_home_hero_stat_2_label' => array(
+				'label'   => __( 'Stat 2 — caption', 'lafka' ),
+				'default' => __( 'avg. pickup', 'lafka' ),
+			),
+			'lafka_home_hero_stat_3_value' => array(
+				'label'   => __( 'Stat 3 — value', 'lafka' ),
+				'default' => __( 'Free', 'lafka' ),
+			),
+			'lafka_home_hero_stat_3_label' => array(
+				'label'   => __( 'Stat 3 — caption', 'lafka' ),
+				'default' => __( 'delivery $30+', 'lafka' ),
+			),
+		);
+		foreach ( $lafka_home_hero_stat_fields as $lafka_setting_id => $lafka_field ) {
+			$wp_customize->add_setting(
+				$lafka_setting_id,
+				array(
+					'default'           => $lafka_field['default'],
+					'sanitize_callback' => 'sanitize_text_field',
+					'transport'         => 'refresh',
+				)
+			);
+			$wp_customize->add_control(
+				$lafka_setting_id,
+				array(
+					'label'   => $lafka_field['label'],
+					'section' => 'lafka_home_hero',
+					'type'    => 'text',
+				)
+			);
+		}
 
 		// -----------------------------------------------------------------
 		// 4. Story split
@@ -453,20 +493,18 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			)
 		);
 
+		// Setting IDs mirror the keys the rebuilt closer partial actually
+		// reads (partials/home-cta-closer.php); the textarea default mirrors
+		// that partial's get_theme_mod() fallback so preview == render.
 		$lafka_home_closer_fields = array(
-			'lafka_home_closer_eyebrow'   => array(
-				'label' => __( 'Eyebrow', 'lafka' ),
-				'default' => __( "Don't wait", 'lafka' ),
-				'type' => 'text',
-			),
 			'lafka_home_closer_headline'  => array(
 				'label' => __( 'Headline', 'lafka' ),
 				'default' => __( 'Hungry?', 'lafka' ),
 				'type' => 'text',
 			),
-			'lafka_home_closer_subhead'   => array(
+			'lafka_home_closer_lead'      => array(
 				'label' => __( 'Sub-headline', 'lafka' ),
-				'default' => __( 'Order online for pickup or delivery — ready when you are.', 'lafka' ),
+				'default' => __( 'Pickup or delivery. Ready in about 25 minutes.', 'lafka' ),
 				'type' => 'textarea',
 			),
 			'lafka_home_closer_cta_label' => array(

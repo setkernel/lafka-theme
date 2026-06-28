@@ -2,7 +2,7 @@
  * Cart page controls — pickup/delivery tabs + clear-order button.
  *
  * Pairs with woocommerce/cart/cart.php (v5.68.0 additions). Reuses the
- * peppery.fulfilment localStorage key set by menu-controls so the user's
+ * lafka.fulfilment localStorage key set by menu-controls so the user's
  * choice persists across pages.
  *
  * @since 5.68.0
@@ -10,8 +10,14 @@
 ( function () {
 	'use strict';
 
-	var KEY_FULFILMENT = 'peppery.fulfilment';
-	var DEFAULT_FULFILMENT = 'pickup';
+	// The fulfilment storage contract is defined once in PHP and handed to the
+	// JS via window.lafkaCfg (wp_localize_script), so the menu and cart
+	// controllers can never read different keys. The literals below are a
+	// brand-neutral fallback only, used if the localized config is absent.
+	var LAFKA_CFG = window.lafkaCfg || {};
+	var KEY_FULFILMENT = LAFKA_CFG.fulfilmentKey || 'lafka.fulfilment';
+	var DEFAULT_FULFILMENT = LAFKA_CFG.fulfilmentDefault || 'pickup';
+	var LEGACY_KEY_FULFILMENT = LAFKA_CFG.fulfilmentLegacyKey || '';
 
 	function $$( sel, scope ) {
 		return Array.prototype.slice.call( ( scope || document ).querySelectorAll( sel ) );
@@ -19,7 +25,22 @@
 
 	function getFulfilment() {
 		try {
-			return localStorage.getItem( KEY_FULFILMENT ) || DEFAULT_FULFILMENT;
+			var value = localStorage.getItem( KEY_FULFILMENT );
+			// One-time migration: adopt the value stored under the pre-rename
+			// key when the current key has not been written yet, so returning
+			// customers keep their previously-chosen fulfilment method.
+			if ( null === value && LEGACY_KEY_FULFILMENT ) {
+				value = localStorage.getItem( LEGACY_KEY_FULFILMENT );
+				if ( null !== value ) {
+					try {
+						localStorage.setItem( KEY_FULFILMENT, value );
+						localStorage.removeItem( LEGACY_KEY_FULFILMENT );
+					} catch {
+						/* ignore */
+					}
+				}
+			}
+			return value || DEFAULT_FULFILMENT;
 		} catch {
 			return DEFAULT_FULFILMENT;
 		}

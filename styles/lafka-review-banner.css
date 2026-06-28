@@ -87,7 +87,7 @@
 	padding: var(--lafka-space-4) var(--lafka-space-5) var(--lafka-space-4) var(--lafka-space-4);
 	background: var(--lafka-color-surface-raised);
 	color: var(--lafka-color-text-primary);
-	border: 1px solid var(--lafka-color-success-500, #43a047);
+	border: 1px solid var(--lafka-color-success-500, #047857);
 	border-left-width: 4px;
 	border-radius: var(--lafka-radius-lg);
 	box-shadow: var(--lafka-shadow-3);
@@ -133,7 +133,7 @@
 	justify-content: center;
 	align-self: flex-start;
 	padding: var(--lafka-space-2) var(--lafka-space-4);
-	background: var(--lafka-color-success-500, #43a047);
+	background: var(--lafka-color-success-500, #047857);
 	color: #fff;
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body-sm);
@@ -149,7 +149,7 @@
 
 .lafka-review-banner__cta:hover,
 .lafka-review-banner__cta:focus-visible {
-	background: var(--lafka-color-success-600, #388e3c);
+	background: var(--lafka-color-success-600, color-mix(in srgb, var(--lafka-color-success-500) 85%, black));
 	color: #fff;
 	text-decoration: none;
 }

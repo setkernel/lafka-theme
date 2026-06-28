@@ -16,7 +16,10 @@
  *   - Hours       → lafka_open_status_get_hours_map() (plugin restaurant-info)
  *   - City        → restaurant info → 'city'
  *   - Phone       → restaurant info → 'phone_display' / 'phone_e164'
- *   - Free over X → Customizer key 'lafka_announce_bar_delivery_threshold' (default 30)
+ *   - Free over X → SSOT lafka_get_free_delivery_threshold() (plugin) when
+ *                   available, else theme_mod 'lafka_announce_bar_delivery_threshold'
+ *                   (0 = off). Promise is suppressed when the resolved value <= 0,
+ *                   so it can never diverge from what the shipping rule enforces.
  *   - Visible     → Customizer key 'lafka_announce_bar_enabled' (default true)
  *
  * Auto-hides entirely when no hours AND no phone configured.
@@ -43,7 +46,11 @@ if ( ! $lafka_ann_status && '' === $lafka_ann_phone && '' === $lafka_ann_city ) 
 	return;
 }
 
-$lafka_ann_threshold = (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 30 );
+// SSOT: read the same threshold the plugin's free-delivery rule enforces; fall
+// back to the single shared theme_mod (0 = off) when the plugin isn't loaded.
+$lafka_ann_threshold = function_exists( 'lafka_get_free_delivery_threshold' )
+	? (float) lafka_get_free_delivery_threshold()
+	: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
 $lafka_ann_show_delivery = (bool) get_theme_mod( 'lafka_announce_bar_show_delivery', true );
 
 $lafka_ann_hours_json = function_exists( 'lafka_open_status_hours_for_client' ) ? lafka_open_status_hours_for_client() : array();
@@ -84,12 +91,20 @@ $lafka_ann_threshold_label = function_exists( 'wc_price' )
 			<span class="lafka-announce-bar__delivery">
 				<span class="lafka-announce-bar__icon" aria-hidden="true">🚚</span>
 				<?php
-				/* translators: 1: city name; 2: formatted threshold (e.g. "$30") */
-				printf(
-					esc_html__( 'Delivery in %1$s · Free over %2$s', 'lafka' ),
-					esc_html( $lafka_ann_city ),
-					esc_html( $lafka_ann_threshold_label )
-				);
+				if ( $lafka_ann_threshold > 0 ) {
+					/* translators: 1: city name; 2: formatted threshold (e.g. "$30") */
+					printf(
+						esc_html__( 'Delivery in %1$s · Free over %2$s', 'lafka' ),
+						esc_html( $lafka_ann_city ),
+						esc_html( $lafka_ann_threshold_label )
+					);
+				} else {
+					/* translators: %s: city name */
+					printf(
+						esc_html__( 'Delivery in %s', 'lafka' ),
+						esc_html( $lafka_ann_city )
+					);
+				}
 				?>
 			</span>
 		<?php endif; ?>

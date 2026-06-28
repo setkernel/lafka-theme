@@ -77,6 +77,16 @@ body {
 /* ── CSS DESIGN TOKENS (subset needed above-fold) ── */
 :root {
     --lafka-accent-color: #dc2626;
+
+    /* f074: name the handoff accent/brand SSOT tokens above-fold too, at the
+       design-system defaults. dynamic-css.php (inlined later in <head>)
+       overrides both with the operator's Customizer colors, so these are
+       only the first-paint fallbacks — they must stay equal to the
+       lafka-tokens.css defaults (accent-500 #dc2626 / brand-500 #f59e0b)
+       so the out-of-box render is identical across the legacy and handoff
+       naming systems. */
+    --lafka-color-accent-500: #dc2626;
+    --lafka-color-brand-500: #f59e0b;
     --lafka-menu-bg-color: #ffca3c;
     --lafka-menu-link-color: #61443e;
     --lafka-header-bg-color: #fff;

@@ -211,10 +211,19 @@
         const denyBtn = promptEl.querySelector('.lafka-push-prompt__deny');
         const closeBtn = promptEl.querySelector('.lafka-push-prompt__close');
 
+        // Single teardown — detach the document-level keydown listener on
+        // EVERY close path (dismiss, accept, Escape) so the closure never
+        // dangles after the prompt element is removed. A later Escape would
+        // otherwise fire a false push_prompt_deny against a gone prompt.
+        function teardown() {
+            document.removeEventListener('keydown', onKeydown);
+        }
+
         function dismiss(reason) {
             promptEl.setAttribute('data-dismissing', 'true');
             pushEvent('push_prompt_deny', { reason: reason || 'dismiss' });
             suppress();
+            teardown();
             window.setTimeout(() => {
                 if (promptEl.parentNode) {
                     promptEl.parentNode.removeChild(promptEl);
@@ -225,6 +234,10 @@
         if (acceptBtn) {
             acceptBtn.addEventListener('click', () => {
                 promptEl.setAttribute('data-dismissing', 'true');
+                // Accept never routes through dismiss(), so detach the keydown
+                // listener here too — otherwise it leaks and a later Escape
+                // fires a false push_prompt_deny.
+                teardown();
                 subscribe().then(() => {
                     window.setTimeout(() => {
                         if (promptEl.parentNode) {
@@ -244,8 +257,8 @@
         // Escape closes.
         function onKeydown(evt) {
             if (evt.key === 'Escape' || evt.keyCode === 27) {
+                // dismiss() runs teardown() which detaches this listener.
                 dismiss('dismiss');
-                document.removeEventListener('keydown', onKeydown);
             }
         }
         document.addEventListener('keydown', onKeydown);

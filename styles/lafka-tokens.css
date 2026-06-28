@@ -244,7 +244,20 @@
 	--lafka-shadow-2: 0 2px 4px rgba(24, 24, 27, 0.05), 0 4px 12px rgba(24, 24, 27, 0.06);
 	--lafka-shadow-3: 0 6px 16px rgba(24, 24, 27, 0.08), 0 12px 32px rgba(24, 24, 27, 0.08);
 	--lafka-shadow-4: 0 12px 32px rgba(24, 24, 27, 0.12), 0 28px 64px rgba(24, 24, 27, 0.12);
-	--lafka-shadow-focus: 0 0 0 3px rgba(220, 38, 38, 0.35);
+
+	/* C-A11Y-Audit-2026-06-27 (f018): keyboard focus ring. The old value
+	 * (0 0 0 3px rgba(220,38,38,.35)) composited to ~#f3b4b4 on white
+	 * (~1.5:1) and was red-on-red (~1:1) on the #dc2626 "Order now" CTA —
+	 * failing WCAG 1.4.11 (3:1 non-text contrast). Now opaque + offset:
+	 * a 2px surface-coloured spacer guarantees separation even on a
+	 * same-colour (red / ink) surface, then a 4px solid accent-700 ring.
+	 * accent-700 (#991b1b) on white = 7.41:1; the spacer keeps the ring
+	 * visible on #dc2626 (CTA) and on --lafka-color-text-primary (active
+	 * chip) backgrounds. Every focusable control on the conversion path
+	 * reads this single token, so the fix propagates site-wide. */
+	--lafka-shadow-focus:
+		0 0 0 2px var(--lafka-color-surface-page, #fff),
+		0 0 0 4px var(--lafka-color-accent-700);
 
 	/* ------- Motion ----------------------------------------------------- */
 	--lafka-motion-duration-fast: 120ms;

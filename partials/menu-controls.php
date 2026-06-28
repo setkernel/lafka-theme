@@ -9,7 +9,7 @@
  *   - Multi-select, "Clear all" link appears when any are on
  *
  * State persistence:
- *   - Fulfilment → localStorage.peppery.fulfilment
+ *   - Fulfilment → localStorage.lafka.fulfilment
  *   - Filter chips → URL hash (so bookmarks/share work)
  *
  * @package Lafka
@@ -18,11 +18,60 @@
 
 defined( 'ABSPATH' ) || exit;
 
+/*
+ * Fulfilment localStorage contract (SSOT).
+ *
+ * The pickup/delivery choice persists under a single brand-neutral key shared
+ * by the menu and cart controllers. It is defined ONCE here in PHP and handed
+ * to the JS via window.lafkaCfg (wp_localize_script); the controllers only fall
+ * back to their own literals when this object is missing. `fulfilmentLegacyKey`
+ * drives a one-time migration of the pre-rename value so returning customers
+ * keep their stored choice. Override all three via the
+ * 'lafka_fulfilment_js_config' filter — the single customization point.
+ *
+ * NOTE: the helper is mirrored in woocommerce/cart/cart.php because the shared
+ * enqueue site (incl/system/core-functions.php) is out of scope for this
+ * change; consolidate it there when next touching the enqueue.
+ */
+if ( ! function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
+	/**
+	 * Attach the brand-neutral fulfilment storage contract (window.lafkaCfg)
+	 * to a registered script handle. Idempotent per handle.
+	 *
+	 * @param string $handle Registered script handle to localize.
+	 */
+	function lafka_localize_fulfilment_cfg( $handle ) {
+		static $done = array();
+		if ( isset( $done[ $handle ] ) || ! function_exists( 'wp_localize_script' ) ) {
+			return;
+		}
+		$done[ $handle ] = true;
+		wp_localize_script(
+			$handle,
+			'lafkaCfg',
+			apply_filters(
+				'lafka_fulfilment_js_config',
+				array(
+					'fulfilmentKey'       => 'lafka.fulfilment',
+					'fulfilmentDefault'   => 'pickup',
+					// Pre-rename key, read once for migration only (see JS).
+					'fulfilmentLegacyKey' => 'peppery.fulfilment',
+				)
+			)
+		);
+	}
+}
+lafka_localize_fulfilment_cfg( 'lafka-menu-controls' );
+
 $lafka_mc_eta = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
 $lafka_mc_info = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_mc_addr_short = isset( $lafka_mc_info['address_short'] ) ? (string) $lafka_mc_info['address_short'] : '';
 $lafka_mc_city = isset( $lafka_mc_info['city'] ) ? (string) $lafka_mc_info['city'] : '';
-$lafka_mc_threshold = (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 30 );
+// SSOT: read the same threshold the plugin's free-delivery rule enforces; fall
+// back to the single shared theme_mod (0 = off) when the plugin isn't loaded.
+$lafka_mc_threshold = function_exists( 'lafka_get_free_delivery_threshold' )
+	? (float) lafka_get_free_delivery_threshold()
+	: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
 $lafka_mc_threshold_label = function_exists( 'wc_price' )
 	? wp_strip_all_tags( wc_price( $lafka_mc_threshold ) )
 	: sprintf( '$%s', number_format_i18n( $lafka_mc_threshold, 0 ) );
@@ -32,12 +81,13 @@ $lafka_mc_delivery_eta = $lafka_mc_eta && ! empty( $lafka_mc_eta['delivery'] ) ?
 ?>
 <div class="lafka-menu__controls" data-lafka-menu-controls>
 
-	<div class="lafka-menu__tabs" role="tablist" aria-label="<?php esc_attr_e( 'Fulfilment method', 'lafka' ); ?>">
+	<div class="lafka-menu__tabs" role="radiogroup" aria-label="<?php esc_attr_e( 'Fulfilment method', 'lafka' ); ?>">
 		<button
 			type="button"
 			class="lafka-menu__tab is-active"
-			role="tab"
-			aria-selected="true"
+			role="radio"
+			aria-checked="true"
+			tabindex="0"
 			data-lafka-fulfilment="pickup"
 		>
 			<span class="lafka-menu__tab-label"><?php esc_html_e( 'Pickup', 'lafka' ); ?></span>
@@ -58,19 +108,24 @@ $lafka_mc_delivery_eta = $lafka_mc_eta && ! empty( $lafka_mc_eta['delivery'] ) ?
 		<button
 			type="button"
 			class="lafka-menu__tab"
-			role="tab"
-			aria-selected="false"
+			role="radio"
+			aria-checked="false"
+			tabindex="-1"
 			data-lafka-fulfilment="delivery"
 		>
 			<span class="lafka-menu__tab-label"><?php esc_html_e( 'Delivery', 'lafka' ); ?></span>
 			<span class="lafka-menu__tab-meta">
 				<?php
-				/* translators: 1: free-delivery threshold (e.g. "$30"); 2: city. */
-				printf(
-					esc_html__( 'Free over %1$s%2$s', 'lafka' ),
-					esc_html( $lafka_mc_threshold_label ),
-					'' !== $lafka_mc_city ? ' · ' . esc_html( $lafka_mc_city ) : ''
-				);
+				if ( $lafka_mc_threshold > 0 ) {
+					/* translators: 1: free-delivery threshold (e.g. "$30"); 2: city. */
+					printf(
+						esc_html__( 'Free over %1$s%2$s', 'lafka' ),
+						esc_html( $lafka_mc_threshold_label ),
+						'' !== $lafka_mc_city ? ' · ' . esc_html( $lafka_mc_city ) : ''
+					);
+				} elseif ( '' !== $lafka_mc_city ) {
+					echo esc_html( $lafka_mc_city );
+				}
 				?>
 			</span>
 		</button>

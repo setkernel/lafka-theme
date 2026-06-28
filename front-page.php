@@ -24,7 +24,7 @@ get_header();
 // containers + breakpoints via the design system.
 ?>
 
-<main id="main" class="lafka-front-page" role="main">
+<div id="main" class="lafka-front-page">
 
 	<?php
 	// Section order per handoff /design_handoff_peppery_ordering/README.md
@@ -48,7 +48,7 @@ get_header();
 	get_template_part( 'partials/home-cta-closer' );
 	?>
 
-</main>
+</div>
 
 <?php
 get_footer();

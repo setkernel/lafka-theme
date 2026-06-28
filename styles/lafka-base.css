@@ -61,3 +61,97 @@
 	overflow: hidden;
 	contain: layout;
 }
+
+/* ---------------------------------------------------------------------------
+ * P6-UX-6: GROUPED MOBILE MENU appearance.
+ *
+ * Audit 2026-06-28 (f022): the LafkaMobileGroupedWalker in lafka-plugin emits
+ * .lafka-mobile-menu-group / -label / -items markup when the Customizer toggle
+ * lafka_mobile_menu_grouping = yes (incl/customizer-editorial.php). Those rules
+ * previously lived ONLY in lafka-child, so the OSS bundle (parent + plugin)
+ * rendered bare <h4>/<ul> when an operator turned grouping on. The plugin emits
+ * markup; the theme owns appearance — so the styling belongs here in the parent
+ * baseline (enqueued unconditionally, depends on lafka-tokens). Tokens mirror
+ * the .lafka-mobile-nav component so the grouped menu matches the rest of the
+ * mobile navigation, and colours resolve from --lafka-* (operator-overridable).
+ * ------------------------------------------------------------------------- */
+.lafka-mobile-menu-group {
+	margin: var(--lafka-space-6) 0;
+}
+
+.lafka-mobile-menu-group-label {
+	margin: var(--lafka-space-5) 0 var(--lafka-space-2);
+	padding: 0 var(--lafka-space-4);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-mobile-menu-group-items {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-mobile-menu-group-items > li > a {
+	display: block;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-medium);
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-mobile-menu-group-items > li > a:hover {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-accent-text);
+}
+
+/* ---------------------------------------------------------------------------
+ * P6-UX-7: PRICE PRESENTATION CONSISTENCY (W3-T5, 2026-04-28).
+ *
+ * Audit 2026-06-28 (f058): .price / .woocommerce-Price-amount are emitted by
+ * WooCommerce and the parent's own product templates on every surface (shop
+ * loop, PDP, widgets, cart). The presentation rules used to live ONLY in
+ * lafka-child, so the OSS bundle (parent + plugin) shipped misaligned digits
+ * and an over-loud strike-through price on its own. Structural + typographic
+ * only — no colour — so price colour still resolves from --lafka-* elsewhere.
+ * ------------------------------------------------------------------------- */
+
+/* Tabular digits keep prices vertically aligned inside product grids. */
+.price,
+.woocommerce-Price-amount {
+	font-variant-numeric: tabular-nums;
+}
+
+/* Strike-through (original price) — muted so it doesn't compete with the sale price. */
+.price del {
+	opacity: 0.6;
+	margin-right: 0.25em;
+}
+
+/* Highlighted (sale price) — no underline theatrics; colour from theme vars. */
+.price ins {
+	text-decoration: none;
+}
+
+/* ---------------------------------------------------------------------------
+ * CART FRAGMENTS CLS RESERVATION (C-PERF-Audit-2026-04-29).
+ *
+ * Audit 2026-06-28 (f058): the cart table populates via shop AJAX fragments
+ * after the initial render; without a reserved min-height the browser re-flows
+ * when the rows arrive (measured CLS 0.206 on /cart/, ~2x the 0.1 threshold).
+ * The parent emits the cart markup, so the reservation belongs in the parent
+ * baseline — moved out of lafka-child so the OSS default is CLS-safe on its own.
+ * ------------------------------------------------------------------------- */
+.woocommerce-cart .woocommerce {
+	min-height: 60vh;
+}
+
+.woocommerce-cart-form__cart-item {
+	min-height: 80px; /* approx one product row */
+	contain: layout;
+}

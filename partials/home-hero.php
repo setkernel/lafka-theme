@@ -24,6 +24,12 @@ defined( 'ABSPATH' ) || exit;
 
 $lafka_hero_status = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
 
+// Operator can hide the status pill entirely via the Hero Customizer
+// toggle (defaults on).
+if ( ! (bool) get_theme_mod( 'lafka_home_hero_show_status', true ) ) {
+	$lafka_hero_status = null;
+}
+
 // v5.79.0: suppress hero status pill when the announce bar is already
 // showing the same open/closed signal sitewide — avoids the duplicated
 // "Open now · until 12:00 am" reading at the top of every home view.
@@ -48,7 +54,7 @@ $lafka_hero_lead = (string) get_theme_mod(
 );
 
 $lafka_hero_cta_primary_label = (string) get_theme_mod( 'lafka_home_hero_primary_cta_label', __( 'Start your order', 'lafka' ) );
-$lafka_hero_cta_primary_url   = (string) get_theme_mod( 'lafka_home_hero_primary_cta_url', home_url( '/menu/' ) );
+$lafka_hero_cta_primary_url   = (string) get_theme_mod( 'lafka_home_hero_primary_cta_url', function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' ) );
 
 $lafka_hero_image_id  = (int) get_theme_mod( 'lafka_home_hero_image_id', 0 );
 $lafka_hero_image_src = $lafka_hero_image_id ? wp_get_attachment_image_url( $lafka_hero_image_id, 'large' ) : '';
@@ -56,12 +62,21 @@ if ( '' === $lafka_hero_image_src ) {
 	$lafka_hero_image_src = (string) apply_filters( 'lafka_home_hero_default_bg_url', '' );
 }
 
-// Stats — operator may override via Customizer. Order matches the handoff
-// prototype: rating first (trust signal), pickup time (urgency), free
-// delivery (commerce hook). The rating stat defaults to EMPTY — shipping a
-// fabricated rating + review count as a default would publish fake social
-// proof on every install (audit 2026-06-27 #5). It renders only once the
-// operator supplies a real value.
+// Overlay scrim — operator toggle (defaults off; auto-enabled for
+// catalog-discovered images via the theme_mod_lafka_home_hero_overlay
+// filter). Only meaningful when a background image is actually present.
+$lafka_hero_overlay     = (bool) get_theme_mod( 'lafka_home_hero_overlay', false );
+$lafka_hero_media_class = 'lafka-hero__media';
+if ( $lafka_hero_overlay && ( $lafka_hero_image_id || '' !== $lafka_hero_image_src ) ) {
+	$lafka_hero_media_class .= ' lafka-hero__media--overlay';
+}
+
+// Stats — editable in the Hero Customizer section (Lafka — Home Page →
+// Hero). Order matches the handoff prototype: rating first (trust signal),
+// pickup time (urgency), free delivery (commerce hook). The rating stat
+// defaults to EMPTY — shipping a fabricated rating + review count as a
+// default would publish fake social proof on every install (audit
+// 2026-06-27 #5). It renders only once the operator supplies a real value.
 $lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value', '' );
 $lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', '' );
 $lafka_hero_stat_2_value = (string) get_theme_mod( 'lafka_home_hero_stat_2_value', '25 min' );
@@ -147,7 +162,7 @@ $lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label
 
 		</div>
 
-		<div class="lafka-hero__media" aria-hidden="true">
+		<div class="<?php echo esc_attr( $lafka_hero_media_class ); ?>" aria-hidden="true">
 			<?php
 			if ( $lafka_hero_image_id ) {
 				// v5.99.0: render via wp_get_attachment_image() so width/
