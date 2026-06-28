@@ -22,12 +22,11 @@ declare(strict_types=1);
 namespace Lafka\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class TabnabbingDefenseTest extends TestCase {
 
-	/**
-	 * @dataProvider templatesProvider
-	 */
+	#[DataProvider('templatesProvider')]
 	public function test_target_blank_links_carry_noopener_noreferrer( string $relative_path ): void {
 		$path = dirname( __DIR__, 2 ) . '/' . $relative_path;
 		$lines = file( $path, FILE_IGNORE_NEW_LINES );
@@ -61,7 +60,7 @@ final class TabnabbingDefenseTest extends TestCase {
 	/**
 	 * @return array<string, array{0:string}>
 	 */
-	public function templatesProvider(): array {
+	public static function templatesProvider(): array {
 		return array(
 			'social-profiles partial'   => array( 'partials/social-profiles.php' ),
 			'foodmenu single template'  => array( 'single-lafka-foodmenu.php' ),

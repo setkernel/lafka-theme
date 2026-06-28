@@ -18,6 +18,7 @@ declare(strict_types=1);
 namespace Lafka\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class SocialProfilesFilterTest extends TestCase {
 
@@ -36,9 +37,7 @@ final class SocialProfilesFilterTest extends TestCase {
 		);
 	}
 
-	/**
-	 * @dataProvider modernNetworksProvider
-	 */
+	#[DataProvider('modernNetworksProvider')]
 	public function test_default_list_includes_modern_network( string $key ): void {
 		// 2015-era list missed every network from the past decade. Defaults
 		// must include modern networks so operators with a fresh install
@@ -50,7 +49,7 @@ final class SocialProfilesFilterTest extends TestCase {
 		);
 	}
 
-	public function modernNetworksProvider(): array {
+	public static function modernNetworksProvider(): array {
 		return array(
 			'tiktok'   => array( 'tiktok' ),
 			'threads'  => array( 'threads' ),

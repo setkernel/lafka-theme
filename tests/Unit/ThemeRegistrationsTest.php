@@ -17,6 +17,7 @@ declare(strict_types=1);
 namespace Lafka\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ThemeRegistrationsTest extends TestCase {
 
@@ -31,9 +32,7 @@ final class ThemeRegistrationsTest extends TestCase {
 		self::assertStringContainsString( "register_nav_menus(", $src );
 	}
 
-	/**
-	 * @dataProvider expected_nav_locations
-	 */
+	#[DataProvider('expected_nav_locations')]
 	public function test_nav_location_present( string $slug ): void {
 		$src = file_get_contents( self::CORE_FUNCTIONS );
 		self::assertMatchesRegularExpression(
@@ -43,7 +42,7 @@ final class ThemeRegistrationsTest extends TestCase {
 		);
 	}
 
-	public function expected_nav_locations(): array {
+	public static function expected_nav_locations(): array {
 		return array(
 			'primary'   => array( 'primary' ),
 			'mobile'    => array( 'mobile' ),
@@ -55,9 +54,7 @@ final class ThemeRegistrationsTest extends TestCase {
 
 	// ─── Image sizes ────────────────────────────────────────────────────────
 
-	/**
-	 * @dataProvider expected_image_sizes
-	 */
+	#[DataProvider('expected_image_sizes')]
 	public function test_image_size_present( string $slug ): void {
 		$src = file_get_contents( self::FUNCTIONS_PHP );
 		self::assertMatchesRegularExpression(
@@ -67,7 +64,7 @@ final class ThemeRegistrationsTest extends TestCase {
 		);
 	}
 
-	public function expected_image_sizes(): array {
+	public static function expected_image_sizes(): array {
 		return array(
 			'lafka-foodmenu-single-thumb'    => array( 'lafka-foodmenu-single-thumb' ),
 			'lafka-640x640'                  => array( 'lafka-640x640' ),
