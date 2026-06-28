@@ -25,6 +25,15 @@ if ( ! function_exists( 'lafka_pdp_cta_render' ) ) {
 		if ( ! function_exists( 'is_product' ) || ! is_product() ) {
 			return;
 		}
+		// Stand down when the PDP redesign owns the page. The redesigned PDP
+		// (pdp-pickers.js + pdp-summary's .lafka-pdp-mobile-cta) already
+		// provides the sticky CTA, default-variation auto-select and live
+		// total; emitting this second .lafka-pdp-cta aside would ship a dead
+		// bar plus a competing, uncoordinated auto-selector. Mirrors the
+		// enqueue gate in incl/system/core-functions.php.
+		if ( function_exists( 'lafka_pdp_redesign_enabled' ) && lafka_pdp_redesign_enabled() ) {
+			return;
+		}
 		if ( ! (bool) apply_filters( 'lafka_pdp_sticky_cta_enabled', (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true ) ) ) {
 			return;
 		}

@@ -701,20 +701,53 @@ if ( ! function_exists( 'lafka_wrap_cart_after' ) ) {
 
 }
 
-// Ensure cart contents update when products are added to the cart via AJAX.
-// P6-A11Y-7-followup: fragment is keyed on the <li> wrapper (not the inner
-// <a>). Earlier versions keyed on `a.cart-contents` which caused WC to inject
-// the full <li>...</li> markup INTO the existing <a> position, producing
-// <li><li><a>...</a></li></li> nesting on every fragment refresh.
+// Ensure the cart-count surfaces refresh when products are added via AJAX.
+//
+// f053: the previous fragment was keyed on `li.lafka-cart-link-item` and
+// rendered lafka_cart_link() — legacy markup the handoff header (header.php)
+// and the cart drawer (partials/cart-drawer.php) no longer output. With no
+// matching node in the DOM, WC's fragment replacement was a silent no-op, so
+// the header bag numeral and the cart-drawer title pill stayed at their
+// server-rendered value (e.g. "0") until a full page reload after a quick-add.
+// We now key the fragments on the nodes those templates ACTUALLY render:
+//   - span.lafka-header__cart-count       (header bag badge, header.php)
+//   - a.lafka-header__cart                 (header anchor — refreshes the SR
+//                                           aria-label so the count in
+//                                           "View cart, N items" stays
+//                                           accurate; WCAG 2.5.3 Label in Name)
+//   - span.lafka-cart-drawer__count-badge  (drawer title pill, cart-drawer.php)
+// Each fragment's value root element matches its selector key, so WC's
+// replaceWith swaps the node cleanly and stays idempotent across repeated
+// refreshes — no <li><li> nesting like the pre-P6-A11Y-7 `a.cart-contents`
+// regression. This markup is theme-owned, so the callback lives in the theme
+// (the plugin stays theme-agnostic).
 add_filter( 'woocommerce_add_to_cart_fragments', 'lafka_header_add_to_cart_fragment' );
 if ( ! function_exists( 'lafka_header_add_to_cart_fragment' ) ) {
 
 	function lafka_header_add_to_cart_fragment( $fragments ) {
-		ob_start();
+		// `WC()->cart` is null in some early-template / REST contexts. Guard so
+		// the filter never fatals while computing the count.
+		$lafka_cart_count = ( function_exists( 'WC' ) && WC() && WC()->cart )
+			? (int) WC()->cart->get_cart_contents_count()
+			: 0;
 
-		lafka_cart_link();
+		// Header bag badge. The .lafka-header__cart-count class is unique — the
+		// sticky bar uses .lafka-sticky-cart__count — so this targets only the
+		// header numeral, no collision.
+		$fragments['span.lafka-header__cart-count'] = '<span class="lafka-header__cart-count" data-lafka-cart-count aria-hidden="true">' . esc_html( (string) $lafka_cart_count ) . '</span>';
 
-		$fragments['li.lafka-cart-link-item'] = ob_get_clean();
+		// Header cart anchor — mirrors header.php so the screen-reader
+		// aria-label count refreshes alongside the visible badge (the inner
+		// span here is re-applied idempotently by the badge fragment above).
+		/* translators: %d: number of items in the cart */
+		$lafka_cart_aria                   = sprintf( _n( 'View cart, %d item', 'View cart, %d items', $lafka_cart_count, 'lafka' ), $lafka_cart_count );
+		$fragments['a.lafka-header__cart'] = '<a class="lafka-header__cart" href="' . esc_url( wc_get_cart_url() ) . '" aria-label="' . esc_attr( $lafka_cart_aria ) . '" data-lafka-cart-open>'
+			. '<i class="fa fa-shopping-bag" aria-hidden="true"></i>'
+			. '<span class="lafka-header__cart-count" data-lafka-cart-count aria-hidden="true">' . esc_html( (string) $lafka_cart_count ) . '</span>'
+			. '</a>';
+
+		// Cart-drawer title count pill (partials/cart-drawer.php).
+		$fragments['span.lafka-cart-drawer__count-badge'] = '<span class="lafka-cart-drawer__count-badge" data-lafka-cart-count-pill>' . esc_html( (string) $lafka_cart_count ) . '</span>';
 
 		return $fragments;
 	}
@@ -1194,10 +1227,15 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 				}
 			}
 
+			// Resolve the cross-repo catalog-visibility meta key from the plugin's
+			// SSOT accessor, falling back to the literal so the theme still renders
+			// the in-catalog variations when the plugin is deactivated.
+			$lafka_in_catalog_meta_key = function_exists( 'lafka_meta_variable_in_catalog' ) ? lafka_meta_variable_in_catalog() : '_lafka_variable_in_catalog';
+
 			ob_start();
 			?>
 			<?php foreach ( $available_variations as $variation ) : ?>
-				<?php if ( get_post_meta( $variation['variation_id'], '_lafka_variable_in_catalog', true ) ) : ?>
+				<?php if ( get_post_meta( $variation['variation_id'], $lafka_in_catalog_meta_key, true ) ) : ?>
 					<?php
 					$default_addon_option_pairs = array();
 					foreach ( $product_addons as $addon ) {
@@ -1300,10 +1338,13 @@ if ( ! function_exists( 'lafka_is_product_eligible_for_variation_in_listings' ) 
 		if ( $product->get_type() === 'variable' ) {
 			$children = $product->get_children();
 			if ( $children ) {
+				// Resolve the cross-repo catalog-visibility meta key from the plugin's
+				// SSOT accessor, falling back to the literal when the plugin is inactive.
+				$meta_key = function_exists( 'lafka_meta_variable_in_catalog' ) ? lafka_meta_variable_in_catalog() : '_lafka_variable_in_catalog';
 				// Prime meta cache for all children in one query
 				update_meta_cache( 'post', $children );
 				foreach ( $children as $variation_id ) {
-					if ( get_post_meta( $variation_id, '_lafka_variable_in_catalog', true ) ) {
+					if ( get_post_meta( $variation_id, $meta_key, true ) ) {
 						$result = true;
 						break;
 					}
@@ -1377,6 +1418,32 @@ if ( ! function_exists( 'lafka_should_display_weight_in_additional_info' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_get_hpos_aware_order_meta' ) ) {
+	/**
+	 * Read order meta in a WooCommerce HPOS-safe way.
+	 *
+	 * Branch-routing meta such as `lafka_selected_branch_id` is written by lafka-plugin and,
+	 * under High-Performance Order Storage, lives in `wc_orders_meta` — NOT `wp_postmeta`.
+	 * A raw get_post_meta() therefore returns empty under HPOS and the new-order notifier
+	 * silently misroutes (every branch operator is notified for every order, or none).
+	 * Prefer the plugin's canonical accessor when the shipping-areas module is loaded;
+	 * otherwise fall back to the WC_Order object, which abstracts both storage backends.
+	 *
+	 * @param int    $order_id Order ID.
+	 * @param string $meta_key Meta key to read.
+	 * @return mixed Meta value, or '' when the order cannot be loaded.
+	 */
+	function lafka_get_hpos_aware_order_meta( $order_id, $meta_key ) {
+		if ( class_exists( 'Lafka_Shipping_Areas' ) && method_exists( 'Lafka_Shipping_Areas', 'get_order_meta_backward_compatible' ) ) {
+			return Lafka_Shipping_Areas::get_order_meta_backward_compatible( $order_id, $meta_key );
+		}
+
+		$order = wc_get_order( $order_id );
+
+		return $order ? $order->get_meta( $meta_key ) : '';
+	}
+}
+
 add_action( 'wp_ajax_lafka_new_orders_notification', 'lafka_new_orders_notification' );
 if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 	function lafka_new_orders_notification() {
@@ -1398,9 +1465,19 @@ if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 			// Clear the already notified orders which are not new any more
 			$notified_order_ids_array = array_intersect( $notified_order_ids_array, $order_ids_to_be_processed_array );
 
-			// Prime meta cache for all order IDs to avoid N+1 queries
+			// Prime meta cache for all order IDs to avoid N+1 queries.
+			// Under WooCommerce High-Performance Order Storage (HPOS) order meta lives in
+			// `wc_orders_meta` (not `wp_postmeta`) and is already loaded onto the WC_Order
+			// objects that wc_get_orders() returned, so priming the 'post' meta cache is
+			// unnecessary — and wrong for orders that have no `wp_posts` row at all. This
+			// mirrors lafka-plugin/incl/kitchen-display/includes/class-lafka-kds-ajax.php.
 			if ( $order_ids_to_be_processed_array ) {
-				update_meta_cache( 'post', $order_ids_to_be_processed_array );
+				if (
+					! class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' )
+					|| ! \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled()
+				) {
+					update_meta_cache( 'post', $order_ids_to_be_processed_array );
+				}
 			}
 
 			/** @var WC_Order $order */
@@ -1408,7 +1485,7 @@ if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 				if ( ! in_array( $order_id, $notified_order_ids_array, true ) ) {
 					$to_notify = true;
 
-					$branch_id = get_post_meta( $order_id, 'lafka_selected_branch_id', true );
+					$branch_id = lafka_get_hpos_aware_order_meta( $order_id, 'lafka_selected_branch_id' );
 					if ( ! empty( $branch_id ) ) {
 						$branch_user_id = get_term_meta( $branch_id, 'lafka_branch_user', true );
 						if ( ! empty( $branch_user_id ) && get_current_user_id() !== (int) $branch_user_id ) {
@@ -1426,7 +1503,7 @@ if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
 
 			$notification = '';
 			if ( $order_id_to_notify ) {
-				$branch_id        = get_post_meta( $order_id_to_notify, 'lafka_selected_branch_id', true );
+				$branch_id        = lafka_get_hpos_aware_order_meta( $order_id_to_notify, 'lafka_selected_branch_id' );
 				$branch_location  = get_term( $branch_id );
 				$branch_image_src = LAFKA_IMAGES_PATH . 'order-notification.png';
 				if ( ! empty( $branch_location ) && ! is_wp_error( $branch_location ) ) {

@@ -385,7 +385,7 @@
 	flex-direction: column;
 	gap: 4px;
 	padding: var(--lafka-space-2, 8px);
-	border: 1px solid var(--lafka-color-border, #e4e4e7);
+	border: 1px solid var(--lafka-color-border-subtle);
 	border-radius: var(--lafka-radius-md, 8px);
 	background: var(--lafka-color-surface-raised, #fff);
 }

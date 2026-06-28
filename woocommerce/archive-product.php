@@ -12,10 +12,15 @@
  *   - Category archive (is_product_category() — flat in one category)
  *   - Tag archive (is_product_tag() — flat in one tag)
  *
- * Suppresses WC's `woocommerce_before_main_content` / `_after` / loop
- * hooks because the handoff layout supplies its own page header, ordering,
- * and pagination — but keeps `woocommerce_after_main_content` for trailing
- * structured data + integrations that hook there.
+ * Intentionally suppresses ALL of WC's `woocommerce_before_main_content`,
+ * `woocommerce_after_main_content`, and product-loop hooks: the handoff
+ * layout supplies its own wrapper, page header, loop/grid, and pagination,
+ * so WC's default wrapper/breadcrumb/sidebar/loop callbacks are not run on
+ * the shop/category/tag archives. None of these `do_action()` calls fire
+ * here by design. (Third-party integrations that rely on those hooks will
+ * therefore not run on these archives; re-introducing them would require
+ * firing the actions after removing WC's default wrapper callbacks plus the
+ * loop/structured-data hooks — out of scope of this template.)
  *
  * @package Lafka
  * @since   5.61.0
@@ -24,6 +29,17 @@
 defined( 'ABSPATH' ) || exit;
 
 get_header( 'shop' );
+
+// GA4 view_item_list: this template deliberately suppresses
+// woocommerce_before_main_content (see the docblock above), which is the only
+// hook the plugin's priority-5 emit (lafka_dl_emit_view_item_list) listens on.
+// Without this call the event never fires on shop/category/tag archives. Call
+// the emit directly rather than re-firing the action so we don't re-introduce
+// the breadcrumb/sidebar callbacks the redesign intentionally dropped. The
+// emit self-guards on is_shop()/is_product_category()/is_product_tag().
+if ( function_exists( 'lafka_dl_emit_view_item_list' ) ) {
+	lafka_dl_emit_view_item_list();
+}
 
 $lafka_arch_is_shop    = function_exists( 'is_shop' ) ? is_shop() : false;
 $lafka_arch_is_cat     = function_exists( 'is_product_category' ) ? is_product_category() : false;
@@ -49,6 +65,11 @@ if ( taxonomy_exists( 'product_cat' ) ) {
 	$lafka_arch_term_args = array(
 		'taxonomy'   => 'product_cat',
 		'hide_empty' => true,
+		// Top-level sections only — mirrors page-menu.php so both menu surfaces
+		// show the same category set, and so a product assigned to both a parent
+		// and a child term is not rendered twice (the per-group query already
+		// pulls in descendant products).
+		'parent'     => 0,
 		'orderby'    => 'count',
 		'order'      => 'DESC',
 	);
@@ -61,9 +82,13 @@ if ( taxonomy_exists( 'product_cat' ) ) {
 	}
 }
 $lafka_arch_current_slug = ( $lafka_arch_is_cat && $lafka_arch_queried && isset( $lafka_arch_queried->slug ) ) ? (string) $lafka_arch_queried->slug : 'all';
-$lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_permalink( 'shop' ) : home_url( '/menu/' );
+// Canonical browse target (f104): the /menu/ page via the shared resolver. Used
+// below by the breadcrumb "Menu" crumb (kept in lockstep with the JSON-LD
+// breadcrumb), the "All" category chip, and the empty-state reset link — all now
+// point at the same /menu/ URL rather than diverging to the WC shop archive.
+$lafka_arch_shop_url = function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' );
 ?>
-<main id="main" class="lafka-menu" role="main">
+<div class="lafka-menu">
 
 	<header class="lafka-menu__header">
 		<div class="lafka-container">
@@ -149,17 +174,28 @@ $lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 
 			<?php
 			if ( $lafka_arch_is_shop && ! empty( $lafka_arch_terms ) ) :
-				// "All" view — render items grouped by category.
+				// "All" view — render items grouped by category. The per-group cap
+				// is operator-configurable (Customizer mod `lafka_menu_group_limit`,
+				// default 24) and filterable per category; any items beyond the cap
+				// stay reachable via the "See all" link in the group header. Use a
+				// paginated query so the true category total is known regardless of
+				// the cap.
+				$lafka_arch_group_limit_default = (int) get_theme_mod( 'lafka_menu_group_limit', 24 );
 				foreach ( $lafka_arch_terms as $lafka_arch_group ) :
-					$lafka_arch_group_products = wc_get_products(
+					$lafka_arch_group_limit = (int) apply_filters( 'lafka_menu_group_limit', $lafka_arch_group_limit_default, $lafka_arch_group );
+					$lafka_arch_group_query = wc_get_products(
 						array(
 							'status'   => 'publish',
-							'limit'    => 24,
+							'limit'    => $lafka_arch_group_limit,
+							'page'     => 1,
+							'paginate' => true,
 							'category' => array( $lafka_arch_group->slug ),
 							'orderby'  => 'menu_order',
 							'order'    => 'ASC',
 						)
 					);
+					$lafka_arch_group_products = ( is_object( $lafka_arch_group_query ) && isset( $lafka_arch_group_query->products ) ) ? $lafka_arch_group_query->products : array();
+					$lafka_arch_group_total    = ( is_object( $lafka_arch_group_query ) && isset( $lafka_arch_group_query->total ) ) ? (int) $lafka_arch_group_query->total : count( $lafka_arch_group_products );
 					if ( empty( $lafka_arch_group_products ) ) {
 						continue;
 					}
@@ -172,6 +208,17 @@ $lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 							</h2>
 							<span class="lafka-menu__group-rule" aria-hidden="true"></span>
 							<span class="lafka-menu__group-count"><?php echo esc_html( (string) $lafka_arch_group->count ); ?></span>
+							<?php if ( $lafka_arch_group_total > count( $lafka_arch_group_products ) ) : ?>
+								<a class="lafka-menu__group-all" href="<?php echo esc_url( get_term_link( $lafka_arch_group ) ); ?>">
+									<?php
+									printf(
+										/* translators: %s: total number of items in this category. */
+										esc_html__( 'See all %s items', 'lafka' ),
+										esc_html( number_format_i18n( $lafka_arch_group_total ) )
+									);
+									?>
+								</a>
+							<?php endif; ?>
 							<?php if ( '' !== $lafka_arch_group->description ) : ?>
 								<p class="lafka-menu__group-blurb"><?php echo wp_kses_post( $lafka_arch_group->description ); ?></p>
 							<?php endif; ?>
@@ -213,7 +260,7 @@ $lafka_arch_shop_url = function_exists( 'wc_get_page_permalink' ) ? wc_get_page_
 		</div>
 	</div>
 
-</main>
+</div>
 
 <?php
 get_footer( 'shop' );

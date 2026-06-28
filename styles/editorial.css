@@ -76,8 +76,20 @@
     --ink-soft:     #2A2A2A;
     --gray:         #5E5E5E;
     --gray-soft:    #8A8074;
-    --brand:        #E4584B;
-    --brand-deep:   #C93827;
+
+    /* f074 SSOT: editorial brand now follows the operator accent instead of
+       the old hardcoded coral/deep-coral brand literals. --brand reads the
+       design-system accent token (--lafka-color-accent-500), which
+       dynamic-css.php drives from the Customizer accent_color (v5.96 alias),
+       so editorial pages share one brand color with every other rebuilt
+       surface. Fallbacks are the design-system defaults (accent-500 #dc2626 /
+       accent-600 #b91c1c) — no brand literal remains in this OSS file and the
+       out-of-box color matches the rest of the theme. --brand-deep is upgraded
+       to a derived darker shade of the live accent in the @supports color-mix
+       block at the end of this file so the primary-CTA hover stays in-family
+       with whatever accent the operator picks. */
+    --brand:        var(--lafka-color-accent-500, #dc2626);
+    --brand-deep:   var(--lafka-color-accent-600, #b91c1c);
     --gold:         #FFD166;
     --green:        #2D5A3D;
     --shadow-1:     0 1px 2px rgba(26,26,26,0.04), 0 4px 16px rgba(26,26,26,0.06);
@@ -1140,5 +1152,24 @@
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+    }
+}
+
+/* ============================================================
+   f074 — BRAND-DEEP DERIVED FROM THE LIVE ACCENT (progressive enhancement)
+
+   Mirrors the lafka-tokens.css v5.99.0 accent-text pattern: modern browsers
+   derive --brand-deep as a ~15%-darker shade of the operator's accent so the
+   .btn-primary:hover state stays in-family with any accent color the operator
+   chooses in the Customizer. Browsers without color-mix() keep the
+   --lafka-color-accent-600 fallback set in the token block above. Same SSOT
+   (the operator accent) either way — no brand literal.
+   ============================================================ */
+
+@supports (color: color-mix(in srgb, red 50%, white)) {
+
+    .lafka-editorial-home,
+    .lafka-editorial-contact {
+        --brand-deep: color-mix(in srgb, var(--lafka-color-accent-500, #dc2626) 85%, #000);
     }
 }

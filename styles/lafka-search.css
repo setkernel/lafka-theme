@@ -40,7 +40,7 @@
 	/* 16px prevents iOS zoom-on-focus. */
 	font-size: 16px;
 	padding: 10px 16px;
-	border: 1px solid var(--lafka-color-border, #e4e4e7);
+	border: 1px solid var(--lafka-color-border-subtle);
 	border-radius: var(--lafka-radius-pill, 999px);
 	background: var(--lafka-color-surface-page, #fff);
 	color: var(--lafka-color-text, #18181b);

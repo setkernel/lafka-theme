@@ -14360,7 +14360,7 @@ body.lafka-store-closed>div.widget.woocommerce.widget_shopping_cart .widget_shop
     bottom: 0 !important;
 }
 
-.lafka-disabled-cart-buttons .links .button.add_to_cart_button, .lafka-disabled-cart-buttons button.single_add_to_cart_button, .lafka-disabled-cart-buttons div.product .cart div.quantity, .lafka-disabled-cart-buttons .links div.quantity {
+.lafka-disabled-cart-buttons .links .button.add_to_cart_button, .lafka-disabled-cart-buttons button.single_add_to_cart_button, .lafka-disabled-cart-buttons div.product .cart div.quantity, .lafka-disabled-cart-buttons .links div.quantity, .lafka-disabled-cart-buttons .lafka-pdp-summary__cta, .lafka-disabled-cart-buttons .lafka-pdp-mobile-cta__btn {
     display: none !important;
 }
 

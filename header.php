@@ -29,6 +29,29 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+if ( ! function_exists( 'lafka_get_logo_id' ) ) {
+	/**
+	 * Resolve the brand logo attachment ID via a single source-of-truth chain.
+	 *
+	 * Shared by header.php and footer.php so both surfaces always render the
+	 * same logo. Preference order (v6.3.0):
+	 *   1. WP-standard custom_logo (Appearance → Customize → Site Identity → Logo).
+	 *   2. Legacy lafka_get_option( 'theme_logo' )        (old framework data).
+	 *   3. Legacy lafka_get_option( 'mobile_theme_logo' ) (old framework data).
+	 *
+	 * @since 6.3.0
+	 *
+	 * @return int Logo attachment ID, or 0 when none is configured.
+	 */
+	function lafka_get_logo_id() {
+		$lafka_custom_logo_id = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'custom_logo', 0 ) : 0;
+		$lafka_legacy_main    = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'theme_logo' ) : 0;
+		$lafka_legacy_mobile  = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'mobile_theme_logo' ) : 0;
+
+		return $lafka_custom_logo_id ?: $lafka_legacy_main ?: $lafka_legacy_mobile;
+	}
+}
 ?><!DOCTYPE html>
 <html <?php language_attributes(); ?>>
 <head>
@@ -119,16 +142,13 @@ defined( 'ABSPATH' ) || exit;
 				<?php
 				/*
 				 * v6.3.0: prefer WP-standard custom-logo (Appearance →
-				 * Customize → Site Identity → Logo). Fall back to legacy
-				 * lafka_get_option('theme_logo') so operators with data
-				 * stored in the old framework still see their logo until
-				 * they re-upload via the standard UI. Final fallback is
-				 * the WP Site Icon.
+				 * Customize → Site Identity → Logo), falling back to the
+				 * legacy framework options. Resolution lives in the shared
+				 * lafka_get_logo_id() SSOT helper so the footer renders the
+				 * exact same logo. Final fallback below is the WP Site Icon.
 				 */
-				$lafka_custom_logo_id = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'custom_logo', 0 ) : 0;
-				$lafka_legacy_main    = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'theme_logo' ) : 0;
-				$lafka_legacy_mobile  = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'mobile_theme_logo' ) : 0;
-				$lafka_logo_id        = $lafka_custom_logo_id ?: $lafka_legacy_main ?: $lafka_legacy_mobile;
+				$lafka_logo_id      = function_exists( 'lafka_get_logo_id' ) ? lafka_get_logo_id() : 0;
+				$lafka_has_logo_img = false;
 				if ( $lafka_logo_id ) {
 					echo wp_get_attachment_image(
 						$lafka_logo_id,
@@ -140,6 +160,7 @@ defined( 'ABSPATH' ) || exit;
 							'loading' => 'eager',
 						)
 					);
+					$lafka_has_logo_img = true;
 				} else {
 					// Site icon as last-resort fallback.
 					$lafka_site_icon = function_exists( 'get_site_icon_url' ) ? get_site_icon_url( 96 ) : '';
@@ -149,10 +170,22 @@ defined( 'ABSPATH' ) || exit;
 							esc_url( $lafka_site_icon ),
 							esc_attr( get_bloginfo( 'name' ) )
 						);
+						$lafka_has_logo_img = true;
 					}
 				}
 				?>
-				<span class="lafka-header__wordmark"><?php bloginfo( 'name' ); ?></span>
+				<?php
+				/*
+				 * a11y (f103): when a logo image is rendered, its alt text is
+				 * already the link's accessible name at every breakpoint. The
+				 * visible wordmark (shown ≥1024px) would otherwise duplicate that
+				 * name for desktop screen-reader users (e.g. "Peppery Peppery,
+				 * link"), so hide it from the a11y tree with aria-hidden while
+				 * keeping it visible. When no image exists, leave the wordmark
+				 * exposed as the link's sole accessible name.
+				 */
+				?>
+				<span class="lafka-header__wordmark"<?php echo $lafka_has_logo_img ? ' aria-hidden="true"' : ''; ?>><?php bloginfo( 'name' ); ?></span>
 			</a>
 
 			<?php
@@ -210,7 +243,7 @@ defined( 'ABSPATH' ) || exit;
 					</a>
 				<?php endif; ?>
 
-				<a class="lafka-header__cta" href="<?php echo esc_url( apply_filters( 'lafka_header_cta_url', home_url( '/menu/' ) ) ); ?>">
+				<a class="lafka-header__cta" href="<?php echo esc_url( function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : apply_filters( 'lafka_header_cta_url', home_url( '/menu/' ) ) ); ?>">
 					<span class="lafka-header__cta-label"><?php echo esc_html( apply_filters( 'lafka_header_cta_label', __( 'Order now', 'lafka' ) ) ); ?></span>
 					<span class="lafka-header__cta-arrow" aria-hidden="true">→</span>
 				</a>

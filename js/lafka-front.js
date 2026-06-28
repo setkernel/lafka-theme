@@ -518,7 +518,13 @@
 
         // Add to cart Ajax if enable_ajax_add_to_cart is set in the WooCommerce settings and product is simple or variable
         if (lafka_main_js_params.enable_ajax_add_to_cart === 'yes') {
-            $(document).on('click', '.single_add_to_cart_button', function(e) {
+            // Delegate from BOTH WC's stock button class and the redesigned PDP
+            // CTAs ([data-lafka-add-to-cart] on .lafka-pdp-summary__cta /
+            // .lafka-pdp-mobile-cta__btn), which intentionally drop the
+            // single_add_to_cart_button class so lafka-libs-config.js doesn't
+            // fight pdp-pickers.js over disabled/unavailable state. Both routes
+            // serialize the same form.cart, so the AJAX add path is identical.
+            $(document).on('click', '.single_add_to_cart_button, [data-lafka-add-to-cart]', function(e) {
 
                 var $add_to_cart_form = $(this).closest('form.cart');
 

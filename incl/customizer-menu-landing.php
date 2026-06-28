@@ -2,12 +2,17 @@
 /**
  * Customizer panel for the /menu/ landing template.
  *
- * Exposes operator-facing settings for page-menu.php so the OSS theme
- * bundle works out-of-box and can be tailored per install without
- * code edits. Pattern matches incl/customizer-editorial.php.
+ * Exposes operator-facing settings for page-menu.php (and the matching
+ * shop view in woocommerce/archive-product.php) so the OSS theme bundle
+ * works out-of-box and can be tailored per install without code edits.
+ * Pattern matches incl/customizer-editorial.php.
  *
- * All settings are namespaced `lafka_menu_landing_*` and accessed via
- * `get_theme_mod( 'lafka_menu_landing_<key>', <default> )`.
+ * The two settings registered here are the keys the rebuilt /menu/
+ * template actually reads:
+ *   - `lafka_menu_archive_title` — page-menu.php:33-39, archive-product.php:50
+ *   - `lafka_menu_archive_lead`  — page-menu.php:41-44, archive-product.php:51-54
+ *
+ * Both are accessed via `get_theme_mod( '<key>', <default> )`.
  *
  * @package Lafka
  * @since   5.25.0
@@ -28,7 +33,7 @@ function lafka_menu_landing_customizer_register( WP_Customize_Manager $wp_custom
 		'lafka_menu_landing',
 		array(
 			'title'       => __( 'Lafka — Menu Landing', 'lafka' ),
-			'description' => __( 'Settings for the auto-generated /menu/ landing template (page-menu.php).', 'lafka' ),
+			'description' => __( 'Settings for the auto-generated /menu/ landing template (page-menu.php) and the shop archive.', 'lafka' ),
 			'priority'    => 165,
 		)
 	);
@@ -46,8 +51,12 @@ function lafka_menu_landing_customizer_register( WP_Customize_Manager $wp_custom
 		)
 	);
 
+	// Heading shown at the top of /menu/ and the shop archive. Default ''
+	// so the get_the_title() / 'The full menu' fallback chain in
+	// page-menu.php:33-39 (and archive-product.php:50) stays in control when
+	// the operator has not set an explicit heading.
 	$wp_customize->add_setting(
-		'lafka_menu_landing_intro',
+		'lafka_menu_archive_title',
 		array(
 			'default'           => '',
 			'sanitize_callback' => 'sanitize_text_field',
@@ -55,117 +64,35 @@ function lafka_menu_landing_customizer_register( WP_Customize_Manager $wp_custom
 		)
 	);
 	$wp_customize->add_control(
-		'lafka_menu_landing_intro',
+		'lafka_menu_archive_title',
 		array(
-			'label'       => __( 'Intro text', 'lafka' ),
-			'description' => __( 'Short tagline shown above the category grid. Leave blank for the default.', 'lafka' ),
+			'label'       => __( 'Menu heading', 'lafka' ),
+			'description' => __( 'Headline at the top of the menu. Leave blank to use the page title (falls back to "The full menu").', 'lafka' ),
+			'section'     => 'lafka_menu_landing_content',
+			'type'        => 'text',
+		)
+	);
+
+	// Lead paragraph beneath the heading. Sanitized with wp_kses_post (NOT
+	// sanitize_text_field) because the templates emit it via wp_kses_post
+	// (page-menu.php:81, archive-product.php:97), so inline markup must
+	// survive the save. Default mirrors the template fallback at
+	// page-menu.php:43 / archive-product.php:52-53.
+	$wp_customize->add_setting(
+		'lafka_menu_archive_lead',
+		array(
+			'default'           => __( 'Browse everything we make. Tap a category to jump to it or scroll through the whole menu.', 'lafka' ),
+			'sanitize_callback' => 'wp_kses_post',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_menu_archive_lead',
+		array(
+			'label'       => __( 'Menu lead copy', 'lafka' ),
+			'description' => __( 'Intro paragraph shown beneath the heading. Leave blank to hide it.', 'lafka' ),
 			'section'     => 'lafka_menu_landing_content',
 			'type'        => 'textarea',
 		)
 	);
-
-	// ---------------------------------------------------------------------
-	// Section: Layout
-	// ---------------------------------------------------------------------
-
-	$wp_customize->add_section(
-		'lafka_menu_landing_layout',
-		array(
-			'title'    => __( 'Layout', 'lafka' ),
-			'panel'    => 'lafka_menu_landing',
-			'priority' => 20,
-		)
-	);
-
-	$wp_customize->add_setting(
-		'lafka_menu_landing_style',
-		array(
-			'default'           => 'text',
-			'sanitize_callback' => 'lafka_menu_landing_sanitize_style',
-			'transport'         => 'refresh',
-		)
-	);
-	$wp_customize->add_control(
-		'lafka_menu_landing_style',
-		array(
-			'label'       => __( 'Card style', 'lafka' ),
-			'description' => __( 'Text-first is dense and scannable; image cards add a hero photo per category.', 'lafka' ),
-			'section'     => 'lafka_menu_landing_layout',
-			'type'        => 'radio',
-			'choices'     => array(
-				'text'  => __( 'Text only (recommended)', 'lafka' ),
-				'image' => __( 'With category images', 'lafka' ),
-			),
-		)
-	);
-
-	$wp_customize->add_setting(
-		'lafka_menu_landing_show_count',
-		array(
-			'default'           => true,
-			'sanitize_callback' => 'rest_sanitize_boolean',
-			'transport'         => 'refresh',
-		)
-	);
-	$wp_customize->add_control(
-		'lafka_menu_landing_show_count',
-		array(
-			'label'   => __( 'Show item counts', 'lafka' ),
-			'section' => 'lafka_menu_landing_layout',
-			'type'    => 'checkbox',
-		)
-	);
-
-	$wp_customize->add_setting(
-		'lafka_menu_landing_show_subcats',
-		array(
-			'default'           => true,
-			'sanitize_callback' => 'rest_sanitize_boolean',
-			'transport'         => 'refresh',
-		)
-	);
-	$wp_customize->add_control(
-		'lafka_menu_landing_show_subcats',
-		array(
-			'label'       => __( 'Show subcategories inline', 'lafka' ),
-			'description' => __( 'When a category has children, surface them as inline chips on the card.', 'lafka' ),
-			'section'     => 'lafka_menu_landing_layout',
-			'type'        => 'checkbox',
-		)
-	);
-
-	// v5.26.0: default flipped from #fccc4c (Peppery yellow, 1.47:1 contrast,
-	// fails WCAG AA) to the design-system accent #dc2626 (4.83:1 AA pass).
-	// Existing operator overrides are unaffected.
-	$wp_customize->add_setting(
-		'lafka_menu_landing_accent',
-		array(
-			'default'           => '#dc2626',
-			'sanitize_callback' => 'sanitize_hex_color',
-			'transport'         => 'refresh',
-		)
-	);
-	$wp_customize->add_control(
-		new WP_Customize_Color_Control(
-			$wp_customize,
-			'lafka_menu_landing_accent',
-			array(
-				'label'   => __( 'Accent colour', 'lafka' ),
-				'section' => 'lafka_menu_landing_layout',
-			)
-		)
-	);
-}
-
-if ( ! function_exists( 'lafka_menu_landing_sanitize_style' ) ) {
-	/**
-	 * Sanitize the card-style radio.
-	 *
-	 * @param string $value Submitted value.
-	 * @return string `text` or `image`.
-	 */
-	function lafka_menu_landing_sanitize_style( $value ) {
-		$value = is_string( $value ) ? $value : '';
-		return in_array( $value, array( 'text', 'image' ), true ) ? $value : 'text';
-	}
 }

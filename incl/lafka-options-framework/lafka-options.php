@@ -1073,19 +1073,6 @@ function lafka_optionsframework_options() {
 			)
 		);
 		$options[] = array(
-			'name' => esc_html_x( 'Product Combos', 'theme-options', 'lafka' ),
-			'desc' => esc_html_x( 'With Product Combos enabled, you can group existing simple, variable, and subscription products and sell them together.', 'theme-options', 'lafka' ) .
-			          '<br><br><b>' . esc_html_x( 'IMPORTANT NOTE', 'theme-options', 'lafka' ) . ': </b>' .
-			          esc_html_x( 'Disable this option if you are using third party Bundles / Combos plugin.', 'theme-options', 'lafka' ),
-			'id'   => 'product_combos',
-			'std'  => 'enabled',
-			'type' => 'select',
-			'options' => array(
-				'' => esc_html__('Disabled', 'lafka'),
-				'enabled' => esc_html__('Enabled', 'lafka')
-			)
-		);
-		$options[] = array(
 			'name' => esc_html_x( 'Lafka Shipping Areas and Branch Locations', 'theme-options', 'lafka' ),
 			'desc' => esc_html_x( 'With this option enabled, you can draw your shipping areas into google maps and use them with the WooCommerce Shipping Zones. You can define different rate and other parameters. Those areas can be used to define different branch locations and validate customer addresses against them. This will allow you to have orders for different branches based on the customer address.', 'theme-options', 'lafka' ) .
 			          '<br>' . esc_html_x( 'Once enabled, the settings are available in WooCommerce->Lafka Shipping Settings', 'theme-options', 'lafka' ) .

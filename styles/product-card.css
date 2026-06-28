@@ -120,7 +120,7 @@ ul.products {
 .lafka-product-card__price {
 	font-size: 15px;
 	font-weight: 700;
-	color: var(--lafka-primary, currentColor);
+	color: var(--lafka-color-text-primary);
 	white-space: nowrap;
 }
 

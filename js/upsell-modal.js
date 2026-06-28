@@ -31,21 +31,34 @@
 		var endpoint = (window.wc_add_to_cart_params && window.wc_add_to_cart_params.wc_ajax_url
 			? window.wc_add_to_cart_params.wc_ajax_url.toString().replace('%%endpoint%%', 'add_to_cart')
 			: '/?wc-ajax=add_to_cart');
-		$.ajax({
-			url: endpoint,
-			method: 'POST',
-			data: { product_id: productId, quantity: 1 },
-			success: function (response) {
+		$.post(endpoint, { product_id: productId, quantity: 1 })
+			.done(function (response) {
+				// WC returns { error: true, product_url } for products it
+				// can't AJAX-add (out of stock, qty limit, options required).
+				// Don't claim success or fire added_to_cart with undefined
+				// fragments — bail (and follow product_url if provided).
+				if (!response) {
+					btn.disabled = false;
+					btn.textContent = originalText;
+					return;
+				}
+				if (response.error) {
+					if (response.product_url) {
+						window.location.href = response.product_url;
+					}
+					btn.disabled = false;
+					btn.textContent = originalText;
+					return;
+				}
 				$(document.body).trigger('added_to_cart', [response.fragments, response.cart_hash, $(btn)]);
 				btn.disabled = false;
 				btn.textContent = '✓ Added';
 				setTimeout(function () { btn.textContent = originalText; }, 2000);
-			},
-			error: function () {
+			})
+			.fail(function () {
 				btn.disabled = false;
 				btn.textContent = originalText;
 				console.error('lafka-pdp: failed to add to cart');
-			}
-		});
+			});
 	}
 })(window.jQuery);

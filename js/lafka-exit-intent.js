@@ -329,7 +329,10 @@
 				toast.parentNode.removeChild(toast);
 			}
 		}, 220);
-		// Detach listeners — we're done for this session.
+		// Detach listeners — we're done for this session. Remove the
+		// keydown listener on EVERY close path (not just the Escape branch
+		// of onKeydown) so the closure never dangles after the toast is gone.
+		document.removeEventListener('keydown', onKeydown);
 		detachTriggers();
 	}
 
@@ -388,8 +391,8 @@
 
 	function onKeydown(evt) {
 		if (evt.key === 'Escape' || evt.keyCode === 27) {
+			// dismiss() detaches the keydown listener for us.
 			dismiss('escape');
-			document.removeEventListener('keydown', onKeydown);
 		}
 	}
 

@@ -7,6 +7,22 @@
  * helpers). Returns a structured array the announce bar (and any other
  * surface) can render.
  *
+ * SSOT: `lafka_get_restaurant_info()['hours']` is now the single hours
+ * store. When the operator hasn't populated the dedicated display-hours
+ * store (`lafka_business_hours_*`), the resolver derives that map from the
+ * SAME order-hours schedule that gates ordering (Lafka_Order_Hours), so the
+ * "Open now" badge, the JSON-LD openingHoursSpecification, and the order
+ * gate all agree on the schedule. The client-side refresh
+ * (js/lafka-announce-bar.js) reads the same serialized map via
+ * lafka_open_status_hours_for_client(), so server render and client refresh
+ * stay in sync.
+ *
+ * Caveat: this badge reflects the *schedule* only. The order gate also
+ * honours force-override and holiday/vacation closures, which the hours map
+ * cannot express; reconciling those would require feeding gate state to the
+ * client refresh too (out of scope here). The schedule mismatch — the
+ * structural "two stores, two formats" defect — is what this resolves.
+ *
  * Filter surface:
  *   lafka_open_status(array $status, int $now) — override the result
  *
@@ -20,6 +36,11 @@ if ( ! function_exists( 'lafka_open_status_get_hours_map' ) ) {
 	/**
 	 * Resolve the hours map from the plugin's restaurant-info resolver, or
 	 * an empty array when no plugin / no hours are configured.
+	 *
+	 * The resolver reconciles the two historical hours stores into one: when
+	 * the dedicated display store is unset it derives this map from the
+	 * order-acceptance schedule, so the value returned here matches what the
+	 * order gate enforces (see the file-level docblock).
 	 *
 	 * @return array<string, string> e.g. ['Monday' => '11:00-23:00', ...]
 	 */

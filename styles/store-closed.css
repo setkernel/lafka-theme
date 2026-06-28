@@ -13,7 +13,7 @@
 
 .lafka-store-closed-card {
 	background: #fff8e1;
-	border-left: 4px solid var(--lafka-primary, #c98a00);
+	border-left: 4px solid var(--lafka-color-warning-500);
 	border-radius: 8px;
 	padding: 12px 14px;
 	margin: 12px 0;

@@ -42,9 +42,19 @@
  *   - Mobile (<769px): bottom-center, full-width minus 16px gutters.
  *
  * Stacking:
- *   - z-index 1080 — below the post-purchase review banner (1090) and
- *     exit-intent toast (1100) so when feature toggles overlap, the more
- *     urgent surfaces win.
+ *   - z-index is DERIVED from the shared promo band token rather than
+ *     hardcoded: calc(var(--lafka-z-toast) - 20) == 1080. This keeps the
+ *     prompt below the post-purchase review banner (toast - 10 == 1090) and
+ *     the exit-intent toast (toast == 1100) so when feature toggles overlap,
+ *     the more urgent surfaces win — and because all three derive from the
+ *     single --lafka-z-toast token, any future re-spacing of the z-index
+ *     scale in lafka-tokens.css propagates here instead of silently
+ *     desyncing the overlays.
+ *   - The promo band (toast, 1100) sits above --lafka-z-dialog (1000).
+ *     --lafka-z-dialog currently has NO consumer, so the "promo covers an
+ *     open dialog" concern is moot today; if a real modal/dialog is ever
+ *     added it MUST use --lafka-z-dialog and these promo toasts must be
+ *     reconfirmed to sit below it (or above, per UX intent).
  *
  * @since 6.12.0
  * ========================================================================= */
@@ -56,7 +66,10 @@
 	left: auto;
 	width: 340px;
 	max-width: calc(100vw - 32px);
-	z-index: 1080;
+
+	/* Derived from the shared promo band so re-spacing the scale propagates.
+	 * toast (1100) − 20 == 1080: below review-banner (1090) and exit-toast (1100). */
+	z-index: calc(var(--lafka-z-toast, 1100) - 20);
 	pointer-events: none;
 	opacity: 0;
 	transform: translateY(16px);
@@ -130,7 +143,8 @@
 	gap: var(--lafka-space-2);
 }
 
-/* Primary CTA — red pill matching the brand's primary action treatment.
+/* Primary CTA — pill on the canonical accent ramp so it follows the
+ * operator's Customizer brand color like every other CTA.
  * Same shape as the exit-intent CTA so the customer's pattern-recognition
  * still parses "this is the action button". */
 .lafka-push-prompt__accept {
@@ -138,7 +152,7 @@
 	align-items: center;
 	justify-content: center;
 	padding: var(--lafka-space-2) var(--lafka-space-4);
-	background: var(--lafka-color-primary-500, #d23f31);
+	background: var(--lafka-color-accent-500, #dc2626);
 	color: #fff;
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body-sm);
@@ -155,7 +169,7 @@
 
 .lafka-push-prompt__accept:hover,
 .lafka-push-prompt__accept:focus-visible {
-	background: var(--lafka-color-primary-600, #b13327);
+	background: var(--lafka-color-accent-600, #b91c1c);
 	color: #fff;
 	text-decoration: none;
 }
