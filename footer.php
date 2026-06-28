@@ -31,7 +31,7 @@ $lafka_ft_phone = isset( $lafka_ft_info['phone_display'] ) ? (string) $lafka_ft_
 $lafka_ft_tel   = isset( $lafka_ft_info['phone_e164'] ) ? (string) $lafka_ft_info['phone_e164'] : $lafka_ft_phone;
 $lafka_ft_email = isset( $lafka_ft_info['email'] ) ? (string) $lafka_ft_info['email'] : (string) get_bloginfo( 'admin_email' );
 $lafka_ft_hours = isset( $lafka_ft_info['hours'] ) && is_array( $lafka_ft_info['hours'] ) ? $lafka_ft_info['hours'] : array();
-$lafka_ft_logo  = function_exists( 'lafka_get_option' ) ? lafka_get_option( 'theme_logo' ) : 0;
+$lafka_ft_logo  = function_exists( 'lafka_get_logo_id' ) ? lafka_get_logo_id() : 0;
 
 $lafka_ft_about = (string) get_theme_mod(
 	'lafka_footer_about',
@@ -89,6 +89,16 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 								'alt'   => esc_attr( $lafka_ft_name ),
 							)
 						);
+					} else {
+						// Site icon as last-resort fallback (parity with header.php).
+						$lafka_ft_site_icon = function_exists( 'get_site_icon_url' ) ? get_site_icon_url( 96 ) : '';
+						if ( $lafka_ft_site_icon ) {
+							printf(
+								'<img class="lafka-footer__logo" src="%s" alt="%s">',
+								esc_url( $lafka_ft_site_icon ),
+								esc_attr( $lafka_ft_name )
+							);
+						}
 					}
 					?>
 					<span class="lafka-footer__brand-name"><?php echo esc_html( $lafka_ft_name ); ?></span>
@@ -117,7 +127,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 			<div class="lafka-footer__col lafka-footer__col--order">
 				<h2 class="lafka-footer__col-title"><?php esc_html_e( 'Order', 'lafka' ); ?></h2>
 				<ul class="lafka-footer__links">
-					<li><a href="<?php echo esc_url( home_url( '/menu/' ) ); ?>"><?php esc_html_e( 'Full menu', 'lafka' ); ?></a></li>
+					<li><a href="<?php echo esc_url( function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' ) ); ?>"><?php esc_html_e( 'Full menu', 'lafka' ); ?></a></li>
 					<?php if ( function_exists( 'wc_get_cart_url' ) ) : ?>
 						<li><a href="<?php echo esc_url( wc_get_cart_url() ); ?>"><?php esc_html_e( 'Your cart', 'lafka' ); ?></a></li>
 					<?php endif; ?>

@@ -36,7 +36,8 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 <aside
 	class="lafka-cart-drawer"
 	role="dialog"
-	aria-modal="false"
+	<?php // f092 (a11y): the drawer is only ever shown as a modal — it locks body scroll, traps Tab, and (via js/cart-drawer.js) inerts #header/#content on open. Declare that modality truthfully so AT does not contradict the actual behaviour (WCAG 4.1.2). ?>
+	aria-modal="true"
 	aria-hidden="true"
 	aria-labelledby="lafka-cart-drawer-title"
 	tabindex="-1"
@@ -74,42 +75,17 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 			 */
 			?>
 			<ul class="lafka-cart-drawer__items">
-				<?php if ( $lafka_cart_empty ) : ?>
-					<li class="lafka-cart-drawer__empty" data-lafka-cart-empty>
-						<span class="lafka-cart-drawer__empty-icon" aria-hidden="true">🛒</span>
-						<span class="lafka-cart-drawer__empty-title"><?php esc_html_e( 'Your cart is empty', 'lafka' ); ?></span>
-						<span class="lafka-cart-drawer__empty-hint"><?php esc_html_e( 'Add something delicious to get started.', 'lafka' ); ?></span>
-						<a class="lafka-cart-drawer__empty-cta" href="<?php echo esc_url( apply_filters( 'lafka_header_cta_url', home_url( '/menu/' ) ) ); ?>">
-							<?php esc_html_e( 'Browse the menu', 'lafka' ); ?>
-						</a>
-					</li>
-				<?php else : ?>
-					<?php
-					foreach ( WC()->cart->get_cart() as $lafka_cart_item_key => $lafka_cart_item ) {
-						$lafka_product = $lafka_cart_item['data'] ?? null;
-						if ( ! $lafka_product ) {
-							continue;
+				<?php
+				if ( function_exists( 'lafka_cart_drawer_render_item' ) ) {
+					if ( $lafka_cart_empty ) {
+						lafka_cart_drawer_render_item();
+					} else {
+						foreach ( WC()->cart->get_cart() as $lafka_cart_item_key => $lafka_cart_item ) {
+							lafka_cart_drawer_render_item( (string) $lafka_cart_item_key, $lafka_cart_item );
 						}
-						$lafka_item_name  = apply_filters( 'woocommerce_cart_item_name', $lafka_product->get_name(), $lafka_cart_item, $lafka_cart_item_key );
-						$lafka_item_thumb = $lafka_product->get_image( 'woocommerce_gallery_thumbnail', array( 'loading' => 'lazy' ) );
-						$lafka_item_price = WC()->cart->get_product_subtotal( $lafka_product, $lafka_cart_item['quantity'] );
-						?>
-						<li class="lafka-cart-drawer__item" data-cart-key="<?php echo esc_attr( $lafka_cart_item_key ); ?>">
-							<span class="lafka-cart-drawer__thumb">
-								<?php
-								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- WC_Product::get_image() returns trusted WC-core HTML with attributes pre-escaped.
-								echo $lafka_item_thumb;
-								?>
-							</span>
-							<span class="lafka-cart-drawer__name"><?php echo wp_kses_post( $lafka_item_name ); ?></span>
-							<span class="lafka-cart-drawer__qty">×<?php echo esc_html( (string) (int) $lafka_cart_item['quantity'] ); ?></span>
-							<span class="lafka-cart-drawer__price"><?php echo wp_kses_post( $lafka_item_price ); ?></span>
-							<button type="button" class="lafka-cart-drawer__remove" data-cart-key="<?php echo esc_attr( $lafka_cart_item_key ); ?>" aria-label="<?php esc_attr_e( 'Remove item', 'lafka' ); ?>">×</button>
-						</li>
-						<?php
 					}
-					?>
-				<?php endif; ?>
+				}
+				?>
 			</ul>
 
 		</div>
@@ -124,42 +100,20 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 		?>
 
 		<footer class="lafka-cart-drawer__footer">
-			<div class="lafka-cart-drawer__total">
-				<?php
-				/* Server-render the subtotal + free-delivery progress on initial
-				 * page load so the drawer footer isn't empty when the customer
-				 * opens it without having added anything in this session.
-				 *
-				 * Fragment replacement on add-to-cart still updates this block
-				 * (the plugin's lafka-cart-drawer-fragments.php replaces the
-				 * entire .lafka-cart-drawer__total div). After the fragment
-				 * HTML lands, lafka-fdp-tracker.js post-processes the plain-
-				 * text .lafka-cart-drawer__threshold markup into the rich
-				 * .lafka-fdp component — keeping initial-render and AJAX-
-				 * refresh visually consistent without modifying the plugin
-				 * (v6.9.0, Pillar 3A). */
-				if ( ! $lafka_cart_empty ) {
-					$lafka_cart_total = (float) WC()->cart->get_cart_contents_total();
-					?>
-					<div class="lafka-cart-drawer__subtotal">
-						<span><?php esc_html_e( 'Subtotal', 'lafka' ); ?></span>
-						<strong><?php echo wp_kses_post( wc_price( $lafka_cart_total ) ); ?></strong>
-					</div>
-					<?php
-					/* v6.9.0: rich progress component replaces the v6.7.4 plain-
-					 * text threshold notice. Partial silently returns if the
-					 * operator hasn't configured a threshold ( <= 0 ). */
-					get_template_part(
-						'partials/free-delivery-progress',
-						null,
-						array(
-							'context'    => 'drawer',
-							'cart_total' => $lafka_cart_total,
-						)
-					);
-				}
-				?>
-			</div>
+			<?php
+			/* SSOT (f099): the subtotal + rich .lafka-fdp free-delivery progress
+			 * block is rendered by the plugin callable lafka_cart_drawer_render_total()
+			 * on initial server load AND refreshed by the SAME callable via
+			 * woocommerce_add_to_cart_fragments
+			 * (lafka-plugin/incl/woocommerce/lafka-cart-drawer-fragments.php), so the
+			 * two paths are byte-identical and the rich component ships even for an
+			 * empty initial cart. It emits the full div.lafka-cart-drawer__total
+			 * fragment target (mirrors lafka_cart_drawer_render_upsell above).
+			 * lafka-fdp-tracker.js keeps only its dataLayer/analytics duties. */
+			if ( function_exists( 'lafka_cart_drawer_render_total' ) ) {
+				lafka_cart_drawer_render_total();
+			}
+			?>
 
 			<div class="lafka-cart-drawer__actions">
 				<a class="lafka-cart-drawer__checkout" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">

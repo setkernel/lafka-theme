@@ -142,6 +142,9 @@ final class EditorialTemplatesTest extends TestCase {
     public function test_no_hardcoded_peppery_strings(): void {
         // OSS-safety: per the architectural feedback, no Peppery-specific strings
         // should appear in the OSS code. Operator content flows through Customizer.
+        // This also globs js/*.js so brand-namespaced literals (e.g. a
+        // 'peppery.fulfilment' localStorage key) can't silently ship in the
+        // public theme's scripts.
         // NB: this scan must NOT include tests/ — the test body itself contains
         // 'Peppery' / 'Sackville Drive' as the banned literals to assert against.
         $files_to_check = array_merge(
@@ -149,7 +152,8 @@ final class EditorialTemplatesTest extends TestCase {
             glob( $this->theme_dir . '/partials/editorial-*.php' ) ?: array(),
             glob( $this->theme_dir . '/incl/customizer-editorial.php' ) ?: array(),
             glob( $this->theme_dir . '/inc/customizer-editorial.php' ) ?: array(),
-            glob( $this->theme_dir . '/styles/editorial.css' ) ?: array()
+            glob( $this->theme_dir . '/styles/editorial.css' ) ?: array(),
+            glob( $this->theme_dir . '/js/*.js' ) ?: array()
         );
         foreach ( $files_to_check as $f ) {
             // Defensive: skip any path that resolves under tests/ (shouldn't, but
@@ -164,10 +168,48 @@ final class EditorialTemplatesTest extends TestCase {
                 $contents,
                 "$f contains hardcoded street address — should come from Customizer / restaurant-info"
             );
-            $this->assertStringNotContainsString(
-                'Peppery',
+            // Case-insensitive so it also catches the lowercase brand
+            // namespace that leaked into the JS controllers (the
+            // 'peppery.fulfilment' localStorage key), not just the
+            // capitalised display name.
+            $this->assertStringNotContainsStringIgnoringCase(
+                'peppery',
                 $contents,
-                "$f contains hardcoded brand name — should come from get_bloginfo('name') or Customizer"
+                "$f contains the hardcoded 'peppery' brand namespace — should come from get_bloginfo('name'), Customizer, or a brand-neutral key/filter"
+            );
+        }
+    }
+
+    /**
+     * SSOT lock for the fulfilment storage contract (audit f082): the menu and
+     * cart controllers must both read the localized window.lafkaCfg object so
+     * the pickup/delivery choice can never silently fail to carry across the
+     * menu -> cart conversion path, and neither may hardcode the pre-rename
+     * 'peppery.fulfilment' key (that literal now lives only in the PHP config
+     * for one-time migration).
+     */
+    public function test_fulfilment_controllers_share_localized_config(): void {
+        $controllers = array(
+            $this->theme_dir . '/js/lafka-menu-controls.js',
+            $this->theme_dir . '/js/lafka-cart-controls.js',
+        );
+        foreach ( $controllers as $path ) {
+            $this->assertFileExists( $path );
+            $contents = file_get_contents( $path );
+            $this->assertStringContainsString(
+                'window.lafkaCfg',
+                $contents,
+                "$path must read the shared window.lafkaCfg config (single source for the fulfilment key + default)"
+            );
+            $this->assertStringContainsString(
+                'fulfilmentKey',
+                $contents,
+                "$path must read fulfilmentKey from the localized config"
+            );
+            $this->assertStringNotContainsString(
+                'peppery.fulfilment',
+                $contents,
+                "$path must not hardcode the pre-rename 'peppery.fulfilment' key — it now comes from PHP (window.lafkaCfg) for migration only"
             );
         }
     }

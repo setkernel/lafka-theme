@@ -58,18 +58,22 @@
     var overlay = buildModal();
     document.body.appendChild(overlay);
 
+    function closeModal() {
+      overlay.remove();
+      document.removeEventListener('keydown', onEsc);
+    }
+
     overlay.addEventListener('click', function (e) {
       var m = e.target.getAttribute && e.target.getAttribute('data-method');
-      if (m) { setMethod(m); return; }
+      if (m) { closeModal(); setMethod(m); return; }
       if (e.target === overlay || (e.target.classList && e.target.classList.contains('lafka-method-modal__close'))) {
-        overlay.remove();
+        closeModal();
       }
     });
 
     function onEsc(ev) {
       if (ev.key === 'Escape') {
-        overlay.remove();
-        document.removeEventListener('keydown', onEsc);
+        closeModal();
       }
     }
     document.addEventListener('keydown', onEsc);

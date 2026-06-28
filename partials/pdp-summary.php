@@ -25,6 +25,18 @@ if ( ! ( $product instanceof WC_Product ) ) {
 
 $is_variable = $product->is_type( 'variable' );
 $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() );
+
+// Store-closed gate. When the store is closed AND the operator has opted into
+// lafka_order_hours_disable_add_to_cart, the add-to-cart form must be replaced
+// by the closed-store card. The plugin enforces the block server-side
+// (woocommerce_is_purchasable + woocommerce_add_to_cart_validation), but this
+// redesigned PDP renders its own <form class="cart"> below and never fires
+// woocommerce_single_product_summary, so the plugin's classic-template card
+// swap can't reach it — we gate the form here and render the plugin's card
+// inline instead (single source of truth for the closed-store markup).
+$lafka_pdp_cart_disabled = class_exists( 'Lafka_Order_Hours' )
+    && ! Lafka_Order_Hours::is_shop_open()
+    && ! empty( Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_disable_add_to_cart'] );
 ?>
 <div class="lafka-pdp-summary">
 
@@ -62,9 +74,37 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
         <?php endif; ?>
     </div>
 
+    <?php
+    /**
+     * Redesigned-PDP summary integration point.
+     *
+     * The redesign composes its own summary and deliberately never fires
+     * woocommerce_single_product_summary — doing so would re-introduce WC's
+     * default title/price/excerpt/add-to-cart buy box at their stock priorities
+     * (double-rendering the buy box this template rebuilds) and re-emit WC's
+     * native Product JSON-LD, which is already produced in wp_head. The
+     * genuinely-orphaned summary integrations (nutrition, weight, social proof,
+     * sale countdown, promo tooltips, custom product popup link) are re-homed
+     * onto this dedicated hook in woocommerce/single-product.php and render here,
+     * just below the title/price.
+     */
+    do_action( 'lafka_pdp_summary', $product );
+    ?>
+
     <?php require __DIR__ . '/pdp-last-order-card.php'; ?>
 
-    <?php if ( $is_variable ) : ?>
+    <?php if ( $lafka_pdp_cart_disabled ) : ?>
+
+        <?php
+        // Store closed + add-to-cart disabled: render the plugin's closed-store
+        // card in place of the buy box. The <form class="cart"> is intentionally
+        // not emitted, so there is no Add-to-Cart to submit. The server also
+        // rejects any replayed add via woocommerce_is_purchasable /
+        // woocommerce_add_to_cart_validation (see Lafka_Order_Hours).
+        Lafka_Order_Hours::echo_closed_store_message();
+        ?>
+
+    <?php elseif ( $is_variable ) : ?>
         <?php
         // Fire BEFORE the form opens — this triggers the lafka-plugin addon
         // system's reposition_display_for_variable_product(), which moves
@@ -101,7 +141,7 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
                     <div class="lafka-pdp-summary__cart-row">
                         <div class="quantity lafka-pdp-summary__qty">
                             <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease quantity', 'lafka' ); ?>">−</button>
-                            <input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input">
+                            <input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input" aria-label="<?php esc_attr_e( 'Quantity', 'lafka' ); ?>">
                             <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
                         </div>
                         <button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
@@ -186,7 +226,7 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
             <div class="lafka-pdp-summary__cart-row">
                 <div class="quantity lafka-pdp-summary__qty">
                     <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="-1" aria-label="<?php esc_attr_e( 'Decrease quantity', 'lafka' ); ?>">−</button>
-                    <input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input">
+                    <input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input" aria-label="<?php esc_attr_e( 'Quantity', 'lafka' ); ?>">
                     <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
                 </div>
                 <button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart>
@@ -230,7 +270,12 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
     $lafka_pdp_pickup_addr = isset( $lafka_pdp_info['address_short'] ) ? (string) $lafka_pdp_info['address_short'] : '';
     $lafka_pdp_eta        = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
     $lafka_pdp_pickup_eta = $lafka_pdp_eta && ! empty( $lafka_pdp_eta['pickup'] ) ? (string) $lafka_pdp_eta['pickup'] : '~25 min';
-    $lafka_pdp_threshold  = (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 30 );
+    // SSOT: read the same threshold the plugin's free-delivery rule enforces;
+    // fall back to the single shared theme_mod (0 = off) when the plugin isn't
+    // loaded. The free-delivery assurance is suppressed entirely when <= 0.
+    $lafka_pdp_threshold  = function_exists( 'lafka_get_free_delivery_threshold' )
+        ? (float) lafka_get_free_delivery_threshold()
+        : (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
     ?>
     <ul class="lafka-pdp-summary__assurances" role="list">
         <li>
@@ -242,6 +287,7 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
             ?>
             </span>
         </li>
+        <?php if ( $lafka_pdp_threshold > 0 ) : ?>
         <li>
             <span class="lafka-pdp-summary__assurance-icon" aria-hidden="true">🚚</span>
             <span>
@@ -251,6 +297,7 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
             ?>
             </span>
         </li>
+        <?php endif; ?>
         <?php if ( '' !== $lafka_pdp_pickup_addr ) : ?>
             <li>
                 <span class="lafka-pdp-summary__assurance-icon" aria-hidden="true">📍</span>

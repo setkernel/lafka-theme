@@ -192,10 +192,18 @@ body .lafka-header {
  * v6.7.11: nav hidden below 1024 (was 768). The tablet (768–1023) band
  * could not fit 12 categories without horizontal scroll overflow, so we
  * now drop the in-row nav at that breakpoint and rely on the hamburger
- * mobile-nav drawer instead. A scroll-fade gradient on `::after` signals
- * remaining off-screen items in the desktop (1024+) band — mirrors the
- * pattern already in use on `.lafka-menu__cats` / `.lafka-menu__toc` from
- * v6.7.8. */
+ * mobile-nav drawer instead.
+ *
+ * v6.19.1 (f060): the desktop (1024+) band previously clipped its 12-item
+ * nav to a scrollbar-less horizontal scroller with only a right-edge
+ * scroll-fade cue, so at 1280 (scrollWidth ~1170 > clientWidth ~813) four
+ * categories sat off-screen with no usable desktop scroll affordance — no
+ * visible scrollbar and a mouse wheel can't pan a horizontal container.
+ * The nav now WRAPS at 1024+ (see the media query below the base list
+ * rules) so every category stays discoverable; the header simply grows a
+ * second row when one line won't fit. The fade is switched off there as
+ * there is no longer any overflow to signal. The nowrap horizontal-scroll
+ * base behaviour is left intact for any sub-1024 context. */
 .lafka-header__nav {
 	flex: 1 1 0;
 	min-width: 0;
@@ -211,9 +219,10 @@ body .lafka-header {
 	}
 }
 
-/* Right-edge scroll fade affordance — signals additional nav items when
- * the horizontal scroll container clips overflow (12-item nav in a
- * ~650px slot at 1280). Pure-CSS always-on (matches menu chips pattern). */
+/* Right-edge scroll fade — legacy horizontal-scroll cue retained for the
+ * nowrap base behaviour. Switched off in the 1024+ media query below where
+ * the nav wraps instead of scrolling, so there is no overflow to signal
+ * (f060). */
 .lafka-header__nav::after {
 	content: '';
 	position: absolute;
@@ -242,6 +251,29 @@ body .lafka-header {
 
 .lafka-header__nav-list::-webkit-scrollbar {
 	display: none;
+}
+
+/* v6.19.1 (f060): wrap the nav onto a second row at the desktop band rather
+ * than clipping overflow to a hidden horizontal scroller. `overflow: visible`
+ * resets the base nowrap scroller, `flex-wrap: wrap` lets the list flow, and
+ * the row/column gap pair keeps the existing inter-item spacing while adding
+ * breathing room between rows. Lines centre to mirror the parent's centred
+ * single-row layout. When every item fits one line (wider viewports) nothing
+ * wraps, so the original single-row look is preserved. */
+@media (min-width: 1024px) {
+
+	.lafka-header__nav-list {
+		flex-wrap: wrap;
+		justify-content: center;
+		overflow: visible;
+		gap: var(--lafka-space-2) var(--lafka-space-1);
+	}
+
+	/* No overflow once the list wraps, so the right-edge fade would only
+	 * mask the last item on each row — switch it off. */
+	.lafka-header__nav::after {
+		content: none;
+	}
 }
 
 .lafka-header__nav-list > li {

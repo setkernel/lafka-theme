@@ -16,7 +16,7 @@
 	background: var(--lafka-color-surface-raised);
 	border-top: 1px solid var(--lafka-color-border-subtle);
 	box-shadow: var(--lafka-shadow-2);
-	padding: env(safe-area-inset-bottom, 0);
+	padding-bottom: env(safe-area-inset-bottom, 0);
 	transform: translateY(0);
 	transition: transform var(--lafka-duration-normal) var(--lafka-ease-out);
 }
@@ -124,7 +124,7 @@
 /* Theme-page bottom padding so the sticky bar doesn't cover content.
  * Apply at body level only when the bar is active (toggled by JS). */
 body.lafka-has-sticky-cart {
-	padding-bottom: 64px;
+	padding-bottom: calc(64px + env(safe-area-inset-bottom, 0px));
 }
 
 /* v6.6.0 — hide the sticky-cart bar on desktop. The header cart icon

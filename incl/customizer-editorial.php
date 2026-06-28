@@ -289,18 +289,18 @@ function lafka_editorial_customizer_register( WP_Customize_Manager $wp_customize
     $wp_customize->add_setting(
         'lafka_editorial_home_proof_stars',
         array(
-			'default'           => 5,
+			'default'           => 0,
 			'sanitize_callback' => 'absint',
         ) 
     );
     $wp_customize->add_control(
         'lafka_editorial_home_proof_stars',
         array(
-			'label'       => __( 'Star rating (1–5)', 'lafka' ),
+			'label'       => __( 'Star rating (0 = hide, 1–5)', 'lafka' ),
 			'section'     => 'lafka_editorial_home_proof',
 			'type'        => 'number',
 			'input_attrs' => array(
-				'min' => 1,
+				'min' => 0,
 				'max' => 5,
 				'step' => 1,
 			),

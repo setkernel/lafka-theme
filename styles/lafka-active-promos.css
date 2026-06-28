@@ -8,13 +8,13 @@
 	flex-wrap: wrap;
 	align-items: center;
 	gap: var(--lafka-space-2, 8px);
-	margin: 0 0 var(--lafka-space-4, 20px);
+	margin: 0 0 var(--lafka-space-4, 16px);
 }
 
 .lafka-active-promos__lead {
 	font-weight: 700;
 	font-size: 0.9rem;
-	color: var(--lafka-color-text, #18181b);
+	color: var(--lafka-color-text-primary);
 }
 
 .lafka-active-promos__chip {
@@ -24,8 +24,8 @@
 	padding: 6px 12px;
 	border-radius: var(--lafka-radius-pill, 999px);
 	background: var(--lafka-color-surface-brand-soft, #fff7ed);
-	border: 1px solid var(--lafka-color-accent-200, #fecaca);
-	color: var(--lafka-color-text, #27272a);
+	border: 1px solid var(--lafka-color-border-subtle);
+	color: var(--lafka-color-text-primary);
 	font-size: 0.85rem;
 	font-weight: 600;
 	line-height: 1.2;

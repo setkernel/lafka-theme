@@ -24,12 +24,26 @@ $lafka_cat_eyebrow  = (string) get_theme_mod( 'lafka_home_categories_eyebrow', _
 $lafka_cat_headline = (string) get_theme_mod( 'lafka_home_categories_headline', __( 'What are you craving?', 'lafka' ) );
 $lafka_cat_limit    = (int) get_theme_mod( 'lafka_home_categories_limit', 6 );
 
+// Map the "Order categories by" Customizer choice to get_terms orderby/order.
+// Whitelisting via the map (rather than passing the stored value straight
+// through) guards against an invalid value reaching get_terms.
+$lafka_cat_orderby   = sanitize_key( (string) get_theme_mod( 'lafka_home_categories_orderby', 'count' ) );
+$lafka_cat_order_map = array(
+	'count'      => array( 'count', 'DESC' ),
+	'name'       => array( 'name', 'ASC' ),
+	'menu_order' => array( 'menu_order', 'ASC' ),
+);
+if ( ! isset( $lafka_cat_order_map[ $lafka_cat_orderby ] ) ) {
+	$lafka_cat_orderby = 'count';
+}
+list( $lafka_cat_ob, $lafka_cat_dir ) = $lafka_cat_order_map[ $lafka_cat_orderby ];
+
 $lafka_cat_args = array(
 	'taxonomy'   => 'product_cat',
 	'number'     => max( 1, $lafka_cat_limit ),
 	'hide_empty' => true,
-	'orderby'    => 'count',
-	'order'      => 'DESC',
+	'orderby'    => $lafka_cat_ob,
+	'order'      => $lafka_cat_dir,
 );
 
 if ( function_exists( 'lafka_uncategorized_excluded_ids' ) ) {

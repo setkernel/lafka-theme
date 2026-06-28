@@ -892,7 +892,10 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
   .lafka-pdp-mobile-cta__qty { display: flex; align-items: center; border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); }
 
-  .lafka-pdp-mobile-cta__qty button { background: none; border: none; padding: 6px 10px; cursor: pointer; font: inherit; font-weight: 700; }
+  /* v6.7.11 (f033): 44×44 tap target (was ~28×30). Hit area now WCAG 2.5.5,
+   * mirroring desktop .lafka-pdp-qty__btn. padding:0 8px keeps the glyph
+   * centered while min-width/min-height drive the box. */
+  .lafka-pdp-mobile-cta__qty button { background: none; border: none; min-width: 44px; min-height: 44px; padding: 0 8px; cursor: pointer; font: inherit; font-weight: 700; }
 
   .lafka-pdp-mobile-cta__qty span { padding: 0 8px; font-weight: 600; min-width: 18px; text-align: center; }
 

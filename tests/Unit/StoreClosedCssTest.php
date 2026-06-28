@@ -51,13 +51,20 @@ final class StoreClosedCssTest extends TestCase {
 	}
 
 	public function test_css_uses_var_for_brand_accent(): void {
-		// Border accent uses the operator's --lafka-primary CSS variable.
-		// Fallback to a neutral warm gold (NOT a brand-specific value).
+		// Border accent reads the dedicated warning token --lafka-color-warning-500
+		// (defined in lafka-tokens.css, enqueued first so no fallback is needed).
+		// This gives the closed-store card its calm amber emphasis from the SSOT
+		// rather than the old orphaned/undefined --lafka-primary name.
 		$css = file_get_contents( dirname( __DIR__, 2 ) . '/styles/store-closed.css' );
 		$this->assertMatchesRegularExpression(
-			'/var\(\s*--lafka-primary\s*,\s*[#\w]+\s*\)/',
+			'/var\(\s*--lafka-color-warning-500\s*\)/',
 			$css,
-			'border accent must use var(--lafka-primary, fallback)'
+			'border accent must use var(--lafka-color-warning-500)'
+		);
+		$this->assertStringNotContainsString(
+			'--lafka-primary',
+			$css,
+			'the orphaned/undefined --lafka-primary token must not reappear'
 		);
 	}
 

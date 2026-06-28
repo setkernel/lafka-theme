@@ -1,4 +1,21 @@
 /* RESPONSIVE STYLES */
+
+/*
+ * CANONICAL BREAKPOINTS (lafka) — keep media ranges non-overlapping so no
+ * viewport width is matched by both a "mobile" and a "desktop" query. The
+ * three-breakpoint visual checks run at 375 / 768 / 1280, so the 768 edge
+ * must resolve to a single, predictable rule.
+ *
+ *   Desktop and up : (min-width: 768px)
+ *   Mobile only    : (max-width: 767px)
+ *   Second tier up : (min-width: 600px)
+ *   Second tier dn : (max-width: 599px)
+ *
+ * Adjacent ranges differ by exactly 1px (768/767, 600/599) — they never
+ * share an edge pixel. Do NOT introduce 769 or max-width:768 / max-width:600
+ * variants in new components; convert any you find to the values above.
+ */
+
 @media only screen and (min-width: 1440px) {
 
     body.lafka_boxed #container, body.lafka_boxed .inner, body.lafka_boxed #container > .dokan-dashboard-wrap {
@@ -26,7 +43,7 @@
     }
 }
 
-@media only screen and (min-width: 769px) and (max-width: 1024px) {
+@media only screen and (min-width: 768px) and (max-width: 1024px) {
 
     div.product div.summary, #content div.product div.summary {
         padding-right: 40px;
@@ -34,7 +51,7 @@
     }
 }
 
-@media only screen and (min-width: 769px) and (max-width: 1279px) {
+@media only screen and (min-width: 768px) and (max-width: 1279px) {
 
     .summary form.cart div.product-addon p.form-row {
         width: 100%;
@@ -483,7 +500,7 @@ and (orientation: landscape) {
     }
 }
 
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: 767px) {
 
     div.product div.images, #content div.product div.images, div.product div.summary, #content div.product div.summary, .foodmenu_top div.two_third.foodmenu-main-image-holder, .foodmenu_top div.one_third.last.project-data {
         width: 100%;
@@ -1231,7 +1248,7 @@ and (orientation: landscape) {
     }
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
 
     /* v5.41.0: tighten the global .inner gutter on phones. The desktop
      * default of `padding: 0 40px` (style.css:2966) eats 80px from a

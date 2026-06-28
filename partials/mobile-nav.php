@@ -49,7 +49,7 @@ if ( taxonomy_exists( 'product_cat' ) ) {
 	class="lafka-mobile-nav"
 	aria-hidden="true"
 	role="dialog"
-	aria-modal="false"
+	aria-modal="true"
 	aria-label="<?php esc_attr_e( 'Main menu', 'lafka' ); ?>"
 	data-lafka-mobile-nav
 >

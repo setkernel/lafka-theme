@@ -444,7 +444,7 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 		if ( $needs_editor || $needs_menus || $needs_options ) {
 			// wp-color-picker
 			wp_enqueue_style( 'wp-color-picker' );
-			wp_enqueue_script( 'wp-color-picker', array( 'jquery' ) );
+			wp_enqueue_script( 'wp-color-picker' );
 			// font-awesome
 			wp_enqueue_style( 'font_awesome_6_v4shims', get_template_directory_uri() . '/styles/font-awesome/css/v4-shims.min.css', array(), lafka_asset_version( '/styles/font-awesome/css/v4-shims.min.css' ), 'screen' );
 			wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . '/styles/font-awesome/css/all.min.css', array( 'font_awesome_6_v4shims' ), lafka_asset_version( '/styles/font-awesome/css/all.min.css' ), 'screen' );
@@ -1125,10 +1125,18 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		// v5.27.0: PDP sticky CTA — conditionally enqueued on single-product
-		// pages only. Skips the asset cost everywhere else.
+		// v5.27.0: PDP sticky CTA (legacy "System A") — conditionally enqueued
+		// on single-product pages only. Skips the asset cost everywhere else.
+		// Gated OFF when the PDP redesign owns the page: pdp-pickers.js +
+		// pdp-summary's .lafka-pdp-mobile-cta already provide the sticky CTA,
+		// auto-select and live total. Loading both runs two uncoordinated
+		// variation auto-selectors against the same form.variations_form and
+		// ships a dead second bottom bar with a full-reload add-to-cart
+		// fallback. Both this enqueue and the wp_footer render in
+		// template-parts/lafka-pdp-cta.php are independently gated.
 		$lafka_pdp_cta_active = function_exists( 'is_product' ) && is_product()
-			&& (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true );
+			&& (bool) get_theme_mod( 'lafka_pdp_sticky_cta_enabled', true )
+			&& ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() );
 		// v5.32.0: empty-cart "Popular" — only on /cart/ and only when
 		// the toggle is on. We can't easily know in advance if the cart
 		// will be empty server-side, so enqueue on all cart pages.

@@ -45,14 +45,21 @@ final class CartItemCssTest extends TestCase {
 	}
 
 	public function test_css_uses_css_var_for_brand_accent(): void {
-		// Price color should respect operator's --lafka-primary CSS variable
-		// with a neutral fallback (currentColor or similar), not a hardcoded
-		// brand-specific hex.
+		// Cart line price is design-system INK, read from the SSOT token
+		// --lafka-color-text-primary (defined in lafka-tokens.css, enqueued
+		// first so no fallback is needed). Per the pixel-perfect handoff the
+		// line price is ink, NOT accent — so this must not use an accent token
+		// nor the old orphaned/undefined --lafka-primary name.
 		$css = file_get_contents( dirname( __DIR__, 2 ) . '/styles/cart-item.css' );
 		$this->assertMatchesRegularExpression(
-			'/var\(\s*--lafka-primary\s*,\s*[^)]+\)/',
+			'/color:\s*var\(\s*--lafka-color-text-primary\s*\)/',
 			$css,
-			'price color must use var(--lafka-primary, fallback)'
+			'price color must use var(--lafka-color-text-primary)'
+		);
+		$this->assertStringNotContainsString(
+			'--lafka-primary',
+			$css,
+			'the orphaned/undefined --lafka-primary token must not reappear'
 		);
 	}
 

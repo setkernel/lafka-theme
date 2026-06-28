@@ -150,7 +150,7 @@
 .product-addon h3,
 .product-addon-name {
 	margin: 0 0 var(--lafka-space-3);
-	font-size: var(--lafka-font-size-h5);
+	font-size: var(--lafka-font-size-body-lg);
 	font-weight: var(--lafka-font-weight-semibold);
 	color: var(--lafka-color-text-primary);
 }

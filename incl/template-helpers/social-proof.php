@@ -22,8 +22,10 @@ if ( ! function_exists( 'lafka_social_proof_get_data' ) ) {
 	/**
 	 * Pull the social-proof data from Customizer settings.
 	 *
-	 * @return array{rating: float, count: int, provider: string, url: string}|null
+	 * @return array{rating: float, has_rating: bool, count: int, provider: string, url: string}|null
 	 *         Null when nothing is configured (caller should not render).
+	 *         'has_rating' is false when only a count was set, so the
+	 *         renderer can omit the stars instead of showing a "0.0".
 	 */
 	function lafka_social_proof_get_data() {
 		$rating   = trim( (string) get_theme_mod( 'lafka_social_proof_rating', '' ) );
@@ -36,10 +38,11 @@ if ( ! function_exists( 'lafka_social_proof_get_data' ) ) {
 			$data = null;
 		} else {
 			$data = array(
-				'rating'   => '' === $rating ? 0.0 : (float) $rating,
-				'count'    => $count,
-				'provider' => $provider,
-				'url'      => $url,
+				'rating'     => '' === $rating ? 0.0 : (float) $rating,
+				'has_rating' => '' !== $rating,
+				'count'      => $count,
+				'provider'   => $provider,
+				'url'        => $url,
 			);
 		}
 
@@ -62,10 +65,11 @@ if ( ! function_exists( 'lafka_social_proof_render' ) ) {
 		$provider     = (string) $data['provider'];
 		$url          = (string) $data['url'];
 		$rating_pct   = ( $rating / 5.0 ) * 100.0;
+		$has_rating   = ! empty( $data['has_rating'] );
 		$has_link     = '' !== $url;
 		$tag          = $has_link ? 'a' : 'div';
 		$href_attr    = $has_link ? ' href="' . esc_url( $url ) . '" target="_blank" rel="noopener nofollow"' : '';
-		$rating_label = '' !== (string) $data['rating'] ? number_format_i18n( $rating, 1 ) : '';
+		$rating_label = $has_rating ? number_format_i18n( $rating, 1 ) : '';
 
 		// Accessible label: "4.8 out of 5 stars based on 312 Google reviews"
 		$aria_parts = array();
@@ -91,15 +95,17 @@ if ( ! function_exists( 'lafka_social_proof_render' ) ) {
 			<?php echo $href_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			aria-label="<?php echo esc_attr( $aria_label ); ?>"
 		>
-			<span class="lafka-social-proof__stars" aria-hidden="true">
-				<span class="lafka-social-proof__stars-empty">★★★★★</span>
-				<span class="lafka-social-proof__stars-filled" style="width: <?php echo esc_attr( (string) $rating_pct ); ?>%;">★★★★★</span>
-			</span>
-			<?php if ( $rating_label ) : ?>
+			<?php if ( $has_rating ) : ?>
+				<span class="lafka-social-proof__stars" aria-hidden="true">
+					<span class="lafka-social-proof__stars-empty">★★★★★</span>
+					<span class="lafka-social-proof__stars-filled" style="width: <?php echo esc_attr( (string) $rating_pct ); ?>%;">★★★★★</span>
+				</span>
 				<span class="lafka-social-proof__rating"><?php echo esc_html( $rating_label ); ?></span>
 			<?php endif; ?>
 			<?php if ( $count > 0 ) : ?>
-				<span class="lafka-social-proof__separator" aria-hidden="true">·</span>
+				<?php if ( $has_rating ) : ?>
+					<span class="lafka-social-proof__separator" aria-hidden="true">·</span>
+				<?php endif; ?>
 				<span class="lafka-social-proof__count">
 					<?php
 					if ( $provider ) {

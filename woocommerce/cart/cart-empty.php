@@ -23,13 +23,15 @@ defined( 'ABSPATH' ) || exit;
 // default; in our override we own the empty-state shell and let the action
 // fire AFTER (so the "Add a side?" upsell sits below the CTA, not above).
 
-$lafka_cart_empty_menu_url = function_exists( 'wc_get_page_permalink' )
-	? wc_get_page_permalink( 'shop' )
-	: home_url( '/menu/' );
-
-// Allow operator override of the canonical "browse" target — useful for
-// installs that route the menu via a custom page slug instead of the WC shop.
-$lafka_cart_empty_menu_url = (string) apply_filters( 'lafka_cart_empty_menu_url', home_url( '/menu/' ) );
+// Canonical browse target (f104): the /menu/ page, resolved via the shared
+// lafka_get_menu_url() helper so this CTA always tracks the header "Order now"
+// button and the JSON-LD Menu links. The dedicated `lafka_cart_empty_menu_url`
+// filter stays as a more-specific override for operators who want the empty-cart
+// CTA to differ from the global menu URL.
+$lafka_cart_empty_menu_url = (string) apply_filters(
+	'lafka_cart_empty_menu_url',
+	function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' )
+);
 ?>
 <section class="lafka-cart-empty" data-lafka-cart-empty>
 	<span class="lafka-cart-empty__emoji" aria-hidden="true">🛒</span>

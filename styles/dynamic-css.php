@@ -57,6 +57,12 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 	function lafka_dynamic_css_build() {
 		// Gather all theme options
 		$accent_color                    = esc_attr( lafka_get_option( 'accent_color' ) );
+		// f074: brand-ramp anchor. Default #f59e0b matches the shipped
+		// pepper-yellow in lafka-tokens.css so the out-of-box ramp is
+		// unchanged; operators who set a brand color drive the handoff
+		// `--lafka-color-brand-500` consumers (footer chrome, hero gradient,
+		// open-status dot, etc.) instead of that token being fixed in CSS.
+		$brand_color                     = esc_attr( lafka_get_option( 'brand_color', '#f59e0b' ) );
 		$logo_bg_color                   = esc_attr( lafka_get_option( 'logo_background_color' ) );
 		$links_color                     = esc_attr( lafka_get_option( 'links_color' ) );
 		$links_hover_color               = esc_attr( lafka_get_option( 'links_hover_color' ) );
@@ -206,6 +212,13 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// see the legacy surfaces change but the handoff pages stay
 		// on the shipped #dc2626 — colour drift across the site.
 		$custom_css .= '--lafka-color-accent-500:' . $accent_color . ';';
+		// f074: SSOT — bridge the Customizer brand_color into the handoff
+		// brand ramp anchor (--lafka-color-brand-500). Without this the brand
+		// ramp was fixed at the shipped pepper-yellow with no operator feed,
+		// so a rebrand never reached the brand-token consumers. The accent
+		// ramp is already mirrored above (v5.96.0); this gives the brand ramp
+		// the same operator hook.
+		$custom_css .= '--lafka-color-brand-500:' . $brand_color . ';';
 		$custom_css .= '--lafka-logo-bg-color:' . $logo_bg_color . ';';
 		$custom_css .= '--lafka-link-color:' . $links_color . ';';
 		$custom_css .= '--lafka-link-hover-color:' . $links_hover_color . ';';
