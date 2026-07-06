@@ -45,12 +45,12 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 			}
 
 			a, .editor-rich-text__tinymce a, .wp-block-freeform.block-library-rich-text__tinymce a, .block-editor-rich-text__editable a {
-				color: <?php echo esc_attr( lafka_get_option( 'links_color' ) ); ?>;
+				color: <?php echo esc_attr( get_theme_mod( 'lafka_links_color', '#dc2626' ) ); ?>;
 				text-decoration: none;
 			}
 			
 			.editor-post-title {
-				background-color: <?php echo esc_attr( lafka_get_option( 'page_title_bckgr_color' ) ); ?>;
+				background-color: <?php echo esc_attr( get_theme_mod( 'lafka_page_title_bckgr_color', '#f7f7f7' ) ); ?>;
 				margin-bottom: 60px;
 			}
 
@@ -134,7 +134,7 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 			$h6_css_style = $lafka_safe_style( $h6_font );
 			?>
 			h6, .editor-block-list__block-edit .wp-block-heading h6, .wp-block-freeform.block-library-rich-text__tinymce h6, .lafka-counter-h6, .lafka-typed-h6{color:<?php echo esc_attr( $h6_font['color'] ); ?>;font-size:<?php echo esc_attr( $h6_font['size'] ); ?>;<?php echo esc_attr( $h6_css_style ); ?>}
-			.edit-post-visual-editor .editor-post-title__block .editor-post-title__input {color: <?php echo esc_attr( lafka_get_option( 'page_title_color' ) ); ?> !important;}
+			.edit-post-visual-editor .editor-post-title__block .editor-post-title__input {color: <?php echo esc_attr( get_theme_mod( 'lafka_page_title_color', '#22272d' ) ); ?> !important;}
 		</style>
 		<?php
 		$custom_gutenberg_css = ob_get_clean();

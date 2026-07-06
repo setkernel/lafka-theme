@@ -119,6 +119,32 @@ namespace Lafka\Tests\Unit {
 			}
 		}
 
+		public function test_map_contains_dyncss_content_colors_keys(): void {
+			$map      = \lafka_legacy_migrate_map();
+			$expected = array(
+				'links_color'                        => 'lafka_links_color',
+				'links_hover_color'                  => 'lafka_links_hover_color',
+				'sidebar_titles_color'               => 'lafka_sidebar_titles_color',
+				'all_buttons_color'                  => 'lafka_all_buttons_color',
+				'all_buttons_hover_color'            => 'lafka_all_buttons_hover_color',
+				'new_label_color'                    => 'lafka_new_label_color',
+				'sale_label_color'                   => 'lafka_sale_label_color',
+				'page_title_color'                   => 'lafka_page_title_color',
+				'page_subtitle_color'                => 'lafka_page_subtitle_color',
+				'custom_page_title_color'            => 'lafka_custom_page_title_color',
+				'page_title_bckgr_color'             => 'lafka_page_title_bckgr_color',
+				'page_title_border_color'            => 'lafka_page_title_border_color',
+				'add_to_cart_color'                  => 'lafka_add_to_cart_color',
+				'price_color_in_listings'            => 'lafka_price_color_in_listings',
+				'price_background_color_in_listings' => 'lafka_price_background_color_in_listings',
+				'fancy_category_title_color'         => 'lafka_fancy_category_title_color',
+			);
+			foreach ( $expected as $legacy_key => $mod_key ) {
+				$this->assertArrayHasKey( $legacy_key, $map, "Migration map missing '{$legacy_key}'." );
+				$this->assertSame( $mod_key, $map[ $legacy_key ], "Migration map mis-homes '{$legacy_key}'." );
+			}
+		}
+
 		public function test_map_is_pure_and_prefixes_every_destination(): void {
 			// A pure data map: every destination is a namespaced lafka_ theme_mod
 			// so NX1-05 export (which only bundles lafka_* theme_mods) picks them up.

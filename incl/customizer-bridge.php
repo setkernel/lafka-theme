@@ -72,6 +72,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			self::register_header_colors_section( $wp_customize );
 			self::register_menu_colors_section( $wp_customize );
 			self::register_footer_colors_section( $wp_customize );
+			self::register_content_colors_section( $wp_customize );
+			self::register_page_title_colors_section( $wp_customize );
+			self::register_listing_colors_section( $wp_customize );
 			self::register_general_section( $wp_customize );
 		}
 
@@ -432,6 +435,214 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings_footer_colors',
 				__( 'Footer copyright bar text color', 'lafka' ),
 				'#aeaeae',
+				'',
+				'theme_mod'
+			);
+		}
+
+		// ====================================================================
+		// Section: Content colors  (NX1-02.dyncss-content-colors)
+		// ====================================================================
+
+		private static function register_content_colors_section( $wp_customize ): void {
+			$wp_customize->add_section(
+				'lafka_settings_content_colors',
+				array(
+					'title'       => esc_html__( 'Content Colors', 'lafka' ),
+					'description' => esc_html__( 'Links, sidebar widget titles, buttons, and the New / Sale product badges. These drive the content --lafka-* CSS custom properties.', 'lafka' ),
+					'panel'       => 'lafka_settings',
+					'priority'    => 27,
+				)
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_links_color',
+				'lafka_settings_content_colors',
+				__( 'Links color', 'lafka' ),
+				'#dc2626',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_links_hover_color',
+				'lafka_settings_content_colors',
+				__( 'Links hover color', 'lafka' ),
+				'#ce4f44',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_sidebar_titles_color',
+				'lafka_settings_content_colors',
+				__( 'Sidebar widget titles color', 'lafka' ),
+				'#333333',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_all_buttons_color',
+				'lafka_settings_content_colors',
+				__( 'Buttons color', 'lafka' ),
+				'#dc2626',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_all_buttons_hover_color',
+				'lafka_settings_content_colors',
+				__( 'Buttons hover color', 'lafka' ),
+				'#b91c1c',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_new_label_color',
+				'lafka_settings_content_colors',
+				__( 'New product label color', 'lafka' ),
+				'#047857',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_sale_label_color',
+				'lafka_settings_content_colors',
+				__( 'Sale product label color', 'lafka' ),
+				'#dc2626',
+				'',
+				'theme_mod'
+			);
+		}
+
+		// ====================================================================
+		// Section: Page title colors  (NX1-02.dyncss-content-colors)
+		// ====================================================================
+
+		private static function register_page_title_colors_section( $wp_customize ): void {
+			$wp_customize->add_section(
+				'lafka_settings_page_title_colors',
+				array(
+					'title'       => esc_html__( 'Page Title Colors', 'lafka' ),
+					'description' => esc_html__( 'Colors for the page-title bar: title, subtitle, and — when a title background image is set — the overlaid custom title, plus the bar background and border.', 'lafka' ),
+					'panel'       => 'lafka_settings',
+					'priority'    => 28,
+				)
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_page_title_color',
+				'lafka_settings_page_title_colors',
+				__( 'Page title color', 'lafka' ),
+				'#22272d',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_page_subtitle_color',
+				'lafka_settings_page_title_colors',
+				__( 'Page subtitle color', 'lafka' ),
+				'#5e5e5e',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_custom_page_title_color',
+				'lafka_settings_page_title_colors',
+				__( 'Custom title color (over background image)', 'lafka' ),
+				'#ffffff',
+				__( 'Used for the page title when the title bar has a background image.', 'lafka' ),
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_page_title_bckgr_color',
+				'lafka_settings_page_title_colors',
+				__( 'Page title bar background color', 'lafka' ),
+				'#f7f7f7',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_page_title_border_color',
+				'lafka_settings_page_title_colors',
+				__( 'Page title bar border color', 'lafka' ),
+				'#f0f0f0',
+				'',
+				'theme_mod'
+			);
+		}
+
+		// ====================================================================
+		// Section: Product listing colors  (NX1-02.dyncss-content-colors)
+		// ====================================================================
+
+		private static function register_listing_colors_section( $wp_customize ): void {
+			$wp_customize->add_section(
+				'lafka_settings_listing_colors',
+				array(
+					'title'       => esc_html__( 'Product Listing Colors', 'lafka' ),
+					'description' => esc_html__( 'Add-to-cart button, price tag, and fancy category title colors used across the product grid and menu listings.', 'lafka' ),
+					'panel'       => 'lafka_settings',
+					'priority'    => 29,
+				)
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_add_to_cart_color',
+				'lafka_settings_listing_colors',
+				__( 'Add to cart button color', 'lafka' ),
+				'#e4584b',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_price_color_in_listings',
+				'lafka_settings_listing_colors',
+				__( 'Listing price color', 'lafka' ),
+				'#feda5e',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_price_background_color_in_listings',
+				'lafka_settings_listing_colors',
+				__( 'Listing price background color', 'lafka' ),
+				'#4d2c21',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_fancy_category_title_color',
+				'lafka_settings_listing_colors',
+				__( 'Fancy category title color', 'lafka' ),
+				'#dd3333',
 				'',
 				'theme_mod'
 			);

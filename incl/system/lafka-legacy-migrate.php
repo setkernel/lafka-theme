@@ -85,6 +85,27 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'footer_links_color'                 => 'lafka_footer_links_color',
 			'footer_text_color'                  => 'lafka_footer_text_color',
 			'footer_copyright_bar_bckgr_color'   => 'lafka_footer_copyright_bar_bckgr_color',
+
+			// NX1-02.dyncss-content-colors — content color tokens
+			// (page-title / buttons / links / labels / product-listing) that
+			// dynamic-css.php (+ its gutenberg-editor twins) emit. Each carries
+			// the same Options-Framework `std` as its theme_mod default.
+			'links_color'                        => 'lafka_links_color',
+			'links_hover_color'                  => 'lafka_links_hover_color',
+			'sidebar_titles_color'               => 'lafka_sidebar_titles_color',
+			'all_buttons_color'                  => 'lafka_all_buttons_color',
+			'all_buttons_hover_color'            => 'lafka_all_buttons_hover_color',
+			'new_label_color'                    => 'lafka_new_label_color',
+			'sale_label_color'                   => 'lafka_sale_label_color',
+			'page_title_color'                   => 'lafka_page_title_color',
+			'page_subtitle_color'                => 'lafka_page_subtitle_color',
+			'custom_page_title_color'            => 'lafka_custom_page_title_color',
+			'page_title_bckgr_color'             => 'lafka_page_title_bckgr_color',
+			'page_title_border_color'            => 'lafka_page_title_border_color',
+			'add_to_cart_color'                  => 'lafka_add_to_cart_color',
+			'price_color_in_listings'            => 'lafka_price_color_in_listings',
+			'price_background_color_in_listings' => 'lafka_price_background_color_in_listings',
+			'fancy_category_title_color'         => 'lafka_fancy_category_title_color',
 		);
 	}
 }

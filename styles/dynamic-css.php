@@ -73,27 +73,33 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// open-status dot, etc.) instead of that token being fixed in CSS.
 		$brand_color                     = esc_attr( get_theme_mod( 'lafka_brand_color', '#f59e0b' ) );
 		$logo_bg_color                   = esc_attr( get_theme_mod( 'lafka_logo_background_color', '#fccc4c' ) );
-		$links_color                     = esc_attr( lafka_get_option( 'links_color' ) );
-		$links_hover_color               = esc_attr( lafka_get_option( 'links_hover_color' ) );
-		$sidebar_titles_color            = esc_attr( lafka_get_option( 'sidebar_titles_color' ) );
-		$all_buttons_color               = esc_attr( lafka_get_option( 'all_buttons_color' ) );
-		$all_buttons_hover_color         = esc_attr( lafka_get_option( 'all_buttons_hover_color' ) );
-		$new_label_color                 = esc_attr( lafka_get_option( 'new_label_color' ) );
-		$sale_label_color                = esc_attr( lafka_get_option( 'sale_label_color' ) );
-		$page_title_color                = esc_attr( lafka_get_option( 'page_title_color' ) );
-		$page_subtitle_color             = esc_attr( lafka_get_option( 'page_subtitle_color' ) );
-		$custom_page_title_color         = esc_attr( lafka_get_option( 'custom_page_title_color' ) );
+		// NX1-02.dyncss-content-colors: content color tokens (links, sidebar
+		// titles, all-buttons, new/sale labels, page title/subtitle) read from
+		// `lafka_<key>` theme_mods (migrated off the legacy `lafka` option).
+		// Inline defaults reproduce the Options-Framework `std` so fresh installs
+		// still render the shipped Peppery pixels.
+		$links_color                     = esc_attr( get_theme_mod( 'lafka_links_color', '#dc2626' ) );
+		$links_hover_color               = esc_attr( get_theme_mod( 'lafka_links_hover_color', '#ce4f44' ) );
+		$sidebar_titles_color            = esc_attr( get_theme_mod( 'lafka_sidebar_titles_color', '#333333' ) );
+		$all_buttons_color               = esc_attr( get_theme_mod( 'lafka_all_buttons_color', '#dc2626' ) );
+		$all_buttons_hover_color         = esc_attr( get_theme_mod( 'lafka_all_buttons_hover_color', '#b91c1c' ) );
+		$new_label_color                 = esc_attr( get_theme_mod( 'lafka_new_label_color', '#047857' ) );
+		$sale_label_color                = esc_attr( get_theme_mod( 'lafka_sale_label_color', '#dc2626' ) );
+		$page_title_color                = esc_attr( get_theme_mod( 'lafka_page_title_color', '#22272d' ) );
+		$page_subtitle_color             = esc_attr( get_theme_mod( 'lafka_page_subtitle_color', '#5e5e5e' ) );
+		$custom_page_title_color         = esc_attr( get_theme_mod( 'lafka_custom_page_title_color', '#ffffff' ) );
 		// NX1-02.dyncss-chrome-colors: header / top-bar / collapsible / footer
 		// color tokens read from `lafka_<key>` theme_mods (migrated off the
 		// legacy `lafka` option). Inline defaults reproduce the Options-Framework
 		// `std` so fresh installs still render the shipped Peppery pixels; the
 		// two unregistered fallbacks (header_top_bar_border_color,
 		// main_menu_links_bckgr_hover_color) keep their '' default so the ternary
-		// resolves to `transparent` when unset, exactly as before. Interleaved
-		// page-title / listing color keys stay on lafka_get_option (their slice).
+		// resolves to `transparent` when unset, exactly as before. The interleaved
+		// page-title background/border keys were migrated in
+		// NX1-02.dyncss-content-colors (below).
 		$transparent_dark_menu_color     = esc_attr( get_theme_mod( 'lafka_transparent_header_dark_menu_color', '#22272d' ) );
-		$page_title_bg_color             = esc_attr( lafka_get_option( 'page_title_bckgr_color' ) );
-		$page_title_border_color         = esc_attr( lafka_get_option( 'page_title_border_color' ) );
+		$page_title_bg_color             = esc_attr( get_theme_mod( 'lafka_page_title_bckgr_color', '#f7f7f7' ) );
+		$page_title_border_color         = esc_attr( get_theme_mod( 'lafka_page_title_border_color', '#f0f0f0' ) );
 		$header_top_bar_color            = esc_attr( get_theme_mod( 'lafka_header_top_bar_color', '#222222' ) );
 		$header_top_bar_border_raw       = get_theme_mod( 'lafka_header_top_bar_border_color', '' );
 		$header_top_bar_border_color     = $header_top_bar_border_raw ? esc_attr( $header_top_bar_border_raw ) : 'transparent';
@@ -113,10 +119,12 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		$footer_text_color               = esc_attr( get_theme_mod( 'lafka_footer_text_color', '#aeaeae' ) );
 		$footer_copyright_bg_raw         = get_theme_mod( 'lafka_footer_copyright_bar_bckgr_color', '#222222' );
 		$footer_copyright_bg_color       = $footer_copyright_bg_raw ? esc_attr( $footer_copyright_bg_raw ) : 'transparent';
-		$add_to_cart_color               = esc_attr( lafka_get_option( 'add_to_cart_color' ) );
-		$price_color                     = esc_attr( lafka_get_option( 'price_color_in_listings' ) );
-		$price_bg_color                  = esc_attr( lafka_get_option( 'price_background_color_in_listings' ) );
-		$fancy_category_title_color      = esc_attr( lafka_get_option( 'fancy_category_title_color' ) );
+		// NX1-02.dyncss-content-colors: product-listing color tokens (add-to-cart
+		// button, listing price fg/bg, fancy category title) read from theme_mods.
+		$add_to_cart_color               = esc_attr( get_theme_mod( 'lafka_add_to_cart_color', '#e4584b' ) );
+		$price_color                     = esc_attr( get_theme_mod( 'lafka_price_color_in_listings', '#feda5e' ) );
+		$price_bg_color                  = esc_attr( get_theme_mod( 'lafka_price_background_color_in_listings', '#4d2c21' ) );
+		$fancy_category_title_color      = esc_attr( get_theme_mod( 'lafka_fancy_category_title_color', '#dd3333' ) );
 
 		// Main menu (NX1-02.dyncss-chrome-colors: theme_mods; inline defaults
 		// reproduce the Options-Framework std. main_menu_links_bckgr_hover_color
