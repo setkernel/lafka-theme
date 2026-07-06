@@ -475,22 +475,16 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 		if ( $needs_editor || $needs_menus || $needs_options ) {
 			wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), true );
 
-			$new_orders_push_notifications = 'no';
-			if ( LAFKA_IS_WOOCOMMERCE && current_user_can( 'manage_woocommerce' ) && lafka_get_option( 'order_notifications' ) ) {
-				$new_orders_push_notifications = 'yes';
-			}
-			wp_enqueue_script( 'lafka-back', get_template_directory_uri() . '/js/lafka-back.js', array( 'jquery', 'jquery-ui-dialog', 'nice-select', 'wp-color-picker' ), lafka_asset_version( '/js/lafka-back.js' ), true );
+			// New-order notification poller moved to lafka-plugin (NX1-08b); the theme
+			// only ships the remaining admin helpers (colour pickers, metabox layout,
+			// menu-icon picker) here plus the options-import nonce.
+			wp_enqueue_script( 'lafka-back', get_template_directory_uri() . '/js/lafka-back.js', array( 'jquery', 'nice-select', 'wp-color-picker' ), lafka_asset_version( '/js/lafka-back.js' ), true );
 			wp_localize_script(
 				'lafka-back',
 				'lafka_back_js_params',
 				array(
-					'new_orders_push_notifications' => $new_orders_push_notifications,
-					'new_orders_push_notifications_allow_label' => esc_html__( 'Set Permission', 'lafka' ),
-					'new_orders_push_notifications_cancel_label' => esc_html__( 'Close', 'lafka' ),
-					'service_worker_path'           => get_template_directory_uri() . '/js/sw.js',
-					'nonce'                         => wp_create_nonce( 'lafka_ajax_nonce' ),
-					'import_nonce'                  => wp_create_nonce( 'lafka_import_nonce' ),
-					'admin_url'                     => admin_url( 'admin-ajax.php' ),
+					'import_nonce' => wp_create_nonce( 'lafka_import_nonce' ),
+					'admin_url'    => admin_url( 'admin-ajax.php' ),
 				)
 			);
 		}
