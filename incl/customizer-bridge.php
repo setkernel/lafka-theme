@@ -984,6 +984,10 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_product_columns_mobile'           => '1',
 				'lafka_product_list_buttons_visibility'  => 'lafka-visible-buttons',
 				'lafka_product_hover_onproduct'          => 'lafka-prodhover-zoom',
+				// NX1-02.plugin-owned-confirm — the WooCommerce sale-countdown
+				// toggle (legacy 'use_countdown' select; std 'enabled'). The only
+				// theme-owned key migrated in that otherwise plugin-owned slice.
+				'lafka_use_countdown'                    => 'enabled',
 				'lafka_category_columns_num'             => '3',
 				'lafka_shop_default_product_columns'     => 'columns-3',
 				'lafka_shopwide_video_bckgr'             => '0',

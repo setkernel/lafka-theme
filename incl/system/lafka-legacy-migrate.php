@@ -255,6 +255,22 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'events_sidebar'                  => 'lafka_events_sidebar',
 			'offcanvas_sidebar'               => 'lafka_offcanvas_sidebar',
 			'lafka_github_updates_enabled'    => 'lafka_github_updates_enabled',
+
+			// NX1-02.plugin-owned-confirm — the WooCommerce sale-countdown toggle
+			// is the SINGLE theme-owned key in an otherwise plugin-owned set; it
+			// migrates to a theme_mod (readers: incl/woocommerce-functions.php's
+			// product-list + single-product countdowns).
+			//
+			// NOT in this map (deliberately — invariant 1): the plugin-owned keys
+			// product_addons, google_maps_api_key, foodmenu_currency,
+			// foodmenu_currency_position, category_description_position,
+			// custom_product_popup_link, custom_product_popup_content and
+			// promo_tooltip_{1..3}_* stay in the `lafka` array (the plugin's flag /
+			// functional-shared storage) and are read via the lafka_get_option shim.
+			// Absent from the map, the copy never forks them into an exportable
+			// theme_mod. The theme's product_addons reads route through the plugin's
+			// is_lafka_product_addons() gate rather than a duplicated legacy read.
+			'use_countdown'                   => 'lafka_use_countdown',
 		);
 	}
 }

@@ -286,6 +286,69 @@ namespace Lafka\Tests\Unit {
 		}
 
 		/**
+		 * NX1-02.plugin-owned-confirm — the final slice migrates exactly ONE
+		 * theme-owned key (the WooCommerce sale-countdown toggle) and confirms the
+		 * remaining plugin-owned set stays in the `lafka` array (invariant 1): none
+		 * of those keys may appear in the map, or the copy would fork a plugin flag
+		 * into an exportable theme_mod and diverge from the plugin's flag storage.
+		 */
+		public function test_map_contains_use_countdown_and_excludes_plugin_owned_set(): void {
+			$map = \lafka_legacy_migrate_map();
+
+			// The lone theme-owned key in this slice migrates to a theme_mod.
+			$this->assertArrayHasKey( 'use_countdown', $map, "Migration map missing 'use_countdown'." );
+			$this->assertSame( 'lafka_use_countdown', $map['use_countdown'], "Migration map mis-homes 'use_countdown'." );
+
+			// The plugin-owned set is NEVER copied out of the `lafka` array.
+			$plugin_owned = array(
+				'product_addons',
+				'google_maps_api_key',
+				'foodmenu_currency',
+				'foodmenu_currency_position',
+				'category_description_position',
+				'custom_product_popup_link',
+				'custom_product_popup_content',
+				'promo_tooltip_1',
+				'promo_tooltip_2',
+				'promo_tooltip_3',
+			);
+			foreach ( $plugin_owned as $key ) {
+				$this->assertArrayNotHasKey( $key, $map, "Plugin-owned '{$key}' must stay in the `lafka` array, not migrate to a theme_mod." );
+			}
+		}
+
+		/**
+		 * The copy migrates use_countdown verbatim while leaving every plugin-owned
+		 * key untouched in the `lafka` array (never promoted to a theme_mod).
+		 */
+		public function test_copies_use_countdown_but_never_plugin_owned_keys(): void {
+			$GLOBALS['lafka_mig_options']['lafka'] = array(
+				'use_countdown'                 => 'disabled',
+				// Plugin-owned keys that share the array must survive untouched.
+				'product_addons'                => 'enabled',
+				'google_maps_api_key'           => 'SECRET-KEY',
+				'foodmenu_currency'             => '£',
+				'foodmenu_currency_position'    => 'right',
+				'category_description_position' => 'below',
+			);
+
+			$report = \lafka_legacy_migrate_run();
+
+			// The theme-owned toggle lands in its theme_mod home.
+			$this->assertSame( 'disabled', get_theme_mod( 'lafka_use_countdown' ) );
+			$this->assertSame( 'disabled', $report['lafka_use_countdown'] );
+
+			// No plugin-owned key ever becomes a theme_mod, and none is reported.
+			$this->assertFalse( get_theme_mod( 'lafka_product_addons' ) );
+			$this->assertFalse( get_theme_mod( 'lafka_google_maps_api_key' ) );
+			$this->assertFalse( get_theme_mod( 'lafka_foodmenu_currency' ) );
+			$this->assertFalse( get_theme_mod( 'lafka_foodmenu_currency_position' ) );
+			$this->assertFalse( get_theme_mod( 'lafka_category_description_position' ) );
+			$this->assertArrayNotHasKey( 'lafka_google_maps_api_key', $report );
+			$this->assertArrayNotHasKey( 'lafka_foodmenu_currency', $report );
+		}
+
+		/**
 		 * The composite typography + background arrays copy verbatim into their
 		 * theme_mods — the migration is value-type-agnostic, so the JSON-encoded
 		 * `style` sub-field and the background arrays keep their exact shape

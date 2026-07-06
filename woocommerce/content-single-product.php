@@ -68,7 +68,7 @@ if ( get_theme_mod( 'lafka_hide_product_price_on_zero', false ) && $product->get
 			?>
 			<?php
 			$lafka_has_product_addon = false;
-			if ( class_exists( 'WC_Product_Addons_Helper' ) && lafka_get_option( 'product_addons' ) === 'enabled' ) {
+			if ( class_exists( 'WC_Product_Addons_Helper' ) && function_exists( 'is_lafka_product_addons' ) && is_lafka_product_addons() ) {
 				$lafka_has_product_addon = count( WC_Product_Addons_Helper::get_product_addons( get_the_ID() ) );
 			}
 			?>

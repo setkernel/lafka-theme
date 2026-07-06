@@ -619,7 +619,7 @@ if ( ! function_exists( 'lafka_shop_sale_countdown' ) ) {
 		 */
 		global $post, $product;
 
-		if ( lafka_get_option( 'use_countdown', 'enabled' ) == 'enabled' && $product->is_on_sale() ) {
+		if ( get_theme_mod( 'lafka_use_countdown', 'enabled' ) === 'enabled' && $product->is_on_sale() ) {
 			$sales_dates = lafka_get_product_sales_dates( $post );
 			$now         = time();
 			if ( $sales_dates['to'] && $now < $sales_dates['to'] ) {
@@ -646,7 +646,7 @@ if ( ! function_exists( 'lafka_product_sale_countdown' ) ) {
 	function lafka_product_sale_countdown() {
 		global $post, $product;
 
-		if ( lafka_get_option( 'use_countdown', 'enabled' ) == 'enabled' && $product->is_on_sale() ) {
+		if ( get_theme_mod( 'lafka_use_countdown', 'enabled' ) === 'enabled' && $product->is_on_sale() ) {
 			$sales_dates = lafka_get_product_sales_dates( $post );
 			$now         = time();
 
