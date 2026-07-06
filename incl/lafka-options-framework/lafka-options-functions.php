@@ -1,20 +1,17 @@
 <?php
-
-/*
- * This is an example of how to add custom scripts to the options panel.
- * This one shows/hides the an option when a checkbox is clicked.
+/**
+ * Surviving Options-Framework font helpers (NX1-02 theme 7.0).
+ *
+ * The Options Framework admin panel is retired, but its Google-font list helper
+ * lives on: lafka_typography_get_google_fonts() is read by the front-end
+ * Google-font enqueuer (incl/system/core-functions.php) to decide which chosen
+ * families are Google-hosted. The panel-only font-preview enqueue and the dead
+ * `additional_stylesheet` skin loader were pruned with the panel.
+ *
+ * @package Lafka
  */
 
-add_action('lafka_optionsframework_custom_scripts', 'lafka_optionsframework_custom_scripts');
-
-function lafka_optionsframework_custom_scripts() {
-
-	wp_enqueue_script('lafka-of-fonts-preview', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-of-fonts-preview.js', array('jquery'), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-of-fonts-preview.js' ), true);
-	wp_localize_script('lafka-of-fonts-preview', 'lafka_font_prev_params', array(
-			'fonts' => esc_js(json_encode(lafka_typography_get_os_fonts())),
-			'google_subset' => esc_js(lafka_get_google_subsets())
-	));
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Returns an array of system fonts
@@ -282,16 +279,16 @@ function lafka_typography_get_google_fonts() {
 	if ( $google_faces_transient == 'use_default' ) {
 		$google_faces_to_return = $google_faces_default;
 
-		// include the currently chosen heading font
-		$headings_font = lafka_get_option( 'headings_font', array(
+		// include the currently chosen heading font (NX1-02: migrated theme_mod)
+		$headings_font = get_theme_mod( 'lafka_headings_font', array(
 			'face' => 'Rubik'
 		));
 		if ( ! array_key_exists( $headings_font['face'], $google_faces_to_return ) ) {
 			$google_faces_to_return[ $headings_font['face'] ] = $headings_font['face'];
 		}
 
-		// include the currently chosen body font
-		$body_font = lafka_get_option( 'body_font', array(
+		// include the currently chosen body font (NX1-02: migrated theme_mod)
+		$body_font = get_theme_mod( 'lafka_body_font', array(
 			'face' => 'Open Sans'
 		) );
 		if ( ! array_key_exists( $body_font['face'], $google_faces_to_return ) ) {
@@ -316,15 +313,3 @@ function lafka_is_string_valid_json($string) {
 
 	return (json_last_error() === JSON_ERROR_NONE);
 }
-
-/*
- * Load the additional stylesheet, defined as skin
- */
-
-function lafka_options_stylesheets_alt_style() {
-	if (lafka_get_option('additional_stylesheet') != 'default') {
-		wp_enqueue_style('lafka_stylesheets_alt_style', lafka_get_option('additional_stylesheet'), array(), null);
-	}
-}
-
-add_action('wp_enqueue_scripts', 'lafka_options_stylesheets_alt_style');

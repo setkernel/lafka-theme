@@ -2354,16 +2354,51 @@ if ( ! function_exists( 'lafka_generate_excerpt' ) ) {
 if ( ! function_exists( 'lafka_get_option' ) ) {
 
 	/**
-	 * Get Option.
+	 * Get Option — DEPRECATED one-cycle back-compat shim (NX1-02, theme 7.0).
 	 *
-	 * Fallback: only fires if lafka-plugin is not active. Plugin's class-lafka-options.php
-	 * definition supersedes this when both load.
+	 * The theme's legacy Options Framework is retired. Every FIRST-PARTY theme
+	 * reader of a migrated appearance key was re-pointed at its
+	 * `get_theme_mod( 'lafka_<key>', <default> )` home by the NX1-02 slices
+	 * (enforced by tests/Unit/LegacyOptionShimScanTest.php). This shim survives
+	 * only so third-party / child-theme code still calling the legacy helper for
+	 * a MAPPED key keeps resolving the value from its new theme_mod home for one
+	 * major cycle, with a WP_DEBUG deprecation notice pointing at the new API.
 	 *
-	 * Delegates to Lafka_Options when the plugin provides it, falling back to
-	 * a local implementation for standalone theme use.
+	 * Resolution order:
+	 *   1. Mapped appearance key  -> get_theme_mod( <mod_key>, $default ) (+ notice).
+	 *   2. Unmapped / plugin-owned key -> the shared Lafka_Options helper (plugin
+	 *      canonical) when active, else the raw `lafka` array, else the slim
+	 *      plugin-owned defaults (lafka_get_default_values()). This path is
+	 *      unchanged and never touches plugin code — it delegates to the plugin's
+	 *      own public accessor exactly as before.
+	 *
+	 * Fallback: this theme definition only fires standalone (plugin inactive);
+	 * the plugin defines lafka_get_option() first, so its function_exists() guard
+	 * supersedes this whenever both load.
 	 */
 	function lafka_get_option( $name, $default = false ) {
-		// If the shared helper is available (loaded by the plugin), use it.
+		// 1. Mapped appearance key: its home is now a `lafka_<key>` theme_mod.
+		$lafka_option_map = function_exists( 'lafka_legacy_migrate_map' ) ? lafka_legacy_migrate_map() : array();
+		if ( isset( $lafka_option_map[ $name ] ) ) {
+			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && function_exists( '_doing_it_wrong' ) ) {
+				_doing_it_wrong(
+					__FUNCTION__,
+					esc_html(
+						sprintf(
+							/* translators: 1: legacy option key, 2: replacement theme_mod key. */
+							__( 'The "%1$s" theme setting moved to the Customizer theme_mod "%2$s". Read it with get_theme_mod() — lafka_get_option() for this key is deprecated and will be removed in a future major version.', 'lafka' ),
+							$name,
+							$lafka_option_map[ $name ]
+						)
+					),
+					'7.0.0'
+				);
+			}
+			return get_theme_mod( $lafka_option_map[ $name ], $default );
+		}
+
+		// 2. Unmapped / plugin-owned key. If the shared helper is available
+		// (loaded by the plugin), use it.
 		if ( class_exists( 'Lafka_Options' ) ) {
 			return Lafka_Options::get( $name, $default ?: null );
 		}

@@ -24,16 +24,36 @@
  *    it is the plugin's flag storage (module registry, order_notifications,
  *    functional-shared secrets). Only the theme's appearance keys are copied
  *    out; plugin-owned keys are absent from the map (invariant 1).
- *  - It does not register the one-time upgrade trigger. Wiring the run onto an
- *    upgrade hook is the NX1-02 Retire phase's job; this file only provides the
- *    map + copy so a slice's readers have a migrated home to read from, and so
- *    the copy is unit-covered (LegacyOptionMigrationTest) ahead of that wiring.
+ *  - It does not delete or rewrite the `lafka` array (see above).
+ *
+ * ONE-TIME UPGRADE TRIGGER (NX1-02 Retire phase)
+ * ----------------------------------------------
+ *  - `lafka_legacy_migrate_maybe_run()` runs the copy exactly ONCE per install,
+ *    gated by the `lafka_legacy_migration_version` option flag (NOT the theme
+ *    version — an operator can re-save the theme version without re-migrating,
+ *    and a theme downgrade/upgrade cycle must not re-copy stale legacy data over
+ *    an operator's newer Customizer edits). It writes a summary to the
+ *    `lafka_legacy_migration_log` option for supportability, and is hooked on
+ *    `after_setup_theme` so an upgraded install migrates on its first request
+ *    (front-end or admin) before dynamic-css / templates read the new homes. The
+ *    copy writes to the ACTIVE stylesheet's theme_mods (child on prod, parent on
+ *    wp-env), because set_theme_mod() is active-theme aware (Hazard 1).
  *
  * @package Lafka
  * @since   6.22.0 (NX1-02.logos-brand-pilot)
  */
 
 defined( 'ABSPATH' ) || exit;
+
+/**
+ * Migration schema version. Bump ONLY when a new slice appends map pairs that an
+ * already-migrated install must pick up on its next load. Bumping re-runs the
+ * (idempotent, non-clobbering) copy so newly-mapped keys land while every
+ * previously-copied / operator-edited theme_mod is left untouched.
+ */
+if ( ! defined( 'LAFKA_LEGACY_MIGRATION_VERSION' ) ) {
+	define( 'LAFKA_LEGACY_MIGRATION_VERSION', 1 );
+}
 
 if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 	/**
@@ -311,4 +331,54 @@ if ( ! function_exists( 'lafka_legacy_migrate_run' ) ) {
 
 		return $report;
 	}
+}
+
+if ( ! function_exists( 'lafka_legacy_migrate_maybe_run' ) ) {
+	/**
+	 * Run the legacy → theme_mod copy exactly once per install (per schema bump).
+	 *
+	 * Gated by the `lafka_legacy_migration_version` option so the copy fires at
+	 * most once per LAFKA_LEGACY_MIGRATION_VERSION: on a fresh install the flag is
+	 * written immediately (with an empty report — nothing to copy), so this is a
+	 * single cheap get_option() on every subsequent request. On an upgraded
+	 * install the copy runs, then the flag is stamped and a summary logged.
+	 *
+	 * @return array<string,mixed>|null Report of copied theme_mods, or null when
+	 *                                  this version already migrated (no-op).
+	 */
+	function lafka_legacy_migrate_maybe_run() {
+		$done = (int) get_option( 'lafka_legacy_migration_version', 0 );
+		if ( $done >= LAFKA_LEGACY_MIGRATION_VERSION ) {
+			return null;
+		}
+
+		$report = lafka_legacy_migrate_run();
+
+		// Stamp the flag FIRST so a fatal in the logging below can never cause a
+		// re-copy (the copy itself is idempotent, but the invariant is one run).
+		update_option( 'lafka_legacy_migration_version', LAFKA_LEGACY_MIGRATION_VERSION, false );
+
+		// Supportability: record what this run did without storing the values
+		// (they already live in the theme_mods) — just the audit trail.
+		update_option(
+			'lafka_legacy_migration_log',
+			array(
+				'migration_version' => LAFKA_LEGACY_MIGRATION_VERSION,
+				'ran_at_gmt'        => function_exists( 'current_time' ) ? current_time( 'mysql', true ) : gmdate( 'Y-m-d H:i:s' ),
+				'stylesheet'        => function_exists( 'get_stylesheet' ) ? get_stylesheet() : '',
+				'copied_count'      => count( $report ),
+				'copied_theme_mods' => array_keys( $report ),
+			),
+			false
+		);
+
+		return $report;
+	}
+}
+
+// Run the one-time upgrade copy on the first request after an upgrade. Guarded so
+// the file can be required by unit tests (which stub get_option/set_theme_mod but
+// not add_action) without side effects at include time.
+if ( function_exists( 'add_action' ) ) {
+	add_action( 'after_setup_theme', 'lafka_legacy_migrate_maybe_run', 99 );
 }

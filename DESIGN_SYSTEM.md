@@ -236,3 +236,25 @@ Tokens are the contract; these are the key files that consume them.
 Open `DESIGN_SYSTEM.md` and `styles/lafka-tokens.css` in the same PR.
 Add the WCAG ratio for any new color pair in the table above. If you
 can't justify the change in one sentence on the PR, the change is wrong.
+
+### Where theme settings live (config SSOT)
+
+As of theme 7.0 the legacy **Options Framework** (`incl/lafka-options-framework/`,
+the single `wp_options['lafka']` array read via `lafka_get_option()`) is retired.
+Every appearance/behaviour setting the theme owns is now a **Customizer
+`theme_mod`**, namespaced `lafka_<key>`, and `styles/dynamic-css.php` emits its
+`--lafka-*` tokens from those `theme_mods` (with the shipped default inline at
+each reader, so a fresh install renders the pixel-perfect defaults). To add or
+change a setting:
+
+- Register the control in `incl/customizer-bridge.php` (or a sibling
+  `incl/customizer-*.php` panel) writing a `theme_mod` named `lafka_<key>`, and
+  read it with `get_theme_mod( 'lafka_<key>', <default> )` — never re-introduce a
+  `lafka_get_option()` read for a theme setting (it is a deprecated back-compat
+  shim; `tests/Unit/LegacyOptionShimScanTest.php` fails the build if you do).
+- If the setting must survive an upgrade from the old panel, add its legacy key →
+  `lafka_<key>` pair to `lafka_legacy_migrate_map()` in
+  `incl/system/lafka-legacy-migrate.php` and bump `LAFKA_LEGACY_MIGRATION_VERSION`.
+- The `wp_options['lafka']` array still exists but is now **plugin-owned** storage
+  (feature-module flags + functional-shared keys); the theme never writes it. Its
+  plugin-owned defaults live in `incl/system/lafka-option-defaults.php`.

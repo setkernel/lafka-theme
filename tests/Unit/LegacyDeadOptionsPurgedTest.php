@@ -1,28 +1,22 @@
 <?php
 /**
- * LegacyDeadOptionsPurgedTest — NX1-02.dead-purge regression guard.
+ * LegacyDeadOptionsPurgedTest — NX1-02 framework-retirement regression guard.
  *
- * The legacy Options Framework registered 48 field keys that no live reader
- * anywhere in the theme, plugin, or child consumes (verified by exact
- * lafka_get_option() and broad bare-key greps during the NX1-02 inventory).
- * The dead-purge slice deletes their registrations from
- * incl/lafka-options-framework/lafka-options.php and removes the sole (never
- * included) reader of the 11 *_profile keys, partials/social-profiles.php.
+ * The NX1-02.dead-purge slice removed 48 unread legacy field registrations plus
+ * the orphaned partials/social-profiles.php. The final NX1-02 retire phase then
+ * deleted the entire Options-Framework admin panel — its field registry
+ * (lafka-options.php, where those dead keys lived), the interface/sanitize
+ * layers, and the Settings-API save/validate handler that was the "saving the
+ * panel rebuilds the whole `lafka` array" hazard.
  *
- * This source-grep guard locks that deletion: it fails if any dead key is
- * re-registered or the orphaned partial reappears. It is intentionally
- * source-based (no WP runtime) — the framework registry function needs the
- * full admin scaffolding to execute, so a byte-level assertion on the file is
- * both cheaper and a truer regression fence.
- *
- * Note on exact matching: several dead keys are prefixes of LIVE keys
- * (top_bar_message vs top_bar_message_color/_phone; number_related_posts vs
- * number_related_products; video_bckgr_* vs video_bckgr_url). The regex anchors
- * on the id-registration pattern WITH the closing quote so a dead key can never
- * match its surviving sibling's registration.
+ * This source-level guard locks that retirement: the registry file can never
+ * re-register a dead key because the file itself is gone, the rebuild-hazard
+ * register_setting() call is gone, and the orphaned social partial stays
+ * deleted. The two genuinely-used helpers (the Google-font list + the media
+ * library uploader) must SURVIVE, so their absence would also fail here.
  *
  * @package Lafka\Tests\Unit
- * @since   lafka-theme 6.21.0 (NX1-02 dead-purge)
+ * @since   lafka-theme 6.21.0 (NX1-02 dead-purge); 7.0.0 (framework retirement)
  */
 
 declare(strict_types=1);
@@ -34,91 +28,96 @@ use PHPUnit\Framework\Attributes\DataProvider;
 
 final class LegacyDeadOptionsPurgedTest extends TestCase {
 
-	private function options_src(): string {
-		$path = dirname( __DIR__, 2 ) . '/incl/lafka-options-framework/lafka-options.php';
-		$src  = file_get_contents( $path );
-		$this->assertNotFalse( $src, 'Could not read lafka-options.php' );
-		return (string) $src;
+	private function theme_root(): string {
+		return dirname( __DIR__, 2 );
 	}
 
-	#[DataProvider('deadKeysProvider')]
-	public function test_dead_key_has_no_field_registration( string $key ): void {
-		$src = $this->options_src();
-		$this->assertDoesNotMatchRegularExpression(
-			"/'id'\\s*=>\\s*'" . preg_quote( $key, '/' ) . "'/",
-			$src,
-			"Dead legacy option '{$key}' must not be registered in the Options Framework "
-				. '(NX1-02.dead-purge removed it — see tests/Unit/LegacyDeadOptionsPurgedTest.php).'
+	/**
+	 * @return array<string, array{0:string}>
+	 */
+	public static function retiredFileProvider(): array {
+		$files = array(
+			// The field registry (where the 48 dead keys lived) — deleting it
+			// makes re-registering any of them impossible by construction.
+			'incl/lafka-options-framework/lafka-options.php',
+			// The admin panel: menu page, enqueue, tabs/fields renderer.
+			'incl/lafka-options-framework/lafka-options-framework.php',
+			'incl/lafka-options-framework/lafka-options-interface.php',
+			// The Settings-API sanitize layer used only by the panel/validate.
+			'incl/lafka-options-framework/lafka-options-sanitize.php',
+			// The v6.1 menu-hide/redirect shim, redundant once the menu is gone.
+			'incl/customizer-bridge-deprecate-theme-options.php',
+			// The orphaned (never-included) reader of the dead *_profile keys.
+			'partials/social-profiles.php',
 		);
+		$provider = array();
+		foreach ( $files as $file ) {
+			$provider[ $file ] = array( $file );
+		}
+		return $provider;
 	}
 
-	public function test_orphaned_social_profiles_partial_is_deleted(): void {
+	#[DataProvider('retiredFileProvider')]
+	public function test_retired_framework_file_is_deleted( string $relative ): void {
 		$this->assertFileDoesNotExist(
-			dirname( __DIR__, 2 ) . '/partials/social-profiles.php',
-			'partials/social-profiles.php was the sole (never-included) reader of the dead '
-				. '*_profile keys and must stay deleted.'
+			$this->theme_root() . '/' . $relative,
+			"NX1-02 retired '{$relative}' — it must stay deleted."
 		);
 	}
 
 	/**
 	 * @return array<string, array{0:string}>
 	 */
-	public static function deadKeysProvider(): array {
-		$keys = array(
-			'transparent_header_menu_color',
-			'transparent_header_menu_hover_color',
-			'transparent_header_dark_menu_hover_color',
-			'enable_pre_header',
-			'top_bar_message',
-			'top_bar_message_phone_link',
-			'copyright_text',
-			'show_logo_in_footer',
-			'footer_logo',
-			'footer_sidebar',
-			'video_bckgr_start',
-			'video_bckgr_end',
-			'video_bckgr_loop',
-			'video_bckgr_mute',
-			'shop_video_bckgr_start',
-			'shop_video_bckgr_end',
-			'shop_video_bckgr_loop',
-			'shop_video_bckgr_mute',
-			'blog_video_bckgr_start',
-			'blog_video_bckgr_end',
-			'blog_video_bckgr_loop',
-			'blog_video_bckgr_mute',
-			'show_related_posts',
-			'owl_carousel',
-			'number_related_posts',
-			'events_subtitle',
-			'events_title_background_imgid',
-			'events_title_alignment',
-			'social_in_footer',
-			'facebook_profile',
-			'twitter_profile',
-			'youtube_profile',
-			'vimeo_profile',
-			'dribbble_profile',
-			'linkedin_profile',
-			'flicker_profile',
-			'instegram_profile',
-			'pinterest_profile',
-			'vkontakte_profile',
-			'behance_profile',
-			'import_lafka0',
-			'import_lafka1',
-			'import_lafka2',
-			'import_lafka3',
-			'import_lafka4',
-			'import_lafka5',
-			'import_lafka6',
-			'additional_stylesheet',
+	public static function survivingHelperProvider(): array {
+		$files = array(
+			// Google-font list helper — read by the front-end font enqueuer.
+			'incl/lafka-options-framework/lafka-options-functions.php',
+			// Media Library uploader — used by the mega-menu editor.
+			'incl/lafka-options-framework/lafka-options-medialibrary-uploader.php',
+			// The slim successor to the registry defaults (plugin-owned keys).
+			'incl/system/lafka-option-defaults.php',
 		);
-
 		$provider = array();
-		foreach ( $keys as $key ) {
-			$provider[ $key ] = array( $key );
+		foreach ( $files as $file ) {
+			$provider[ $file ] = array( $file );
 		}
 		return $provider;
+	}
+
+	#[DataProvider('survivingHelperProvider')]
+	public function test_surviving_helper_file_still_exists( string $relative ): void {
+		$this->assertFileExists(
+			$this->theme_root() . '/' . $relative,
+			"'{$relative}' is still consumed by live code and must survive the retirement."
+		);
+	}
+
+	public function test_settings_api_rebuild_hazard_is_gone(): void {
+		// The "saving the panel rebuilds the whole `lafka` array from registered
+		// fields, clobbering plugin-written keys" hazard lived in the framework's
+		// register_setting( 'lafka-optionsframework', 'lafka', ... ) validate call.
+		// No theme source may register it any more.
+		$hits = array();
+		$it   = new \RecursiveIteratorIterator(
+			new \RecursiveDirectoryIterator( $this->theme_root(), \FilesystemIterator::SKIP_DOTS )
+		);
+		foreach ( $it as $file ) {
+			if ( 'php' !== strtolower( $file->getExtension() ) ) {
+				continue;
+			}
+			$path = $file->getPathname();
+			if ( str_contains( $path, '/tests/' ) || str_contains( $path, '/vendor/' ) ) {
+				continue;
+			}
+			$src = (string) file_get_contents( $path );
+			if ( preg_match( "/register_setting\(\s*'lafka-optionsframework'/", $src ) ) {
+				$hits[] = $path;
+			}
+		}
+		$this->assertSame(
+			array(),
+			$hits,
+			"The Options-Framework register_setting() rebuild hazard is still present in: \n" . implode( "\n", $hits )
+		);
 	}
 }

@@ -72,6 +72,17 @@ as its template and place your overrides and `functions.php` snippets there so
 they survive theme updates. Simple appearance tweaks can be made without a child
 theme through **Appearance -> Customize**.
 
+= Where did the "Theme Options" panel go? =
+
+The legacy "Appearance -> Theme Options" admin panel has been retired. All theme
+appearance settings now live in the WordPress **Customizer** (Appearance ->
+Customize), which shows a live preview. When you update to this version, any
+settings you had saved in the old panel are copied to their Customizer homes
+automatically, once, on the first page load — your storefront looks identical
+before and after. Feature toggles that belong to the companion plugin (product
+addons, delivery zones, order hours, the kitchen display) now live on the
+plugin's own Modules screen.
+
 = Does it work with WooCommerce? =
 
 Yes — the theme is built around WooCommerce. WooCommerce 9.5 or newer is

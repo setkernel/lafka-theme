@@ -29,14 +29,6 @@ require_once get_template_directory() . '/incl/system/asset-min.php';
 require_once get_template_directory() . '/incl/customizer-bridge.php';
 
 /*
- * v6.1.0: Retire the legacy Theme Options admin menu. The framework's
- * storage + helpers stay loaded (lafka_get_option still reads from
- * wp_options.lafka), but the operator-visible entry point is removed
- * and direct URL hits redirect to Customizer.
- */
-require_once get_template_directory() . '/incl/customizer-bridge-deprecate-theme-options.php';
-
-/*
  * v6.2.0: Lafka Maintenance Tools page. Replaces the maintenance UI
  * that lived inside the legacy Theme Options panel (notably the
  * GitHub release cache flush button). Lives at Tools → Lafka
@@ -55,14 +47,24 @@ if ( is_admin() ) {
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 /*
- * Loads the Options Panel
+ * NX1-02 (theme 7.0): the legacy Options Framework admin panel is RETIRED — the
+ * "Appearance -> Theme Options" menu, its Settings-API save/validate rebuild
+ * hazard, and the field registry are gone. Two genuinely-used helpers survive
+ * and are loaded here, plus the slim plugin-owned option defaults:
+ *   - incl/system/lafka-option-defaults.php -> lafka_get_default_values(), the
+ *     slim successor to the registry defaults (plugin-owned flags + shared keys).
+ *   - lafka-options-functions.php -> lafka_typography_get_google_fonts(), read
+ *     by the front-end Google-font enqueuer (incl/system/core-functions.php).
+ *   - lafka-options-medialibrary-uploader.php -> lafka_medialibrary_uploader(),
+ *     the admin media picker the mega-menu editor (incl/LafkaMegaMenu.php) uses.
  */
-if ( ! function_exists( 'lafka_optionsframework_init' ) ) {
+if ( ! defined( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY' ) ) {
 	define( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/incl/lafka-options-framework/' );
-	// framework
-	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-framework.php';
-	// custom functions
-	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-functions.php';
+}
+require_once get_template_directory() . '/incl/system/lafka-option-defaults.php';
+require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-functions.php';
+if ( is_admin() ) {
+	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-medialibrary-uploader.php';
 }
 
 /* Load configuration */

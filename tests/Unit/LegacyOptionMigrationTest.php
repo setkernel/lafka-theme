@@ -51,6 +51,23 @@ namespace {
 			$GLOBALS['lafka_mig_mods'][ $name ] = $value;
 		}
 	}
+	// Shims used by the one-time upgrade trigger (lafka_legacy_migrate_maybe_run).
+	if ( ! function_exists( 'update_option' ) ) {
+		function update_option( $name, $value, $autoload = null ) {
+			$GLOBALS['lafka_mig_options'][ $name ] = $value;
+			return true;
+		}
+	}
+	if ( ! function_exists( 'current_time' ) ) {
+		function current_time( $type, $gmt = 0 ) {
+			return '2026-07-06 00:00:00';
+		}
+	}
+	if ( ! function_exists( 'get_stylesheet' ) ) {
+		function get_stylesheet() {
+			return 'lafka';
+		}
+	}
 
 	require_once dirname( __DIR__, 2 ) . '/incl/system/lafka-legacy-migrate.php';
 }
@@ -470,6 +487,98 @@ namespace Lafka\Tests\Unit {
 			// Fresh install: the `lafka` option does not exist yet.
 			$report = \lafka_legacy_migrate_run();
 			$this->assertSame( array(), $report );
+		}
+
+		/**
+		 * UPGRADE SIMULATION (NX1-02 Retire phase): an existing install whose
+		 * operator customised the theme via the legacy panel is upgraded. The
+		 * one-time trigger copies EVERY mapped legacy value into its theme_mod
+		 * home, leaves the plugin-owned keys untouched in the `lafka` array,
+		 * stamps the migration flag, logs a summary, and is a no-op on re-run.
+		 *
+		 * The legacy array is reconstructed from the committed dynamic-css parity
+		 * fixture VALUES (reverse-mapped to their bare legacy key names), so this
+		 * exercises the real appearance keys — including the composite typography
+		 * and background arrays — with the exact values the byte-parity gate uses.
+		 */
+		public function test_upgrade_run_copies_every_mapped_key_and_leaves_plugin_keys(): void {
+			$map     = \lafka_legacy_migrate_map();
+			$reverse = array_flip( $map );
+
+			$fixture = require dirname( __DIR__ ) . '/fixtures/dynamic-css-fixture.php';
+
+			// Reverse-map the fixture's `lafka_<key>` entries to bare legacy keys.
+			$legacy = array();
+			foreach ( $fixture as $mod_key => $value ) {
+				if ( isset( $reverse[ $mod_key ] ) ) {
+					$legacy[ $reverse[ $mod_key ] ] = $value;
+				}
+			}
+			$this->assertNotEmpty( $legacy, 'Fixture failed to reverse-map onto legacy keys.' );
+
+			// Plugin-owned keys that share the array and MUST survive untouched.
+			$legacy['product_addons']      = 'enabled';
+			$legacy['google_maps_api_key'] = 'SECRET-KEY';
+			$legacy['foodmenu_currency']   = '£';
+
+			$GLOBALS['lafka_mig_options']['lafka'] = $legacy;
+
+			$report = \lafka_legacy_migrate_maybe_run();
+			$this->assertIsArray( $report, 'First upgrade run must copy and report.' );
+
+			// Every mapped legacy value landed verbatim in its theme_mod home.
+			foreach ( $legacy as $legacy_key => $value ) {
+				if ( ! isset( $map[ $legacy_key ] ) ) {
+					continue;
+				}
+				$this->assertSame(
+					$value,
+					get_theme_mod( $map[ $legacy_key ] ),
+					"Upgrade copy lost/mangled '{$legacy_key}'."
+				);
+				$this->assertArrayHasKey( $map[ $legacy_key ], $report );
+			}
+
+			// Plugin-owned keys were never promoted to a theme_mod...
+			$this->assertFalse( get_theme_mod( 'lafka_product_addons' ) );
+			$this->assertFalse( get_theme_mod( 'lafka_google_maps_api_key' ) );
+			$this->assertFalse( get_theme_mod( 'lafka_foodmenu_currency' ) );
+			// ...and remain byte-intact in the `lafka` array (invariant 1).
+			$this->assertSame( 'enabled', $GLOBALS['lafka_mig_options']['lafka']['product_addons'] );
+			$this->assertSame( 'SECRET-KEY', $GLOBALS['lafka_mig_options']['lafka']['google_maps_api_key'] );
+			$this->assertSame( '£', $GLOBALS['lafka_mig_options']['lafka']['foodmenu_currency'] );
+
+			// The flag is stamped and a supportability summary is logged.
+			$this->assertSame( \LAFKA_LEGACY_MIGRATION_VERSION, (int) get_option( 'lafka_legacy_migration_version' ) );
+			$log = get_option( 'lafka_legacy_migration_log' );
+			$this->assertIsArray( $log );
+			$this->assertSame( \LAFKA_LEGACY_MIGRATION_VERSION, $log['migration_version'] );
+			$this->assertSame( count( $report ), $log['copied_count'] );
+			$this->assertSame( array_keys( $report ), $log['copied_theme_mods'] );
+		}
+
+		public function test_upgrade_run_is_a_no_op_on_second_pass(): void {
+			$GLOBALS['lafka_mig_options']['lafka'] = array( 'accent_color' => '#0a58f3' );
+
+			$first = \lafka_legacy_migrate_maybe_run();
+			$this->assertIsArray( $first );
+			$this->assertSame( '#0a58f3', get_theme_mod( 'lafka_accent_color' ) );
+
+			// Even if a NEW legacy value appears, the stamped flag blocks re-copy.
+			$GLOBALS['lafka_mig_options']['lafka']['accent_color'] = '#000000';
+			$second = \lafka_legacy_migrate_maybe_run();
+			$this->assertNull( $second, 'A second maybe_run at the same schema version must be a no-op.' );
+			$this->assertSame( '#0a58f3', get_theme_mod( 'lafka_accent_color' ), 'Migrated theme_mod must not be re-copied.' );
+		}
+
+		public function test_fresh_install_stamps_flag_without_copying(): void {
+			// No `lafka` array at all: the trigger still stamps the flag so it
+			// never re-runs, and logs a zero-copy summary.
+			$report = \lafka_legacy_migrate_maybe_run();
+			$this->assertSame( array(), $report );
+			$this->assertSame( \LAFKA_LEGACY_MIGRATION_VERSION, (int) get_option( 'lafka_legacy_migration_version' ) );
+			$log = get_option( 'lafka_legacy_migration_log' );
+			$this->assertSame( 0, $log['copied_count'] );
 		}
 	}
 }
