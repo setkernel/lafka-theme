@@ -39,7 +39,7 @@ $event_id = get_the_ID();
 		<?php endif; ?>
 	</div>
 
-	<?php if ( lafka_get_option( 'event_use_countdown' ) && tribe_get_start_date( $event_id, true, 'U' ) > time() ) : ?>
+	<?php if ( get_theme_mod( 'lafka_event_use_countdown', true ) && tribe_get_start_date( $event_id, true, 'U' ) > time() ) : ?>
 		<?php
 		$lafka_random_num          = uniqid();
 		$lafka_countdown_inline_js = "jQuery(function () { jQuery('#lafka_start_event_countdown" . esc_js( $event_id . $lafka_random_num ) . "').countdown({until: new Date(\"" . esc_js( date( 'F j, Y G:i:s', tribe_get_start_date( $event_id, true, 'U' ) ) ) . "\"), compact: false, layout: '<span class=\"countdown_time_small\">{dn} {dl} {hn}:{mnn}:{snn}</span>'});});";

@@ -265,13 +265,13 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 						<div class="foodmenu-unit lafka-none-overlay <?php echo esc_attr( implode( ' ', $lafka_terms_arr ) ); ?>">
 							<div class="foodmenu-unit-holder">
 
-								<?php if ( ! lafka_get_option( 'hide_foodmenu_images' ) ) : ?>
+								<?php if ( ! get_theme_mod( 'lafka_hide_foodmenu_images', false ) ) : ?>
 									<?php if ( has_post_thumbnail( $lafka_foodmenu->ID ) ) : ?>
-										<?php if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) : ?>
+										<?php if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) : ?>
 											<a title="<?php esc_attr_e( 'View more', 'lafka' ); ?>" href="<?php echo esc_url( get_the_permalink( $lafka_foodmenu->ID ) ); ?>" class="lafka-foodmenu-image-link">
 										<?php endif; ?>
 											<?php echo get_the_post_thumbnail( $lafka_foodmenu->ID, $lafka_thumb_size ); ?>
-										<?php if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) : ?>
+										<?php if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) : ?>
 											</a>
 										<?php endif; ?>
 									<?php else : ?>
@@ -282,12 +282,12 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 								<div class="foodmenu-unit-info">
 									<a 
 									<?php
-									if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) :
+									if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) :
 										?>
 										title="<?php esc_attr_e( 'View more', 'lafka' ); ?>" <?php endif; ?>
 										href="
 										<?php
-										if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) {
+										if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) {
 											echo esc_url( get_the_permalink( $lafka_foodmenu->ID ) );
 										} else {
 											echo '#';}
@@ -322,7 +322,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 											</ul>
 										<?php endif; ?>
 									</a>
-									<?php if ( $lafka_featured_image_src && lafka_get_option( 'show_light_menu_entries' ) ) : ?>
+									<?php if ( $lafka_featured_image_src && get_theme_mod( 'lafka_show_light_menu_entries', true ) ) : ?>
 										<a class="foodmenu-lightbox-link" href="<?php echo esc_url( $lafka_featured_image_src ); ?>"><span></span></a>
 									<?php endif; ?>
 								</div>

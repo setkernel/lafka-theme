@@ -9,7 +9,7 @@
 
 // Show or not the author avatar
 $lafka_show_author_avatar = false;
-if ( ( lafka_get_option( 'show_author_avatar' ) ) || ( is_singular() && ! lafka_get_option( 'show_author_info' ) && lafka_get_option( 'show_author_avatar' ) ) ) {
+if ( ( get_theme_mod( 'lafka_show_author_avatar', true ) ) || ( is_singular() && ! get_theme_mod( 'lafka_show_author_info', true ) && get_theme_mod( 'lafka_show_author_avatar', true ) ) ) {
 	$lafka_show_author_avatar = true;
 }
 ?>

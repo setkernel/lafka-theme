@@ -108,7 +108,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'lafka' ); ?></a>
 
-	<?php if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'show_preloader' ) ) : ?>
+	<?php if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_show_preloader', true ) ) : ?>
 		<div class="mask" aria-hidden="true">
 			<div id="spinner">
 				<div class="double-bounce1"></div>
@@ -117,7 +117,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 		</div>
 	<?php endif; ?>
 
-	<?php if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'add_to_cart_sound' ) ) : ?>
+	<?php if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_add_to_cart_sound', true ) ) : ?>
 		<?php // preload="none" — 352 KB wav stays uncached until add-to-cart fires. ?>
 		<audio id="cart_add_sound" controls preload="none" hidden>
 			<source src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cart_add.wav' ); ?>" type="audio/wav">
@@ -206,7 +206,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 
 			<div class="lafka-header__actions">
 
-				<?php if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'show_searchform' ) ) : ?>
+				<?php if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_show_searchform', true ) ) : ?>
 					<a class="lafka-header__icon-btn lafka-header__search" href="#search" aria-label="<?php esc_attr_e( 'Search', 'lafka' ); ?>" data-lafka-search-toggle>
 						<i class="fa fa-search" aria-hidden="true"></i>
 					</a>

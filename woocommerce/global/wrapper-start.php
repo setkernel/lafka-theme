@@ -18,13 +18,13 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 global $wp_query;
-$woocommerce_sidebar = lafka_get_option( 'woocommerce_sidebar' );
+$woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
 
 $show_sidebar_class = '';
 
-if ( lafka_get_option( 'show_sidebar_shop' ) && $woocommerce_sidebar && $woocommerce_sidebar != 'none' && ! is_product() ) {
+if ( get_theme_mod( 'lafka_show_sidebar_shop', false ) && $woocommerce_sidebar && $woocommerce_sidebar != 'none' && ! is_product() ) {
 	$show_sidebar_class = 'has-sidebar';
-} elseif ( lafka_get_option( 'show_sidebar_product' ) && $woocommerce_sidebar && $woocommerce_sidebar != 'none' && is_product() ) {
+} elseif ( get_theme_mod( 'lafka_show_sidebar_product', false ) && $woocommerce_sidebar && $woocommerce_sidebar != 'none' && is_product() ) {
 	$show_sidebar_class = 'has-sidebar';
 }
 
@@ -46,8 +46,8 @@ if ( $lafka_has_offcanvas_sidebar ) {
 }
 
 // get Shop subtitle
-$shop_subtitle          = lafka_get_option( 'shop_subtitle' );
-$title_background_image = lafka_get_option( 'shop_title_background_imgid' );
+$shop_subtitle          = get_theme_mod( 'lafka_shop_subtitle', '' );
+$title_background_image = get_theme_mod( 'lafka_shop_title_background_imgid', '' );
 
 if ( $title_background_image ) {
 	$img                    = wp_get_attachment_image_src( $title_background_image, 'full' );
@@ -79,7 +79,7 @@ if ( is_product_category() || is_product_tag() ) {
 
 	<?php if ( ! is_product() ) : // For single product don't show title div ?>
 		<?php if ( is_shop() ) : // For SHOP page ?>
-			<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( lafka_get_option( 'shop_title_alignment' ) ); ?>
+			<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( get_theme_mod( 'lafka_shop_title_alignment', 'centered_title' ) ); ?>
 			<?php
 			if ( $title_background_image ) :
 				?>
@@ -104,7 +104,7 @@ if ( is_product_category() || is_product_tag() ) {
 				<div class="inner fixed">
 					<div class="lafka-title-text-container">
 						<!-- BREADCRUMB -->
-						<?php if ( lafka_get_option( 'show_breadcrumb' ) ) : ?>
+						<?php if ( get_theme_mod( 'lafka_show_breadcrumb', true ) ) : ?>
 							<?php woocommerce_breadcrumb(); ?>
 						<?php endif; ?>
 						<!-- END OF BREADCRUMB -->

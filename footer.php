@@ -213,7 +213,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 	// Header search overlay — opened by the [data-lafka-search-toggle] icon in
 	// header.php. Native <dialog>: showModal() handles Escape + focus trapping;
 	// the close button is a method="dialog" form. (Audit 2026-06-27 #3.)
-	if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'show_searchform' ) ) :
+	if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_show_searchform', true ) ) :
 		?>
 		<dialog id="lafka-search-dialog" class="lafka-search-dialog" aria-label="<?php esc_attr_e( 'Search', 'lafka' ); ?>">
 			<div class="lafka-search-dialog__panel">

@@ -32,7 +32,7 @@ if ( $total <= 1 ) {
 ?>
 <div class="box box-common lafka-shop-pager
 <?php
-if ( lafka_get_option( 'enable_shop_infinite' ) ) {
+if ( get_theme_mod( 'lafka_enable_shop_infinite', true ) ) {
 	echo ' lafka-infinite';}
 ?>
 ">
@@ -42,7 +42,7 @@ if ( lafka_get_option( 'enable_shop_infinite' ) ) {
 		<p class="infinite-scroll-last"><?php esc_html_e( 'No more items available', 'lafka' ); ?></p>
 	</div>
 
-	<?php if ( lafka_get_option( 'enable_shop_infinite' ) && lafka_get_option( 'use_load_more_on_shop' ) ) : ?>
+	<?php if ( get_theme_mod( 'lafka_enable_shop_infinite', true ) && get_theme_mod( 'lafka_use_load_more_on_shop', false ) ) : ?>
 		<div class="lafka-load-more-container">
 			<button class="lafka-load-more button"><?php esc_html_e( 'Load More', 'lafka' ); ?></button>
 		</div>

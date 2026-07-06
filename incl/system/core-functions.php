@@ -220,7 +220,7 @@ if ( ! function_exists( 'lafka_register_sidebars' ) ) {
 			}
 
 			// Register the custom sidbars
-			$lafka_custom_sdbrs = substr( lafka_get_option( 'sidebar_ids' ), 0, -1 );
+			$lafka_custom_sdbrs = substr( get_theme_mod( 'lafka_sidebar_ids', '' ), 0, -1 );
 
 			if ( $lafka_custom_sdbrs ) {
 				$sdbrsArr = explode( ';', $lafka_custom_sdbrs );
@@ -1106,7 +1106,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// v6.13.0: header search overlay — only when the search icon is shown
 		// (Customizer "show_searchform"). Wires the otherwise-dead header
 		// trigger to a native <dialog>. (Audit 2026-06-27 #3.)
-		if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'show_searchform' ) ) {
+		if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_show_searchform', true ) ) {
 			wp_enqueue_style( 'lafka-search', get_template_directory_uri() . '/styles/lafka-search.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-search.css' ) );
 			wp_enqueue_script( 'lafka-search', get_template_directory_uri() . '/js/lafka-search.js', array(), lafka_asset_version( '/js/lafka-search.js' ), true );
 		}
@@ -1744,7 +1744,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		}
 
 		// Preloader style
-		if ( lafka_get_option( 'show_preloader' ) ) {
+		if ( get_theme_mod( 'lafka_show_preloader', true ) ) {
 			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
 		}
 
@@ -1766,7 +1766,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		}
 
 		// Load the responsive stylesheet if enabled
-		if ( lafka_get_option( 'is_responsive' ) ) {
+		if ( get_theme_mod( 'lafka_is_responsive', true ) ) {
 			wp_enqueue_style( 'lafka-responsive', get_template_directory_uri() . '/styles/lafka-responsive.css', array( 'lafka-style' ), lafka_asset_version( '/styles/lafka-responsive.css' ) );
 		}
 
@@ -1817,7 +1817,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// check so they no-op safely when the lib is absent.
 
 		/* loading jquery-ui-slider only for price filter */
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'show_pricefilter' ) && is_woocommerce() && ! is_product() ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_show_pricefilter', true ) && is_woocommerce() && ! is_product() ) {
 			wp_enqueue_script( 'jquery-ui-slider' );
 		}
 
@@ -1829,32 +1829,32 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		}
 
 		$enable_ajax_add_to_cart = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'ajax_to_cart_single' ) ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_ajax_to_cart_single', true ) ) {
 			$enable_ajax_add_to_cart = 'yes';
 		}
 
 		$enable_infinite_on_shop = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'enable_shop_infinite' ) ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_enable_shop_infinite', true ) ) {
 			$enable_infinite_on_shop = 'yes';
 		}
 
 		$use_load_more_on_shop = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'use_load_more_on_shop' ) ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_use_load_more_on_shop', false ) ) {
 			$use_load_more_on_shop = 'yes';
 		}
 
 		$use_product_filter_ajax = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'use_product_filter_ajax' ) ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_use_product_filter_ajax', true ) ) {
 			$use_product_filter_ajax = 'yes';
 		}
 
 		$categories_fancy = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'categories_fancy' ) ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_categories_fancy', false ) ) {
 			$categories_fancy = 'yes';
 		}
 
 		$shopping_cart_on_add = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'shopping_cart_on_add' ) ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_shopping_cart_on_add', true ) ) {
 			$shopping_cart_on_add = 'yes';
 		}
 
@@ -1899,9 +1899,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
 				'product_label'           => esc_js( __( 'Product', 'lafka' ) ),
 				'added_to_cart_label'     => esc_js( __( 'was added to the cart', 'lafka' ) ),
-				'show_preloader'          => esc_js( lafka_get_option( 'show_preloader' ) ),
-				'sticky_header'           => esc_js( lafka_get_option( 'sticky_header' ) ),
-				'enable_smooth_scroll'    => esc_js( lafka_get_option( 'enable_smooth_scroll' ) ),
+				'show_preloader'          => esc_js( get_theme_mod( 'lafka_show_preloader', true ) ),
+				'sticky_header'           => esc_js( get_theme_mod( 'lafka_sticky_header', true ) ),
+				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
 				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
 				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),
 				'cart_redirect_after_add' => $cart_redirect_after_add,
@@ -1994,7 +1994,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// register Isotope
 		wp_register_script( 'isotope', get_template_directory_uri() . '/js/isotope/dist/isotope.pkgd.min.js', array( 'jquery', 'imagesloaded' ), lafka_asset_version( '/js/isotope/dist/isotope.pkgd.min.js' ), true );
-		if ( is_post_type_archive( 'lafka-foodmenu' ) || is_tax( 'lafka_foodmenu_category' ) || ( lafka_get_option( 'general_blog_style' ) === 'lafka_blog_masonry' && ( is_archive() || is_category() || lafka_is_blog() ) ) ) {
+		if ( is_post_type_archive( 'lafka-foodmenu' ) || is_tax( 'lafka_foodmenu_category' ) || ( get_theme_mod( 'lafka_general_blog_style', '' ) === 'lafka_blog_masonry' && ( is_archive() || is_category() || lafka_is_blog() ) ) ) {
 			// load Isotope
 			wp_enqueue_script( 'isotope' );
 		}
@@ -2068,7 +2068,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			)
 		);
 
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'use_quickview' ) ) {
+		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_use_quickview', true ) ) {
 			wp_localize_script(
 				'lafka-libs-config',
 				'lafka_quickview',
@@ -2083,8 +2083,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		$search_options = lafka_get_option( 'search_options' );
-		if ( lafka_get_option( 'show_searchform' ) && $search_options['use_ajax'] ) {
+		$search_options = get_theme_mod(
+			'lafka_search_options',
+			array(
+				'use_ajax'      => '1',
+				'only_products' => '1',
+			)
+		);
+		if ( get_theme_mod( 'lafka_show_searchform', true ) && $search_options['use_ajax'] ) {
 			wp_localize_script(
 				'lafka-libs-config',
 				'lafka_ajax_search',
@@ -2403,16 +2409,16 @@ if ( ! function_exists( 'lafka_has_to_include_backgr_video' ) ) {
 		if ( lafka_has_post_video_bckgr() ) {
 			return 'postmeta';
 			// If is blog page and video background is set
-		} elseif ( lafka_is_blog() && lafka_get_option( 'show_blog_video_bckgr' ) && lafka_get_option( 'blog_video_bckgr_url' ) ) {
+		} elseif ( lafka_is_blog() && get_theme_mod( 'lafka_show_blog_video_bckgr', false ) && get_theme_mod( 'lafka_blog_video_bckgr_url', '' ) ) {
 			return 'blog';
 			// If is shopwide
-		} elseif ( ! $is_compare && LAFKA_IS_WOOCOMMERCE && is_woocommerce() && lafka_get_option( 'show_shop_video_bckgr' ) && lafka_get_option( 'shopwide_video_bckgr' ) && lafka_get_option( 'shop_video_bckgr_url' ) ) {
+		} elseif ( ! $is_compare && LAFKA_IS_WOOCOMMERCE && is_woocommerce() && get_theme_mod( 'lafka_show_shop_video_bckgr', false ) && get_theme_mod( 'lafka_shopwide_video_bckgr', '0' ) && get_theme_mod( 'lafka_shop_video_bckgr_url', '' ) ) {
 			return 'shopwide';
 			// If is shop page and video background is set
-		} elseif ( ! $is_compare && LAFKA_IS_WOOCOMMERCE && is_shop() && lafka_get_option( 'show_shop_video_bckgr' ) && lafka_get_option( 'shop_video_bckgr_url' ) ) {
+		} elseif ( ! $is_compare && LAFKA_IS_WOOCOMMERCE && is_shop() && get_theme_mod( 'lafka_show_shop_video_bckgr', false ) && get_theme_mod( 'lafka_shop_video_bckgr_url', '' ) ) {
 			return 'shop';
 			// If Global video background is set
-		} elseif ( ! $is_compare && lafka_get_option( 'show_video_bckgr' ) && lafka_get_option( 'video_bckgr_url' ) ) {
+		} elseif ( ! $is_compare && get_theme_mod( 'lafka_show_video_bckgr', false ) && get_theme_mod( 'lafka_video_bckgr_url', '' ) ) {
 			return 'global';
 		}
 
@@ -2465,19 +2471,19 @@ if ( ! function_exists( 'lafka_set_menu_on_primary' ) ) {
 	function lafka_set_menu_on_primary( $args ) {
 		if ( $args['theme_location'] === 'primary' ) {
 			if ( lafka_is_blog() ) {
-				return lafka_set_menu_on_primary_helper( $args, lafka_get_option( 'blog_top_menu' ) );
+				return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_blog_top_menu', 'default' ) );
 			}
 			if ( LAFKA_IS_WOOCOMMERCE && is_shop() ) {
-				return lafka_set_menu_on_primary_helper( $args, lafka_get_option( 'shop_top_menu' ) );
+				return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_shop_top_menu', 'default' ) );
 			}
 			if ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() ) {
-				return lafka_set_menu_on_primary_helper( $args, lafka_get_option( 'forum_top_menu' ) );
+				return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_forum_top_menu', 'default' ) );
 			}
 			if ( LAFKA_IS_EVENTS ) {
 				$mode_and_title = lafka_get_current_events_display_mode_and_title();
 				$events_mode    = $mode_and_title['display_mode'];
 				if ( in_array( $events_mode, array( 'MAIN_CALENDAR', 'CALENDAR_CATEGORY', 'MAIN_EVENTS', 'CATEGORY_EVENTS', 'SINGLE_EVENT_DAYS' ), true ) ) {
-					return lafka_set_menu_on_primary_helper( $args, lafka_get_option( 'events_top_menu' ) );
+					return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_events_top_menu', 'default' ) );
 				}
 			}
 
@@ -2512,6 +2518,30 @@ if ( ! function_exists( 'lafka_set_menu_on_primary_helper' ) ) {
 	}
 
 }
+if ( ! function_exists( 'lafka_registered_sidebar_default' ) ) {
+
+	/**
+	 * Resolve the default sidebar for a section, mirroring the retired Options
+	 * Framework's dynamic `std` for the WooCommerce / bbPress / Events sidebar
+	 * selects (NX1-02.layout-behaviour-toggles).
+	 *
+	 * The framework defaulted those selects to a preferred sidebar id when that
+	 * sidebar was actually registered, else to 'none'. Reproducing that at the
+	 * `get_theme_mod()` read default keeps a fresh install byte-identical while
+	 * still degrading to 'none' on installs where the preferred sidebar is
+	 * absent (e.g. WooCommerce inactive).
+	 *
+	 * @param string $preferred Preferred registered-sidebar id (shop / lafka_forum / right_sidebar).
+	 * @return string The preferred id when registered, otherwise 'none'.
+	 */
+	function lafka_registered_sidebar_default( $preferred ) {
+		global $wp_registered_sidebars;
+		return ( is_array( $wp_registered_sidebars ) && array_key_exists( $preferred, $wp_registered_sidebars ) )
+			? $preferred
+			: 'none';
+	}
+}
+
 /*
  * Check for sidebar
  */
@@ -2527,19 +2557,19 @@ if ( ! function_exists( 'lafka_check_for_sidebar' ) ) {
 			$is_cat_tag_tax_archive = true;
 		}
 
-		$blog_categoty_sidebar     = lafka_get_option( 'blog_categoty_sidebar' );
-		$foodmenu_categoty_sidebar = lafka_get_option( 'foodmenu_categoty_sidebar' );
+		$blog_categoty_sidebar     = get_theme_mod( 'lafka_blog_categoty_sidebar', 'right_sidebar' );
+		$foodmenu_categoty_sidebar = get_theme_mod( 'lafka_foodmenu_categoty_sidebar', 'none' );
 
 		if ( LAFKA_IS_WOOCOMMERCE ) {
-			$woocommerce_sidebar = lafka_get_option( 'woocommerce_sidebar' );
+			$woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
 		}
 
 		if ( LAFKA_IS_BBPRESS ) {
-			$bbpress_sidebar = lafka_get_option( 'bbpress_sidebar' );
+			$bbpress_sidebar = get_theme_mod( 'lafka_bbpress_sidebar', lafka_registered_sidebar_default( 'lafka_forum' ) );
 		}
 
 		if ( LAFKA_IS_EVENTS ) {
-			$events_sidebar = lafka_get_option( 'events_sidebar' );
+			$events_sidebar = get_theme_mod( 'lafka_events_sidebar', lafka_registered_sidebar_default( 'right_sidebar' ) );
 		}
 
 		if ( is_single() || is_page() ) {
@@ -2594,7 +2624,7 @@ if ( ! function_exists( 'lafka_check_for_offcanvas_sidebar' ) ) {
 			return 'none';
 		}
 
-		$offcanvas_sidebar_choice = lafka_get_option( 'offcanvas_sidebar' );
+		$offcanvas_sidebar_choice = get_theme_mod( 'lafka_offcanvas_sidebar', 'none' );
 		if ( isset( $meta_options['lafka_custom_offcanvas_sidebar'] ) && $meta_options['lafka_custom_offcanvas_sidebar'][0] !== 'default' ) {
 			$offcanvas_sidebar_choice = $meta_options['lafka_custom_offcanvas_sidebar'][0];
 		}
@@ -2618,19 +2648,19 @@ if ( ! function_exists( 'lafka_check_for_sidebar_position' ) ) {
 			$meta_options = get_post_custom( get_queried_object_id() );
 		}
 
-		$sidebar_position = lafka_get_option( 'sidebar_position' );
+		$sidebar_position = get_theme_mod( 'lafka_sidebar_position', 'lafka-right-sidebar' );
 		if ( isset( $meta_options['lafka_sidebar_position'] ) && $meta_options['lafka_sidebar_position'][0] !== 'default' ) {
 			$sidebar_position = $meta_options['lafka_sidebar_position'][0];
 		}
 
 		if ( defined( 'LAFKA_IS_WOOCOMMERCE' ) && LAFKA_IS_WOOCOMMERCE && is_woocommerce() ) {
-			if ( ! is_product() && lafka_get_option( 'shop_sidebar_position' ) !== 'default' ) {
-				$sidebar_position = lafka_get_option( 'shop_sidebar_position' );
-			} elseif ( is_product() && lafka_get_option( 'product_sidebar_position' ) !== 'default' ) {
-				$sidebar_position = lafka_get_option( 'product_sidebar_position' );
+			if ( ! is_product() && get_theme_mod( 'lafka_shop_sidebar_position', 'default' ) !== 'default' ) {
+				$sidebar_position = get_theme_mod( 'lafka_shop_sidebar_position', 'default' );
+			} elseif ( is_product() && get_theme_mod( 'lafka_product_sidebar_position', 'default' ) !== 'default' ) {
+				$sidebar_position = get_theme_mod( 'lafka_product_sidebar_position', 'default' );
 			}
-		} elseif ( lafka_get_option( 'blog_sidebar_position' ) !== 'default' && ( is_category() || is_tag() || is_author() || is_date() || is_search() || is_home() ) ) {
-			$sidebar_position = lafka_get_option( 'blog_sidebar_position' );
+		} elseif ( get_theme_mod( 'lafka_blog_sidebar_position', 'default' ) !== 'default' && ( is_category() || is_tag() || is_author() || is_date() || is_search() || is_home() ) ) {
+			$sidebar_position = get_theme_mod( 'lafka_blog_sidebar_position', 'default' );
 		}
 
 		return $sidebar_position;
@@ -2692,8 +2722,8 @@ if ( ! function_exists( 'lafka_get_current_events_display_mode_and_title' ) ) {
 		// If Event calendar is active follow the procedure to display the title
 		if ( function_exists( 'tribe_is_month' ) ) {
 			if ( tribe_is_month() && ! is_tax( '', $id ) ) { // The Main Calendar Page
-				if ( lafka_get_option( 'events_title' ) ) {
-					$title = lafka_get_option( 'events_title' );
+				if ( get_theme_mod( 'lafka_events_title', '' ) ) {
+					$title = get_theme_mod( 'lafka_events_title', '' );
 				} else {
 					$title = esc_html__( 'The Main Calendar', 'lafka' );
 				}
@@ -2702,8 +2732,8 @@ if ( ! function_exists( 'lafka_get_current_events_display_mode_and_title' ) ) {
 				$title = esc_html__( 'Calendar Category', 'lafka' ) . ': ' . tribe_meta_event_category_name();
 				$mode  = 'CALENDAR_CATEGORY';
 			} elseif ( tribe_is_event( $id ) && ! tribe_is_day() && ! is_singular() && ! is_tax( '', $id ) ) { // The Main Events List
-				if ( lafka_get_option( 'events_title' ) ) {
-					$title = lafka_get_option( 'events_title' );
+				if ( get_theme_mod( 'lafka_events_title', '' ) ) {
+					$title = get_theme_mod( 'lafka_events_title', '' );
 				} else {
 					$title = esc_html__( 'Events List', 'lafka' );
 				}

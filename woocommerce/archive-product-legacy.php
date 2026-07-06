@@ -58,7 +58,7 @@ do_action( 'woocommerce_shop_loop_header' );
 		 * @hooked woocommerce_catalog_ordering - 30
 		 */
 
-		if ( ! lafka_get_option( 'show_refine_area' ) ) {
+		if ( ! get_theme_mod( 'lafka_show_refine_area', true ) ) {
 			remove_action( 'woocommerce_before_shop_loop', 'woocommerce_catalog_ordering', 30 );
 		}
 		do_action( 'woocommerce_before_shop_loop' );
