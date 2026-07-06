@@ -39,7 +39,7 @@ $lafka_404_path = strtok( $lafka_404_path, '?' );
 		</p>
 
 		<div class="lafka-404__actions">
-			<a class="lafka-404__cta lafka-404__cta--primary" href="<?php echo esc_url( function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' ) ); ?>">
+			<a class="lafka-404__cta lafka-404__cta--primary" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 				<?php esc_html_e( 'Browse the menu', 'lafka' ); ?>
 				<span class="lafka-404__arrow" aria-hidden="true">→</span>
 			</a>

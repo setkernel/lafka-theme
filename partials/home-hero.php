@@ -54,7 +54,7 @@ $lafka_hero_lead = (string) get_theme_mod(
 );
 
 $lafka_hero_cta_primary_label = (string) get_theme_mod( 'lafka_home_hero_primary_cta_label', __( 'Start your order', 'lafka' ) );
-$lafka_hero_cta_primary_url   = (string) get_theme_mod( 'lafka_home_hero_primary_cta_url', function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' ) );
+$lafka_hero_cta_primary_url   = (string) get_theme_mod( 'lafka_home_hero_primary_cta_url', lafka_theme_menu_url() );
 
 $lafka_hero_image_id  = (int) get_theme_mod( 'lafka_home_hero_image_id', 0 );
 $lafka_hero_image_src = $lafka_hero_image_id ? wp_get_attachment_image_url( $lafka_hero_image_id, 'large' ) : '';

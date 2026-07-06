@@ -106,7 +106,7 @@ $lafka_visit_logo_id = function_exists( 'lafka_get_option' ) ? lafka_get_option(
 							<?php esc_html_e( 'Get directions', 'lafka' ); ?>
 						</a>
 					<?php endif; ?>
-					<a class="lafka-visit__cta lafka-visit__cta--ghost" href="<?php echo esc_url( function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' ) ); ?>">
+					<a class="lafka-visit__cta lafka-visit__cta--ghost" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 						<?php esc_html_e( 'Order online', 'lafka' ); ?>
 					</a>
 				</div>

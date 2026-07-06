@@ -30,7 +30,7 @@ defined( 'ABSPATH' ) || exit;
 // CTA to differ from the global menu URL.
 $lafka_cart_empty_menu_url = (string) apply_filters(
 	'lafka_cart_empty_menu_url',
-	function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' )
+	lafka_theme_menu_url()
 );
 ?>
 <section class="lafka-cart-empty" data-lafka-cart-empty>

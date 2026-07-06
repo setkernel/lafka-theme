@@ -130,6 +130,14 @@ require_once get_template_directory() . '/incl/mobile-nav-loader.php';
 // Strip country code from address_display for local-restaurant display (v5.63.0).
 require_once get_template_directory() . '/incl/template-helpers/address-filters.php';
 
+// Canonical menu-URL resolver — single guard point for lafka_get_menu_url()
+// across every theme CTA (audit #97). v6.19.0.
+require_once get_template_directory() . '/incl/template-helpers/menu-url.php';
+
+// Public "Reach us" email resolver — host-only fallback, never leaks a port
+// (audit V4). v6.19.0.
+require_once get_template_directory() . '/incl/template-helpers/contact-email.php';
+
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
 require_once get_template_directory() . '/incl/contact-template-loader.php';
 
