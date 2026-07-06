@@ -1217,7 +1217,7 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		if ( ! empty( $use_google_face_for_body['buttons'] ) ) {
 			$classes[] = 'lafka-headings-for-buttons';
 		}
-		if ( lafka_get_option( 'footer_copyright_bar_text_color' ) === '#ffffff' ) {
+		if ( get_theme_mod( 'lafka_footer_copyright_bar_text_color', '#aeaeae' ) === '#ffffff' ) {
 			$classes[] = 'lafka-light-copyright';
 		}
 		if ( ! empty( $header_backgr_body['image'] ) ) {

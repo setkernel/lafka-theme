@@ -54,6 +54,37 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'mobile_theme_logo'       => 'lafka_mobile_theme_logo',
 			'disable_logo_point_down' => 'lafka_disable_logo_point_down',
 			'theme_logo'              => 'lafka_theme_logo',
+
+			// NX1-02.dyncss-chrome-colors — header / top-bar / collapsible /
+			// main-menu / footer color tokens (dynamic-css.php's largest single
+			// color block). `header_top_bar_border_color` and
+			// `main_menu_links_bckgr_hover_color` were never registered
+			// Options-Framework fields (no UI ever wrote them), so their entries
+			// here are copy no-ops on any real install — kept for a complete
+			// record of the slice's migrated readers.
+			'header_top_bar_color'               => 'lafka_header_top_bar_color',
+			'header_top_bar_border_color'        => 'lafka_header_top_bar_border_color',
+			'top_bar_message_color'              => 'lafka_top_bar_message_color',
+			'header_services_color'              => 'lafka_header_services_color',
+			'top_bar_menu_links_color'           => 'lafka_top_bar_menu_links_color',
+			'top_bar_menu_links_hover_color'     => 'lafka_top_bar_menu_links_hover_color',
+			'transparent_header_dark_menu_color' => 'lafka_transparent_header_dark_menu_color',
+			'collapsible_bckgr_color'            => 'lafka_collapsible_bckgr_color',
+			'collapsible_titles_color'           => 'lafka_collapsible_titles_color',
+			'collapsible_titles_border_color'    => 'lafka_collapsible_titles_border_color',
+			'collapsible_links_color'            => 'lafka_collapsible_links_color',
+			'main_menu_background_color'         => 'lafka_main_menu_background_color',
+			'main_menu_links_color'              => 'lafka_main_menu_links_color',
+			'main_menu_links_hover_color'        => 'lafka_main_menu_links_hover_color',
+			'main_menu_links_bckgr_hover_color'  => 'lafka_main_menu_links_bckgr_hover_color',
+			'main_menu_icons_color'              => 'lafka_main_menu_icons_color',
+			'footer_titles_color'                => 'lafka_footer_titles_color',
+			'footer_title_border_color'          => 'lafka_footer_title_border_color',
+			'footer_copyright_bar_text_color'    => 'lafka_footer_copyright_bar_text_color',
+			'footer_menu_links_color'            => 'lafka_footer_menu_links_color',
+			'footer_links_color'                 => 'lafka_footer_links_color',
+			'footer_text_color'                  => 'lafka_footer_text_color',
+			'footer_copyright_bar_bckgr_color'   => 'lafka_footer_copyright_bar_bckgr_color',
 		);
 	}
 }

@@ -69,6 +69,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 			self::register_logos_section( $wp_customize );
 			self::register_brand_section( $wp_customize );
+			self::register_header_colors_section( $wp_customize );
+			self::register_menu_colors_section( $wp_customize );
+			self::register_footer_colors_section( $wp_customize );
 			self::register_general_section( $wp_customize );
 		}
 
@@ -164,6 +167,272 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				__( 'Brand color', 'lafka' ),
 				'#f59e0b',
 				__( 'Secondary brand accent — drives the --lafka-color-brand-500 ramp (footer chrome, hero gradient, open-status dot). Defaults to the shipped pepper-yellow.', 'lafka' ),
+				'theme_mod'
+			);
+		}
+
+		// ====================================================================
+		// Section: Header & Top Bar colors  (NX1-02.dyncss-chrome-colors)
+		// ====================================================================
+
+		/**
+		 * Header chrome color controls migrated off the legacy Options Framework
+		 * to `lafka_<key>` theme_mods. Defaults match the framework `std` (and the
+		 * inline defaults in styles/dynamic-css.php) so a fresh install renders the
+		 * shipped Peppery pixels unchanged. The two dynamic-css inline fallbacks
+		 * `header_top_bar_border_color` / `main_menu_links_bckgr_hover_color` had no
+		 * framework field and get no control — they keep their transparent default.
+		 */
+		private static function register_header_colors_section( $wp_customize ): void {
+			$wp_customize->add_section(
+				'lafka_settings_header_colors',
+				array(
+					'title'       => esc_html__( 'Header & Top Bar Colors', 'lafka' ),
+					'description' => esc_html__( 'Colors for the top bar, header service icons, and the collapsible pre-header. These drive the header --lafka-* CSS custom properties.', 'lafka' ),
+					'panel'       => 'lafka_settings',
+					'priority'    => 22,
+				)
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_header_top_bar_color',
+				'lafka_settings_header_colors',
+				__( 'Header top bar background color', 'lafka' ),
+				'#222222',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_top_bar_message_color',
+				'lafka_settings_header_colors',
+				__( 'Short header message color', 'lafka' ),
+				'#4b4b4b',
+				__( 'The optional short message in the header top bar.', 'lafka' ),
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_header_services_color',
+				'lafka_settings_header_colors',
+				__( 'Header service icons color', 'lafka' ),
+				'#333333',
+				__( 'My Account, Wishlist, Cart and related header icons.', 'lafka' ),
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_top_bar_menu_links_color',
+				'lafka_settings_header_colors',
+				__( 'Top bar menu links color', 'lafka' ),
+				'#ffffff',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_top_bar_menu_links_hover_color',
+				'lafka_settings_header_colors',
+				__( 'Top bar menu links hover color', 'lafka' ),
+				'#fccc4c',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_transparent_header_dark_menu_color',
+				'lafka_settings_header_colors',
+				__( 'Transparent header menu color (dark scheme)', 'lafka' ),
+				'#22272d',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_collapsible_bckgr_color',
+				'lafka_settings_header_colors',
+				__( 'Collapsible pre-header background color', 'lafka' ),
+				'#fcfcfc',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_collapsible_titles_color',
+				'lafka_settings_header_colors',
+				__( 'Collapsible pre-header titles color', 'lafka' ),
+				'#22272d',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_collapsible_titles_border_color',
+				'lafka_settings_header_colors',
+				__( 'Collapsible pre-header titles border color', 'lafka' ),
+				'#f1f1f1',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_collapsible_links_color',
+				'lafka_settings_header_colors',
+				__( 'Collapsible pre-header links color', 'lafka' ),
+				'#22272d',
+				'',
+				'theme_mod'
+			);
+		}
+
+		// ====================================================================
+		// Section: Main Menu colors  (NX1-02.dyncss-chrome-colors)
+		// ====================================================================
+
+		private static function register_menu_colors_section( $wp_customize ): void {
+			$wp_customize->add_section(
+				'lafka_settings_menu_colors',
+				array(
+					'title'       => esc_html__( 'Main Menu Colors', 'lafka' ),
+					'description' => esc_html__( 'Background, link, and icon colors for the primary navigation menu.', 'lafka' ),
+					'panel'       => 'lafka_settings',
+					'priority'    => 24,
+				)
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_main_menu_background_color',
+				'lafka_settings_menu_colors',
+				__( 'Main menu background color', 'lafka' ),
+				'#fccc4c',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_main_menu_links_color',
+				'lafka_settings_menu_colors',
+				__( 'Main menu links color', 'lafka' ),
+				'#61443e',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_main_menu_links_hover_color',
+				'lafka_settings_menu_colors',
+				__( 'Main menu links hover color', 'lafka' ),
+				'#22272d',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_main_menu_icons_color',
+				'lafka_settings_menu_colors',
+				__( 'Main menu icons color', 'lafka' ),
+				'#ac8320',
+				'',
+				'theme_mod'
+			);
+		}
+
+		// ====================================================================
+		// Section: Footer colors  (NX1-02.dyncss-chrome-colors)
+		// ====================================================================
+
+		private static function register_footer_colors_section( $wp_customize ): void {
+			$wp_customize->add_section(
+				'lafka_settings_footer_colors',
+				array(
+					'title'       => esc_html__( 'Footer Colors', 'lafka' ),
+					'description' => esc_html__( 'Title, link, text, and copyright-bar colors for the site footer.', 'lafka' ),
+					'panel'       => 'lafka_settings',
+					'priority'    => 26,
+				)
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_footer_titles_color',
+				'lafka_settings_footer_colors',
+				__( 'Footer titles color', 'lafka' ),
+				'#ffffff',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_footer_title_border_color',
+				'lafka_settings_footer_colors',
+				__( 'Footer titles border color', 'lafka' ),
+				'#f1f1f1',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_footer_menu_links_color',
+				'lafka_settings_footer_colors',
+				__( 'Footer menu links color', 'lafka' ),
+				'#ffffff',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_footer_links_color',
+				'lafka_settings_footer_colors',
+				__( 'Footer widget links color', 'lafka' ),
+				'#f5f5f5',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_footer_text_color',
+				'lafka_settings_footer_colors',
+				__( 'Footer text color', 'lafka' ),
+				'#aeaeae',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_footer_copyright_bar_bckgr_color',
+				'lafka_settings_footer_colors',
+				__( 'Footer copyright bar background color', 'lafka' ),
+				'#222222',
+				'',
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_footer_copyright_bar_text_color',
+				'lafka_settings_footer_colors',
+				__( 'Footer copyright bar text color', 'lafka' ),
+				'#aeaeae',
+				'',
 				'theme_mod'
 			);
 		}

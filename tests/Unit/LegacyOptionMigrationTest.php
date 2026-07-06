@@ -86,6 +86,39 @@ namespace Lafka\Tests\Unit {
 			}
 		}
 
+		public function test_map_contains_dyncss_chrome_colors_keys(): void {
+			$map      = \lafka_legacy_migrate_map();
+			$expected = array(
+				'header_top_bar_color'               => 'lafka_header_top_bar_color',
+				'header_top_bar_border_color'        => 'lafka_header_top_bar_border_color',
+				'top_bar_message_color'              => 'lafka_top_bar_message_color',
+				'header_services_color'              => 'lafka_header_services_color',
+				'top_bar_menu_links_color'           => 'lafka_top_bar_menu_links_color',
+				'top_bar_menu_links_hover_color'     => 'lafka_top_bar_menu_links_hover_color',
+				'transparent_header_dark_menu_color' => 'lafka_transparent_header_dark_menu_color',
+				'collapsible_bckgr_color'            => 'lafka_collapsible_bckgr_color',
+				'collapsible_titles_color'           => 'lafka_collapsible_titles_color',
+				'collapsible_titles_border_color'    => 'lafka_collapsible_titles_border_color',
+				'collapsible_links_color'            => 'lafka_collapsible_links_color',
+				'main_menu_background_color'          => 'lafka_main_menu_background_color',
+				'main_menu_links_color'              => 'lafka_main_menu_links_color',
+				'main_menu_links_hover_color'        => 'lafka_main_menu_links_hover_color',
+				'main_menu_links_bckgr_hover_color'  => 'lafka_main_menu_links_bckgr_hover_color',
+				'main_menu_icons_color'              => 'lafka_main_menu_icons_color',
+				'footer_titles_color'                => 'lafka_footer_titles_color',
+				'footer_title_border_color'          => 'lafka_footer_title_border_color',
+				'footer_copyright_bar_text_color'    => 'lafka_footer_copyright_bar_text_color',
+				'footer_menu_links_color'            => 'lafka_footer_menu_links_color',
+				'footer_links_color'                 => 'lafka_footer_links_color',
+				'footer_text_color'                  => 'lafka_footer_text_color',
+				'footer_copyright_bar_bckgr_color'   => 'lafka_footer_copyright_bar_bckgr_color',
+			);
+			foreach ( $expected as $legacy_key => $mod_key ) {
+				$this->assertArrayHasKey( $legacy_key, $map, "Migration map missing '{$legacy_key}'." );
+				$this->assertSame( $mod_key, $map[ $legacy_key ], "Migration map mis-homes '{$legacy_key}'." );
+			}
+		}
+
 		public function test_map_is_pure_and_prefixes_every_destination(): void {
 			// A pure data map: every destination is a namespaced lafka_ theme_mod
 			// so NX1-05 export (which only bundles lafka_* theme_mods) picks them up.
