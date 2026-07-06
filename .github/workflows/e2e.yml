@@ -1,0 +1,149 @@
+name: E2E (smoke)
+
+# Playwright smoke run of the conversion funnel against a CI-built wp-env that
+# mounts BOTH first-party repos (theme + plugin) plus WooCommerce, seeded with
+# the wave-2 demo fixture (`wp lafka seed-demo`, NX1-09a).
+#
+# NON-BLOCKING BY DESIGN (for now):
+#   - `continue-on-error: true` on the job, so a red run never fails the check.
+#   - This workflow is deliberately NOT part of ci.yml's `ci-passed` aggregate
+#     gate. Promotion to a required check is DEFERRED until the job has proven a
+#     <2% flake rate over ~a week of runs (NX1-09b acceptance). When promoting:
+#     drop `continue-on-error`, and add this job to a required-checks list.
+#
+# POLICY: first-party GitHub actions ONLY (actions/checkout, actions/setup-node,
+# actions/upload-artifact). wp-env + Playwright come from npm (`npx`), not from
+# community actions.
+
+on:
+  workflow_dispatch:
+  pull_request:
+    branches: [main, master]
+    # Skip when nothing that can affect the funnel changed.
+    paths:
+      - 'tests/e2e/**'
+      - 'playwright.config.js'
+      - 'partials/**'
+      - 'woocommerce/**'
+      - 'js/**'
+      - 'functions.php'
+      - '.github/workflows/e2e.yml'
+  push:
+    branches: [main, master]
+    paths:
+      - 'tests/e2e/**'
+      - 'playwright.config.js'
+      - 'partials/**'
+      - 'woocommerce/**'
+      - 'js/**'
+      - 'functions.php'
+      - '.github/workflows/e2e.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: e2e-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    name: Playwright smoke
+    runs-on: ubuntu-latest
+    # Non-blocking until a week of stability — see file header.
+    continue-on-error: true
+    timeout-minutes: 25
+    env:
+      LAFKA_E2E_BASE_URL: http://localhost:8890
+    steps:
+      # Theme under test.
+      - name: Checkout theme
+        uses: actions/checkout@v7
+        with:
+          path: lafka-theme
+
+      # Companion plugin (seeder + addon engine + order-hours + block-cart shim).
+      # Cross-repo test-isolation trap: CI cannot assume a sibling checkout exists
+      # locally, so the plugin is checked out explicitly here.
+      - name: Checkout plugin
+        uses: actions/checkout@v7
+        with:
+          repository: setkernel/lafka-plugin
+          ref: main
+          path: lafka-plugin
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: lafka-theme/package-lock.json
+
+      # CI-only wp-env config at the workspace root, mounting BOTH local repos +
+      # the WooCommerce zip. Generated in a step so nothing CI-only is committed.
+      # Ports match the suite's default LAFKA_E2E_BASE_URL (8890).
+      - name: Write CI wp-env config
+        run: |
+          cat > .wp-env.json <<'JSON'
+          {
+            "core": "WordPress/WordPress#6.9.4",
+            "phpVersion": "8.3",
+            "plugins": [
+              "./lafka-plugin",
+              "https://downloads.wordpress.org/plugin/woocommerce.10.9.1.zip"
+            ],
+            "themes": [ "./lafka-theme" ],
+            "config": {
+              "WP_DEBUG": true,
+              "SCRIPT_DEBUG": true,
+              "WP_ENVIRONMENT_TYPE": "development"
+            },
+            "port": 8890,
+            "testsPort": 8891
+          }
+          JSON
+
+      - name: Install theme dependencies
+        working-directory: lafka-theme
+        run: npm ci --no-audit --no-fund
+
+      - name: Install Playwright browser
+        working-directory: lafka-theme
+        run: npx playwright install --with-deps chromium
+
+      - name: Start wp-env
+        run: npx @wordpress/env start
+
+      # Activate + seed. The CLI container name is discovered dynamically
+      # (docker ps --filter) — the same discovery the suite's global-setup uses —
+      # so this works regardless of the per-run wp-env hash. This step also
+      # fails fast with readable logs if activation or the seeder is broken.
+      - name: Activate and seed demo store
+        run: |
+          CLI=$(docker ps --filter "name=cli-1" --format '{{.Names}}' | grep -v tests | head -n1)
+          echo "Using CLI container: $CLI"
+          docker exec "$CLI" wp theme activate lafka-theme
+          docker exec "$CLI" wp plugin activate lafka-plugin woocommerce
+          docker exec "$CLI" wp lafka seed-demo
+
+      # Run only the @smoke subset (<5 min target). global-setup re-seeds +
+      # prepares the store (coming-soon off, COD, product_addons, classic pages)
+      # idempotently before the run.
+      - name: Run smoke e2e
+        working-directory: lafka-theme
+        run: npm run test:e2e:smoke
+
+      # Traces + screenshots for any failed/retried run.
+      - name: Upload Playwright artifacts
+        if: ${{ failure() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            lafka-theme/test-results/**
+            lafka-theme/playwright-report/**
+          retention-days: 7
+          if-no-files-found: ignore
+
+      - name: Stop wp-env
+        if: ${{ always() }}
+        run: npx @wordpress/env stop || true

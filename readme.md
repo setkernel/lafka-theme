@@ -91,6 +91,33 @@ composer test           # PHPUnit (Brain Monkey)
 npm run lint            # ESLint + Stylelint
 ```
 
+### End-to-end tests (Playwright)
+
+The conversion funnel is covered by a Playwright suite in `tests/e2e/`, driven
+against a **seeded** wp-env — it needs the companion plugin mounted (for the
+`wp lafka seed-demo` fixture, the addon engine, and order-hours), so run it
+against the **umbrella** wp-env (theme + plugin) rather than the theme-only
+`.wp-env.json` stack.
+
+```bash
+npx playwright install chromium   # once
+# Start the umbrella wp-env (theme + plugin) at the workspace root, then:
+npm run test:e2e         # full funnel + store-closed + cart-drawer a11y
+npm run test:e2e:smoke   # just the @smoke money-path
+```
+
+Target defaults to `http://localhost:8890`; override with
+`LAFKA_E2E_BASE_URL=<url>`. `global-setup.js` fails fast if the target is
+unreachable, then re-seeds and prepares the store (coming-soon off, COD on,
+addons on, classic cart/checkout). The suite runs single-worker because every
+spec shares one WordPress backend.
+
+**CI:** `.github/workflows/e2e.yml` runs the `@smoke` subset on PRs against a
+CI-built wp-env that mounts both repos. It is currently **non-blocking** — it is
+`continue-on-error` and deliberately excluded from the `ci-passed` aggregate
+gate; promotion to a required check is deferred until it has proven stable over
+about a week.
+
 A pre-push git hook is shipped under `.githooks/` that runs all four gates before any push — install once per clone:
 
 ```bash

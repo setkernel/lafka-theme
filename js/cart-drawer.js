@@ -122,8 +122,21 @@
     drawer.setAttribute('aria-hidden', 'false');
     setBackgroundInert(true);
     document.body.style.overflow = 'hidden';
+    // Defer the focus move to the next task. Two synchronous forces would
+    // otherwise steal focus straight back to <body>: (1) the drawer transitions
+    // in from visibility:hidden, and an element that still computes as hidden
+    // can't hold focus; (2) inerting #header — which contains the just-clicked
+    // cart trigger — fires a blur the browser resolves after this handler
+    // returns, overriding any focus() made in the same tick. A short timeout
+    // lets the visible + inert state settle first, so focus reliably lands on
+    // the drawer's first control. (requestAnimationFrame is unreliable here —
+    // it is throttled when the page is not actively painting.) (WCAG 2.4.3)
     var f = drawer.querySelector('button, a, [tabindex="0"]');
-    if (f && f.focus) f.focus();
+    if (f && f.focus) {
+      setTimeout(function () {
+        if (drawer.dataset.open === 'true') { f.focus(); }
+      }, 60);
+    }
   }
 
   function close() {
