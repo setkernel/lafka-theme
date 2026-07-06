@@ -75,6 +75,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			self::register_content_colors_section( $wp_customize );
 			self::register_page_title_colors_section( $wp_customize );
 			self::register_listing_colors_section( $wp_customize );
+			self::register_typography_settings( $wp_customize );
 			self::register_general_section( $wp_customize );
 		}
 
@@ -534,8 +535,8 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			$wp_customize->add_section(
 				'lafka_settings_page_title_colors',
 				array(
-					'title'       => esc_html__( 'Page Title Colors', 'lafka' ),
-					'description' => esc_html__( 'Colors for the page-title bar: title, subtitle, and — when a title background image is set — the overlaid custom title, plus the bar background and border.', 'lafka' ),
+					'title'       => esc_html__( 'Page Title', 'lafka' ),
+					'description' => esc_html__( 'The page-title bar: title, subtitle, and — when a title background image is set — the overlaid custom title, plus the bar background and border, and the default background image used on pages without their own.', 'lafka' ),
 					'panel'       => 'lafka_settings',
 					'priority'    => 28,
 				)
@@ -588,6 +589,18 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				__( 'Page title bar border color', 'lafka' ),
 				'#f0f0f0',
 				'',
+				'theme_mod'
+			);
+
+			// NX1-02.dyncss-typography-backgrounds: the default title background
+			// image (scalar attachment id) — the one composite-slice key with a
+			// natural native control.
+			self::add_image(
+				$wp_customize,
+				'lafka_page_title_default_bckgr_image',
+				'lafka_settings_page_title_colors',
+				__( 'Default page title background image', 'lafka' ),
+				__( 'Shown behind the page-title bar on any page without its own title image. Leave empty for the flat background color above.', 'lafka' ),
 				'theme_mod'
 			);
 		}
@@ -646,6 +659,152 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'',
 				'theme_mod'
 			);
+		}
+
+		// ====================================================================
+		// Typography + backgrounds settings  (NX1-02.dyncss-typography-backgrounds)
+		// ====================================================================
+
+		/**
+		 * Register the composite typography + background theme_mod settings the
+		 * dynamic-css typography/backgrounds slice migrated off the legacy Options
+		 * Framework. Each is a first-class `lafka_<key>` theme_mod with the SAME
+		 * Options-Framework `std` default and a shape-preserving sanitizer, so a
+		 * preset apply / NX1-05 config-bundle import / future control round-trips
+		 * through a real Customizer setting and the emitted `--lafka-*` tokens stay
+		 * byte-identical (invariants 2 + 3).
+		 *
+		 * These values are composite arrays — typography carries a JSON-encoded
+		 * `style` sub-field (font-weight/font-style), backgrounds carry
+		 * color/image/position/repeat/attachment, and the two Google-font settings
+		 * are multichecks. WordPress has no native single-input control for such a
+		 * shape (the retired framework used bespoke font/background pickers), so
+		 * these settings are registered WITHOUT controls; a modern granular
+		 * typography editing UI is deferred to the NX2 preset/typography work. The
+		 * one scalar key with a natural control — the default title background
+		 * image — gets a media control in the Page Title section above.
+		 *
+		 * @param WP_Customize_Manager $wp_customize
+		 */
+		private static function register_typography_settings( $wp_customize ): void {
+			$typography = array(
+				'lafka_main_menu_typography'  => array(
+					'size'  => '15px',
+					'style' => '{"font-weight":"600","font-style":"normal"}',
+				),
+				'lafka_top_menu_typography'   => array(
+					'size'  => '13px',
+					'style' => '{"font-weight":"500","font-style":"normal"}',
+				),
+				'lafka_body_font'             => array(
+					'face'  => 'Rubik',
+					'size'  => '16px',
+					'color' => '#5e5e5e',
+				),
+				'lafka_text_logo_typography'  => array(
+					'size'  => '21px',
+					'style' => '{"font-weight":"700","font-style":"normal"}',
+					'color' => '#ffffff',
+				),
+				'lafka_headings_font'         => array( 'face' => 'Rubik' ),
+				'lafka_h1_font'               => array(
+					'face'  => 'Rubik',
+					'size'  => '60px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"700","font-style":"normal"}',
+				),
+				'lafka_h2_font'               => array(
+					'face'  => 'Rubik',
+					'size'  => '44px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"700","font-style":"normal"}',
+				),
+				'lafka_h3_font'               => array(
+					'face'  => 'Rubik',
+					'size'  => '30px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"700","font-style":"normal"}',
+				),
+				'lafka_h4_font'               => array(
+					'face'  => 'Rubik',
+					'size'  => '24px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"600","font-style":"normal"}',
+				),
+				'lafka_h5_font'               => array(
+					'face'  => 'Rubik',
+					'size'  => '21px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"500","font-style":"normal"}',
+				),
+				'lafka_h6_font'               => array(
+					'face'  => 'Rubik',
+					'size'  => '19px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"500","font-style":"normal"}',
+				),
+			);
+			foreach ( $typography as $id => $default ) {
+				$wp_customize->add_setting(
+					$id,
+					array(
+						'type'              => 'theme_mod',
+						'default'           => $default,
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => array( __CLASS__, 'sanitize_typography' ),
+						'transport'         => 'refresh',
+					)
+				);
+			}
+
+			$backgrounds = array(
+				'lafka_header_background' => array(
+					'color'      => '#ffffff',
+					'image'      => '',
+					'repeat'     => '',
+					'position'   => '',
+					'attachment' => 'scroll',
+				),
+				'lafka_footer_background' => array(
+					'color'      => '#242424',
+					'image'      => '',
+					'repeat'     => '',
+					'position'   => '',
+					'attachment' => 'scroll',
+				),
+			);
+			foreach ( $backgrounds as $id => $default ) {
+				$wp_customize->add_setting(
+					$id,
+					array(
+						'type'              => 'theme_mod',
+						'default'           => $default,
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => array( __CLASS__, 'sanitize_background' ),
+						'transport'         => 'refresh',
+					)
+				);
+			}
+
+			$multicheck = array(
+				'lafka_use_google_face_for' => array(
+					'main_menu' => 1,
+					'buttons'   => 1,
+				),
+				'lafka_google_subsets'      => array( 'latin' => '1' ),
+			);
+			foreach ( $multicheck as $id => $default ) {
+				$wp_customize->add_setting(
+					$id,
+					array(
+						'type'              => 'theme_mod',
+						'default'           => $default,
+						'capability'        => 'edit_theme_options',
+						'sanitize_callback' => array( __CLASS__, 'sanitize_multicheck' ),
+						'transport'         => 'refresh',
+					)
+				);
+			}
 		}
 
 		// ====================================================================
@@ -846,6 +1005,94 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 */
 		public static function sanitize_checkbox( $value ): int {
 			return ( ! empty( $value ) && '0' !== $value ) ? 1 : 0;
+		}
+
+		/**
+		 * Sanitize a composite typography array, preserving the shape
+		 * styles/dynamic-css.php consumes: an optional `face`, `size`, `color`
+		 * and a JSON-encoded `style` ({"font-weight":…,"font-style":…}) that the
+		 * renderer json_decode()s. Only the sub-keys present in the input survive,
+		 * so a partial value (e.g. a size-only menu typography) round-trips.
+		 *
+		 * @param mixed $value
+		 * @return array<string,string>
+		 */
+		public static function sanitize_typography( $value ): array {
+			if ( ! is_array( $value ) ) {
+				return array();
+			}
+			$clean = array();
+			if ( isset( $value['face'] ) ) {
+				$clean['face'] = sanitize_text_field( $value['face'] );
+			}
+			if ( isset( $value['size'] ) ) {
+				$clean['size'] = sanitize_text_field( $value['size'] );
+			}
+			if ( isset( $value['color'] ) ) {
+				$clean['color'] = '' === $value['color'] ? '' : (string) sanitize_hex_color( $value['color'] );
+			}
+			if ( isset( $value['style'] ) ) {
+				// Re-encode from the decoded weight/style pair so only a
+				// well-formed JSON object survives (Hazard 6: the exact JSON
+				// shape must hold or the renderer's json_decode breaks).
+				$decoded = is_string( $value['style'] ) ? json_decode( $value['style'], true ) : null;
+				if ( is_array( $decoded ) ) {
+					$clean['style'] = (string) wp_json_encode(
+						array(
+							'font-weight' => isset( $decoded['font-weight'] ) ? sanitize_text_field( $decoded['font-weight'] ) : 'normal',
+							'font-style'  => isset( $decoded['font-style'] ) ? sanitize_text_field( $decoded['font-style'] ) : 'normal',
+						)
+					);
+				} else {
+					$clean['style'] = '';
+				}
+			}
+			return $clean;
+		}
+
+		/**
+		 * Sanitize a composite background array, preserving the shape
+		 * styles/dynamic-css.php consumes: `color` (hex), `image` (attachment id),
+		 * and `position` / `repeat` / `attachment` CSS keywords.
+		 *
+		 * @param mixed $value
+		 * @return array<string,mixed>
+		 */
+		public static function sanitize_background( $value ): array {
+			if ( ! is_array( $value ) ) {
+				return array();
+			}
+			$clean = array();
+			if ( isset( $value['color'] ) ) {
+				$clean['color'] = '' === $value['color'] ? '' : (string) sanitize_hex_color( $value['color'] );
+			}
+			if ( isset( $value['image'] ) ) {
+				$clean['image'] = '' === $value['image'] ? '' : absint( $value['image'] );
+			}
+			foreach ( array( 'repeat', 'position', 'attachment' ) as $sub_key ) {
+				if ( isset( $value[ $sub_key ] ) ) {
+					$clean[ $sub_key ] = sanitize_text_field( $value[ $sub_key ] );
+				}
+			}
+			return $clean;
+		}
+
+		/**
+		 * Sanitize a multicheck array (use_google_face_for / google_subsets):
+		 * a map of option-key => truthy flag, normalised to 1/0.
+		 *
+		 * @param mixed $value
+		 * @return array<string,int>
+		 */
+		public static function sanitize_multicheck( $value ): array {
+			if ( ! is_array( $value ) ) {
+				return array();
+			}
+			$clean = array();
+			foreach ( $value as $sub_key => $flag ) {
+				$clean[ sanitize_key( $sub_key ) ] = ( ! empty( $flag ) && '0' !== $flag ) ? 1 : 0;
+			}
+			return $clean;
 		}
 
 		// ====================================================================

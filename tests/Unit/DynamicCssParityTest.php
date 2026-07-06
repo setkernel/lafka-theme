@@ -128,21 +128,34 @@ namespace Lafka\Tests\Unit {
 		}
 
 		/**
-		 * Every option key styles/dynamic-css.php reads must appear in the
+		 * Every design-token key styles/dynamic-css.php reads must appear in the
 		 * fixture, so a future dynamic-css edit that consumes a NEW key can't
 		 * silently escape the parity gate — it fails here until the fixture (and
 		 * golden) are extended.
+		 *
+		 * NX1-02.dyncss-typography-backgrounds retired the last lafka_get_option
+		 * read here: the builder now reads exclusively from `lafka_<key>`
+		 * theme_mods, so this guard tracks the get_theme_mod( 'lafka_*' ) reads.
+		 * (The migration is complete only when the legacy grep below stays empty.)
 		 */
 		public function test_fixture_covers_every_consumed_key(): void {
 			$src = (string) file_get_contents( dirname( __DIR__, 2 ) . '/styles/dynamic-css.php' );
-			preg_match_all( "/lafka_get_option\(\s*'([a-z0-9_]+)'/", $src, $m );
 
+			// Milestone guard: no legacy Options-Framework read may remain here.
+			preg_match_all( "/lafka_get_option\(\s*'([a-z0-9_]+)'/", $src, $legacy );
+			$this->assertSame(
+				array(),
+				array_values( array_unique( $legacy[1] ) ),
+				'styles/dynamic-css.php still calls lafka_get_option() — NX1-02 requires ZERO legacy reads here.'
+			);
+
+			preg_match_all( "/get_theme_mod\(\s*'(lafka_[a-z0-9_]+)'/", $src, $m );
 			$keys = array_values( array_unique( $m[1] ) );
-			// The heading loop reads lafka_get_option( 'h' . $i . '_font' ); the
-			// regex captures the literal 'h' — expand it to h1_font..h6_font.
-			$keys = array_values( array_diff( $keys, array( 'h' ) ) );
+			// The heading loop reads get_theme_mod( 'lafka_h' . $i . '_font' ); the
+			// regex captures the literal 'lafka_h' — expand it to lafka_h1_font..h6.
+			$keys = array_values( array_diff( $keys, array( 'lafka_h' ) ) );
 			for ( $i = 1; $i <= 6; $i++ ) {
-				$keys[] = 'h' . $i . '_font';
+				$keys[] = 'lafka_h' . $i . '_font';
 			}
 
 			$fixture = $this->fixture();

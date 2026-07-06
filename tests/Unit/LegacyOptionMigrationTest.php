@@ -145,6 +145,80 @@ namespace Lafka\Tests\Unit {
 			}
 		}
 
+		public function test_map_contains_dyncss_typography_backgrounds_keys(): void {
+			$map      = \lafka_legacy_migrate_map();
+			$expected = array(
+				'main_menu_typography'           => 'lafka_main_menu_typography',
+				'top_menu_typography'            => 'lafka_top_menu_typography',
+				'body_font'                      => 'lafka_body_font',
+				'text_logo_typography'           => 'lafka_text_logo_typography',
+				'headings_font'                  => 'lafka_headings_font',
+				'use_google_face_for'            => 'lafka_use_google_face_for',
+				'google_subsets'                 => 'lafka_google_subsets',
+				'h1_font'                        => 'lafka_h1_font',
+				'h2_font'                        => 'lafka_h2_font',
+				'h3_font'                        => 'lafka_h3_font',
+				'h4_font'                        => 'lafka_h4_font',
+				'h5_font'                        => 'lafka_h5_font',
+				'h6_font'                        => 'lafka_h6_font',
+				'header_background'              => 'lafka_header_background',
+				'footer_background'              => 'lafka_footer_background',
+				'page_title_default_bckgr_image' => 'lafka_page_title_default_bckgr_image',
+			);
+			foreach ( $expected as $legacy_key => $mod_key ) {
+				$this->assertArrayHasKey( $legacy_key, $map, "Migration map missing '{$legacy_key}'." );
+				$this->assertSame( $mod_key, $map[ $legacy_key ], "Migration map mis-homes '{$legacy_key}'." );
+			}
+		}
+
+		/**
+		 * The composite typography + background arrays copy verbatim into their
+		 * theme_mods — the migration is value-type-agnostic, so the JSON-encoded
+		 * `style` sub-field and the background arrays keep their exact shape
+		 * (Hazard 6). This locks that a slice-5 upgraded install renders identically.
+		 */
+		public function test_copies_composite_typography_and_background_arrays(): void {
+			$body_font  = array(
+				'face'  => 'Rubik',
+				'size'  => '16px',
+				'color' => '#5e5e5e',
+			);
+			$h1_font    = array(
+				'face'  => 'Rubik',
+				'size'  => '60px',
+				'color' => '#22272d',
+				'style' => '{"font-weight":"700","font-style":"normal"}',
+			);
+			$header_bg  = array(
+				'color'      => '#ffffff',
+				'image'      => 0,
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			);
+			$subsets    = array( 'latin' => '1' );
+
+			$GLOBALS['lafka_mig_options']['lafka'] = array(
+				'body_font'         => $body_font,
+				'h1_font'           => $h1_font,
+				'header_background'  => $header_bg,
+				'google_subsets'    => $subsets,
+			);
+
+			$report = \lafka_legacy_migrate_run();
+
+			$this->assertSame( $body_font, get_theme_mod( 'lafka_body_font' ) );
+			$this->assertSame( $h1_font, get_theme_mod( 'lafka_h1_font' ) );
+			$this->assertSame( $header_bg, get_theme_mod( 'lafka_header_background' ) );
+			$this->assertSame( $subsets, get_theme_mod( 'lafka_google_subsets' ) );
+			// The JSON `style` sub-field survives verbatim for the renderer.
+			$this->assertSame(
+				'{"font-weight":"700","font-style":"normal"}',
+				get_theme_mod( 'lafka_h1_font' )['style']
+			);
+			$this->assertSame( $body_font, $report['lafka_body_font'] );
+		}
+
 		public function test_map_is_pure_and_prefixes_every_destination(): void {
 			// A pure data map: every destination is a namespaced lafka_ theme_mod
 			// so NX1-05 export (which only bundles lafka_* theme_mods) picks them up.

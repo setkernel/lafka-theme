@@ -106,6 +106,35 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'price_color_in_listings'            => 'lafka_price_color_in_listings',
 			'price_background_color_in_listings' => 'lafka_price_background_color_in_listings',
 			'fancy_category_title_color'         => 'lafka_fancy_category_title_color',
+
+			// NX1-02.dyncss-typography-backgrounds — the menu/logo/body/heading
+			// typography arrays, the accent+headings Google-font settings, and the
+			// header/footer background arrays + default title background image that
+			// dynamic-css.php (+ its gutenberg-editor twins + the Google-font
+			// enqueuer + body-class builder) emit. This slice takes
+			// styles/dynamic-css.php to ZERO legacy reads. Each value is a
+			// composite array (typography carries a JSON-encoded `style` sub-field;
+			// backgrounds carry color/image/position/repeat/attachment) whose exact
+			// shape is preserved by the copy below and the theme_mod sanitizers.
+			// `headings_font` is inert in dynamic-css.php (headings resolve to
+			// --lafka-font-display) but is still read by the editor CSS + the font
+			// enqueuer, so it migrates here with the rest of the typography.
+			'main_menu_typography'               => 'lafka_main_menu_typography',
+			'top_menu_typography'                => 'lafka_top_menu_typography',
+			'body_font'                          => 'lafka_body_font',
+			'text_logo_typography'               => 'lafka_text_logo_typography',
+			'headings_font'                      => 'lafka_headings_font',
+			'use_google_face_for'                => 'lafka_use_google_face_for',
+			'google_subsets'                     => 'lafka_google_subsets',
+			'h1_font'                            => 'lafka_h1_font',
+			'h2_font'                            => 'lafka_h2_font',
+			'h3_font'                            => 'lafka_h3_font',
+			'h4_font'                            => 'lafka_h4_font',
+			'h5_font'                            => 'lafka_h5_font',
+			'h6_font'                            => 'lafka_h6_font',
+			'header_background'                  => 'lafka_header_background',
+			'footer_background'                  => 'lafka_footer_background',
+			'page_title_default_bckgr_image'     => 'lafka_page_title_default_bckgr_image',
 		);
 	}
 }

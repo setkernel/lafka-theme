@@ -1001,8 +1001,15 @@ for ( $i = 0; $i <= 6; $i++ ) {
 if ( ! function_exists( 'lafka_get_google_subsets' ) ) {
 
 	function lafka_get_google_subsets() {
-		$selected_subsets = lafka_get_option( 'google_subsets' );
-		$choosen          = array();
+		// NX1-02.dyncss-typography-backgrounds: migrated to the
+		// `lafka_google_subsets` theme_mod. The Options-Framework `std`
+		// (latin enabled) is the default so a fresh install requests the
+		// same subset as before.
+		$selected_subsets = get_theme_mod( 'lafka_google_subsets', array( 'latin' => '1' ) );
+		if ( ! is_array( $selected_subsets ) ) {
+			$selected_subsets = array();
+		}
+		$choosen = array();
 
 		foreach ( $selected_subsets as $subset => $is_selected ) {
 			if ( $is_selected != '0' ) {
@@ -1191,7 +1198,20 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		if ( ! $logo_bg_body ) {
 			$classes[] = 'lafka-no-logo-bg';
 		}
-		$header_backgr_body = lafka_get_option( 'header_background' );
+		// NX1-02.dyncss-typography-backgrounds: header/footer backgrounds +
+		// use_google_face_for read from their migrated `lafka_<key>` theme_mods.
+		// Defaults reproduce the Options-Framework `std` so these body classes are
+		// added/omitted exactly as before on a fresh install.
+		$header_backgr_body = get_theme_mod(
+			'lafka_header_background',
+			array(
+				'color'      => '#ffffff',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
 		if ( $logo_bg_body && $logo_bg_body === $header_backgr_body['color'] ) {
 			$classes[] = 'lafka-logo-matches-header';
 		}
@@ -1210,7 +1230,13 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		if ( ! lafka_get_option( 'show_searchform' ) && ! lafka_get_option( 'show_shopping_cart' ) && ! lafka_get_option( 'show_my_account' ) && ! lafka_get_option( 'show_wish_in_header' ) ) {
 			$classes[] = 'lafka-no-header-services';
 		}
-		$use_google_face_for_body = lafka_get_option( 'use_google_face_for' );
+		$use_google_face_for_body = get_theme_mod(
+			'lafka_use_google_face_for',
+			array(
+				'main_menu' => 1,
+				'buttons'   => 1,
+			)
+		);
 		if ( ! empty( $use_google_face_for_body['main_menu'] ) ) {
 			$classes[] = 'lafka-headings-for-menu';
 		}
@@ -1223,7 +1249,16 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		if ( ! empty( $header_backgr_body['image'] ) ) {
 			$classes[] = 'lafka-has-header-bg';
 		}
-		$footer_backgr_body = lafka_get_option( 'footer_background' );
+		$footer_backgr_body = get_theme_mod(
+			'lafka_footer_background',
+			array(
+				'color'      => '#242424',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
 		if ( ! empty( $footer_backgr_body['image'] ) && $footer_backgr_body['repeat'] === 'no-repeat' ) {
 			$classes[] = 'lafka-footer-bg-norepeat';
 		}

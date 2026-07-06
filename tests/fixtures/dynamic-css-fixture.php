@@ -66,65 +66,66 @@ return array(
 	'lafka_transparent_header_dark_menu_color' => '#eb117f',
 
 	// Main-menu typography: reads ['style'] (JSON) + ['size'].
-	'main_menu_typography' => array(
+	// (NX1-02.dyncss-typography-backgrounds: keyed by its theme_mod name.)
+	'lafka_main_menu_typography' => array(
 		'size'  => '17px',
 		'style' => '{"font-weight":"620","font-style":"italic"}',
 	),
 
 	// Top-menu typography: reads ['style'] (JSON) + ['size'].
-	'top_menu_typography' => array(
+	'lafka_top_menu_typography' => array(
 		'size'  => '14px',
 		'style' => '{"font-weight":"540","font-style":"normal"}',
 	),
 
 	// Body font: reads ['face'] + ['size'] + ['color'].
-	'body_font' => array(
+	'lafka_body_font' => array(
 		'face'  => 'Fixture Sans',
 		'size'  => '16.5px',
 		'color' => '#2b2b31',
 	),
 
 	// Text-logo typography: reads ['style'] (JSON) + ['color'] + ['size'].
-	'text_logo_typography' => array(
+	'lafka_text_logo_typography' => array(
 		'size'  => '23px',
 		'style' => '{"font-weight":"770","font-style":"normal"}',
 		'color' => '#f4f4f2',
 	),
 
 	// Heading fonts h1..h6: each reads ['style'] (JSON) + ['color'] + ['size'].
-	'h1_font' => array(
+	'lafka_h1_font' => array(
 		'size'  => '41px',
 		'style' => '{"font-weight":"800","font-style":"normal"}',
 		'color' => '#640a02',
 	),
-	'h2_font' => array(
+	'lafka_h2_font' => array(
 		'size'  => '33px',
 		'style' => '{"font-weight":"750","font-style":"italic"}',
 		'color' => '#dcd2c5',
 	),
-	'h3_font' => array(
+	'lafka_h3_font' => array(
 		'size'  => '27px',
 		'style' => '{"font-weight":"700","font-style":"normal"}',
 		'color' => '#c2884a',
 	),
-	'h4_font' => array(
+	'lafka_h4_font' => array(
 		'size'  => '22px',
 		'style' => '{"font-weight":"650","font-style":"italic"}',
 		'color' => '#9b3ce9',
 	),
-	'h5_font' => array(
+	'lafka_h5_font' => array(
 		'size'  => '18px',
 		'style' => '{"font-weight":"600","font-style":"normal"}',
 		'color' => '#475bc9',
 	),
-	'h6_font' => array(
+	'lafka_h6_font' => array(
 		'size'  => '15px',
 		'style' => '{"font-weight":"550","font-style":"italic"}',
 		'color' => '#ccbeb4',
 	),
 
 	// Header background: reads ['color'] + ['image'] (+ position/repeat/attachment when image set).
-	'header_background' => array(
+	'lafka_header_background' => array(
 		'color'      => '#101018',
 		'image'      => 101,
 		'position'   => 'left top',
@@ -133,7 +134,7 @@ return array(
 	),
 
 	// Footer background: repeat='no-repeat' exercises the bg-size:cover branch.
-	'footer_background' => array(
+	'lafka_footer_background' => array(
 		'color'      => '#181820',
 		'image'      => 102,
 		'position'   => 'right bottom',
@@ -142,5 +143,5 @@ return array(
 	),
 
 	// Page-title default background image: scalar attachment id (truthy → 64px title).
-	'page_title_default_bckgr_image' => 103,
+	'lafka_page_title_default_bckgr_image' => 103,
 );

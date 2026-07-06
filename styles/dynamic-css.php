@@ -139,28 +139,64 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		$menu_icons_color_raw      = get_theme_mod( 'lafka_main_menu_icons_color', '#ac8320' );
 		$menu_icons_color          = $menu_icons_color_raw ? esc_attr( $menu_icons_color_raw ) : 'inherit';
 
+		// NX1-02.dyncss-typography-backgrounds: the menu/logo/body/heading
+		// typography arrays + header/footer backgrounds + the default title
+		// background image read from `lafka_<key>` theme_mods (migrated off the
+		// legacy `lafka` option). After this slice styles/dynamic-css.php has ZERO
+		// legacy Options-Framework reads (NX1-02 accept criterion). The composite array
+		// SHAPE — a JSON-encoded `style` sub-field decoded below — is preserved by
+		// the theme_mod sanitizers registered in incl/customizer-bridge.php; the
+		// inline defaults reproduce the Options-Framework `std` so a fresh install
+		// still renders the shipped Peppery pixels.
+
 		// Main menu typography
-		$main_menu_typography = lafka_get_option( 'main_menu_typography' );
+		$main_menu_typography = get_theme_mod(
+			'lafka_main_menu_typography',
+			array(
+				'size'  => '15px',
+				'style' => '{"font-weight":"600","font-style":"normal"}',
+			)
+		);
 		$main_menu_style      = json_decode( $main_menu_typography['style'], true );
 		$menu_font_size       = esc_attr( $main_menu_typography['size'] );
 		$menu_font_weight     = $main_menu_style ? esc_attr( $main_menu_style['font-weight'] ) : 'normal';
 		$menu_font_style      = $main_menu_style ? esc_attr( $main_menu_style['font-style'] ) : 'normal';
 
 		// Top menu typography
-		$top_menu_typography  = lafka_get_option( 'top_menu_typography' );
+		$top_menu_typography  = get_theme_mod(
+			'lafka_top_menu_typography',
+			array(
+				'size'  => '13px',
+				'style' => '{"font-weight":"500","font-style":"normal"}',
+			)
+		);
 		$top_menu_style       = json_decode( $top_menu_typography['style'], true );
 		$top_menu_font_size   = esc_attr( $top_menu_typography['size'] );
 		$top_menu_font_weight = $top_menu_style ? esc_attr( $top_menu_style['font-weight'] ) : 'normal';
 		$top_menu_font_style  = $top_menu_style ? esc_attr( $top_menu_style['font-style'] ) : 'normal';
 
 		// Body font
-		$body_font        = lafka_get_option( 'body_font' );
+		$body_font        = get_theme_mod(
+			'lafka_body_font',
+			array(
+				'face'  => 'Rubik',
+				'size'  => '16px',
+				'color' => '#5e5e5e',
+			)
+		);
 		$body_font_family = ! empty( $body_font['face'] ) ? '"' . esc_attr( $body_font['face'] ) . '", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 		$body_font_size   = esc_attr( $body_font['size'] );
 		$body_font_color  = esc_attr( $body_font['color'] );
 
 		// Text logo typography
-		$text_logo_typography = lafka_get_option( 'text_logo_typography' );
+		$text_logo_typography = get_theme_mod(
+			'lafka_text_logo_typography',
+			array(
+				'size'  => '21px',
+				'style' => '{"font-weight":"700","font-style":"normal"}',
+				'color' => '#ffffff',
+			)
+		);
 		$text_logo_style      = json_decode( $text_logo_typography['style'], true );
 		$logo_font_color      = esc_attr( $text_logo_typography['color'] );
 		$logo_font_size       = esc_attr( $text_logo_typography['size'] );
@@ -178,10 +214,23 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// routed through the design token so a single source of truth wins.
 		$headings_font_family = 'var(--lafka-font-display)';
 
-		// H1-H6 fonts
-		$h_vars = '';
+		// H1-H6 fonts. Per-level inline defaults reproduce the Options-Framework
+		// std — face 'Rubik' and color '#22272d' are shared across levels; only
+		// the size + font-weight differ (see incl/lafka-options-framework/
+		// lafka-options.php $hN_font_default). Indexed h1..h6.
+		$h_sizes   = array( '60px', '44px', '30px', '24px', '21px', '19px' );
+		$h_weights = array( '700', '700', '700', '600', '500', '500' );
+		$h_vars    = '';
 		for ( $i = 1; $i <= 6; $i++ ) {
-			$h_font  = lafka_get_option( 'h' . $i . '_font' );
+			$h_font  = get_theme_mod(
+				'lafka_h' . $i . '_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => $h_sizes[ $i - 1 ],
+					'color' => '#22272d',
+					'style' => '{"font-weight":"' . $h_weights[ $i - 1 ] . '","font-style":"normal"}',
+				)
+			);
 			$h_style = json_decode( $h_font['style'], true );
 			$h_vars .= '--lafka-h' . $i . '-color:' . esc_attr( $h_font['color'] ) . ';';
 			$h_vars .= '--lafka-h' . $i . '-size:' . esc_attr( $h_font['size'] ) . ';';
@@ -190,7 +239,16 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		}
 
 		// Header background
-		$header_backgr        = lafka_get_option( 'header_background' );
+		$header_backgr        = get_theme_mod(
+			'lafka_header_background',
+			array(
+				'color'      => '#ffffff',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
 		$header_bg_color      = esc_attr( $header_backgr['color'] );
 		$header_bg_image      = 'none';
 		$header_bg_position   = 'center center';
@@ -204,7 +262,16 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		}
 
 		// Footer background
-		$footer_backgr        = lafka_get_option( 'footer_background' );
+		$footer_backgr        = get_theme_mod(
+			'lafka_footer_background',
+			array(
+				'color'      => '#242424',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
 		$footer_bg_color      = esc_attr( $footer_backgr['color'] );
 		$footer_bg_image      = 'none';
 		$footer_bg_position   = 'center center';
@@ -222,7 +289,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		}
 
 		// Title background image
-		$title_backgr       = lafka_get_option( 'page_title_default_bckgr_image' );
+		$title_backgr       = get_theme_mod( 'lafka_page_title_default_bckgr_image', '' );
 		$title_bg_image     = 'none';
 		$title_bg_font_size = 'inherit';
 		if ( $title_backgr ) {

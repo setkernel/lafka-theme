@@ -189,4 +189,29 @@ test.describe( 'Conversion funnel (seeded demo store)', () => {
 		const stickyCta = page.locator( '.lafka-pdp-mobile-cta' );
 		await expect( stickyCta ).toBeVisible();
 	} );
+
+	// NX1-02.dyncss-typography-backgrounds moved the font-enqueue readers
+	// (body_font / headings_font / google_subsets) off the legacy Options
+	// Framework onto `lafka_<key>` theme_mods. On the shipped defaults all three
+	// resolve to Rubik + latin; Rubik is self-hosted (@font-face in style.css) so
+	// lafka_typography_enqueue_google_font() strips it and requests NOTHING from
+	// the Google Fonts CDN. This guards that the migrated readers keep yielding
+	// that Rubik-only result — a migration bug that returned a different (real
+	// Google) face would surface as a fonts.googleapis.com request here.
+	test( 'default typography self-hosts Rubik — no Google Fonts CDN request', async ( {
+		page,
+	} ) => {
+		const googleFontRequests = [];
+		page.on( 'request', ( req ) => {
+			if ( req.url().includes( 'fonts.googleapis.com' ) ) {
+				googleFontRequests.push( req.url() );
+			}
+		} );
+		await page.goto( '/' );
+		await page.waitForLoadState( 'networkidle' );
+		expect( googleFontRequests ).toEqual( [] );
+		// The enqueue short-circuits before wp_enqueue_style for a Rubik-only
+		// request, so there is no lafka-fonts stylesheet link at all.
+		await expect( page.locator( 'link#lafka-fonts-css' ) ).toHaveCount( 0 );
+	} );
 } );

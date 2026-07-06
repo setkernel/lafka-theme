@@ -940,9 +940,20 @@ if ( ! function_exists( 'lafka_typography_google_fonts_url' ) ) {
 		if ( 'off' !== _x( 'on', 'Google fonts: on or off', 'lafka' ) ) {
 			$all_google_fonts = array_keys( lafka_typography_get_google_fonts() );
 
-			// Define all the options that possibly have a unique Google font
-			$body_font     = lafka_get_option( 'body_font' );
-			$headings_font = lafka_get_option( 'headings_font' );
+			// Define all the options that possibly have a unique Google font.
+			// NX1-02.dyncss-typography-backgrounds: read the migrated
+			// `lafka_<key>` theme_mods; the Options-Framework `std` face 'Rubik'
+			// is passed as the default so a fresh install enqueues the same
+			// (self-hosted → CDN-stripped) family set as before.
+			$body_font     = get_theme_mod(
+				'lafka_body_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '16px',
+					'color' => '#5e5e5e',
+				)
+			);
+			$headings_font = get_theme_mod( 'lafka_headings_font', array( 'face' => 'Rubik' ) );
 
 			// Get the font face for each option and put it in an array
 			$selected_fonts = array(

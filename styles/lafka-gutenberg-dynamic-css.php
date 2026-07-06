@@ -8,13 +8,15 @@ add_action( 'admin_enqueue_scripts', 'lafka_add_custom_gutenberg_css', 99 );
 if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 
 	function lafka_add_custom_gutenberg_css() {
-		// Defensive helper — `lafka_get_option('xN_font')` returns `false`
-		// when the theme options haven't been saved (fresh install). Without
-		// this, every page emits ~10 PHP warnings about "Trying to access
-		// array offset on value of type bool" + json_decode(null) deprecations.
-		// Caught by Session 4 audit (HIGH-1).
-		$lafka_safe_font = static function ( $key ) {
-			$font = lafka_get_option( $key );
+		// Defensive helper — a font theme_mod can be unset (fresh install) or a
+		// partial array; without normalising it, every page emits ~10 PHP warnings
+		// about "Trying to access array offset on value of type bool" +
+		// json_decode(null) deprecations. Caught by Session 4 audit (HIGH-1).
+		// NX1-02.dyncss-typography-backgrounds: reads the migrated `lafka_<key>`
+		// theme_mods; the caller passes the Options-Framework `std` as the default
+		// so a fresh install keeps the shipped editor typography.
+		$lafka_safe_font = static function ( $mod_key, $default = array() ) {
+			$font = get_theme_mod( $mod_key, $default );
 			if ( ! is_array( $font ) ) {
 				$font = array();
 			}
@@ -55,7 +57,7 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 			}
 
 			/* Page Title background */
-			<?php $title_backgr = lafka_get_option( 'page_title_default_bckgr_image' ); ?>
+			<?php $title_backgr = get_theme_mod( 'lafka_page_title_default_bckgr_image', '' ); ?>
 			<?php if ( $title_backgr ) : ?>
 			.editor-post-title {
 					background: url("<?php echo esc_url( wp_get_attachment_image_url( $title_backgr, 'full' ) ); ?>");
@@ -64,7 +66,16 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 			<?php endif; ?>
 
 			/* Body font */
-			<?php $body_font = $lafka_safe_font( 'body_font' ); ?>
+			<?php
+			$body_font = $lafka_safe_font(
+				'lafka_body_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '16px',
+					'color' => '#5e5e5e',
+				)
+			);
+			?>
 			body.gutenberg-editor-page .edit-post-visual-editor, body.gutenberg-editor-page .edit-post-visual-editor p:not(.wp-block-cover-text), .editor-styles-wrapper, .editor-styles-wrapper p, .block-editor .editor-styles-wrapper {
 				<?php if ( ! empty( $body_font['face'] ) ) : ?>
 					font-family:<?php echo esc_attr( $body_font['face'] ); ?> !important;
@@ -77,13 +88,19 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 				color:<?php echo esc_attr( $body_font['color'] ); ?>;
 			}
 				/* Heading fonts */
-			<?php $headings_font = $lafka_safe_font( 'headings_font' ); ?>
+			<?php $headings_font = $lafka_safe_font( 'lafka_headings_font', array( 'face' => 'Rubik' ) ); ?>
 			<?php if ( ! empty( $headings_font['face'] ) ) : ?>
 				div.edit-post-visual-editor h1, body.gutenberg-editor-page .edit-post-visual-editor p.wp-block-cover-image-text, div.edit-post-visual-editor h2, div.edit-post-visual-editor h3, div.edit-post-visual-editor h4, div.edit-post-visual-editor h5, div.edit-post-visual-editor h6, div.edit-post-visual-editor blockquote, div.edit-post-visual-editor q, body.gutenberg-editor-page div.edit-post-visual-editor blockquote p, body.gutenberg-editor-page div.edit-post-visual-editor q p, div.edit-post-visual-editor  textarea.editor-post-title__input {
 					font-family:<?php echo esc_attr( $headings_font['face'] ); ?>;
 				}
 				<?php
-				$use_google_face_for = lafka_get_option( 'use_google_face_for' );
+				$use_google_face_for = get_theme_mod(
+					'lafka_use_google_face_for',
+					array(
+						'main_menu' => 1,
+						'buttons'   => 1,
+					)
+				);
 				if ( ! is_array( $use_google_face_for ) ) {
 					$use_google_face_for = array(); }
 				?>
@@ -95,13 +112,29 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 			<?php endif; ?>
 			/* H1 */
 			<?php
-			$h1_font      = $lafka_safe_font( 'h1_font' );
+			$h1_font      = $lafka_safe_font(
+				'lafka_h1_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '60px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"700","font-style":"normal"}',
+				)
+			);
 			$h1_css_style = $lafka_safe_style( $h1_font );
 			?>
 			h1, .editor-block-list__block-edit .wp-block-heading h1, .wp-block-freeform.block-library-rich-text__tinymce h1, .edit-post-visual-editor .editor-post-title__block .editor-post-title__input, .lafka-counter-h1, .lafka-typed-h1, .lafka-dropcap p:first-letter, .lafka-dropcap h1:first-letter, .lafka-dropcap h2:first-letter, .lafka-dropcap h3:first-letter, .lafka-dropcap h4:first-letter, .lafka-dropcap h5:first-letter, .lafka-dropcap h6:first-letter{color:<?php echo esc_attr( $h1_font['color'] ); ?> !important;font-size:<?php echo esc_attr( $h1_font['size'] ); ?>;<?php echo esc_attr( $h1_css_style ); ?>}
 			/* H2 */
 			<?php
-			$h2_font      = $lafka_safe_font( 'h2_font' );
+			$h2_font      = $lafka_safe_font(
+				'lafka_h2_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '44px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"700","font-style":"normal"}',
+				)
+			);
 			$h2_css_style = $lafka_safe_style( $h2_font );
 			?>
 			h2, .editor-block-list__block-edit .wp-block-heading h2, .wp-block-freeform.block-library-rich-text__tinymce h2, body.gutenberg-editor-page .edit-post-visual-editor p.wp-block-cover-image-text, .lafka-counter-h2, .lafka-typed-h2, .icon_teaser h3:first-child, body.woocommerce-account #customer_login.col2-set .owl-nav, .woocommerce #customer_login.u-columns.col2-set .owl-nav, .related.products h2, .upsells.products h2, .similar_projects > h4, .lafka-related-blog-posts > h4, .tribe-events-related-events-title {color:<?php echo esc_attr( $h2_font['color'] ); ?>;font-size:<?php echo esc_attr( $h2_font['size'] ); ?>;<?php echo esc_attr( $h2_css_style ); ?>}
@@ -112,25 +145,57 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 			
 			/* H3 */
 			<?php
-			$h3_font      = $lafka_safe_font( 'h3_font' );
+			$h3_font      = $lafka_safe_font(
+				'lafka_h3_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '30px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"700","font-style":"normal"}',
+				)
+			);
 			$h3_css_style = $lafka_safe_style( $h3_font );
 			?>
 			h3, .editor-block-list__block-edit .wp-block-heading h3, .wp-block-freeform.block-library-rich-text__tinymce h3, .lafka-counter-h3, .lafka-typed-h3, .woocommerce p.cart-empty {color:<?php echo esc_attr( $h3_font['color'] ); ?>;font-size:<?php echo esc_attr( $h3_font['size'] ); ?>;<?php echo esc_attr( $h3_css_style ); ?>}
 			/* H4 */
 			<?php
-			$h4_font      = $lafka_safe_font( 'h4_font' );
+			$h4_font      = $lafka_safe_font(
+				'lafka_h4_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '24px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"600","font-style":"normal"}',
+				)
+			);
 			$h4_css_style = $lafka_safe_style( $h4_font );
 			?>
 			h4, .editor-block-list__block-edit .wp-block-heading h4, .wp-block-freeform.block-library-rich-text__tinymce h4, .lafka-counter-h4, .lafka-typed-h4{color:<?php echo esc_attr( $h4_font['color'] ); ?>;font-size:<?php echo esc_attr( $h4_font['size'] ); ?>;<?php echo esc_attr( $h4_css_style ); ?>}
 			/* H5 */
 			<?php
-			$h5_font      = $lafka_safe_font( 'h5_font' );
+			$h5_font      = $lafka_safe_font(
+				'lafka_h5_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '21px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"500","font-style":"normal"}',
+				)
+			);
 			$h5_css_style = $lafka_safe_style( $h5_font );
 			?>
 			h5, .editor-block-list__block-edit .wp-block-heading h5, .wp-block-freeform.block-library-rich-text__tinymce h5, .lafka-counter-h5, .lafka-typed-h5{color:<?php echo esc_attr( $h5_font['color'] ); ?>;font-size:<?php echo esc_attr( $h5_font['size'] ); ?>;<?php echo esc_attr( $h5_css_style ); ?>}
 			/* H6 */
 			<?php
-			$h6_font      = $lafka_safe_font( 'h6_font' );
+			$h6_font      = $lafka_safe_font(
+				'lafka_h6_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => '19px',
+					'color' => '#22272d',
+					'style' => '{"font-weight":"500","font-style":"normal"}',
+				)
+			);
 			$h6_css_style = $lafka_safe_style( $h6_font );
 			?>
 			h6, .editor-block-list__block-edit .wp-block-heading h6, .wp-block-freeform.block-library-rich-text__tinymce h6, .lafka-counter-h6, .lafka-typed-h6{color:<?php echo esc_attr( $h6_font['color'] ); ?>;font-size:<?php echo esc_attr( $h6_font['size'] ); ?>;<?php echo esc_attr( $h6_css_style ); ?>}
