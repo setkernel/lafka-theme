@@ -1,7 +1,7 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 <?php
-$lafka_theme_logo_img        = lafka_get_option( 'theme_logo' );
-$lafka_mobile_logo_img       = lafka_get_option( 'mobile_theme_logo' );
+$lafka_theme_logo_img        = get_theme_mod( 'lafka_theme_logo', '' );
+$lafka_mobile_logo_img       = get_theme_mod( 'lafka_mobile_theme_logo', '' );
 $lafka_persistent_logo_class = 'persistent_logo';
 $lafka_is_text_logo          = lafka_is_text_logo( $lafka_theme_logo_img );
 ?>

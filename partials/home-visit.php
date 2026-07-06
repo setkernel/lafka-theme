@@ -36,7 +36,7 @@ if ( '' === $lafka_visit_addr && '' === $lafka_visit_phone ) {
 	return;
 }
 
-$lafka_visit_logo_id = function_exists( 'lafka_get_option' ) ? lafka_get_option( 'theme_logo' ) : 0;
+$lafka_visit_logo_id = function_exists( 'get_theme_mod' ) ? get_theme_mod( 'lafka_theme_logo', 0 ) : 0;
 ?>
 <section class="lafka-visit" aria-labelledby="lafka-visit-heading">
 	<div class="lafka-container">

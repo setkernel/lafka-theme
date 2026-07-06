@@ -7,12 +7,17 @@
  */
 add_action( 'wp_enqueue_scripts', 'lafka_add_custom_css', 99 );
 
-// Bust the dynamic-css cache whenever theme options change.
+// Bust the dynamic-css cache whenever the design-token sources change:
+//  - the legacy `lafka` option (Options Framework + plugin flags), and
+//  - the active theme's `theme_mods_<stylesheet>` row. NX1-02 migrates the
+//    design-token readers onto `lafka_<key>` theme_mods, so a Customizer
+//    publish (or the one-time legacy->theme_mod copy) writes that theme_mods
+//    option — without this branch the operator would see stale cached CSS.
 add_action( 'updated_option', 'lafka_dynamic_css_bust_on_options_save', 10, 1 );
 add_action( 'added_option', 'lafka_dynamic_css_bust_on_options_save', 10, 1 );
 if ( ! function_exists( 'lafka_dynamic_css_bust_on_options_save' ) ) {
 	function lafka_dynamic_css_bust_on_options_save( $option_name ) {
-		if ( $option_name === 'lafka' ) {
+		if ( $option_name === 'lafka' || $option_name === 'theme_mods_' . get_option( 'stylesheet' ) ) {
 			update_option( 'lafka_dynamic_css_version', (string) time(), false );
 		}
 	}
@@ -55,15 +60,19 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 	 * @return string CSS string ready for wp_add_inline_style.
 	 */
 	function lafka_dynamic_css_build() {
-		// Gather all theme options
-		$accent_color                    = esc_attr( lafka_get_option( 'accent_color' ) );
+		// Gather all theme options.
+		// NX1-02.logos-brand-pilot: accent/brand/logo-bg read from `lafka_<key>`
+		// theme_mods (migrated off the legacy `lafka` option); inline defaults
+		// reproduce the registry `std` so fresh installs still render the
+		// shipped Peppery pixels.
+		$accent_color                    = esc_attr( get_theme_mod( 'lafka_accent_color', '#dc2626' ) );
 		// f074: brand-ramp anchor. Default #f59e0b matches the shipped
 		// pepper-yellow in lafka-tokens.css so the out-of-box ramp is
 		// unchanged; operators who set a brand color drive the handoff
 		// `--lafka-color-brand-500` consumers (footer chrome, hero gradient,
 		// open-status dot, etc.) instead of that token being fixed in CSS.
-		$brand_color                     = esc_attr( lafka_get_option( 'brand_color', '#f59e0b' ) );
-		$logo_bg_color                   = esc_attr( lafka_get_option( 'logo_background_color' ) );
+		$brand_color                     = esc_attr( get_theme_mod( 'lafka_brand_color', '#f59e0b' ) );
+		$logo_bg_color                   = esc_attr( get_theme_mod( 'lafka_logo_background_color', '#fccc4c' ) );
 		$links_color                     = esc_attr( lafka_get_option( 'links_color' ) );
 		$links_hover_color               = esc_attr( lafka_get_option( 'links_hover_color' ) );
 		$sidebar_titles_color            = esc_attr( lafka_get_option( 'sidebar_titles_color' ) );

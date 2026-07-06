@@ -37,8 +37,8 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 	 * Shared by header.php and footer.php so both surfaces always render the
 	 * same logo. Preference order (v6.3.0):
 	 *   1. WP-standard custom_logo (Appearance → Customize → Site Identity → Logo).
-	 *   2. Legacy lafka_get_option( 'theme_logo' )        (old framework data).
-	 *   3. Legacy lafka_get_option( 'mobile_theme_logo' ) (old framework data).
+	 *   2. Migrated theme_mod lafka_theme_logo        (was legacy framework data).
+	 *   3. Migrated theme_mod lafka_mobile_theme_logo (was legacy framework data).
 	 *
 	 * @since 6.3.0
 	 *
@@ -46,8 +46,8 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 	 */
 	function lafka_get_logo_id() {
 		$lafka_custom_logo_id = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'custom_logo', 0 ) : 0;
-		$lafka_legacy_main    = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'theme_logo' ) : 0;
-		$lafka_legacy_mobile  = function_exists( 'lafka_get_option' ) ? (int) lafka_get_option( 'mobile_theme_logo' ) : 0;
+		$lafka_legacy_main    = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'lafka_theme_logo', 0 ) : 0;
+		$lafka_legacy_mobile  = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'lafka_mobile_theme_logo', 0 ) : 0;
 
 		return $lafka_custom_logo_id ?: $lafka_legacy_main ?: $lafka_legacy_mobile;
 	}

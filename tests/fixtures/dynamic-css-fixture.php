@@ -2,12 +2,17 @@
 /**
  * NX1-02 dynamic-css BYTE-PARITY fixture (committed contract; do NOT edit by hand).
  *
- * A complete, DELIBERATELY NON-DEFAULT snapshot of every legacy theme-option
- * key that styles/dynamic-css.php consumes. tests/Unit/DynamicCssParityTest.php
- * feeds this SAME array to BOTH lafka_get_option() and get_theme_mod() so that,
- * as NX1-02 slices re-point each reader from the legacy layer to theme_mods, a
+ * A complete, DELIBERATELY NON-DEFAULT snapshot of every option key that
+ * styles/dynamic-css.php consumes. tests/Unit/DynamicCssParityTest.php feeds
+ * this SAME array to BOTH lafka_get_option() and get_theme_mod() so that, as
+ * NX1-02 slices re-point each reader from the legacy layer to theme_mods, a
  * byte-identical emitted CSS proves the rewiring is lossless. Every value is
  * unique so a swapped/dropped key shows up as a diff against the golden.
+ *
+ * Keys a slice has already migrated are keyed by their `lafka_<key>` theme_mod
+ * name (that is what the reader now looks up); still-legacy keys keep their
+ * bare Options Framework name. When a slice migrates a key, RENAME its entry
+ * here to the theme_mod name with the SAME value — the golden is unchanged.
  *
  * Regenerate ONLY on an intentional dynamic-css contract change:
  *   php scripts/... (see scratch generator) then refresh the golden with
@@ -17,11 +22,11 @@
  */
 
 return array(
-	'accent_color'                       => '#ce2266',
+	'lafka_accent_color'                 => '#ce2266',
 	'add_to_cart_color'                  => '#9b0c69',
 	'all_buttons_color'                  => '#7eb7d5',
 	'all_buttons_hover_color'            => '#38f742',
-	'brand_color'                        => '#88f6a6',
+	'lafka_brand_color'                  => '#88f6a6',
 	'collapsible_bckgr_color'            => '#fa64cc',
 	'collapsible_links_color'            => '#0bba0e',
 	'collapsible_titles_border_color'    => '#8047db',
@@ -40,7 +45,7 @@ return array(
 	'header_top_bar_color'               => '#b945c4',
 	'links_color'                        => '#5b05c9',
 	'links_hover_color'                  => '#021622',
-	'logo_background_color'              => '#59bb35',
+	'lafka_logo_background_color'        => '#59bb35',
 	'main_menu_background_color'         => '#45298c',
 	'main_menu_icons_color'              => '#a50227',
 	'main_menu_links_bckgr_hover_color'  => '#0a58f3',

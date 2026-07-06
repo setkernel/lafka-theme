@@ -41,7 +41,7 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 		<style media="all" type="text/css">
 		
 		div.edit-post-visual-editor blockquote, div.edit-post-visual-editor q {
-				background-color:<?php echo esc_attr( lafka_get_option( 'accent_color' ) ); ?>;
+				background-color:<?php echo esc_attr( get_theme_mod( 'lafka_accent_color', '#dc2626' ) ); ?>;
 			}
 
 			a, .editor-rich-text__tinymce a, .wp-block-freeform.block-library-rich-text__tinymce a, .block-editor-rich-text__editable a {

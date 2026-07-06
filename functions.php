@@ -3,6 +3,15 @@
 require_once get_template_directory() . '/incl/system/core-functions.php';
 
 /*
+ * NX1-02 (theme 7.0): legacy Options Framework -> Customizer theme_mod
+ * migration map + idempotent copy. Defines lafka_legacy_migrate_map() and
+ * lafka_legacy_migrate_run() so migrated readers have a home to migrate FROM;
+ * the one-time upgrade trigger that calls the run is wired by the NX1-02
+ * Retire phase. Loading here only defines the functions (no side effects).
+ */
+require_once get_template_directory() . '/incl/system/lafka-legacy-migrate.php';
+
+/*
  * NX1-10b: production asset-minification switch. Rewrites enqueued theme
  * styles//js URLs to their `.min` sibling (a `npm run build` artefact) when
  * SCRIPT_DEBUG is off and the sibling exists on disk. Hooks style_loader_src /
@@ -1175,20 +1184,21 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		if ( ! lafka_get_option( 'header_top_mobile_visibility' ) ) {
 			$classes[] = 'lafka-no-top-header-mobile';
 		}
-		if ( lafka_get_option( 'disable_logo_point_down' ) ) {
+		if ( get_theme_mod( 'lafka_disable_logo_point_down', 0 ) ) {
 			$classes[] = 'lafka-no-logo-point';
 		}
-		if ( ! lafka_get_option( 'logo_background_color' ) ) {
+		$logo_bg_body = get_theme_mod( 'lafka_logo_background_color', '#fccc4c' );
+		if ( ! $logo_bg_body ) {
 			$classes[] = 'lafka-no-logo-bg';
 		}
 		$header_backgr_body = lafka_get_option( 'header_background' );
-		if ( lafka_get_option( 'logo_background_color' ) && lafka_get_option( 'logo_background_color' ) === $header_backgr_body['color'] ) {
+		if ( $logo_bg_body && $logo_bg_body === $header_backgr_body['color'] ) {
 			$classes[] = 'lafka-logo-matches-header';
 		}
 		if ( ! lafka_get_option( 'use_quickview' ) ) {
 			$classes[] = 'lafka-no-quickview';
 		}
-		if ( lafka_get_option( 'mobile_theme_logo' ) ) {
+		if ( get_theme_mod( 'lafka_mobile_theme_logo', '' ) ) {
 			$classes[] = 'lafka-has-mobile-logo';
 		}
 		if ( lafka_get_option( 'show_quantity_on_listing' ) ) {

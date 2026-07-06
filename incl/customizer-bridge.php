@@ -15,10 +15,18 @@
  * keeping the legacy storage intact so existing read paths (`lafka_get_option`)
  * keep working with zero data migration.
  *
- * Mechanism: each Customizer setting uses `type => 'option'` with a setting
- * ID like `lafka[<key>]`. WP's Customizer maps that to the `wp_options.lafka`
- * row at sub-key `<key>` — the SAME storage Theme Options writes to. The
- * operator now has one UI; the codebase has one storage.
+ * Mechanism: a legacy-bridged Customizer setting uses `type => 'option'` with a
+ * setting ID like `lafka[<key>]`. WP's Customizer maps that to the
+ * `wp_options.lafka` row at sub-key `<key>` — the SAME storage Theme Options
+ * writes to. The operator now has one UI; the codebase has one storage.
+ *
+ * NX1-02 (theme 7.0) retires that legacy storage slice by slice: a migrated
+ * control instead uses `type => 'theme_mod'` with a `lafka_<key>` setting ID,
+ * and its readers move to `get_theme_mod( 'lafka_<key>', <std> )`. The
+ * per-control `$type` argument on the setting helpers selects which storage a
+ * given control uses, so migrated and not-yet-migrated fields coexist here
+ * during the migration. (logos-brand-pilot migrated accent/brand/logo-bg +
+ * mobile logo + point-down.)
  *
  * This file is included from functions.php. Adding new bridges below is a
  * matter of calling `lafka_bridge_*()` with the legacy option key.
@@ -54,7 +62,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings',
 				array(
 					'title'       => esc_html__( 'Lafka — Site Settings', 'lafka' ),
-					'description' => esc_html__( 'Logos, branding, integrations, and general site behavior. These fields write to the legacy "Theme Options" storage so existing code keeps working — the only change is the editing UI is now here, in one place.', 'lafka' ),
+					'description' => esc_html__( 'Logos, branding, integrations, and general site behavior. Migrated fields save to the Customizer (theme_mods); the rest still write to the legacy "Theme Options" storage until their NX1-02 slice lands — the only change is the editing UI is now here, in one place.', 'lafka' ),
 					'priority'    => 30,
 				)
 			);
@@ -96,27 +104,31 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 			self::add_image(
 				$wp_customize,
-				'lafka[mobile_theme_logo]',
+				'lafka_mobile_theme_logo',
 				'lafka_settings_logos',
 				__( 'Mobile logo (optional)', 'lafka' ),
-				__( 'Alternate logo for ≤767px viewports. Also used in the sticky/condensed header. Leave empty to reuse the main logo from Site Identity.', 'lafka' )
+				__( 'Alternate logo for ≤767px viewports. Also used in the sticky/condensed header. Leave empty to reuse the main logo from Site Identity.', 'lafka' ),
+				'theme_mod'
 			);
 
 			self::add_color(
 				$wp_customize,
-				'lafka[logo_background_color]',
+				'lafka_logo_background_color',
 				'lafka_settings_logos',
 				__( 'Logo background color', 'lafka' ),
 				'#fccc4c',
-				__( 'Applied behind the logo across all viewports. Leave the default for the legacy peach-yellow plate.', 'lafka' )
+				__( 'Applied behind the logo across all viewports. Leave the default for the legacy peach-yellow plate.', 'lafka' ),
+				'theme_mod'
 			);
 
 			self::add_checkbox(
 				$wp_customize,
-				'lafka[disable_logo_point_down]',
+				'lafka_disable_logo_point_down',
 				'lafka_settings_logos',
 				__( 'Disable the logo point-down accent', 'lafka' ),
-				__( 'Removes the small triangle that hangs under the logo plate.', 'lafka' )
+				__( 'Removes the small triangle that hangs under the logo plate.', 'lafka' ),
+				0,
+				'theme_mod'
 			);
 		}
 
@@ -137,11 +149,22 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 			self::add_color(
 				$wp_customize,
-				'lafka[accent_color]',
+				'lafka_accent_color',
 				'lafka_settings_brand',
 				__( 'Accent color', 'lafka' ),
 				'#dc2626',
-				__( 'Primary brand color — CTAs, links, badges. Aliased to --lafka-color-accent-500 in modern components.', 'lafka' )
+				__( 'Primary brand color — CTAs, links, badges. Aliased to --lafka-color-accent-500 in modern components.', 'lafka' ),
+				'theme_mod'
+			);
+
+			self::add_color(
+				$wp_customize,
+				'lafka_brand_color',
+				'lafka_settings_brand',
+				__( 'Brand color', 'lafka' ),
+				'#f59e0b',
+				__( 'Secondary brand accent — drives the --lafka-color-brand-500 ramp (footer chrome, hero gradient, open-status dot). Defaults to the shipped pepper-yellow.', 'lafka' ),
+				'theme_mod'
 			);
 		}
 
@@ -219,12 +242,14 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 * @param string               $label
 		 * @param string               $default
 		 * @param string               $description
+		 * @param string               $type        'option' (legacy lafka[] storage)
+		 *                                           or 'theme_mod' (migrated home).
 		 */
-		private static function add_text( $wp_customize, $id, $section, $label, $default = '', $description = '' ): void {
+		private static function add_text( $wp_customize, $id, $section, $label, $default = '', $description = '', $type = 'option' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
-					'type'              => 'option',
+					'type'              => $type,
 					'default'           => $default,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'sanitize_text_field',
@@ -244,12 +269,14 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 		/**
 		 * Add a color setting + WP_Customize_Color_Control.
+		 *
+		 * @param string $type 'option' (legacy lafka[] storage) or 'theme_mod'.
 		 */
-		private static function add_color( $wp_customize, $id, $section, $label, $default = '#000000', $description = '' ): void {
+		private static function add_color( $wp_customize, $id, $section, $label, $default = '#000000', $description = '', $type = 'option' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
-					'type'              => 'option',
+					'type'              => $type,
 					'default'           => $default,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'sanitize_hex_color',
@@ -276,12 +303,14 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 * stored attachment IDs the same way, so this is a drop-in bridge —
 		 * existing render code calling `lafka_get_option('theme_logo')` keeps
 		 * working without any change.
+		 *
+		 * @param string $type 'option' (legacy lafka[] storage) or 'theme_mod'.
 		 */
-		private static function add_image( $wp_customize, $id, $section, $label, $description = '' ): void {
+		private static function add_image( $wp_customize, $id, $section, $label, $description = '', $type = 'option' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
-					'type'              => 'option',
+					'type'              => $type,
 					'default'           => '',
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'absint',
@@ -304,12 +333,14 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 		/**
 		 * Add a boolean setting (stored as 1/0 to match Theme Options shape).
+		 *
+		 * @param string $type 'option' (legacy lafka[] storage) or 'theme_mod'.
 		 */
-		private static function add_checkbox( $wp_customize, $id, $section, $label, $description = '', $default = 0 ): void {
+		private static function add_checkbox( $wp_customize, $id, $section, $label, $description = '', $default = 0, $type = 'option' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
-					'type'              => 'option',
+					'type'              => $type,
 					'default'           => $default ? 1 : 0,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
