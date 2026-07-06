@@ -3,6 +3,14 @@
 require_once get_template_directory() . '/incl/system/core-functions.php';
 
 /*
+ * NX1-10b: production asset-minification switch. Rewrites enqueued theme
+ * styles//js URLs to their `.min` sibling (a `npm run build` artefact) when
+ * SCRIPT_DEBUG is off and the sibling exists on disk. Hooks style_loader_src /
+ * script_loader_src; a strict no-op in dev checkouts and under SCRIPT_DEBUG.
+ */
+require_once get_template_directory() . '/incl/system/asset-min.php';
+
+/*
  * v6.0.0: Customizer bridge to legacy Theme Options storage.
  * Adds a "Lafka — Site Settings" panel in Customizer whose fields write
  * directly to wp_options.lafka (the Theme Options storage), so operators

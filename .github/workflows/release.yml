@@ -34,6 +34,23 @@ jobs:
         id: version
         run: echo "tag=${GITHUB_REF#refs/tags/}" >> "$GITHUB_OUTPUT"
 
+      # Minify-only dist step (NX1-10b): regenerate the .min.css / .min.js
+      # siblings the runtime switch (incl/system/asset-min.php) serves in
+      # production. These are git-ignored build artefacts, so they only exist
+      # after `npm run build` runs here — the rsync below must copy them into
+      # the zip (it excludes node_modules/vendor/tooling, never the .min files).
+      # First-party actions only; mirrors ci.yml's Node setup.
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 24
+          cache: npm
+
+      - name: Install npm dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build minified assets
+        run: npm run build
+
       - name: Build zip
         run: |
           mkdir lafka

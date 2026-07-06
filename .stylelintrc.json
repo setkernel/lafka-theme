@@ -3,6 +3,7 @@
 	"ignoreFiles": [
 		"vendor/**",
 		"node_modules/**",
+		"**/*.min.css",
 		"styles/cloud-zoom/**",
 		"styles/et-line-font/**",
 		"styles/flaticon/**",
