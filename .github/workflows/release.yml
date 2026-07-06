@@ -54,9 +54,21 @@ jobs:
       - name: Build zip
         run: |
           mkdir lafka
+          # NX1-10d: dev-only files must never ship in the installable zip.
+          # Excluded: VCS/CI metadata, dependencies, package manifests, lint +
+          # phpunit + playwright + wp-env tooling, the test suite, the build
+          # scripts (already run in the step above), and the contributor/design
+          # docs. Runtime assets STAY — the freshly-built .min siblings, the
+          # store/demo one-click importer, readme.txt, languages/, theme.json.
+          # `readme.md` is the GitHub project readme (dev-only); the lowercase
+          # exclude is required because `README.md` does not match it on the
+          # case-sensitive Linux runner.
           rsync -a --exclude='.git' \
                    --exclude='.github' \
                    --exclude='.gitignore' \
+                   --exclude='.githooks' \
+                   --exclude='.npmrc' \
+                   --exclude='.wp-env*.json' \
                    --exclude='node_modules' \
                    --exclude='vendor' \
                    --exclude='package.json' \
@@ -66,7 +78,15 @@ jobs:
                    --exclude='.phpcs.xml.dist' \
                    --exclude='.stylelintrc.json' \
                    --exclude='eslint.config.mjs' \
+                   --exclude='phpunit.xml.dist' \
+                   --exclude='.phpunit.result.cache' \
+                   --exclude='playwright.config.js' \
+                   --exclude='tests' \
+                   --exclude='scripts' \
+                   --exclude='CONTRIBUTING.md' \
+                   --exclude='DESIGN_SYSTEM.md' \
                    --exclude='README.md' \
+                   --exclude='readme.md' \
                    --exclude='LICENSE' \
                    ./ lafka/
           zip -r lafka.zip lafka/
