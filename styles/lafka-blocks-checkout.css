@@ -241,9 +241,22 @@
 /* =========================================================================
  * Accent CTAs — "Proceed to Checkout" (cart) + "Place Order" (checkout)
  * Pizza-red pill, display type, per handoff (CTAs only).
+ *
+ * WC renders these as <a> tags, so the theme's prose-link styling
+ * (accent-text colour + underline via .lafka-page__content) bled in —
+ * caught live 2026-07-06 as dark-red underlined CTA text on the accent
+ * pill. The reset below plus the :not() exclusion in lafka-page.css
+ * keep every block button out of the prose-link treatment.
  * ========================================================================= */
+.wc-block-components-button,
+.wc-block-components-button:visited {
+	text-decoration: none;
+}
+
 .wc-block-cart__submit-button,
-.wc-block-components-checkout-place-order-button {
+.wc-block-cart__submit-button:visited,
+.wc-block-components-checkout-place-order-button,
+.wc-block-components-checkout-place-order-button:visited {
 	min-height: 52px;
 	padding: var(--lafka-space-4) var(--lafka-space-8);
 	background: var(--lafka-color-accent-500);
@@ -255,6 +268,7 @@
 	font-size: var(--lafka-font-size-body-lg);
 	letter-spacing: var(--lafka-letter-spacing-normal);
 	box-shadow: var(--lafka-shadow-1);
+	text-decoration: none;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		box-shadow var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }

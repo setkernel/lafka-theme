@@ -183,8 +183,11 @@
  * a WC page (like /cart/) uses page.php as its template and routes
  * the cart shortcode through .lafka-page__content. Previously the
  * cart-empty "Browse the menu" button rendered accent-on-accent
- * invisible because this rule painted its text accent red. */
-.lafka-page__content a:not(.wp-block-button__link, .lafka-cart-empty__cta, [class*="__cta"], [class*="__btn"], .button) {
+ * invisible because this rule painted its text accent red.
+ * NX1-04b: WC BLOCK buttons (.wc-block-components-button /
+ * .wp-element-button, e.g. the block cart's "Proceed to Checkout"
+ * anchor) join the exclusion list for the same reason. */
+.lafka-page__content a:not(.wp-block-button__link, .lafka-cart-empty__cta, [class*="__cta"], [class*="__btn"], .button, .wc-block-components-button, .wp-element-button) {
 	color: var(--lafka-color-accent-text);
 	text-decoration: underline;
 	text-underline-offset: 3px;
@@ -192,7 +195,7 @@
 	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-.lafka-page__content a:not(.wp-block-button__link, .lafka-cart-empty__cta, [class*="__cta"], [class*="__btn"], .button):hover {
+.lafka-page__content a:not(.wp-block-button__link, .lafka-cart-empty__cta, [class*="__cta"], [class*="__btn"], .button, .wc-block-components-button, .wp-element-button):hover {
 	color: var(--lafka-color-accent-600);
 	text-decoration-thickness: 2px;
 }

@@ -126,4 +126,48 @@ final class BlocksCheckoutCssTest extends TestCase {
 			'Block inputs must carry the shared focus ring token.'
 		);
 	}
+
+	/**
+	 * WC's primary block buttons (cart submit, place order) are ANCHOR tags, so
+	 * the theme's global link styles (accent-text colour + underline) bleed into
+	 * them unless the skin resets anchor inheritance. Caught live 2026-07-06:
+	 * the cart's "Proceed to Checkout" rendered dark-red struck-through text on
+	 * the accent background.
+	 */
+	public function test_primary_block_buttons_reset_anchor_inheritance(): void {
+		$button_reset = $this->extract_rule_blocks( '.wc-block-components-button' );
+		$this->assertStringContainsString(
+			'text-decoration: none',
+			$button_reset,
+			'All WC block buttons must reset the theme link underline.'
+		);
+
+		$cta_block = $this->extract_rule_blocks( '.wc-block-cart__submit-button' );
+		$this->assertStringContainsString(
+			'text-decoration: none',
+			$cta_block,
+			'The accent CTAs must reset the theme link underline.'
+		);
+		$this->assertStringContainsString(
+			'var(--lafka-color-accent-contrast',
+			$cta_block,
+			'Accent CTA text must use the on-accent contrast token, not the link colour.'
+		);
+	}
+
+	/**
+	 * All declaration blocks whose selector list mentions the given selector,
+	 * concatenated.
+	 */
+	private function extract_rule_blocks( string $selector ): string {
+		$out = '';
+		if ( preg_match_all( '/[^{}]*\{[^}]*\}/', $this->css, $matches ) ) {
+			foreach ( $matches[0] as $rule ) {
+				if ( str_contains( $rule, $selector ) ) {
+					$out .= $rule . "\n";
+				}
+			}
+		}
+		return $out;
+	}
 }
