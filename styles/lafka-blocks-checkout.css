@@ -1,0 +1,607 @@
+/* =========================================================================
+ * lafka-blocks-checkout.css — WooCommerce BLOCK Cart & Checkout skin (NX1-04b)
+ *
+ * Layers the Peppery handoff visual language
+ * (/design_handoff_peppery_ordering/README.md, "Cart" + "Checkout") over
+ * WooCommerce's block Cart/Checkout and over the plugin's lafka- block
+ * components (order_type/branch selects via the Additional Checkout Fields API,
+ * timeslot picker, free-delivery progress, addon item_data lines in cart
+ * items). Companion to the classic-path lafka-cart-handoff.css /
+ * lafka-checkout-handoff.css — same design system, different (block) markup.
+ *
+ * Enqueued CONDITIONALLY (blocks mode + has_block cart/checkout) via
+ * lafka_is_block_cart_checkout_page(); never on the classic shortcode path.
+ *
+ * Discipline: every colour/size/motion value is a --lafka-* token — NO hex
+ * literals (locked by BlocksCheckoutCssTest). Contrast pairs match the handoff:
+ * ink text on light surfaces, accent-500 fills carry accent-contrast text.
+ *
+ * @since lafka-theme 6.21.0 (NX1-04b)
+ * ========================================================================= */
+
+/* -------- Dormant Magnific popup source (root-cause hide) -------------- *
+ * The classic shipping-areas branch modal is inline popup source kept hidden by
+ * Magnific Popup's `.mfp-hide { display:none }` rule — which lives in the
+ * magnific stylesheet the theme only enqueues on pages that open a popup. On a
+ * block cart/checkout page that sheet isn't loaded, so the dormant branch form
+ * (delivery/pickup bar + submit) leaks in below the footer. Restore the hide
+ * here (this sheet only loads on block cart/checkout). Magnific strips
+ * `.mfp-hide` when it actually opens a popup, so an opened popup is unaffected. */
+.mfp-hide {
+	display: none !important;
+}
+
+/* In blocks mode the block checkout's own order_type / branch selects
+ * (Additional Checkout Fields API) are the canonical fulfilment controls, so
+ * the classic branch-selection modal is redundant regardless — belt-and-braces
+ * hide in case a host renders it outside an .mfp-hide wrapper. */
+.lafka-branch-selection {
+	display: none !important;
+}
+
+/* -------- Shared page frame (cart + checkout) -------------------------- */
+.wp-block-woocommerce-cart,
+.wp-block-woocommerce-checkout {
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: var(--lafka-gutter-mobile);
+	font-family: var(--lafka-font-family-body);
+	color: var(--lafka-color-text-primary);
+}
+
+@media (min-width: 768px) {
+
+	.wp-block-woocommerce-cart,
+	.wp-block-woocommerce-checkout {
+		padding-inline: var(--lafka-gutter-laptop);
+	}
+}
+
+/* Two-column money layout: main + summary. WC's sidebar-layout already sizes
+ * the two flex columns to fit the container exactly, so we must NOT add a
+ * `gap` (it overflows the row and wraps the summary underneath). We only pin
+ * the summary column sticky on desktop. */
+@media (min-width: 1024px) {
+
+	.wc-block-cart__sidebar,
+	.wc-block-checkout__sidebar {
+		position: sticky;
+		top: var(--lafka-space-6);
+		align-self: flex-start;
+	}
+}
+
+/* -------- Typography rhythm -------------------------------------------- *
+ * Titles ride Fraunces (display); everything else Rubik (body). */
+.wc-block-cart__totals-title,
+.wc-block-components-checkout-order-summary__title-text,
+.wc-block-components-title {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	color: var(--lafka-color-text-primary);
+}
+
+/* =========================================================================
+ * Block CART
+ * ========================================================================= */
+
+/* Item rows — card-like separation, generous vertical rhythm. */
+.wc-block-cart-items__header {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-muted);
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+}
+
+.wc-block-cart-items__row {
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+	padding-block: var(--lafka-space-4);
+}
+
+.wc-block-cart-item__image img {
+	border-radius: var(--lafka-radius-md);
+	background: var(--lafka-color-surface-muted);
+}
+
+.wc-block-cart-item__product .wc-block-components-product-name {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+}
+
+.wc-block-cart-item__product .wc-block-components-product-name:hover {
+	color: var(--lafka-color-accent-text);
+}
+
+/* Addon item_data lines (NX1-04c) — muted meta, tight leading. */
+.wc-block-components-product-metadata,
+.wc-block-components-product-details {
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+	line-height: var(--lafka-line-height-snug);
+}
+
+.wc-block-components-product-details__name {
+	font-weight: var(--lafka-font-weight-medium);
+	color: var(--lafka-color-text-secondary);
+}
+
+.wc-block-components-product-details__value {
+	color: var(--lafka-color-text-muted);
+}
+
+.wc-block-cart-item__total .wc-block-components-product-price,
+.wc-block-cart-item__prices .wc-block-components-product-price__value {
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+}
+
+/* Quantity stepper — pill control, ink glyphs, accent focus. */
+.wc-block-components-quantity-selector {
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-surface-page);
+}
+
+.wc-block-components-quantity-selector__button {
+	color: var(--lafka-color-text-primary);
+}
+
+.wc-block-components-quantity-selector__button:hover {
+	color: var(--lafka-color-accent-text);
+	background: var(--lafka-color-surface-muted);
+}
+
+.wc-block-components-quantity-selector__input {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+/* Remove link — muted → error on hover. */
+.wc-block-cart-item__remove-link {
+	color: var(--lafka-color-text-muted);
+	font-size: var(--lafka-font-size-caption);
+	text-decoration: underline;
+}
+
+.wc-block-cart-item__remove-link:hover {
+	color: var(--lafka-color-error-500);
+}
+
+/* -------- Totals card (cart sidebar) ----------------------------------- *
+ * The cart sidebar is the flex summary column (order-summary + express
+ * options + the Proceed CTA). Card the column itself so the CTA lands inside
+ * the summary, per the handoff. */
+.wc-block-cart__sidebar {
+	background: var(--lafka-color-surface-raised);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	box-shadow: var(--lafka-shadow-1);
+	padding: var(--lafka-space-6);
+}
+
+.wc-block-cart__totals-title {
+	font-size: var(--lafka-font-size-h3);
+	margin-bottom: var(--lafka-space-3);
+}
+
+/* =========================================================================
+ * Shared totals rows (cart + checkout summary)
+ * ========================================================================= */
+.wc-block-components-totals-item {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	color: var(--lafka-color-text-secondary);
+}
+
+.wc-block-components-totals-item__label {
+	color: var(--lafka-color-text-secondary);
+}
+
+.wc-block-components-totals-item__value {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+.wc-block-components-totals-item__description {
+	color: var(--lafka-color-text-muted);
+	font-size: var(--lafka-font-size-caption);
+}
+
+.wc-block-components-totals-footer-item {
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	padding-top: var(--lafka-space-3);
+	font-size: var(--lafka-font-size-h4);
+}
+
+.wc-block-components-totals-footer-item .wc-block-components-totals-item__label,
+.wc-block-components-totals-footer-item .wc-block-components-totals-item__value {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	color: var(--lafka-color-text-primary);
+}
+
+/* Coupon panel — quiet collapsible, tokenised chrome. */
+.wc-block-components-totals-coupon .wc-block-components-panel__button,
+.wc-block-components-panel__button {
+	color: var(--lafka-color-text-secondary);
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+.wc-block-components-panel__button:hover {
+	color: var(--lafka-color-accent-text);
+}
+
+/* =========================================================================
+ * Accent CTAs — "Proceed to Checkout" (cart) + "Place Order" (checkout)
+ * Pizza-red pill, display type, per handoff (CTAs only).
+ * ========================================================================= */
+.wc-block-cart__submit-button,
+.wc-block-components-checkout-place-order-button {
+	min-height: 52px;
+	padding: var(--lafka-space-4) var(--lafka-space-8);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-accent-contrast);
+	border: 1px solid transparent;
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: var(--lafka-font-size-body-lg);
+	letter-spacing: var(--lafka-letter-spacing-normal);
+	box-shadow: var(--lafka-shadow-1);
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		box-shadow var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.wc-block-cart__submit-button:hover,
+.wc-block-components-checkout-place-order-button:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-accent-contrast);
+	box-shadow: var(--lafka-shadow-2);
+}
+
+.wc-block-cart__submit-button:focus-visible,
+.wc-block-components-checkout-place-order-button:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* =========================================================================
+ * Block CHECKOUT
+ * ========================================================================= */
+
+/* Numbered steps — restate the handoff "6-step feel": Fraunces titles with a
+ * dark counter pill, generous separation between steps. */
+.wc-block-checkout__main {
+	counter-reset: lafka-checkout-step;
+}
+
+.wc-block-components-checkout-step {
+	counter-increment: lafka-checkout-step;
+	margin-bottom: var(--lafka-space-8);
+}
+
+.wc-block-components-checkout-step__title {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: var(--lafka-font-size-h3);
+	line-height: var(--lafka-line-height-snug);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	color: var(--lafka-color-text-primary);
+}
+
+.wc-block-components-checkout-step__heading {
+	display: flex;
+	align-items: center;
+	gap: var(--lafka-space-3);
+}
+
+.wc-block-components-checkout-step__heading::before {
+	content: counter(lafka-checkout-step);
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	flex: 0 0 auto;
+	width: 32px;
+	height: 32px;
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+	border-radius: var(--lafka-radius-pill);
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: var(--lafka-font-size-body);
+}
+
+.wc-block-components-checkout-step__description {
+	color: var(--lafka-color-text-muted);
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+/* -------- Form fields: match .lafka-input (sunken → ink focus) --------- */
+.wc-block-components-text-input input,
+.wc-block-components-text-input textarea,
+.wc-block-components-textarea,
+.wc-blocks-components-select__select,
+.wc-block-components-select-input select,
+.wc-block-components-address-form input,
+.wc-block-components-address-form select {
+	background: var(--lafka-color-surface-sunken);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	color: var(--lafka-color-text-primary);
+	min-height: 48px;
+}
+
+.wc-block-components-text-input input:focus,
+.wc-block-components-text-input textarea:focus,
+.wc-blocks-components-select__select:focus,
+.wc-block-components-select-input select:focus,
+.wc-block-components-address-form input:focus,
+.wc-block-components-address-form select:focus {
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-page);
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* Floating field labels + generic labels. */
+.wc-block-components-text-input label,
+.wc-blocks-components-select__label,
+.wc-block-components-checkout-step__content label {
+	font-family: var(--lafka-font-family-body);
+	color: var(--lafka-color-text-muted);
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.wc-block-components-text-input.is-active label,
+.wc-block-components-text-input input:focus + label {
+	color: var(--lafka-color-text-secondary);
+}
+
+/* Validation — visible red border on invalid inputs (parity with classic). */
+.wc-block-components-text-input.has-error input,
+.wc-block-components-validation-error ~ .wc-block-components-text-input input {
+	border-color: var(--lafka-color-error-500);
+}
+
+.wc-block-components-validation-error {
+	color: var(--lafka-color-error-500);
+	font-size: var(--lafka-font-size-caption);
+}
+
+/* -------- lafka order_type / branch selects (Additional Fields API) ---- */
+.wc-block-components-select-input-lafka-order-type .wc-blocks-components-select__select,
+.wc-block-components-select-input[class*="lafka"] .wc-blocks-components-select__select {
+	background: var(--lafka-color-surface-sunken);
+	border-color: var(--lafka-color-border-default);
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+/* -------- Payment method radios ---------------------------------------- *
+ * Left padding on the option clears the absolutely-positioned radio input
+ * (left:16px, 20px wide) so the label text never overlaps the dot. */
+.wc-block-components-radio-control__option {
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
+	padding: var(--lafka-space-3) var(--lafka-space-4) var(--lafka-space-3) var(--lafka-space-12);
+	margin-bottom: var(--lafka-space-2);
+	background: var(--lafka-color-surface-page);
+	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.wc-block-components-radio-control__option-checked,
+.wc-block-components-radio-control__option:hover {
+	border-color: var(--lafka-color-accent-500);
+	background: var(--lafka-color-accent-50);
+}
+
+.wc-block-components-radio-control__input:checked {
+	border-color: var(--lafka-color-accent-500);
+	background: var(--lafka-color-accent-500);
+}
+
+.wc-block-components-radio-control__label {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+/* -------- Checkout order summary (sidebar) ----------------------------- */
+.wc-block-checkout__sidebar .wc-block-components-checkout-order-summary,
+.wc-block-checkout__sidebar .wp-block-woocommerce-checkout-order-summary-block {
+	background: var(--lafka-color-surface-raised);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+.wc-block-components-checkout-order-summary__title-text {
+	font-size: var(--lafka-font-size-h3);
+}
+
+.wc-block-components-order-summary-item__description .wc-block-components-product-name {
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+}
+
+.wc-block-components-order-summary-item__quantity {
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+	border-radius: var(--lafka-radius-pill);
+	font-weight: var(--lafka-font-weight-semibold);
+}
+
+.wc-block-components-order-summary-item__total-price {
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+}
+
+/* =========================================================================
+ * Lafka block components
+ * ========================================================================= */
+
+/* -------- Free-delivery progress (block cart) -------------------------- *
+ * Mirrors the classic lafka-free-delivery-progress.css: green success band,
+ * a slim track + accent bar, "reached" swaps to a success fill. */
+.lafka-block-free-delivery {
+	margin: var(--lafka-space-4) 0;
+	padding: var(--lafka-space-4);
+	background: var(--lafka-color-success-bg);
+	border: 1px solid var(--lafka-status-success-border);
+	border-radius: var(--lafka-radius-md);
+}
+
+.lafka-block-free-delivery__label {
+	margin: 0 0 var(--lafka-space-2);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	color: var(--lafka-color-success);
+}
+
+.lafka-block-free-delivery__track {
+	height: var(--lafka-space-2);
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-surface-muted);
+	overflow: hidden;
+}
+
+.lafka-block-free-delivery__bar {
+	height: 100%;
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-accent-500);
+	transition: width var(--lafka-motion-duration-slow) var(--lafka-motion-ease-out);
+}
+
+.lafka-block-free-delivery--reached .lafka-block-free-delivery__bar {
+	background: var(--lafka-color-success-500);
+}
+
+.lafka-block-free-delivery--reached .lafka-block-free-delivery__label {
+	color: var(--lafka-color-success);
+	font-weight: var(--lafka-font-weight-semibold);
+}
+
+/* -------- Timeslot picker (block checkout) ----------------------------- */
+.lafka-block-timeslot {
+	margin: var(--lafka-space-4) 0;
+	padding: var(--lafka-space-4);
+	background: var(--lafka-color-surface-sunken);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
+}
+
+.lafka-block-timeslot__heading {
+	margin: 0 0 var(--lafka-space-3);
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: var(--lafka-font-size-h4);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-block-timeslot__row {
+	display: grid;
+	grid-template-columns: 1fr;
+	gap: var(--lafka-space-3);
+}
+
+@media (min-width: 600px) {
+
+	.lafka-block-timeslot__row {
+		grid-template-columns: 1fr 1fr;
+	}
+}
+
+.lafka-block-timeslot__date,
+.lafka-block-timeslot__time {
+	width: 100%;
+	min-height: 48px;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	background: var(--lafka-color-surface-page);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-block-timeslot__date:focus,
+.lafka-block-timeslot__time:focus {
+	border-color: var(--lafka-color-text-primary);
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-block-timeslot__time:disabled {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-muted);
+	cursor: not-allowed;
+}
+
+.lafka-block-timeslot__note {
+	margin: var(--lafka-space-2) 0 0;
+	font-size: var(--lafka-font-size-caption);
+	color: var(--lafka-color-text-muted);
+}
+
+/* =========================================================================
+ * Empty states (cart + checkout) — handoff-tokenised chrome
+ * ========================================================================= */
+.wc-block-cart__empty-cart__title,
+.wc-block-checkout-empty__title {
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: var(--lafka-font-size-h2);
+	color: var(--lafka-color-text-primary);
+}
+
+.wc-block-checkout-empty__description {
+	color: var(--lafka-color-text-secondary);
+}
+
+.wc-block-checkout-empty__image path {
+	fill: var(--lafka-color-text-muted);
+}
+
+/* =========================================================================
+ * Mobile layout (< 1024px): single column, comfortable tap targets, the
+ * summary flows under the main column; the submit CTA stays full-width.
+ * ========================================================================= */
+@media (max-width: 1023px) {
+
+	.wc-block-cart__submit-button,
+	.wc-block-components-checkout-place-order-button {
+		width: 100%;
+	}
+
+	.wc-block-cart__sidebar > .wc-block-components-sidebar,
+	.wc-block-checkout__sidebar > .wc-block-components-sidebar {
+		margin-top: var(--lafka-space-6);
+	}
+}
+
+@media (max-width: 768px) {
+
+	.wc-block-components-quantity-selector,
+	.wc-block-components-radio-control__option {
+		min-height: var(--lafka-tap-target);
+	}
+}
+
+/* Reduced-motion: neutralise the progress-bar + CTA transitions. */
+@media (prefers-reduced-motion: reduce) {
+
+	.lafka-block-free-delivery__bar,
+	.wc-block-cart__submit-button,
+	.wc-block-components-checkout-place-order-button {
+		transition: none;
+	}
+}

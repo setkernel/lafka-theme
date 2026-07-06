@@ -1041,6 +1041,37 @@ if ( ! function_exists( 'lafka_style_loader_tag_filter' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_is_block_cart_checkout_page' ) ) {
+	/**
+	 * Whether the current request renders WooCommerce's BLOCK Cart or Checkout
+	 * (NX1-04b). True only when the queried page actually contains the
+	 * `woocommerce/cart` or `woocommerce/checkout` block AND Lafka is in blocks
+	 * checkout mode.
+	 *
+	 * The mode gate reads the plugin's SSOT helper (Lafka_Checkout_Mode) behind a
+	 * class_exists guard so the theme still degrades to plain-WC block styling when
+	 * the plugin is absent, and NEVER treats a classic-mode page (where the shim
+	 * serves the shortcode checkout, or the pages are physically shortcodes) as a
+	 * block page. Used to gate both the block-checkout stylesheet and the
+	 * defer-suppression below — the WooCommerce Blocks runtime must not be
+	 * `defer`-reordered (see lafka_defer_non_critical_scripts).
+	 *
+	 * @return bool
+	 */
+	function lafka_is_block_cart_checkout_page() {
+		if ( ! function_exists( 'has_block' ) ) {
+			return false;
+		}
+		// Classic mode ⇒ never a block page (shim serves shortcodes). Absent
+		// plugin ⇒ fall through and style whatever WC block pages exist.
+		if ( class_exists( 'Lafka_Checkout_Mode' ) && ! Lafka_Checkout_Mode::is_blocks() ) {
+			return false;
+		}
+
+		return has_block( 'woocommerce/checkout' ) || has_block( 'woocommerce/cart' );
+	}
+}
+
 /**
  * Register / Enqueue theme scripts
  */
@@ -1544,6 +1575,22 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				get_template_directory_uri() . '/styles/lafka-checkout-handoff.css',
 				array( 'lafka-tokens' ),
 				lafka_asset_version( '/styles/lafka-checkout-handoff.css' )
+			);
+		}
+
+		// NX1-04b: block Cart/Checkout skin. Applies the handoff visual language
+		// to WooCommerce's block cart + checkout and to the plugin's lafka- block
+		// components (order_type/branch fields, timeslot picker, free-delivery
+		// progress, addon item_data lines). CONDITIONAL — only when the page
+		// actually renders a block cart/checkout AND Lafka is in blocks mode
+		// (never in classic mode; the handoff sheets above own the shortcode
+		// path). Deliberately kept OUT of the always-on asset budget.
+		if ( lafka_is_block_cart_checkout_page() ) {
+			wp_enqueue_style(
+				'lafka-blocks-checkout',
+				get_template_directory_uri() . '/styles/lafka-blocks-checkout.css',
+				array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-blocks-checkout.css' )
 			);
 		}
 
@@ -2159,6 +2206,20 @@ if ( ! function_exists( 'lafka_defer_non_critical_scripts' ) ) {
 	function lafka_defer_non_critical_scripts( $tag, $handle, $src ) {
 		// Don't defer in admin or for critical scripts
 		if ( is_admin() ) {
+			return $tag;
+		}
+		// NX1-04b: never brute-force `defer` on a block Cart/Checkout page. The
+		// WooCommerce Blocks runtime is a graph of wp-*/wc-* scripts that carry
+		// inline `-before`/`-after` data (the wc-settings Store API preload +
+		// nonce, wp-date's moment settings, wp-url). Those inline blocks run
+		// synchronously in source order; deferring the EXTERNAL file makes the
+		// inline data execute first and throw (normalizePath / moment /
+		// setSettings undefined), which leaves the block cart & checkout wedged on
+		// their empty-cart fallback and silently blocks every block-mode order.
+		// WordPress already orders these correctly without defer, so we simply opt
+		// the whole page out (classic pages are unaffected — their cart/checkout
+		// are shortcodes, not blocks).
+		if ( function_exists( 'lafka_is_block_cart_checkout_page' ) && lafka_is_block_cart_checkout_page() ) {
 			return $tag;
 		}
 		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore', 'wp-i18n', 'wp-api-fetch', 'wp-hooks', 'wp-polyfill' );
