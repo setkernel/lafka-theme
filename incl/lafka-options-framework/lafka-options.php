@@ -268,12 +268,6 @@ function lafka_optionsframework_options() {
 		'type' => 'lafka_upload'
 	);
 	$options[] = array(
-			'name' => esc_html_x('Footer Logo (Needs to be enabled from Footer area->Show logo in footer)', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Choose or upload new logo.', 'theme-options', 'lafka'),
-			'id' => 'footer_logo',
-			'type' => 'lafka_upload'
-	);
-	$options[] = array(
 		'name' => esc_html_x('Disable Logo Point-down Effect', 'theme-options', 'lafka'),
 		'desc' => esc_html_x('Remove the logo holder point-down accent.', 'theme-options', 'lafka'),
 		'id' => 'disable_logo_point_down',
@@ -437,22 +431,10 @@ function lafka_optionsframework_options() {
 		'type' => 'color'
 	);
 	$options[] = array(
-			'desc' => esc_html_x('The message will appear in the header.', 'theme-options', 'lafka'),
-			'id' => 'top_bar_message',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
 			'desc' => esc_html_x('Append Phone Number.', 'theme-options', 'lafka'),
 			'id' => 'top_bar_message_phone',
 			'std' => '',
 			'type' => 'text'
-	);
-	$options[] = array(
-		'desc' => esc_html_x('Make phone number a link to dial.', 'theme-options', 'lafka'),
-		'id' => 'top_bar_message_phone_link',
-		'std' => 1,
-		'type' => 'checkbox',
 	);
 	$options[] = array(
 		'name' => esc_html_x('Header Services Icons Color (My Account, Wishlist, Cart, etc.)', 'theme-options', 'lafka'),
@@ -460,13 +442,6 @@ function lafka_optionsframework_options() {
 		'id' => 'header_services_color',
 		'std' => '#333333',
 		'type' => 'color'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Collapsible Pre-Header', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Enable Collapsible Pre-Header widget area', 'theme-options', 'lafka'),
-			'id' => 'enable_pre_header',
-			'std' => 0,
-			'type' => 'checkbox'
 	);
 	$options[] = array(
 			'name' => esc_html_x('Collapsible Pre-Header Background Color', 'theme-options', 'lafka'),
@@ -557,26 +532,8 @@ function lafka_optionsframework_options() {
 			'type' => 'color'
 	);
 	$options[] = array(
-			'name' => esc_html_x('Transparent Header Menu Color - Light Scheme', 'theme-options', 'lafka'),
-			'id' => 'transparent_header_menu_color',
-			'std' => '#ffffff',
-			'type' => 'color'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Transparent Header Menu Hover Color - Light Scheme', 'theme-options', 'lafka'),
-			'id' => 'transparent_header_menu_hover_color',
-			'std' => '',
-			'type' => 'color'
-	);
-	$options[] = array(
 		'name' => esc_html_x('Transparent Header Menu Color - Dark Scheme', 'theme-options', 'lafka'),
 		'id' => 'transparent_header_dark_menu_color',
-		'std' => '#22272d',
-		'type' => 'color'
-	);
-	$options[] = array(
-		'name' => esc_html_x('Transparent Header Menu Hover - Dark Scheme', 'theme-options', 'lafka'),
-		'id' => 'transparent_header_dark_menu_hover_color',
 		'std' => '#22272d',
 		'type' => 'color'
 	);
@@ -620,13 +577,6 @@ function lafka_optionsframework_options() {
 					'' => esc_html_x('Standard', 'theme-options', 'lafka'),
 					'lafka-stretched-footer' => esc_html_x('Fullwidth', 'theme-options', 'lafka')
 			)
-	);
-	$options[] = array(
-			'name' => esc_html_x('Show Logo in Footer', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Main logo will be displayed in footer, unless General->Footer Logo is selected. In that case "Footer Logo" will be displayed.', 'theme-options', 'lafka'),
-			'id' => 'show_logo_in_footer',
-			'std' => 0,
-			'type' => 'checkbox'
 	);
 	$options[] = array(
 			'name' => esc_html__('Footer Background', 'lafka'),
@@ -676,13 +626,6 @@ function lafka_optionsframework_options() {
 			'id' => 'footer_copyright_bar_text_color',
 			'std' => '#aeaeae',
 			'type' => 'color'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Footer Copyright Bar Text', 'theme-options', 'lafka'),
-			'desc' => sprintf(esc_html_x('Enter Copyright text. Use %s as wildcard to be replaced by current year.', 'theme-options', 'lafka'), '%current_year%'),
-			'id' => 'copyright_text',
-			'std' => 'Lafka theme by <a target="_blank" title="theAlThemist\'s foodmenu" href="http://themeforest.net/user/theAlThemist/foodmenu?ref=theAlThemist">theAlThemist</a> | &#169; %current_year% All rights reserved!',
-			'type' => 'textarea'
 	);
 
 	/*
@@ -1016,36 +959,6 @@ function lafka_optionsframework_options() {
 			'id' => 'video_bckgr_url',
 			'std' => '',
 			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Start Time', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Set the seconds the video should start at.', 'theme-options', 'lafka'),
-			'id' => 'video_bckgr_start',
-			'class' => 'mini',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('End Time', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Set the seconds the video should stop at.', 'theme-options', 'lafka'),
-			'id' => 'video_bckgr_end',
-			'class' => 'mini',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Loop', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Loops the movie once ended.', 'theme-options', 'lafka'),
-			'id' => 'video_bckgr_loop',
-			'std' => 1,
-			'type' => 'checkbox'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Mute', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Mute the audio.', 'theme-options', 'lafka'),
-			'id' => 'video_bckgr_mute',
-			'std' => 1,
-			'type' => 'checkbox'
 	);
 	/*
 	 * If Woocommerce is activated show the shop options
@@ -1556,36 +1469,6 @@ function lafka_optionsframework_options() {
 				'std' => '',
 				'type' => 'text'
 		);
-		$options[] = array(
-				'name' => esc_html_x('Start Time', 'theme-options', 'lafka'),
-				'desc' => esc_html_x('Set the seconds the video should start at.', 'theme-options', 'lafka'),
-				'id' => 'shop_video_bckgr_start',
-				'class' => 'mini',
-				'std' => '',
-				'type' => 'text'
-		);
-		$options[] = array(
-				'name' => esc_html_x('End Time', 'theme-options', 'lafka'),
-				'desc' => esc_html_x('Set the seconds the video should stop at.', 'theme-options', 'lafka'),
-				'id' => 'shop_video_bckgr_end',
-				'class' => 'mini',
-				'std' => '',
-				'type' => 'text'
-		);
-		$options[] = array(
-				'name' => esc_html_x('Loop', 'theme-options', 'lafka'),
-				'desc' => esc_html_x('Loops the movie once ended.', 'theme-options', 'lafka'),
-				'id' => 'shop_video_bckgr_loop',
-				'std' => 1,
-				'type' => 'checkbox'
-		);
-		$options[] = array(
-				'name' => esc_html_x('Mute', 'theme-options', 'lafka'),
-				'desc' => esc_html_x('Mute the audio.', 'theme-options', 'lafka'),
-				'id' => 'shop_video_bckgr_mute',
-				'std' => 1,
-				'type' => 'checkbox'
-		);
 	}
 	/*
 	 * If The Events Calendar is activated show the Events options
@@ -1627,31 +1510,6 @@ function lafka_optionsframework_options() {
 			'id' => 'events_title',
 			'std' => '',
 			'type' => 'text'
-		);
-		$options[] = array(
-			'name' => esc_html_x('Events Subtitle', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Subtitle for Main Calendar Page, Main Events List.', 'theme-options', 'lafka'),
-			'id' => 'events_subtitle',
-			'std' => '',
-			'type' => 'text'
-		);
-		$options[] = array(
-			'name' => esc_html_x('Title with Image Background for Events', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Use to manage / upload images', 'theme-options', 'lafka'),
-			'id' => 'events_title_background_imgid',
-			'std' => '',
-			'type' => 'lafka_upload',
-			'is_multiple' => false
-		);
-		$options[] = array(
-			'desc' => esc_html_x('Title alignment', 'theme-options', 'lafka'),
-			'id' => 'events_title_alignment',
-			'std' => 'none',
-			'type' => 'select',
-			'options' => array(
-				'left_title' => esc_html_x('Left', 'theme-options', 'lafka'),
-				'centered_title' => esc_html_x('Center', 'theme-options', 'lafka'),
-			)
 		);
 		$options[] = array(
 			'name' => esc_html_x('Use Countdown on Events', 'theme-options', 'lafka'),
@@ -1803,30 +1661,6 @@ function lafka_optionsframework_options() {
 		)
 	);
 	$options[] = array(
-			'name' => esc_html_x('Show Related Posts', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Display random posts from the same categories on single post page.', 'theme-options', 'lafka'),
-			'id' => 'show_related_posts',
-			'class' => 'expandable_option',
-			'std' => 1,
-			'type' => 'checkbox'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Related Posts Carousel', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Enable Carousel effect on related blog posts.', 'theme-options', 'lafka'),
-			'id' => 'owl_carousel',
-			'std' => 1,
-			'type' => 'checkbox',
-			'class' => 'show_related_posts'
-	);
-	$options[] = array(
-		'name' => esc_html_x('Number of Related Posts', 'theme-options', 'lafka'),
-		'desc' => esc_html_x('Set the number of related posts shown on single post page. Set to -1 to display all.', 'theme-options', 'lafka'),
-		'id' => 'number_related_posts',
-		'std' => 6,
-		'class' => 'mini',
-		'type' => 'text'
-	);
-	$options[] = array(
 			'name' => esc_html_x('Show Author Info on Blog Posts', 'theme-options', 'lafka'),
 			'desc' => esc_html_x('If selected, Author section will be displayed below the post.', 'theme-options', 'lafka'),
 			'id' => 'show_author_info',
@@ -1854,36 +1688,6 @@ function lafka_optionsframework_options() {
 			'id' => 'blog_video_bckgr_url',
 			'std' => '',
 			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Start Time', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Set the seconds the video should start at.', 'theme-options', 'lafka'),
-			'id' => 'blog_video_bckgr_start',
-			'class' => 'mini',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('End Time', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Set the seconds the video should stop at.', 'theme-options', 'lafka'),
-			'id' => 'blog_video_bckgr_end',
-			'class' => 'mini',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Loop', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Loops the movie once ended.', 'theme-options', 'lafka'),
-			'id' => 'blog_video_bckgr_loop',
-			'std' => 1,
-			'type' => 'checkbox'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Mute', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Mute the audio.', 'theme-options', 'lafka'),
-			'id' => 'blog_video_bckgr_mute',
-			'std' => 1,
-			'type' => 'checkbox'
 	);
 	/*
 	 * SIDEBARS
@@ -2017,184 +1821,6 @@ function lafka_optionsframework_options() {
 			'class' => '', //mini, tiny, small
 			'options' => $registered_sidebars_array
 	);
-	$default_footer_sdbr = 'bottom_footer_sidebar';
-	$options[] = array(
-			'name' => esc_html_x('Footer Sidebar', 'theme-options', 'lafka'),
-			'desc' => esc_html_x('Select sidebar to be displayed in footer. May be overriden for the specific pages, posts and custom post types.', 'theme-options', 'lafka'),
-			'id' => 'footer_sidebar',
-			'std' => $default_footer_sdbr,
-			'type' => 'select',
-			'class' => '', //mini, tiny, small
-			'options' => $registered_sidebars_array
-	);
-	/*
-	 * Social profiles settings
-	 */
-	$options[] = array(
-			'name' => esc_html_x('Social Profiles', 'theme-options', 'lafka'),
-			'type' => 'heading',
-			'tab_id' => 'socialprofiles'
-	);
-	$options[] = array(
-			'desc' => esc_html_x('Fill in your social profiles URLs.', 'theme-options', 'lafka'),
-			'type' => 'info'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Show in Footer', 'theme-options', 'lafka'),
-			'id' => 'social_in_footer',
-			'desc' => esc_html_x('Show profiles in footer.', 'theme-options', 'lafka'),
-			'std' => 0,
-			'type' => 'checkbox'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Facebook Profile URL', 'theme-options', 'lafka'),
-			'id' => 'facebook_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Twitter Profile URL', 'theme-options', 'lafka'),
-			'id' => 'twitter_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('YouTube Profile URL', 'theme-options', 'lafka'),
-			'id' => 'youtube_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Vimeo Profile URL', 'theme-options', 'lafka'),
-			'id' => 'vimeo_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Dribbble Profile URL', 'theme-options', 'lafka'),
-			'id' => 'dribbble_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('LinkedIn Profile URL', 'theme-options', 'lafka'),
-			'id' => 'linkedin_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Flickr Profile URL', 'theme-options', 'lafka'),
-			'id' => 'flicker_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Instagram Profile URL', 'theme-options', 'lafka'),
-			'id' => 'instegram_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Pinterest Profile URL', 'theme-options', 'lafka'),
-			'id' => 'pinterest_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('VKontakte Profile URL', 'theme-options', 'lafka'),
-			'id' => 'vkontakte_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Behance Profile URL', 'theme-options', 'lafka'),
-			'id' => 'behance_profile',
-			'std' => '',
-			'type' => 'text'
-	);
-	/*
-	 * Demo import
-	 */
-	$options[] = array(
-			'name' => esc_html_x('Import Demo', 'theme-options', 'lafka'),
-			'type' => 'heading',
-			'tab_id' => 'importdemo'
-	);
-	$options[] = array(
-			'desc' => '<p><b>' . esc_html__('NOTE THAT THE IMPORT CAN OVERRIDE YOUR DATA AND SETTINGS.', 'lafka') . '</b></p>' . sprintf(_x("<p><b>Make sure that the required plugins for the corresponding import are installed and activated.</b></p><p>Note also that the demo is using many images and takes longer to import. You may need to increase some of the PHP parameters, described here: %s . If for some reason is not possible to increase <i>max_execution_time</i> and still can't run the import, you may need to run it again, in order to import all the images.</p><p><b>Click the image of the desired demo to import.</b>The import can take several minutes. For best result use fresh WP installation.</p><p>You can use following plugin to reset WordPress: %s .</p>", 'theme-options', 'lafka'), '<a href="http://althemist.com/are-you-sure-you-want-to-do-this/" target="_blank">Recommended settings for successfull import</a>', '<a href="https://wordpress.org/plugins/wordpress-reset/" target="_blank">WordPress Reset</a>'),
-			'type' => 'info'
-	);
-	$options[] = array(
-			'name' => esc_html_x('Import Lafka Main Demo', 'theme-options', 'lafka'),
-			'desc' => sprintf(_x("<p><b>Demo Location:</b> %s <br/><b>NOTE:</b> Usually takes less than 3 minutes, but depending on the server it may take up to 10.</p><p><b>Required plugins for the import:</b><br/><b><a target=\"_blank\" href=\"https://wordpress.org/plugins/woocommerce/\">WooCommerce</a></b></p>", 'theme-options', 'lafka'), '<a target="_blank" href="https://lafka.althemist.com/fastfood/" >Lafka Main Demo</a>'),
-			'id' => 'import_lafka0',
-			'type' => 'images',
-			'class' => 'import_lafka_demo',
-			'options' => array(
-					'lafka' => LAFKA_IMAGES_PATH . 'demo-image0.jpg'
-			)
-	);
-	$options[] = array(
-		'name' => esc_html_x('Import Lafka Burger Demo', 'theme-options', 'lafka'),
-		'desc' => sprintf(_x("<p><b>Demo Location:</b> %s <br/><b>NOTE:</b> Usually takes less than 3 minutes, but depending on the server it may take up to 10.</p><p><b>Required plugins for the import:</b><br/><b><a target=\"_blank\" href=\"https://wordpress.org/plugins/woocommerce/\">WooCommerce</a></b></p>", 'theme-options', 'lafka'), '<a target="_blank" href="https://lafka.althemist.com/burgers/" >Lafka Burgers</a>'),
-		'id' => 'import_lafka1',
-		'type' => 'images',
-		'class' => 'import_lafka_demo',
-		'options' => array(
-			'lafka' => LAFKA_IMAGES_PATH . 'demo-image1.jpg'
-		)
-	);
-	$options[] = array(
-		'name' => esc_html_x('Import Lafka Pizza Demo', 'theme-options', 'lafka'),
-		'desc' => sprintf(_x("<p><b>Demo Location:</b> %s <br/><b>NOTE:</b> Usually takes less than 3 minutes, but depending on the server it may take up to 10.</p><p><b>Required plugins for the import:</b><br/><b><a target=\"_blank\" href=\"https://wordpress.org/plugins/woocommerce/\">WooCommerce</a></b></p>", 'theme-options', 'lafka'), '<a target="_blank" href="https://lafka.althemist.com/pizza/" >Lafka Pizza</a>'),
-		'id' => 'import_lafka2',
-		'type' => 'images',
-		'class' => 'import_lafka_demo',
-		'options' => array(
-			'lafka' => LAFKA_IMAGES_PATH . 'demo-image2.jpg'
-		)
-	);
-	$options[] = array(
-		'name' => esc_html_x('Import Lafka Meraki Demo', 'theme-options', 'lafka'),
-		'desc' => sprintf(_x("<p><b>Demo Location:</b> %s <br/><b>NOTE:</b> Usually takes less than 3 minutes, but depending on the server it may take up to 10.</p><p><b>Required plugins for the import:</b><br/><b><a target=\"_blank\" href=\"https://wordpress.org/plugins/woocommerce/\">WooCommerce</a></b></p>", 'theme-options', 'lafka'), '<a target="_blank" href="https://lafka.althemist.com/meraki/" >Lafka Meraki Restaurant</a>'),
-		'id' => 'import_lafka3',
-		'type' => 'images',
-		'class' => 'import_lafka_demo',
-		'options' => array(
-			'lafka' => LAFKA_IMAGES_PATH . 'demo-image3.jpg'
-		)
-	);
-	$options[] = array(
-		'name' => esc_html_x('Import Lafka Food Truck Demo', 'theme-options', 'lafka'),
-		'desc' => sprintf(_x("<p><b>Demo Location:</b> %s <br/><b>NOTE:</b> Usually takes less than 3 minutes, but depending on the server it may take up to 10.</p>", 'theme-options', 'lafka'), '<a target="_blank" href="https://lafka.althemist.com/foodtruck/" >Lafka Food Truck</a>'),
-		'id' => 'import_lafka4',
-		'type' => 'images',
-		'class' => 'import_lafka_demo',
-		'options' => array(
-			'lafka' => LAFKA_IMAGES_PATH . 'demo-image4.jpg'
-		)
-	);
-	$options[] = array(
-		'name' => esc_html_x('Import Lafka Bakery Demo', 'theme-options', 'lafka'),
-		'desc' => sprintf(_x("<p><b>Demo Location:</b> %s <br/><b>NOTE:</b> Usually takes less than 3 minutes, but depending on the server it may take up to 10.</p><p><b>Required plugins for the import:</b><br/><b><a target=\"_blank\" href=\"https://wordpress.org/plugins/woocommerce/\">WooCommerce</a></b></p>", 'theme-options', 'lafka'), '<a target="_blank" href="https://lafka.althemist.com/bakery/" >Lafka Bakery</a>'),
-		'id' => 'import_lafka5',
-		'type' => 'images',
-		'class' => 'import_lafka_demo',
-		'options' => array(
-			'lafka' => LAFKA_IMAGES_PATH . 'demo-image5.jpg'
-		)
-	);
-	$options[] = array(
-		'name' => esc_html_x('Import Lafka Sushi Demo', 'theme-options', 'lafka'),
-		'desc' => sprintf(_x("<p><b>Demo Location:</b> %s <br/><b>NOTE:</b> Usually takes less than 3 minutes, but depending on the server it may take up to 10.</p>", 'theme-options', 'lafka'), '<a target="_blank" href="https://lafka.althemist.com/sushi/" >Lafka Sushi</a>'),
-		'id' => 'import_lafka6',
-		'type' => 'images',
-		'class' => 'import_lafka_demo',
-		'options' => array(
-			'lafka' => LAFKA_IMAGES_PATH . 'demo-image6.jpg'
-		)
-	);
-
 	/*
 	 * Lafka Updates
 	 */

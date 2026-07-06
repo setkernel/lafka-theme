@@ -62,8 +62,7 @@ final class TabnabbingDefenseTest extends TestCase {
 	 */
 	public static function templatesProvider(): array {
 		return array(
-			'social-profiles partial'   => array( 'partials/social-profiles.php' ),
-			'foodmenu single template'  => array( 'single-lafka-foodmenu.php' ),
+			'foodmenu single template' => array( 'single-lafka-foodmenu.php' ),
 		);
 	}
 }

@@ -102,14 +102,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				__( 'Alternate logo for ≤767px viewports. Also used in the sticky/condensed header. Leave empty to reuse the main logo from Site Identity.', 'lafka' )
 			);
 
-			self::add_image(
-				$wp_customize,
-				'lafka[footer_logo]',
-				'lafka_settings_logos',
-				__( 'Footer logo (optional)', 'lafka' ),
-				__( 'Shown in the footer brand column when "Show logo in footer" is enabled.', 'lafka' )
-			);
-
 			self::add_color(
 				$wp_customize,
 				'lafka[logo_background_color]',
