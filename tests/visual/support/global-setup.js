@@ -12,6 +12,7 @@
  */
 const { BASE_URL, prepareStore } = require( '../../e2e/support/store' );
 const { wpCli } = require( '../../e2e/support/wp-cli' );
+const { seedBlog } = require( '../../e2e/support/blog' );
 
 /**
  * Pin the home "Customer favourites" grid to a DETERMINISTIC set. Without
@@ -60,5 +61,9 @@ module.exports = async function globalSetup() {
 	prepareStore();
 	// Deterministic home "Customer favourites" grid (stable height → no shift).
 	pinFeaturedProducts();
-	console.log( '[visual] store prepared against ' + BASE_URL );
+	// Deterministic blog fixture + static-front-page wiring for the NX1-10a
+	// legacy-surface goldens (blog index / archive / search / single+comments).
+	// Runs after prepareStore so the reused product attachments already exist.
+	seedBlog();
+	console.log( '[visual] store + blog prepared against ' + BASE_URL );
 };

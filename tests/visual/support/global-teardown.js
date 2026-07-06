@@ -9,15 +9,19 @@
  * @since lafka-theme 6.21.0 (NX1-02 harness)
  */
 const { useBlockCartCheckout } = require( '../../e2e/support/store' );
+const { restoreFrontPage } = require( '../../e2e/support/blog' );
 
 module.exports = async function globalTeardown() {
 	try {
 		useBlockCartCheckout();
-		console.log( '[visual] restored env to blocks checkout mode' );
+		// NX1-10a: revert the show_on_front=page wiring seedBlog() installed for
+		// the blog-index golden, returning the env to the posts baseline.
+		restoreFrontPage();
+		console.log( '[visual] restored env to blocks checkout + posts front page' );
 	} catch ( err ) {
 		// Non-fatal: the env is throwaway. Surface it so a human can re-baseline.
 		console.warn(
-			'[visual] could not restore blocks checkout mode: ' + err.message
+			'[visual] could not restore env baseline: ' + err.message
 		);
 	}
 };
