@@ -1083,6 +1083,67 @@ if ( ! function_exists( 'lafka_is_block_cart_checkout_page' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_is_legacy_blog_surface' ) ) {
+	/**
+	 * Whether the current request renders the classic LEGACY blog layout
+	 * (content.php via index.php / archive.php / search.php, or single.php) whose
+	 * blog / widget / sidebar CSS was extracted from the style.css monolith into
+	 * styles/legacy-blog.css (NX1-10a).
+	 *
+	 * Deliberately blog-SPECIFIC: is_singular('post') (not is_single(), which is
+	 * also true for single products) and the blog taxonomies (not is_archive(),
+	 * which is also true for the WooCommerce shop/product archives). The posts
+	 * index is gated with `is_home() && ! is_front_page()` so that when
+	 * show_on_front=posts — where `/` is is_home() yet renders the DESIGNED
+	 * front-page.php, not the blog layout — the handoff home does not pull this
+	 * sheet. The six handoff routes (home, /menu/, PDP, cart, checkout) match
+	 * none of these, so they never download legacy-blog.css. Comment/review CSS
+	 * is NOT here — it stays in style.css because it also styles WooCommerce
+	 * product reviews.
+	 *
+	 * @return bool
+	 */
+	function lafka_is_legacy_blog_surface() {
+		return ( is_home() && ! is_front_page() )
+			|| is_category() || is_tag() || is_author() || is_date()
+			|| is_singular( 'post' )
+			|| is_search()
+			|| is_attachment();
+	}
+}
+
+if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
+	/**
+	 * Whether the current request may render legacy lafka_* shortcode / WPBakery
+	 * / foodmenu-grid / post-slider markup whose CSS was extracted into
+	 * styles/legacy-shortcodes.css (NX1-10a). Loaded on: the blog surfaces (post
+	 * galleries/sliders), the legacy foodmenu CPT, and any singular content whose
+	 * post_content embeds a lafka_* shortcode or WPBakery row. The handoff routes
+	 * carry none of that markup, so they never download it.
+	 *
+	 * @return bool
+	 */
+	function lafka_needs_legacy_shortcode_styles() {
+		if ( lafka_is_legacy_blog_surface() ) {
+			return true;
+		}
+		if ( is_post_type_archive( 'lafka_foodmenu' )
+			|| is_singular( 'lafka_foodmenu' )
+			|| ( function_exists( 'is_tax' ) && is_tax( 'lafka_foodmenu_category' ) ) ) {
+			return true;
+		}
+		if ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) {
+			$content = (string) $GLOBALS['post']->post_content;
+			if ( false !== strpos( $content, '[lafka_' )
+				|| false !== strpos( $content, 'vc_row' )
+				|| false !== strpos( $content, '[vc_' ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+}
+
 /**
  * Register / Enqueue theme scripts
  */
@@ -1750,6 +1811,27 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
 		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', array( 'lafka-tokens' ), wp_get_theme( get_template() )->get( 'Version' ) );
+
+		// NX1-10a: the legacy monolith remainder, split out of style.css into
+		// scoped sheets that load ONLY on the surfaces which render the matching
+		// legacy markup. Every rule in them was proven (scripts/nx1-10a-extract.mjs)
+		// to match zero elements on the six handoff pages, so home/menu/PDP/cart/
+		// checkout download none of it. Each depends on lafka-style so its
+		// @layer legacy rules keep the monolith's original source order (below the
+		// unlayered modular sheets).
+		$lafka_legacy_ver = wp_get_theme( get_template() )->get( 'Version' );
+		if ( lafka_is_legacy_blog_surface() ) {
+			wp_enqueue_style( 'lafka-legacy-blog', get_template_directory_uri() . '/styles/legacy-blog.css', array( 'lafka-style' ), $lafka_legacy_ver );
+		}
+		if ( lafka_needs_legacy_shortcode_styles() ) {
+			wp_enqueue_style( 'lafka-legacy-shortcodes', get_template_directory_uri() . '/styles/legacy-shortcodes.css', array( 'lafka-style' ), $lafka_legacy_ver );
+		}
+		if ( function_exists( 'is_bbpress' ) ) {
+			wp_enqueue_style( 'lafka-legacy-forum', get_template_directory_uri() . '/styles/legacy-forum.css', array( 'lafka-style' ), $lafka_legacy_ver );
+		}
+		if ( class_exists( 'Tribe__Events__Main' ) ) {
+			wp_enqueue_style( 'lafka-legacy-events', get_template_directory_uri() . '/styles/legacy-events.css', array( 'lafka-style' ), $lafka_legacy_ver );
+		}
 
 		// v5.40.0: tokenized WC notices (success / error / info). Loads
 		// site-wide after lafka-style so source order wins over the legacy

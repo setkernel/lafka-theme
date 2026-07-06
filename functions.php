@@ -1091,22 +1091,17 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		$is_header_style_forum  = get_theme_mod( 'lafka_forum_header_style', '' );
 		$is_header_style_events = get_theme_mod( 'lafka_events_header_style', '' );
 
-		$is_search_only_in_products = false;
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'only_products' ) ) {
-			$is_search_only_in_products = true;
-		}
-
 		if ( LAFKA_IS_WOOCOMMERCE && ( is_product_category() || is_product_tag() ) ) {
 			$is_header_style_shop_category = get_term_meta( $wp_query->queried_object_id, 'lafka_term_header_style', true );
 		}
 
 		$header_style_class = '';
 		if ( $is_header_style_blog && ( lafka_is_blog() || is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) ) {
-			if ( is_search() && $is_search_only_in_products ) {
-				$header_style_class = $is_header_style_shop;
-			} else {
-				$header_style_class = $is_header_style_blog;
-			}
+			// NX1-10a: the former `only_products` legacy read here was never a
+			// registered option (always falsy after NX1-02), so the search-in-
+			// products branch was dead. Blog surfaces (incl. search) use the blog
+			// header style unconditionally.
+			$header_style_class = $is_header_style_blog;
 		} elseif ( LAFKA_IS_WOOCOMMERCE && is_shop() && $is_header_style_shop ) {
 			$header_style_class = $is_header_style_shop;
 		} elseif ( LAFKA_IS_WOOCOMMERCE && ( is_product_category() || is_product_tag() ) && $is_header_style_shop_category ) {

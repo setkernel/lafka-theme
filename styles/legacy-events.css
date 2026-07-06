@@ -1,0 +1,139 @@
+/* lafka-theme/styles/legacy-events.css
+ *
+ * The Events Calendar (tribe-events) surfaces. Enqueued only when the plugin is active.
+ *
+ * EXTRACTED from the legacy style.css monolith by scripts/nx1-10a-extract.mjs
+ * (NX1-10a). Every rule here was proven to match ZERO elements on the six
+ * handoff surfaces, so it is enqueued only on the legacy surface below. Kept in
+ * @layer legacy so it stays below the unlayered modular sheets, exactly as it
+ * did inside the monolith.
+ *
+ * @since lafka-theme 6.21.0 (NX1-10a)
+ */
+
+@layer legacy {
+
+#tribe-events-content {
+    position: relative;
+    margin-bottom: 50px;
+}
+
+#tribe-bar-views.tribe-bar-views-open {
+    z-index: 1000;
+}
+
+#tribe-bar-views ul li.tribe-bar-active {
+    display: block;
+}
+
+#tribe-bar-views.tribe-bar-views-open ul li {
+    display: block;
+    padding: 8px 0;
+}
+
+
+td.tribe-events-future.tribe-events-has-events>div:first-of-type {
+    background-color: #444;
+    color: #fff;
+    opacity: 1;
+}
+
+
+td.tribe-events-future.tribe-events-has-events>div:first-of-type a {
+    color: #fff;
+    opacity: 1;
+}
+
+td.tribe-events-future.tribe-events-has-events h3.tribe-events-month-event-title a {
+    opacity: 1;
+}
+
+.tribe-events-schedule h2,
+.tribe-events-cost {
+    vertical-align: middle;
+}
+
+
+.tribe-events-schedule .tribe-events-cost {
+    display: block;
+    float: right;
+    max-width: 150px;
+    background-color: #fafafa;
+    color: #fff;
+    padding: 6px 15px;
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border-radius: 3px;
+}
+
+.tribe-events-schedule .tribe-events-cost {
+    float: none;
+    display: inline-block;
+    vertical-align: middle;
+    top: auto;
+    left: auto;
+    margin: 0 0 0 15px;
+    position: relative;
+}
+
+
+.tribe-events-schedule .tribe-events-cost::before {
+    content: "\f145";
+    font-family: 'Font Awesome 6 Free';
+    font-weight: 900;
+    margin-right: 5px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+#tribe-events-content ul.tribe-events-sub-nav,
+.widget .tribe-events-sub-nav {
+    margin: 35px 0;
+}
+
+#tribe-events-content ul.tribe-events-sub-nav li,
+.widget .tribe-events-sub-nav li {
+    width: 48%;
+}
+
+.tribe-events-sub-nav .tribe-events-nav-previous,
+.tribe-events-sub-nav .tribe-events-nav-previous {
+    text-align: left;
+    float: left;
+}
+
+.tribe-events-sub-nav .tribe-events-nav-next {
+    text-align: right;
+    float: right;
+}
+
+.single-tribe_events .tribe-events-single-event-description {
+    margin-bottom: 50px;
+}
+
+
+.single-tribe_events .tribe-events-schedule h2 {
+    margin-right: 8px;
+}
+
+.tribe-mini-calendar .tribe-events-has-events div[id*="daynum-"] a::before {
+    background: #999 none repeat scroll 0 0;
+    border-radius: 7px;
+    bottom: 4px;
+    content: "";
+    display: block;
+    height: 7px;
+    left: 50%;
+    margin: 5px auto 0 -4px;
+    padding: 0;
+    position: absolute;
+    width: 7px;
+}
+
+.tribe-mini-calendar-nav #ajax-loading-mini {
+    margin: -32px 0 0 -32px;
+}
+
+
+}

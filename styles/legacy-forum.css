@@ -1,0 +1,99 @@
+/* lafka-theme/styles/legacy-forum.css
+ *
+ * bbPress forum surfaces. Enqueued only when bbPress is active.
+ *
+ * EXTRACTED from the legacy style.css monolith by scripts/nx1-10a-extract.mjs
+ * (NX1-10a). Every rule here was proven to match ZERO elements on the six
+ * handoff surfaces, so it is enqueued only on the legacy surface below. Kept in
+ * @layer legacy so it stays below the unlayered modular sheets, exactly as it
+ * did inside the monolith.
+ *
+ * @since lafka-theme 6.21.0 (NX1-10a)
+ */
+
+@layer legacy {
+
+.bbp_widget_login .bbp-logged-in img.avatar {
+    margin: 0 10px 10px 0;
+}
+
+.bbp_widget_login .bbp-logged-in h4 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    line-height: normal;
+    font-weight: 400;
+}
+
+.bbp_widget_login .bbp-logged-in h4 a {
+    color: #333;
+}
+
+.bbp_widget_login .bbp-logged-in a.button.logout-link {
+    padding: 8px 20px;
+    margin-bottom: 12px;
+}
+
+.bbp_widget_login .bbp-logged-in a.button.logout-link::before {
+    display: inline-block;
+    content: "\f08b";
+    font-family: 'Font Awesome 6 Free';
+    font-size: 14px;
+    margin-bottom: 2px;
+    margin-right: 5px;
+    font-weight: 900;
+    vertical-align: middle;
+}
+
+ul.super-sticky li.bbp-topic-title .bbp-topic-permalink::before {
+    display: inline-block;
+    color: #fff;
+    content: "\f0c6";
+    font-family: 'Font Awesome 6 Free';
+    font-size: 12px;
+    margin-bottom: 2px;
+    margin-right: 8px;
+    font-weight: 900 !important;
+    padding: 5px 7px;
+    font-size: 120%;
+}
+
+ul.sticky li.bbp-topic-title .bbp-topic-permalink::before {
+    display: inline-block;
+    color: #fff;
+    content: "\f0c6";
+    font-family: 'Font Awesome 6 Free';
+    font-size: 12px;
+    margin-bottom: 2px;
+    margin-right: 8px;
+    font-size: 120%;
+    font-weight: 900 !important;
+    padding: 5px 7px;
+}
+
+ul.status-closed li.bbp-topic-title .bbp-topic-permalink::before {
+    display: inline-block;
+    color: #fff;
+    content: "\f023";
+    font-family: 'Font Awesome 6 Free';
+    font-size: 12px;
+    margin-bottom: 2px;
+    margin-right: 8px;
+    font-weight: 900 !important;
+    padding: 5px 7px;
+    font-size: 120%;
+}
+
+.bbp-topics-front ul.super-sticky,
+.bbp-topics ul.super-sticky,
+.bbp-topics ul.sticky,
+.bbp-forum-content ul.sticky {
+    background-color: #fff !important;
+}
+
+
+body.bbpress a.lafka-post-nav {
+    display: none !important;
+}
+
+
+}
