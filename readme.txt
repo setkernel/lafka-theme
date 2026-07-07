@@ -4,7 +4,7 @@ Contributors: setkernel
 Requires at least: 6.6
 Tested up to: 7.0
 Requires PHP: 8.1
-Version: 6.19.0
+Version: 7.0.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: e-commerce, woocommerce, restaurant, food, full-width-template, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, accessibility-ready, block-styles, wide-blocks

@@ -30,13 +30,14 @@
 			"required": true
 		},
 		{
-			"file": "DESIGN_SYSTEM.md",
-			"pattern": "current theme v(\\d+\\.\\d+\\.\\d+)",
-			"required": false
+			"file": "readme.txt",
+			"pattern": "^Version:\\s*(\\d+\\.\\d+\\.\\d+[^\\s]*)",
+			"flags": "m",
+			"required": true
 		},
 		{
-			"file": "readme.md",
-			"pattern": "Main stylesheet \\(v(\\d+\\.\\d+\\.\\d+)\\)",
+			"file": "DESIGN_SYSTEM.md",
+			"pattern": "current theme v(\\d+\\.\\d+\\.\\d+)",
 			"required": false
 		}
 	],
