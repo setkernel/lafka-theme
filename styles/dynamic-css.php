@@ -23,6 +23,36 @@ if ( ! function_exists( 'lafka_dynamic_css_bust_on_options_save' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_dynamic_css_style_pair' ) ) {
+	/**
+	 * Decode a composite typography `style` sub-field into [ weight, style ].
+	 *
+	 * The legacy Options-Framework shape stores `style` as a JSON STRING
+	 * ('{"font-weight":"600","font-style":"normal"}'), but preset.json chrome
+	 * and `lafka_presets`-filter values may (reasonably) supply a plain array
+	 * — and json_decode() on an array throws an uncaught TypeError, which
+	 * would fatal every front-end request from inside wp_enqueue_scripts.
+	 * Accept both shapes; anything else falls back to normal/normal.
+	 *
+	 * @param mixed $typography Composite typography value ({ size, style, … }).
+	 * @return array{0:string,1:string} [ font-weight, font-style ].
+	 */
+	function lafka_dynamic_css_style_pair( $typography ): array {
+		$style = is_array( $typography ) && isset( $typography['style'] ) ? $typography['style'] : null;
+		if ( is_string( $style ) && '' !== $style ) {
+			$style = json_decode( $style, true );
+		}
+		if ( ! is_array( $style ) ) {
+			return array( 'normal', 'normal' );
+		}
+
+		return array(
+			isset( $style['font-weight'] ) ? esc_attr( (string) $style['font-weight'] ) : 'normal',
+			isset( $style['font-style'] ) ? esc_attr( (string) $style['font-style'] ) : 'normal',
+		);
+	}
+}
+
 if ( ! function_exists( 'lafka_add_custom_css' ) ) {
 
 	function lafka_add_custom_css() {
@@ -166,10 +196,8 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 				? lafka_preset_default( 'lafka_main_menu_typography', $main_menu_typography_default )
 				: $main_menu_typography_default
 		);
-		$main_menu_style      = json_decode( $main_menu_typography['style'], true );
-		$menu_font_size       = esc_attr( $main_menu_typography['size'] );
-		$menu_font_weight     = $main_menu_style ? esc_attr( $main_menu_style['font-weight'] ) : 'normal';
-		$menu_font_style      = $main_menu_style ? esc_attr( $main_menu_style['font-style'] ) : 'normal';
+		list( $menu_font_weight, $menu_font_style ) = lafka_dynamic_css_style_pair( $main_menu_typography );
+		$menu_font_size = esc_attr( $main_menu_typography['size'] );
 
 		// Top menu typography
 		$top_menu_typography_default = array(
@@ -182,10 +210,8 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 				? lafka_preset_default( 'lafka_top_menu_typography', $top_menu_typography_default )
 				: $top_menu_typography_default
 		);
-		$top_menu_style       = json_decode( $top_menu_typography['style'], true );
-		$top_menu_font_size   = esc_attr( $top_menu_typography['size'] );
-		$top_menu_font_weight = $top_menu_style ? esc_attr( $top_menu_style['font-weight'] ) : 'normal';
-		$top_menu_font_style  = $top_menu_style ? esc_attr( $top_menu_style['font-style'] ) : 'normal';
+		list( $top_menu_font_weight, $top_menu_font_style ) = lafka_dynamic_css_style_pair( $top_menu_typography );
+		$top_menu_font_size = esc_attr( $top_menu_typography['size'] );
 
 		// Body font
 		$body_font_default = array(
@@ -215,11 +241,9 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 				? lafka_preset_default( 'lafka_text_logo_typography', $text_logo_typography_default )
 				: $text_logo_typography_default
 		);
-		$text_logo_style      = json_decode( $text_logo_typography['style'], true );
-		$logo_font_color      = esc_attr( $text_logo_typography['color'] );
-		$logo_font_size       = esc_attr( $text_logo_typography['size'] );
-		$logo_font_weight     = $text_logo_style ? esc_attr( $text_logo_style['font-weight'] ) : 'normal';
-		$logo_font_style      = $text_logo_style ? esc_attr( $text_logo_style['font-style'] ) : 'normal';
+		list( $logo_font_weight, $logo_font_style ) = lafka_dynamic_css_style_pair( $text_logo_typography );
+		$logo_font_color = esc_attr( $text_logo_typography['color'] );
+		$logo_font_size  = esc_attr( $text_logo_typography['size'] );
 
 		// Headings font.
 		// v5.44.0: the legacy theme-options "Headings Font" picker is now
@@ -252,11 +276,11 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 					? lafka_preset_default( 'lafka_h' . $i . '_font', $h_font_default )
 					: $h_font_default
 			);
-			$h_style = json_decode( $h_font['style'], true );
+			list( $h_weight, $h_slant ) = lafka_dynamic_css_style_pair( $h_font );
 			$h_vars .= '--lafka-h' . $i . '-color:' . esc_attr( $h_font['color'] ) . ';';
 			$h_vars .= '--lafka-h' . $i . '-size:' . esc_attr( $h_font['size'] ) . ';';
-			$h_vars .= '--lafka-h' . $i . '-weight:' . ( $h_style ? esc_attr( $h_style['font-weight'] ) : 'normal' ) . ';';
-			$h_vars .= '--lafka-h' . $i . '-style:' . ( $h_style ? esc_attr( $h_style['font-style'] ) : 'normal' ) . ';';
+			$h_vars .= '--lafka-h' . $i . '-weight:' . $h_weight . ';';
+			$h_vars .= '--lafka-h' . $i . '-style:' . $h_slant . ';';
 		}
 
 		// Header background

@@ -78,7 +78,43 @@ if ( ! function_exists( 'lafka_preset_default' ) ) {
 			return $fallback;
 		}
 		$chrome = lafka_active_preset()->chrome();
-		return array_key_exists( $key, $chrome ) ? $chrome[ $key ] : $fallback;
+		return array_key_exists( $key, $chrome )
+			? lafka_preset_sanitize_chrome_value( $chrome[ $key ] )
+			: $fallback;
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_sanitize_chrome_value' ) ) {
+	/**
+	 * Defence-in-depth sanitiser for a chrome (theme_mod-default) value — the
+	 * counterpart of lafka_preset_css_value() for the TML layer. Chrome values
+	 * flow into dynamic-css.php's :root{} block, where esc_attr() alone cannot
+	 * stop a `red;}body{display:none` breakout from a hostile 3rd-party preset
+	 * registered via the `lafka_presets` filter. Strings are stripped of
+	 * rule-breaking characters; two composite shapes survive intact:
+	 *   - arrays (composite typography / background) sanitise recursively;
+	 *   - a JSON-object STRING (the legacy `style` sub-field) is decoded, its
+	 *     leaves stripped, and re-encoded so its legitimate braces remain.
+	 * Clean first-party values pass through byte-identical (parity-safe).
+	 *
+	 * @param mixed $value Chrome value supplied by a preset.
+	 * @return mixed
+	 */
+	function lafka_preset_sanitize_chrome_value( $value ) {
+		if ( is_array( $value ) ) {
+			return array_map( 'lafka_preset_sanitize_chrome_value', $value );
+		}
+		if ( ! is_string( $value ) ) {
+			return $value;
+		}
+		$trimmed = trim( $value );
+		if ( '' !== $trimmed && '{' === $trimmed[0] ) {
+			$decoded = json_decode( $trimmed, true );
+			if ( is_array( $decoded ) ) {
+				return (string) wp_json_encode( array_map( 'lafka_preset_sanitize_chrome_value', $decoded ) );
+			}
+		}
+		return lafka_preset_css_value( $value );
 	}
 }
 
