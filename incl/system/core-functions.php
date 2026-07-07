@@ -1822,6 +1822,17 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			$lafka_style_deps[] = 'lafka-preset';
 		}
 
+		// NX2-03: register the active preset's pool @font-face declarations as a
+		// second inline-only handle (src=false → no HTTP request for the CSS). The
+		// browser fetches ONLY the two woff2 families the preset references. Peppery
+		// (Rubik + Fraunces, source:"base") attaches nothing — those faces already
+		// live in the static CSS — so this is zero-cost for the default preset. See
+		// docs/PRESET_ENGINE.md §11 (NX2-03) + incl/presets/lafka-preset-fonts.php.
+		if ( function_exists( 'lafka_preset_register_fonts' ) ) {
+			lafka_preset_register_fonts();
+			$lafka_style_deps[] = 'lafka-preset-fonts';
+		}
+
 		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
 		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', $lafka_style_deps, wp_get_theme( get_template() )->get( 'Version' ) );
 

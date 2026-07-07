@@ -176,6 +176,216 @@ if ( ! function_exists( 'lafka_preset_register_ptl' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_font_pool' ) ) {
+	/**
+	 * The curated font pool (slug => definition), filterable so a child theme or
+	 * 3rd-party preset bundle can register additional self-hosted OFL families.
+	 * See incl/presets/lafka-preset-fonts.php for the shape. NX2-03.
+	 *
+	 * @return array<string,array<string,mixed>>
+	 */
+	function lafka_font_pool(): array {
+		$pool = defined( 'LAFKA_FONT_POOL' ) ? LAFKA_FONT_POOL : array();
+		if ( function_exists( 'apply_filters' ) ) {
+			/**
+			 * Filter the registered font pool.
+			 *
+			 * @param array<string,array<string,mixed>> $pool slug => definition.
+			 */
+			$pool = (array) apply_filters( 'lafka_font_pool', $pool );
+		}
+		return $pool;
+	}
+}
+
+if ( ! function_exists( 'lafka_font_pool_slug' ) ) {
+	/**
+	 * Resolve a family NAME (as written in a preset's fonts{} block, e.g.
+	 * "Space Grotesk") to its pool slug, or '' when the family is not pooled.
+	 * Accepts either the display family name or the slug itself.
+	 *
+	 * @param string $family
+	 */
+	function lafka_font_pool_slug( string $family ): string {
+		$family = trim( $family );
+		if ( '' === $family ) {
+			return '';
+		}
+		$pool = lafka_font_pool();
+		foreach ( $pool as $slug => $entry ) {
+			if ( isset( $entry['family'] ) && 0 === strcasecmp( (string) $entry['family'], $family ) ) {
+				return (string) $slug;
+			}
+		}
+		$key = function_exists( 'sanitize_key' ) ? sanitize_key( $family ) : strtolower( $family );
+		return isset( $pool[ $key ] ) ? $key : '';
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_font_selection' ) ) {
+	/**
+	 * The active preset's resolved body + display font families. Returns a map
+	 * keyed by role, each entry:
+	 *   [ 'role' => 'body'|'display', 'family' => 'Rubik', 'source' => 'base'|'pool', 'slug' => '<pool slug>|'' ]
+	 * These are the ONLY two families the active preset loads (peppery => Rubik +
+	 * Fraunces). NX2-03.
+	 *
+	 * @param Lafka_Preset $preset
+	 * @return array<string,array<string,string>>
+	 */
+	function lafka_preset_font_selection( Lafka_Preset $preset ): array {
+		$fonts = $preset->fonts();
+		$out   = array();
+		foreach ( array( 'body', 'display' ) as $role ) {
+			$decl   = isset( $fonts[ $role ] ) && is_array( $fonts[ $role ] ) ? $fonts[ $role ] : array();
+			$family = isset( $decl['family'] ) ? (string) $decl['family'] : '';
+			$source = isset( $decl['source'] ) ? (string) $decl['source'] : 'base';
+			$out[ $role ] = array(
+				'role'   => $role,
+				'family' => $family,
+				'source' => $source,
+				'slug'   => 'pool' === $source ? lafka_font_pool_slug( $family ) : '',
+			);
+		}
+		return $out;
+	}
+}
+
+if ( ! function_exists( 'lafka_font_face_css_for_slug' ) ) {
+	/**
+	 * @font-face CSS for ONE pool family (every weight × subset it ships). Base
+	 * families return '' — Rubik/Fraunces are already declared in the static CSS,
+	 * so re-emitting them would be a duplicate (and would break Peppery's
+	 * byte/pixel identity). NX2-03.
+	 *
+	 * @param string $slug
+	 * @return string
+	 */
+	function lafka_font_face_css_for_slug( string $slug ): string {
+		$pool = lafka_font_pool();
+		if ( ! isset( $pool[ $slug ] ) ) {
+			return '';
+		}
+		$entry = $pool[ $slug ];
+		$source = isset( $entry['source'] ) ? (string) $entry['source'] : 'pool';
+		if ( 'pool' !== $source ) {
+			return '';
+		}
+
+		$dir_uri = function_exists( 'get_template_directory_uri' )
+			? get_template_directory_uri()
+			: '..'; // isolated unit tests: relative marker, structure is what's asserted.
+		$base    = $dir_uri . '/assets/fonts/' . ( isset( $entry['dir'] ) ? $entry['dir'] : $slug ) . '/';
+		$family  = isset( $entry['family'] ) ? (string) $entry['family'] : $slug;
+		$subsets = array(
+			'latin'     => defined( 'LAFKA_FONT_RANGE_LATIN' ) ? LAFKA_FONT_RANGE_LATIN : '',
+			'latin-ext' => defined( 'LAFKA_FONT_RANGE_LATIN_EXT' ) ? LAFKA_FONT_RANGE_LATIN_EXT : '',
+		);
+
+		$css = '';
+		foreach ( (array) ( isset( $entry['weights'] ) ? $entry['weights'] : array() ) as $weight => $files ) {
+			foreach ( $subsets as $subset => $range ) {
+				if ( empty( $files[ $subset ] ) ) {
+					continue;
+				}
+				$css .= '@font-face{'
+					. 'font-family:"' . $family . '";'
+					. 'font-style:normal;'
+					. 'font-display:swap;'
+					. 'font-weight:' . (int) $weight . ';'
+					. 'src:url(' . $base . $files[ $subset ] . ') format("woff2");'
+					. ( '' !== $range ? 'unicode-range:' . $range . ';' : '' )
+					. '}';
+			}
+		}
+		return $css;
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_font_face_css' ) ) {
+	/**
+	 * @font-face CSS for the active preset's POOL body + display families
+	 * (deduped when both roles share a family). Peppery — both source:"base" —
+	 * yields '', so the engine emits nothing and the goldens stay byte-identical.
+	 * Only the ACTIVE preset's (at most two) pool families are ever emitted:
+	 * conditional per-preset enqueue. NX2-03.
+	 *
+	 * @param Lafka_Preset $preset
+	 * @return string
+	 */
+	function lafka_preset_font_face_css( Lafka_Preset $preset ): string {
+		$slugs = array();
+		foreach ( lafka_preset_font_selection( $preset ) as $sel ) {
+			if ( 'pool' === $sel['source'] && '' !== $sel['slug'] ) {
+				$slugs[ $sel['slug'] ] = true;
+			}
+		}
+		$css = '';
+		foreach ( array_keys( $slugs ) as $slug ) {
+			$css .= lafka_font_face_css_for_slug( $slug );
+		}
+		return $css;
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_register_fonts' ) ) {
+	/**
+	 * Register the inline-only `lafka-preset-fonts` handle and attach the active
+	 * preset's pool @font-face declarations. `src=false` → NO extra HTTP request
+	 * for the CSS; the browser fetches ONLY the (at most two) woff2 families the
+	 * preset references. Peppery (base fonts, already in static CSS) attaches no
+	 * inline, so this adds zero bytes for the default preset — the always-on CSS
+	 * budget is unchanged (pool fonts are strictly conditional). Called from
+	 * lafka_enqueue_scripts_and_styles() alongside the PTL registration. NX2-03.
+	 */
+	function lafka_preset_register_fonts(): void {
+		if ( ! function_exists( 'wp_register_style' ) ) {
+			return;
+		}
+		$ver = ( function_exists( 'wp_get_theme' ) && function_exists( 'get_template' ) )
+			? wp_get_theme( get_template() )->get( 'Version' )
+			: false;
+
+		wp_register_style( 'lafka-preset-fonts', false, array(), $ver );
+
+		$css = lafka_preset_font_face_css( lafka_active_preset() );
+		if ( '' !== $css && function_exists( 'wp_add_inline_style' ) ) {
+			wp_add_inline_style( 'lafka-preset-fonts', $css );
+		}
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_display_preload_href' ) ) {
+	/**
+	 * The URL of the active preset's POOL display font to `<link rel=preload>`
+	 * (the heaviest shipped weight, latin subset — the above-fold heading face,
+	 * the same intent as header.php's static Fraunces preload). Returns '' when
+	 * the display font is source:"base" (Peppery included) — the static Fraunces
+	 * preload already covers it, so the head stays byte-identical. The CALLER
+	 * escapes with esc_url() in the template. NX2-03.
+	 *
+	 * @return string A font URL, or '' when there is nothing new to preload.
+	 */
+	function lafka_preset_display_preload_href(): string {
+		$sel = lafka_preset_font_selection( lafka_active_preset() );
+		if ( ! isset( $sel['display'] ) || 'pool' !== $sel['display']['source'] || '' === $sel['display']['slug'] ) {
+			return '';
+		}
+		$pool = lafka_font_pool();
+		$slug = $sel['display']['slug'];
+		if ( empty( $pool[ $slug ]['weights'] ) ) {
+			return '';
+		}
+		$weights  = $pool[ $slug ]['weights'];
+		$heaviest = max( array_map( 'intval', array_keys( $weights ) ) );
+		if ( empty( $weights[ $heaviest ]['latin'] ) ) {
+			return '';
+		}
+		$dir_uri = function_exists( 'get_template_directory_uri' ) ? get_template_directory_uri() : '..';
+		return $dir_uri . '/assets/fonts/' . ( isset( $pool[ $slug ]['dir'] ) ? $pool[ $slug ]['dir'] : $slug ) . '/' . $weights[ $heaviest ]['latin'];
+	}
+}
+
 if ( ! function_exists( 'lafka_preset_language_attributes' ) ) {
 	/**
 	 * Stamp `data-theme="dark"` on <html> for a dark active preset, activating the

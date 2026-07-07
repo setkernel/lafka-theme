@@ -95,6 +95,18 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 	?>
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-600.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-800.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
+	<?php
+	// NX2-03: when the active preset's DISPLAY face is a pool font (not the base
+	// Fraunces the two static links above preload), preload its heaviest weight so
+	// the heading face lands within the LCP window. Peppery / any base-display
+	// preset yields '' here, so no link is printed and the head stays byte-identical.
+	$lafka_pool_display_font = function_exists( 'lafka_preset_display_preload_href' ) ? lafka_preset_display_preload_href() : '';
+	if ( '' !== $lafka_pool_display_font ) :
+		?>
+	<link rel="preload" href="<?php echo esc_url( $lafka_pool_display_font ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
+		<?php
+	endif;
+	?>
 
 	<?php wp_head(); ?>
 </head>

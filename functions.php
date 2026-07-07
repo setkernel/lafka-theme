@@ -20,6 +20,7 @@ require_once get_template_directory() . '/incl/system/lafka-legacy-migrate.php';
  * no-op. See docs/PRESET_ENGINE.md.
  */
 require_once get_template_directory() . '/incl/presets/lafka-preset-tokens.php';
+require_once get_template_directory() . '/incl/presets/lafka-preset-fonts.php';
 require_once get_template_directory() . '/incl/presets/class-lafka-preset.php';
 require_once get_template_directory() . '/incl/presets/class-lafka-presets.php';
 require_once get_template_directory() . '/incl/presets/lafka-preset-emit.php';

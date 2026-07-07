@@ -40,6 +40,13 @@
 	],
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@fontsource/archivo": "^5.2.8",
+		"@fontsource/dm-serif-display": "^5.2.8",
+		"@fontsource/inter": "^5.2.8",
+		"@fontsource/lora": "^5.2.8",
+		"@fontsource/manrope": "^5.2.8",
+		"@fontsource/rubik": "^5.2.8",
+		"@fontsource/space-grotesk": "^5.2.10",
 		"@playwright/test": "^1.61.1",
 		"@wordpress/stylelint-config": "^23.41.0",
 		"esbuild": "^0.27.7",
