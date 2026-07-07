@@ -147,11 +147,6 @@ require_once get_template_directory() . '/incl/LafkaTransferContent.class.php';
  */
 require_once get_template_directory() . '/incl/LafkaMegaMenu.php';
 
-/**
- * Include LafkaMobileMenuWalker
- */
-require_once get_template_directory() . '/incl/LafkaMobileMenuWalker.php';
-
 /*
  * Register theme text domain
  */

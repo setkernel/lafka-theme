@@ -75,9 +75,6 @@ if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
 			'--lafka-color-surface-footer',
 			'--lafka-color-surface-announce',
 			'--lafka-color-surface-dark',
-			'--lafka-color-surface-cream',
-			'--lafka-color-scrim-bottom',
-			'--lafka-color-scrim-left',
 
 			// ---- Colour: border (EXCLUDES -focus — var() alias to accent-500) --
 			'--lafka-color-border-subtle',

@@ -1058,27 +1058,12 @@
     }
 
     /**
-     * Define behaviour for click on shopping cart icon
+     * Define behaviour for click on shopping cart icon.
+     * (The legacy #lafka_quick_cart_link opener was removed — lafka_cart_link()
+     * no longer exists, so that node never rendered; the auto-open path at the
+     * added_to_cart handler is what adds .active_cart now.)
      */
     function defineCartIconClickBehaviour() {
-        $(document).on("click", "body:not(.woocommerce-checkout) #lafka_quick_cart_link", function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-
-            var shoppingCart = $(document.body).find("div.widget.woocommerce.widget_shopping_cart");
-
-            // Order hours counter to the next opening
-            lafkaInitSmallCountdowns($(document.body).find('div.lafka-closed-store-message'));
-
-            shoppingCart.addClass("active_cart");
-            // NiceScroll removed; native OS scrollbar handles overflow. Guard kept for
-            // back-compat with sites that may still bundle the plugin via mu-plugins.
-            if (typeof $.fn.niceScroll === 'function') {
-                $(document.body).find('div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content ul.cart_list.product_list_widget').niceScroll({ horizrailenabled: false });
-            }
-
-        });
-
         $(document).on("click", ".close-cart-button", function(event) {
             var $parent = $(this).parent();
             $parent.removeClass('active_cart');

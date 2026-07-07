@@ -5,8 +5,6 @@
  * Replaces the WC stock template with a clean handoff layout per
  * /design_handoff_peppery_ordering/README.md "Menu page (/menu, /menu/:cat)".
  *
- * Legacy template preserved as archive-product-legacy.php.
- *
  * Handles three views:
  *   - Shop page (is_shop() — flat or grouped-by-category)
  *   - Category archive (is_product_category() — flat in one category)

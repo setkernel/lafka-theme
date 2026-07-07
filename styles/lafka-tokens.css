@@ -145,11 +145,10 @@
 	 * in lafka-announce-bar.css. */
 	--lafka-color-surface-announce: #18181b;
 
-	/* Extras not in handoff — preserved for existing dark-section components */
+	/* Extras not in handoff — preserved for existing dark-section components.
+	 * (surface-cream + the two scrim gradients were retired in the 2026-07
+	 * lean pass: zero var() consumers anywhere in the codebase.) */
 	--lafka-color-surface-dark: #0f0f10;
-	--lafka-color-surface-cream: #fdf8ed;
-	--lafka-color-scrim-bottom: linear-gradient(to top, rgba(24, 24, 27, 0.78) 0%, rgba(24, 24, 27, 0) 60%);
-	--lafka-color-scrim-left: linear-gradient(to right, rgba(24, 24, 27, 0.72) 0%, rgba(24, 24, 27, 0) 60%);
 
 	/* ------- Colour: border --------------------------------------------- */
 	--lafka-color-border-subtle: #e4e4e7;

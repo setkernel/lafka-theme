@@ -607,33 +607,6 @@ if ( ! function_exists( 'lafka_enable_page_attributes' ) ) {
 
 }
 
-	/**
-	 * Display language switcher
-	 *
-	 * @return String
-	 */
-if ( ! function_exists( 'lafka_language_selector_flags' ) ) {
-
-	function lafka_language_selector_flags() {
-		$languages = icl_get_languages( 'skip_missing=0&orderby=code' );
-
-		if ( ! empty( $languages ) ) {
-			foreach ( $languages as $l ) {
-				if ( ! $l['active'] ) {
-					echo '<a title="' . esc_attr( $l['native_name'] ) . '" href="' . esc_url( $l['url'] ) . '">';
-				}
-
-				echo '<img src="' . esc_url( $l['country_flag_url'] ) . '" height="12" alt="' . esc_attr( $l['language_code'] ) . '" width="18" />';
-
-				if ( ! $l['active'] ) {
-					echo '</a>';
-				}
-			}
-		}
-	}
-
-}
-
 	add_filter( 'excerpt_more', 'lafka_new_excerpt_more' );
 if ( ! function_exists( 'lafka_new_excerpt_more' ) ) {
 

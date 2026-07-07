@@ -116,7 +116,9 @@ out-of-whitelist key fails a unit test AND is dropped at emit time (never reache
    - Light preset: `:root{ … }` (specificity 0,1,0) — beats base by source order.
    - Dark preset: `:root[data-theme="dark"]{ … }` (0,2,0) — supersedes the scaffold token-for-token.
    - **Peppery emits an empty PTL** → nothing meaningful printed → byte-identical.
-   - Build the PTL string once, cache under a key folding `active_slug + preset-file-mtime`.
+   - PTL string is built per request from the transient-cached registry (see
+     `Lafka_Presets` discovery cache) — a cheap string-concat over ~10-40 already-parsed
+     entries, so no dedicated PTL-string cache is kept (implemented as shipped in NX2-01).
 3. **Operator** — `dynamic-css.php`'s existing `:root{}` inline on `lafka-style`. Unchanged
    in structure; §5 wraps its default args.
 
