@@ -8,7 +8,18 @@
  * ========================================================================= */
 
 .lafka-footer {
-	background: var(--lafka-color-text-primary);
+
+	/* NX2-07: the footer is a PERMANENT dark "inverse" band in every preset.
+	 * It used to read its background off --lafka-color-text-primary (the ink),
+	 * which a dark preset inverts to near-white — turning the footer into a
+	 * white slab. Point it at the dedicated always-dark footer surface, and
+	 * PIN the inverse-text tokens to their light-theme (light) values within
+	 * this scope so a dark preset keeps light-on-dark footer text instead of
+	 * flipping it dark-on-dark. Both pins equal the values Peppery already
+	 * resolves, so Peppery stays byte/pixel-identical. */
+	--lafka-color-text-inverse: #fff;
+	--lafka-color-text-primary: #18181b;
+	background: var(--lafka-color-surface-footer);
 	color: var(--lafka-color-text-inverse);
 	padding-block: var(--lafka-space-12);
 	margin-top: var(--lafka-space-16);

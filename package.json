@@ -16,6 +16,7 @@
 		"test:e2e:smoke": "playwright test --grep @smoke",
 		"test:e2e:install": "playwright install --with-deps chromium",
 		"test:visual:nx1-02": "playwright test --config playwright.visual.config.js",
+		"test:visual:nx2-dark": "playwright test --config playwright.visual.dark.config.js",
 		"sync-version": "node scripts/sync-version.mjs",
 		"check-version": "node scripts/sync-version.mjs --check",
 		"version": "node scripts/sync-version.mjs --stage"

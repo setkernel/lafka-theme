@@ -299,7 +299,7 @@
 	position: sticky;
 	top: var(--lafka-header-h);
 	z-index: var(--lafka-z-sticky-cta);
-	background: rgba(255, 255, 255, 0.92);
+	background: var(--lafka-color-surface-glass, rgba(255, 255, 255, 0.92));
 	backdrop-filter: blur(8px);
 	-webkit-backdrop-filter: blur(8px);
 	border-bottom: 1px solid var(--lafka-color-border-subtle); /* v5.74.0: bottom only */

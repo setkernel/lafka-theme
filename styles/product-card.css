@@ -26,7 +26,7 @@ ul.products {
 .lafka-product-card {
 	display: grid;
 	grid-template-columns: 92px 1fr;
-	background: #fff;
+	background: var(--lafka-color-surface-raised, #fff);
 	border-radius: 14px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 	overflow: hidden;

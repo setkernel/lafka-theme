@@ -58,3 +58,7 @@ wp-content/uploads/
 /tests/visual/__screenshots__/
 /tests/visual/.output/
 /tests/visual/.report/
+# NX2-07 dark-preset visual gate (playwright.visual.dark.config.js) — same
+# LOCAL/untracked contract. See tests/visual/nx2-dark.spec.js.
+/tests/visual/.output-dark/
+/tests/visual/.report-dark/

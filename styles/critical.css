@@ -70,7 +70,7 @@ body {
     font-family: Rubik, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     font-size: 13px;
     color: #5e5e5e;
-    background: #fff;
+    background: var(--lafka-color-surface-page, #fff);
     overflow-x: hidden;
 }
 
@@ -101,7 +101,7 @@ body {
 
 /* ── PRELOADER MASK — must be instant so it covers unstyled flash ── */
 .mask {
-    background-color: #fff;
+    background-color: var(--lafka-color-surface-page, #fff);
     width: 100%;
     height: 100%;
     position: fixed;

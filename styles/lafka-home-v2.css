@@ -342,6 +342,13 @@
 }
 
 .lafka-visit__card {
+
+	/* NX2-07: this card sits on the always-dark surface, so its light-on-dark
+	 * text must stay light under a dark preset. Pin the inverse token to its
+	 * light-theme (light) value here — identical to what Peppery resolves, so
+	 * no Peppery pixel moves; the inner surface-page "pin" card keeps its own
+	 * page-relative text tokens and inverts correctly. */
+	--lafka-color-text-inverse: #fff;
 	background: var(--lafka-color-surface-dark);
 	border-radius: var(--lafka-radius-xl);
 	overflow: hidden;
@@ -669,6 +676,13 @@
  * white frame around a dark card. `--lafka-color-surface-ink` falls back
  * to #18181b if undefined; otherwise inherits surface-dark from tokens. */
 .lafka-closer {
+
+	/* NX2-07: always-dark closer band — keep its inverse text light under a
+	 * dark preset (identical to Peppery's resolved value, so no pixel moves).
+	 * The primary CTA sits on the accent FILL, so it reads --lafka-color-text-
+	 * on-accent (below) which flips dark on the light accent under a dark
+	 * preset — the one spot that must NOT follow this light pin. */
+	--lafka-color-text-inverse: #fff;
 	padding-block: var(--lafka-space-16) var(--lafka-space-20);
 	background: var(--lafka-color-surface-ink, var(--lafka-color-surface-dark, #18181b));
 	color: var(--lafka-color-text-on-ink, var(--lafka-color-text-inverse, #fff));
@@ -762,13 +776,17 @@
 
 .lafka-closer__cta--primary {
 	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-text-inverse);
+
+	/* NX2-07: text on the accent FILL — read the on-accent token (== #fff in
+	 * Peppery, so identical) so a dark preset with a light accent flips it to
+	 * dark for contrast, overriding the section's light inverse pin above. */
+	color: var(--lafka-color-text-on-accent);
 	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
 }
 
 .lafka-closer__cta--primary:hover {
 	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-text-inverse);
+	color: var(--lafka-color-text-on-accent);
 }
 
 .lafka-closer__cta--ghost {

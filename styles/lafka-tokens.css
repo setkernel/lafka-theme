@@ -123,6 +123,19 @@
 	--lafka-color-surface-overlay: rgba(24, 24, 27, 0.55);
 	--lafka-color-surface-brand-soft: var(--lafka-color-brand-50);
 
+	/* NX2-07: frosted sticky-chrome surface (header + menu category strip).
+	 * Translucent so the blurred content shows through. Light value == the
+	 * literal these bars shipped, so Peppery stays pixel-identical; the dark
+	 * scaffold below flips it so a dark preset's sticky bars aren't white. */
+	--lafka-color-surface-glass: rgba(255, 255, 255, 0.92);
+
+	/* NX2-07: the permanent dark "inverse" footer band. Was read off
+	 * --lafka-color-text-primary (the ink), which INVERTS to near-white under a
+	 * dark preset — the footer became a white slab. A dedicated surface token
+	 * (light value == the old ink, so Peppery is byte/pixel-identical) stays
+	 * dark in every preset. See .lafka-footer in lafka-footer-chrome.css. */
+	--lafka-color-surface-footer: #18181b;
+
 	/* Extras not in handoff — preserved for existing dark-section components */
 	--lafka-color-surface-dark: #0f0f10;
 	--lafka-color-surface-cream: #fdf8ed;
@@ -414,6 +427,18 @@
 	--lafka-color-surface-active: #3f3f46;
 	--lafka-color-surface-overlay: rgba(0, 0, 0, 0.7);
 
+	/* NX2-07: dark values for the surfaces tokenised this wave, so a dark
+	 * preset renders dark-on-dark instead of light chrome islands. glass =
+	 * the near-black page tint, translucent; footer = a grounded deep band. */
+	--lafka-color-surface-glass: rgba(15, 15, 16, 0.92);
+	--lafka-color-surface-footer: #050505;
+
+	/* NX2-07: accent-50 is only ever used as a "warm panel" BACKGROUND (PDP
+	 * toppings/side callouts, cart/checkout notices) — never as text — so a dark
+	 * preset needs a dark tint here or those panels stay light islands. Faintly
+	 * warm near-black keeps the appetising-panel intent. */
+	--lafka-color-accent-50: #241a1a;
+
 	--lafka-color-border-subtle: #27272a;
 	--lafka-color-border-default: #3f3f46;
 	--lafka-color-border-strong: #52525b;
@@ -462,6 +487,18 @@
 html body,
 html .lafka-body {
 	color: var(--lafka-color-text-primary);
+}
+
+/* NX2-07: body background base. WordPress emits a `global-styles` inline rule
+ * `body { background: var(--wp--preset--color--background) }` (from theme.json's
+ * styles.color.background) AFTER our stylesheets, pinning the page to #fff and
+ * clobbering critical.css's tokenised body background at equal specificity.
+ * Mirror the color guard above: `html body` (0,0,2) beats it (0,0,1) by
+ * specificity regardless of source order, so the page surface follows the
+ * active preset. Peppery's surface-page == #fff → byte/pixel-identical; a dark
+ * preset paints the page near-black (the fix that makes dark mode functional). */
+html body {
+	background-color: var(--lafka-color-surface-page);
 }
 
 h1,

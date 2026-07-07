@@ -25,6 +25,12 @@
 	--lafka-pdp-bg-soft: var(--lafka-color-surface-sunken);
 	--lafka-pdp-bg-warm: var(--lafka-color-accent-50);
 	--lafka-pdp-bg-dark: var(--lafka-color-text-primary);
+
+	/* NX2-07: the raised card/panel/drawer surface. Was a hardcoded #fff in
+	 * every component below; aliased onto the design-system raised surface so
+	 * a dark preset renders dark cards. Peppery's raised surface == #fff, so
+	 * this is byte-for-byte identical there. */
+	--lafka-pdp-surface: var(--lafka-color-surface-raised);
 	--lafka-pdp-radius: var(--lafka-radius-md);
 	--lafka-pdp-radius-chip: var(--lafka-radius-md);
 	--lafka-pdp-shadow-card: var(--lafka-shadow-1);
@@ -100,7 +106,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .lafka-method-modal {
-  background: #fff; padding: 24px;
+  background: var(--lafka-pdp-surface); padding: 24px;
   border-radius: var(--lafka-pdp-radius);
   max-width: 320px; width: calc(100% - 32px);
   position: relative;
@@ -111,7 +117,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .lafka-method-modal button:not(.lafka-method-modal__close) {
   display: block; width: 100%;
   padding: 12px; margin: 8px 0;
-  background: #fff; border: 1.5px solid var(--lafka-pdp-border);
+  background: var(--lafka-pdp-surface); border: 1.5px solid var(--lafka-pdp-border);
   border-radius: var(--lafka-pdp-radius-chip);
   font: inherit; cursor: pointer; text-align: left;
 }
@@ -150,7 +156,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   padding: 8px 14px;
   border: 1.5px solid var(--lafka-pdp-border);
   border-radius: var(--lafka-pdp-radius-chip);
-  background: #fff;
+  background: var(--lafka-pdp-surface);
   transition: border-color .12s, background .12s, color .12s;
   text-align: center; min-width: 64px;
 }
@@ -532,7 +538,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
    plugin emits a bare div; we give it the same warm-card treatment to
    anchor the running total below the toppings. */
 #product-addons-total {
-  background: #fff;
+  background: var(--lafka-pdp-surface);
   border: 1px solid var(--lafka-pdp-border);
   border-radius: var(--lafka-pdp-radius);
   padding: 10px 14px;
@@ -562,7 +568,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .lafka-cart-drawer__panel {
   position: absolute; right: 0; top: 0; bottom: 0;
   width: 400px; max-width: 92vw;
-  background: #fff;
+  background: var(--lafka-pdp-surface);
   display: flex; flex-direction: column;
   transform: translateX(100%);
   transition: transform .25s ease;
@@ -611,7 +617,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-cart-drawer__actions { display: flex; gap: 8px; margin-top: 12px; }
 
-.lafka-cart-drawer__continue { flex: 1; background: #fff; border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); padding: 12px; cursor: pointer; font: inherit; }
+.lafka-cart-drawer__continue { flex: 1; background: var(--lafka-pdp-surface); border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); padding: 12px; cursor: pointer; font: inherit; }
 
 /* v6.7.11 (H-new, CTA-RADIUS-new): pill radius on the drawer Checkout
  * CTA so it matches the site-wide primary CTAs (hero, cart Proceed, etc).
@@ -641,7 +647,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .lafka-pdp-last-order__items li { padding: 2px 0; }
 
 .lafka-pdp-last-order__reorder {
-  background: #fff;
+  background: var(--lafka-pdp-surface);
   border: 1.5px solid var(--lafka-pdp-accent);
   color: var(--lafka-pdp-accent);
   padding: 6px 14px;
@@ -758,7 +764,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .lafka-pdp-upsell__add {
-  background: #fff;
+  background: var(--lafka-pdp-surface);
   border: 1.5px solid var(--lafka-pdp-accent);
   color: var(--lafka-pdp-accent);
   padding: 6px;
@@ -774,7 +780,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 /* === PDP summary (W4-T18) === */
 .lafka-pdp-summary {
-  background: #fff;
+  background: var(--lafka-pdp-surface);
   border-radius: var(--lafka-pdp-radius);
   padding: 20px;
   box-shadow: var(--lafka-pdp-shadow-card);
@@ -883,7 +889,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
     display: flex;
     position: fixed; bottom: 0; left: 0; right: 0;
     z-index: 90;
-    background: #fff;
+    background: var(--lafka-pdp-surface);
     border-top: 2px solid var(--lafka-pdp-accent);
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     gap: 10px; align-items: stretch;
@@ -963,7 +969,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 /* === PDP tabs (W4-T19) === */
 .lafka-pdp-tabs {
   margin: 32px 0;
-  background: #fff;
+  background: var(--lafka-pdp-surface);
   border-radius: var(--lafka-pdp-radius);
   padding: 20px;
   box-shadow: var(--lafka-pdp-shadow-card);
