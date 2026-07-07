@@ -77,6 +77,7 @@ final class ReleasePackagingTest extends TestCase {
 			'scripts',
 			'CONTRIBUTING.md',
 			'DESIGN_SYSTEM.md',
+			'docs',
 			'README.md',
 			'readme.md',
 		);
@@ -107,6 +108,9 @@ final class ReleasePackagingTest extends TestCase {
 			'theme.json',
 			'partials',
 			'functions.php',
+			// NX2-01: the preset engine ships its definitions from presets/*/preset.json
+			// (the runtime PHP lives under incl/presets/, covered by 'incl' above).
+			'presets',
 		);
 
 		foreach ( $runtime as $needle ) {
