@@ -123,12 +123,30 @@ if ( ! function_exists( 'lafka_preset_ptl_css' ) ) {
 			$decls .= $key . ':' . lafka_preset_css_value( (string) $value ) . ';';
 		}
 
+		$is_dark = $preset->is_dark();
+
+		if ( $is_dark ) {
+			// accent-text is FORBIDDEN in preset tokens (operator-derived), so the
+			// emitter supplies the dark value. Static fallback = the raw accent
+			// (readable on a dark surface) for browsers without color-mix; the base
+			// derivation DARKENS accent-text, wrong on dark, so the @supports block
+			// below LIGHTENS it toward white. See PRESET_ENGINE.md §6.
+			$decls .= '--lafka-color-accent-text:var(--lafka-color-accent-500);';
+		}
+
 		if ( '' === $decls ) {
 			return '';
 		}
 
-		$selector = $preset->is_dark() ? ':root[data-theme="dark"]' : ':root';
-		return $selector . '{' . $decls . '}';
+		$selector = $is_dark ? ':root[data-theme="dark"]' : ':root';
+		$css      = $selector . '{' . $decls . '}';
+
+		if ( $is_dark ) {
+			$css .= '@supports (color: color-mix(in srgb, red 50%, white)){'
+				. ':root[data-theme="dark"]{--lafka-color-accent-text:color-mix(in srgb, var(--lafka-color-accent-500) 80%, #fff);}}';
+		}
+
+		return $css;
 	}
 }
 
@@ -156,4 +174,32 @@ if ( ! function_exists( 'lafka_preset_register_ptl' ) ) {
 			wp_add_inline_style( 'lafka-preset', $css );
 		}
 	}
+}
+
+if ( ! function_exists( 'lafka_preset_language_attributes' ) ) {
+	/**
+	 * Stamp `data-theme="dark"` on <html> for a dark active preset, activating the
+	 * `:root[data-theme="dark"]` scaffold + `color-scheme` and the dark PTL.
+	 * header.php emits `<html <?php language_attributes(); ?>>`. A light preset
+	 * (incl. Peppery) adds nothing, so the goldens are unaffected. §6.
+	 *
+	 * @param string $output The language_attributes string.
+	 * @return string
+	 */
+	function lafka_preset_language_attributes( $output ) {
+		if (
+			function_exists( 'lafka_active_preset' )
+			&& lafka_active_preset()->is_dark()
+			&& false === strpos( (string) $output, 'data-theme' )
+		) {
+			$output .= ' data-theme="dark"';
+		}
+		return $output;
+	}
+}
+
+// Include-time hook (matches dynamic-css.php's pattern); guarded so the isolated
+// preset unit tests that don't shim add_filter don't fatal.
+if ( function_exists( 'add_filter' ) ) {
+	add_filter( 'language_attributes', 'lafka_preset_language_attributes' );
 }

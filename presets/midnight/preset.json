@@ -1,0 +1,47 @@
+{
+	"slug": "midnight",
+	"schema": 1,
+	"label": "Midnight",
+	"description": "Late-night diner — neon on black.",
+	"dark": true,
+	"extends": null,
+	"tokens": {
+		"--lafka-color-surface-page": "#0a0a0a",
+		"--lafka-color-surface-raised": "#141414",
+		"--lafka-color-surface-sunken": "#050505",
+		"--lafka-color-surface-muted": "#1c1c1c",
+		"--lafka-color-surface-hover": "#1c1c1c",
+		"--lafka-color-surface-active": "#2a2a2a",
+		"--lafka-color-surface-overlay": "rgba(0, 0, 0, 0.72)",
+		"--lafka-color-text-primary": "#fafafa",
+		"--lafka-color-text-secondary": "#d4d4d8",
+		"--lafka-color-text-muted": "#a1a1aa",
+		"--lafka-color-text-inverse": "#0a0a0a",
+		"--lafka-color-border-subtle": "#262626",
+		"--lafka-color-border-default": "#363636",
+		"--lafka-color-border-strong": "#4d4d4d",
+		"--lafka-color-accent-600": "#0891b2",
+		"--lafka-color-accent-700": "#0e7490",
+		"--lafka-color-brand-50": "#f7fee7",
+		"--lafka-color-brand-100": "#ecfccb",
+		"--lafka-color-brand-300": "#bef264",
+		"--lafka-color-brand-600": "#65a30d",
+		"--lafka-color-brand-700": "#4d7c0f",
+		"--lafka-color-brand-900": "#1a2e05",
+		"--lafka-color-success-500": "#22c55e",
+		"--lafka-color-error-500": "#f87171",
+		"--lafka-color-warning-500": "#fbbf24",
+		"--lafka-color-info-500": "#60a5fa"
+	},
+	"chrome": {
+		"lafka_accent_color": "#22d3ee",
+		"lafka_brand_color": "#a3e635"
+	},
+	"fonts": {
+		"body": { "family": "Rubik", "source": "base" },
+		"display": { "family": "Fraunces", "source": "base" }
+	},
+	"category_emoji": {},
+	"variants": {},
+	"contrast_exceptions": []
+}

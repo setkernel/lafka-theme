@@ -418,8 +418,14 @@
 	--lafka-color-border-default: #3f3f46;
 	--lafka-color-border-strong: #52525b;
 
-	--lafka-color-accent-500: #ef4444;
-	--lafka-color-accent-600: #f87171;
+	/* NX2-01: the dark --lafka-color-accent-500 / -600 overrides were DELETED
+	 * here. At (0,2,0) they out-ranked the operator's (0,1,0) dynamic-css :root
+	 * accent, so in dark mode an operator accent override was silently ignored.
+	 * Dark accent now comes from the active preset's chrome.lafka_accent_color
+	 * (theme_mod-default layer, operator-overridable); accent-text is lightened
+	 * for dark surfaces by the preset emitter's dark @supports block. Peppery
+	 * never stamps data-theme, so this deletion is provably zero-impact on the 30
+	 * Peppery goldens. See docs/PRESET_ENGINE.md §6. */
 
 	--lafka-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
 	--lafka-shadow-2: 0 2px 6px rgba(0, 0, 0, 0.45);

@@ -35,7 +35,13 @@ if ( ! function_exists( 'lafka_add_custom_css' ) ) {
 		//   transient expires (was up to a week).
 		$opts_version  = get_option( 'lafka_dynamic_css_version', '0' );
 		$theme_version = wp_get_theme( get_template() )->get( 'Version' );
-		$cache_key     = 'lafka_dyncss_v' . $opts_version . '_t' . $theme_version . '_' . get_locale();
+		// NX2-01: fold the active preset slug into the cache key. dynamic-css now
+		// resolves its ~57 defaults through the active preset (lafka_preset_default),
+		// so two presets must never share a cache entry — a preset switch writes
+		// only the lafka_active_preset theme_mod, and this makes that switch
+		// cache-correct by construction (independent of the option-save bust hook).
+		$active_preset = function_exists( 'lafka_get_active_preset_slug' ) ? lafka_get_active_preset_slug() : 'peppery';
+		$cache_key     = 'lafka_dyncss_v' . $opts_version . '_t' . $theme_version . '_' . get_locale() . '_p' . $active_preset;
 
 		$custom_css = wp_cache_get( $cache_key, 'lafka' );
 		if ( $custom_css === false ) {
