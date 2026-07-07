@@ -43,14 +43,16 @@ preset-default (TML) ← operator-value. Both routes make the operator the final
 lafka-theme/
   presets/
     peppery/preset.json          # preset #1, DEFAULT, identity (empty overrides)
-    midnight/preset.json         # dark preset shipped this wave to exercise dark path
+    midnight/ ember/             # dark presets
+    verde/ koyo/ terracotta/ azzurro/ brioche/ saffron/ fjord/  # light presets (10 total, NX2-05/08)
     __fixtures__/lowcontrast/preset.json   # NX2-02: must FAIL the contrast gate
   incl/presets/
     class-lafka-preset.php            # value object: reads one preset.json, typed accessors
     class-lafka-presets.php           # registry: discovery, cache, lafka_presets filter, active()
     lafka-preset-tokens.php           # LAFKA_PRESET_TOKEN_WHITELIST + LAFKA_PRESET_CHROME_WHITELIST + LAFKA_PRESET_CRITICAL_KEYS (pure-data constants)
     lafka-preset-emit.php             # PTL builder + enqueue wiring + data-theme + lafka_preset_default()
-    class-lafka-color-contrast.php    # NX2-02 WCAG ratio helper (none exists in repo)
+    lafka-preset-fonts.php            # NX2-03 8-family OFL font registry + per-preset enqueue
+    class-lafka-color-contrast.php    # NX2-02 WCAG ratio helper
   docs/PRESET_ENGINE.md               # this file
 ```
 

@@ -26,6 +26,14 @@ composer phpcbf     # auto-fix what PHPCS can fix
 composer test       # PHPUnit (Brain Monkey)
 ```
 
+A pre-push hook that runs all four gates ships in `.githooks/` — install once per clone:
+
+```bash
+git config core.hooksPath .githooks
+```
+
+Bypass for a single push with `git push --no-verify`.
+
 ### End-to-end (Playwright)
 
 ```bash
@@ -66,11 +74,11 @@ It is **non-blocking** for now — `continue-on-error`, and not part of the
 | Top-level templates (single, archive, page, etc.) | repo root |
 | Theme functions / hooks | `functions.php` |
 | Reusable theme classes | `incl/` |
-| Theme options framework | `incl/lafka-options-framework/` |
+| Legacy options shim (deprecated `lafka_get_option()`) | `incl/lafka-options-framework/` |
+| Design presets (10 built-in) | `presets/` + `incl/presets/` |
 | Per-template partials | `partials/` |
 | WooCommerce overrides | `woocommerce/` |
 | Tribe Events overrides | `tribe-events/` |
-| WPBakery / VC element overrides | `vc_templates/` |
 | Custom page templates | `page_templates/` |
 | Frontend JS | `js/` |
 | Frontend CSS | `style.css` (root) + `styles/` (design tokens + variants) |
@@ -87,7 +95,7 @@ It is **non-blocking** for now — `continue-on-error`, and not part of the
 
 ## Compatibility matrix
 
-See [LAFKA_AUDIT.md](../LAFKA_AUDIT.md) and [LAFKA_SYSTEM_MAP.md](../LAFKA_SYSTEM_MAP.md) at the workspace root.
+See [COMPATIBILITY.md](../lafka-plugin/COMPATIBILITY.md) (support floors + CI matrix) and the workspace [ROADMAP](../ROADMAP_2026-07-05.md).
 
 ## Releases
 
