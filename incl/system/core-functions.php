@@ -1809,8 +1809,21 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
 		}
 
+		// NX2-01: register the Preset-Token Layer as an inline-only handle
+		// (src=false → no HTTP request) that depends on lafka-tokens, so the
+		// active preset's :root overrides print AFTER the base tokens. lafka-style
+		// then depends on lafka-preset so the operator's dynamic-css :root inline
+		// still prints LAST and always wins. Peppery emits an empty PTL, so this
+		// adds zero bytes for the default preset (byte-identical dynamic-css +
+		// pixel-identical goldens). See docs/PRESET_ENGINE.md §4.
+		$lafka_style_deps = array( 'lafka-tokens' );
+		if ( function_exists( 'lafka_preset_register_ptl' ) ) {
+			lafka_preset_register_ptl();
+			$lafka_style_deps[] = 'lafka-preset';
+		}
+
 		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
-		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', array( 'lafka-tokens' ), wp_get_theme( get_template() )->get( 'Version' ) );
+		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', $lafka_style_deps, wp_get_theme( get_template() )->get( 'Version' ) );
 
 		// NX1-10a: the legacy monolith remainder, split out of style.css into
 		// scoped sheets that load ONLY on the surfaces which render the matching
