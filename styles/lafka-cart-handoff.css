@@ -145,7 +145,14 @@
 }
 
 .lafka-cart-tab.is-active .lafka-cart-tab__meta {
-	color: rgba(255, 255, 255, 0.78);
+
+	/* NX2-07 verify-pass: the active pill's background reads
+	 * --lafka-color-text-primary (the ink), which a dark preset flips light — so
+	 * the pill inverts light and this hardcoded translucent white becomes
+	 * white-on-white (1.03:1). Derive the meta FROM the inverse token like the
+	 * menu tab meta does: on Peppery (text-inverse == #fff) color-mix resolves to
+	 * the identical rgba(255,255,255,0.78); a dark preset flips it dark. */
+	color: color-mix(in srgb, var(--lafka-color-text-inverse) 78%, transparent);
 }
 
 .lafka-cart-tab__label {

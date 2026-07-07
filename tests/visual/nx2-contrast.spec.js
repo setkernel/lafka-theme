@@ -202,6 +202,9 @@ test.describe( 'NX2-07 midnight rendered text-contrast (>= AA)', () => {
 			{ sel: '.lafka-pdp-upsell__heading', min: T.text, label: 'pdp upsell heading' },
 			{ sel: '.lafka-product-card__title', min: T.text, label: 'product card title' },
 			{ sel: '.lafka-product-card__price', min: T.text, label: 'product card price' },
+			// verify-pass: the WooCommerce breadcrumb ships a fixed #767676 that
+			// drops to 4.36:1 on the dark page — guard the dark-scoped lift.
+			{ sel: '.breadcrumb', min: T.text, label: 'breadcrumb' },
 		] );
 	} );
 
@@ -240,6 +243,13 @@ test.describe( 'NX2-07 midnight rendered text-contrast (>= AA)', () => {
 				{ sel: '.cart_totals h2', min: T.text, label: 'cart totals heading' },
 				{ sel: '.cart_totals .order-total .amount', min: T.text, label: 'cart order total' },
 				{ sel: '.wc-proceed-to-checkout .checkout-button', min: T.ui, label: 'checkout CTA' },
+				// verify-pass: two dark-mode inversions the first NX2-07 pass missed.
+				// The active cart-tab pill inverts light (its bg reads the ink), so a
+				// hardcoded translucent-white meta went white-on-white (1.03:1); the
+				// reassurance line sits on success-50 (no dark value) → light-on-light
+				// (1.4:1). Guard both dark-scoped fixes.
+				{ sel: '.lafka-cart-tab.is-active .lafka-cart-tab__meta', min: T.text, label: 'cart tab meta' },
+				{ sel: '.lafka-direct--line', min: T.text, label: 'cart reassurance line' },
 			] );
 		} );
 	} );

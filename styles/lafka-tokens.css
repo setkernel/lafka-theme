@@ -511,6 +511,17 @@ html body {
 	background-color: var(--lafka-color-surface-page);
 }
 
+/* NX2-07 verify-pass: the WooCommerce `.breadcrumb` colour ships as a fixed
+ * #767676 from styles/dynamic-css.php (operator-fed, so it stays put across
+ * presets). On Peppery's white page that clears AA (4.54:1), but on a dark
+ * preset's near-black page it drops to 4.36:1 (sub-AA). Lift it to a muted
+ * light ink in the dark scope only (0,2,0 beats the 0,1,0 dynamic-css rule by
+ * specificity regardless of order); Peppery has no data-theme, so the shipped
+ * #767676 and its byte-identical dynamic-css output are untouched. */
+:root[data-theme="dark"] .breadcrumb {
+	color: var(--lafka-color-text-muted);
+}
+
 h1,
 .lafka-h1,
 .lafka-display {

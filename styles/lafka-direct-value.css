@@ -66,6 +66,17 @@
 	color: var(--lafka-color-text-primary);
 }
 
+/* NX2-07 verify-pass: the cart/checkout reassurance line sits on
+ * --lafka-color-success-50 — a light mint tint with NO dark scaffold value — so
+ * a dark preset leaves it a light island while its text flips light →
+ * light-on-light (1.4:1). Dark-scope the panel to the raised surface + primary
+ * ink so it reads light-on-dark. Peppery (no data-theme) keeps the exact mint
+ * panel, so it stays byte/pixel-identical. */
+:root[data-theme="dark"] .lafka-direct--line {
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+}
+
 .lafka-direct__cta {
 	display: inline-flex;
 	align-items: center;
