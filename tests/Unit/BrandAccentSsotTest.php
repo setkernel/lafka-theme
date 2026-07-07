@@ -73,10 +73,13 @@ final class BrandAccentSsotTest extends TestCase {
 		$php = $this->theme_file( '/styles/dynamic-css.php' );
 		// NX1-02.logos-brand-pilot: brand_color migrated legacy option ->
 		// lafka_brand_color theme_mod; the pepper-yellow default is preserved.
+		// NX2-01: the default now flows through the preset theme_mod-default layer
+		// (lafka_preset_default), function_exists-guarded so the isolated builder
+		// still falls back to the '#f59e0b' literal. The SSOT default is unchanged.
 		$this->assertMatchesRegularExpression(
-			"/get_theme_mod\(\s*'lafka_brand_color'\s*,\s*'#f59e0b'\s*\)/",
+			"/get_theme_mod\(\s*'lafka_brand_color'\s*,\s*function_exists\(\s*'lafka_preset_default'\s*\)\s*\?\s*lafka_preset_default\(\s*'lafka_brand_color'\s*,\s*'#f59e0b'\s*\)\s*:\s*'#f59e0b'\s*\)/",
 			$php,
-			'dynamic-css.php must read the lafka_brand_color theme_mod with the pepper-yellow default.'
+			'dynamic-css.php must read the lafka_brand_color theme_mod with the pepper-yellow default (via the preset default layer).'
 		);
 		$this->assertStringContainsString(
 			"--lafka-color-brand-500:' . \$brand_color",
