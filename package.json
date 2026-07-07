@@ -45,6 +45,6 @@
 		"esbuild": "^0.27.7",
 		"eslint": "^10.6.0",
 		"globals": "^17.7.0",
-		"stylelint": "^16.26.1"
+		"stylelint": "^17.14.0"
 	}
 }
