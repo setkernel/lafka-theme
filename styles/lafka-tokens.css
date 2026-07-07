@@ -522,6 +522,17 @@ html body {
 	color: var(--lafka-color-text-muted);
 }
 
+/* NX2-08: the same fixed #767676 also dips below AA on a LIGHT preset's off-white
+ * page surface (4.28:1 on terracotta's #fff7ed, 4.34:1 on fjord's #f8fafc, etc.).
+ * Lift it to the preset's muted ink for every NON-default preset (marked with
+ * data-lafka-preset on <html> by lafka_preset_language_attributes); Peppery
+ * carries no marker — its page is pure #fff where #767676 clears AA at 4.54:1 —
+ * so its dynamic-css bytes + the 30 goldens stay byte/pixel-identical. Dark
+ * presets are already handled by the rule above (this scope excludes them). */
+:root[data-lafka-preset]:not([data-theme="dark"]) .breadcrumb {
+	color: var(--lafka-color-text-muted);
+}
+
 h1,
 .lafka-h1,
 .lafka-display {

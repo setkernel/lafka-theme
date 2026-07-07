@@ -1,20 +1,30 @@
 /* lafka-theme/tests/visual/nx2-contrast.spec.js
  *
  * ============================================================================
- * NX2-07 RENDERED TEXT-CONTRAST GATE — README FOR AGENTS (read before editing)
+ * NX2-07 / NX2-08 RENDERED TEXT-CONTRAST GATE — README FOR AGENTS (read first)
  * ============================================================================
- * A screenshot golden can BAKE a broken state: if a dark preset ships text
- * that is dark-on-dark, `--update-snapshots` happily records the unreadable
- * pixels as "correct" and the gate goes green forever. That is exactly how the
- * first NX2-07 dark goldens encoded a batch of dark-on-dark text/CTA inversions.
+ * A screenshot golden can BAKE a broken state: if a preset ships text that is
+ * dark-on-dark (or light-on-light), `--update-snapshots` happily records the
+ * unreadable pixels as "correct" and the gate goes green forever. That is
+ * exactly how the first NX2-07 dark goldens encoded a batch of dark-on-dark
+ * text/CTA inversions.
  *
- * This gate CANNOT bake that bug. It activates the dark preset (midnight), loads
- * home + menu + a PDP + the cart, and for a CURATED list of critical selectors
- * computes the *rendered* WCAG contrast ratio from getComputedStyle (text colour
- * over its first opaque ancestor background, alpha-composited) and FAILS if any
- * pair falls under AA (>= 4.5 for body text, >= 3.0 for large text / UI such as
+ * This gate CANNOT bake that bug. For EVERY REGISTERED PRESET (NX2-08 — the
+ * whole roster, not just midnight) it activates the preset, loads home + menu +
+ * a PDP + the cart, and for a CURATED list of critical selectors computes the
+ * *rendered* WCAG contrast ratio from getComputedStyle (text colour over its
+ * first opaque ancestor background, alpha-composited) and FAILS if any pair
+ * falls under AA (>= 4.5 for body text, >= 3.0 for large text / UI such as
  * primary CTAs). There is no snapshot to update — the only way to make it green
- * is to make the text actually readable.
+ * is to make the text actually readable under that preset.
+ *
+ * WHY EVERY PRESET: PresetContrastTest (PHP) gates each preset's TOKEN palette
+ * in the abstract; this gate proves the palette survives CONTACT with the real
+ * rendered DOM (announce/footer always-dark bands, header chrome, card/section
+ * text, CTAs) on every preset a customer could be served — the dark presets for
+ * dark-on-dark, the light presets for light-on-light. The preset set is
+ * discovered from presets/<slug>/preset.json exactly as the PHP registry does
+ * (the nested __fixtures__ dir is never a registered preset, so it is skipped).
  *
  * The curated list is the six inversions NX2-07's adversarial verify caught plus
  * the load-bearing surrounding text (hero heading, header nav, footer, card
@@ -23,16 +33,43 @@
  *
  * ISOLATION: run by its OWN config (playwright.contrast.config.js,
  * `npm run test:contrast`) and testIgnore'd by playwright.visual.config.js, so
- * the 30 Peppery goldens never trip over its midnight activation and vice-versa.
- * Like nx2-dark it toggles lafka_active_preset -> midnight in beforeAll and
- * REMOVES it in afterAll (leaving it on would poison a later Peppery run).
+ * the 30 Peppery goldens never trip over its preset activations and vice-versa.
+ * Each preset's describe toggles lafka_active_preset -> <slug> in beforeAll and
+ * REMOVES it in afterAll (leaving it on would poison a later Peppery run); the
+ * whole file runs serially so the global active-preset theme_mod is never shared
+ * across two presets at once.
  *
  * @since lafka-theme 7.1.0 (NX2-07 dark text/CTA inversion remediation)
+ * @since lafka-theme 7.2.0 (NX2-08 generalized to every registered preset)
  */
+const fs = require( 'node:fs' );
+const path = require( 'node:path' );
 const { test, expect } = require( '@playwright/test' );
 const { SEED, useClassicCartCheckout } = require( '../e2e/support/store' );
 const { wpCli, bustDynamicCss } = require( '../e2e/support/wp-cli' );
 const { stabilize } = require( './support/capture' );
+
+/**
+ * Discover every REGISTERED preset the same way Lafka_Presets does: one
+ * presets/<slug>/preset.json per preset under the theme. The nested
+ * presets/__fixtures__ dir holds the deliberately-failing lowcontrast fixture
+ * and is NOT a registered preset, so it is skipped — mirroring the PHP registry.
+ * Sorted for a deterministic, reproducible run order. `slug` is a directory name
+ * (a sanitize_key identity), so it is safe to interpolate into the wp eval below.
+ *
+ * @return {string[]} Sorted registered preset slugs.
+ */
+function discoverPresetSlugs() {
+	const dir = path.resolve( __dirname, '..', '..', 'presets' );
+	return fs
+		.readdirSync( dir, { withFileTypes: true } )
+		.filter( ( e ) => e.isDirectory() && e.name !== '__fixtures__' )
+		.filter( ( e ) => fs.existsSync( path.join( dir, e.name, 'preset.json' ) ) )
+		.map( ( e ) => e.name )
+		.sort();
+}
+
+const PRESET_SLUGS = discoverPresetSlugs();
 
 /**
  * In-page WCAG contrast probe. Returns, per selector, the computed text colour,
@@ -150,12 +187,23 @@ async function assertContrast( page, entries ) {
 // AA thresholds: 4.5 for normal text, 3.0 for large text / UI (primary CTAs).
 const T = { text: 4.5, ui: 3.0 };
 
-// Serial: the active-preset theme_mod + checkout mode are global store state.
-test.describe.configure( { mode: 'serial' } );
+// Sequential, NOT serial-cascading. The active-preset theme_mod + checkout mode
+// are global store state, so no two preset describes may run at once — but the
+// contrast config already pins workers:1 + fullyParallel:false, which serialises
+// every test onto one worker in declaration order. We deliberately do NOT set
+// `mode: 'serial'`: a serial group aborts every remaining test on the first
+// failure, which (across a 10-preset roster) would hide every violation after
+// the first. As a GATE we want one run to surface EVERY preset's every failing
+// selector, so each test runs independently and each preset's afterAll still
+// restores the Peppery default.
 
-test.describe( 'NX2-07 midnight rendered text-contrast (>= AA)', () => {
+// One describe per registered preset, run back-to-back. Each sets its slug in
+// beforeAll and restores the Peppery default in afterAll, so the global
+// active-preset theme_mod is never shared across two presets. NX2-08.
+for ( const slug of PRESET_SLUGS ) {
+	test.describe( `NX2-07 ${ slug } rendered text-contrast (>= AA)`, () => {
 	test.beforeAll( () => {
-		wpCli( [ 'eval', 'set_theme_mod("lafka_active_preset","midnight");' ] );
+		wpCli( [ 'eval', `set_theme_mod("lafka_active_preset","${ slug }");` ] );
 		bustDynamicCss();
 	} );
 
@@ -253,4 +301,5 @@ test.describe( 'NX2-07 midnight rendered text-contrast (>= AA)', () => {
 			] );
 		} );
 	} );
-} );
+	} );
+}

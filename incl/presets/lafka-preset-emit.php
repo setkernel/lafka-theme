@@ -388,18 +388,36 @@ if ( ! function_exists( 'lafka_preset_display_preload_href' ) ) {
 
 if ( ! function_exists( 'lafka_preset_language_attributes' ) ) {
 	/**
-	 * Stamp `data-theme="dark"` on <html> for a dark active preset, activating the
-	 * `:root[data-theme="dark"]` scaffold + `color-scheme` and the dark PTL.
-	 * header.php emits `<html <?php language_attributes(); ?>>`. A light preset
-	 * (incl. Peppery) adds nothing, so the goldens are unaffected. §6.
+	 * Stamp preset markers on <html>. header.php emits
+	 * `<html <?php language_attributes(); ?>>`.
+	 *
+	 *   - `data-lafka-preset="<slug>"` for any NON-default active preset, so
+	 *     preset-scoped CSS can target it (NX2-08 uses it to lift the fixed
+	 *     WooCommerce breadcrumb #767676 to the preset's muted ink on off-white
+	 *     light surfaces where it dips below AA). Peppery is the zero-state — it
+	 *     carries NO marker, so its markup + the 30 goldens stay identical (mirrors
+	 *     Peppery's empty PTL).
+	 *   - `data-theme="dark"` for a dark active preset, activating the
+	 *     `:root[data-theme="dark"]` scaffold + `color-scheme` and the dark PTL. §6.
 	 *
 	 * @param string $output The language_attributes string.
 	 * @return string
 	 */
 	function lafka_preset_language_attributes( $output ) {
+		if ( ! function_exists( 'lafka_active_preset' ) ) {
+			return $output;
+		}
+		$preset = lafka_active_preset();
+		$slug   = $preset->slug();
 		if (
-			function_exists( 'lafka_active_preset' )
-			&& lafka_active_preset()->is_dark()
+			'' !== $slug && 'peppery' !== $slug
+			&& false === strpos( (string) $output, 'data-lafka-preset' )
+		) {
+			$attr    = function_exists( 'esc_attr' ) ? esc_attr( $slug ) : $slug;
+			$output .= ' data-lafka-preset="' . $attr . '"';
+		}
+		if (
+			$preset->is_dark()
 			&& false === strpos( (string) $output, 'data-theme' )
 		) {
 			$output .= ' data-theme="dark"';
