@@ -71,7 +71,7 @@ lafka/
 ├── plugins/                # Place commercial plugin zips here
 ├── functions.php           # Main theme functions
 ├── header.php / footer.php # Layout templates
-└── style.css               # Main stylesheet (v6.19.0)
+└── style.css               # Main stylesheet (v7.0.0)
 ```
 
 The visual single source of truth is the `styles/` token system

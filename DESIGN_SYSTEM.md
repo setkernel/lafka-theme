@@ -3,7 +3,7 @@
 Single source of truth for every visual decision in the theme. If you can't
 find an answer here, the answer doesn't exist yet — propose it via PR.
 
-**Locked**: 2026-05-15 design lock; current theme v6.19.0.
+**Locked**: 2026-05-15 design lock; current theme v7.0.0.
 
 ## Principles
 
