@@ -31,9 +31,13 @@
 		"--lafka-color-brand-700": "#4d7c0f",
 		"--lafka-color-brand-900": "#1a2e05",
 		"--lafka-color-success-500": "#22c55e",
+		"--lafka-color-success-50": "#0a1f13",
 		"--lafka-color-error-500": "#f87171",
+		"--lafka-color-error-50": "#251113",
 		"--lafka-color-warning-500": "#fbbf24",
-		"--lafka-color-info-500": "#60a5fa"
+		"--lafka-color-warning-50": "#251d06",
+		"--lafka-color-info-500": "#60a5fa",
+		"--lafka-color-info-50": "#0a1830"
 	},
 	"chrome": {
 		"lafka_accent_color": "#22d3ee",
