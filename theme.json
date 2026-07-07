@@ -12,77 +12,77 @@
 				{
 					"slug": "accent",
 					"name": "Accent",
-					"color": "#DD430E"
+					"color": "#dc2626"
 				},
 				{
 					"slug": "text-primary",
 					"name": "Text",
-					"color": "#333333"
+					"color": "#18181b"
 				},
 				{
 					"slug": "text-secondary",
 					"name": "Text Secondary",
-					"color": "#666666"
+					"color": "#3f3f46"
 				},
 				{
 					"slug": "text-muted",
 					"name": "Text Muted",
-					"color": "#5e5e5e"
+					"color": "#71717a"
 				},
 				{
 					"slug": "background",
 					"name": "Background",
-					"color": "#ffffff"
+					"color": "#fff"
 				},
 				{
 					"slug": "background-subtle",
 					"name": "Background Subtle",
-					"color": "#f8f8f8"
+					"color": "#fafafa"
 				},
 				{
 					"slug": "background-input",
 					"name": "Background Input",
-					"color": "#f6f6f6"
+					"color": "#fafafa"
 				},
 				{
 					"slug": "border-light",
 					"name": "Border Light",
-					"color": "#f1f1f1"
+					"color": "#e4e4e7"
 				},
 				{
 					"slug": "border-default",
 					"name": "Border Default",
-					"color": "#e8e8e8"
+					"color": "#d4d4d8"
 				},
 				{
 					"slug": "border-medium",
 					"name": "Border Medium",
-					"color": "#e1e1e1"
+					"color": "#d4d4d8"
 				},
 				{
 					"slug": "border-dark",
 					"name": "Border Dark",
-					"color": "#cccccc"
+					"color": "#a1a1aa"
 				},
 				{
 					"slug": "status-error",
 					"name": "Error",
-					"color": "#c23131"
+					"color": "#b91c1c"
 				},
 				{
 					"slug": "status-warning",
 					"name": "Warning",
-					"color": "#9d8967"
+					"color": "#b45309"
 				},
 				{
 					"slug": "status-success",
 					"name": "Success",
-					"color": "#388e3c"
+					"color": "#047857"
 				},
 				{
 					"slug": "status-info",
 					"name": "Info",
-					"color": "#008cc9"
+					"color": "#1d4ed8"
 				}
 			]
 		},
@@ -94,17 +94,17 @@
 				{
 					"slug": "small",
 					"name": "Small",
-					"size": "13px"
+					"size": "0.8125rem"
 				},
 				{
 					"slug": "medium",
 					"name": "Medium",
-					"size": "16px"
+					"size": "1rem"
 				},
 				{
 					"slug": "large",
 					"name": "Large",
-					"size": "20px"
+					"size": "1.25rem"
 				},
 				{
 					"slug": "x-large",
@@ -114,7 +114,24 @@
 				{
 					"slug": "xx-large",
 					"name": "XX Large",
-					"size": "40px"
+					"size": "2.5rem"
+				}
+			],
+			"fontFamilies": [
+				{
+					"slug": "body",
+					"name": "Body",
+					"fontFamily": "\"Rubik\", system-ui, -apple-system, \"Segoe UI\", roboto, \"Helvetica Neue\", arial, sans-serif"
+				},
+				{
+					"slug": "display",
+					"name": "Display",
+					"fontFamily": "\"Fraunces\", \"Iowan Old Style\", \"Palatino Linotype\", \"Book Antiqua\", palatino, georgia, serif"
+				},
+				{
+					"slug": "mono",
+					"name": "Mono",
+					"fontFamily": "ui-monospace, sfmono-regular, \"SF Mono\", menlo, consolas, monospace"
 				}
 			]
 		},

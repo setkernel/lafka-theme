@@ -35,7 +35,7 @@ $lafka_closer_lead     = (string) get_theme_mod(
 	__( 'Pickup or delivery. Ready in about 25 minutes.', 'lafka' )
 );
 $lafka_closer_cta_label = (string) get_theme_mod( 'lafka_home_closer_cta_label', __( 'Start your order', 'lafka' ) );
-$lafka_closer_cta_url   = (string) get_theme_mod( 'lafka_home_closer_cta_url', function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' ) );
+$lafka_closer_cta_url   = (string) get_theme_mod( 'lafka_home_closer_cta_url', lafka_theme_menu_url() );
 ?>
 <section class="lafka-closer" aria-labelledby="lafka-closer-heading">
 	<div class="lafka-container">

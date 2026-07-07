@@ -23,11 +23,34 @@ npx @wordpress/env start
 npm run lint        # ESLint + Stylelint
 composer phpcs      # WordPress coding standards (security sniffs enforced)
 composer phpcbf     # auto-fix what PHPCS can fix
-npm run test:e2e    # Playwright conversion-path e2e (see playwright.config.js)
+composer test       # PHPUnit (Brain Monkey)
 ```
 
-The Playwright suite (`tests/e2e/`) needs browsers installed once:
-`npm run test:e2e:install`.
+### End-to-end (Playwright)
+
+```bash
+npm run test:e2e:install   # browsers, once
+npm run test:e2e           # full funnel + store-closed + cart-drawer a11y
+npm run test:e2e:smoke     # just the @smoke money-path
+```
+
+The e2e suite (`tests/e2e/`) drives a **seeded** store and therefore needs the
+companion **plugin** mounted alongside the theme (for `wp lafka seed-demo`, the
+addon engine, and order-hours). Run it against the **umbrella** wp-env (both
+repos), not the theme-only `.wp-env.json` at `localhost:8881` — the seeder does
+not exist there. The suite targets `http://localhost:8890` by default; override
+with `LAFKA_E2E_BASE_URL=<url>`.
+
+`global-setup.js` fails fast if the target is unreachable, then re-seeds and
+prepares the store (WooCommerce coming-soon off, COD on, `product_addons` on,
+classic cart/checkout shortcodes). It discovers the wp-env CLI container
+dynamically (`docker ps`); set `LAFKA_E2E_CLI_CONTAINER` to pin it. Because all
+specs share one WordPress backend, the suite runs single-worker; the
+store-closed spec is serial and self-restoring.
+
+CI runs the `@smoke` subset via `.github/workflows/e2e.yml` (both repos mounted).
+It is **non-blocking** for now — `continue-on-error`, and not part of the
+`ci-passed` gate — until it proves stable over ~a week.
 
 ## Branching
 

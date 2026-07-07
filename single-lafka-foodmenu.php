@@ -154,7 +154,7 @@ while ( have_posts() ) :
 						if ( $lafka_prtfl_gallery == 'list' ) :
 							?>
 							lafka_image_list_foodmenu<?php endif; ?>" >
-							<?php if ( ! lafka_get_option( 'hide_foodmenu_images' ) ) : ?>
+							<?php if ( ! get_theme_mod( 'lafka_hide_foodmenu_images', false ) ) : ?>
 								<div class="two_third foodmenu-main-image-holder">
 									<?php if ( $lafka_prtfl_gallery == 'cloud' && has_post_thumbnail() ) : ?>
 										<!-- Cloud Zoom -->
@@ -435,7 +435,7 @@ while ( have_posts() ) :
 					$lafka_similar_foodmenus = new WP_Query( $lafka_get_foodmenu_args );
 					?>
 
-					<?php if ( lafka_get_option( 'show_related_menu_entries' ) ) : ?>
+					<?php if ( get_theme_mod( 'lafka_show_related_menu_entries', true ) ) : ?>
 						<?php if ( $lafka_similar_foodmenus->have_posts() ) : ?>
 							<div class="similar_projects full_width">
 								<h4>
@@ -460,13 +460,13 @@ while ( have_posts() ) :
 									<?php global $post; ?>
 									<div class="foodmenu-unit lafka-none-overlay grid-unit">
 										<div class="foodmenu-unit-holder">
-											<?php if ( ! lafka_get_option( 'hide_foodmenu_images' ) ) : ?>
+											<?php if ( ! get_theme_mod( 'lafka_hide_foodmenu_images', false ) ) : ?>
 												<?php if ( has_post_thumbnail() ) : ?>
-													<?php if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) : ?>
+													<?php if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) : ?>
 														<a title="<?php esc_attr_e( 'View more', 'lafka' ); ?>" href="<?php echo esc_url( get_the_permalink( get_the_ID() ) ); ?>" class="lafka-foodmenu-image-link">
 													<?php endif; ?>
 														<?php the_post_thumbnail( 'lafka-640x640' ); ?>
-													<?php if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) : ?>
+													<?php if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) : ?>
 														</a>
 													<?php endif; ?>
 												<?php else : ?>
@@ -476,12 +476,12 @@ while ( have_posts() ) :
 											<div class="foodmenu-unit-info">
 												<a 
 												<?php
-												if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) :
+												if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) :
 													?>
 													title="<?php esc_attr_e( 'View more', 'lafka' ); ?>" <?php endif; ?>
 													href="
 													<?php
-													if ( ! lafka_get_option( 'foodmenu_simple_menu' ) ) {
+													if ( ! get_theme_mod( 'lafka_foodmenu_simple_menu', false ) ) {
 														the_permalink();
 													} else {
 														echo '#';}
@@ -526,7 +526,7 @@ while ( have_posts() ) :
 			</div>
 
 			<!-- Previous / Next links -->
-			<?php if ( lafka_get_option( 'show_prev_next' ) ) : ?>
+			<?php if ( get_theme_mod( 'lafka_show_prev_next', true ) ) : ?>
 				<?php echo wp_kses_post( lafka_post_nav() ); ?>
 			<?php endif; ?>
 		</div>

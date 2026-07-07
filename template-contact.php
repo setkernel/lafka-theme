@@ -29,7 +29,7 @@ $lafka_c_tel   = isset( $lafka_c_info['phone_e164'] ) ? (string) $lafka_c_info['
 $lafka_c_email = isset( $lafka_c_info['email'] ) ? (string) $lafka_c_info['email'] : (string) get_bloginfo( 'admin_email' );
 $lafka_c_hours = isset( $lafka_c_info['hours'] ) && is_array( $lafka_c_info['hours'] ) ? $lafka_c_info['hours'] : array();
 $lafka_c_directions = isset( $lafka_c_info['directions_url'] ) ? (string) $lafka_c_info['directions_url'] : '';
-$lafka_c_logo  = function_exists( 'lafka_get_option' ) ? lafka_get_option( 'theme_logo' ) : 0;
+$lafka_c_logo  = function_exists( 'get_theme_mod' ) ? get_theme_mod( 'lafka_theme_logo', 0 ) : 0;
 
 $lafka_c_photo_id = (int) get_theme_mod( 'lafka_contact_photo_id', 0 );
 $lafka_c_photo    = $lafka_c_photo_id ? wp_get_attachment_image_url( $lafka_c_photo_id, 'large' ) : '';

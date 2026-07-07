@@ -177,6 +177,13 @@ namespace {
 			return 'http://example.test' . $path;
 		}
 	}
+	// Canonical menu-URL resolver (incl/template-helpers/menu-url.php) — the
+	// redesigned templates now call this theme helper for every menu CTA.
+	if ( ! function_exists( 'lafka_theme_menu_url' ) ) {
+		function lafka_theme_menu_url() {
+			return 'http://example.test/menu/';
+		}
+	}
 	// Escaping / i18n shims — return or echo the raw value.
 	if ( ! function_exists( 'esc_html' ) ) {
 		function esc_html( $text ) {

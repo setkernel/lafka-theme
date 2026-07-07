@@ -68,7 +68,7 @@ if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
 			<?php
 			$second_image = lafka_get_second_product_image_id( $product ? $product : $post );
 			// If we have swap image enabled and second image:
-			if ( lafka_get_option( 'product_hover_onproduct' ) == 'lafka-prodhover-swap' && $second_image ) :
+			if ( get_theme_mod( 'lafka_product_hover_onproduct', 'lafka-prodhover-zoom' ) == 'lafka-prodhover-swap' && $second_image ) :
 				?>
 				<?php
 				$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'shop_catalog' );
@@ -129,7 +129,7 @@ if ( ! function_exists( 'lafka_is_product_new' ) ) {
 	function lafka_is_product_new( $product ) {
 		/** @var $product WC_Product */
 
-		$days_product_is_new = lafka_get_option( 'new_label_period', 45 );
+		$days_product_is_new = get_theme_mod( 'lafka_new_label_period', 45 );
 
 		if ( $days_product_is_new != 0 ) {
 			$post_date_dt = date_create( $product->get_date_created() );
@@ -227,15 +227,15 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 
 		echo '<div class="content_holder">';
 
-		$style_class = 'columns-' . lafka_get_option( 'category_columns_num' );
+		$style_class = 'columns-' . get_theme_mod( 'lafka_category_columns_num', '3' );
 
-		if ( lafka_get_option( 'enable_shop_cat_carousel' ) ) {
+		if ( get_theme_mod( 'lafka_enable_shop_cat_carousel', true ) ) {
 			// owl carousel
 			wp_localize_script(
 				'lafka-libs-config',
 				'lafka_owl_carousel_cat',
 				array(
-					'columns' => esc_js( lafka_get_option( 'category_columns_num' ) ),
+					'columns' => esc_js( get_theme_mod( 'lafka_category_columns_num', '3' ) ),
 				)
 			);
 
@@ -271,7 +271,7 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 		} else {
 			$lafka_products_will_display = ( 'subcategories' !== $display_type || is_search() || is_paged() );
 		}
-		if ( lafka_get_option( 'show_refine_area' ) && $lafka_products_will_display ) {
+		if ( get_theme_mod( 'lafka_show_refine_area', true ) && $lafka_products_will_display ) {
 			echo '<div class="box-sort-filter' . ( is_active_sidebar( 'lafka_product_filters_sidebar' ) ? ' lafka-product-filters-has-widgets' : '' ) . '">';
 			echo '<div class="product-filter">';
 			if ( is_active_sidebar( 'lafka_product_filters_sidebar' ) ) {
@@ -285,12 +285,12 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 add_filter( 'woocommerce_price_filter_widget_step', 'lafka_set_price_filter_widget_step' );
 if ( ! function_exists( 'lafka_set_price_filter_widget_step' ) ) {
 	function lafka_set_price_filter_widget_step() {
-		return lafka_get_option( 'price_filter_widget_step' );
+		return get_theme_mod( 'lafka_price_filter_widget_step', 10 );
 	}
 }
 
 // Price filter on category pages
-if ( lafka_get_option( 'show_pricefilter', 1 ) && lafka_get_option( 'show_refine_area' ) ) {
+if ( get_theme_mod( 'lafka_show_pricefilter', true ) && get_theme_mod( 'lafka_show_refine_area', true ) ) {
 	add_action( 'woocommerce_before_shop_loop', 'lafka_price_filter', 10 );
 }
 
@@ -484,7 +484,7 @@ if ( ! function_exists( 'lafka_shop_sidebar' ) ) {
 
 	function lafka_shop_sidebar() {
 		echo '</div>'; // closes content_holder
-		if ( lafka_get_option( 'show_sidebar_shop' ) ) {
+		if ( get_theme_mod( 'lafka_show_sidebar_shop', false ) ) {
 			do_action( 'woocommerce_sidebar' );
 			echo '<div class="clear"></div>';
 		}
@@ -499,7 +499,7 @@ add_action( 'woocommerce_before_shop_loop', 'lafka_wrap_before_shop_loop_after',
 if ( ! function_exists( 'lafka_wrap_before_shop_loop_after' ) ) {
 
 	function lafka_wrap_before_shop_loop_after() {
-		$shop_default_product_columns = lafka_get_option( 'shop_default_product_columns' );
+		$shop_default_product_columns = get_theme_mod( 'lafka_shop_default_product_columns', 'columns-3' );
 
 		$uri_parts = explode( '?', esc_url_raw( $_SERVER['REQUEST_URI'] ), 2 ); // Reading only. Stripped to domain name. Used for redirection.
 
@@ -520,11 +520,11 @@ if ( ! function_exists( 'lafka_wrap_before_shop_loop_after' ) ) {
 			$lafka_reset_filter_url .= $reset_params_to_keep;
 		}
 
-		if ( lafka_get_option( 'show_refine_area' ) && woocommerce_products_will_display() ) {
+		if ( get_theme_mod( 'lafka_show_refine_area', true ) && woocommerce_products_will_display() ) {
 			// Define widget area here for filters
 			if ( is_active_sidebar( 'lafka_product_filters_sidebar' ) ) {
 				echo '<div class="lafka-filter-widgets-holder">';
-				echo '<div id="lafka-filter-widgets" ' . ( 'opened' == lafka_get_option( 'refine_area_state' ) ? 'class="lafka_active_filter_area"' : '' ) . ' >';
+				echo '<div id="lafka-filter-widgets" ' . ( 'opened' == get_theme_mod( 'lafka_refine_area_state', 'opened' ) ? 'class="lafka_active_filter_area"' : '' ) . ' >';
 				dynamic_sidebar( 'lafka_product_filters_sidebar' );
 				echo '</div>';
 				echo '<a href="' . esc_url( $lafka_reset_filter_url ) . '" data-lafka_reset_query="' . esc_js( $reset_params_to_keep ) . '" class="lafka-reset-filters">' . esc_html__( 'Reset All Filters', 'lafka' ) . '</a>';
@@ -548,7 +548,7 @@ add_filter( 'loop_shop_per_page', 'lafka_set_products_per_page', 20 );
 if ( ! function_exists( 'lafka_set_products_per_page' ) ) {
 
 	function lafka_set_products_per_page() {
-		$per_page = lafka_get_option( 'products_per_page' );
+		$per_page = get_theme_mod( 'lafka_products_per_page', 12 );
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public shop per_page filter URL param; no state mutation.
 		if ( array_key_exists( 'per_page', $_GET ) ) {
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- public shop per_page filter URL param; no state mutation.
@@ -619,7 +619,7 @@ if ( ! function_exists( 'lafka_shop_sale_countdown' ) ) {
 		 */
 		global $post, $product;
 
-		if ( lafka_get_option( 'use_countdown', 'enabled' ) == 'enabled' && $product->is_on_sale() ) {
+		if ( get_theme_mod( 'lafka_use_countdown', 'enabled' ) === 'enabled' && $product->is_on_sale() ) {
 			$sales_dates = lafka_get_product_sales_dates( $post );
 			$now         = time();
 			if ( $sales_dates['to'] && $now < $sales_dates['to'] ) {
@@ -646,7 +646,7 @@ if ( ! function_exists( 'lafka_product_sale_countdown' ) ) {
 	function lafka_product_sale_countdown() {
 		global $post, $product;
 
-		if ( lafka_get_option( 'use_countdown', 'enabled' ) == 'enabled' && $product->is_on_sale() ) {
+		if ( get_theme_mod( 'lafka_use_countdown', 'enabled' ) === 'enabled' && $product->is_on_sale() ) {
 			$sales_dates = lafka_get_product_sales_dates( $post );
 			$now         = time();
 
@@ -847,7 +847,7 @@ if ( defined( 'YITH_WOOCOMPARE' ) ) {
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );
 
 // If related products are set to zero hide them
-if ( lafka_get_option( 'number_related_products' ) == 0 ) {
+if ( get_theme_mod( 'lafka_number_related_products', 6 ) == 0 ) {
 	remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
 }
 
@@ -864,7 +864,7 @@ if ( ! function_exists( 'lafka_related_products_args' ) ) {
 	 */
 	function lafka_related_products_args( $args ) {
 
-		$args['posts_per_page'] = lafka_get_option( 'number_related_products' ); // number_related_products theme option
+		$args['posts_per_page'] = get_theme_mod( 'lafka_number_related_products', 6 ); // number_related_products theme option
 		$args['columns']        = 1; // arranged in 1 columns
 
 		return $args;
@@ -1010,7 +1010,7 @@ add_filter(
 	}
 );
 
-if ( lafka_get_option( 'only_free_delivery' ) ) {
+if ( get_theme_mod( 'lafka_only_free_delivery', false ) ) {
 	add_filter( 'woocommerce_package_rates', 'lafka_hide_shipping_when_free_is_available', 100 );
 }
 
@@ -1080,7 +1080,7 @@ if ( ! function_exists( 'lafka_get_effective_gallery_type_setting' ) ) {
 		global $post;
 
 		$per_product_gallery_type_setting = '';
-		$global_gallery_type_setting      = lafka_get_option( 'single_product_gallery_type' );
+		$global_gallery_type_setting      = get_theme_mod( 'lafka_single_product_gallery_type', 'woo_default' );
 
 		if ( is_product() ) {
 			$per_product_gallery_type_setting = get_post_meta( $post->ID, 'lafka_single_product_gallery_type', true );
@@ -1418,121 +1418,6 @@ if ( ! function_exists( 'lafka_should_display_weight_in_additional_info' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_get_hpos_aware_order_meta' ) ) {
-	/**
-	 * Read order meta in a WooCommerce HPOS-safe way.
-	 *
-	 * Branch-routing meta such as `lafka_selected_branch_id` is written by lafka-plugin and,
-	 * under High-Performance Order Storage, lives in `wc_orders_meta` — NOT `wp_postmeta`.
-	 * A raw get_post_meta() therefore returns empty under HPOS and the new-order notifier
-	 * silently misroutes (every branch operator is notified for every order, or none).
-	 * Prefer the plugin's canonical accessor when the shipping-areas module is loaded;
-	 * otherwise fall back to the WC_Order object, which abstracts both storage backends.
-	 *
-	 * @param int    $order_id Order ID.
-	 * @param string $meta_key Meta key to read.
-	 * @return mixed Meta value, or '' when the order cannot be loaded.
-	 */
-	function lafka_get_hpos_aware_order_meta( $order_id, $meta_key ) {
-		if ( class_exists( 'Lafka_Shipping_Areas' ) && method_exists( 'Lafka_Shipping_Areas', 'get_order_meta_backward_compatible' ) ) {
-			return Lafka_Shipping_Areas::get_order_meta_backward_compatible( $order_id, $meta_key );
-		}
-
-		$order = wc_get_order( $order_id );
-
-		return $order ? $order->get_meta( $meta_key ) : '';
-	}
-}
-
-add_action( 'wp_ajax_lafka_new_orders_notification', 'lafka_new_orders_notification' );
-if ( ! function_exists( 'lafka_new_orders_notification' ) ) {
-	function lafka_new_orders_notification() {
-		check_ajax_referer( 'lafka_ajax_nonce', 'security' );
-
-		if ( current_user_can( 'manage_woocommerce' ) ) {
-			$order_id_to_notify       = '';
-			$notified_order_ids_array = json_decode( get_option( 'lafka_last_processed_order_ids', '' ), true );
-			if ( is_null( $notified_order_ids_array ) ) {
-				$notified_order_ids_array = array();
-			}
-			$order_ids_to_be_processed_array = wc_get_orders(
-				array(
-					'status' => 'processing',
-					'return' => 'ids',
-				)
-			);
-
-			// Clear the already notified orders which are not new any more
-			$notified_order_ids_array = array_intersect( $notified_order_ids_array, $order_ids_to_be_processed_array );
-
-			// Prime meta cache for all order IDs to avoid N+1 queries.
-			// Under WooCommerce High-Performance Order Storage (HPOS) order meta lives in
-			// `wc_orders_meta` (not `wp_postmeta`) and is already loaded onto the WC_Order
-			// objects that wc_get_orders() returned, so priming the 'post' meta cache is
-			// unnecessary — and wrong for orders that have no `wp_posts` row at all. This
-			// mirrors lafka-plugin/incl/kitchen-display/includes/class-lafka-kds-ajax.php.
-			if ( $order_ids_to_be_processed_array ) {
-				if (
-					! class_exists( '\Automattic\WooCommerce\Utilities\OrderUtil' )
-					|| ! \Automattic\WooCommerce\Utilities\OrderUtil::custom_orders_table_usage_is_enabled()
-				) {
-					update_meta_cache( 'post', $order_ids_to_be_processed_array );
-				}
-			}
-
-			/** @var WC_Order $order */
-			foreach ( $order_ids_to_be_processed_array as $order_id ) {
-				if ( ! in_array( $order_id, $notified_order_ids_array, true ) ) {
-					$to_notify = true;
-
-					$branch_id = lafka_get_hpos_aware_order_meta( $order_id, 'lafka_selected_branch_id' );
-					if ( ! empty( $branch_id ) ) {
-						$branch_user_id = get_term_meta( $branch_id, 'lafka_branch_user', true );
-						if ( ! empty( $branch_user_id ) && get_current_user_id() !== (int) $branch_user_id ) {
-							$to_notify = false;
-						}
-					}
-
-					if ( $to_notify ) {
-						$order_id_to_notify = $order_id;
-
-						break;
-					}
-				}
-			}
-
-			$notification = '';
-			if ( $order_id_to_notify ) {
-				$branch_id        = lafka_get_hpos_aware_order_meta( $order_id_to_notify, 'lafka_selected_branch_id' );
-				$branch_location  = get_term( $branch_id );
-				$branch_image_src = LAFKA_IMAGES_PATH . 'order-notification.png';
-				if ( ! empty( $branch_location ) && ! is_wp_error( $branch_location ) ) {
-					$title           = sprintf( esc_html__( 'New Order for %s', 'lafka' ), $branch_location->name );
-					$branch_image_id = get_term_meta( $branch_id, 'lafka_branch_location_img_id', true );
-					if ( $branch_image_id ) {
-						$branch_image_src = wp_get_attachment_thumb_url( $branch_image_id );
-					}
-				} else {
-					$title = esc_html__( 'New Order', 'lafka' );
-				}
-
-				$notification = array(
-					'title' => $title,
-					'body'  => esc_html__( 'Order', 'lafka' ) . ' #' . esc_html( $order_id_to_notify ) . ' ' . esc_html__( 'is waiting to be processed.', 'lafka' ),
-					'icon'  => $branch_image_src,
-					'sound' => LAFKA_IMAGES_PATH . 'cart_add.wav',
-					'url'   => admin_url( 'post.php?post=' . $order_id_to_notify . '&action=edit' ),
-				);
-
-				$notified_order_ids_array[] = $order_id_to_notify;
-			}
-			update_option( 'lafka_last_processed_order_ids', json_encode( $notified_order_ids_array ), false );
-			wp_send_json( $notification );
-		}
-		wp_die();
-	}
-}
-
 add_filter( 'woocommerce_product_related_products_heading', 'lafka_custom_related_products_heading' );
 if ( ! function_exists( 'lafka_custom_related_products_heading' ) ) {
 	function lafka_custom_related_products_heading() {
@@ -1600,30 +1485,14 @@ add_action(
 
 if ( ! function_exists( 'lafka_is_product_listview' ) ) {
 	function lafka_is_product_listview(): bool {
-		return ( is_product_category() || is_shop() ) && lafka_get_option( 'shop_default_product_columns' ) == 'lafka-products-list-view';
-	}
-}
-
-add_action( 'admin_footer', 'lafka_admin_push_permission_dialog' );
-if ( ! function_exists( 'lafka_admin_push_permission_dialog' ) ) {
-	function lafka_admin_push_permission_dialog() {
-		if ( class_exists( 'woocommerce' ) && lafka_get_option( 'order_notifications' ) ) {
-			?>
-			<div id="lafka-push-confirm" title="<?php esc_html_e( 'Push notifications for new orders by Lafka', 'lafka' ); ?>">
-				<p>
-					<span class="dashicons dashicons-testimonial"></span>
-					<?php esc_html_e( 'To receive notification for new orders, you have to allow this permission in your browser.', 'lafka' ); ?>
-				</p>
-			</div>
-			<?php
-		}
+		return ( is_product_category() || is_shop() ) && get_theme_mod( 'lafka_shop_default_product_columns', 'columns-3' ) == 'lafka-products-list-view';
 	}
 }
 
 add_filter( 'lafka_links_before_add_to_cart', 'lafka_quantity_input_on_listing' );
 if ( ! function_exists( 'lafka_quantity_input_on_listing' ) ) {
 	function lafka_quantity_input_on_listing() {
-		if ( lafka_get_option( 'show_quantity_on_listing' ) && ! lafka_get_option( 'use_quickview' ) ) {
+		if ( get_theme_mod( 'lafka_show_quantity_on_listing', false ) && ! get_theme_mod( 'lafka_use_quickview', true ) ) {
 			global $product;
 			if ( ! $product || ! is_a( $product, 'WC_Product' ) ) {
 				$product = wc_get_product( get_the_ID() );
@@ -1667,7 +1536,7 @@ if ( ! function_exists( 'lafka_product_loop_item_class' ) ) {
 		$classes[] = 'prod_hold';
 
 		// Hover behaviour.
-		$hover = lafka_get_option( 'product_hover_onproduct' );
+		$hover = get_theme_mod( 'lafka_product_hover_onproduct', 'lafka-prodhover-zoom' );
 		if ( $hover && 'none' !== $hover ) {
 			if ( ! ( 'lafka-prodhover-swap' === $hover && ! lafka_get_second_product_image_id( $product ) ) ) {
 				$classes[] = $hover;
@@ -1680,7 +1549,7 @@ if ( ! function_exists( 'lafka_product_loop_item_class' ) ) {
 		}
 
 		// Button visibility modifier.
-		$btn_visibility = lafka_get_option( 'product_list_buttons_visibility' );
+		$btn_visibility = get_theme_mod( 'lafka_product_list_buttons_visibility', 'lafka-visible-buttons' );
 		if ( $btn_visibility ) {
 			$classes[] = $btn_visibility;
 		}

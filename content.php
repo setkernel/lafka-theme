@@ -17,7 +17,7 @@ if ( isset( $lafka_custom_options['lafka_rev_slider_before_header'] ) && trim( $
 $lafka_featured_flex_slider_imgs = lafka_get_more_featured_images( get_the_ID() );
 
 // Blog style
-$lafka_general_blog_style = lafka_get_option( 'general_blog_style' );
+$lafka_general_blog_style = get_theme_mod( 'lafka_general_blog_style', '' );
 
 // Featured image size
 $lafka_featured_image_size = 'lafka-foodmenu-single-thumb';
@@ -97,7 +97,7 @@ if ( is_singular( array( 'post' ) ) ) {
 		<?php if ( is_single() ) : ?>
 			<?php the_content(); ?>
 			<div class="clear"></div>
-			<?php if ( lafka_get_option( 'show_author_info' ) && ( trim( get_the_author_meta( 'description' ) ) ) ) : ?>
+			<?php if ( get_theme_mod( 'lafka_show_author_info', true ) && ( trim( get_the_author_meta( 'description' ) ) ) ) : ?>
 				<div class="lafka-author-info">
 					<div class="title">
 						<h2><?php echo esc_html__( 'About the Author:', 'lafka' ); ?> <?php the_author_posts_link(); ?></h2>

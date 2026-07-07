@@ -86,7 +86,7 @@ $lafka_arch_current_slug = ( $lafka_arch_is_cat && $lafka_arch_queried && isset(
 // below by the breadcrumb "Menu" crumb (kept in lockstep with the JSON-LD
 // breadcrumb), the "All" category chip, and the empty-state reset link — all now
 // point at the same /menu/ URL rather than diverging to the WC shop archive.
-$lafka_arch_shop_url = function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' );
+$lafka_arch_shop_url = lafka_theme_menu_url();
 ?>
 <div class="lafka-menu">
 

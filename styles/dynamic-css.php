@@ -7,12 +7,17 @@
  */
 add_action( 'wp_enqueue_scripts', 'lafka_add_custom_css', 99 );
 
-// Bust the dynamic-css cache whenever theme options change.
+// Bust the dynamic-css cache whenever the design-token sources change:
+//  - the legacy `lafka` option (Options Framework + plugin flags), and
+//  - the active theme's `theme_mods_<stylesheet>` row. NX1-02 migrates the
+//    design-token readers onto `lafka_<key>` theme_mods, so a Customizer
+//    publish (or the one-time legacy->theme_mod copy) writes that theme_mods
+//    option — without this branch the operator would see stale cached CSS.
 add_action( 'updated_option', 'lafka_dynamic_css_bust_on_options_save', 10, 1 );
 add_action( 'added_option', 'lafka_dynamic_css_bust_on_options_save', 10, 1 );
 if ( ! function_exists( 'lafka_dynamic_css_bust_on_options_save' ) ) {
 	function lafka_dynamic_css_bust_on_options_save( $option_name ) {
-		if ( $option_name === 'lafka' ) {
+		if ( $option_name === 'lafka' || $option_name === 'theme_mods_' . get_option( 'stylesheet' ) ) {
 			update_option( 'lafka_dynamic_css_version', (string) time(), false );
 		}
 	}
@@ -55,84 +60,143 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 	 * @return string CSS string ready for wp_add_inline_style.
 	 */
 	function lafka_dynamic_css_build() {
-		// Gather all theme options
-		$accent_color                    = esc_attr( lafka_get_option( 'accent_color' ) );
+		// Gather all theme options.
+		// NX1-02.logos-brand-pilot: accent/brand/logo-bg read from `lafka_<key>`
+		// theme_mods (migrated off the legacy `lafka` option); inline defaults
+		// reproduce the registry `std` so fresh installs still render the
+		// shipped Peppery pixels.
+		$accent_color                    = esc_attr( get_theme_mod( 'lafka_accent_color', '#dc2626' ) );
 		// f074: brand-ramp anchor. Default #f59e0b matches the shipped
 		// pepper-yellow in lafka-tokens.css so the out-of-box ramp is
 		// unchanged; operators who set a brand color drive the handoff
 		// `--lafka-color-brand-500` consumers (footer chrome, hero gradient,
 		// open-status dot, etc.) instead of that token being fixed in CSS.
-		$brand_color                     = esc_attr( lafka_get_option( 'brand_color', '#f59e0b' ) );
-		$logo_bg_color                   = esc_attr( lafka_get_option( 'logo_background_color' ) );
-		$links_color                     = esc_attr( lafka_get_option( 'links_color' ) );
-		$links_hover_color               = esc_attr( lafka_get_option( 'links_hover_color' ) );
-		$sidebar_titles_color            = esc_attr( lafka_get_option( 'sidebar_titles_color' ) );
-		$all_buttons_color               = esc_attr( lafka_get_option( 'all_buttons_color' ) );
-		$all_buttons_hover_color         = esc_attr( lafka_get_option( 'all_buttons_hover_color' ) );
-		$new_label_color                 = esc_attr( lafka_get_option( 'new_label_color' ) );
-		$sale_label_color                = esc_attr( lafka_get_option( 'sale_label_color' ) );
-		$page_title_color                = esc_attr( lafka_get_option( 'page_title_color' ) );
-		$page_subtitle_color             = esc_attr( lafka_get_option( 'page_subtitle_color' ) );
-		$custom_page_title_color         = esc_attr( lafka_get_option( 'custom_page_title_color' ) );
-		$transparent_dark_menu_color     = esc_attr( lafka_get_option( 'transparent_header_dark_menu_color' ) );
-		$page_title_bg_color             = esc_attr( lafka_get_option( 'page_title_bckgr_color' ) );
-		$page_title_border_color         = esc_attr( lafka_get_option( 'page_title_border_color' ) );
-		$header_top_bar_color            = esc_attr( lafka_get_option( 'header_top_bar_color' ) );
-		$header_top_bar_border_raw       = lafka_get_option( 'header_top_bar_border_color' );
+		$brand_color                     = esc_attr( get_theme_mod( 'lafka_brand_color', '#f59e0b' ) );
+		$logo_bg_color                   = esc_attr( get_theme_mod( 'lafka_logo_background_color', '#fccc4c' ) );
+		// NX1-02.dyncss-content-colors: content color tokens (links, sidebar
+		// titles, all-buttons, new/sale labels, page title/subtitle) read from
+		// `lafka_<key>` theme_mods (migrated off the legacy `lafka` option).
+		// Inline defaults reproduce the Options-Framework `std` so fresh installs
+		// still render the shipped Peppery pixels.
+		$links_color                     = esc_attr( get_theme_mod( 'lafka_links_color', '#dc2626' ) );
+		$links_hover_color               = esc_attr( get_theme_mod( 'lafka_links_hover_color', '#ce4f44' ) );
+		$sidebar_titles_color            = esc_attr( get_theme_mod( 'lafka_sidebar_titles_color', '#333333' ) );
+		$all_buttons_color               = esc_attr( get_theme_mod( 'lafka_all_buttons_color', '#dc2626' ) );
+		$all_buttons_hover_color         = esc_attr( get_theme_mod( 'lafka_all_buttons_hover_color', '#b91c1c' ) );
+		$new_label_color                 = esc_attr( get_theme_mod( 'lafka_new_label_color', '#047857' ) );
+		$sale_label_color                = esc_attr( get_theme_mod( 'lafka_sale_label_color', '#dc2626' ) );
+		$page_title_color                = esc_attr( get_theme_mod( 'lafka_page_title_color', '#22272d' ) );
+		$page_subtitle_color             = esc_attr( get_theme_mod( 'lafka_page_subtitle_color', '#5e5e5e' ) );
+		$custom_page_title_color         = esc_attr( get_theme_mod( 'lafka_custom_page_title_color', '#ffffff' ) );
+		// NX1-02.dyncss-chrome-colors: header / top-bar / collapsible / footer
+		// color tokens read from `lafka_<key>` theme_mods (migrated off the
+		// legacy `lafka` option). Inline defaults reproduce the Options-Framework
+		// `std` so fresh installs still render the shipped Peppery pixels; the
+		// two unregistered fallbacks (header_top_bar_border_color,
+		// main_menu_links_bckgr_hover_color) keep their '' default so the ternary
+		// resolves to `transparent` when unset, exactly as before. The interleaved
+		// page-title background/border keys were migrated in
+		// NX1-02.dyncss-content-colors (below).
+		$transparent_dark_menu_color     = esc_attr( get_theme_mod( 'lafka_transparent_header_dark_menu_color', '#22272d' ) );
+		$page_title_bg_color             = esc_attr( get_theme_mod( 'lafka_page_title_bckgr_color', '#f7f7f7' ) );
+		$page_title_border_color         = esc_attr( get_theme_mod( 'lafka_page_title_border_color', '#f0f0f0' ) );
+		$header_top_bar_color            = esc_attr( get_theme_mod( 'lafka_header_top_bar_color', '#222222' ) );
+		$header_top_bar_border_raw       = get_theme_mod( 'lafka_header_top_bar_border_color', '' );
 		$header_top_bar_border_color     = $header_top_bar_border_raw ? esc_attr( $header_top_bar_border_raw ) : 'transparent';
-		$top_bar_message_color           = esc_attr( lafka_get_option( 'top_bar_message_color' ) );
-		$header_services_color           = esc_attr( lafka_get_option( 'header_services_color' ) );
-		$top_bar_menu_links_color        = esc_attr( lafka_get_option( 'top_bar_menu_links_color' ) );
-		$top_bar_menu_links_hover_color  = esc_attr( lafka_get_option( 'top_bar_menu_links_hover_color' ) );
-		$collapsible_bg_color            = esc_attr( lafka_get_option( 'collapsible_bckgr_color' ) );
-		$collapsible_titles_color        = esc_attr( lafka_get_option( 'collapsible_titles_color' ) );
-		$collapsible_titles_border_color = esc_attr( lafka_get_option( 'collapsible_titles_border_color' ) );
-		$collapsible_links_color         = esc_attr( lafka_get_option( 'collapsible_links_color' ) );
-		$footer_titles_color             = esc_attr( lafka_get_option( 'footer_titles_color' ) );
-		$footer_title_border_color       = esc_attr( lafka_get_option( 'footer_title_border_color' ) );
-		$footer_copyright_text_color     = esc_attr( lafka_get_option( 'footer_copyright_bar_text_color' ) );
-		$footer_menu_links_color         = esc_attr( lafka_get_option( 'footer_menu_links_color' ) );
-		$footer_links_color              = esc_attr( lafka_get_option( 'footer_links_color' ) );
-		$footer_text_color               = esc_attr( lafka_get_option( 'footer_text_color' ) );
-		$footer_copyright_bg_raw         = lafka_get_option( 'footer_copyright_bar_bckgr_color' );
+		$top_bar_message_color           = esc_attr( get_theme_mod( 'lafka_top_bar_message_color', '#4b4b4b' ) );
+		$header_services_color           = esc_attr( get_theme_mod( 'lafka_header_services_color', '#333333' ) );
+		$top_bar_menu_links_color        = esc_attr( get_theme_mod( 'lafka_top_bar_menu_links_color', '#ffffff' ) );
+		$top_bar_menu_links_hover_color  = esc_attr( get_theme_mod( 'lafka_top_bar_menu_links_hover_color', '#fccc4c' ) );
+		$collapsible_bg_color            = esc_attr( get_theme_mod( 'lafka_collapsible_bckgr_color', '#fcfcfc' ) );
+		$collapsible_titles_color        = esc_attr( get_theme_mod( 'lafka_collapsible_titles_color', '#22272d' ) );
+		$collapsible_titles_border_color = esc_attr( get_theme_mod( 'lafka_collapsible_titles_border_color', '#f1f1f1' ) );
+		$collapsible_links_color         = esc_attr( get_theme_mod( 'lafka_collapsible_links_color', '#22272d' ) );
+		$footer_titles_color             = esc_attr( get_theme_mod( 'lafka_footer_titles_color', '#ffffff' ) );
+		$footer_title_border_color       = esc_attr( get_theme_mod( 'lafka_footer_title_border_color', '#f1f1f1' ) );
+		$footer_copyright_text_color     = esc_attr( get_theme_mod( 'lafka_footer_copyright_bar_text_color', '#aeaeae' ) );
+		$footer_menu_links_color         = esc_attr( get_theme_mod( 'lafka_footer_menu_links_color', '#ffffff' ) );
+		$footer_links_color              = esc_attr( get_theme_mod( 'lafka_footer_links_color', '#f5f5f5' ) );
+		$footer_text_color               = esc_attr( get_theme_mod( 'lafka_footer_text_color', '#aeaeae' ) );
+		$footer_copyright_bg_raw         = get_theme_mod( 'lafka_footer_copyright_bar_bckgr_color', '#222222' );
 		$footer_copyright_bg_color       = $footer_copyright_bg_raw ? esc_attr( $footer_copyright_bg_raw ) : 'transparent';
-		$add_to_cart_color               = esc_attr( lafka_get_option( 'add_to_cart_color' ) );
-		$price_color                     = esc_attr( lafka_get_option( 'price_color_in_listings' ) );
-		$price_bg_color                  = esc_attr( lafka_get_option( 'price_background_color_in_listings' ) );
-		$fancy_category_title_color      = esc_attr( lafka_get_option( 'fancy_category_title_color' ) );
+		// NX1-02.dyncss-content-colors: product-listing color tokens (add-to-cart
+		// button, listing price fg/bg, fancy category title) read from theme_mods.
+		$add_to_cart_color               = esc_attr( get_theme_mod( 'lafka_add_to_cart_color', '#e4584b' ) );
+		$price_color                     = esc_attr( get_theme_mod( 'lafka_price_color_in_listings', '#feda5e' ) );
+		$price_bg_color                  = esc_attr( get_theme_mod( 'lafka_price_background_color_in_listings', '#4d2c21' ) );
+		$fancy_category_title_color      = esc_attr( get_theme_mod( 'lafka_fancy_category_title_color', '#dd3333' ) );
 
-		// Main menu
-		$menu_bg_color             = esc_attr( lafka_get_option( 'main_menu_background_color' ) );
-		$menu_links_color          = esc_attr( lafka_get_option( 'main_menu_links_color' ) );
-		$menu_links_hover_color    = esc_attr( lafka_get_option( 'main_menu_links_hover_color' ) );
-		$menu_links_bg_hover_raw   = lafka_get_option( 'main_menu_links_bckgr_hover_color' );
+		// Main menu (NX1-02.dyncss-chrome-colors: theme_mods; inline defaults
+		// reproduce the Options-Framework std. main_menu_links_bckgr_hover_color
+		// was never a registered field, so its '' default keeps the ternary
+		// transparent/accent fallback identical to the legacy behaviour).
+		$menu_bg_color             = esc_attr( get_theme_mod( 'lafka_main_menu_background_color', '#fccc4c' ) );
+		$menu_links_color          = esc_attr( get_theme_mod( 'lafka_main_menu_links_color', '#61443e' ) );
+		$menu_links_hover_color    = esc_attr( get_theme_mod( 'lafka_main_menu_links_hover_color', '#22272d' ) );
+		$menu_links_bg_hover_raw   = get_theme_mod( 'lafka_main_menu_links_bckgr_hover_color', '' );
 		$menu_links_bg_hover_color = $menu_links_bg_hover_raw ? esc_attr( $menu_links_bg_hover_raw ) : 'transparent';
 		$menu_highlight_bg_color   = $menu_links_bg_hover_raw ? esc_attr( $menu_links_bg_hover_raw ) : $accent_color;
-		$menu_icons_color_raw      = lafka_get_option( 'main_menu_icons_color' );
+		$menu_icons_color_raw      = get_theme_mod( 'lafka_main_menu_icons_color', '#ac8320' );
 		$menu_icons_color          = $menu_icons_color_raw ? esc_attr( $menu_icons_color_raw ) : 'inherit';
 
+		// NX1-02.dyncss-typography-backgrounds: the menu/logo/body/heading
+		// typography arrays + header/footer backgrounds + the default title
+		// background image read from `lafka_<key>` theme_mods (migrated off the
+		// legacy `lafka` option). After this slice styles/dynamic-css.php has ZERO
+		// legacy Options-Framework reads (NX1-02 accept criterion). The composite array
+		// SHAPE — a JSON-encoded `style` sub-field decoded below — is preserved by
+		// the theme_mod sanitizers registered in incl/customizer-bridge.php; the
+		// inline defaults reproduce the Options-Framework `std` so a fresh install
+		// still renders the shipped Peppery pixels.
+
 		// Main menu typography
-		$main_menu_typography = lafka_get_option( 'main_menu_typography' );
+		$main_menu_typography = get_theme_mod(
+			'lafka_main_menu_typography',
+			array(
+				'size'  => '15px',
+				'style' => '{"font-weight":"600","font-style":"normal"}',
+			)
+		);
 		$main_menu_style      = json_decode( $main_menu_typography['style'], true );
 		$menu_font_size       = esc_attr( $main_menu_typography['size'] );
 		$menu_font_weight     = $main_menu_style ? esc_attr( $main_menu_style['font-weight'] ) : 'normal';
 		$menu_font_style      = $main_menu_style ? esc_attr( $main_menu_style['font-style'] ) : 'normal';
 
 		// Top menu typography
-		$top_menu_typography  = lafka_get_option( 'top_menu_typography' );
+		$top_menu_typography  = get_theme_mod(
+			'lafka_top_menu_typography',
+			array(
+				'size'  => '13px',
+				'style' => '{"font-weight":"500","font-style":"normal"}',
+			)
+		);
 		$top_menu_style       = json_decode( $top_menu_typography['style'], true );
 		$top_menu_font_size   = esc_attr( $top_menu_typography['size'] );
 		$top_menu_font_weight = $top_menu_style ? esc_attr( $top_menu_style['font-weight'] ) : 'normal';
 		$top_menu_font_style  = $top_menu_style ? esc_attr( $top_menu_style['font-style'] ) : 'normal';
 
 		// Body font
-		$body_font        = lafka_get_option( 'body_font' );
+		$body_font        = get_theme_mod(
+			'lafka_body_font',
+			array(
+				'face'  => 'Rubik',
+				'size'  => '16px',
+				'color' => '#5e5e5e',
+			)
+		);
 		$body_font_family = ! empty( $body_font['face'] ) ? '"' . esc_attr( $body_font['face'] ) . '", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 		$body_font_size   = esc_attr( $body_font['size'] );
 		$body_font_color  = esc_attr( $body_font['color'] );
 
 		// Text logo typography
-		$text_logo_typography = lafka_get_option( 'text_logo_typography' );
+		$text_logo_typography = get_theme_mod(
+			'lafka_text_logo_typography',
+			array(
+				'size'  => '21px',
+				'style' => '{"font-weight":"700","font-style":"normal"}',
+				'color' => '#ffffff',
+			)
+		);
 		$text_logo_style      = json_decode( $text_logo_typography['style'], true );
 		$logo_font_color      = esc_attr( $text_logo_typography['color'] );
 		$logo_font_size       = esc_attr( $text_logo_typography['size'] );
@@ -150,10 +214,23 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// routed through the design token so a single source of truth wins.
 		$headings_font_family = 'var(--lafka-font-display)';
 
-		// H1-H6 fonts
-		$h_vars = '';
+		// H1-H6 fonts. Per-level inline defaults reproduce the Options-Framework
+		// std — face 'Rubik' and color '#22272d' are shared across levels; only
+		// the size + font-weight differ (see incl/lafka-options-framework/
+		// lafka-options.php $hN_font_default). Indexed h1..h6.
+		$h_sizes   = array( '60px', '44px', '30px', '24px', '21px', '19px' );
+		$h_weights = array( '700', '700', '700', '600', '500', '500' );
+		$h_vars    = '';
 		for ( $i = 1; $i <= 6; $i++ ) {
-			$h_font  = lafka_get_option( 'h' . $i . '_font' );
+			$h_font  = get_theme_mod(
+				'lafka_h' . $i . '_font',
+				array(
+					'face'  => 'Rubik',
+					'size'  => $h_sizes[ $i - 1 ],
+					'color' => '#22272d',
+					'style' => '{"font-weight":"' . $h_weights[ $i - 1 ] . '","font-style":"normal"}',
+				)
+			);
 			$h_style = json_decode( $h_font['style'], true );
 			$h_vars .= '--lafka-h' . $i . '-color:' . esc_attr( $h_font['color'] ) . ';';
 			$h_vars .= '--lafka-h' . $i . '-size:' . esc_attr( $h_font['size'] ) . ';';
@@ -162,7 +239,16 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		}
 
 		// Header background
-		$header_backgr        = lafka_get_option( 'header_background' );
+		$header_backgr        = get_theme_mod(
+			'lafka_header_background',
+			array(
+				'color'      => '#ffffff',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
 		$header_bg_color      = esc_attr( $header_backgr['color'] );
 		$header_bg_image      = 'none';
 		$header_bg_position   = 'center center';
@@ -176,7 +262,16 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		}
 
 		// Footer background
-		$footer_backgr        = lafka_get_option( 'footer_background' );
+		$footer_backgr        = get_theme_mod(
+			'lafka_footer_background',
+			array(
+				'color'      => '#242424',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
 		$footer_bg_color      = esc_attr( $footer_backgr['color'] );
 		$footer_bg_image      = 'none';
 		$footer_bg_position   = 'center center';
@@ -194,7 +289,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		}
 
 		// Title background image
-		$title_backgr       = lafka_get_option( 'page_title_default_bckgr_image' );
+		$title_backgr       = get_theme_mod( 'lafka_page_title_default_bckgr_image', '' );
 		$title_bg_image     = 'none';
 		$title_bg_font_size = 'inherit';
 		if ( $title_backgr ) {

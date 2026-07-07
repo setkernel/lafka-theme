@@ -30,8 +30,8 @@ if ( array_key_exists( 'per_page', $_GET ) ) {
 
 ?>
 <form class="woocommerce-ordering" method="get">
-	<?php if ( lafka_get_option( 'show_products_limit' ) ) : ?>
-		<?php $products_per_page_from_options = intval( lafka_get_option( 'products_per_page' ) ); ?>
+	<?php if ( get_theme_mod( 'lafka_show_products_limit', true ) ) : ?>
+		<?php $products_per_page_from_options = intval( get_theme_mod( 'lafka_products_per_page', 12 ) ); ?>
 		<?php if ( $products_per_page_from_options > 0 ) : ?>
 			<div class="limit">
 				<b><?php esc_html_e( 'Show', 'lafka' ); ?>:</b>

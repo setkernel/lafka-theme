@@ -5,12 +5,12 @@
 get_header();
 
 // show Blog title
-$lafka_show_blog_title = lafka_get_option( 'show_blog_title' );
+$lafka_show_blog_title = get_theme_mod( 'lafka_show_blog_title', true );
 // get Blog title
-$lafka_blog_title = lafka_get_option( 'blog_title' );
+$lafka_blog_title = get_theme_mod( 'lafka_blog_title', 'Blog' );
 // get Blog subtitle
-$lafka_blog_subtitle          = lafka_get_option( 'blog_subtitle' );
-$lafka_title_background_image = lafka_get_option( 'blog_title_background_imgid' );
+$lafka_blog_subtitle          = get_theme_mod( 'lafka_blog_subtitle', '' );
+$lafka_title_background_image = get_theme_mod( 'lafka_blog_title_background_imgid', '' );
 
 if ( $lafka_title_background_image ) {
 	$lafka_img                    = wp_get_attachment_image_src( $lafka_title_background_image, 'full' );
@@ -18,7 +18,7 @@ if ( $lafka_title_background_image ) {
 }
 
 // Blog style
-$lafka_general_blog_style = lafka_get_option( 'general_blog_style' );
+$lafka_general_blog_style = get_theme_mod( 'lafka_general_blog_style', '' );
 switch ( $lafka_general_blog_style ) {
 	case 'lafka_blog_masonry':
 		// Isotope settings
@@ -69,7 +69,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 ?>
 >
 	<?php if ( lafka_is_blog() && $lafka_show_blog_title || lafka_breadcrumb() ) : ?>
-		<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( lafka_get_option( 'blog_title_alignment' ) ); ?>
+		<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( get_theme_mod( 'lafka_blog_title_alignment', 'centered_title' ) ); ?>
 		<?php
 		if ( $lafka_title_background_image ) :
 			?>
@@ -152,7 +152,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 		</div>
 		<!-- END OF CONTENT WRAPPER -->
 		<!-- Previous / Next links -->
-		<?php if ( lafka_get_option( 'show_prev_next' ) ) : ?>
+		<?php if ( get_theme_mod( 'lafka_show_prev_next', true ) ) : ?>
 			<?php echo wp_kses_post( lafka_post_nav() ); ?>
 		<?php endif; ?>
 	</div>

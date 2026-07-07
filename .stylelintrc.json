@@ -3,6 +3,7 @@
 	"ignoreFiles": [
 		"vendor/**",
 		"node_modules/**",
+		"**/*.min.css",
 		"styles/cloud-zoom/**",
 		"styles/et-line-font/**",
 		"styles/flaticon/**",
@@ -14,7 +15,8 @@
 		"styles/owl-carousel2-dist/**",
 		"styles/fonts/**",
 		"woocommerce/compare.css",
-		"incl/lafka-options-framework/**"
+		"incl/lafka-options-framework/**",
+		"tests/fixtures/**"
 	],
 	"rules": {
 		"no-descending-specificity": null,

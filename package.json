@@ -10,8 +10,12 @@
 		"lint:css:fix": "stylelint '**/*.css' --fix",
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:fix": "npm run lint:js:fix && npm run lint:css:fix",
+		"build": "node scripts/build-assets.mjs",
+		"build:theme-json": "node scripts/build-theme-json.mjs",
 		"test:e2e": "playwright test",
+		"test:e2e:smoke": "playwright test --grep @smoke",
 		"test:e2e:install": "playwright install --with-deps chromium",
+		"test:visual:nx1-02": "playwright test --config playwright.visual.config.js",
 		"sync-version": "node scripts/sync-version.mjs",
 		"check-version": "node scripts/sync-version.mjs --check",
 		"version": "node scripts/sync-version.mjs --stage"
@@ -38,6 +42,7 @@
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.61.1",
 		"@wordpress/stylelint-config": "^23.41.0",
+		"esbuild": "^0.27.7",
 		"eslint": "^10.6.0",
 		"globals": "^17.7.0",
 		"stylelint": "^16.26.1"

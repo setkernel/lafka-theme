@@ -56,9 +56,9 @@ if ( $lafka_sidebar_choice != 'none' ) {
 
 // For Forum subtitle and image background
 if ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() ) {
-	$lafka_subtitle               = lafka_get_option( 'forum_subtitle' );
-	$lafka_title_background_image = lafka_get_option( 'forum_title_background_imgid' );
-	$lafka_title_alignment        = lafka_get_option( 'forum_title_alignment' );
+	$lafka_subtitle               = get_theme_mod( 'lafka_forum_subtitle', '' );
+	$lafka_title_background_image = get_theme_mod( 'lafka_forum_title_background_imgid', '' );
+	$lafka_title_alignment        = get_theme_mod( 'lafka_forum_title_alignment', 'none' );
 	if ( $lafka_title_background_image ) {
 		$lafka_img                    = wp_get_attachment_image_src( $lafka_title_background_image, 'full' );
 		$lafka_title_background_image = $lafka_img ? $lafka_img[0] : $lafka_img;
@@ -188,7 +188,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 		</div>
 
 		<!-- Previous / Next links -->
-		<?php if ( lafka_get_option( 'show_prev_next' ) ) : ?>
+		<?php if ( get_theme_mod( 'lafka_show_prev_next', true ) ) : ?>
 			<?php echo wp_kses_post( lafka_post_nav() ); ?>
 		<?php endif; ?>
 	</div>

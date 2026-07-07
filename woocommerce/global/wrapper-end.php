@@ -20,7 +20,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 //Previous / Next links
-if ( lafka_get_option( 'show_prev_next' ) ) {
+if ( get_theme_mod( 'lafka_show_prev_next', true ) ) {
 	echo wp_kses_post( lafka_post_nav() );
 }
 

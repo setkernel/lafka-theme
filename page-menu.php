@@ -68,7 +68,7 @@ while ( have_posts() ) :
 	// Canonical browse target (f104): the /menu/ page via the shared resolver,
 	// so the "Back to all items" reset link matches every other menu CTA rather
 	// than diverging to the WC shop archive.
-	$lafka_menu_shop_url = function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' );
+	$lafka_menu_shop_url = lafka_theme_menu_url();
 	?>
 	<div class="lafka-menu">
 
@@ -96,20 +96,34 @@ while ( have_posts() ) :
 		</div>
 
 		<?php if ( ! empty( $lafka_menu_terms ) ) : ?>
-			<nav class="lafka-menu__toc" aria-label="<?php esc_attr_e( 'Jump to category', 'lafka' ); ?>">
-				<div class="lafka-container lafka-menu__toc-inner">
-					<span class="lafka-menu__toc-label"><?php esc_html_e( 'Jump to', 'lafka' ); ?></span>
-					<ul class="lafka-menu__toc-list" role="list">
-						<?php foreach ( $lafka_menu_terms as $lafka_menu_toc_term ) : ?>
-							<li>
-								<a class="lafka-menu__toc-link" href="#<?php echo esc_attr( 'lafka-menu-cat-' . $lafka_menu_toc_term->slug ); ?>">
-									<?php echo esc_html( $lafka_menu_toc_term->name ); ?>
-								</a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				</div>
-			</nav>
+			<?php
+			/*
+			 * V3 (audit): the filter-pill strip below (.lafka-menu__cats) is the
+			 * single canonical category nav on /menu/. The "Jump to" anchor strip
+			 * is a duplicate of it — same in-page category anchors — so it no
+			 * longer renders by default. Operators who want the extra in-page TOC
+			 * back can re-enable it with:
+			 *   add_filter( 'lafka_menu_show_jump_links', '__return_true' );
+			 */
+			if ( (bool) apply_filters( 'lafka_menu_show_jump_links', false ) ) :
+				?>
+				<nav class="lafka-menu__toc" aria-label="<?php esc_attr_e( 'Jump to category', 'lafka' ); ?>">
+					<div class="lafka-container lafka-menu__toc-inner">
+						<span class="lafka-menu__toc-label"><?php esc_html_e( 'Jump to', 'lafka' ); ?></span>
+						<ul class="lafka-menu__toc-list" role="list">
+							<?php foreach ( $lafka_menu_terms as $lafka_menu_toc_term ) : ?>
+								<li>
+									<a class="lafka-menu__toc-link" href="#<?php echo esc_attr( 'lafka-menu-cat-' . $lafka_menu_toc_term->slug ); ?>">
+										<?php echo esc_html( $lafka_menu_toc_term->name ); ?>
+									</a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					</div>
+				</nav>
+				<?php
+			endif;
+			?>
 
 			<nav class="lafka-menu__cats" aria-label="<?php esc_attr_e( 'Categories', 'lafka' ); ?>">
 				<div class="lafka-container">

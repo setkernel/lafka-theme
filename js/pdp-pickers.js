@@ -74,17 +74,36 @@
     return attrs;
   }
 
+  // Lowercase an attribute map's keys. WooCommerce stores CUSTOM (non-taxonomy)
+  // product-attribute keys lowercased in the variation data (attribute_size)
+  // while pdp-pickers renders the field under the human attribute name's own
+  // case (attribute_Size, from get_variation_attributes()). Comparing raw keys
+  // then never matches, variation_id stays 0, and the add-to-cart CTA is stuck
+  // disabled on any variable product whose custom attribute name isn't already
+  // lowercase. Normalising keys before comparison fixes that without affecting
+  // taxonomy attributes (their keys are already lowercase). Values keep their
+  // case — WC matches those exactly (and both sides carry the same value).
+  function lowerAttrKeys( obj ) {
+    var out = {};
+    Object.keys( obj || {} ).forEach( function ( k ) {
+      out[ k.toLowerCase() ] = obj[ k ];
+    } );
+    return out;
+  }
+
   function findMatchingVariation(attrs) {
     if (!wcVariations.length) return null;
+    var selected = lowerAttrKeys( attrs );
     for (var i = 0; i < wcVariations.length; i++) {
       var v = wcVariations[i];
       if (!v || !v.attributes) continue;
+      var stored = lowerAttrKeys( v.attributes );
       var ok = true;
       // Every attribute the user selected must match (or be wildcard '').
-      for (var k in attrs) {
-        if (!Object.prototype.hasOwnProperty.call(attrs, k)) continue;
-        var stored = v.attributes[k];
-        if (stored !== '' && stored != null && stored !== attrs[k]) {
+      for (var k in selected) {
+        if (!Object.prototype.hasOwnProperty.call(selected, k)) continue;
+        var sv = stored[k];
+        if (sv !== '' && sv != null && sv !== selected[k]) {
           ok = false;
           break;
         }
@@ -93,10 +112,10 @@
       // Every non-wildcard attribute on the variation must be in the user
       // selection too — prevents matching a 3-attribute variation when
       // only 2 are picked.
-      for (var k2 in v.attributes) {
-        if (!Object.prototype.hasOwnProperty.call(v.attributes, k2)) continue;
-        if (v.attributes[k2] === '' || v.attributes[k2] == null) continue;
-        if (!Object.prototype.hasOwnProperty.call(attrs, k2)) {
+      for (var k2 in stored) {
+        if (!Object.prototype.hasOwnProperty.call(stored, k2)) continue;
+        if (stored[k2] === '' || stored[k2] == null) continue;
+        if (!Object.prototype.hasOwnProperty.call(selected, k2)) {
           ok = false;
           break;
         }

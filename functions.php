@@ -3,6 +3,23 @@
 require_once get_template_directory() . '/incl/system/core-functions.php';
 
 /*
+ * NX1-02 (theme 7.0): legacy Options Framework -> Customizer theme_mod
+ * migration map + idempotent copy. Defines lafka_legacy_migrate_map() and
+ * lafka_legacy_migrate_run() so migrated readers have a home to migrate FROM;
+ * the one-time upgrade trigger that calls the run is wired by the NX1-02
+ * Retire phase. Loading here only defines the functions (no side effects).
+ */
+require_once get_template_directory() . '/incl/system/lafka-legacy-migrate.php';
+
+/*
+ * NX1-10b: production asset-minification switch. Rewrites enqueued theme
+ * styles//js URLs to their `.min` sibling (a `npm run build` artefact) when
+ * SCRIPT_DEBUG is off and the sibling exists on disk. Hooks style_loader_src /
+ * script_loader_src; a strict no-op in dev checkouts and under SCRIPT_DEBUG.
+ */
+require_once get_template_directory() . '/incl/system/asset-min.php';
+
+/*
  * v6.0.0: Customizer bridge to legacy Theme Options storage.
  * Adds a "Lafka — Site Settings" panel in Customizer whose fields write
  * directly to wp_options.lafka (the Theme Options storage), so operators
@@ -10,14 +27,6 @@ require_once get_template_directory() . '/incl/system/core-functions.php';
  * working with zero data migration.
  */
 require_once get_template_directory() . '/incl/customizer-bridge.php';
-
-/*
- * v6.1.0: Retire the legacy Theme Options admin menu. The framework's
- * storage + helpers stay loaded (lafka_get_option still reads from
- * wp_options.lafka), but the operator-visible entry point is removed
- * and direct URL hits redirect to Customizer.
- */
-require_once get_template_directory() . '/incl/customizer-bridge-deprecate-theme-options.php';
 
 /*
  * v6.2.0: Lafka Maintenance Tools page. Replaces the maintenance UI
@@ -38,14 +47,24 @@ if ( is_admin() ) {
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
 
 /*
- * Loads the Options Panel
+ * NX1-02 (theme 7.0): the legacy Options Framework admin panel is RETIRED — the
+ * "Appearance -> Theme Options" menu, its Settings-API save/validate rebuild
+ * hazard, and the field registry are gone. Two genuinely-used helpers survive
+ * and are loaded here, plus the slim plugin-owned option defaults:
+ *   - incl/system/lafka-option-defaults.php -> lafka_get_default_values(), the
+ *     slim successor to the registry defaults (plugin-owned flags + shared keys).
+ *   - lafka-options-functions.php -> lafka_typography_get_google_fonts(), read
+ *     by the front-end Google-font enqueuer (incl/system/core-functions.php).
+ *   - lafka-options-medialibrary-uploader.php -> lafka_medialibrary_uploader(),
+ *     the admin media picker the mega-menu editor (incl/LafkaMegaMenu.php) uses.
  */
-if ( ! function_exists( 'lafka_optionsframework_init' ) ) {
+if ( ! defined( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY' ) ) {
 	define( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/incl/lafka-options-framework/' );
-	// framework
-	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-framework.php';
-	// custom functions
-	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-functions.php';
+}
+require_once get_template_directory() . '/incl/system/lafka-option-defaults.php';
+require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-functions.php';
+if ( is_admin() ) {
+	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-medialibrary-uploader.php';
 }
 
 /* Load configuration */
@@ -129,6 +148,14 @@ require_once get_template_directory() . '/incl/mobile-nav-loader.php';
 
 // Strip country code from address_display for local-restaurant display (v5.63.0).
 require_once get_template_directory() . '/incl/template-helpers/address-filters.php';
+
+// Canonical menu-URL resolver — single guard point for lafka_get_menu_url()
+// across every theme CTA (audit #97). v6.19.0.
+require_once get_template_directory() . '/incl/template-helpers/menu-url.php';
+
+// Public "Reach us" email resolver — host-only fallback, never leaks a port
+// (audit V4). v6.19.0.
+require_once get_template_directory() . '/incl/template-helpers/contact-email.php';
 
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
 require_once get_template_directory() . '/incl/contact-template-loader.php';
@@ -214,7 +241,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 
 	function lafka_breadcrumb( $delimiter = ' <span class="lafka-breadcrumb-delimiter">/</span> ' ) {
 
-		if ( lafka_get_option( 'show_breadcrumb', 1 ) && ! is_404() ) {
+		if ( get_theme_mod( 'lafka_show_breadcrumb', true ) && ! is_404() ) {
 			$home    = esc_html__( 'Home', 'lafka' ); // text for the 'Home' link
 			$before  = '<span class="current-crumb">'; // tag before the current crumb
 			$after   = '</span>'; // tag after the current crumb
@@ -976,8 +1003,15 @@ for ( $i = 0; $i <= 6; $i++ ) {
 if ( ! function_exists( 'lafka_get_google_subsets' ) ) {
 
 	function lafka_get_google_subsets() {
-		$selected_subsets = lafka_get_option( 'google_subsets' );
-		$choosen          = array();
+		// NX1-02.dyncss-typography-backgrounds: migrated to the
+		// `lafka_google_subsets` theme_mod. The Options-Framework `std`
+		// (latin enabled) is the default so a fresh install requests the
+		// same subset as before.
+		$selected_subsets = get_theme_mod( 'lafka_google_subsets', array( 'latin' => '1' ) );
+		if ( ! is_array( $selected_subsets ) ) {
+			$selected_subsets = array();
+		}
+		$choosen = array();
 
 		foreach ( $selected_subsets as $subset => $is_selected ) {
 			if ( $is_selected != '0' ) {
@@ -1013,7 +1047,7 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		global $wp_query;
 
 		// the layout class
-		$general_layout = lafka_get_option( 'general_layout' );
+		$general_layout = get_theme_mod( 'lafka_general_layout', 'lafka_fullwidth' );
 
 		// check is singular and not Blog/Shop/Forum so we get the real post_meta
 		if ( ! ( LAFKA_IS_WOOCOMMERCE && is_shop() ) && ! lafka_is_blog() && ! ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() ) && is_singular() ) {
@@ -1052,15 +1086,10 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		} else {
 			$is_header_style_meta = '';
 		}
-		$is_header_style_blog   = lafka_get_option( 'blog_header_style' );
-		$is_header_style_shop   = lafka_get_option( 'shop_header_style' );
-		$is_header_style_forum  = lafka_get_option( 'forum_header_style' );
-		$is_header_style_events = lafka_get_option( 'events_header_style' );
-
-		$is_search_only_in_products = false;
-		if ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'only_products' ) ) {
-			$is_search_only_in_products = true;
-		}
+		$is_header_style_blog   = get_theme_mod( 'lafka_blog_header_style', '' );
+		$is_header_style_shop   = get_theme_mod( 'lafka_shop_header_style', '' );
+		$is_header_style_forum  = get_theme_mod( 'lafka_forum_header_style', '' );
+		$is_header_style_events = get_theme_mod( 'lafka_events_header_style', '' );
 
 		if ( LAFKA_IS_WOOCOMMERCE && ( is_product_category() || is_product_tag() ) ) {
 			$is_header_style_shop_category = get_term_meta( $wp_query->queried_object_id, 'lafka_term_header_style', true );
@@ -1068,11 +1097,11 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 
 		$header_style_class = '';
 		if ( $is_header_style_blog && ( lafka_is_blog() || is_category() || is_day() || is_month() || is_year() || is_search() || is_tag() || is_author() ) ) {
-			if ( is_search() && $is_search_only_in_products ) {
-				$header_style_class = $is_header_style_shop;
-			} else {
-				$header_style_class = $is_header_style_blog;
-			}
+			// NX1-10a: the former `only_products` legacy read here was never a
+			// registered option (always falsy after NX1-02), so the search-in-
+			// products branch was dead. Blog surfaces (incl. search) use the blog
+			// header style unconditionally.
+			$header_style_class = $is_header_style_blog;
 		} elseif ( LAFKA_IS_WOOCOMMERCE && is_shop() && $is_header_style_shop ) {
 			$header_style_class = $is_header_style_shop;
 		} elseif ( LAFKA_IS_WOOCOMMERCE && ( is_product_category() || is_product_tag() ) && $is_header_style_shop_category ) {
@@ -1095,34 +1124,34 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		}
 
 		// if no header-top
-		if ( ! lafka_get_option( 'enable_top_header' ) ) {
+		if ( ! get_theme_mod( 'lafka_enable_top_header', true ) ) {
 			$classes[] = sanitize_html_class( 'lafka-no-top-header' );
 		}
 
 		// footer reveal
-		if ( lafka_get_option( 'footer_style' ) && $specific_footer_style === 'default' ) {
-			$classes[] = sanitize_html_class( lafka_get_option( 'footer_style' ) );
+		if ( get_theme_mod( 'lafka_footer_style', '' ) && $specific_footer_style === 'default' ) {
+			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_footer_style', '' ) );
 		} elseif ( $specific_footer_style !== 'standard' && $specific_footer_style !== 'default' ) {
 			$classes[] = sanitize_html_class( $specific_footer_style );
 		}
 
 		// Header size
-		if ( lafka_get_option( 'header_width' ) && $specific_header_size === 'default' ) {
-			$classes[] = sanitize_html_class( lafka_get_option( 'header_width' ) );
+		if ( get_theme_mod( 'lafka_header_width', '' ) && $specific_header_size === 'default' ) {
+			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_header_width', '' ) );
 		} elseif ( $specific_header_size !== 'standard' && $specific_header_size !== 'default' ) {
 			$classes[] = sanitize_html_class( $specific_header_size );
 		}
 
 		// Footer size
-		if ( lafka_get_option( 'footer_width' ) && $specific_footer_size === 'default' ) {
-			$classes[] = sanitize_html_class( lafka_get_option( 'footer_width' ) );
+		if ( get_theme_mod( 'lafka_footer_width', '' ) && $specific_footer_size === 'default' ) {
+			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_footer_width', '' ) );
 		} elseif ( $specific_footer_size !== 'standard' && $specific_footer_size !== 'default' ) {
 			$classes[] = sanitize_html_class( $specific_footer_size );
 		}
 
 		// Sub-menu color Scheme
-		if ( lafka_get_option( 'submenu_color_scheme' ) ) {
-			$classes[] = sanitize_html_class( lafka_get_option( 'submenu_color_scheme' ) );
+		if ( get_theme_mod( 'lafka_submenu_color_scheme', '' ) ) {
+			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_submenu_color_scheme', '' ) );
 		}
 
 		// If using video background
@@ -1131,73 +1160,102 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		}
 
 		// Shop and Category Pages Width
-		if ( lafka_get_option( 'shop_pages_width' ) ) {
-			$classes[] = lafka_get_option( 'shop_pages_width' );
+		if ( get_theme_mod( 'lafka_shop_pages_width', '' ) ) {
+			$classes[] = get_theme_mod( 'lafka_shop_pages_width', '' );
 		}
 
 		// Blog and Category Pages Width
-		if ( lafka_get_option( 'blog_pages_width' ) ) {
-			$classes[] = lafka_get_option( 'blog_pages_width' );
+		if ( get_theme_mod( 'lafka_blog_pages_width', 'lafka-fullwidth-blog-pages' ) ) {
+			$classes[] = get_theme_mod( 'lafka_blog_pages_width', 'lafka-fullwidth-blog-pages' );
 		}
 
 		// Feature-toggle classes for CSS custom properties
-		if ( lafka_get_option( 'all_buttons_style' ) === 'round' ) {
+		if ( get_theme_mod( 'lafka_all_buttons_style', 'round' ) === 'round' ) {
 			$classes[] = 'lafka-round-buttons';
 		}
-		if ( lafka_get_option( 'fancy_title_font' ) ) {
+		if ( get_theme_mod( 'lafka_fancy_title_font', false ) ) {
 			$classes[] = 'lafka-fancy-titles';
 		}
-		if ( lafka_get_option( 'uppercase_page_titles' ) ) {
+		if ( get_theme_mod( 'lafka_uppercase_page_titles', true ) ) {
 			$classes[] = 'lafka-uppercase-titles';
 		}
-		if ( lafka_get_option( 'main_menu_transf_to_uppercase' ) ) {
+		if ( get_theme_mod( 'lafka_main_menu_transf_to_uppercase', true ) ) {
 			$classes[] = 'lafka-uppercase-menu';
 		}
-		if ( lafka_get_option( 'categories_fancy' ) ) {
+		if ( get_theme_mod( 'lafka_categories_fancy', false ) ) {
 			$classes[] = 'lafka-fancy-categories';
 		}
-		if ( ! lafka_get_option( 'header_top_mobile_visibility' ) ) {
+		if ( ! get_theme_mod( 'lafka_header_top_mobile_visibility', true ) ) {
 			$classes[] = 'lafka-no-top-header-mobile';
 		}
-		if ( lafka_get_option( 'disable_logo_point_down' ) ) {
+		if ( get_theme_mod( 'lafka_disable_logo_point_down', 0 ) ) {
 			$classes[] = 'lafka-no-logo-point';
 		}
-		if ( ! lafka_get_option( 'logo_background_color' ) ) {
+		$logo_bg_body = get_theme_mod( 'lafka_logo_background_color', '#fccc4c' );
+		if ( ! $logo_bg_body ) {
 			$classes[] = 'lafka-no-logo-bg';
 		}
-		$header_backgr_body = lafka_get_option( 'header_background' );
-		if ( lafka_get_option( 'logo_background_color' ) && lafka_get_option( 'logo_background_color' ) === $header_backgr_body['color'] ) {
+		// NX1-02.dyncss-typography-backgrounds: header/footer backgrounds +
+		// use_google_face_for read from their migrated `lafka_<key>` theme_mods.
+		// Defaults reproduce the Options-Framework `std` so these body classes are
+		// added/omitted exactly as before on a fresh install.
+		$header_backgr_body = get_theme_mod(
+			'lafka_header_background',
+			array(
+				'color'      => '#ffffff',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
+		if ( $logo_bg_body && $logo_bg_body === $header_backgr_body['color'] ) {
 			$classes[] = 'lafka-logo-matches-header';
 		}
-		if ( ! lafka_get_option( 'use_quickview' ) ) {
+		if ( ! get_theme_mod( 'lafka_use_quickview', true ) ) {
 			$classes[] = 'lafka-no-quickview';
 		}
-		if ( lafka_get_option( 'mobile_theme_logo' ) ) {
+		if ( get_theme_mod( 'lafka_mobile_theme_logo', '' ) ) {
 			$classes[] = 'lafka-has-mobile-logo';
 		}
-		if ( lafka_get_option( 'show_quantity_on_listing' ) ) {
+		if ( get_theme_mod( 'lafka_show_quantity_on_listing', false ) ) {
 			$classes[] = 'lafka-qty-on-listing';
 		}
-		if ( lafka_get_option( 'product_columns_mobile' ) === '2' ) {
+		if ( get_theme_mod( 'lafka_product_columns_mobile', '1' ) === '2' ) {
 			$classes[] = 'lafka-mobile-2col';
 		}
-		if ( ! lafka_get_option( 'show_searchform' ) && ! lafka_get_option( 'show_shopping_cart' ) && ! lafka_get_option( 'show_my_account' ) && ! lafka_get_option( 'show_wish_in_header' ) ) {
+		if ( ! get_theme_mod( 'lafka_show_searchform', true ) && ! get_theme_mod( 'lafka_show_shopping_cart', true ) && ! get_theme_mod( 'lafka_show_my_account', true ) && ! get_theme_mod( 'lafka_show_wish_in_header', true ) ) {
 			$classes[] = 'lafka-no-header-services';
 		}
-		$use_google_face_for_body = lafka_get_option( 'use_google_face_for' );
+		$use_google_face_for_body = get_theme_mod(
+			'lafka_use_google_face_for',
+			array(
+				'main_menu' => 1,
+				'buttons'   => 1,
+			)
+		);
 		if ( ! empty( $use_google_face_for_body['main_menu'] ) ) {
 			$classes[] = 'lafka-headings-for-menu';
 		}
 		if ( ! empty( $use_google_face_for_body['buttons'] ) ) {
 			$classes[] = 'lafka-headings-for-buttons';
 		}
-		if ( lafka_get_option( 'footer_copyright_bar_text_color' ) === '#ffffff' ) {
+		if ( get_theme_mod( 'lafka_footer_copyright_bar_text_color', '#aeaeae' ) === '#ffffff' ) {
 			$classes[] = 'lafka-light-copyright';
 		}
 		if ( ! empty( $header_backgr_body['image'] ) ) {
 			$classes[] = 'lafka-has-header-bg';
 		}
-		$footer_backgr_body = lafka_get_option( 'footer_background' );
+		$footer_backgr_body = get_theme_mod(
+			'lafka_footer_background',
+			array(
+				'color'      => '#242424',
+				'image'      => '',
+				'repeat'     => '',
+				'position'   => '',
+				'attachment' => 'scroll',
+			)
+		);
 		if ( ! empty( $footer_backgr_body['image'] ) && $footer_backgr_body['repeat'] === 'no-repeat' ) {
 			$classes[] = 'lafka-footer-bg-norepeat';
 		}
@@ -1370,7 +1428,7 @@ if ( ! function_exists( 'lafka_convert_to_timeago_date_format' ) ) {
 		global $post;
 		$post_unix_time = strtotime( $post->post_date );
 
-		if ( lafka_get_option( 'date_format' ) == 'lafka_format' && ! lafka_is_time_more_than_x_months_ago( 6, $post_unix_time ) ) {
+		if ( get_theme_mod( 'lafka_date_format', 'default' ) == 'lafka_format' && ! lafka_is_time_more_than_x_months_ago( 6, $post_unix_time ) ) {
 			return human_time_diff( $post_unix_time, time() ) . ' ' . __( 'ago', 'lafka' );
 		}
 
@@ -1409,13 +1467,13 @@ if ( ! function_exists( 'lafka_remove_page_template' ) ) {
 
 if ( ! function_exists( 'lafka_should_show_account_icon' ) ) {
 	function lafka_should_show_account_icon() {
-		return ( LAFKA_IS_WOOCOMMERCE && lafka_get_option( 'show_my_account' ) && get_option( 'woocommerce_myaccount_page_id' ) );
+		return ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_show_my_account', true ) && get_option( 'woocommerce_myaccount_page_id' ) );
 	}
 }
 
 if ( ! function_exists( 'lafka_should_show_wishlist_icon' ) ) {
 	function lafka_should_show_wishlist_icon() {
-		return ( LAFKA_IS_WOOCOMMERCE && LAFKA_IS_WISHLIST && lafka_get_option( 'show_wish_in_header' ) );
+		return ( LAFKA_IS_WOOCOMMERCE && LAFKA_IS_WISHLIST && get_theme_mod( 'lafka_show_wish_in_header', true ) );
 	}
 }
 

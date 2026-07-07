@@ -37,7 +37,7 @@ $lafka_product_classes = array( 'box', 'box-common', 'fixed', 'lafka-single-prod
 if ( lafka_is_product_eligible_for_variation_in_listings( $product ) ) {
 	$lafka_product_classes[] = 'lafka-variations-list-in-catalog';
 }
-if ( lafka_get_option( 'hide_product_price_on_zero' ) && $product->get_price() == 0 ) {
+if ( get_theme_mod( 'lafka_hide_product_price_on_zero', false ) && $product->get_price() == 0 ) {
 	$lafka_product_classes[] = 'lafka-hide-zero-price';
 }
 ?>
@@ -54,7 +54,7 @@ if ( lafka_get_option( 'hide_product_price_on_zero' ) && $product->get_price() =
 			echo ' ' . esc_attr( implode( ' ', $lafka_single_product_gallery_classes ) );}
 		?>
 		">
-			<?php if ( lafka_get_option( 'show_breadcrumb' ) ) : ?>
+			<?php if ( get_theme_mod( 'lafka_show_breadcrumb', true ) ) : ?>
 				<?php woocommerce_breadcrumb(); ?>
 			<?php endif; ?>
 			<?php
@@ -68,7 +68,7 @@ if ( lafka_get_option( 'hide_product_price_on_zero' ) && $product->get_price() =
 			?>
 			<?php
 			$lafka_has_product_addon = false;
-			if ( class_exists( 'WC_Product_Addons_Helper' ) && lafka_get_option( 'product_addons' ) === 'enabled' ) {
+			if ( class_exists( 'WC_Product_Addons_Helper' ) && function_exists( 'is_lafka_product_addons' ) && is_lafka_product_addons() ) {
 				$lafka_has_product_addon = count( WC_Product_Addons_Helper::get_product_addons( get_the_ID() ) );
 			}
 			?>
@@ -113,7 +113,7 @@ if ( lafka_get_option( 'hide_product_price_on_zero' ) && $product->get_price() =
 
 	</div><!-- closing div of content-holder -->
 	<?php
-	if ( lafka_get_option( 'show_sidebar_product' ) ) {
+	if ( get_theme_mod( 'lafka_show_sidebar_product', false ) ) {
 		do_action( 'woocommerce_sidebar' );
 		echo '<div class="clear"></div>';
 	}

@@ -1,0 +1,715 @@
+/* lafka-theme/styles/legacy-shortcodes.css
+ *
+ * Legacy lafka_* shortcodes + WPBakery-era content (galleries, sliders, countdowns, foodmenu grids). Enqueued on legacy shortcode/page-builder content and singular legacy templates.
+ *
+ * EXTRACTED from the legacy style.css monolith by scripts/nx1-10a-extract.mjs
+ * (NX1-10a). Every rule here was proven to match ZERO elements on the six
+ * handoff surfaces, so it is enqueued only on the legacy surface below. Kept in
+ * @layer legacy so it stays below the unlayered modular sheets, exactly as it
+ * did inside the monolith.
+ *
+ * @since lafka-theme 6.21.0 (NX1-10a)
+ */
+
+@layer legacy {
+
+.project-details ul {
+    margin: 0;
+    padding: 0;
+}
+
+.lafka_flexslider .slides li {
+    margin: auto;
+    padding: 0;
+    overflow: hidden;
+}
+
+.lafka-foodmenu-categories ul li a.is-checked::before {
+    position: absolute;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+    height: 2px;
+    content: "";
+    -webkit-transition: all .3s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: all .3s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.project-details .lafka-nutrition-di-legend {
+    margin-bottom: 0;
+}
+
+.foodmenus,
+.lafka-foodmenu-shortcode-container {
+    min-width: 100%;
+    width: 100%;
+    overflow: hidden;
+    min-height: 150px;
+}
+
+.foodmenu-main-image-holder ul.additional-images li a {
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-transition: all 0.4s ease;
+    transition: all 0.4s ease;
+}
+
+.foodmenu-main-image-holder ul.additional-images li a:hover {
+    position: absolute;
+    top: 0;
+    left: 0;
+    -webkit-transform: scale(1.12);
+    transform: scale(1.12);
+    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
+}
+
+.lafka_content_slider .owl-nav .owl-next.disabled,
+.lafka_content_slider .owl-nav .owl-prev.disabled {
+    display: none;
+}
+
+.lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next,
+.lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev {
+    background-color: #fff;
+}
+
+.lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next::before,
+.lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev::before {
+    border-color: #fff !Important;
+}
+
+.lafka_content_slider.lafka_content_slider_dark_nav .owl-nav .owl-next,
+.lafka_content_slider.lafka_content_slider_dark_nav .owl-nav .owl-prev {
+    background-color: #333;
+    color: #fff;
+}
+
+.lafka_content_slider.lafka_content_slider_dark_nav .owl-nav .owl-next::before,
+.lafka_content_slider.lafka_content_slider_dark_nav .owl-nav .owl-prev::before {
+    border-color: #333 !Important;
+}
+
+.lafka_content_slider .owl-nav .owl-next,
+.lafka_content_slider .owl-nav .owl-prev {
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    color: #f8f8f8;
+}
+
+.lafka_content_slider .owl-nav .owl-next {
+    right: 10px;
+}
+
+.lafka_content_slider .owl-nav .owl-prev {
+    left: 10px;
+}
+
+.lafka_flexslider {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    margin-bottom: 30px;
+    position: relative;
+}
+
+.lafka_flexslider .slides>li {
+    display: none;
+    -webkit-backface-visibility: hidden;
+}
+
+.lafka_flexslider .slides img {
+    display: block;
+    vertical-align: text-bottom;
+    height: auto;
+}
+
+.foodmenu-main-image-holder .lafka_flexslider .slides img {
+    width: 100%;
+    height: auto;
+}
+
+.lafka_flexslider.post_slide {
+    margin-bottom: 35px;
+    position: relative;
+}
+
+.lafka_flexslider:hover .flex-direction-nav a {
+    opacity: 0.9;
+}
+
+.lafka_flexslider:hover .flex-direction-nav a:hover {
+    opacity: 1;
+}
+
+
+.lafka-foodmenu-categories ul {
+    padding: 0;
+    margin: 0 0 35px 0;
+    list-style: none;
+    display: block;
+    border-radius: 3px;
+}
+
+.lafka-foodmenu-categories ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 2px;
+    padding: 0;
+    float: left;
+}
+
+.lafka-foodmenu-categories ul li:first-of-type {
+    float: right;
+}
+
+.lafka-foodmenu-categories ul li a {
+    color: #b1b1b1;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 7px 12px;
+    position: relative;
+    display: block;
+    overflow: hidden;
+}
+
+.lafka-foodmenu-categories ul li:first-of-type a {
+    text-transform: capitalize;
+}
+
+.foodmenu-unit {
+    width: 100%;
+    display: inline-block;
+    float: left;
+    overflow: hidden;
+    margin: 0 0 35px 0;
+    padding: 0 0 35px 0;
+    border-bottom: 1px solid #eaeaea;
+}
+
+.lafka-foodmenu-light .foodmenu-unit {
+    border-color: #494949;
+}
+
+.lafka-foodmenu-shortcode-container .foodmenu-unit:last-of-type {
+    border: none;
+    padding: 0;
+}
+
+.lafka-foodmenu-shortcode-container .foodmenu-unit:last-of-type {
+    margin-bottom: 0;
+}
+
+.foodmenu-unit.lafka-none-overlay a.foodmenu-link:hover {
+    cursor: pointer !important;
+}
+
+
+.lafka_masonry_fullwidth .foodmenu-unit.masonry-unit {
+    width: 25%;
+}
+
+.lafka_masonry_fullwidth .foodmenu-unit.masonry-unit a.foodmenu-link {
+    padding: 20px;
+}
+
+
+.owl-item .foodmenu-unit {
+    width: 100% !important;
+}
+
+.similar_projects {
+    padding-top: 80px;
+    border-top: 1px solid var(--lafka-border-light, #f1f1f1);
+}
+
+.similar_projects .foodmenu-unit {
+    text-align: center;
+    vertical-align: top;
+    padding: 15px;
+    border: none;
+    margin-bottom: 20px;
+}
+
+.similar_projects a.lafka-foodmenu-image-link {
+    display: block;
+    margin: 0 auto;
+}
+
+.similar_projects .owl-item .foodmenu-unit {
+    border: 15px solid transparent;
+}
+
+.foodmenu-unit>h4 {
+    padding: 22px 12px;
+    font-size: 15px;
+    text-transform: uppercase;
+    margin-bottom: 0;
+    position: absolute;
+    width: 100%;
+    bottom: -150px;
+    left: 0;
+    z-index: 2;
+    display: block;
+    -webkit-transition: all 0.5s ease 0s;
+    transition: all 0.5s ease 0s;
+    text-align: center;
+}
+
+.foodmenu-unit:hover>h4 {
+    bottom: 80px;
+    color: #fff;
+}
+
+a.lafka-foodmenu-image-link,
+.foodmenu-unit-holder>img,
+.owl-carousel .owl-item .foodmenu-unit-holder>img {
+    display: inline-block;
+    position: relative;
+    width: 100px;
+    max-width: 100px;
+    height: 100px;
+    vertical-align: middle;
+}
+
+.similar_projects a.lafka-foodmenu-image-link,
+.similar_projects .foodmenu-unit-holder>img,
+.similar_projects .owl-carousel .owl-item .foodmenu-unit-holder>img {
+    width: 100%;
+    max-width: 100%;
+    height: auto;
+    border: 1px solid var(--lafka-border-light, #f1f1f1);
+    border-radius: 6px;
+    margin-bottom: 15px;
+}
+
+.foodmenu-unit .lafka-foodmenu-image-link img,
+.foodmenu-unit-holder>img {
+    -webkit-transition: all 0.3s ease 0s;
+    transition: all 0.3s ease 0s;
+    border-radius: 50%;
+    opacity: 1;
+}
+
+.similar_projects .foodmenu-unit .lafka-foodmenu-image-link img,
+.similar_projects .foodmenu-unit-holder>img {
+    border-radius: 0;
+}
+
+.lafka-foodmenu-light .foodmenu-unit .lafka-foodmenu-image-link img,
+.foodmenu-unit-holder>img {
+    border: none;
+}
+
+.foodmenu-unit:hover .lafka-foodmenu-image-link img {
+    opacity: 0.85;
+}
+
+.foodmenu-unit.lafka-none-overlay .foodmenu-unit-holder:hover>img {
+    opacity: 1;
+}
+
+.lafka-none-overlay.lafka-10px-gap .foodmenu-unit-holder {
+    background: none;
+}
+
+.lafka-foodmenu-light .foodmenu-unit-info h4,
+.lafka-foodmenu-light .lafka-foodmenu-categories ul li a,
+.lafka-foodmenu-light .lafka-foodmenu-price,
+.lafka-foodmenu-light .foodmenu-unit-info a,
+.lafka-foodmenu-light .foodmenu-unit-info ul li a {
+    color: #fff;
+}
+
+a.foodmenu-link {
+    display: block;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    padding: 0;
+}
+
+.lafka-none-overlay a.foodmenu-link {
+    background: none !important;
+}
+
+.foodmenu-unit-holder:hover a.foodmenu-lightbox-link {
+    opacity: 1;
+}
+
+.similar_projects .foodmenu-unit a.foodmenu-link,
+.similar_projects .foodmenu-unit a.foodmenu-link small,
+.similar_projects .foodmenu-unit a.foodmenu-link h4,
+.similar_projects .foodmenu-unit a.foodmenu-link h6,
+.similar_projects .foodmenu-unit a.foodmenu-link p,
+.owl-item .foodmenu-unit a.foodmenu-link,
+.owl-item .foodmenu-unit a.foodmenu-link small,
+.owl-item .foodmenu-unit a.foodmenu-link h4,
+.owl-item .foodmenu-unit a.foodmenu-link h6,
+.owl-item .foodmenu-unit a.foodmenu-link p {
+    text-decoration: none;
+}
+
+.foodmenu_top {
+    padding-bottom: 80px;
+    position: relative;
+    max-width: 100vw;
+}
+
+.foodmenu_top div.two_third.foodmenu-main-image-holder {
+    display: inline-block;
+    width: 50%;
+    vertical-align: top;
+    position: relative;
+    float: left;
+    margin-right: 0;
+}
+
+.foodmenu_top div.one_third.last.project-data {
+    display: inline-block;
+    vertical-align: top;
+    width: 50%;
+    padding-left: 80px;
+    position: relative;
+    z-index: 3;
+    float: left;
+}
+
+.foodmenu_top.lafka_image_list_foodmenu div.one_third.last.project-data {
+    padding-right: 80px;
+}
+
+.foodmenu_top .project-data .more-details {
+    font-size: 15px;
+    margin-bottom: 20px;
+}
+
+.foodmenu_top .project-data .more-details .lafka-more-details-text {
+    font-size: 17px;
+    color: #333;
+    position: relative;
+    display: block;
+    padding: 20px 0 22px 0;
+    margin-bottom: 25px;
+    border-bottom: 1px solid #e9e9e9;
+}
+
+.foodmenu_top .project-data h4 {
+    font-size: 15px;
+    margin-bottom: 10px;
+    margin-top: 10px;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+
+.foodmenu_top .project-data h4::before {
+    display: inline-block;
+    content: "";
+    width: 10px;
+    height: 2px;
+    background-color: #cecece;
+    vertical-align: middle;
+    margin-right: 7px;
+    position: relative;
+    top: -1px;
+}
+
+.foodmenu_top .project-data ul li strong {
+    font-size: 13px;
+    font-weight: 500;
+    text-transform: uppercase;
+    color: #333;
+    text-align: left;
+    clear: both;
+    display: block;
+    margin-bottom: 5px;
+}
+
+.foodmenu_top .project-data .project-details .simple-list-underlined li {
+    border: none !important;
+    padding: 0;
+    font-size: 14px;
+}
+
+.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-ingredients,
+.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-nutrition-allergens {
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-nutrition-allergens {
+    margin-bottom: 35px;
+}
+
+.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-nutrition-list,
+.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-nutrition-list ul {
+    padding-top: 0;
+}
+
+.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-nutrition-list {
+    margin-bottom: 20px;
+}
+
+.foodmenu_top .project-data .project-details .lafka-foodmenu-main-price {
+    font-size: 30px;
+    font-weight: 500;
+    color: #333;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.lafka-foodmenu-option {
+    display: inline-block;
+    vertical-align: bottom;
+    font-size: 12px;
+    margin-right: 4px;
+    color: #5e5e5e; /* P6-A11Y-2: #999→#5e5e5e, 4.6:1 WCAG AA */
+}
+
+.lafka-foodmenu-price {
+    color: #333;
+    display: inline-block;
+    vertical-align: bottom;
+}
+
+.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-options-list {
+    padding: 0;
+    margin: 0 2px 4px 0;
+    font-size: 12px;
+}
+
+.lafka-foodmenu-options-list .lafka-foodmenu-option,
+.lafka-foodmenu-options-list .lafka-foodmenu-price {
+    width: auto;
+}
+
+.lafka-foodmenu-options-list .woocommerce-Price-currencySymbol {
+    font-size: 90%;
+    bottom: 0;
+    vertical-align: baseline;
+}
+
+.foodmenu_top .project-data .project-details a.button {
+    margin: 30px 8px 0 0;
+    padding: 0 40px;
+    height: 46px;
+    line-height: 46px;
+}
+
+.foodmenu_top .project-data .project-details a.button:not(.lafka-secondary-button) {
+    background-color: #333;
+}
+
+.foodmenu-main-image-holder #wrap {
+    margin-left: 100px;
+}
+
+.foodmenu-main-image-holder ul.additional-images {
+    padding: 0;
+    margin: 0;
+    list-style: none;
+    text-align: center;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 80px;
+}
+
+.lafka_icon_element-color-juicy_pink {
+    color: #f4524d !important;
+}
+
+.lafka_icon_element-color-green {
+    color: #6dab3c !important;
+}
+
+.lafka_icon_element-color-blue {
+    color: #5472d2 !important;
+}
+
+.lafka_icon_element-color-turquoise {
+    color: #00c1cf !important;
+}
+
+.lafka_icon_element-color-pink {
+    color: #fe6c61 !important;
+}
+
+.lafka_icon_element-color-violet {
+    color: #8d6dc4 !important;
+}
+
+.lafka_icon_element-color-peacoc {
+    color: #4cadc9 !important;
+}
+
+.lafka_icon_element-color-chino {
+    color: #cec2ab !important;
+}
+
+.lafka_icon_element-color-mulled_wine {
+    color: #50485b !important;
+}
+
+.lafka_icon_element-color-vista_blue {
+    color: #75d69c !important;
+}
+
+.lafka_icon_element-color-black {
+    color: #2a2a2a !important;
+}
+
+.lafka_icon_element-color-grey {
+    color: #ebebeb !important;
+}
+
+.lafka_icon_element-color-orange {
+    color: #f7be68 !important;
+}
+
+.lafka_icon_element-color-sky {
+    color: #5aa1e3 !important;
+}
+
+.lafka_icon_element-color-sandy_brown {
+    color: #f79468 !important;
+}
+
+.lafka_icon_element-color-purple {
+    color: #b97ebb !important;
+}
+
+.lafka_icon_element-color-white {
+    color: #fff !important;
+}
+
+.lafka_content_slider {
+    position: relative;
+}
+
+.lafka_content_slider.lafka-fullheight-content-slider.lafka_content_slider_dark_nav .owl-nav .owl-next,
+.lafka_content_slider.lafka-fullheight-content-slider.lafka_content_slider_dark_nav .owl-nav .owl-prev {
+    background-color: #333;
+}
+
+.lafka_content_slider.lafka-fullheight-content-slider.lafka_content_slider_light_nav .owl-nav .owl-next,
+.lafka_content_slider.lafka-fullheight-content-slider.lafka_content_slider_light_nav .owl-nav .owl-prev {
+    background-color: #fff;
+}
+
+.lafka_content_slider.lafka_content_slider_light_nav.lafka-pagination-numbers .owl-dot::after {
+    background-color: #fff;
+}
+
+.lafka_content_slider .owl-dots {
+    width: 100%;
+    height: 30px;
+    text-align: inherit;
+    margin: 0;
+    padding: 0 35px;
+}
+
+.lafka_content_slider.lafka-pagination-inside .owl-dots {
+    position: absolute;
+    bottom: -300px;
+}
+
+.lafka_content_slider.lafka-pagination-inside:hover .owl-dots {
+    bottom: 30px;
+}
+
+.lafka_content_slider .owl-dot {
+    display: inline-block;
+    padding: 3px 6px;
+    vertical-align: middle;
+    background: none;
+    margin: 0 4px;
+}
+
+.lafka_content_slider .owl-dot span {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    background-color: #cecece;
+    border-radius: 50%;
+    vertical-align: middle;
+    position: relative;
+    -webkit-transition: all 0.5s ease 0s;
+    transition: all 0.5s ease 0s;
+}
+
+.lafka_content_slider .owl-dot.active span::after {
+    display: block;
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 2px solid #cecece;
+    border-radius: 50%;
+    content: "";
+}
+
+
+html.no-touch .lafka-from-right {
+    opacity: 0;
+    position: relative;
+    right: -80px;
+}
+
+html.no-touch .lafka-from-left {
+    opacity: 0;
+    position: relative;
+    left: -80px;
+}
+
+html.no-touch .lafka-from-bottom {
+    opacity: 0;
+    position: relative;
+    bottom: -50px;
+}
+
+.lafka_content_slider_light_nav.lafka-pagination-numbers .owl-dot::before {
+    color: #fff;
+}
+
+.dokan-pagination-container .dokan-pagination li.active a {
+    display: inline-block;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    vertical-align: middle;
+    text-align: center;
+    font-weight: 400;
+    text-decoration: none;
+    color: #333;
+    background: #e1e1e1;
+}
+
+.dokan-pagination-container .dokan-pagination li.active a::before {
+    display: block;
+    content: "";
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border: 2px solid #e1e1e1;
+    border-radius: 2em;
+    opacity: 0;
+    -webkit-transition: all .4s cubic-bezier(0.77, 0, 0.175, 1);
+    transition: all .4s cubic-bezier(0.77, 0, 0.175, 1);
+}
+
+.dokan-pagination-container .dokan-pagination li.active a::before {
+    opacity: 1;
+}
+
+
+.lafka-foodmenu-categories ul li a {
+    color: var(--lafka-h2-color);
+}
+
+
+}

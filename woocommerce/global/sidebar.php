@@ -19,7 +19,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 
-$woocommerce_sidebar = lafka_get_option( 'woocommerce_sidebar' );
+$woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
 
 if ( $woocommerce_sidebar && $woocommerce_sidebar != 'none' ) {
 	get_sidebar();

@@ -71,10 +71,12 @@ final class BrandAccentSsotTest extends TestCase {
 
 	public function test_dynamic_css_bridges_brand_color_to_handoff_token(): void {
 		$php = $this->theme_file( '/styles/dynamic-css.php' );
+		// NX1-02.logos-brand-pilot: brand_color migrated legacy option ->
+		// lafka_brand_color theme_mod; the pepper-yellow default is preserved.
 		$this->assertMatchesRegularExpression(
-			"/lafka_get_option\(\s*'brand_color'\s*,\s*'#f59e0b'\s*\)/",
+			"/get_theme_mod\(\s*'lafka_brand_color'\s*,\s*'#f59e0b'\s*\)/",
 			$php,
-			'dynamic-css.php must read the brand_color option with the pepper-yellow default.'
+			'dynamic-css.php must read the lafka_brand_color theme_mod with the pepper-yellow default.'
 		);
 		$this->assertStringContainsString(
 			"--lafka-color-brand-500:' . \$brand_color",

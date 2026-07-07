@@ -31,7 +31,7 @@ if ( $lafka_has_offcanvas_sidebar ) {
 // Sidebar position
 $lafka_sidebar_classes[] = apply_filters( 'lafka_left_sidebar_position_class', '' );
 
-$lafka_title_background_image = lafka_get_option( 'blog_title_background_imgid' );
+$lafka_title_background_image = get_theme_mod( 'lafka_blog_title_background_imgid', '' );
 
 if ( $lafka_title_background_image ) {
 	$lafka_img                    = wp_get_attachment_image_src( $lafka_title_background_image, 'full' );
@@ -39,7 +39,7 @@ if ( $lafka_title_background_image ) {
 }
 
 // Blog style
-$lafka_general_blog_style = lafka_get_option( 'general_blog_style' );
+$lafka_general_blog_style = get_theme_mod( 'lafka_general_blog_style', '' );
 switch ( $lafka_general_blog_style ) {
 	case 'lafka_blog_masonry':
 		// Isotope settings

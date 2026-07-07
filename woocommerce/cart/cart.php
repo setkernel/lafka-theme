@@ -268,7 +268,7 @@ do_action( 'woocommerce_before_cart' );
 	 * zero qty removes lines. */
 	// Canonical browse target (f104): the /menu/ page via the shared resolver, so
 	// "Add more items" tracks every other menu CTA instead of the WC shop archive.
-	$lafka_cart_shop_url = function_exists( 'lafka_get_menu_url' ) ? lafka_get_menu_url() : home_url( '/menu/' );
+	$lafka_cart_shop_url = lafka_theme_menu_url();
 	?>
 	<div class="lafka-cart-bottom-actions">
 		<a class="lafka-cart-bottom-actions__add" href="<?php echo esc_url( $lafka_cart_shop_url ); ?>">

@@ -36,8 +36,19 @@ final class ContrastFixesTest extends TestCase {
 		// parent emits that markup. These assertions now run against the parent's
 		// own CSS — both files are always present, so the suite no longer skips
 		// in isolated CI (it used to silently skip when the child was absent).
-		$this->theme_css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
-		$this->base_css  = file_get_contents( dirname( __DIR__, 2 ) . '/styles/lafka-base.css' );
+		// NX1-10a: the legacy blog/foodmenu/forum/events CSS was extracted out of
+		// style.css into scoped styles/legacy-*.css sheets. The contrast lock must
+		// follow the rules wherever they now live, so theme_css is the monolith
+		// remainder PLUS those extracted sheets.
+		$root            = dirname( __DIR__, 2 );
+		$this->theme_css = file_get_contents( $root . '/style.css' );
+		foreach ( array( 'legacy-blog', 'legacy-shortcodes', 'legacy-forum', 'legacy-events' ) as $legacy ) {
+			$legacy_path = $root . '/styles/' . $legacy . '.css';
+			if ( is_file( $legacy_path ) ) {
+				$this->theme_css .= "\n" . file_get_contents( $legacy_path );
+			}
+		}
+		$this->base_css = file_get_contents( $root . '/styles/lafka-base.css' );
 	}
 
 	// ------------------------------------------------------------------

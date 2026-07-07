@@ -63,9 +63,16 @@ export default [
 			},
 		},
 	},
-	// Playwright config + e2e tests run under Node.js (CommonJS).
+	// Playwright configs + e2e/visual tests run under Node.js (CommonJS).
 	{
-		files: ["playwright.config.js", "tests/e2e/**/*.js", "tests/e2e/**/*.spec.js"],
+		files: [
+			"playwright.config.js",
+			"playwright.visual.config.js",
+			"tests/e2e/**/*.js",
+			"tests/e2e/**/*.spec.js",
+			"tests/visual/**/*.js",
+			"tests/visual/**/*.spec.js",
+		],
 		languageOptions: {
 			sourceType: "commonjs",
 			globals: {

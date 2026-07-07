@@ -33,7 +33,7 @@ class Lafka_GitHub_Updater {
 		add_action( 'admin_notices', array( $this, 'render_admin_notices' ) );
 
 		// Allow disabling update checks entirely.
-		if ( ! lafka_get_option( 'lafka_github_updates_enabled', true ) ) {
+		if ( ! get_theme_mod( 'lafka_github_updates_enabled', true ) ) {
 			return;
 		}
 
