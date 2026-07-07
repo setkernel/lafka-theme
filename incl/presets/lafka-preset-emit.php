@@ -426,8 +426,50 @@ if ( ! function_exists( 'lafka_preset_language_attributes' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_preset_category_emoji' ) ) {
+	/**
+	 * Feed the active preset's `category_emoji` map into the `lafka_category_emoji`
+	 * filter (partials/home-categories.php:102), so each preset can theme the
+	 * "What are you craving?" category-tile glyphs. The map is keyed by product_cat
+	 * term slug (e.g. pizzas/sides/salads/drinks); the resolved glyph is echoed as
+	 * escaped text content downstream (esc_html) — a trusted preset literal.
+	 *
+	 * A preset with an EMPTY map (Peppery, Midnight) returns the incoming $emoji
+	 * untouched, so those presets' markup + the 30 goldens stay byte-identical.
+	 * Resolution mirrors the partial's own map (home-categories.php:96-100): an
+	 * exact slug hit wins, else a fuzzy fallback where the term slug CONTAINS a map
+	 * key or the term name contains it. An unmatched term keeps the passed glyph.
+	 *
+	 * @param string $emoji The glyph the partial resolved from its own default map.
+	 * @param object $term  The product_cat term (WP_Term; reads ->slug and ->name).
+	 * @return string
+	 */
+	function lafka_preset_category_emoji( $emoji, $term ) {
+		if ( ! function_exists( 'lafka_active_preset' ) ) {
+			return $emoji;
+		}
+		$map = lafka_active_preset()->category_emoji();
+		if ( empty( $map ) || ! is_object( $term ) || ! isset( $term->slug ) ) {
+			return $emoji;
+		}
+		$slug = strtolower( (string) $term->slug );
+		if ( isset( $map[ $slug ] ) ) {
+			return (string) $map[ $slug ];
+		}
+		$name = isset( $term->name ) ? (string) $term->name : '';
+		foreach ( $map as $needle => $glyph ) {
+			$needle = strtolower( (string) $needle );
+			if ( '' !== $needle && ( false !== strpos( $slug, $needle ) || false !== stripos( $name, $needle ) ) ) {
+				return (string) $glyph;
+			}
+		}
+		return $emoji;
+	}
+}
+
 // Include-time hook (matches dynamic-css.php's pattern); guarded so the isolated
 // preset unit tests that don't shim add_filter don't fatal.
 if ( function_exists( 'add_filter' ) ) {
 	add_filter( 'language_attributes', 'lafka_preset_language_attributes' );
+	add_filter( 'lafka_category_emoji', 'lafka_preset_category_emoji', 10, 2 );
 }
