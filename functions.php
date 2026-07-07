@@ -12,6 +12,19 @@ require_once get_template_directory() . '/incl/system/core-functions.php';
 require_once get_template_directory() . '/incl/system/lafka-legacy-migrate.php';
 
 /*
+ * NX2-01 (theme 7.1): preset engine — "10 designs in one theme". Loads the
+ * pure-data token/chrome whitelists, the Lafka_Preset value object, the
+ * Lafka_Presets registry, and the public surface + emission wiring
+ * (lafka_presets/lafka_active_preset/lafka_preset_default + the PTL enqueue and
+ * dark data-theme filter). Peppery is preset #1, the default and a provable
+ * no-op. See docs/PRESET_ENGINE.md.
+ */
+require_once get_template_directory() . '/incl/presets/lafka-preset-tokens.php';
+require_once get_template_directory() . '/incl/presets/class-lafka-preset.php';
+require_once get_template_directory() . '/incl/presets/class-lafka-presets.php';
+require_once get_template_directory() . '/incl/presets/lafka-preset-emit.php';
+
+/*
  * NX1-10b: production asset-minification switch. Rewrites enqueued theme
  * styles//js URLs to their `.min` sibling (a `npm run build` artefact) when
  * SCRIPT_DEBUG is off and the sibling exists on disk. Hooks style_loader_src /
