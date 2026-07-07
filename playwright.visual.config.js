@@ -23,8 +23,9 @@ const { defineConfig } = require( '@playwright/test' );
 module.exports = defineConfig( {
 	testDir: './tests/visual',
 	// The NX2-07 dark-preset goldens run under playwright.visual.dark.config.js
-	// (midnight active); they must NOT run in this Peppery pass.
-	testIgnore: '**/nx2-dark.spec.js',
+	// and the NX2-07 rendered-contrast gate under playwright.contrast.config.js
+	// (both midnight-active); neither must run in this Peppery pass.
+	testIgnore: [ '**/nx2-dark.spec.js', '**/nx2-contrast.spec.js' ],
 	globalSetup: require.resolve( './tests/visual/support/global-setup.js' ),
 	globalTeardown: require.resolve( './tests/visual/support/global-teardown.js' ),
 

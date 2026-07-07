@@ -661,7 +661,12 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 /* === Upsell row "Make it a meal" (W4-T17) === */
 .lafka-pdp-upsell { margin: 24px 0; }
 
-.lafka-pdp-upsell__heading { font-size: 14px; font-weight: 700; margin: 0 0 12px; }
+/* NX2-07: this bare <h3> otherwise inherits its colour from WordPress's
+ * global-styles `h3 { color: var(--wp--preset--color--text-primary) }` (a fixed
+ * #18181b that a dark preset can't flip → dark-on-dark). Wire it to the
+ * mode-aware text token; text-primary's light value equals that WP ink, so
+ * Peppery is unchanged, and a dark preset flips it light. */
+.lafka-pdp-upsell__heading { font-size: 14px; font-weight: 700; margin: 0 0 12px; color: var(--lafka-color-text-primary); }
 
 .lafka-pdp-upsell__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
 

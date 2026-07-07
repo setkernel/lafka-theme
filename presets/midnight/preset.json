@@ -37,7 +37,18 @@
 	},
 	"chrome": {
 		"lafka_accent_color": "#22d3ee",
-		"lafka_brand_color": "#a3e635"
+		"lafka_brand_color": "#a3e635",
+		"lafka_header_background": {
+			"color": "#0f0f10",
+			"image": "",
+			"repeat": "",
+			"position": "",
+			"attachment": "scroll"
+		},
+		"lafka_main_menu_background_color": "#141414",
+		"lafka_main_menu_links_color": "#f5f5f5",
+		"lafka_main_menu_links_hover_color": "#22d3ee",
+		"lafka_main_menu_icons_color": "#a1a1aa"
 	},
 	"fonts": {
 		"body": { "family": "Rubik", "source": "base" },

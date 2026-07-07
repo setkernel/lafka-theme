@@ -73,6 +73,7 @@ if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
 			'--lafka-color-surface-overlay',
 			'--lafka-color-surface-glass',
 			'--lafka-color-surface-footer',
+			'--lafka-color-surface-announce',
 			'--lafka-color-surface-dark',
 			'--lafka-color-surface-cream',
 			'--lafka-color-scrim-bottom',

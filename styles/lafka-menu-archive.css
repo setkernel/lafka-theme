@@ -115,7 +115,14 @@
 }
 
 .lafka-menu__tab.is-active .lafka-menu__tab-meta {
-	color: rgba(255, 255, 255, 0.78);
+
+	/* NX2-07: the active pill's label already reads --lafka-color-text-inverse
+	 * (dark ink on the light pill under a dark preset). The meta was a hardcoded
+	 * translucent white — correct on Peppery's dark pill, but white-on-white
+	 * once the pill inverts light. Derive the muted meta FROM the inverse token
+	 * so it tracks the pill: on Peppery (text-inverse == #fff) color-mix resolves
+	 * to the identical rgba(255,255,255,0.78); a dark preset flips it dark. */
+	color: color-mix(in srgb, var(--lafka-color-text-inverse) 78%, transparent);
 }
 
 .lafka-menu__tab-label {

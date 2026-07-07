@@ -62,3 +62,7 @@ wp-content/uploads/
 # LOCAL/untracked contract. See tests/visual/nx2-dark.spec.js.
 /tests/visual/.output-dark/
 /tests/visual/.report-dark/
+# NX2-07 rendered text-contrast gate (playwright.contrast.config.js) — no
+# goldens; only run artefacts. See tests/visual/nx2-contrast.spec.js.
+/tests/visual/.output-contrast/
+/tests/visual/.report-contrast/

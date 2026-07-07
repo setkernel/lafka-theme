@@ -69,6 +69,7 @@ export default [
 			"playwright.config.js",
 			"playwright.visual.config.js",
 			"playwright.visual.dark.config.js",
+			"playwright.contrast.config.js",
 			"tests/e2e/**/*.js",
 			"tests/e2e/**/*.spec.js",
 			"tests/visual/**/*.js",

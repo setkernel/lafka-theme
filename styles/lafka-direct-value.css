@@ -54,6 +54,18 @@
 	line-height: 1.4;
 }
 
+/* NX2-07: the strip/badge sit on the brand-soft surface, which a dark preset
+ * paints near-black. Their heading + body text read a stale (undefined)
+ * --lafka-color-text token that falls back to a dark ink in BOTH modes →
+ * dark-on-dark under a dark preset. Flip them to the mode-aware primary text
+ * token in dark scope only; Peppery (no data-theme) keeps its exact light
+ * literals, so it stays byte/pixel-identical. */
+:root[data-theme="dark"] .lafka-direct__heading,
+:root[data-theme="dark"] .lafka-direct__point,
+:root[data-theme="dark"] .lafka-direct--badge {
+	color: var(--lafka-color-text-primary);
+}
+
 .lafka-direct__cta {
 	display: inline-flex;
 	align-items: center;

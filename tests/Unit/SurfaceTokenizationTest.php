@@ -141,9 +141,10 @@ namespace Lafka\Tests\Unit {
 				'surface-raised' => array( '--lafka-color-surface-raised' ),
 				'surface-sunken' => array( '--lafka-color-surface-sunken' ),
 				'surface-muted'  => array( '--lafka-color-surface-muted' ),
-				'surface-glass'  => array( '--lafka-color-surface-glass' ),
-				'surface-footer' => array( '--lafka-color-surface-footer' ),
-				'accent-50'      => array( '--lafka-color-accent-50' ),
+				'surface-glass'    => array( '--lafka-color-surface-glass' ),
+				'surface-footer'   => array( '--lafka-color-surface-footer' ),
+				'surface-announce' => array( '--lafka-color-surface-announce' ),
+				'accent-50'        => array( '--lafka-color-accent-50' ),
 			);
 		}
 

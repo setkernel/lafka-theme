@@ -83,4 +83,19 @@ function wpCli( args, opts = {} ) {
 	} ).trim();
 }
 
-module.exports = { wpCli, resolveContainer };
+/**
+ * Bust the dynamic-css cache so a just-activated preset's CHROME (the ~57
+ * theme_mod-default reads in styles/dynamic-css.php — header/menu background,
+ * link colours, …) is rebuilt instead of served from a stale transient. The
+ * dynamic-css cache key folds in the active-preset slug + an options-version
+ * but NOT the preset FILE mtime, so editing a preset's chrome{} alone can leave
+ * an entry keyed before the edit still cached; bumping the version option (a new
+ * cache key) + flushing the object cache forces a fresh build on the next page
+ * load. Call after switching lafka_active_preset in a spec's beforeAll.
+ */
+function bustDynamicCss() {
+	wpCli( [ 'option', 'update', 'lafka_dynamic_css_version', String( Date.now() ) ] );
+	wpCli( [ 'cache', 'flush' ] );
+}
+
+module.exports = { wpCli, resolveContainer, bustDynamicCss };

@@ -33,7 +33,7 @@
 const { test, expect } = require( '@playwright/test' );
 const { shootAllBreakpoints } = require( './support/capture' );
 const { SEED, useClassicCartCheckout } = require( '../e2e/support/store' );
-const { wpCli } = require( '../e2e/support/wp-cli' );
+const { wpCli, bustDynamicCss } = require( '../e2e/support/wp-cli' );
 
 // Same non-deterministic regions the Peppery gate blanks (see nx1-02.spec.js).
 const MASK_SELECTORS = [
@@ -77,6 +77,9 @@ test.describe( 'NX2-07 midnight dark goldens', () => {
 	test.beforeAll( () => {
 		// Activate the dark preset for every capture in this file.
 		wpCli( [ 'eval', 'set_theme_mod("lafka_active_preset","midnight");' ] );
+		// Rebuild dynamic-css so the preset's chrome (dark header/menu) is
+		// captured fresh, never from a transient keyed before the switch.
+		bustDynamicCss();
 	} );
 
 	test.afterAll( () => {

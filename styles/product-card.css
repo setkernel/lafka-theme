@@ -109,6 +109,20 @@ ul.products {
 	overflow: hidden;
 }
 
+/* NX2-07: the card title/description use light-ink literals (#1a1a1a / #6a6a6a)
+ * that a dark preset can't flip; tokenising them to the page-relative text
+ * tokens would shift Peppery's exact ink (text-primary is #18181b, not #1a1a1a).
+ * Flip them to the mode-aware text tokens under the dark scope ONLY, so Peppery
+ * (no data-theme) keeps its exact literals byte/pixel/computed-identical while a
+ * dark preset reads title + description comfortably above AA. */
+:root[data-theme="dark"] .lafka-product-card__title {
+	color: var(--lafka-color-text-primary);
+}
+
+:root[data-theme="dark"] .lafka-product-card__desc {
+	color: var(--lafka-color-text-muted);
+}
+
 .lafka-product-card__bottom {
 	display: flex;
 	align-items: center;

@@ -551,6 +551,17 @@
 	color: var(--lafka-color-text-primary);
 }
 
+/* NX2-07: the primary CTA sits on the bright brand FILL. Peppery reads the ink
+ * (text-primary) — dark-on-amber, correct. A dark preset flips text-primary
+ * light (near-white), which is unreadable on the still-bright brand fill. Pin
+ * the CTA text to the on-accent token in dark scope only: it flips DARK on the
+ * light fill for contrast, mirroring the closer CTA. Peppery keeps its exact
+ * text-primary ink (no data-theme), so it stays byte/pixel-identical. */
+:root[data-theme="dark"] .lafka-visit__cta--primary,
+:root[data-theme="dark"] .lafka-visit__cta--primary:hover {
+	color: var(--lafka-color-text-on-accent);
+}
+
 .lafka-visit__cta--ghost {
 	background: transparent;
 	color: var(--lafka-color-text-inverse);

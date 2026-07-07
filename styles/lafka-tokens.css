@@ -136,6 +136,15 @@
 	 * dark in every preset. See .lafka-footer in lafka-footer-chrome.css. */
 	--lafka-color-surface-footer: #18181b;
 
+	/* NX2-07: the top-of-page announce band is a PERMANENT dark "inverse" strip
+	 * (like the footer). It used to read its background off
+	 * --lafka-color-text-primary (the ink), which a dark preset inverts to
+	 * near-white — turning the strip into a white slab with white text on it.
+	 * A dedicated always-dark surface (light value == the old ink, so Peppery is
+	 * byte/pixel-identical) stays dark in every preset. See .lafka-announce-bar
+	 * in lafka-announce-bar.css. */
+	--lafka-color-surface-announce: #18181b;
+
 	/* Extras not in handoff — preserved for existing dark-section components */
 	--lafka-color-surface-dark: #0f0f10;
 	--lafka-color-surface-cream: #fdf8ed;
@@ -432,6 +441,7 @@
 	 * the near-black page tint, translucent; footer = a grounded deep band. */
 	--lafka-color-surface-glass: rgba(15, 15, 16, 0.92);
 	--lafka-color-surface-footer: #050505;
+	--lafka-color-surface-announce: #050505;
 
 	/* NX2-07: accent-50 is only ever used as a "warm panel" BACKGROUND (PDP
 	 * toppings/side callouts, cart/checkout notices) — never as text — so a dark
