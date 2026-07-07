@@ -1,0 +1,37 @@
+NX1-10a dead-declaration prune — audit
+=======================================
+
+Every row below is a declaration that was DEAD in the monolith (overridden
+by a LATER kept style.css rule — the late accent-color consolidation groups
+at style.css:11513 / 11527) but silently re-won after being moved into a
+legacy-*.css sheet that enqueues after style.css. Deleting it restores the
+monolith's effective cascade. Derived exhaustively from the parity sweep,
+not hand-listed.
+
+delete-keys (media,selector,property): 11
+declarations deleted: 11
+
+SHEET             PROPERTY            DEAD VALUE                  KEPT WINNER (style.css)
+                                                                
+legacy-blog       color               #333                        var(--lafka-link-color)
+                  selector: div.widget_categories ul li a:hover
+legacy-blog       color               #333                        var(--lafka-link-color)
+                  selector: div.widget_archive ul li a:hover
+legacy-blog       margin-bottom       30px                        80px
+                  selector: .lafka-related-blog-posts > h4
+legacy-blog       background-color    #333                        var(--lafka-accent-color)
+                  selector: .foodmenu-unit-info a.foodmenu-lightbox-link
+legacy-blog       background-color    #f4524d                     var(--lafka-accent-color)
+                  selector: .blog-post-meta span.sticky_post
+legacy-blog       background-color    #333                        var(--lafka-accent-color)
+                  selector: .blog-post-meta.post-meta-top .count_comments a
+legacy-blog       color               #dedede                     var(--lafka-accent-color)
+                  selector: .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title::before
+legacy-shortcode  background-color    #333                        var(--lafka-accent-color)
+                  selector: .lafka-foodmenu-categories ul li a.is-checked::before
+legacy-shortcode  color               #333                        var(--lafka-accent-color)
+                  selector: .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next
+legacy-shortcode  color               #333                        var(--lafka-accent-color)
+                  selector: .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev
+legacy-events     background-color    #fafafa                     var(--lafka-accent-color)
+                  selector: .tribe-events-schedule .tribe-events-cost

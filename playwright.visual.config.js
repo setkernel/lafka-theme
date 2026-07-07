@@ -35,8 +35,18 @@ module.exports = defineConfig( {
 		timeout: 15 * 1000,
 		// Freeze CSS animations; allow a tiny sub-pixel AA tolerance so text
 		// rendering jitter across runs can't flake the gate.
+		//
+		// NX1-10a: a bare maxDiffPixelRatio: 0.01 let the cascade-inversion badge
+		// flip slip through — a badge-sized colour change (a few hundred px) is
+		// far under 1% of a full-page screenshot. We now ALSO cap the ABSOLUTE
+		// differing-pixel count. Playwright takes Math.min() of the two limits
+		// (coreBundle.js: maxDiffPixels = min(maxDiffPixels, ratio*w*h)), so with
+		// both set the 50-pixel cap is the effective gate on every page large
+		// enough to matter — a badge-sized colour flip can never pass again. The
+		// ratio is retained only as a belt-and-braces ceiling on tiny images.
 		toHaveScreenshot: {
 			animations: 'disabled',
+			maxDiffPixels: 50,
 			maxDiffPixelRatio: 0.01,
 		},
 	},

@@ -184,7 +184,6 @@ div.widget_pages ul li.current_page_item>a {
 
 div.widget_categories ul li a:hover,
 div.widget_archive ul li a:hover {
-    color: #333;
     text-decoration: none;
 }
 
@@ -406,10 +405,6 @@ body.lafka_transparent_header .lafka_title_holder.title_has_image .inner {
     margin-bottom: 15px;
 }
 
-
-.lafka-related-blog-posts>h4 {
-    margin-bottom: 30px;
-}
 
 .lafka-is-custom-footer-sidebar>.widget.box {
     clear: none;
@@ -1015,7 +1010,6 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
     -webkit-transition: all 0.5s ease 0s;
     transition: all 0.5s ease 0s;
     border-radius: 50%;
-    background-color: #333;
     padding: 0;
     opacity: 0;
 }
@@ -1234,7 +1228,6 @@ body.single-post .lafka_title_holder .blog-post-meta img.avatar {
 }
 
 .blog-post-meta span.sticky_post {
-    background-color: #f4524d;
     color: #fff;
     padding: 4px 8px;
     font-weight: 600;
@@ -1251,7 +1244,6 @@ body.single-post .lafka_title_holder .blog-post-meta img.avatar {
 .blog-post-meta.post-meta-top .count_comments a {
     color: #fff;
     border-radius: 2em;
-    background-color: #333;
     text-align: center;
     padding: 2px 5px;
     min-width: 21px;
@@ -1442,7 +1434,6 @@ body.single-post .has-sidebar .lafka_post_data_holder {
     font-weight: 400 !important;
     text-align: center;
     margin: 0 auto 12px auto;
-    color: #dedede;
 }
 
 .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title a {

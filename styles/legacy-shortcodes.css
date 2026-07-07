@@ -31,7 +31,6 @@
     right: 12px;
     height: 2px;
     content: "";
-    background-color: #333;
     -webkit-transition: all .3s cubic-bezier(0.77, 0, 0.175, 1);
     transition: all .3s cubic-bezier(0.77, 0, 0.175, 1);
 }
@@ -73,7 +72,6 @@
 .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next,
 .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev {
     background-color: #fff;
-    color: #333;
 }
 
 .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next::before,
