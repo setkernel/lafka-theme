@@ -81,8 +81,17 @@ $lafka_hero_stat_1_value = (string) get_theme_mod( 'lafka_home_hero_stat_1_value
 $lafka_hero_stat_1_label = (string) get_theme_mod( 'lafka_home_hero_stat_1_label', '' );
 $lafka_hero_stat_2_value = (string) get_theme_mod( 'lafka_home_hero_stat_2_value', '25 min' );
 $lafka_hero_stat_2_label = (string) get_theme_mod( 'lafka_home_hero_stat_2_label', __( 'avg. pickup', 'lafka' ) );
-$lafka_hero_stat_3_value = (string) get_theme_mod( 'lafka_home_hero_stat_3_value', 'Free' );
-$lafka_hero_stat_3_label = (string) get_theme_mod( 'lafka_home_hero_stat_3_label', __( 'delivery $30+', 'lafka' ) );
+// Stat 3's default derives from the free-delivery threshold SSOT (plugin
+// rule, else the shared theme_mod; 0 = off → stat hidden). The old baked-in
+// dollar-figure default advertised an offer shipping didn't enforce.
+$lafka_hero_stat_3_defaults = function_exists( 'lafka_home_hero_stat3_defaults' )
+	? lafka_home_hero_stat3_defaults()
+	: array(
+		'value' => '',
+		'label' => '',
+	);
+$lafka_hero_stat_3_value    = (string) get_theme_mod( 'lafka_home_hero_stat_3_value', $lafka_hero_stat_3_defaults['value'] );
+$lafka_hero_stat_3_label    = (string) get_theme_mod( 'lafka_home_hero_stat_3_label', $lafka_hero_stat_3_defaults['label'] );
 ?>
 <section class="lafka-hero" aria-label="<?php esc_attr_e( 'Welcome', 'lafka' ); ?>">
 	<div class="lafka-container lafka-hero__inner">

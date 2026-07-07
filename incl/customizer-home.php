@@ -204,11 +204,13 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			),
 			'lafka_home_hero_stat_3_value' => array(
 				'label'   => __( 'Stat 3 — value', 'lafka' ),
-				'default' => __( 'Free', 'lafka' ),
+				// Derived from the free-delivery threshold SSOT so the
+				// Customizer preview matches the front end (empty = off).
+				'default' => function_exists( 'lafka_home_hero_stat3_defaults' ) ? lafka_home_hero_stat3_defaults()['value'] : '',
 			),
 			'lafka_home_hero_stat_3_label' => array(
 				'label'   => __( 'Stat 3 — caption', 'lafka' ),
-				'default' => __( 'delivery $30+', 'lafka' ),
+				'default' => function_exists( 'lafka_home_hero_stat3_defaults' ) ? lafka_home_hero_stat3_defaults()['label'] : '',
 			),
 		);
 		foreach ( $lafka_home_hero_stat_fields as $lafka_setting_id => $lafka_field ) {

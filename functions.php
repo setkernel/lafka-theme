@@ -120,6 +120,10 @@ require_once get_template_directory() . '/incl/template-helpers/social-proof.php
 require_once get_template_directory() . '/incl/customizer-service-eta.php';
 require_once get_template_directory() . '/incl/template-helpers/service-eta.php';
 
+// Free-delivery threshold SSOT accessors — every surface citing the
+// threshold (announce bar, hero, how-it-works, cart, PDP) reads via these.
+require_once get_template_directory() . '/incl/template-helpers/free-delivery.php';
+
 // Empty-cart "Popular" entry-points (v5.32.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-cart-empty-popular.php';
 

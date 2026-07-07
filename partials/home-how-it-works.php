@@ -17,6 +17,12 @@ defined( 'ABSPATH' ) || exit;
 $lafka_how_eyebrow  = (string) get_theme_mod( 'lafka_home_how_eyebrow', __( 'How it works', 'lafka' ) );
 $lafka_how_headline = (string) get_theme_mod( 'lafka_home_how_headline', __( 'Hot food, three taps away.', 'lafka' ) );
 
+// Step 2's default derives from the free-delivery threshold SSOT — cites the
+// real amount, or drops the claim entirely when no threshold is configured.
+$lafka_how_2_body_default = function_exists( 'lafka_home_how_step2_body_default' )
+	? lafka_home_how_step2_body_default()
+	: __( 'Pickup is fastest, or get it delivered piping hot.', 'lafka' );
+
 $lafka_how_steps = (array) apply_filters(
 	'lafka_home_how_it_works_steps',
 	array(
@@ -26,7 +32,7 @@ $lafka_how_steps = (array) apply_filters(
 		),
 		array(
 			'title' => (string) get_theme_mod( 'lafka_home_how_2_title', __( 'Pickup or delivery', 'lafka' ) ),
-			'body'  => (string) get_theme_mod( 'lafka_home_how_2_body', __( 'Pickup is fastest. Free delivery on orders over $30.', 'lafka' ) ),
+			'body'  => (string) get_theme_mod( 'lafka_home_how_2_body', $lafka_how_2_body_default ),
 		),
 		array(
 			'title' => (string) get_theme_mod( 'lafka_home_how_3_title', __( 'We start baking', 'lafka' ) ),
