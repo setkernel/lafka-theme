@@ -41,6 +41,14 @@ if ( ! function_exists( 'lafka_preset_preview_payloads' ) ) {
 	 * @return array<string, array{label:string,description:string,dark:bool,ptl:string,fonts:string,dynamicCss:string}>
 	 */
 	function lafka_preset_preview_payloads(): array {
+		// Memoized: a single preview load calls this twice (localize + font
+		// preload). Payloads are deterministic within one request, so the
+		// second call returns the built set free of charge.
+		static $cache = null;
+		if ( null !== $cache ) {
+			return $cache;
+		}
+
 		$payloads = array();
 
 		foreach ( lafka_presets()->all() as $slug => $preset ) {
@@ -68,7 +76,9 @@ if ( ! function_exists( 'lafka_preset_preview_payloads' ) ) {
 			remove_filter( 'lafka_active_preset_slug', $force, 999 );
 		}
 
-		return $payloads;
+		$cache = $payloads;
+
+		return $cache;
 	}
 }
 
@@ -149,4 +159,53 @@ if ( ! function_exists( 'lafka_preset_controls_css' ) ) {
 		);
 	}
 	add_action( 'customize_controls_enqueue_scripts', 'lafka_preset_controls_css' );
+}
+
+if ( ! function_exists( 'lafka_preset_preview_enqueue' ) ) {
+	/**
+	 * Preview-iframe script: payloads for every preset, swap-on-message.
+	 * Fires only via customize_preview_init — never on a real front end.
+	 */
+	function lafka_preset_preview_enqueue(): void {
+		wp_enqueue_script(
+			'lafka-preset-preview',
+			get_template_directory_uri() . '/assets/customizer/lafka-preset-preview.js',
+			array( 'customize-preview' ),
+			wp_get_theme( get_template() )->get( 'Version' ),
+			true
+		);
+		wp_localize_script(
+			'lafka-preset-preview',
+			'lafkaPresetPreview',
+			array( 'payloads' => lafka_preset_preview_payloads() )
+		);
+	}
+	add_action( 'customize_preview_init', 'lafka_preset_preview_enqueue' );
+}
+
+if ( ! function_exists( 'lafka_preset_preview_preload_fonts' ) ) {
+	/**
+	 * Inside the preview iframe, print EVERY pool family's @font-face block
+	 * so a preset swap only changes font-family custom properties against
+	 * already-loaded families ("hot swap"). Guarded by is_customize_preview()
+	 * — a normal render keeps the strict 2-families-per-page budget (the
+	 * NX2-03 accept criterion / iron gate).
+	 */
+	function lafka_preset_preview_preload_fonts(): void {
+		if ( ! function_exists( 'is_customize_preview' ) || ! is_customize_preview() ) {
+			return;
+		}
+		$css = '';
+		foreach ( lafka_preset_preview_payloads() as $payload ) {
+			$css .= $payload['fonts'];
+		}
+		if ( '' !== $css ) {
+			// Duplicate @font-face rules across payloads are harmless — the
+			// browser dedupes identical family/style/weight/src rules.
+			wp_register_style( 'lafka-preset-fonts-preview', false, array(), wp_get_theme( get_template() )->get( 'Version' ) );
+			wp_enqueue_style( 'lafka-preset-fonts-preview' );
+			wp_add_inline_style( 'lafka-preset-fonts-preview', $css );
+		}
+	}
+	add_action( 'wp_enqueue_scripts', 'lafka_preset_preview_preload_fonts', 20 );
 }
