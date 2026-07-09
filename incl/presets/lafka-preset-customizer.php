@@ -51,6 +51,13 @@ if ( ! function_exists( 'lafka_preset_preview_payloads' ) ) {
 
 		$payloads = array();
 
+		// In a live customize session WP has previewed every registered
+		// setting, pinning each flat theme_mod read to the value captured
+		// with the CURRENT preset active — which would collapse all ten
+		// dynamicCss payloads into clones of the active preset's. Suspend
+		// those pins for the build; posted (changeset) values keep winning.
+		$suspension = lafka_preset_payloads_unpin_theme_mods();
+
 		foreach ( lafka_presets()->all() as $slug => $preset ) {
 			// Force every slug-resolving reader onto THIS preset for the
 			// duration of one build. Priority 999 so it wins over any
@@ -76,9 +83,90 @@ if ( ! function_exists( 'lafka_preset_preview_payloads' ) ) {
 			remove_filter( 'lafka_active_preset_slug', $force, 999 );
 		}
 
+		lafka_preset_payloads_repin_theme_mods( $suspension );
+
 		$cache = $payloads;
 
 		return $cache;
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_payloads_unpin_theme_mods' ) ) {
+	/**
+	 * Suspend the customize-preview theme_mod pins for a forced-slug payload build.
+	 *
+	 * In a customize session (preview iframe or controls request) WordPress
+	 * previews every registered setting: each FLAT theme_mod setting gets a
+	 * `theme_mod_{$id}` filter (WP_Customize_Setting::_preview_filter) that
+	 * REPLACES the incoming value with either the operator's posted value or
+	 * the value captured when preview() ran. That capture resolved preset
+	 * defaults against the preset active at load, so under the pins a
+	 * forced-slug lafka_dynamic_css_build() reads the ACTIVE preset's chrome
+	 * for every registered key — all ten payloads collapse into clones of the
+	 * active one. (PTL/fonts take the preset object explicitly and never
+	 * suffered; unit/CLI builds have no manager, which is why only a real
+	 * customize session exposed this.)
+	 *
+	 * Removing a pin outright would also drop the operator's UNSAVED
+	 * (changeset) value for that key, so each removed pin is replaced for the
+	 * build's duration by a stand-in that keeps the posted value winning but
+	 * lets get_theme_mod() defaults — the forced preset's chrome — through
+	 * untouched. Multidimensional settings (core's nav_menu_locations[...])
+	 * keep their aggregated pin: dynamic-css reads none of them and their
+	 * capture is shared state that must not be disturbed.
+	 *
+	 * @since 7.1.0
+	 *
+	 * @return array{pins: array<int, array{string, callable}>, overrides: array<int, array{string, callable}>}
+	 *         Handles for lafka_preset_payloads_repin_theme_mods().
+	 */
+	function lafka_preset_payloads_unpin_theme_mods(): array {
+		$suspension = array(
+			'pins'      => array(),
+			'overrides' => array(),
+		);
+		$manager    = isset( $GLOBALS['wp_customize'] ) ? $GLOBALS['wp_customize'] : null;
+		if ( ! $manager instanceof WP_Customize_Manager ) {
+			return $suspension;
+		}
+		foreach ( $manager->settings() as $setting ) {
+			if ( 'theme_mod' !== $setting->type || false !== strpos( $setting->id, '[' ) ) {
+				continue;
+			}
+			$hook = 'theme_mod_' . $setting->id;
+			$pin  = array( $setting, '_preview_filter' );
+			if ( ! remove_filter( $hook, $pin ) ) {
+				continue; // Setting not previewed in this request — nothing pinned.
+			}
+			$suspension['pins'][] = array( $hook, $pin );
+
+			$override = static function ( $value ) use ( $setting ) {
+				$unset = new stdClass();
+				$post  = $setting->post_value( $unset );
+				return $unset === $post ? $value : $post;
+			};
+			add_filter( $hook, $override );
+			$suspension['overrides'][] = array( $hook, $override );
+		}
+		return $suspension;
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_payloads_repin_theme_mods' ) ) {
+	/**
+	 * Restore the pins suspended by lafka_preset_payloads_unpin_theme_mods().
+	 *
+	 * @since 7.1.0
+	 *
+	 * @param array{pins: array<int, array{string, callable}>, overrides: array<int, array{string, callable}>} $suspension Suspension handles.
+	 */
+	function lafka_preset_payloads_repin_theme_mods( array $suspension ): void {
+		foreach ( $suspension['overrides'] as $pair ) {
+			remove_filter( $pair[0], $pair[1] );
+		}
+		foreach ( $suspension['pins'] as $pair ) {
+			add_filter( $pair[0], $pair[1] );
+		}
 	}
 }
 
