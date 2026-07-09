@@ -43,6 +43,7 @@ preset-default (TML) ← operator-value. Both routes make the operator the final
 lafka-theme/
   presets/
     peppery/preset.json          # preset #1, DEFAULT, identity (empty overrides)
+    peppery/preview.jpg          # NX2-04 620×465 switcher thumbnail (one preview.jpg per preset dir)
     midnight/ ember/             # dark presets
     verde/ koyo/ terracotta/ azzurro/ brioche/ saffron/ fjord/  # light presets (10 total, NX2-05/08)
     __fixtures__/lowcontrast/preset.json   # NX2-02: must FAIL the contrast gate
@@ -53,6 +54,10 @@ lafka-theme/
     lafka-preset-emit.php             # PTL builder + enqueue wiring + data-theme + lafka_preset_default()
     lafka-preset-fonts.php            # NX2-03 8-family OFL font registry + per-preset enqueue
     class-lafka-color-contrast.php    # NX2-02 WCAG ratio helper
+    lafka-preset-customizer.php       # NX2-04 Customizer switcher: section/setting/control reg, preview payloads, controls+preview enqueues, font preload
+    class-lafka-customize-preset-control.php  # NX2-04 radio-image grid control (preview.jpg thumb + accent/brand swatch fallback)
+  assets/customizer/
+    lafka-preset-preview.js           # NX2-04 preview-iframe swap script (zero client-side style math)
   docs/PRESET_ENGINE.md               # this file
 ```
 
@@ -63,6 +68,11 @@ Public function surface (all `function_exists`-guarded, `lafka_` prefixed):
   `$key`, else `$fallback`. **Untyped** return (must route composite typography arrays like
   `lafka_h1_font`, not just scalars).
 - `lafka_get_active_preset_slug()` → `get_theme_mod( 'lafka_active_preset', 'peppery' )`.
+- `lafka_preset_preview_payloads()` → `array<slug, {label,description,dark,ptl,fonts,dynamicCss}>`
+  for the NX2-04 live preview: per preset, the three swap-ready CSS strings built by the REAL
+  emitters (each slug forced through `lafka_active_preset_slug` @999); static-memoized per request.
+- `lafka_sanitize_preset_slug( mixed ): string` → registry-checked slug sanitizer (unknown →
+  `peppery`); the `sanitize_callback` for the `lafka_active_preset` Customizer setting.
 - Filters: `lafka_presets` (register/modify the discovered set), `lafka_active_preset_slug`,
   `lafka_preset_token_whitelist`, `lafka_category_emoji` (existing; preset feeds it).
 
@@ -128,6 +138,28 @@ declaration except the operator's own layer, which prints last. Chrome/accent/br
 through §5 as `get_theme_mod()` *defaults*, so any stored operator value wins by definition.
 A preset switch writes **only** `lafka_active_preset` — never a chrome theme_mod — so operator
 customizations survive a switch untouched.
+
+### Customizer live preview (NX2-04)
+
+The switcher previews **server-emitted CSS — zero client-side style math**.
+`lafka_preset_preview_payloads()` runs the real emitters once per preset (PTL, fonts,
+`lafka_dynamic_css_build()`) and localizes the three swap-ready strings; on selection
+`assets/customizer/lafka-preset-preview.js` swaps the three live `<style>` blocks —
+`lafka-preset-inline-css`, `lafka-preset-fonts-inline-css`, `lafka-style-inline-css` —
+and flips `html[data-theme]`. Accent/brand bind straight to `--lafka-*` vars via a per-color
+postMessage transport; hero copy + announce bar use selective-refresh partials.
+
+- **Preview cache bypass.** Inside `is_customize_preview()`, `lafka_dynamic_css_build()`
+  REBUILDS and never reads/writes the mtime cache; otherwise a stale saved-value cache serves
+  the previous palette in the preview iframe (the real defect fixed en route).
+- **WP preview-pin trap (durable lesson).** In a live customize session
+  `WP_Customize_Setting::_preview_filter` pins every registered flat theme_mod to the value
+  captured with the *active* preset — so a forced-slug rebuild reads that preset's chrome for
+  every key, collapsing all ten `dynamicCss` payloads into clones of the active one. Unit/CLI
+  builds have no customize manager, so no unit gate could see it; only the e2e caught it. The
+  payload builder suspends those pins for the build (exception-safe repin in `finally`; posted
+  changeset values still win via a `post_value()` override). `tests/e2e/customizer-preset.spec.js`
+  is the regression gate.
 
 ## 5. theme_mod-default layer (the ~57 wraps in dynamic-css.php)
 
