@@ -73,6 +73,16 @@ if ( ! function_exists( 'lafka_add_custom_css' ) ) {
 		$active_preset = function_exists( 'lafka_get_active_preset_slug' ) ? lafka_get_active_preset_slug() : 'peppery';
 		$cache_key     = 'lafka_dyncss_v' . $opts_version . '_t' . $theme_version . '_' . get_locale() . '_p' . $active_preset;
 
+		// NX2-04: inside the Customizer preview the theme_mods are the
+		// operator's UNSAVED values — the cache was built from saved ones, so
+		// serving it would show stale styles for every dynamic-css-backed
+		// control (and writing here would poison the shared cache with
+		// unsaved values). Always rebuild, never cache, in preview.
+		if ( function_exists( 'is_customize_preview' ) && is_customize_preview() ) {
+			wp_add_inline_style( 'lafka-style', lafka_dynamic_css_build() );
+			return;
+		}
+
 		$custom_css = wp_cache_get( $cache_key, 'lafka' );
 		if ( $custom_css === false ) {
 			$custom_css = get_transient( $cache_key );
