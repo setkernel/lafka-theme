@@ -26,6 +26,15 @@ require_once get_template_directory() . '/incl/presets/class-lafka-presets.php';
 require_once get_template_directory() . '/incl/presets/lafka-preset-emit.php';
 
 /*
+ * NX2-04: Customizer-side preset surface — per-preset preview payloads (the
+ * exact PTL / font-face / dynamic-css strings a real render with each preset
+ * active would emit, for the switcher's live preview) + the preset-slug
+ * sanitizer. Loading here only defines functions; the expensive payload build
+ * runs solely from the Customizer enqueues.
+ */
+require_once get_template_directory() . '/incl/presets/lafka-preset-customizer.php';
+
+/*
  * NX1-10b: production asset-minification switch. Rewrites enqueued theme
  * styles//js URLs to their `.min` sibling (a `npm run build` artefact) when
  * SCRIPT_DEBUG is off and the sibling exists on disk. Hooks style_loader_src /
