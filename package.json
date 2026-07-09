@@ -13,6 +13,7 @@
 		"build": "node scripts/build-assets.mjs",
 		"build:theme-json": "node scripts/build-theme-json.mjs",
 		"sync:fonts": "node scripts/nx2-03-sync-fonts.mjs",
+		"previews:presets": "node scripts/nx2-04-preset-previews.mjs",
 		"test:e2e": "playwright test",
 		"test:e2e:smoke": "playwright test --grep @smoke",
 		"test:e2e:install": "playwright install --with-deps chromium",

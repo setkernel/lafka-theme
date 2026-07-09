@@ -83,9 +83,11 @@ export default [
 		},
 	},
 	// Node.js build scripts (ES modules) — e.g. scripts/sync-version.mjs.
+	// ecmaVersion 2022 for top-level await (nx2-04-preset-previews.mjs).
 	{
 		files: ["scripts/**/*.mjs"],
 		languageOptions: {
+			ecmaVersion: 2022,
 			sourceType: "module",
 			globals: {
 				...globals.node,
