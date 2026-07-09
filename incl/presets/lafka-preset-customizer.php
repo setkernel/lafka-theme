@@ -90,3 +90,63 @@ if ( ! function_exists( 'lafka_preset_fonts_css_for_preview' ) ) {
 		return (string) lafka_preset_font_face_css( $preset );
 	}
 }
+
+if ( ! function_exists( 'lafka_preset_customize_register' ) ) {
+	/**
+	 * Setting + section + control. Section priority 5 tops the panel
+	 * (Logos sits at 10) — the preset choice is the first decision.
+	 *
+	 * @param WP_Customize_Manager $wp_customize Manager.
+	 */
+	function lafka_preset_customize_register( $wp_customize ): void {
+		require_once __DIR__ . '/class-lafka-customize-preset-control.php';
+
+		$wp_customize->add_section(
+			'lafka_design_preset',
+			array(
+				'title'    => esc_html__( 'Design Preset', 'lafka' ),
+				'description' => esc_html__( 'Ten complete restaurant identities — colors, typography, dark/light. Your own Customizer overrides always win over the preset.', 'lafka' ),
+				'panel'    => 'lafka_settings',
+				'priority' => 5,
+			)
+		);
+
+		$wp_customize->add_setting(
+			'lafka_active_preset',
+			array(
+				'default'           => 'peppery',
+				'type'              => 'theme_mod',
+				'sanitize_callback' => 'lafka_sanitize_preset_slug',
+				'transport'         => 'postMessage',
+			)
+		);
+
+		$wp_customize->add_control(
+			new Lafka_Customize_Preset_Control(
+				$wp_customize,
+				'lafka_active_preset',
+				array(
+					'label'   => esc_html__( 'Preset', 'lafka' ),
+					'section' => 'lafka_design_preset',
+				)
+			)
+		);
+	}
+	add_action( 'customize_register', 'lafka_preset_customize_register' );
+}
+
+if ( ! function_exists( 'lafka_preset_controls_css' ) ) {
+	/**
+	 * Card-grid styling for the controls pane (controls screen only —
+	 * nothing loads on the front end).
+	 */
+	function lafka_preset_controls_css(): void {
+		wp_enqueue_style(
+			'lafka-preset-control',
+			get_template_directory_uri() . '/assets/customizer/lafka-preset-control.css',
+			array(),
+			wp_get_theme( get_template() )->get( 'Version' )
+		);
+	}
+	add_action( 'customize_controls_enqueue_scripts', 'lafka_preset_controls_css' );
+}
