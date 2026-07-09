@@ -155,6 +155,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				)
 			);
 
+			// NX2-04 Task 4 ships preview JS binding these two settings for
+			// instant postMessage updates, so they opt out of the refresh
+			// default (every other add_color() call keeps 'refresh').
 			self::add_color(
 				$wp_customize,
 				'lafka_accent_color',
@@ -162,7 +165,8 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				__( 'Accent color', 'lafka' ),
 				'#dc2626',
 				__( 'Primary brand color — CTAs, links, badges. Aliased to --lafka-color-accent-500 in modern components.', 'lafka' ),
-				'theme_mod'
+				'theme_mod',
+				'postMessage'
 			);
 
 			self::add_color(
@@ -172,7 +176,8 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				__( 'Brand color', 'lafka' ),
 				'#f59e0b',
 				__( 'Secondary brand accent — drives the --lafka-color-brand-500 ramp (footer chrome, hero gradient, open-status dot). Defaults to the shipped pepper-yellow.', 'lafka' ),
-				'theme_mod'
+				'theme_mod',
+				'postMessage'
 			);
 		}
 
@@ -1143,9 +1148,13 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		/**
 		 * Add a color setting + WP_Customize_Color_Control.
 		 *
-		 * @param string $type 'option' (legacy lafka[] storage) or 'theme_mod'.
+		 * @param string $type      'option' (legacy lafka[] storage) or 'theme_mod'.
+		 * @param string $transport Setting transport. Defaults to a full-refresh
+		 *                          reload; pass the live-JS transport (requires a
+		 *                          matching preview binding, see NX2-04 Task 4)
+		 *                          to update the preview without reloading.
 		 */
-		private static function add_color( $wp_customize, $id, $section, $label, $default = '#000000', $description = '', $type = 'option' ): void {
+		private static function add_color( $wp_customize, $id, $section, $label, $default = '#000000', $description = '', $type = 'option', $transport = 'refresh' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
@@ -1153,7 +1162,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 					'default'           => $default,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'sanitize_hex_color',
-					'transport'         => 'refresh',
+					'transport'         => $transport,
 				)
 			);
 			$wp_customize->add_control(

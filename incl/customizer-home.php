@@ -76,13 +76,18 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			),
 		);
 
+		// NX2-04: these four copy fields are the highest-traffic hero edits;
+		// they ride postMessage so the operator sees the change live without a
+		// full preview reload (the lafka_home_hero selective-refresh partial
+		// below re-renders the real template part). This loop holds ONLY the
+		// four copy fields, so the transport is set directly here.
 		foreach ( $lafka_home_hero_fields as $lafka_setting_id => $lafka_field ) {
 			$wp_customize->add_setting(
 				$lafka_setting_id,
 				array(
 					'default'           => $lafka_field['default'],
 					'sanitize_callback' => 'url' === $lafka_field['type'] ? 'esc_url_raw' : ( 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field' ),
-					'transport'         => 'refresh',
+					'transport'         => 'postMessage',
 				)
 			);
 			$wp_customize->add_control(
@@ -228,6 +233,28 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 					'label'   => $lafka_field['label'],
 					'section' => 'lafka_home_hero',
 					'type'    => 'text',
+				)
+			);
+		}
+
+		// NX2-04: hero copy edits re-render just the hero via selective
+		// refresh instead of a full preview reload.
+		if ( isset( $wp_customize->selective_refresh ) ) {
+			$wp_customize->selective_refresh->add_partial(
+				'lafka_home_hero',
+				array(
+					'selector'            => '.lafka-hero',
+					'settings'            => array(
+						'lafka_home_hero_headline',
+						'lafka_home_hero_lead',
+						'lafka_home_hero_primary_cta_label',
+						'lafka_home_hero_primary_cta_url',
+					),
+					'container_inclusive' => true,
+					'fallback_refresh'    => true,
+					'render_callback'     => static function () {
+						get_template_part( 'partials/home-hero' );
+					},
 				)
 			);
 		}
