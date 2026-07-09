@@ -58,32 +58,40 @@ if ( ! function_exists( 'lafka_preset_preview_payloads' ) ) {
 		// those pins for the build; posted (changeset) values keep winning.
 		$suspension = lafka_preset_payloads_unpin_theme_mods();
 
-		foreach ( lafka_presets()->all() as $slug => $preset ) {
-			// Force every slug-resolving reader onto THIS preset for the
-			// duration of one build. Priority 999 so it wins over any
-			// third-party slug filter. No reset() needed between iterations:
-			// Lafka_Presets::active() re-resolves the slug on EVERY call via
-			// lafka_get_active_preset_slug() (which applies this filter) —
-			// the registry caches only the discovered preset SET, never the
-			// active resolution.
-			$force = static function () use ( $slug ) {
-				return $slug;
-			};
-			add_filter( 'lafka_active_preset_slug', $force, 999 );
+		try {
+			foreach ( lafka_presets()->all() as $slug => $preset ) {
+				// Force every slug-resolving reader onto THIS preset for the
+				// duration of one build. Priority 999 so it wins over any
+				// third-party slug filter. No reset() needed between iterations:
+				// Lafka_Presets::active() re-resolves the slug on EVERY call via
+				// lafka_get_active_preset_slug() (which applies this filter) —
+				// the registry caches only the discovered preset SET, never the
+				// active resolution.
+				$force = static function () use ( $slug ) {
+					return $slug;
+				};
+				add_filter( 'lafka_active_preset_slug', $force, 999 );
 
-			$payloads[ $slug ] = array(
-				'label'       => $preset->label(),
-				'description' => $preset->description(),
-				'dark'        => $preset->is_dark(),
-				'ptl'         => lafka_preset_ptl_css( $preset ),
-				'fonts'       => lafka_preset_fonts_css_for_preview( $preset ),
-				'dynamicCss'  => lafka_dynamic_css_build(),
-			);
-
-			remove_filter( 'lafka_active_preset_slug', $force, 999 );
+				try {
+					$payloads[ $slug ] = array(
+						'label'       => $preset->label(),
+						'description' => $preset->description(),
+						'dark'        => $preset->is_dark(),
+						'ptl'         => lafka_preset_ptl_css( $preset ),
+						'fonts'       => lafka_preset_fonts_css_for_preview( $preset ),
+						'dynamicCss'  => lafka_dynamic_css_build(),
+					);
+				} finally {
+					remove_filter( 'lafka_active_preset_slug', $force, 999 );
+				}
+			}
+		} finally {
+			// A mid-build throw must not leave the preview pins dropped (and
+			// the override stand-ins stacked) for the rest of the request —
+			// and a caught-then-retried build must not double-wrap the hooks.
+			// Repin unconditionally; memoize on the success path only.
+			lafka_preset_payloads_repin_theme_mods( $suspension );
 		}
-
-		lafka_preset_payloads_repin_theme_mods( $suspension );
 
 		$cache = $payloads;
 
