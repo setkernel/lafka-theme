@@ -42,8 +42,8 @@
 		"@eslint/js": "^10.0.1",
 		"@playwright/test": "^1.61.1",
 		"@wordpress/stylelint-config": "^23.41.0",
-		"esbuild": "^0.27.7",
-		"eslint": "^10.6.0",
+		"esbuild": "^0.28.1",
+		"eslint": "^10.7.0",
 		"globals": "^17.7.0",
 		"stylelint": "^16.26.1"
 	}
