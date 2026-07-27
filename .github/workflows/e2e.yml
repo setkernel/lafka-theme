@@ -49,7 +49,7 @@ concurrency:
 jobs:
   smoke:
     name: Playwright smoke
-    runs-on: ubuntu-latest
+    runs-on: ${{ vars.CI_RUNNER || 'setkernel-linux' }}
     # Non-blocking until a week of stability — see file header.
     continue-on-error: true
     timeout-minutes: 25
