@@ -71,7 +71,6 @@ final class ThemeRegistrationsTest extends TestCase {
 			'lafka-general-small-size'       => array( 'lafka-general-small-size' ),
 			'lafka-general-small-size-nocrop' => array( 'lafka-general-small-size-nocrop' ),
 			'lafka-widgets-thumb'            => array( 'lafka-widgets-thumb' ),
-			'lafka-related-posts'            => array( 'lafka-related-posts' ),
 		);
 	}
 }

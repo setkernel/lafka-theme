@@ -124,15 +124,6 @@ if ( ! function_exists( 'lafka_vc_set_cpt' ) ) {
 }
 
 /**
- * Include Lafka_Font_Awesome
- * PERF-C04: Only load the 3,026-line icon data class in admin — its static arrays
- * (icon picker data) are only used by VC icon pickers and admin UI.
- */
-if ( is_admin() ) {
-	require_once get_template_directory() . '/incl/Lafka_Font_Awesome.php';
-}
-
-/**
  * Include TGM-Plugin-Activation
  */
 require_once get_template_directory() . '/incl/tgm-plugin-activation/class-tgm-plugin-activation.php';

@@ -24,11 +24,3 @@ $woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registe
 if ( $woocommerce_sidebar && $woocommerce_sidebar != 'none' ) {
 	get_sidebar();
 }
-
-//get_sidebar('shop');
-//if(is_active_sidebar('shop'))
-//{
-//    echo '<div class="sidebar">';
-//    dynamic_sidebar('shop');
-//    echo '</div>';
-//}
