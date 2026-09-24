@@ -4,10 +4,8 @@ require_once get_template_directory() . '/incl/system/core-functions.php';
 
 /*
  * NX1-02 (theme 7.0): legacy Options Framework -> Customizer theme_mod
- * migration map + idempotent copy. Defines lafka_legacy_migrate_map() and
- * lafka_legacy_migrate_run() so migrated readers have a home to migrate FROM;
- * the one-time upgrade trigger that calls the run is wired by the NX1-02
- * Retire phase. Loading here only defines the functions (no side effects).
+ * migration map + idempotent copy. Also hooks the one-time upgrade run
+ * (lafka_legacy_migrate_maybe_run on after_setup_theme).
  */
 require_once get_template_directory() . '/incl/system/lafka-legacy-migrate.php';
 
@@ -43,11 +41,9 @@ require_once get_template_directory() . '/incl/presets/lafka-preset-customizer.p
 require_once get_template_directory() . '/incl/system/asset-min.php';
 
 /*
- * v6.0.0: Customizer bridge to legacy Theme Options storage.
- * Adds a "Lafka — Site Settings" panel in Customizer whose fields write
- * directly to wp_options.lafka (the Theme Options storage), so operators
- * have ONE editing UI and existing read paths (lafka_get_option) keep
- * working with zero data migration.
+ * "Lafka — Site Settings" Customizer panel. Since NX1-02 its fields save to
+ * lafka_* theme_mods; only the plugin-owned google_maps_api_key still writes
+ * the legacy wp_options.lafka row.
  */
 require_once get_template_directory() . '/incl/customizer-bridge.php';
 
@@ -559,7 +555,6 @@ if ( function_exists( 'add_image_size' ) ) {
 	add_image_size( 'lafka-general-small-size', 100, 100, true ); //(cropped)
 	add_image_size( 'lafka-general-small-size-nocrop', 100 ); // (not cropped)
 	add_image_size( 'lafka-widgets-thumb', 60, 60, true ); //(cropped)
-	add_image_size( 'lafka-related-posts', 400, 300, true ); //(cropped)
 }
 
 	add_filter( 'wp_prepare_attachment_for_js', 'lafka_append_image_sizes_js', 10, 3 );
@@ -1436,7 +1431,7 @@ if ( ! function_exists( 'lafka_convert_to_timeago_date_format' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_is_time_x_months_ago' ) ) {
+if ( ! function_exists( 'lafka_is_time_more_than_x_months_ago' ) ) {
 	/**
 	 * Return true if $unix_time is more than $months months ago than current time
 	 *
