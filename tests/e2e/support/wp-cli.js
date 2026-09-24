@@ -84,8 +84,8 @@ function wpCli( args, opts = {} ) {
 }
 
 /**
- * Bust the dynamic-css cache so a just-activated preset's CHROME (the ~57
- * theme_mod-default reads in styles/dynamic-css.php — header/menu background,
+ * Bust the dynamic-css cache so a just-activated preset's CHROME (the 55
+ * theme_mod-default keys in styles/dynamic-css.php — header/menu background,
  * link colours, …) is rebuilt instead of served from a stale transient. The
  * dynamic-css cache key folds in the active-preset slug + an options-version
  * but NOT the preset FILE mtime, so editing a preset's chrome{} alone can leave

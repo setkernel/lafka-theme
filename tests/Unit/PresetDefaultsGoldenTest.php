@@ -6,11 +6,11 @@ declare(strict_types=1);
  *
  * DynamicCssParityTest's fixture OVERRIDES every theme_mod, so the default
  * branch of each `get_theme_mod( 'lafka_x', <default> )` never fires — it can't
- * catch a mistake in the theme_mod-default layer (the ~57 lafka_preset_default
- * wraps). THIS gate renders dynamic-css with ALL theme_mods UNSET, per active
+ * catch a mistake in the theme_mod-default layer (the 50 lafka_preset_default
+ * call sites). THIS gate renders dynamic-css with ALL theme_mods UNSET, per active
  * preset, and byte-compares to a committed golden.
  *
- * CRITICAL ORDERING (PRESET_ENGINE.md §9, §12 step 3): the PEPPERY golden is
+ * CRITICAL ORDERING (PRESET_ENGINE.md §5, §9): the PEPPERY golden was
  * captured on the PRE-CHANGE dynamic-css (before the wraps). Peppery's chrome is
  * empty, so lafka_preset_default returns the shipped literal → the WRAPPED
  * dynamic-css must reproduce that golden BYTE-for-BYTE. A wrong extraction (a
