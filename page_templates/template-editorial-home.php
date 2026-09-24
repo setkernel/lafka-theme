@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 get_header();
 ?>
 
-<main id="content" class="lafka-editorial-home" tabindex="-1">
+<div class="lafka-editorial-home">
 
     <?php /* 1. Utility bar (top dark strip) */ ?>
     <?php get_template_part( 'partials/editorial-utility-bar' ); ?>
@@ -118,7 +118,7 @@ get_header();
     <?php /* 8. Newsletter */ ?>
     <?php get_template_part( 'partials/editorial-newsletter' ); ?>
 
-</main>
+</div>
 
 <?php
 get_footer();

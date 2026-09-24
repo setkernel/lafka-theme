@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 get_header();
 ?>
 
-<main id="content" class="lafka-editorial-contact" tabindex="-1">
+<div class="lafka-editorial-contact">
 
     <?php /* Utility bar */ ?>
     <?php get_template_part( 'partials/editorial-utility-bar' ); ?>
@@ -43,7 +43,7 @@ get_header();
         <?php get_template_part( 'partials/editorial-contact-form' ); ?>
     </div>
 
-</main>
+</div>
 
 <?php
 get_footer();

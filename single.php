@@ -35,7 +35,7 @@ while ( have_posts() ) :
 	$lafka_pst_author   = (int) get_the_author_meta( 'ID' );
 	$lafka_pst_avatar   = get_avatar( $lafka_pst_author, 40 );
 	?>
-	<main id="main" class="lafka-page lafka-page--post<?php echo $lafka_pst_has_hero ? ' lafka-page--has-hero' : ''; ?>" role="main">
+	<div id="main" class="lafka-page lafka-page--post<?php echo $lafka_pst_has_hero ? ' lafka-page--has-hero' : ''; ?>">
 
 		<header class="lafka-page__header">
 			<?php if ( $lafka_pst_has_hero ) : ?>
@@ -139,7 +139,7 @@ while ( have_posts() ) :
 			</div>
 		</article>
 
-	</main>
+	</div>
 	<?php
 endwhile;
 

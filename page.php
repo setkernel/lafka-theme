@@ -36,7 +36,7 @@ while ( have_posts() ) :
 	}
 	$lafka_pg_has_hero = ( '' !== $lafka_pg_thumb );
 	?>
-	<main id="main" class="lafka-page<?php echo $lafka_pg_has_hero ? ' lafka-page--has-hero' : ''; ?>" role="main">
+	<div id="main" class="lafka-page<?php echo $lafka_pg_has_hero ? ' lafka-page--has-hero' : ''; ?>">
 
 		<header class="lafka-page__header">
 			<?php if ( $lafka_pg_has_hero ) : ?>
@@ -78,7 +78,7 @@ while ( have_posts() ) :
 			</div>
 		</article>
 
-	</main>
+	</div>
 	<?php
 endwhile;
 

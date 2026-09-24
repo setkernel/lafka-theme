@@ -125,7 +125,7 @@ if ( is_product_category() || is_product_tag() ) {
 
 	<?php endif; ?>
 
-	<div id="products-wrapper" class="inner site-main" role="main">
+	<div id="products-wrapper" class="inner site-main">
 		<?php if ( $lafka_has_offcanvas_sidebar ) : ?>
 			<a class="sidebar-trigger" href="#"><?php echo esc_html__( 'show', 'lafka' ); ?></a>
 		<?php endif; ?>
