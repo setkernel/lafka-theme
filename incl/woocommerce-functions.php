@@ -3,12 +3,8 @@
 // Woocommerce specific functions
 /** @var $product WC_Product */
 
-// Disable WooCommerce styles
-if ( version_compare( WC_VERSION, '2.1' ) >= 0 ) {
-	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
-} else {
-	define( 'WOOCOMMERCE_USE_CSS', false );
-}
+// Disable WooCommerce styles (the theme owns all storefront styling).
+add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 
 add_filter( 'woocommerce_breadcrumb_defaults', 'lafka_woocommerce_breadcrumb_defaults' );
 if ( ! function_exists( 'lafka_woocommerce_breadcrumb_defaults' ) ) {

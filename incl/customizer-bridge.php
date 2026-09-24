@@ -20,13 +20,11 @@
  * `wp_options.lafka` row at sub-key `<key>` — the SAME storage Theme Options
  * writes to. The operator now has one UI; the codebase has one storage.
  *
- * NX1-02 (theme 7.0) retires that legacy storage slice by slice: a migrated
- * control instead uses `type => 'theme_mod'` with a `lafka_<key>` setting ID,
- * and its readers move to `get_theme_mod( 'lafka_<key>', <std> )`. The
- * per-control `$type` argument on the setting helpers selects which storage a
- * given control uses, so migrated and not-yet-migrated fields coexist here
- * during the migration. (logos-brand-pilot migrated accent/brand/logo-bg +
- * mobile logo + point-down.)
+ * NX1-02 (theme 7.0) retired that legacy storage: controls use
+ * `type => 'theme_mod'` with a `lafka_<key>` setting ID and readers call
+ * `get_theme_mod( 'lafka_<key>', <std> )`. The only remaining `lafka[<key>]`
+ * option-type control is the plugin-owned google_maps_api_key. The per-control
+ * `$type` argument on the setting helpers still selects the storage.
  *
  * This file is included from functions.php. Adding new bridges below is a
  * matter of calling `lafka_bridge_*()` with the legacy option key.
@@ -49,7 +47,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 */
 		public static function init(): void {
 			add_action( 'customize_register', array( __CLASS__, 'register' ) );
-			add_action( 'admin_notices', array( __CLASS__, 'theme_options_notice' ) );
 		}
 
 		/**
@@ -62,7 +59,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings',
 				array(
 					'title'       => esc_html__( 'Lafka — Site Settings', 'lafka' ),
-					'description' => esc_html__( 'Logos, branding, integrations, and general site behavior. Migrated fields save to the Customizer (theme_mods); the rest still write to the legacy "Theme Options" storage until their NX1-02 slice lands — the only change is the editing UI is now here, in one place.', 'lafka' ),
+					'description' => esc_html__( 'Logos, branding, integrations, and general site behavior.', 'lafka' ),
 					'priority'    => 30,
 				)
 			);
@@ -1336,37 +1333,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				$clean[ sanitize_key( $sub_key ) ] = ( ! empty( $flag ) && '0' !== $flag ) ? 1 : 0;
 			}
 			return $clean;
-		}
-
-		// ====================================================================
-		// Admin notice on Theme Options page directing operators to Customizer
-		// ====================================================================
-
-		/**
-		 * Show a one-time-per-pageload notice on the Theme Options admin page
-		 * explaining that editing now happens in Customizer.
-		 */
-		public static function theme_options_notice(): void {
-			$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-			if ( ! $screen || ! isset( $screen->id ) ) {
-				return;
-			}
-			// Theme Options framework uses the slug 'lafka_options' for its page.
-			if ( false === strpos( (string) $screen->id, 'lafka_options' )
-				&& false === strpos( (string) $screen->id, 'lafka-options' ) ) {
-				return;
-			}
-			$customizer_url = admin_url( 'customize.php?autofocus[panel]=lafka_settings' );
-			?>
-			<div class="notice notice-info">
-				<p>
-					<strong><?php esc_html_e( 'Editing moved to the Customizer.', 'lafka' ); ?></strong>
-					<?php esc_html_e( 'The fields here still work, but the operator UI now lives in', 'lafka' ); ?>
-					<a href="<?php echo esc_url( $customizer_url ); ?>"><strong><?php esc_html_e( 'Appearance → Customize → Lafka — Site Settings', 'lafka' ); ?></strong></a>.
-					<?php esc_html_e( 'Both surfaces read/write the same DB row, so existing values are preserved either way.', 'lafka' ); ?>
-				</p>
-			</div>
-			<?php
 		}
 	}
 

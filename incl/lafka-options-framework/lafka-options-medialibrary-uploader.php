@@ -4,28 +4,9 @@
 /**
  * WooThemes Media Library-driven AJAX File Uploader Module (2010-11-05)
  *
- * Slightly modified for use in the Options Framework.
+ * Slightly modified for use in the Options Framework. Still used by the
+ * mega-menu editor and the plugin's metabox image fields.
  */
-if (is_admin()) {
-
-	// Load additional css and js for image uploads on the Options Framework page
-	$lafka_page = 'appearance_page_options-framework';
-	add_action("admin_enqueue_scripts", 'lafka_optionsframework_mlu_js');
-}
-
-/**
- * Registers and enqueues (loads) the necessary JavaScript file for working with the
- * Media Library-driven AJAX File Uploader Module.
- */
-if (!function_exists('lafka_optionsframework_mlu_js')) {
-
-	function lafka_optionsframework_mlu_js() {
-
-		// Registers custom scripts for the Media Library AJAX uploader.
-		wp_enqueue_script('lafka-of-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-of-medialibrary-uploader.js', array('jquery', 'thickbox'), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-of-medialibrary-uploader.js' ), true);
-	}
-
-}
 
 /**
  * Media Uploader Using the WordPress Media Library (multiple files).
@@ -197,33 +178,6 @@ if (!function_exists('lafka_optionsframework_mlu_get_silentpost')) {
 			}
 		}
 		return $_id;
-	}
-
-}
-
-/**
- * Trigger code inside the Media Library popup.
- */
-if (!function_exists('lafka_optionsframework_mlu_insidepopup')) {
-
-	function lafka_optionsframework_mlu_insidepopup() {
-
-		if (isset($_REQUEST['lafka_is_optionsframework']) && $_REQUEST['lafka_is_optionsframework'] == 'yes') {
-
-			add_filter('media_upload_tabs', 'lafka_optionsframework_mlu_modify_tabs');
-		}
-	}
-
-}
-
-/**
- * Triggered inside the Media Library popup to modify the title of the "Gallery" tab.
- */
-if (!function_exists('lafka_optionsframework_mlu_modify_tabs')) {
-
-	function lafka_optionsframework_mlu_modify_tabs($tabs) {
-		$tabs['gallery'] = str_replace(esc_html__('Gallery', 'lafka'), esc_html__('Previously Uploaded', 'lafka'), $tabs['gallery']);
-		return $tabs;
 	}
 
 }

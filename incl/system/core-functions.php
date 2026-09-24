@@ -1040,12 +1040,6 @@ if ( ! function_exists( 'lafka_style_loader_tag_filter' ) ) {
 			$link_preload    = str_replace( "id='" . $handle . "-css'", '', $link_preload );
 
 			return $link_preload . $link_stylesheet;
-		} elseif ( in_array( $handle, array( 'feather', 'tiza' ), true ) ) {
-			$link_preload = str_replace( "rel='stylesheet'", "rel='preload' as='font'", $html );
-			$link_preload = str_replace( "type='text/css'", "type='font/woff' crossorigin='anonymous'", $link_preload );
-			$link_preload = str_replace( "media='all'", '', $link_preload );
-
-			return $link_preload;
 		}
 
 		return $html;
@@ -2590,16 +2584,6 @@ if ( ! function_exists( 'lafka_is_blog' ) ) {
 
 }
 
-add_action( 'after_switch_theme', 'lafka_redirect_to_options', 99 );
-if ( ! function_exists( 'lafka_redirect_to_options' ) ) {
-
-	// Redirect to theme options on theme activation
-	function lafka_redirect_to_options() {
-		wp_redirect( admin_url( 'themes.php?page=lafka-optionsframework' ) );
-	}
-
-}
-
 add_filter( 'wp_nav_menu_args', 'lafka_set_menu_on_primary' );
 if ( ! function_exists( 'lafka_set_menu_on_primary' ) ) {
 
@@ -2935,18 +2919,6 @@ if ( ! function_exists( 'lafka_is_events_part' ) ) {
  */
 function lafka_strip_script_tag_from_js_block( $source ) {
 	return trim( preg_replace( '#<script[^>]*>(.*)</script>#is', '$1', $source ) );
-}
-
-if ( ! function_exists( 'lafka_write_log' ) ) {
-	// Fallback: only fires if lafka-plugin is not active. Plugin's class-lafka-options.php
-	// definition supersedes this when both load. Both bodies are identical.
-	function lafka_write_log( $log ) {
-		if ( is_array( $log ) || is_object( $log ) ) {
-			error_log( print_r( $log, true ) );
-		} else {
-			error_log( $log );
-		}
-	}
 }
 
 // P6-PERF-5: inline critical CSS + defer non-critical stylesheets.
