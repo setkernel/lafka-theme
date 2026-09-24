@@ -620,17 +620,6 @@ if (typeof lafka_quickview !== 'undefined') {
         };
 
         /**
-         * Escape quotes in a string.
-         * @param {string} string
-         * @return {string}
-         */
-        LafkaVariationForm.prototype.addSlashes = function (string) {
-            string = string.replace(/'/g, '\\\'');
-            string = string.replace(/"/g, '\\\"');
-            return string;
-        };
-
-        /**
          * Updates attributes in the DOM to show valid values.
          */
         LafkaVariationForm.prototype.onUpdateAttributes = function (event) {
