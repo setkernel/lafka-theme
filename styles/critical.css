@@ -84,15 +84,12 @@ body {
        naming systems. */
     --lafka-color-accent-500: #dc2626;
     --lafka-color-brand-500: #f59e0b;
-    --lafka-menu-bg-color: #ffca3c;
-    --lafka-menu-link-color: #61443e;
     --lafka-header-bg-color: #fff;
     --lafka-body-font-family: 'Rubik', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, sans-serif;
     --lafka-body-font-size: 16px;
     --lafka-h1-color: #22272d;
     --lafka-h2-color: #22272d;
     --lafka-h3-color: #22272d;
-    --lafka-text-primary: #333;
     --lafka-border-light: #f1f1f1;
 }
 
