@@ -27,13 +27,10 @@ vendor/
 # only when present on disk.
 /styles/*.min.css
 /js/*.min.js
-# Exceptions: a few first-party scripts ship a committed, hand-tuned `.min`
-# sibling consumed by an existing SCRIPT_DEBUG `$suffix` enqueue, and two
-# vendored libraries are distributed only in minified form. Keep these tracked.
-!/js/lafka-front.min.js
+# Exceptions: lafka-dialog.min.js is build output that lafka-plugin registers
+# by path, so it stays committed (CI fails if it drifts from `npm run build`);
+# two vendored libraries are distributed only in minified form.
 !/js/lafka-dialog.min.js
-!/js/lafka-libs-config.min.js
-!/js/lafka-price-slider.min.js
 !/js/typed.min.js
 !/js/jquery.nice-select.min.js
 

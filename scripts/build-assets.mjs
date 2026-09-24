@@ -17,10 +17,12 @@
  *     subdirectories (font-awesome/, owl-carousel2-dist/, ...) and are skipped
  *     automatically by not recursing;
  *   - already-minified `*.min.*` inputs are skipped (no `.min.min.*`);
- *   - `styles/dynamic-css.php` is a `.php` file, so it never matches;
- *   - the SKIP set below covers first-party scripts that ship a committed,
- *     hand-tuned `.min` sibling consumed by an existing `$suffix` enqueue, plus
- *     the one vendored top-level lib — leaving those out keeps the tree clean.
+ *   - `styles/dynamic-css.php` is a `.php` file, so it never matches.
+ *
+ * Every first-party script is minified here — there are no hand-tuned `.min`
+ * files. `js/lafka-dialog.min.js` is the one output that is ALSO committed,
+ * because lafka-plugin registers that path directly; CI rebuilds and fails on
+ * a diff, so the committed copy can never go stale.
  *
  * Usage: `npm run build`  (or `node scripts/build-assets.mjs`)
  */
@@ -32,24 +34,13 @@ import { dirname, join } from 'node:path';
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
-/* First-party assets that already ship a committed, hand-tuned `.min` sibling
- * (consumed by a SCRIPT_DEBUG `$suffix` enqueue). The build must not
- * regenerate these — doing so would clobber the tuned output and dirty the
- * tree. */
-const SKIP = new Set([
-	'lafka-front.js',
-	'lafka-dialog.js',
-	'lafka-libs-config.js',
-	'lafka-price-slider.js',
-]);
-
 const TARGETS = [
 	{ dir: 'styles', ext: '.css', loader: 'css' },
 	{ dir: 'js', ext: '.js', loader: 'js' },
 ];
 
 /**
- * Top-level, non-minified, non-skipped first-party files for one target dir.
+ * Top-level, non-minified first-party files for one target dir.
  *
  * @param {string} dir Directory relative to the theme root.
  * @param {string} ext File extension including the dot, e.g. '.css'.
@@ -62,7 +53,6 @@ function firstPartyFiles(dir, ext) {
 			(name) =>
 				name.endsWith(ext) &&
 				!name.endsWith(minExt) &&
-				!SKIP.has(name) &&
 				statSync(join(ROOT, dir, name)).isFile()
 		)
 		.sort();

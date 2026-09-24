@@ -1139,8 +1139,6 @@ add_action( 'wp_enqueue_scripts', 'lafka_enqueue_scripts_and_styles' );
 if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 	function lafka_enqueue_scripts_and_styles() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
 		// v5.26.0: design-system tokens — enqueued FIRST so every other
 		// Lafka stylesheet can read --lafka-* custom properties. See
 		// styles/lafka-tokens.css for the full token list.
@@ -1976,9 +1974,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// parsed first.
 		wp_enqueue_script(
 			'lafka-front',
-			get_template_directory_uri() . '/js/lafka-front' . $suffix . '.js',
+			get_template_directory_uri() . '/js/lafka-front.js',
 			$lafka_front_deps,
-			lafka_asset_version( '/js/lafka-front' . $suffix . '.js' ),
+			lafka_asset_version( '/js/lafka-front.js' ),
 			array(
 				'in_footer' => true,
 				'strategy'  => 'defer',
@@ -2064,7 +2062,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// the branch-locations modal — which is a critical-path ordering
 		// flow and ships as a pre-minified vendor file — can still depend
 		// on it. Everywhere else uses window.lafkaDialog.
-		wp_enqueue_script( 'lafka-dialog', get_template_directory_uri() . '/js/lafka-dialog' . $suffix . '.js', array(), lafka_asset_version( '/js/lafka-dialog' . $suffix . '.js' ), $footer_defer );
+		wp_enqueue_script( 'lafka-dialog', get_template_directory_uri() . '/js/lafka-dialog.js', array(), lafka_asset_version( '/js/lafka-dialog.js' ), $footer_defer );
 		wp_enqueue_style( 'lafka-dialog', get_template_directory_uri() . '/styles/lafka-dialog.css', array(), lafka_asset_version( '/styles/lafka-dialog.css' ) );
 
 		// jquery.appear + isInViewport replaced by lafkaOnVisible() (IntersectionObserver)
@@ -2151,7 +2149,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// lafka-libs-config calls window.lafkaDialog — depend on it explicitly
 		// so the script load order is correct even when defer is on.
 		$lafka_libs_deps[] = 'lafka-dialog';
-		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config' . $suffix . '.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config' . $suffix . '.js' ), $footer_defer );
+		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config.js' ), $footer_defer );
 
 		// send is_rtl to js for owl carousel
 		wp_localize_script(

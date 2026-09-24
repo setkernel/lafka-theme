@@ -18,11 +18,10 @@
  *
  * The version query arg is preserved verbatim so cache-busting never regresses.
  *
- * Note: a few first-party scripts (lafka-front, lafka-dialog, lafka-libs-config,
- * lafka-price-slider) are enqueued through their own `$suffix` `.min` switch and
- * ship a committed, hand-tuned `.min` sibling. This filter leaves those alone —
- * their src already ends in `.min` when SCRIPT_DEBUG is off, which trips the
- * already-minified guard below — so the two mechanisms never double up.
+ * Every first-party script and stylesheet goes through this one switch; there
+ * are no per-enqueue `$suffix` swaps. (lafka-plugin still registers
+ * `js/lafka-dialog.min.js` by path, which is why that one build output is
+ * committed.)
  *
  * @package Lafka
  * @since   6.20.0
