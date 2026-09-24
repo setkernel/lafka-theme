@@ -7,7 +7,7 @@ Requires PHP: 8.1
 Version: 7.0.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
-Tags: e-commerce, woocommerce, restaurant, food, full-width-template, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, accessibility-ready, block-styles, wide-blocks
+Tags: e-commerce, food-and-drink, full-width-template, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, accessibility-ready, block-styles, wide-blocks
 
 Mobile-first restaurant-ordering theme for WordPress and WooCommerce, built on a token-driven design system.
 
@@ -148,13 +148,13 @@ Scripts and styles (verified from the bundled file headers):
 * jQuery Countdown v2.1.0 — MIT — Copyright Keith Wood (`js/count/`).
 * Simple JavaScript Inheritance (`js/count/jquery.plugin.js`) — MIT —
   by John Resig.
-* Cloud Zoom v1.0.2 — MIT — Copyright 2010 R. Cecco (`js/cloud-zoom/`).
+* Cloud Zoom v1.0.2 — MIT — Copyright 2010 R. Cecco — http://www.professorcloud.com
+  (`js/cloud-zoom/`).
 * jQuery Nice Select v1.0 — MIT — by Hernan Sartorio
   (`js/jquery.nice-select.min.js`).
-* Typed.js — MIT — by Matt Boldt (`js/typed.min.js`; bundled minified build
-  carries no version/license header — verify — TODO NX5-01).
-* jquery.mb.YTPlayer — Copyright 2020 Matteo Bicocchi (`js/jquery.mb.YTPlayer/`;
-  bundled header does not state license terms — verify — TODO NX5-01).
+* Typed.js — MIT — Copyright Matt Boldt — https://github.com/mattboldt/typed.js
+  (`js/typed.min.js`; TODO NX5-01: the bundled minified build records no
+  version, so the exact upstream release is unverified).
 
 Other vendored libraries not enumerated above (for example the remaining helper
 scripts under `js/`) are pending the same NX5-01 GPL audit.

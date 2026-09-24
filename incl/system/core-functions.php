@@ -2151,14 +2151,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		$is_compare = false;
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- YITH WooCompare view detection from $_GET['action']; read-only display gating, no state mutation.
-		if ( isset( $_GET['action'] ) && $_GET['action'] === 'yith-woocompare-view-table' ) {
-			$is_compare = true;
-		}
-
-		$to_include_backgr_video = lafka_has_to_include_backgr_video( $is_compare );
-
 		/* JavaScript to pages with the comment form
 		 * to support sites with threaded comments (when in use).
 		 */
@@ -2220,23 +2212,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_localize_script(
 				'lafka-libs-config',
 				'lafka_ajax_search',
-				array(
-					'include' => 'true',
-				)
-			);
-		}
-
-		// Register video background plugin
-		wp_register_style( 'ytplayer', get_template_directory_uri() . '/styles/jquery.mb.YTPlayer/css/jquery.mb.YTPlayer.min.css', array(), lafka_asset_version( '/styles/jquery.mb.YTPlayer/css/jquery.mb.YTPlayer.min.css' ) );
-		wp_register_script( 'ytplayer', get_template_directory_uri() . '/js/jquery.mb.YTPlayer/jquery.mb.YTPlayer.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.mb.YTPlayer/jquery.mb.YTPlayer.min.js' ), true );
-
-		// Load video background plugin
-		if ( $to_include_backgr_video ) {
-			wp_enqueue_style( 'ytplayer' );
-			wp_enqueue_script( 'ytplayer' );
-			wp_localize_script(
-				'lafka-libs-config',
-				'lafka_ytplayer_conf',
 				array(
 					'include' => 'true',
 				)

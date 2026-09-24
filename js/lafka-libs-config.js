@@ -228,13 +228,6 @@
 				e.preventDefault();
 			});
 		}
-
-		/***********************************
-		 * "lafka-ytplayer-conf"
-		 ***********************************/
-		if (typeof lafka_ytplayer_conf !== 'undefined') {
-			$("div.lafka_bckgr_player").YTPlayer();
-		}
 		/* End Ready */
 	});
 

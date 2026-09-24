@@ -107,7 +107,6 @@ export default [
 			"js/flex/**",
 			"js/isotope/**",
 			"js/jquery.nice-select.min.js",
-			"js/jquery.mb.YTPlayer/**",
 			"js/magnific/**",
 			"js/owl-carousel2-dist/**",
 			"js/typed.min.js",
