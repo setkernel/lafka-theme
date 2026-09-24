@@ -4,8 +4,9 @@
  *
  * For each discovered preset: point lafka_active_preset at it (wp-cli into
  * the umbrella wp-env), bust the dynamic-css cache, screenshot the home page
- * hero region at 1240×930 and save a 620-wide JPEG. Restores the theme_mod
- * and cache when done — run against http://localhost:8890 only.
+ * hero region at 1240×930 and save a 620-wide JPEG. Restores the previously
+ * active preset (or leaves the theme_mod unset if it was unset) and busts the
+ * cache when done — run against http://localhost:8890 only.
  *
  * Usage: npm run previews:presets [-- --only=ember,koyo]
  */
@@ -30,6 +31,16 @@ const slugs = readdirSync( join( ROOT, 'presets' ), { withFileTypes: true } )
 	.filter( ( slug ) => existsSync( join( ROOT, 'presets', slug, 'preset.json' ) ) )
 	.filter( ( slug ) => ! only || only.includes( slug ) );
 
+// Remember the operator's active preset so the finally-block restores it
+// (an unset theme_mod stays unset rather than being pinned to a slug).
+const previousPreset = wpCli( [
+	'eval',
+	'echo (string) get_theme_mod("lafka_active_preset", "");',
+] );
+if ( previousPreset && ! /^[a-z0-9_-]+$/.test( previousPreset ) ) {
+	throw new Error( `Unexpected lafka_active_preset value: ${ previousPreset }` );
+}
+
 const browser = await chromium.launch();
 // Lay the page out at 1240 CSS px (desktop) but emit 620 device px so the
 // committed JPEG is the 620-wide 4:3 thumbnail the Customizer control expects.
@@ -42,7 +53,12 @@ try {
 	for ( const slug of slugs ) {
 		wpCli( [ 'eval', `set_theme_mod("lafka_active_preset","${ slug }");` ] );
 		bustDynamicCss();
-		await page.goto( `${ BASE_URL }/`, { waitUntil: 'networkidle' } );
+		const resp = await page.goto( `${ BASE_URL }/`, { waitUntil: 'networkidle' } );
+		if ( ! resp || ! resp.ok() ) {
+			throw new Error(
+				`${ slug }: home page returned ${ resp ? resp.status() : 'no response' } — refusing to write a preview of an error page`
+			);
+		}
 		// Fonts finish after networkidle occasionally; settle briefly.
 		await page.evaluate( () => document.fonts.ready );
 		const out = join( ROOT, 'presets', slug, 'preview.jpg' );
@@ -56,7 +72,12 @@ try {
 		console.log( `✓ ${ slug } -> presets/${ slug }/preview.jpg` );
 	}
 } finally {
-	wpCli( [ 'eval', 'remove_theme_mod("lafka_active_preset");' ] );
+	wpCli( [
+		'eval',
+		previousPreset
+			? `set_theme_mod("lafka_active_preset","${ previousPreset }");`
+			: 'remove_theme_mod("lafka_active_preset");',
+	] );
 	bustDynamicCss();
 	await browser.close();
 }
