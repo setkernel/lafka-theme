@@ -226,7 +226,7 @@ whitelist constants at load (logged in `WP_DEBUG`, dropped at emit).
 ## 9. Test & gating plan (reuse the existing harnesses)
 
 - **IRON GATE (unchanged, must stay green for Peppery):** the 30 visual goldens
-  (`npm run test:visual:nx1-02`) + `DynamicCssParityTest` — both byte/pixel-identical because
+  (`npm run test:visual`) + `DynamicCssParityTest` — both byte/pixel-identical because
   Peppery emits nothing.
 - **NEW `PresetDefaultsGoldenTest`** — renders `dynamic-css` with **all theme_mods unset**, per
   active preset, byte-compared to a golden. Closes the documented `DynamicCssParityTest` blind

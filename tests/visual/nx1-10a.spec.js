@@ -20,7 +20,7 @@
  *
  * GOLDENS ARE LOCAL + UNTRACKED (gitignored), machine-specific — same contract
  * as nx1-02.spec.js. Regenerate only intentionally:
- *   npm run test:visual:nx1-02 -- --update-snapshots
+ *   npm run test:visual -- --update-snapshots
  * (the visual config runs BOTH specs). REQUIREMENTS: the umbrella wp-env up at
  * LAFKA_E2E_BASE_URL (default http://localhost:8890). global-setup reseeds the
  * demo store AND the deterministic blog fixture (support/blog.js).

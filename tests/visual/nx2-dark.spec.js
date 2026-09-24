@@ -14,7 +14,7 @@
  * ISOLATION FROM THE PEPPERY GATE (critical): this file is DELIBERATELY run by
  * its OWN config (playwright.visual.dark.config.js, `npm run test:visual:nx2-dark`)
  * and is testIgnore'd by playwright.visual.config.js, so the 30 PEPPERY goldens
- * (test:visual:nx1-02) never try to render these dark shots and vice-versa. The
+ * (test:visual) never try to render these dark shots and vice-versa. The
  * dark goldens live under tests/visual/__screenshots__/nx2-dark.spec.js/ and are
  * LOCAL + UNTRACKED (gitignored), machine-specific — same contract as nx1-02.
  * Capture the baseline ONLY after tokenisation makes midnight render dark:

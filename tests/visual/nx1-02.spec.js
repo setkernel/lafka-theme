@@ -18,10 +18,10 @@
  *
  * HOW SLICE AGENTS USE IT
  *   1. On the pre-migration HEAD, once:
- *        npm run test:visual:nx1-02 -- --update-snapshots
+ *        npm run test:visual -- --update-snapshots
  *      (writes the golden baseline)
  *   2. After each migration slice:
- *        npm run test:visual:nx1-02
+ *        npm run test:visual
  *      A green run == the slice changed no rendered pixels. A red run == the
  *      slice moved/dropped a token; inspect tests/visual/.report before shipping.
  *

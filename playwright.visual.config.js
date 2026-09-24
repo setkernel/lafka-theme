@@ -7,7 +7,7 @@ const { defineConfig } = require( '@playwright/test' );
  * DELIBERATELY SEPARATE from playwright.config.js (the e2e conversion suite) so
  * this NEVER runs in CI: the e2e job invokes the default config (testDir
  * ./tests/e2e); this config (testDir ./tests/visual) is only ever run by the
- * `npm run test:visual:nx1-02` script a developer runs locally. Its goldens are
+ * `npm run test:visual` script a developer runs locally. Its goldens are
  * LOCAL and UNTRACKED (see .gitignore) — the NX1-02 migration gate, regenerated
  * only on an intentional, reviewed visual change.
  *
@@ -30,7 +30,7 @@ module.exports = defineConfig( {
 	globalTeardown: require.resolve( './tests/visual/support/global-teardown.js' ),
 
 	// Goldens + diffs live UNDER untracked dirs (gitignored). Regenerate with
-	// `npm run test:visual:nx1-02 -- --update-snapshots`.
+	// `npm run test:visual -- --update-snapshots`.
 	snapshotPathTemplate: '{testDir}/__screenshots__/{testFileName}/{arg}{ext}',
 	outputDir: './tests/visual/.output',
 
