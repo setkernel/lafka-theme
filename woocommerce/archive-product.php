@@ -199,8 +199,12 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 							'page'     => 1,
 							'paginate' => true,
 							'category' => array( $lafka_arch_group->slug ),
-							'orderby'  => 'menu_order',
-							'order'    => 'ASC',
+							// Title breaks menu_order ties (WooCommerce's own default catalog
+							// order), so equal-order items never shuffle between requests.
+							'orderby'  => array(
+								'menu_order' => 'ASC',
+								'title'      => 'ASC',
+							),
 						)
 					);
 					$lafka_arch_group_products = ( is_object( $lafka_arch_group_query ) && isset( $lafka_arch_group_query->products ) ) ? $lafka_arch_group_query->products : array();

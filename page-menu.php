@@ -169,8 +169,12 @@ while ( have_posts() ) :
 									'page'     => 1,
 									'paginate' => true,
 									'category' => array( $lafka_menu_group->slug ),
-									'orderby'  => 'menu_order',
-									'order'    => 'ASC',
+									// Title breaks menu_order ties (WooCommerce's own default catalog
+									// order), so equal-order items never shuffle between requests.
+									'orderby'  => array(
+										'menu_order' => 'ASC',
+										'title'      => 'ASC',
+									),
 								)
 							)
 							: null;
