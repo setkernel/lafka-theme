@@ -55,5 +55,5 @@ vendor/
 # machine-specific, and regenerated only intentionally — never committed, never
 # run in CI. See tests/visual/nx1-02.spec.js.
 /tests/visual/__screenshots__/
-/tests/visual/.output/
-/tests/visual/.report/
+/tests/visual/.output*/
+/tests/visual/.report*/
