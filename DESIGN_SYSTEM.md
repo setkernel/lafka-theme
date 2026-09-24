@@ -30,8 +30,8 @@ All values exposed via CSS custom properties in `styles/lafka-tokens.css`.
 | `--lafka-color-brand-300`      | `#fdba74` | hover overlays                                |
 | `--lafka-color-brand-500`      | `#f59e0b` | brand fill (primary yellow)                   |
 | `--lafka-color-brand-600`      | `#d97706` | active/pressed states                         |
-| `--lafka-color-brand-700`      | `#b45309` | text-on-yellow (AAA on `brand-50`)            |
-| `--lafka-color-brand-900`      | `#451a03` | display text on yellow surfaces (AAA)         |
+| `--lafka-color-brand-700`      | `#b45309` | text-on-yellow (AA 4.73:1 on `brand-50`)      |
+| `--lafka-color-brand-900`      | `#451a03` | display text on yellow (AAA on `brand-50`/`-100`; AA 6.97:1 on `brand-500`) |
 
 ### Accent — pizza red (calls to action)
 
@@ -41,15 +41,15 @@ All values exposed via CSS custom properties in `styles/lafka-tokens.css`.
 | `--lafka-color-accent-500`     | `#dc2626` | primary CTA fill, "Add to Cart"               |
 | `--lafka-color-accent-600`     | `#b91c1c` | CTA hover/pressed                             |
 | `--lafka-color-accent-700`     | `#991b1b` | CTA text on light surfaces                    |
-| `--lafka-color-accent-contrast`| `#ffffff` | text on accent fills (AAA on `accent-500`)    |
+| `--lafka-color-accent-contrast`| `#ffffff` | text on accent fills (AA 4.83:1 on `accent-500`) |
 
 ### Neutrals (text + surfaces)
 
 | Token                            | Hex      | Role                                          |
 |----------------------------------|----------|-----------------------------------------------|
-| `--lafka-color-text-primary`     | `#18181b` | body, headings (AAA on surface-page)         |
-| `--lafka-color-text-secondary`   | `#3f3f46` | meta, captions (AA on surface-page)          |
-| `--lafka-color-text-muted`       | `#71717a` | hints, disabled (AA on surface-page)         |
+| `--lafka-color-text-primary`     | `#18181b` | body, headings (AAA 17.7:1 on surface-page)  |
+| `--lafka-color-text-secondary`   | `#3f3f46` | meta, captions (AAA 10.4:1 on surface-page)  |
+| `--lafka-color-text-muted`       | `#71717a` | hints, disabled (AA 4.83:1 on surface-page; 4.40:1 on surface-muted — Peppery's one audited contrast waiver) |
 | `--lafka-color-text-inverse`     | `#ffffff` | text on dark surfaces                        |
 | `--lafka-color-surface-page`     | `#ffffff` | page background                              |
 | `--lafka-color-surface-raised`   | `#ffffff` | card fill                                    |
@@ -69,7 +69,7 @@ Each paired with a 50-tint background; all WCAG-AA on white.
 
 The accent ramp is the one color an operator may override (via Customizer,
 flowing through `styles/dynamic-css.php` as the SSOT). Because an operator can
-pick any brand red — e.g. Peppery's `#f2002d`, which yields only 4.36:1
+pick any brand red — e.g. an operator red like `#f2002d`, which yields only 4.36:1
 accent-on-white (sub-AA) — there is a dedicated **`--lafka-color-accent-text`**
 token for accent rendered as *text* (eyebrows, prices, link colors). It is
 derived 15% darker from the operator's accent:
@@ -88,18 +88,22 @@ derived 15% darker from the operator's accent:
 The `color-mix(... 85% ..., #000)` darken clears AA for any reasonable mid-tone
 accent; older browsers (Safari <16.4 / Firefox <113 / Chrome <111) fall back to
 `accent-600`. Use `accent-text` for accent-as-text; keep `accent-500` for accent
-*backgrounds* with white text (white-on-mid-red always clears contrast).
+*backgrounds* with white text (4.83:1 on the default `#dc2626`; `PresetContrastTest` gates
+button-text-on-accent for every preset, but an operator's own accent override is not
+gated — `#f2002d` with white text is 4.36:1).
 
-### Dark mode (opt-in)
+### Dark mode (dark presets)
 
-Dark mode is **strictly opt-in** via `[data-theme="dark"]` on `<html>` (a
-forward hook for operators who explicitly want it — e.g. a Customizer/admin
-toggle). It is *not* driven by `prefers-color-scheme` because the handoff design
-language is light-mode-only (warm food photography on light surfaces, red
-accent) and many components hardcode which surface is light. The override block
-lives in `styles/lafka-tokens.css` (`:root[data-theme="dark"]`) and re-points
-the text, surface, border, accent (`accent-500` → `#ef4444`), and shadow tokens
-to their dark equivalents.
+Dark mode is driven by **`dark: true` presets** — Midnight and Ember ship built in.
+The active dark preset stamps `data-theme="dark"` on `<html>` (a
+`language_attributes` filter in the preset engine) and emits its own palette under
+`:root[data-theme="dark"]`; see [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md) §6.
+It is *not* driven by `prefers-color-scheme` (many components assume which surface is
+light, so an automatic flip broke them) and there is no separate operator toggle —
+choosing a dark preset is the switch. The base scaffold in `styles/lafka-tokens.css`
+(`:root[data-theme="dark"]`) re-points the text, surface, border, `accent-50` and shadow
+tokens; it deliberately declares **no** `accent-500`/`-600`, so the dark accent comes from
+the preset's chrome default and an operator accent override still wins.
 
 ### Forbidden
 
@@ -109,19 +113,28 @@ to their dark equivalents.
 
 ## Typography
 
-Two families. Both self-hosted, WOFF2, `font-display: swap`.
+Every preset uses two families — body and display — all self-hosted WOFF2 under
+`assets/fonts/`.
+
+**Peppery (default)** uses the two *base* families with `font-display: optional` (avoids
+the swap-in layout shift):
 
 | Family    | Role        | Weights loaded   | License |
 |-----------|-------------|------------------|---------|
-| **Rubik**     | UI / body / small headings | 400, 600, 700 | OFL |
-| **Fraunces**  | Display / h1 / h2 only     | 600, 800      | OFL |
+| **Rubik**     | UI / body / small headings | 400, 600, 700 (`style.css`) | OFL |
+| **Fraunces**  | Display / h1 / h2 only     | 600, 800 site-wide (`styles/lafka-tokens.css`); 400/600/800 + italics on the editorial templates (`styles/editorial.css`) | OFL |
+
+**Other presets** pick their pair from the 8-family OFL pool in
+`incl/presets/lafka-preset-fonts.php` (Rubik, Fraunces, Inter, Archivo, Lora, Manrope,
+Space Grotesk, DM Serif Display). Pool families are emitted as inline `@font-face` with
+`font-display: swap`, and only the active preset's two families are loaded.
 
 ### Type scale (1.25 modular, mobile-first, fluid where it matters)
 
 | Token                          | Mobile (`< 600px`) | Desktop (`≥ 768px`) | Family   | Weight |
 |--------------------------------|--------------------|---------------------|----------|--------|
 | `--lafka-font-size-display`    | `2.5rem` (40px)    | `clamp(2.5rem, 4vw + 1rem, 4.5rem)` | Fraunces | 800 |
-| `--lafka-font-size-h1`         | `2rem` (32px)      | `2.75rem` (44px)    | Fraunces | 800    |
+| `--lafka-font-size-h1`         | `clamp(2.5rem, 5vw, 3.5rem)` (40–56px) | same token | Fraunces | 800 |
 | `--lafka-font-size-h2`         | `1.5rem` (24px)    | `2rem` (32px)       | Fraunces | 600    |
 | `--lafka-font-size-h3`         | `1.25rem` (20px)   | `1.5rem` (24px)     | Rubik    | 700    |
 | `--lafka-font-size-h4`         | `1.125rem` (18px)  | `1.25rem` (20px)    | Rubik    | 700    |
@@ -171,7 +184,9 @@ Line-heights: display 1.1, headings 1.15, body 1.5, small 1.4.
 ## Elevation (shadows)
 
 Five-level scale. `shadow-0` (none) → `shadow-4` (modal overlay).
-`shadow-focus` is the 3-ring focus indicator (accent-500 @ 35%).
+`shadow-focus` is the 2-ring focus indicator: a 2px `surface-page` spacer, then a 4px
+solid `accent-700` ring (8.31:1 on white; the spacer keeps it visible on accent and ink
+fills — WCAG 1.4.11).
 
 ## Motion
 
@@ -183,7 +198,8 @@ Five-level scale. `shadow-0` (none) → `shadow-4` (modal overlay).
 | `--lafka-motion-ease-out`       | cubic-bezier(0.2, 0.8, 0.4, 1) | exit motion       |
 | `--lafka-motion-ease-in-out`    | cubic-bezier(0.4, 0, 0.2, 1)   | reversible        |
 
-Respect `prefers-reduced-motion` — animations collapse to 1ms.
+Respect `prefers-reduced-motion` — under `reduce` the `--lafka-motion-duration-*` tokens
+collapse to `0ms`.
 
 ## Breakpoints
 
@@ -199,23 +215,23 @@ Container max-width: 1440px. Page gutter: 16px (mobile) / 32px (laptop+).
 
 ## Component primitives
 
-These are the only "button"-like primitives. Anything else is a bug.
+Shared primitives (`styles/lafka-components.css`, `styles/product-card.css`). New
+button-like UI reuses these rather than inventing another.
 
-- **`.lafka-btn`** — base button. Variants via modifier classes:
-  - `--primary` (accent fill)
-  - `--secondary` (outline)
-  - `--ghost` (text only)
-  - `--brand` (yellow fill, dark text)
-- **`.lafka-chip`** — small toggleable option (toppings, sizes).
-- **`.lafka-input`** — form field. Always paired with `.lafka-label`.
-- **`.lafka-card`** — surface container. `--raised` / `--sunken` variants.
+- **`.lafka-btn`** — base button. Modifiers:
+  - `--primary` (accent fill, `accent-contrast` text)
+  - `--ghost` (transparent with ink outline; inverts on hover)
+  - `--lg` (52px min-height)
+- **`.lafka-status-pill`** — open/closed service badge (`--closed` modifier).
 - **`.lafka-product-card`** — product list row. Image-left + body-right.
+
+Planned, not yet built: `.lafka-btn--secondary` / `--brand`, `.lafka-chip`,
+`.lafka-input` + `.lafka-label`, `.lafka-card` (`--raised` / `--sunken`).
 
 ## WPBakery
 
-**Deprecated as required dependency** (see memory:
-`feedback_wpbakery_deprecated.md`). New default page templates render
-without it. Existing operator content keeps working until migrated.
+WPBakery is optional: default templates render without it; existing content keeps
+working.
 
 ## Stylesheet entry points
 
@@ -224,8 +240,8 @@ Tokens are the contract; these are the key files that consume them.
 | File | Role |
 |------|------|
 | `styles/lafka-tokens.css` | The token SSOT — color/type/space/radii/motion, dark-mode block, accent-text derivation. |
-| `styles/dynamic-css.php` | Emits the operator's Customizer accent override into the cascade. Its ~57 chrome defaults now resolve through the active preset via `lafka_preset_default()` (operator theme_mods still win). |
-| `incl/presets/` + `presets/*/preset.json` | **Preset engine (NX2-01)** — the "10 designs in one theme" system. `lafka-preset-tokens.php` (token/chrome whitelists), `class-lafka-preset.php` (VO), `class-lafka-presets.php` (registry), `lafka-preset-emit.php` (the inline-only `lafka-preset` PTL handle + `data-theme` dark filter + `lafka_preset_default`). Peppery is preset #1, the default and a provable no-op. Architecture: [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md). |
+| `styles/dynamic-css.php` | Emits the operator's Customizer accent override into the cascade. Its 55 chrome defaults (50 `lafka_preset_default()` call sites) resolve through the active preset (operator theme_mods still win). |
+| `incl/presets/` + `presets/*/preset.json` | **Preset engine** — the "10 designs in one theme" system; file layout: see [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md) §2. Peppery is preset #1, the default and a provable no-op. |
 | `styles/lafka-base.css` | **Parent baseline a11y / CLS** — structural rules the parent's own markup depends on (`.section-subtitle`, `.foodmenu-unit-info .ingredients`, `.screen-reader-text`, pre-mount `.lafka-owl-carousel` height reservation). Previously these lived only in lafka-child, leaving the OSS parent non-accessible on its own. |
 | `styles/lafka-search.css` | Header search overlay — native `<dialog>`; consumes tokens with neutral fallbacks. |
 | `styles/pdp-redesign.css` | Redesigned product page. |
