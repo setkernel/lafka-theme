@@ -64,10 +64,6 @@
         width: 60%;
     }
 
-    #main-menu li div.lafka-mega-menu > ul.sub-menu > li {
-        padding: 30px;
-    }
-
     .cart-info .coupon input, .cart-info .coupon button {
         width: 100%;
     }
@@ -91,7 +87,7 @@
 
 @media only screen and (max-width: 782px) {
 
-    body.admin-bar #header, body.admin-bar.lafka-sticky-header #header {
+    body.admin-bar #header {
         top: 46px
     }
 }
@@ -101,39 +97,11 @@
  * but DO fit at 1440+. Instead of hiding the menu in that range (jarring
  * UX), we let it scroll horizontally with a fade-mask on the right edge.
  * Hamburger still kicks in at ≤1279 as before. */
-@media only screen and (min-width: 1280px) and (max-width: 1439px) {
-
-    #main-menu {
-        text-align: left;
-    }
-
-    #main-menu ul.menu {
-        white-space: nowrap;
-        overflow-x: auto;
-        overflow-y: hidden;
-        scrollbar-width: none;
-        -ms-overflow-style: none;
-        mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-        -webkit-mask-image: linear-gradient(to right, #000 calc(100% - 32px), transparent);
-    }
-
-    #main-menu ul.menu::-webkit-scrollbar {
-        display: none;
-    }
-
-    #main-menu ul.menu > li {
-        flex-shrink: 0;
-    }
-}
 
 @media only screen and (max-width: 1279px) {
 
-    #main-menu, #main-menu #main_nav.menu, ul.lafka-top-menu, .video_controlls, .lafka-wishlist-counter, #lafka-account-holder {
+     ul.lafka-top-menu {
         display: none !important;
-    }
-
-    .main_menu_holder.has-main-menu {
-        min-height: 90px;
     }
 
     .lafka_title_holder h6 {
@@ -156,18 +124,6 @@
 
     .upsells.products h2::after {
         display: none;
-    }
-
-    a.mob-menu-toggle {
-        display: table;
-    }
-
-    .lafka-search-cart-holder {
-        right: 100px;
-    }
-
-    a.mob-menu-toggle, .lafka-search-cart-holder, .lafka-top-bar-message {
-        top: 20px;
     }
 
     body.single-post #content:not(.has-sidebar) .content_holder > .post > .lafka_post_data_holder .wpb_text_column {
@@ -540,73 +496,6 @@ and (orientation: landscape) {
 
     button.single_add_to_cart_button, div.product a.single_add_to_cart_button, .wishlist_table .add_to_cart.button {
         padding: 12px 27px;
-    }
-
-    #header.lafka-has-header-top #logo {
-        width: 160px;
-        margin-left: -80px;
-    }
-
-    #header #logo::after, #header #logo::before {
-        border-width: 20px 40px;
-    }
-
-    #header.lafka-sticksy #logo::before, #header.lafka-sticksy #logo::after {
-        bottom: -30px;
-        border-width: 15px 40px;
-    }
-
-    .lafka-search-cart-holder {
-        right: 20px;
-        top: auto !important;
-        bottom: 20px;
-        position: fixed;
-        width: 48px;
-        padding: 6px;
-    }
-
-    #cart-module .cart-contents span.count {
-        left: 20px;
-    }
-
-    .lafka-search-cart-holder .lafka-search-trigger, .lafka-search-cart-holder #cart-module, .lafka-search-cart-holder .lafka-wishlist-counter, #lafka-account-holder {
-        margin: 0 0 6px 0;
-    }
-
-    a.mob-menu-toggle {
-        right: 20px;
-    }
-
-    .lafka-top-bar-message {
-        left: 20px;
-    }
-
-    #header .lafka-top-bar-message {
-        padding: 0;
-    }
-
-    #header .lafka-top-bar-message span.lafka-top-bar-message-text {
-        display: none;
-    }
-
-    #header .lafka-top-bar-message span.lafka-top-bar-phone {
-        font-size: 0 !important;
-    }
-
-    #header .lafka-top-bar-message span.lafka-top-bar-phone a::before {
-        font-size: 17px !important;
-        line-height: 48px;
-        width: 48px;
-        height: 48px;
-        text-align: center;
-        margin: 0;
-        color: #fff !important;
-        background-color: #a1ba32 !important;
-        border-radius: 50%;
-    }
-
-    a.mob-menu-toggle, .lafka-search-cart-holder, .lafka-top-bar-message {
-        top: 20px;
     }
 
     nav.woocommerce-MyAccount-navigation, div.woocommerce-MyAccount-content {
@@ -1272,10 +1161,6 @@ and (orientation: landscape) {
         padding-right: max(16px, env(safe-area-inset-right, 0px)) !important;
     }
 
-    body.admin-bar #header.lafka-sticksy {
-        top: 0 !important;
-    }
-
     .foodmenu-unit-holder a.lafka-foodmenu-image-link + .foodmenu-unit-info, .foodmenu-unit-holder > img + .foodmenu-unit-info {
         width: 100%;
     }
@@ -1526,10 +1411,6 @@ and (orientation: landscape) {
         margin-bottom: 35px;
     }
 
-    #cart-module div.widget.woocommerce.widget_shopping_cart {
-        width: 250px;
-    }
-
     .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.product_title {
         font-size: 32px !important;
     }
@@ -1590,10 +1471,6 @@ and (orientation: landscape) {
         vertical-align: middle;
         padding: 0 10px;
         margin-bottom: 10px;
-    }
-
-    #header #logo.lafka_text_logo {
-        min-width: 120px !important;
     }
 
     .lafka-foodmenu-categories ul li {
@@ -1711,10 +1588,6 @@ and (orientation: landscape) {
         float: none;
         display: block;
         margin-bottom: 35px;
-    }
-
-    #cart-module div.widget.woocommerce.widget_shopping_cart {
-        width: 250px;
     }
 
     .wpb_text_column h1, h1.vc_custom_heading, .lafka_title_holder h1.heading-title, #content div.product div.summary h1.product_title {

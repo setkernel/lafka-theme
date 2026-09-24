@@ -930,9 +930,6 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
    * Other page types (category, home) keep the floating cart icon
    * since they don't have the sticky CTA bar.
    */
-  body.single-product .lafka-search-cart-holder {
-    display: none;
-  }
 
   /*
    * Bottom padding accounts for the FULL height of the sticky cart-row,
