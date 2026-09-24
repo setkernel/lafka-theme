@@ -123,7 +123,7 @@ Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
   (returns an empty string) and `lafka_is_text_logo()`.
 
 ### Performance
-- style.css 279.6 KB → 223.2 KB (gzip 46.1 → 38.2 KB); always-on first-party
+- style.css 279.6 KB → 217.9 KB (gzip 46.1 → 37.4 KB); always-on first-party
   CSS+JS on the front page 705.7 KB → 638.5 KB. Product pages also drop
   CloudZoom; non-English sites no longer load a countdown locale everywhere.
 - The shipped theme is ~0.8 MB smaller (the sound file, YTPlayer,
