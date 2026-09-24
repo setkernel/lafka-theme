@@ -24,7 +24,7 @@
  * every other family ships the @fontsource LICENSE).
  *
  * @package Lafka
- * @since   7.2.0 (NX2-03)
+ * @since   7.1.0 (NX2-03)
  */
 
 defined( 'ABSPATH' ) || exit;

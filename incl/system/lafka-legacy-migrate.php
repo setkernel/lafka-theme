@@ -24,7 +24,6 @@
  *    it is the plugin's flag storage (module registry, order_notifications,
  *    functional-shared secrets). Only the theme's appearance keys are copied
  *    out; plugin-owned keys are absent from the map (invariant 1).
- *  - It does not delete or rewrite the `lafka` array (see above).
  *
  * ONE-TIME UPGRADE TRIGGER (NX1-02 Retire phase)
  * ----------------------------------------------
