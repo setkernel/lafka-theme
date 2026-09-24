@@ -79,11 +79,6 @@ div.prod_hold .links {
 	margin-left: 8px;
 }
 
-ul.lafka-top-menu > li.menu-item-has-children > a::after {
-    margin-right: 3px;
-	margin-left: 0;
-}
-
 .tagcloud {
     text-align: right;
 }
@@ -382,15 +377,6 @@ a.lafka-post-nav.lafka-post-next .entry-info::after {
 
 .last, .lafka-is-custom-footer-sidebar > .widget:nth-child(4) {
     clear: right;
-}
-
-ul.lafka-top-menu li > ul.sub-menu {
-	left: auto;
-	right: 0;
-}
-
-ul.lafka-top-menu ul.sub-menu a, ul.lafka-top-menu li:hover ul.sub-menu a {
-	text-align: right;
 }
 
 @media only screen and (max-width: 600px) {

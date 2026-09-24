@@ -1059,10 +1059,6 @@
         $('#footer > div.inner div.one_fourth').filter(function(index) {
             return index % 4 === 3;
         }).addClass('last').after('<div class="clear"></div>');
-        // Put class .last on each 4th widget in pre header
-        $('#pre_header > div.inner div.one_fourth').filter(function(index) {
-            return index % 4 === 3;
-        }).addClass('last').after('<div class="clear"></div>');
         $('#lafka-filter-widgets > div.one_fourth').filter(function(index) {
             return index % 4 === 3;
         }).addClass('last').after('<div class="clear"></div>');
@@ -1074,10 +1070,6 @@
         $('#footer > div.inner div.one_third').filter(function(index) {
             return index % 3 === 2;
         }).addClass('last').after('<div class="clear"></div>');
-        // Put class .last on each 3th widget in pre header
-        $('#pre_header > div.inner div.one_third').filter(function(index) {
-            return index % 3 === 2;
-        }).addClass('last').after('<div class="clear"></div>');
         $('#lafka-filter-widgets > div.one_third').filter(function(index) {
             return index % 3 === 2;
         }).addClass('last').after('<div class="clear"></div>');
@@ -1087,10 +1079,6 @@
             return index % 2 === 1;
         }).addClass('last').after('<div class="clear"></div>');
         $('#footer > div.inner div.one_half').filter(function(index) {
-            return index % 2 === 1;
-        }).addClass('last').after('<div class="clear"></div>');
-        // Put class .last on each 2nd widget in pre header
-        $('#pre_header > div.inner div.one_half').filter(function(index) {
             return index % 2 === 1;
         }).addClass('last').after('<div class="clear"></div>');
         $('#lafka-filter-widgets > div.one_half').filter(function(index) {

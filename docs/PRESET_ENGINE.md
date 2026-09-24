@@ -31,7 +31,7 @@ so the engine emits nothing for it → byte-identical `dynamic-css` + pixel-iden
 - **Operator layer** — `dynamic-css.php`'s existing `:root{}` inline on `lafka-style`
   (accent/brand + chrome theme_mods). Always prints last → always wins.
 - **theme_mod-default layer (TML)** — the mechanism by which a preset supplies the
-  *default* value for the 46 keys in `LAFKA_PRESET_CHROME_WHITELIST` (`lafka_accent_color`,
+  *default* value for the 34 keys in `LAFKA_PRESET_CHROME_WHITELIST` (`lafka_accent_color`,
   `lafka_brand_color` + 53 appearance theme_mods) that `dynamic-css` emits, via one guarded
   helper. Operator-set theme_mods beat it by `get_theme_mod()` semantics.
 
@@ -51,7 +51,7 @@ lafka-theme/
   incl/presets/
     class-lafka-preset.php            # value object: reads one preset.json, typed accessors
     class-lafka-presets.php           # registry: discovery, cache, lafka_presets filter, active()
-    lafka-preset-tokens.php           # LAFKA_PRESET_TOKEN_WHITELIST (88) + LAFKA_PRESET_CHROME_WHITELIST (46) + LAFKA_PRESET_CRITICAL_KEYS (pure-data constants)
+    lafka-preset-tokens.php           # LAFKA_PRESET_TOKEN_WHITELIST (88) + LAFKA_PRESET_CHROME_WHITELIST (34) + LAFKA_PRESET_CRITICAL_KEYS (pure-data constants)
     lafka-preset-emit.php             # PTL builder + pool @font-face emitter + enqueue wiring + data-theme + category-emoji feed + lafka_preset_default()
     lafka-preset-fonts.php            # NX2-03 LAFKA_FONT_POOL: 8-family OFL registry (pure data)
     class-lafka-color-contrast.php    # NX2-02 WCAG ratio helper
@@ -100,7 +100,7 @@ Public function surface (all `function_exists`-guarded, `lafka_` prefixed):
     "lafka_accent_color": "#22d3ee",
     "lafka_brand_color": "#a3e635"
     // whitelist = lafka_accent_color, lafka_brand_color + the 53 appearance theme_mods
-    // (lafka_legacy_migrate_map() destinations) dynamic-css emits — 46 keys
+    // (lafka_legacy_migrate_map() destinations) dynamic-css emits — 34 keys
   },
   "fonts": {                       // source "base" (Rubik/Fraunces, already in static CSS — emits
                                    // nothing) | "pool" (a LAFKA_FONT_POOL family — @font-face inline)
@@ -170,10 +170,10 @@ postMessage transport; hero copy + announce bar use selective-refresh partials.
   changeset values still win via a `post_value()` override). `tests/e2e/customizer-preset.spec.js`
   is the regression gate.
 
-## 5. theme_mod-default layer (41 call sites in dynamic-css.php)
+## 5. theme_mod-default layer (29 call sites in dynamic-css.php)
 
-Every chrome read in `dynamic-css.php` is wrapped — 41 `lafka_preset_default()` call sites
-covering all 46 whitelisted keys (the six `lafka_h1_font`…`lafka_h6_font` arrays share one
+Every chrome read in `dynamic-css.php` is wrapped — 29 `lafka_preset_default()` call sites
+covering all 34 whitelisted keys (the six `lafka_h1_font`…`lafka_h6_font` arrays share one
 looped call). Each wraps `get_theme_mod( 'lafka_x', <literal> )` in `dynamic-css.php` as:
 ```php
 get_theme_mod( 'lafka_x', function_exists( 'lafka_preset_default' )

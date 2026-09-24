@@ -100,10 +100,6 @@
 
 @media only screen and (max-width: 1279px) {
 
-    ul.lafka-top-menu {
-        display: none !important;
-    }
-
     .lafka_title_holder h6 {
         max-width: none;
     }
@@ -156,12 +152,6 @@
 
     .lafka_post_data_holder {
         width: 100%;
-    }
-
-    #powered .lafka-social, #powered .author_credits {
-        width: 100%;
-        padding-right: 70px;
-        text-align: left;
     }
 
     .wpb_lafka_banner a span.lafka_banner-icon, .lafka-none-overlay .foodmenu-unit-info a.foodmenu-link::before {

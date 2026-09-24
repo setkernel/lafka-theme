@@ -240,7 +240,7 @@ Tokens are the contract; these are the key files that consume them.
 | File | Role |
 |------|------|
 | `styles/lafka-tokens.css` | The token SSOT — color/type/space/radii/motion, dark-mode block, accent-text derivation. |
-| `styles/dynamic-css.php` | Emits the operator's Customizer accent override into the cascade. Its 46 chrome defaults (41 `lafka_preset_default()` call sites) resolve through the active preset (operator theme_mods still win). |
+| `styles/dynamic-css.php` | Emits the operator's Customizer accent override into the cascade. Its 34 chrome defaults (29 `lafka_preset_default()` call sites) resolve through the active preset (operator theme_mods still win). |
 | `incl/presets/` + `presets/*/preset.json` | **Preset engine** — the "10 designs in one theme" system; file layout: see [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md) §2. Peppery is preset #1, the default and a provable no-op. |
 | `styles/lafka-base.css` | **Parent baseline a11y / CLS** — structural rules the parent's own markup depends on (`.section-subtitle`, `.foodmenu-unit-info .ingredients`, `.screen-reader-text`, pre-mount `.lafka-owl-carousel` height reservation). Previously these lived only in lafka-child, leaving the OSS parent non-accessible on its own. |
 | `styles/lafka-search.css` | Header search overlay — native `<dialog>`; consumes tokens with neutral fallbacks. |

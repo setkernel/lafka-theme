@@ -44,9 +44,9 @@
 		setting.bind( applyPreset );
 	} );
 
-	// Accent + brand: dynamic-css emits the accent once and every derived
-	// token (--lafka-color-accent-500, the menu highlight fallback) as
-	// var(--lafka-accent-color), so setting that one property updates them all.
+	// Accent + brand: dynamic-css emits the accent once and
+	// --lafka-color-accent-500 as var(--lafka-accent-color), so setting that
+	// one property updates both.
 	api( 'lafka_accent_color', function ( setting ) {
 		setting.bind( function ( value ) {
 			document.documentElement.style.setProperty( '--lafka-accent-color', value );

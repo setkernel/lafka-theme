@@ -27,24 +27,15 @@ return array(
 	'lafka_all_buttons_color'                  => '#7eb7d5',
 	'lafka_all_buttons_hover_color'            => '#38f742',
 	'lafka_brand_color'                        => '#88f6a6',
-	'lafka_collapsible_bckgr_color'            => '#fa64cc',
-	'lafka_collapsible_links_color'            => '#0bba0e',
-	'lafka_collapsible_titles_border_color'    => '#8047db',
-	'lafka_collapsible_titles_color'           => '#2950ce',
 	'lafka_custom_page_title_color'            => '#b4c8db',
 	'lafka_fancy_category_title_color'         => '#bbaedd',
 	'lafka_footer_links_color'                 => '#6d4f96',
-	'lafka_footer_menu_links_color'            => '#6ca926',
 	'lafka_footer_text_color'                  => '#6024b2',
 	'lafka_footer_title_border_color'          => '#9cb73e',
 	'lafka_footer_titles_color'                => '#1ae252',
-	'lafka_header_top_bar_color'               => '#b945c4',
 	'lafka_links_color'                        => '#5b05c9',
 	'lafka_links_hover_color'                  => '#021622',
 	'lafka_logo_background_color'              => '#59bb35',
-	'lafka_main_menu_background_color'         => '#45298c',
-	'lafka_main_menu_links_bckgr_hover_color'  => '#0a58f3',
-	'lafka_main_menu_links_color'              => '#3d55bf',
 	'lafka_new_label_color'                    => '#87c511',
 	'lafka_page_subtitle_color'                => '#136ba7',
 	'lafka_page_title_bckgr_color'             => '#d50974',
@@ -54,18 +45,11 @@ return array(
 	'lafka_price_color_in_listings'            => '#0423a6',
 	'lafka_sale_label_color'                   => '#a78216',
 	'lafka_sidebar_titles_color'               => '#9f6c36',
-	'lafka_top_bar_menu_links_color'           => '#79374e',
-	'lafka_top_bar_menu_links_hover_color'     => '#8e5e4f',
 	'lafka_transparent_header_dark_menu_color' => '#eb117f',
 
 	// Main-menu typography: reads ['style'] (JSON) + ['size'].
 	// (NX1-02.dyncss-typography-backgrounds: keyed by its theme_mod name.)
 	// Top-menu typography: reads ['style'] (JSON) + ['size'].
-	'lafka_top_menu_typography' => array(
-		'size'  => '14px',
-		'style' => '{"font-weight":"540","font-style":"normal"}',
-	),
-
 	// Body font: reads ['face'] + ['size'] + ['color'].
 	'lafka_body_font' => array(
 		'face'  => 'Fixture Sans',

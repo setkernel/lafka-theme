@@ -554,10 +554,6 @@ body.single-product .has-sidebar .content_holder .lafka-has-product-cover-image 
     margin-bottom: 45px;
 }
 
-#pre_header .widget>h3:first-child {
-    color: #5e5e5e; /* P6-A11Y-2: #999→#5e5e5e, 4.6:1 WCAG AA */
-}
-
 #footer .widget>h3:first-child {
     margin-bottom: 40px;
 }
@@ -1911,14 +1907,6 @@ body.lafka_transparent_header.lafka-transparent-dark #lafka_page_title.lafka_tit
 
 .lafka_title_holder .inner::before {
     border-color: transparent var(--lafka-page-title-border-color) var(--lafka-page-title-border-color) transparent;
-}
-
-#pre_header .widget > h3:first-child {
-    color: var(--lafka-collapsible-title-color);
-}
-
-#pre_header > .inner div.widget_categories ul li, #pre_header > .inner div.widget_archive ul li {
-    border-color: var(--lafka-collapsible-title-border-color);
 }
 
 .lafka_title_holder .inner h1.heading-title {
