@@ -105,7 +105,6 @@ export default [
 			"js/cloud-zoom/**",
 			"js/count/**",
 			"js/flex/**",
-			"js/fonticonpicker/**",
 			"js/isotope/**",
 			"js/jquery.nice-select.min.js",
 			"js/jquery.mb.YTPlayer/**",

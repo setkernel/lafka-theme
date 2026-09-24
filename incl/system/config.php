@@ -128,11 +128,6 @@ if ( ! function_exists( 'lafka_vc_set_cpt' ) ) {
  */
 require_once get_template_directory() . '/incl/tgm-plugin-activation/class-tgm-plugin-activation.php';
 
-/**
- * Include Mega Menu functionality
- */
-require_once get_template_directory() . '/incl/LafkaMegaMenu.php';
-
 /*
  * Register theme text domain
  */

@@ -75,7 +75,8 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
  *   - lafka-options-functions.php -> lafka_typography_get_google_fonts(), read
  *     by the front-end Google-font enqueuer (incl/system/core-functions.php).
  *   - lafka-options-medialibrary-uploader.php -> lafka_medialibrary_uploader(),
- *     the admin media picker the mega-menu editor (incl/LafkaMegaMenu.php) uses.
+ *     markup helper for the admin media picker (its JS handler is
+ *     js/lafka-medialibrary-uploader.js, also used by plugin metaboxes).
  */
 if ( ! defined( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY' ) ) {
 	define( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/incl/lafka-options-framework/' );

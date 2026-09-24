@@ -151,8 +151,6 @@ Scripts and styles (verified from the bundled file headers):
 * Cloud Zoom v1.0.2 — MIT — Copyright 2010 R. Cecco (`js/cloud-zoom/`).
 * jQuery Nice Select v1.0 — MIT — by Hernan Sartorio
   (`js/jquery.nice-select.min.js`).
-* jQuery fontIconPicker v2.0.0 — MIT — by Alessandro Benoit and Swashata
-  (`js/fonticonpicker/`).
 * Typed.js — MIT — by Matt Boldt (`js/typed.min.js`; bundled minified build
   carries no version/license header — verify — TODO NX5-01).
 * jquery.mb.YTPlayer — Copyright 2020 Matteo Bicocchi (`js/jquery.mb.YTPlayer/`;

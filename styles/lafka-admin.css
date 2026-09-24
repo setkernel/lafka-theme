@@ -1131,28 +1131,6 @@ audio.lafka_order_notify_audio {
     display:none;
 }
 
-p.description.lafka_megamenu_image {
-    position: relative;
-}
-
-p.description.lafka_megamenu_image .lafka_remove_image_link {
-    top: auto;
-    left: auto;
-    bottom: 7px;
-    right: 10px;
-}
-
-p.description.lafka_megamenu_image span.screenshot, p.description.lafka_megamenu_image span.screenshot input.lafka_upload_image_button {
-    display: inline-block !important;
-    vertical-align: bottom !important;
-}
-
-p.description.lafka_megamenu_image span.screenshot, p.description.lafka_megamenu_image span.screenshot img {
-    max-height: 36px;
-    height: 36px;
-    width: auto;
-}
-
 .column-taxonomy-lafka_branch_location {
     width: 5%;
 }

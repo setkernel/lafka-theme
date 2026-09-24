@@ -433,15 +433,20 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 
 		// Heavy scripts only on pages that need them.
 		$needs_editor  = in_array( $hook, array( 'post.php', 'post-new.php' ), true );
-		$needs_menus   = ( 'nav-menus.php' === $hook );
 		$needs_options = ( false !== strpos( $hook, 'lafka' ) || false !== strpos( $hook, 'theme-options' ) );
+		// Product category/tag screens: lafka-plugin attaches its "title
+		// background image" picker to the lafka-back handle, and the picker
+		// opens the media modal.
+		$needs_terms = false;
+		if ( in_array( $hook, array( 'edit-tags.php', 'term.php' ), true ) && function_exists( 'get_current_screen' ) ) {
+			$screen      = get_current_screen();
+			$needs_terms = $screen && in_array( $screen->taxonomy, array( 'product_cat', 'product_tag' ), true );
+		}
 
 		if ( $needs_editor || $needs_options ) {
 			wp_register_script( 'lafka-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-medialibrary-uploader.js', array( 'jquery-ui-accordion', 'media-upload' ), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-medialibrary-uploader.js' ), true );
 			wp_enqueue_script( 'lafka-medialibrary-uploader' );
-		}
 
-		if ( $needs_editor || $needs_menus || $needs_options ) {
 			// wp-color-picker
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );
@@ -452,32 +457,15 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 			wp_enqueue_style( 'et-line-font', get_template_directory_uri() . '/styles/et-line-font/style.css', false, lafka_asset_version( '/styles/et-line-font/style.css' ), 'screen' );
 		}
 
-		if ( $needs_menus ) {
-			// Flaticon + Fonticonpicker — only used on menu editor
-			wp_enqueue_style( 'flaticon', get_template_directory_uri() . '/styles/flaticon/font/flaticon.css', false, lafka_asset_version( '/styles/flaticon/font/flaticon.css' ), 'screen' );
-			wp_enqueue_script( 'fonticonpicker', get_template_directory_uri() . '/js/fonticonpicker/jquery.fonticonpicker.min.js', array( 'jquery' ), lafka_asset_version( '/js/fonticonpicker/jquery.fonticonpicker.min.js' ), true );
-			wp_enqueue_style( 'fonticonpicker', get_template_directory_uri() . '/styles/fonticonpicker/css/jquery.fonticonpicker.min.css', array(), lafka_asset_version( '/styles/fonticonpicker/css/jquery.fonticonpicker.min.css' ) );
-			wp_enqueue_style( 'fonticonpicker-gray-theme', get_template_directory_uri() . '/styles/fonticonpicker/themes/grey-theme/jquery.fonticonpicker.grey.min.css', array( 'fonticonpicker' ), lafka_asset_version( '/styles/fonticonpicker/themes/grey-theme/jquery.fonticonpicker.grey.min.css' ) );
-
-			// Mega Menu
-			wp_enqueue_style( 'lafka-mega-menu', get_template_directory_uri() . '/styles/lafka-admin-megamenu.css', array(), lafka_asset_version( '/styles/lafka-admin-megamenu.css' ) );
-			wp_enqueue_script( 'lafka-mega-menu', get_template_directory_uri() . '/js/lafka-admin-mega-menu.js', array( 'jquery', 'jquery-ui-sortable' ), lafka_asset_version( '/js/lafka-admin-mega-menu.js' ), true );
-			wp_localize_script(
-				'lafka-mega-menu',
-				'lafka_mega_menu_js_params',
-				array(
-					'mega_menu_label' => esc_html__( 'Mega Menu', 'lafka' ),
-					'column_label'    => esc_html__( 'Column', 'lafka' ),
-				)
-			);
+		if ( $needs_terms ) {
+			wp_enqueue_media();
 		}
 
-		if ( $needs_editor || $needs_menus || $needs_options ) {
+		if ( $needs_editor || $needs_options || $needs_terms ) {
 			wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), true );
 
-			// New-order notification poller moved to lafka-plugin (NX1-08b); the theme
-			// only ships the remaining admin helpers (colour pickers, metabox layout,
-			// menu-icon picker) here.
+			// Admin helpers (colour pickers, metabox layout). The new-order
+			// notification poller lives in lafka-plugin (NX1-08b).
 			wp_enqueue_script( 'lafka-back', get_template_directory_uri() . '/js/lafka-back.js', array( 'jquery', 'nice-select', 'wp-color-picker' ), lafka_asset_version( '/js/lafka-back.js' ), true );
 		}
 	}
