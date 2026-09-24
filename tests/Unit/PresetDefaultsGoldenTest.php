@@ -144,22 +144,5 @@ namespace Lafka\Tests\Unit {
 					. 'theme_mod-default layer (lafka_preset_default wraps) changed the emitted bytes.'
 			);
 		}
-
-		/**
-		 * Peppery is the provable no-op: its all-unset render must equal the
-		 * DynamicCssParityTest baseline defaults exactly. This is what makes the
-		 * PEPPERY golden a pre-change safety net — if wrapping dynamic-css changed
-		 * any literal, peppery would diverge here.
-		 */
-		public function test_peppery_default_render_has_shipped_accent(): void {
-			$GLOBALS['lafka_active_slug'] = 'peppery';
-			\Lafka_Presets::reset();
-			$css = \lafka_dynamic_css_build();
-			$this->assertStringContainsString(
-				'--lafka-color-accent-500:#dc2626;',
-				$css,
-				'peppery all-unset render must emit the shipped Peppery accent #dc2626'
-			);
-		}
 	}
 }

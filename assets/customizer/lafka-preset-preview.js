@@ -44,15 +44,12 @@
 		setting.bind( applyPreset );
 	} );
 
-	// Accent + brand: dynamic-css emits these as three plain custom
-	// properties (no server-side ramp math), so postMessage can set them
-	// directly. --lafka-menu-highlight-bg-color falls back to accent when
-	// the operator hasn't overridden the menu hover background.
+	// Accent + brand: dynamic-css emits the accent once and every derived
+	// token (--lafka-color-accent-500, the menu highlight fallback) as
+	// var(--lafka-accent-color), so setting that one property updates them all.
 	api( 'lafka_accent_color', function ( setting ) {
 		setting.bind( function ( value ) {
-			var root = document.documentElement.style;
-			root.setProperty( '--lafka-accent-color', value );
-			root.setProperty( '--lafka-color-accent-500', value );
+			document.documentElement.style.setProperty( '--lafka-accent-color', value );
 		} );
 	} );
 

@@ -181,7 +181,10 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		$menu_links_hover_color    = esc_attr( get_theme_mod( 'lafka_main_menu_links_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_main_menu_links_hover_color', '#22272d' ) : '#22272d' ) );
 		$menu_links_bg_hover_raw   = get_theme_mod( 'lafka_main_menu_links_bckgr_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_main_menu_links_bckgr_hover_color', '' ) : '' );
 		$menu_links_bg_hover_color = $menu_links_bg_hover_raw ? esc_attr( $menu_links_bg_hover_raw ) : 'transparent';
-		$menu_highlight_bg_color   = $menu_links_bg_hover_raw ? esc_attr( $menu_links_bg_hover_raw ) : $accent_color;
+		// Derived from the accent by reference, not by value, so a live
+		// Customizer accent change (postMessage sets only --lafka-accent-color)
+		// reaches it too.
+		$menu_highlight_bg_color   = $menu_links_bg_hover_raw ? esc_attr( $menu_links_bg_hover_raw ) : 'var(--lafka-accent-color)';
 		$menu_icons_color_raw      = get_theme_mod( 'lafka_main_menu_icons_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_main_menu_icons_color', '#ac8320' ) : '#ac8320' );
 		$menu_icons_color          = $menu_icons_color_raw ? esc_attr( $menu_icons_color_raw ) : 'inherit';
 
@@ -367,7 +370,9 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// alias, operators who set their brand color in Customizer
 		// see the legacy surfaces change but the handoff pages stay
 		// on the shipped #dc2626 — colour drift across the site.
-		$custom_css .= '--lafka-color-accent-500:' . $accent_color . ';';
+		// Emitted as a reference to --lafka-accent-color (same computed value)
+		// so the Customizer preview only has to update one property.
+		$custom_css .= '--lafka-color-accent-500:var(--lafka-accent-color);';
 		// f074: SSOT — bridge the Customizer brand_color into the handoff
 		// brand ramp anchor (--lafka-color-brand-500). Without this the brand
 		// ramp was fixed at the shipped pepper-yellow with no operator feed,
