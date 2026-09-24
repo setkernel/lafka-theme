@@ -91,7 +91,9 @@ class Lafka_GitHub_Updater {
 	}
 
 	/**
-	 * Render admin notices on dashboard/updates/theme-options screens.
+	 * Render admin notices on the dashboard, Updates, Themes, Plugins and
+	 * Tools → Lafka Maintenance screens (the cache flush redirects back to the
+	 * latter, so its success notice must be allowed there).
 	 */
 	public function render_admin_notices() {
 		if ( ! current_user_can( 'update_themes' ) ) {
@@ -103,7 +105,7 @@ class Lafka_GitHub_Updater {
 			return;
 		}
 
-		$allowed_screens = array( 'dashboard', 'update-core', 'themes', 'plugins', 'appearance_page_lafka-options' );
+		$allowed_screens = array( 'dashboard', 'update-core', 'themes', 'plugins', 'tools_page_lafka-maintenance' );
 		if ( ! in_array( $screen->id, $allowed_screens, true ) ) {
 			return;
 		}
@@ -273,9 +275,9 @@ class Lafka_GitHub_Updater {
 			self::log( 'Rate limited by GitHub API for ' . $repo . '. Resets in ' . $reset_time . '.' );
 			self::set_notice(
 				sprintf(
-					'GitHub API rate limit reached. Updates will resume in %s. Consider adding a <a href="%s">Personal Access Token</a> for higher limits.',
+					'GitHub API rate limit reached. Updates will resume in %s. For higher limits, add a GitHub Personal Access Token — see <a href="%s">Tools → Lafka Maintenance</a>.',
 					esc_html( $reset_time ),
-					esc_url( admin_url( 'admin.php?page=lafka-options' ) )
+					esc_url( admin_url( 'tools.php?page=lafka-maintenance' ) )
 				),
 				'warning'
 			);
