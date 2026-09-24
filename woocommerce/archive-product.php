@@ -18,10 +18,15 @@
  * here by design. (Third-party integrations that rely on those hooks will
  * therefore not run on these archives; re-introducing them would require
  * firing the actions after removing WC's default wrapper callbacks plus the
- * loop/structured-data hooks — out of scope of this template.)
+ * loop/structured-data hooks — out of scope of this template.) The one
+ * core behaviour kept is the store notice output WooCommerce hangs on
+ * woocommerce_before_shop_loop, printed at the top of the body below.
+ *
+ * Reviewed against WooCommerce core archive-product.php 8.6.0.
  *
  * @package Lafka
  * @since   5.61.0
+ * @version 8.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -171,6 +176,12 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 		<div class="lafka-container">
 
 			<?php
+			// Store notices (e.g. "added to cart" after a non-AJAX add) — core
+			// prints these from woocommerce_before_shop_loop, which never fires here.
+			if ( function_exists( 'woocommerce_output_all_notices' ) ) {
+				woocommerce_output_all_notices();
+			}
+
 			if ( $lafka_arch_is_shop && ! empty( $lafka_arch_terms ) ) :
 				// "All" view — render items grouped by category. The per-group cap
 				// is operator-configurable (Customizer mod `lafka_menu_group_limit`,

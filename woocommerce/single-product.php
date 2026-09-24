@@ -1,12 +1,13 @@
 <?php
 /**
- * Single product template — overrides woocommerce/templates/single-product.php (WC 10.7).
+ * Single product template — overrides woocommerce/templates/single-product.php.
  *
  * When the PDP-redesign flag is OFF (or the plugin is inactive), renders
- * WooCommerce's default single-product flow inline.
+ * WooCommerce's default single-product flow inline (identical to core 1.6.4).
  *
  * @package Lafka\WooCommerce
  * @since   5.16.0
+ * @version 1.6.4
  */
 
 defined( 'ABSPATH' ) || exit;

@@ -9,9 +9,13 @@
  * Replaces WC's table-based row layout. WC ecosystem hooks preserved
  * for 3rd-party extensions (wishlist plugins, cart-add-on plugins).
  *
+ * Reconciled with WooCommerce core cart/cart.php 10.8.0 (product-instance
+ * guard, backorder check, sold-individually quantity input, filtered product
+ * name on the quantity input and the linked name).
+ *
  * @see https://woocommerce.com/document/template-structure/
  * @package Lafka\WooCommerce
- * @version 6.9.0 (Pillar 3A — free-delivery progress component above totals)
+ * @version 10.8.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -144,7 +148,7 @@ do_action( 'woocommerce_before_cart' );
 			$_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 			$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 
-			if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
+			if ( $_product instanceof WC_Product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
 				$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
 				$product_name      = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
 				?>
@@ -174,7 +178,8 @@ do_action( 'woocommerce_before_cart' );
 							if ( ! $product_permalink ) {
 								echo wp_kses_post( $product_name . '&nbsp;' );
 							} else {
-								echo wp_kses_post( sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $product_name ) );
+								// Same filter WooCommerce core applies to the linked name.
+								echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $_product->get_name() ), $cart_item, $cart_item_key ) );
 							}
 							?>
 						</p>
@@ -202,7 +207,7 @@ do_action( 'woocommerce_before_cart' );
 						<?php endif; ?>
 
 						<?php
-						if ( $_product->backorders_require_notification() && $_product->is_in_stock() ) {
+						if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ) {
 							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'lafka' ) . '</p>', $product_id ) );
 						}
 						?>
@@ -215,20 +220,24 @@ do_action( 'woocommerce_before_cart' );
 							<div class="lafka-cart-item__qty">
 								<?php
 								if ( $_product->is_sold_individually() ) {
-									$product_quantity = sprintf( '1 <input type="hidden" name="cart[%s][qty]" value="1" />', $cart_item_key );
+									$min_quantity = 1;
+									$max_quantity = 1;
 								} else {
-									$product_quantity = woocommerce_quantity_input(
-										array(
-											'input_name'   => "cart[{$cart_item_key}][qty]",
-											'input_value'  => $cart_item['quantity'],
-											'max_value'    => $_product->get_max_purchase_quantity(),
-											'min_value'    => '0',
-											'product_name' => $_product->get_name(),
-										),
-										$_product,
-										false
-									);
+									$min_quantity = 0;
+									$max_quantity = $_product->get_max_purchase_quantity();
 								}
+
+								$product_quantity = woocommerce_quantity_input(
+									array(
+										'input_name'   => "cart[{$cart_item_key}][qty]",
+										'input_value'  => $cart_item['quantity'],
+										'max_value'    => $max_quantity,
+										'min_value'    => $min_quantity,
+										'product_name' => $product_name,
+									),
+									$_product,
+									false
+								);
 
 								echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>

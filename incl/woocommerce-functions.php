@@ -41,6 +41,9 @@ remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_pr
 remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
 
 remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
+// content-product.php prints its own card title, then fires
+// woocommerce_shop_loop_item_title for third-party callbacks.
+remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
 add_filter( 'woocommerce_before_shop_loop_item', 'lafka_shop_loop_image', 10 );
 
 // v5.17.0: legacy lafka_shop_loop_image (registered just above) emits its

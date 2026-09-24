@@ -11,10 +11,13 @@
  *   - Followed by the existing lafka-cart-empty-popular "Add a side?"
  *     section (hooked separately via woocommerce_cart_is_empty)
  *
- * Replaces: woocommerce/templates/cart/cart-empty.php
+ * Replaces: woocommerce/templates/cart/cart-empty.php. Reviewed against core
+ * 7.0.1: the core woocommerce_return_to_shop_redirect / _text filters still
+ * apply to the CTA.
  *
  * @package Lafka\WooCommerce
  * @since   5.90.0
+ * @version 7.0.1
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -30,7 +33,7 @@ defined( 'ABSPATH' ) || exit;
 // CTA to differ from the global menu URL.
 $lafka_cart_empty_menu_url = (string) apply_filters(
 	'lafka_cart_empty_menu_url',
-	lafka_theme_menu_url()
+	apply_filters( 'woocommerce_return_to_shop_redirect', lafka_theme_menu_url() )
 );
 ?>
 <section class="lafka-cart-empty" data-lafka-cart-empty>
@@ -49,7 +52,9 @@ $lafka_cart_empty_menu_url = (string) apply_filters(
 		<?php esc_html_e( 'Build an order from the menu — pizza, poutine, donair and more, ready to go.', 'lafka' ); ?>
 	</p>
 	<a class="lafka-cart-empty__cta" href="<?php echo esc_url( $lafka_cart_empty_menu_url ); ?>">
-		<?php esc_html_e( 'Browse the menu', 'lafka' ); ?>
+		<?php
+		echo esc_html( apply_filters( 'woocommerce_return_to_shop_text', __( 'Browse the menu', 'lafka' ) ) );
+		?>
 	</a>
 </section>
 
