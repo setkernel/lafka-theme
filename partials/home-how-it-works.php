@@ -28,15 +28,15 @@ $lafka_how_steps = (array) apply_filters(
 	array(
 		array(
 			'title' => (string) get_theme_mod( 'lafka_home_how_1_title', __( 'Pick your favourites', 'lafka' ) ),
-			'body'  => (string) get_theme_mod( 'lafka_home_how_1_body', __( 'Browse pizza, poutine, donair, wings & more. Customize every order, save your favourites.', 'lafka' ) ),
+			'body'  => (string) get_theme_mod( 'lafka_home_how_1_body', __( 'Browse the full menu. Customize every order, save your favourites.', 'lafka' ) ),
 		),
 		array(
 			'title' => (string) get_theme_mod( 'lafka_home_how_2_title', __( 'Pickup or delivery', 'lafka' ) ),
 			'body'  => (string) get_theme_mod( 'lafka_home_how_2_body', $lafka_how_2_body_default ),
 		),
 		array(
-			'title' => (string) get_theme_mod( 'lafka_home_how_3_title', __( 'We start baking', 'lafka' ) ),
-			'body'  => (string) get_theme_mod( 'lafka_home_how_3_body', __( 'Track your order in real time. Most pies are out of the oven in 25 minutes.', 'lafka' ) ),
+			'title' => (string) get_theme_mod( 'lafka_home_how_3_title', __( 'We start cooking', 'lafka' ) ),
+			'body'  => (string) get_theme_mod( 'lafka_home_how_3_body', __( 'Track your order in real time. Most orders are ready in about 25 minutes.', 'lafka' ) ),
 		),
 	)
 );

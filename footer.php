@@ -39,7 +39,7 @@ $lafka_ft_logo  = function_exists( 'lafka_get_logo_id' ) ? lafka_get_logo_id() :
 
 $lafka_ft_about = (string) get_theme_mod(
 	'lafka_footer_about',
-	__( 'Fresh-baked pizza, poutine, donair and more — made to order from scratch in our kitchen.', 'lafka' )
+	__( 'Fresh food, made to order from scratch in our kitchen. Order online for pickup or delivery.', 'lafka' )
 );
 
 // Only ship the built-in form when an integration has actually registered a

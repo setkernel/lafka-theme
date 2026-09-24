@@ -61,7 +61,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			),
 			'lafka_home_hero_lead'              => array(
 				'label'   => __( 'Sub-headline', 'lafka' ),
-				'default' => __( 'Fresh dough, locally-sourced toppings, and recipes refined over years of serving our neighbors. Ready in about 25 minutes.', 'lafka' ),
+				'default' => __( 'Fresh ingredients and recipes refined over years of serving our neighbours. Ready in about 25 minutes.', 'lafka' ),
 				'type'    => 'textarea',
 			),
 			'lafka_home_hero_primary_cta_label' => array(
@@ -124,9 +124,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		// the OSS bundle look without uploading. Default applied via
 		// `lafka_home_hero_default_bg_url` filter so child themes can
 		// inject a brand-specific fallback without overriding operator's
-		// Customizer choice. On pepperypizzapoutine.com the operator's
-		// existing yellow-texture upload (uploaded 2021-06 for WPBakery
-		// hero) is the right default.
+		// Customizer choice.
 		$lafka_home_hero_bg_default = (string) apply_filters(
 			'lafka_home_hero_default_bg_url',
 			''

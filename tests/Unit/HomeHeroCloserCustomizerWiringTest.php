@@ -129,12 +129,12 @@ final class HomeHeroCloserCustomizerWiringTest extends TestCase {
 
 	public function test_hero_lead_customizer_default_matches_partial_fallback(): void {
 		$this->assertMatchesRegularExpression(
-			"/get_theme_mod\(\s*'lafka_home_hero_lead',\s*\R?\s*__\(\s*'Fresh dough,/s",
+			"/get_theme_mod\(\s*'lafka_home_hero_lead',\s*\R?\s*__\(\s*'Fresh ingredients and recipes/s",
 			$this->hero,
 			'Hero partial lead fallback baseline.'
 		);
 		$this->assertMatchesRegularExpression(
-			"/'lafka_home_hero_lead'.*?'default'\s*=>\s*__\(\s*'Fresh dough,/s",
+			"/'lafka_home_hero_lead'.*?'default'\s*=>\s*__\(\s*'Fresh ingredients and recipes/s",
 			$this->customizer,
 			'Customizer hero lead default must match the partial fallback so preview == render.'
 		);

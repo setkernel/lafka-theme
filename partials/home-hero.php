@@ -10,7 +10,7 @@
  *   - Left:
  *       - status pill (white bg, success dot, "Open now · until 11:00 pm")
  *       - H1 Fraunces 800 clamp(2.5rem, 6vw, 4.25rem)
- *           "Pizza, poutine & <em class='lafka-hero__accent'>everything craveable</em>."
+ *           "Made fresh & <em class='lafka-hero__accent'>everything craveable</em>."
  *       - Lead paragraph
  *       - Two CTAs: primary red pill + ghost phone
  *       - 3-item stats row (icon-disc + Fraunces bold number + caption)
@@ -43,14 +43,14 @@ $lafka_hero_phone_tel   = isset( $lafka_hero_info['phone_e164'] ) ? (string) $la
 
 $lafka_hero_headline_default = sprintf(
 	/* translators: HTML allowed — second clause wrapped in an <em> for the accent treatment. */
-	__( 'Pizza, poutine & %s.', 'lafka' ),
+	__( 'Made fresh & %s.', 'lafka' ),
 	'<em class="lafka-hero__accent">' . esc_html__( 'everything craveable', 'lafka' ) . '</em>'
 );
 $lafka_hero_headline = (string) get_theme_mod( 'lafka_home_hero_headline', $lafka_hero_headline_default );
 
 $lafka_hero_lead = (string) get_theme_mod(
 	'lafka_home_hero_lead',
-	__( 'Fresh dough, locally-sourced toppings, and recipes refined over years of serving our neighbors. Ready in about 25 minutes.', 'lafka' )
+	__( 'Fresh ingredients and recipes refined over years of serving our neighbours. Ready in about 25 minutes.', 'lafka' )
 );
 
 $lafka_hero_cta_primary_label = (string) get_theme_mod( 'lafka_home_hero_primary_cta_label', __( 'Start your order', 'lafka' ) );
