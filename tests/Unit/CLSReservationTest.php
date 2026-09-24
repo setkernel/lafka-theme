@@ -55,13 +55,4 @@ final class CLSReservationTest extends TestCase {
     // (incl/perf/image-dimensions.php). The plugin's ImageDimensionsTest
     // covers those assertions on the canonical home — no need to test
     // them from this theme test class.
-
-    public function test_rubik_font_display_optional_still_present(): void {
-        // Sanity: confirm W1-T10 self-hosted Rubik @font-face still uses font-display: optional.
-        // Quotes around 'Rubik' are optional in CSS — regex allows both forms.
-        $css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
-        $occurrences = preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-display:\s*optional/s', $css );
-        $this->assertGreaterThanOrEqual( 3, $occurrences,
-            'Rubik @font-face blocks must keep font-display: optional (P6-PERF-3 + P6-PERF-2 dependency)' );
-    }
 }

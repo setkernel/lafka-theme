@@ -27,6 +27,8 @@ final class StyleCssIntegrityTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/^\s*Version:\s*\d+\.\d+\.\d+/m', $this->css,
 			'WP reads the theme version from the style.css header — it must survive purges.' );
 		$this->assertStringContainsString( 'Text Domain: lafka', $this->css );
+		$this->assertMatchesRegularExpression( '/^\s*License:\s*GNU General Public License/m', $this->css,
+			'The GPL License: header must survive — wp.org requires it.' );
 	}
 
 	public function test_font_faces_preserved(): void {
