@@ -13,7 +13,7 @@
 
 version: 2
 updates:
-  # Composer (PHPCS / WPCS / PHPCompatibility / PHPUnit / Brain Monkey).
+  # Composer (PHPCS / WPCS / PHPCompatibility / PHPUnit).
   - package-ecosystem: composer
     directory: /
     schedule:
@@ -25,6 +25,11 @@ updates:
     labels:
       - dependencies
       - composer
+    # PHPCS 4 is blocked: WPCS 3.x requires squizlabs/php_codesniffer ^3.
+    # Skip its major-bump PRs until WPCS supports 4.
+    ignore:
+      - dependency-name: squizlabs/php_codesniffer
+        update-types: ['version-update:semver-major']
     groups:
       composer-minor-and-patch:
         patterns: ['*']
@@ -43,6 +48,11 @@ updates:
     labels:
       - dependencies
       - javascript
+    # stylelint 17 is blocked: @wordpress/stylelint-config peers on
+    # stylelint ^16. Skip its major-bump PRs until that config supports 17.
+    ignore:
+      - dependency-name: stylelint
+        update-types: ['version-update:semver-major']
     groups:
       npm-minor-and-patch:
         patterns: ['*']
