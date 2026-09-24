@@ -24,7 +24,7 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *         0 0 0 2px var(--lafka-color-surface-page, #fff),
  *         0 0 0 4px var(--lafka-color-accent-700);
  *
- * (white spacer + solid #991b1b = 7.41:1 on white; the spacer guarantees
+ * (white spacer + solid #991b1b = 8.31:1 on white; the spacer guarantees
  * separation on the red CTA and the ink-black active chip too).
  *
  * These assertions lock the token value and verify the fix actually
@@ -94,11 +94,11 @@ final class FocusRingContrastTest extends TestCase {
 			'--lafka-shadow-focus must include a --lafka-color-surface-page spacer ring — C-A11Y-Audit-2026-06-27'
 		);
 
-		// A solid high-contrast accent-700 ring (7.41:1 on white).
+		// A solid high-contrast accent-700 ring (8.31:1 on white).
 		$this->assertMatchesRegularExpression(
 			'/var\(\s*--lafka-color-accent-700\b/',
 			$value,
-			'--lafka-shadow-focus must include a solid --lafka-color-accent-700 ring (7.41:1 on white) — C-A11Y-Audit-2026-06-27'
+			'--lafka-shadow-focus must include a solid --lafka-color-accent-700 ring (8.31:1 on white) — C-A11Y-Audit-2026-06-27'
 		);
 
 		// Two comma-separated shadow layers => the ring is offset, not flush.
@@ -114,7 +114,7 @@ final class FocusRingContrastTest extends TestCase {
 		$this->assertMatchesRegularExpression(
 			'/--lafka-color-accent-700\s*:\s*#991b1b\b/i',
 			$this->tokens_css,
-			'--lafka-color-accent-700 must remain #991b1b (7.41:1 on white) so the focus ring clears WCAG 1.4.11 — C-A11Y-Audit-2026-06-27'
+			'--lafka-color-accent-700 must remain #991b1b (8.31:1 on white) so the focus ring clears WCAG 1.4.11 — C-A11Y-Audit-2026-06-27'
 		);
 	}
 
