@@ -72,7 +72,8 @@ final class ReleasePackagingTest extends TestCase {
 			'eslint.config.mjs',
 			'phpunit.xml.dist',
 			'.phpunit.result.cache',
-			'playwright.config.js',
+			'playwright*.config.js',
+			'presets/__fixtures__',
 			'tests',
 			'scripts',
 			'CONTRIBUTING.md',
@@ -119,6 +120,22 @@ final class ReleasePackagingTest extends TestCase {
 				$excludes,
 				"release.yml must NOT exclude runtime path '{$needle}' from the release zip"
 			);
+		}
+	}
+
+	public function test_license_files_are_shipped(): void {
+		// GPLv2 requires the licence text to reach recipients, and the OFL
+		// requires each font's licence to travel with the font files. rsync
+		// excludes are unanchored, so a bare 'LICENSE' pattern would strip the
+		// root GPL text AND every assets/fonts/*/LICENSE.
+		foreach ( $this->release_excludes() as $pattern ) {
+			foreach ( array( 'LICENSE', 'OFL.txt', 'assets/fonts' ) as $licensed ) {
+				self::assertStringNotContainsString(
+					$licensed,
+					$pattern,
+					"release.yml exclude '{$pattern}' would drop licence files ('{$licensed}')"
+				);
+			}
 		}
 	}
 
