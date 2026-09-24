@@ -2,8 +2,8 @@
  *
  * bbPress forum surfaces. Enqueued only when bbPress is active.
  *
- * EXTRACTED from the legacy style.css monolith by scripts/nx1-10a-extract.mjs
- * (NX1-10a). Every rule here was proven to match ZERO elements on the six
+ * EXTRACTED from the legacy style.css monolith in NX1-10a (the one-shot
+ * extractor is in git history). Every rule here was proven to match ZERO elements on the six
  * handoff surfaces, so it is enqueued only on the legacy surface below. Kept in
  * @layer legacy so it stays below the unlayered modular sheets, exactly as it
  * did inside the monolith.

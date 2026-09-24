@@ -8,7 +8,7 @@
  * (tests/Unit/PresetSchemaTest.php) read, mirroring the `lafka_legacy_migrate_map()`
  * pure-data idiom. See docs/PRESET_ENGINE.md §3.
  *
- *  - LAFKA_PRESET_TOKEN_WHITELIST — the ~200 `--lafka-*` design tokens that have
+ *  - LAFKA_PRESET_TOKEN_WHITELIST — the 88 `--lafka-*` design tokens that have
  *    NO operator feed (surfaces, borders, text, semantics, radii, shadows,
  *    motion, type scale/family). A preset's `tokens{}` block may set any of
  *    these into the Preset-Token Layer (PTL). Deliberately EXCLUDES the
@@ -18,7 +18,7 @@
  *    forwards — those are FORBIDDEN in a preset and fail PresetSchemaTest.
  *
  *  - LAFKA_PRESET_CHROME_WHITELIST — `lafka_accent_color` + `lafka_brand_color`
- *    plus the ~55 appearance theme_mods that `styles/dynamic-css.php` emits
+ *    plus the 53 appearance theme_mods that `styles/dynamic-css.php` emits
  *    (the `lafka_legacy_migrate_map()` destinations). A preset's `chrome{}`
  *    block supplies the DEFAULT value for these via the theme_mod-default
  *    layer (TML, see lafka_preset_default()); an operator-set theme_mod always

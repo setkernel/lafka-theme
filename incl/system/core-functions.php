@@ -1824,7 +1824,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// NX1-10a: the legacy monolith remainder, split out of style.css into
 		// scoped sheets that load ONLY on the surfaces which render the matching
-		// legacy markup. Every rule in them was proven (scripts/nx1-10a-extract.mjs)
+		// legacy markup. Every rule in them was proven (by the one-shot NX1-10a extractor, now in git history)
 		// to match zero elements on the six handoff pages, so home/menu/PDP/cart/
 		// checkout download none of it. Each depends on lafka-style so its
 		// @layer legacy rules keep the monolith's original source order (below the

@@ -66,7 +66,7 @@ if ( ! function_exists( 'lafka_add_custom_css' ) ) {
 		$opts_version  = get_option( 'lafka_dynamic_css_version', '0' );
 		$theme_version = wp_get_theme( get_template() )->get( 'Version' );
 		// NX2-01: fold the active preset slug into the cache key. dynamic-css now
-		// resolves its ~57 defaults through the active preset (lafka_preset_default),
+		// resolves its chrome defaults (55 keys, 50 call sites) through the active preset (lafka_preset_default),
 		// so two presets must never share a cache entry — a preset switch writes
 		// only the lafka_active_preset theme_mod, and this makes that switch
 		// cache-correct by construction (independent of the option-save bust hook).
