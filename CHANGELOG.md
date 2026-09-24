@@ -5,7 +5,7 @@ All notable changes to lafka-theme are documented here. The format follows
 semver (see the Releases section of CONTRIBUTING.md). Older history lives in
 git tags + GitHub Releases.
 
-## [Unreleased]
+## [7.1.0] — 2026-09-24
 
 Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
 
