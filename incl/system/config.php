@@ -5,10 +5,6 @@ if ( ! defined( 'LAFKA_IMAGES_PATH' ) ) {
 	define( 'LAFKA_IMAGES_PATH', get_template_directory_uri() . '/image/' );
 }
 
-if ( ! defined( 'LAFKA_BACKGROUNDS_PATH' ) ) {
-	define( 'LAFKA_BACKGROUNDS_PATH', LAFKA_IMAGES_PATH . 'backgrounds/' );
-}
-
 if ( ! defined( 'LAFKA_IS_BBPRESS' ) ) {
 	if ( class_exists( 'bbPress' ) ) {
 		define( 'LAFKA_IS_BBPRESS', true );
@@ -72,18 +68,6 @@ if ( class_exists( 'WCVendors_Pro' ) || function_exists( 'activate_wcvendors_pro
 	define( 'LAFKA_IS_WC_VENDORS_PRO', true );
 } else {
 	define( 'LAFKA_IS_WC_VENDORS_PRO', false );
-}
-
-if ( class_exists( 'Vc_Manager' ) ) {
-	define( 'LAFKA_IS_VC', true );
-} else {
-	define( 'LAFKA_IS_VC', false );
-}
-
-if ( class_exists( 'Envato_Market' ) ) {
-	define( 'LAFKA_IS_ENVATO_MARKET', true );
-} else {
-	define( 'LAFKA_IS_ENVATO_MARKET', false );
 }
 
 /**

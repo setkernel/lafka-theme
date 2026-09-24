@@ -91,11 +91,11 @@ final class ProductCardLayoutTest extends TestCase {
 		// lafka_shop_loop_image emits its own .image > a > img block on
 		// woocommerce_before_shop_loop_item. The new content-product.php
 		// renders the image directly via lafka_product_card_image_html(),
-		// so the legacy filter must be removed to avoid double thumbnails.
-		$this->assertMatchesRegularExpression(
-			"/remove_filter\(\s*['\"]woocommerce_before_shop_loop_item['\"]\s*,\s*['\"]lafka_shop_loop_image['\"]\s*,\s*10/",
+		// so the legacy callback must not be hooked (double thumbnails).
+		$this->assertDoesNotMatchRegularExpression(
+			"/add_(?:filter|action)\(\s*['\"]woocommerce_before_shop_loop_item['\"]\s*,\s*['\"]lafka_shop_loop_image['\"]/",
 			$this->wc_fns,
-			'lafka_shop_loop_image filter must be removed; new card renders the image directly.'
+			'lafka_shop_loop_image must not be hooked; the card renders the image directly.'
 		);
 	}
 }

@@ -44,15 +44,11 @@ remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_
 // content-product.php prints its own card title, then fires
 // woocommerce_shop_loop_item_title for third-party callbacks.
 remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
-add_filter( 'woocommerce_before_shop_loop_item', 'lafka_shop_loop_image', 10 );
 
-// v5.17.0: legacy lafka_shop_loop_image (registered just above) emits its
-// own .image > a > img block, which would duplicate the thumbnail rendered
-// directly in the new content-product.php template via
-// lafka_product_card_image_html(). Removed AFTER the add_filter so the
-// hook is actually unregistered. Operators with custom templates that
-// depend on the legacy markup can re-add it from a child theme.
-remove_filter( 'woocommerce_before_shop_loop_item', 'lafka_shop_loop_image', 10 );
+// lafka_shop_loop_image() (below) is the pre-5.17 loop image block. It is not
+// hooked: content-product.php renders the thumbnail itself. Child themes with
+// templates that need the legacy markup can hook it on
+// woocommerce_before_shop_loop_item.
 
 if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
 

@@ -1397,14 +1397,6 @@ if ( ! function_exists( 'lafka_is_time_more_than_x_months_ago' ) ) {
 	}
 }
 
-// Fix All Import template error
-add_action( 'pmxi_saved_post', 'lafka_remove_page_template', 10, 1 );
-if ( ! function_exists( 'lafka_remove_page_template' ) ) {
-	function lafka_remove_page_template( $id ) {
-		delete_post_meta( $id, '_wp_page_template' );
-	}
-}
-
 if ( ! function_exists( 'lafka_should_show_account_icon' ) ) {
 	function lafka_should_show_account_icon() {
 		return ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_show_my_account', true ) && get_option( 'woocommerce_myaccount_page_id' ) );
