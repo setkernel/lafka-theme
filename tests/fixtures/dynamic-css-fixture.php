@@ -33,24 +33,18 @@ return array(
 	'lafka_collapsible_titles_color'           => '#2950ce',
 	'lafka_custom_page_title_color'            => '#b4c8db',
 	'lafka_fancy_category_title_color'         => '#bbaedd',
-	'lafka_footer_copyright_bar_bckgr_color'   => '#3a827f',
-	'lafka_footer_copyright_bar_text_color'    => '#880b3e',
 	'lafka_footer_links_color'                 => '#6d4f96',
 	'lafka_footer_menu_links_color'            => '#6ca926',
 	'lafka_footer_text_color'                  => '#6024b2',
 	'lafka_footer_title_border_color'          => '#9cb73e',
 	'lafka_footer_titles_color'                => '#1ae252',
-	'lafka_header_services_color'              => '#b0b97f',
-	'lafka_header_top_bar_border_color'        => '#6a4600',
 	'lafka_header_top_bar_color'               => '#b945c4',
 	'lafka_links_color'                        => '#5b05c9',
 	'lafka_links_hover_color'                  => '#021622',
 	'lafka_logo_background_color'              => '#59bb35',
 	'lafka_main_menu_background_color'         => '#45298c',
-	'lafka_main_menu_icons_color'              => '#a50227',
 	'lafka_main_menu_links_bckgr_hover_color'  => '#0a58f3',
 	'lafka_main_menu_links_color'              => '#3d55bf',
-	'lafka_main_menu_links_hover_color'        => '#d85287',
 	'lafka_new_label_color'                    => '#87c511',
 	'lafka_page_subtitle_color'                => '#136ba7',
 	'lafka_page_title_bckgr_color'             => '#d50974',
@@ -62,16 +56,10 @@ return array(
 	'lafka_sidebar_titles_color'               => '#9f6c36',
 	'lafka_top_bar_menu_links_color'           => '#79374e',
 	'lafka_top_bar_menu_links_hover_color'     => '#8e5e4f',
-	'lafka_top_bar_message_color'              => '#4746c3',
 	'lafka_transparent_header_dark_menu_color' => '#eb117f',
 
 	// Main-menu typography: reads ['style'] (JSON) + ['size'].
 	// (NX1-02.dyncss-typography-backgrounds: keyed by its theme_mod name.)
-	'lafka_main_menu_typography' => array(
-		'size'  => '17px',
-		'style' => '{"font-weight":"620","font-style":"italic"}',
-	),
-
 	// Top-menu typography: reads ['style'] (JSON) + ['size'].
 	'lafka_top_menu_typography' => array(
 		'size'  => '14px',
@@ -86,12 +74,6 @@ return array(
 	),
 
 	// Text-logo typography: reads ['style'] (JSON) + ['color'] + ['size'].
-	'lafka_text_logo_typography' => array(
-		'size'  => '23px',
-		'style' => '{"font-weight":"770","font-style":"normal"}',
-		'color' => '#f4f4f2',
-	),
-
 	// Heading fonts h1..h6: each reads ['style'] (JSON) + ['color'] + ['size'].
 	'lafka_h1_font' => array(
 		'size'  => '41px',

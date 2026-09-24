@@ -196,9 +196,6 @@ if ( ! defined( 'LAFKA_PRESET_CHROME_WHITELIST' ) ) {
 			// Header / top-bar / collapsible / main-menu / footer chrome.
 			'lafka_transparent_header_dark_menu_color',
 			'lafka_header_top_bar_color',
-			'lafka_header_top_bar_border_color',
-			'lafka_top_bar_message_color',
-			'lafka_header_services_color',
 			'lafka_top_bar_menu_links_color',
 			'lafka_top_bar_menu_links_hover_color',
 			'lafka_collapsible_bckgr_color',
@@ -207,23 +204,17 @@ if ( ! defined( 'LAFKA_PRESET_CHROME_WHITELIST' ) ) {
 			'lafka_collapsible_links_color',
 			'lafka_main_menu_background_color',
 			'lafka_main_menu_links_color',
-			'lafka_main_menu_links_hover_color',
 			'lafka_main_menu_links_bckgr_hover_color',
-			'lafka_main_menu_icons_color',
 			'lafka_footer_titles_color',
 			'lafka_footer_title_border_color',
-			'lafka_footer_copyright_bar_text_color',
 			'lafka_footer_menu_links_color',
 			'lafka_footer_links_color',
 			'lafka_footer_text_color',
-			'lafka_footer_copyright_bar_bckgr_color',
 
 			// Composite typography arrays (routed by lafka_preset_default's
 			// untyped return — the shape matches dynamic-css.php's defaults).
-			'lafka_main_menu_typography',
 			'lafka_top_menu_typography',
 			'lafka_body_font',
-			'lafka_text_logo_typography',
 			'lafka_h1_font',
 			'lafka_h2_font',
 			'lafka_h3_font',

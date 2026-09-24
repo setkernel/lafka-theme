@@ -68,9 +68,7 @@
 		"lafka_new_label_color": "#047857",
 		"lafka_sale_label_color": "#be123c",
 		"lafka_main_menu_background_color": "#fafaf9",
-		"lafka_main_menu_links_color": "#1c1917",
-		"lafka_main_menu_links_hover_color": "#be123c",
-		"lafka_main_menu_icons_color": "#57534e"
+		"lafka_main_menu_links_color": "#1c1917"
 	},
 	"fonts": {
 		"body": { "family": "Inter", "source": "pool" },
