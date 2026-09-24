@@ -1,0 +1,17 @@
+{
+	"slug": "peppery",
+	"schema": 1,
+	"label": "Peppery",
+	"description": "Pizza & poutine — the Lafka default.",
+	"dark": false,
+	"extends": null,
+	"tokens": {},
+	"chrome": {},
+	"fonts": {
+		"body": { "family": "Rubik", "source": "base" },
+		"display": { "family": "Fraunces", "source": "base" }
+	},
+	"category_emoji": {},
+	"variants": {},
+	"contrast_exceptions": ["text-muted-on-surface"]
+}

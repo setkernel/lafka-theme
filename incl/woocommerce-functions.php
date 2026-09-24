@@ -3,12 +3,8 @@
 // Woocommerce specific functions
 /** @var $product WC_Product */
 
-// Disable WooCommerce styles
-if ( version_compare( WC_VERSION, '2.1' ) >= 0 ) {
-	add_filter( 'woocommerce_enqueue_styles', '__return_false' );
-} else {
-	define( 'WOOCOMMERCE_USE_CSS', false );
-}
+// Disable WooCommerce styles (the theme owns all storefront styling).
+add_filter( 'woocommerce_enqueue_styles', '__return_false' );
 
 add_filter( 'woocommerce_breadcrumb_defaults', 'lafka_woocommerce_breadcrumb_defaults' );
 if ( ! function_exists( 'lafka_woocommerce_breadcrumb_defaults' ) ) {
@@ -45,15 +41,14 @@ remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_pr
 remove_action( 'woocommerce_after_shop_loop_item', 'woocommerce_template_loop_add_to_cart', 10 );
 
 remove_action( 'woocommerce_before_shop_loop_item_title', 'woocommerce_template_loop_product_thumbnail', 10 );
-add_filter( 'woocommerce_before_shop_loop_item', 'lafka_shop_loop_image', 10 );
+// content-product.php prints its own card title, then fires
+// woocommerce_shop_loop_item_title for third-party callbacks.
+remove_action( 'woocommerce_shop_loop_item_title', 'woocommerce_template_loop_product_title', 10 );
 
-// v5.17.0: legacy lafka_shop_loop_image (registered just above) emits its
-// own .image > a > img block, which would duplicate the thumbnail rendered
-// directly in the new content-product.php template via
-// lafka_product_card_image_html(). Removed AFTER the add_filter so the
-// hook is actually unregistered. Operators with custom templates that
-// depend on the legacy markup can re-add it from a child theme.
-remove_filter( 'woocommerce_before_shop_loop_item', 'lafka_shop_loop_image', 10 );
+// lafka_shop_loop_image() (below) is the pre-5.17 loop image block. It is not
+// hooked: content-product.php renders the thumbnail itself. Child themes with
+// templates that need the legacy markup can hook it on
+// woocommerce_before_shop_loop_item.
 
 if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
 
@@ -310,8 +305,7 @@ if ( ! function_exists( 'lafka_price_filter' ) ) {
 		}
 
 		wp_enqueue_style( 'jquery-ui' );
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-		wp_enqueue_script( 'lafka-price-slider', get_template_directory_uri() . '/js/lafka-price-slider' . $suffix . '.js', array( 'jquery-ui-slider', 'wc-jquery-ui-touchpunch', 'accounting' ), lafka_asset_version( '/js/lafka-price-slider' . $suffix . '.js' ), true );
+		wp_enqueue_script( 'lafka-price-slider', get_template_directory_uri() . '/js/lafka-price-slider.js', array( 'jquery-ui-slider', 'wc-jquery-ui-touchpunch', 'accounting' ), lafka_asset_version( '/js/lafka-price-slider.js' ), true );
 
 		// Round values to nearest 10 by default.
 		$step = max( apply_filters( 'woocommerce_price_filter_widget_step', 10 ), 1 );
@@ -623,6 +617,11 @@ if ( ! function_exists( 'lafka_shop_sale_countdown' ) ) {
 			$sales_dates = lafka_get_product_sales_dates( $post );
 			$now         = time();
 			if ( $sales_dates['to'] && $now < $sales_dates['to'] ) {
+				// Late enqueue: the countdown handles are footer scripts, so
+				// they still print even though the loop is mid-render.
+				if ( function_exists( 'lafka_enqueue_countdown' ) ) {
+					lafka_enqueue_countdown();
+				}
 				$random_num = uniqid();
 				?>
 				<div class="count_holder_small" data-countdown-id="<?php echo esc_js( '#lafkaCountSmallLatest' . $post->ID . $random_num ); ?>"
@@ -664,6 +663,9 @@ if ( ! function_exists( 'lafka_product_sale_countdown' ) ) {
 					(function ($) {
 						"use strict";
 						$(window).on("load lafka_quickview_loaded", function () {
+							if (typeof $.fn.countdown !== 'function') {
+								return;
+							}
 							$('#<?php echo esc_attr( $unique_id ); ?>').countdown({
 								until: new Date("<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>"),
 								compact: false,
@@ -882,41 +884,6 @@ if ( ! function_exists( 'lafka_add_this_share' ) ) {
 		if ( function_exists( 'lafka_share_links' ) ) {
 			lafka_share_links( the_title_attribute( 'echo=0' ), get_permalink() );
 		}
-	}
-
-}
-
-/**
- * Cart Link
- * Displayed a link to the cart including the number of items present and the cart total
- *
- * @param array $settings Settings
- *
- * @return array           Settings
- */
-if ( ! function_exists( 'lafka_cart_link' ) ) {
-
-	function lafka_cart_link() {
-		if ( is_cart() ) {
-			$class = 'current-menu-item';
-		} else {
-			$class = '';
-		}
-		?>
-		<?php
-		// `WC()->cart` is null in some early-template / REST contexts. Without
-		// the guard the page fatals — debug.log on local end-to-end testing
-		// (Session 4) confirmed the NPE in production-equivalent runs.
-		$lafka_cart_count = ( function_exists( 'WC' ) && WC() && WC()->cart )
-			? (int) WC()->cart->get_cart_contents_count()
-			: 0;
-		?>
-		<li class="lafka-cart-link-item <?php echo sanitize_html_class( $class ); ?>">
-			<a id="lafka_quick_cart_link" class="cart-contents" href="<?php echo esc_url( wc_get_cart_url() ); ?>" title="<?php esc_attr_e( 'View your shopping cart', 'lafka' ); ?>">
-				<span class="count"><?php echo esc_html( (string) $lafka_cart_count ); ?></span>
-			</a>
-		</li>
-		<?php
 	}
 
 }
@@ -1191,10 +1158,12 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 				update_meta_cache( 'post', $child_ids );
 			}
 
-			// Load addons once outside the loop (was previously inside = N queries for N variations)
+			// Load addons once outside the loop (was previously inside = N queries for N variations).
+			// Lafka_Engine_Helper is lafka-plugin's addon API (it replaced
+			// WC_Product_Addons_Helper, whose alias the plugin dropped in 8.18.0).
 			$product_addons = array();
-			if ( class_exists( 'WC_Product_Addons_Helper' ) ) {
-				$product_addons = WC_Product_Addons_Helper::get_product_addons( $product->get_id() );
+			if ( class_exists( 'Lafka_Engine_Helper' ) && function_exists( 'is_lafka_product_addons' ) && is_lafka_product_addons() ) {
+				$product_addons = Lafka_Engine_Helper::get_product_addons( $product->get_id() );
 			}
 
 			// PERF-C06: Batch-fetch all attribute terms for all variations at once,

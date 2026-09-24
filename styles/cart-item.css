@@ -25,7 +25,7 @@
 .lafka-cart-item {
 	display: grid;
 	grid-template-columns: 80px 1fr;
-	background: #fff;
+	background: var(--lafka-color-surface-raised, #fff);
 	border-radius: 12px;
 	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 	overflow: hidden;
@@ -193,7 +193,7 @@
 	min-height: 44px;
 	width: 44px;
 	height: 44px;
-	color: #999;
+	color: var(--lafka-color-text-muted); /* × is text: 4.5:1 on the cart surface in every preset (#999 was 2.8:1). */
 	font-size: 18px;
 	line-height: 1;
 	text-decoration: none;
@@ -202,8 +202,8 @@
 
 .lafka-cart-item__remove:hover,
 .lafka-cart-item__remove:focus {
-	color: #c62828;
-	background: rgba(198, 40, 40, 0.06);
+	color: var(--lafka-color-error);
+	background: var(--lafka-color-error-bg);
 }
 
 /* Cart actions row (coupon + update). */

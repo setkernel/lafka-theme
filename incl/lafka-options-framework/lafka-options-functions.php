@@ -14,26 +14,6 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Returns an array of system fonts
- * Feel free to edit this, update the font fallbacks, etc.
- */
-function lafka_typography_get_os_fonts() {
-	// OS Font Defaults
-	$os_faces = array(
-			'' => esc_html__( '-- None --', 'lafka' ),
-			'Arial' => 'Arial',
-			'Verdana' => 'Verdana',
-			'Helvetica' => 'Helvetica',
-			'Lucida Grande' => 'Lucida Grande',
-			'Trebuchet MS' => 'Trebuchet MS',
-			'Times New Roman' => 'Times New Roman',
-			'Tahoma' => 'Tahoma',
-			'Georgia' => 'Georgia'
-	);
-	return $os_faces;
-}
-
-/**
  * Returns a select list of Google fonts
  */
 function lafka_typography_get_google_fonts() {

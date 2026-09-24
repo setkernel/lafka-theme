@@ -22,16 +22,6 @@ final class OwlCarouselA11yTest extends TestCase {
         $this->assertGreaterThanOrEqual( 3, $count_next );
     }
 
-    public function test_owl_navtext_does_not_emit_bare_icons(): void {
-        $js = file_get_contents( dirname( __DIR__, 2 ) . '/js/lafka-libs-config.js' );
-        // The audit's failing pattern: navText array containing only an <i> tag
-        // with fa-angle-left, no surrounding sr-only.
-        $this->assertDoesNotMatchRegularExpression(
-            '/navText:\s*\[\s*"<i class=\'fas fa-angle-left\'><\/i>"/',
-            $js
-        );
-    }
-
     public function test_screen_reader_text_helper_defined(): void {
         // Audit 2026-06-27 #6: the parent's Owl/slider navText needs the
         // .screen-reader-text helper, so the PARENT must define it. This used to

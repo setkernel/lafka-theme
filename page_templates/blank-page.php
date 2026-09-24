@@ -1,10 +1,17 @@
-<?php defined( 'ABSPATH' ) || exit; ?>
 <?php
-/*
-	Template Name: Blank page
+/**
+ * Template Name: Content only
+ * Template Post Type: page
+ *
+ * The page content inside the normal header and footer, with no title,
+ * breadcrumb or hero. This template was labelled "Blank page", but it has
+ * rendered the full site chrome since the 5.55 header rebuild; the file name
+ * stays blank-page.php so pages already assigned to it keep working.
+ *
+ * @package Lafka
  */
-global $lafka_is_blank;
-$lafka_is_blank = true;
+
+defined( 'ABSPATH' ) || exit;
 
 get_header();
 ?>

@@ -8,7 +8,7 @@
  * to end users if that exclude list isn't kept in step. This test parses the
  * workflow's `--exclude=` patterns and asserts the known dev-file classes are
  * excluded — and, symmetrically, that runtime assets (readme.txt, languages/,
- * theme.json, the store/demo importer, the built .min files) are NOT excluded.
+ * theme.json, the presets, the built .min files) are NOT excluded.
  * Scans the workflow as text; runs no rsync, needs no node_modules.
  *
  * The build-runs-before-zip ordering is separately guarded by
@@ -72,11 +72,13 @@ final class ReleasePackagingTest extends TestCase {
 			'eslint.config.mjs',
 			'phpunit.xml.dist',
 			'.phpunit.result.cache',
-			'playwright.config.js',
+			'playwright*.config.js',
+			'presets/__fixtures__',
 			'tests',
 			'scripts',
 			'CONTRIBUTING.md',
 			'DESIGN_SYSTEM.md',
+			'docs',
 			'README.md',
 			'readme.md',
 		);
@@ -93,8 +95,6 @@ final class ReleasePackagingTest extends TestCase {
 	public function test_runtime_files_not_excluded_from_zip(): void {
 		$excludes = $this->release_excludes();
 
-		// `store` must stay: incl/LafkaTransferContent.class.php loads
-		// store/demo/ at runtime for the one-click demo importer.
 		$runtime = array(
 			'readme.txt',
 			'languages',
@@ -102,11 +102,13 @@ final class ReleasePackagingTest extends TestCase {
 			'incl',
 			'styles',
 			'js',
-			'store',
 			'woocommerce',
 			'theme.json',
 			'partials',
 			'functions.php',
+			// NX2-01: the preset engine ships its definitions from presets/*/preset.json
+			// (the runtime PHP lives under incl/presets/, covered by 'incl' above).
+			'presets',
 		);
 
 		foreach ( $runtime as $needle ) {
@@ -115,6 +117,22 @@ final class ReleasePackagingTest extends TestCase {
 				$excludes,
 				"release.yml must NOT exclude runtime path '{$needle}' from the release zip"
 			);
+		}
+	}
+
+	public function test_license_files_are_shipped(): void {
+		// GPLv2 requires the licence text to reach recipients, and the OFL
+		// requires each font's licence to travel with the font files. rsync
+		// excludes are unanchored, so a bare 'LICENSE' pattern would strip the
+		// root GPL text AND every assets/fonts/*/LICENSE.
+		foreach ( $this->release_excludes() as $pattern ) {
+			foreach ( array( 'LICENSE', 'OFL.txt', 'assets/fonts' ) as $licensed ) {
+				self::assertStringNotContainsString(
+					$licensed,
+					$pattern,
+					"release.yml exclude '{$pattern}' would drop licence files ('{$licensed}')"
+				);
+			}
 		}
 	}
 

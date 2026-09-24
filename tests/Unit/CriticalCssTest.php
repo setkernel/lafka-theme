@@ -1,113 +1,57 @@
 <?php
 declare(strict_types=1);
 
-namespace Lafka\Tests\Unit;
-
-use PHPUnit\Framework\TestCase;
-
 /**
- * P6-PERF-5 W3-T4 regression lock: critical CSS inline + non-critical
- * deferral must remain wired and respect the keep-blocking filter.
- *
- * These tests are intentionally structural (no WP bootstrap needed):
- * they verify that the module file exists, contains the expected hooks,
- * and is required from core-functions.php.  Any future refactor that
- * silently removes a hook will fail here.
- *
- * @package Lafka\Tests\Unit
- * @since   5.10.0 (W3-T4 P6-PERF-5)
+ * Critical-CSS module (incl/system/lafka-critical-css.php): the inlined
+ * above-the-fold bundle and the print-media deferral of every other stylesheet.
  */
-final class CriticalCssTest extends TestCase {
 
-	private string $module;
+namespace {
+	require_once dirname( __DIR__, 2 ) . '/incl/system/lafka-critical-css.php';
+}
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->module = file_get_contents(
-			dirname( __DIR__, 2 ) . '/incl/system/lafka-critical-css.php'
-		);
-	}
+namespace Lafka\Tests\Unit {
 
-	/** Module file is readable and non-empty. */
-	public function test_module_exists(): void {
-		$this->assertNotEmpty( $this->module );
-	}
+	use PHPUnit\Framework\TestCase;
 
-	/** Critical CSS flat-file exists in styles/ directory. */
-	public function test_critical_css_file_exists(): void {
-		$this->assertFileExists( dirname( __DIR__, 2 ) . '/styles/critical.css' );
-	}
+	final class CriticalCssTest extends TestCase {
 
-	/** Inline function is hooked to wp_head at priority 1. */
-	public function test_inline_hooked_to_wp_head_priority_1(): void {
-		$this->assertMatchesRegularExpression(
-			"/add_action\(\s*['\"]wp_head['\"]\s*,\s*['\"]lafka_inline_critical_css['\"]\s*,\s*1\s*\)/",
-			$this->module
-		);
-	}
+		private const LINK = "<link rel='stylesheet' id='lafka-components-css' href='http://example.test/c.css' media='all' />";
 
-	/** Defer filter is hooked to style_loader_tag. */
-	public function test_defer_filter_hooked_to_style_loader_tag(): void {
-		$this->assertMatchesRegularExpression(
-			"/add_filter\(\s*['\"]style_loader_tag['\"]\s*,\s*['\"]lafka_defer_non_critical_css['\"]/",
-			$this->module
-		);
-	}
+		public function test_non_critical_stylesheet_is_deferred_with_noscript_fallback(): void {
+			$html = \apply_filters( 'style_loader_tag', self::LINK, 'lafka-components', 'http://example.test/c.css', 'all' );
 
-	/** Keep-blocking escape-valve filter is present in the module. */
-	public function test_keep_blocking_filter_provided(): void {
-		$this->assertStringContainsString( 'lafka_critical_css_keep_blocking', $this->module );
-	}
+			$this->assertStringContainsString( 'media="print" onload="this.media=\'all\'; this.onload=null;"', $html );
+			$this->assertStringEndsWith( '<noscript>' . self::LINK . '</noscript>', $html, 'Non-JS visitors must still get the blocking tag.' );
+		}
 
-	/** <noscript> fallback is emitted for non-JS clients. */
-	public function test_noscript_fallback_emitted(): void {
-		$this->assertStringContainsString( '<noscript>', $this->module );
-	}
+		public function test_tokens_and_payment_styles_stay_render_blocking(): void {
+			foreach ( array( 'lafka-tokens', 'wc-authorize-net-cim-credit-card-checkout-block' ) as $handle ) {
+				$this->assertSame( self::LINK, \apply_filters( 'style_loader_tag', self::LINK, $handle, 'http://example.test/c.css', 'all' ), "{$handle} must not be deferred." );
+			}
+		}
 
-	/**
-	 * The canonical design-token stylesheet must stay render-blocking.
-	 *
-	 * Audit 2026-06-27 #7: the inlined critical.css targets pre-rebuild markup
-	 * while lafka-tokens.css (every var() depends on it) was deferred, causing
-	 * a FOUC where colors/spacing fall back until the async sheet loads. The
-	 * keep-blocking allowlist must pin 'lafka-tokens' so tokens resolve on the
-	 * first paint.
-	 */
-	public function test_tokens_stylesheet_kept_blocking(): void {
-		$this->assertStringContainsString(
-			"'lafka-tokens'",
-			$this->module,
-			'lafka-tokens must be in the keep-blocking allowlist so design tokens are not deferred.'
-		);
-		$this->assertMatchesRegularExpression(
-			"/add_filter\(\s*['\"]lafka_critical_css_keep_blocking['\"]\s*,\s*['\"][a-z_]*token[a-z_]*['\"]/i",
-			$this->module,
-			'A keep-blocking callback must register lafka-tokens against lafka_critical_css_keep_blocking.'
-		);
-	}
+		public function test_inlined_bundle_resolves_relative_urls_against_the_stylesheet(): void {
+			$dir = sys_get_temp_dir() . '/lafka-critical-' . uniqid( '', true );
+			mkdir( $dir . '/styles', 0777, true );
+			file_put_contents(
+				$dir . '/styles/critical.css',
+				"/* comment */\n@font-face { src: url('../assets/fonts/a.woff2'); }\n.x { background: url(data:image/png;base64,AA==); }"
+			);
+			$GLOBALS['lafka_test_tpl_dir'] = $dir;
 
-	/** Module is wired via require_once in core-functions.php. */
-	public function test_module_required_from_core_functions(): void {
-		$core = file_get_contents( dirname( __DIR__, 2 ) . '/incl/system/core-functions.php' );
-		$this->assertStringContainsString( 'lafka-critical-css.php', $core );
-	}
+			ob_start();
+			\lafka_inline_critical_css();
+			$out = (string) ob_get_clean();
 
-	/**
-	 * Inline function rewrites relative url() refs to absolute URLs.
-	 *
-	 * Regression: critical.css uses url('../assets/fonts/rubik/...'),
-	 * which when inlined into <head> resolves against the page URL
-	 * (e.g. /menu/pizza/../assets/) → 404 on every front-end page.
-	 * The inline emitter must rewrite these to absolute URLs before echo.
-	 */
-	public function test_inline_rewrites_relative_urls_to_absolute(): void {
-		$this->assertStringContainsString( 'get_template_directory_uri', $this->module,
-			'inline function must build the stylesheet base URL via get_template_directory_uri()'
-		);
-		$this->assertMatchesRegularExpression(
-			'/preg_replace_callback[^;]*url\\\\\(/s',
-			$this->module,
-			'inline function must run a preg_replace_callback over url(...) refs to rewrite relative paths'
-		);
+			unlink( $dir . '/styles/critical.css' );
+			rmdir( $dir . '/styles' );
+			rmdir( $dir );
+
+			$this->assertStringStartsWith( "\n<style id=\"lafka-critical-css\">", $out );
+			$this->assertStringContainsString( 'url(http://example.test/wp-content/themes/lafka/assets/fonts/a.woff2)', $out );
+			$this->assertStringContainsString( 'url(data:image/png;base64,AA==)', $out );
+			$this->assertStringNotContainsString( 'comment', $out );
+		}
 	}
 }

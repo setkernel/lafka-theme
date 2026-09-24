@@ -13,7 +13,6 @@ use PHPUnit\Framework\TestCase;
  * options (WCAG 1.3.1 / 4.1.2).
  */
 final class PdpPickerRadiogroupLabelTest extends TestCase {
-
 	private function partial_source(): string {
 		return (string) file_get_contents( dirname( __DIR__, 2 ) . '/partials/pdp-pickers.php' );
 	}
@@ -42,17 +41,6 @@ final class PdpPickerRadiogroupLabelTest extends TestCase {
 			'aria-required="true"',
 			$src,
 			'radiogroup must remain aria-required for the gating size/crust choice.'
-		);
-	}
-
-	public function test_radiogroup_has_no_unnamed_group(): void {
-		$src = $this->partial_source();
-		// The old markup declared role="radiogroup" immediately followed by
-		// aria-required with no accessible name in between. Lock that out.
-		$this->assertDoesNotMatchRegularExpression(
-			'/role="radiogroup"\s+aria-required=/',
-			$src,
-			'role="radiogroup" must not appear without an accessible name.'
 		);
 	}
 }

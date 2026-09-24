@@ -81,9 +81,11 @@ export default [
 		},
 	},
 	// Node.js build scripts (ES modules) — e.g. scripts/sync-version.mjs.
+	// ecmaVersion 2022 for top-level await (nx2-04-preset-previews.mjs).
 	{
 		files: ["scripts/**/*.mjs"],
 		languageOptions: {
+			ecmaVersion: 2022,
 			sourceType: "module",
 			globals: {
 				...globals.node,
@@ -101,14 +103,10 @@ export default [
 			"js/cloud-zoom/**",
 			"js/count/**",
 			"js/flex/**",
-			"js/fonticonpicker/**",
 			"js/isotope/**",
 			"js/jquery.nice-select.min.js",
-			"js/jquery.nicescroll/**",
-			"js/jquery.mb.YTPlayer/**",
 			"js/magnific/**",
 			"js/owl-carousel2-dist/**",
-			"js/modernizr.custom.js",
 			"js/typed.min.js",
 			// Vendor admin JS
 			"incl/lafka-options-framework/**",

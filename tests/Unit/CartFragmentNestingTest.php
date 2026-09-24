@@ -29,7 +29,6 @@ use PHPUnit\Framework\TestCase;
  * the fragment can never silently orphan again.
  */
 final class CartFragmentNestingTest extends TestCase {
-
 	private string $woocommerce_functions;
 
 	protected function setUp(): void {
@@ -92,26 +91,6 @@ final class CartFragmentNestingTest extends TestCase {
 			$template_class,
 			$template,
 			"{$template_path} must render {$template_class}, otherwise the fragment selector is orphaned and the count never updates."
-		);
-	}
-
-	public function test_orphaned_li_fragment_removed(): void {
-		// The handoff header no longer outputs <li class="lafka-cart-link-item">,
-		// so a fragment keyed on it can never match — it must be gone.
-		$this->assertStringNotContainsString(
-			"\$fragments['li.lafka-cart-link-item']",
-			$this->woocommerce_functions,
-			'The orphaned li.lafka-cart-link-item fragment must be removed; nothing renders that node anymore.'
-		);
-	}
-
-	public function test_fragment_not_keyed_on_anchor_contents(): void {
-		// Original P6-A11Y-7 lock: keying on a.cart-contents while emitting the
-		// <li> wrapper caused <li><li><a>…</a></li></li> nesting on every refresh.
-		$this->assertStringNotContainsString(
-			"\$fragments['a.cart-contents']",
-			$this->woocommerce_functions,
-			'Fragment must NOT be keyed on a.cart-contents (causes <li><li> nesting on AJAX refresh).'
 		);
 	}
 }

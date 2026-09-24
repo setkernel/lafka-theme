@@ -12,7 +12,6 @@ use PHPUnit\Framework\TestCase;
  * matching the announced semantics to the actual widget (WCAG 4.1.2 / 2.1.1).
  */
 final class FulfilmentToggleRadiogroupTest extends TestCase {
-
 	private function partial_source(): string {
 		return (string) file_get_contents( dirname( __DIR__, 2 ) . '/partials/menu-controls.php' );
 	}
@@ -28,13 +27,6 @@ final class FulfilmentToggleRadiogroupTest extends TestCase {
 			$src,
 			'The fulfilment container must be a role="radiogroup" with an accessible name.'
 		);
-	}
-
-	public function test_no_tab_semantics_remain(): void {
-		$src = $this->partial_source();
-		$this->assertStringNotContainsString( 'role="tablist"', $src, 'role="tablist" must be removed.' );
-		$this->assertStringNotContainsString( 'role="tab"', $src, 'role="tab" must be removed.' );
-		$this->assertStringNotContainsString( 'aria-selected', $src, 'aria-selected belongs to tabs, not radios.' );
 	}
 
 	public function test_each_button_is_a_radio_with_aria_checked(): void {

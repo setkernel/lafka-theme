@@ -1,79 +1,56 @@
 <?php
 declare(strict_types=1);
 
-namespace Lafka\Tests\Unit;
+/**
+ * lafka_product_card_image_html() (incl/template-helpers/product-card-image.php):
+ * product image, then the Customizer fallback image, then the bundled SVG —
+ * always lazy, async-decoded and labelled with the product name.
+ */
 
-use PHPUnit\Framework\TestCase;
+namespace {
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/product-card-image.php';
+}
 
-final class ProductCardImageHelperTest extends TestCase {
-	private string $src;
+namespace Lafka\Tests\Unit {
 
-	protected function setUp(): void {
-		parent::setUp();
-		$this->src = file_get_contents( dirname( __DIR__, 2 ) . '/incl/template-helpers/product-card-image.php' );
-	}
+	use PHPUnit\Framework\TestCase;
 
-	public function test_helper_file_exists(): void {
-		$this->assertFileExists( dirname( __DIR__, 2 ) . '/incl/template-helpers/product-card-image.php' );
-	}
+	final class ProductCardImageHelperTest extends TestCase {
 
-	public function test_helper_function_defined(): void {
-		$this->assertStringContainsString( 'function lafka_product_card_image_html', $this->src );
-	}
+		private const SVG = 'http://example.test/wp-content/themes/lafka/assets/images/product-card-fallback.svg';
 
-	public function test_helper_tries_product_image_first(): void {
-		$product_pos  = strpos( $this->src, 'get_image_id' );
-		$customizer_pos = strpos( $this->src, 'lafka_product_card_fallback_image_id' );
-		$this->assertNotFalse( $product_pos, 'helper must call $product->get_image_id()' );
-		$this->assertNotFalse( $customizer_pos, 'helper must read the customizer fallback setting' );
-		$this->assertLessThan( $customizer_pos, $product_pos, 'product image must be tried before customizer override' );
-	}
+		public function test_product_image_wins(): void {
+			$GLOBALS['lafka_test_attachments'] = array( 5 => 'product.jpg', 9 => 'fallback.jpg' );
+			$GLOBALS['lafka_test_theme_mods']['lafka_product_card_fallback_image_id'] = 9;
 
-	public function test_helper_falls_back_to_customizer_override(): void {
-		$this->assertStringContainsString( "get_theme_mod( 'lafka_product_card_fallback_image_id'", $this->src );
-	}
+			$html = \lafka_product_card_image_html( new \WC_Product( array( 'image_id' => 5 ) ) );
 
-	public function test_helper_falls_back_to_bundled_svg(): void {
-		$this->assertStringContainsString( 'assets/images/product-card-fallback.svg', $this->src );
-		$this->assertStringContainsString( 'get_template_directory_uri()', $this->src );
-	}
+			$this->assertStringContainsString( 'src="product.jpg"', $html );
+			$this->assertStringContainsString( 'loading="lazy"', $html );
+			$this->assertStringContainsString( 'decoding="async"', $html );
+			$this->assertStringContainsString( 'alt="Margherita Pizza"', $html );
+		}
 
-	public function test_helper_uses_wp_get_attachment_image_for_attachments(): void {
-		$this->assertStringContainsString( 'wp_get_attachment_image', $this->src );
-	}
+		public function test_customizer_fallback_image_when_the_product_has_none(): void {
+			$GLOBALS['lafka_test_attachments'] = array( 9 => 'fallback.jpg' );
+			$GLOBALS['lafka_test_theme_mods']['lafka_product_card_fallback_image_id'] = 9;
 
-	public function test_helper_emits_lazy_loading_attribute(): void {
-		$this->assertStringContainsString( "'loading'  => 'lazy'", $this->src );
-	}
+			$this->assertStringContainsString( 'src="fallback.jpg"', \lafka_product_card_image_html( new \WC_Product() ) );
+		}
 
-	public function test_helper_emits_alt_text_from_product_name(): void {
-		$this->assertStringContainsString( 'get_name()', $this->src );
-	}
+		public function test_bundled_svg_when_no_image_is_configured(): void {
+			$html = \lafka_product_card_image_html( new \WC_Product() );
 
-	public function test_bundled_svg_exists(): void {
-		$this->assertFileExists( dirname( __DIR__, 2 ) . '/assets/images/product-card-fallback.svg' );
-	}
+			$this->assertStringContainsString( 'src="' . self::SVG . '"', $html );
+			$this->assertStringContainsString( 'alt="Margherita Pizza"', $html );
+			$this->assertFileExists( dirname( __DIR__, 2 ) . '/assets/images/product-card-fallback.svg' );
+		}
 
-	public function test_functions_php_requires_helper(): void {
-		$src = file_get_contents( dirname( __DIR__, 2 ) . '/functions.php' );
-		$this->assertMatchesRegularExpression(
-			"/require(_once)?\s+.*template-helpers\/product-card-image\.php/",
-			$src,
-			'functions.php must require the product-card-image helper.'
-		);
-	}
+		public function test_non_product_input_gets_the_decorative_svg(): void {
+			$html = \lafka_product_card_image_html( null );
 
-	public function test_helper_emits_decoding_async(): void {
-		// Modern web-perf guidance: loading="lazy" should be paired with
-		// decoding="async" to let the browser decode off the main thread.
-		$this->assertStringContainsString( "'decoding' => 'async'", $this->src );
-		$this->assertStringContainsString( 'decoding="async"', $this->src );
-	}
-
-	public function test_helper_guards_against_non_wc_product(): void {
-		// Without this guard, passing null/false/non-WC_Product fatals with
-		// "Call to a member function get_name() on null" — fatal in a product
-		// loop blanks the entire shop page.
-		$this->assertStringContainsString( "is_a( \$product, 'WC_Product' )", $this->src );
+			$this->assertStringContainsString( 'src="' . self::SVG . '"', $html );
+			$this->assertStringContainsString( 'alt=""', $html );
+		}
 	}
 }

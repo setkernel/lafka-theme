@@ -9,6 +9,8 @@
  * Hooks preserved for WooCommerce ecosystem compatibility:
  * - woocommerce_before_shop_loop_item       (link_open already removed by lafka)
  * - woocommerce_before_shop_loop_item_title (sale flash) — fires inside image wrap
+ * - woocommerce_shop_loop_item_title        (core title callback removed; the
+ *                                            card prints its own <h3>)
  * - woocommerce_after_shop_loop_item_title  (rating)     — fires in body, above bottom row
  * - woocommerce_after_shop_loop_item        (link_close + add_to_cart removed)
  *
@@ -17,7 +19,9 @@
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package Lafka\WooCommerce
- * @version 5.17.0
+ * Reconciled with WooCommerce core content-product.php 9.4.0.
+ *
+ * @version 9.4.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -69,6 +73,7 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 		<div class="lafka-product-card__body">
 			<div class="lafka-product-card__head">
 				<h3 class="lafka-product-card__title"><?php echo esc_html( $product->get_name() ); ?></h3>
+				<?php do_action( 'woocommerce_shop_loop_item_title' ); ?>
 				<?php if ( $product->get_short_description() ) : ?>
 					<p class="lafka-product-card__desc"><?php echo esc_html( wp_strip_all_tags( $product->get_short_description() ) ); ?></p>
 				<?php endif; ?>

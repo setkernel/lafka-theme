@@ -43,7 +43,11 @@
 	 * the heavier tint visually competed with the chip pills for
 	 * attention. Use accent-50 at 60% so the section still reads as a
 	 * group but doesn't drown the content. */
-	background: color-mix(in srgb, var(--lafka-color-accent-50) 60%, white);
+
+	/* NX2-07: mix toward the page surface (== white in Peppery, so identical)
+	 * rather than a hardcoded `white`, so under a dark preset this warm panel
+	 * mixes toward near-black and stays dark instead of becoming a light island. */
+	background: color-mix(in srgb, var(--lafka-color-accent-50) 60%, var(--lafka-color-surface-page));
 	border-radius: var(--lafka-radius-md);
 }
 

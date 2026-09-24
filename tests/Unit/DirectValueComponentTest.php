@@ -9,7 +9,6 @@ use PHPUnit\Framework\TestCase;
  * Conversion: "Order Direct — skip the app fees" component + honest PDP reviews.
  */
 final class DirectValueComponentTest extends TestCase {
-
 	private string $logic;
 	private string $partial;
 	private string $pdp;
@@ -21,23 +20,10 @@ final class DirectValueComponentTest extends TestCase {
 		$this->pdp     = file_get_contents( $root . '/partials/pdp-ingredients-reviews.php' );
 	}
 
-	public function test_render_function_and_data_filter_exist(): void {
-		$this->assertStringContainsString( 'function lafka_render_direct_value', $this->logic );
-		$this->assertStringContainsString( "apply_filters(\n\t\t\t'lafka_direct_value_data'", $this->logic );
-		$this->assertStringContainsString( 'function lafka_customize_register_direct_value', $this->logic );
-	}
-
 	public function test_component_emits_order_channel_tracking_contract(): void {
 		$this->assertStringContainsString( 'data-lafka-order-channel="direct"', $this->partial,
 			'The direct CTA must carry the order_channel="direct" tracking contract.' );
 		$this->assertMatchesRegularExpression( '/data-lafka-order-source="(home_strip|menu_badge)"/', $this->partial );
-	}
-
-	public function test_renders_in_home_cart_and_checkout(): void {
-		$this->assertStringContainsString( "lafka_render_direct_value( 'cart' )", $this->logic );
-		$this->assertStringContainsString( "lafka_render_direct_value( 'checkout' )", $this->logic );
-		$front = file_get_contents( dirname( __DIR__, 2 ) . '/front-page.php' );
-		$this->assertStringContainsString( "lafka_render_direct_value( 'home' )", $front );
 	}
 
 	public function test_copy_is_honest_and_customizer_driven(): void {

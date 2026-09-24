@@ -20,13 +20,11 @@
  * `wp_options.lafka` row at sub-key `<key>` — the SAME storage Theme Options
  * writes to. The operator now has one UI; the codebase has one storage.
  *
- * NX1-02 (theme 7.0) retires that legacy storage slice by slice: a migrated
- * control instead uses `type => 'theme_mod'` with a `lafka_<key>` setting ID,
- * and its readers move to `get_theme_mod( 'lafka_<key>', <std> )`. The
- * per-control `$type` argument on the setting helpers selects which storage a
- * given control uses, so migrated and not-yet-migrated fields coexist here
- * during the migration. (logos-brand-pilot migrated accent/brand/logo-bg +
- * mobile logo + point-down.)
+ * NX1-02 (theme 7.0) retired that legacy storage: controls use
+ * `type => 'theme_mod'` with a `lafka_<key>` setting ID and readers call
+ * `get_theme_mod( 'lafka_<key>', <std> )`. The only remaining `lafka[<key>]`
+ * option-type control is the plugin-owned google_maps_api_key. The per-control
+ * `$type` argument on the setting helpers still selects the storage.
  *
  * This file is included from functions.php. Adding new bridges below is a
  * matter of calling `lafka_bridge_*()` with the legacy option key.
@@ -49,7 +47,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 */
 		public static function init(): void {
 			add_action( 'customize_register', array( __CLASS__, 'register' ) );
-			add_action( 'admin_notices', array( __CLASS__, 'theme_options_notice' ) );
 		}
 
 		/**
@@ -62,7 +59,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings',
 				array(
 					'title'       => esc_html__( 'Lafka — Site Settings', 'lafka' ),
-					'description' => esc_html__( 'Logos, branding, integrations, and general site behavior. Migrated fields save to the Customizer (theme_mods); the rest still write to the legacy "Theme Options" storage until their NX1-02 slice lands — the only change is the editing UI is now here, in one place.', 'lafka' ),
+					'description' => esc_html__( 'Logos, branding, integrations, and general site behavior.', 'lafka' ),
 					'priority'    => 30,
 				)
 			);
@@ -70,7 +67,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			self::register_logos_section( $wp_customize );
 			self::register_brand_section( $wp_customize );
 			self::register_header_colors_section( $wp_customize );
-			self::register_menu_colors_section( $wp_customize );
 			self::register_footer_colors_section( $wp_customize );
 			self::register_content_colors_section( $wp_customize );
 			self::register_page_title_colors_section( $wp_customize );
@@ -115,7 +111,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_mobile_theme_logo',
 				'lafka_settings_logos',
 				__( 'Mobile logo (optional)', 'lafka' ),
-				__( 'Alternate logo for ≤767px viewports. Also used in the sticky/condensed header. Leave empty to reuse the main logo from Site Identity.', 'lafka' ),
+				__( 'Fallback logo, used only when no logo is set under Site Identity.', 'lafka' ),
 				'theme_mod'
 			);
 
@@ -123,19 +119,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				$wp_customize,
 				'lafka_logo_background_color',
 				'lafka_settings_logos',
-				__( 'Logo background color', 'lafka' ),
+				__( 'Secondary accent color', 'lafka' ),
 				'#fccc4c',
-				__( 'Applied behind the logo across all viewports. Leave the default for the legacy peach-yellow plate.', 'lafka' ),
-				'theme_mod'
-			);
-
-			self::add_checkbox(
-				$wp_customize,
-				'lafka_disable_logo_point_down',
-				'lafka_settings_logos',
-				__( 'Disable the logo point-down accent', 'lafka' ),
-				__( 'Removes the small triangle that hangs under the logo plate.', 'lafka' ),
-				0,
+				__( 'Used by the page preloader and the active product-tab marker (it was the logo plate color before the 5.55 header).', 'lafka' ),
 				'theme_mod'
 			);
 		}
@@ -155,6 +141,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				)
 			);
 
+			// NX2-04 Task 4 ships preview JS binding these two settings for
+			// instant postMessage updates, so they opt out of the refresh
+			// default (every other add_color() call keeps 'refresh').
 			self::add_color(
 				$wp_customize,
 				'lafka_accent_color',
@@ -162,7 +151,8 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				__( 'Accent color', 'lafka' ),
 				'#dc2626',
 				__( 'Primary brand color — CTAs, links, badges. Aliased to --lafka-color-accent-500 in modern components.', 'lafka' ),
-				'theme_mod'
+				'theme_mod',
+				'postMessage'
 			);
 
 			self::add_color(
@@ -172,81 +162,29 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				__( 'Brand color', 'lafka' ),
 				'#f59e0b',
 				__( 'Secondary brand accent — drives the --lafka-color-brand-500 ramp (footer chrome, hero gradient, open-status dot). Defaults to the shipped pepper-yellow.', 'lafka' ),
-				'theme_mod'
+				'theme_mod',
+				'postMessage'
 			);
 		}
 
 		// ====================================================================
-		// Section: Header & Top Bar colors  (NX1-02.dyncss-chrome-colors)
+		// Section: Header colors  (NX1-02.dyncss-chrome-colors)
 		// ====================================================================
 
 		/**
 		 * Header chrome color controls migrated off the legacy Options Framework
-		 * to `lafka_<key>` theme_mods. Defaults match the framework `std` (and the
-		 * inline defaults in styles/dynamic-css.php) so a fresh install renders the
-		 * shipped Peppery pixels unchanged. The two dynamic-css inline fallbacks
-		 * `header_top_bar_border_color` / `main_menu_links_bckgr_hover_color` had no
-		 * framework field and get no control — they keep their transparent default.
+		 * to `lafka_<key>` theme_mods. The top-bar, pre-header, main-menu and
+		 * copyright-bar colors went with the pre-handoff header and footer (7.1).
 		 */
 		private static function register_header_colors_section( $wp_customize ): void {
 			$wp_customize->add_section(
 				'lafka_settings_header_colors',
 				array(
-					'title'       => esc_html__( 'Header & Top Bar Colors', 'lafka' ),
-					'description' => esc_html__( 'Colors for the top bar, header service icons, and the collapsible pre-header. These drive the header --lafka-* CSS custom properties.', 'lafka' ),
+					'title'       => esc_html__( 'Header Colors', 'lafka' ),
+					'description' => esc_html__( 'Menu color for pages that use the transparent header with a dark scheme.', 'lafka' ),
 					'panel'       => 'lafka_settings',
 					'priority'    => 22,
 				)
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_header_top_bar_color',
-				'lafka_settings_header_colors',
-				__( 'Header top bar background color', 'lafka' ),
-				'#222222',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_top_bar_message_color',
-				'lafka_settings_header_colors',
-				__( 'Short header message color', 'lafka' ),
-				'#4b4b4b',
-				__( 'The optional short message in the header top bar.', 'lafka' ),
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_header_services_color',
-				'lafka_settings_header_colors',
-				__( 'Header service icons color', 'lafka' ),
-				'#333333',
-				__( 'My Account, Wishlist, Cart and related header icons.', 'lafka' ),
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_top_bar_menu_links_color',
-				'lafka_settings_header_colors',
-				__( 'Top bar menu links color', 'lafka' ),
-				'#ffffff',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_top_bar_menu_links_hover_color',
-				'lafka_settings_header_colors',
-				__( 'Top bar menu links hover color', 'lafka' ),
-				'#fccc4c',
-				'',
-				'theme_mod'
 			);
 
 			self::add_color(
@@ -255,102 +193,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings_header_colors',
 				__( 'Transparent header menu color (dark scheme)', 'lafka' ),
 				'#22272d',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_collapsible_bckgr_color',
-				'lafka_settings_header_colors',
-				__( 'Collapsible pre-header background color', 'lafka' ),
-				'#fcfcfc',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_collapsible_titles_color',
-				'lafka_settings_header_colors',
-				__( 'Collapsible pre-header titles color', 'lafka' ),
-				'#22272d',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_collapsible_titles_border_color',
-				'lafka_settings_header_colors',
-				__( 'Collapsible pre-header titles border color', 'lafka' ),
-				'#f1f1f1',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_collapsible_links_color',
-				'lafka_settings_header_colors',
-				__( 'Collapsible pre-header links color', 'lafka' ),
-				'#22272d',
-				'',
-				'theme_mod'
-			);
-		}
-
-		// ====================================================================
-		// Section: Main Menu colors  (NX1-02.dyncss-chrome-colors)
-		// ====================================================================
-
-		private static function register_menu_colors_section( $wp_customize ): void {
-			$wp_customize->add_section(
-				'lafka_settings_menu_colors',
-				array(
-					'title'       => esc_html__( 'Main Menu Colors', 'lafka' ),
-					'description' => esc_html__( 'Background, link, and icon colors for the primary navigation menu.', 'lafka' ),
-					'panel'       => 'lafka_settings',
-					'priority'    => 24,
-				)
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_main_menu_background_color',
-				'lafka_settings_menu_colors',
-				__( 'Main menu background color', 'lafka' ),
-				'#fccc4c',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_main_menu_links_color',
-				'lafka_settings_menu_colors',
-				__( 'Main menu links color', 'lafka' ),
-				'#61443e',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_main_menu_links_hover_color',
-				'lafka_settings_menu_colors',
-				__( 'Main menu links hover color', 'lafka' ),
-				'#22272d',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_main_menu_icons_color',
-				'lafka_settings_menu_colors',
-				__( 'Main menu icons color', 'lafka' ),
-				'#ac8320',
 				'',
 				'theme_mod'
 			);
@@ -365,7 +207,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings_footer_colors',
 				array(
 					'title'       => esc_html__( 'Footer Colors', 'lafka' ),
-					'description' => esc_html__( 'Title, link, text, and copyright-bar colors for the site footer.', 'lafka' ),
+					'description' => esc_html__( 'Title, link and text colors for the legacy footer widget areas.', 'lafka' ),
 					'panel'       => 'lafka_settings',
 					'priority'    => 26,
 				)
@@ -393,16 +235,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 			self::add_color(
 				$wp_customize,
-				'lafka_footer_menu_links_color',
-				'lafka_settings_footer_colors',
-				__( 'Footer menu links color', 'lafka' ),
-				'#ffffff',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
 				'lafka_footer_links_color',
 				'lafka_settings_footer_colors',
 				__( 'Footer widget links color', 'lafka' ),
@@ -416,26 +248,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_footer_text_color',
 				'lafka_settings_footer_colors',
 				__( 'Footer text color', 'lafka' ),
-				'#aeaeae',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_footer_copyright_bar_bckgr_color',
-				'lafka_settings_footer_colors',
-				__( 'Footer copyright bar background color', 'lafka' ),
-				'#222222',
-				'',
-				'theme_mod'
-			);
-
-			self::add_color(
-				$wp_customize,
-				'lafka_footer_copyright_bar_text_color',
-				'lafka_settings_footer_colors',
-				__( 'Footer copyright bar text color', 'lafka' ),
 				'#aeaeae',
 				'',
 				'theme_mod'
@@ -689,23 +501,10 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 */
 		private static function register_typography_settings( $wp_customize ): void {
 			$typography = array(
-				'lafka_main_menu_typography'  => array(
-					'size'  => '15px',
-					'style' => '{"font-weight":"600","font-style":"normal"}',
-				),
-				'lafka_top_menu_typography'   => array(
-					'size'  => '13px',
-					'style' => '{"font-weight":"500","font-style":"normal"}',
-				),
 				'lafka_body_font'             => array(
 					'face'  => 'Rubik',
 					'size'  => '16px',
 					'color' => '#5e5e5e',
-				),
-				'lafka_text_logo_typography'  => array(
-					'size'  => '21px',
-					'style' => '{"font-weight":"700","font-style":"normal"}',
-					'color' => '#ffffff',
 				),
 				'lafka_headings_font'         => array( 'face' => 'Rubik' ),
 				'lafka_h1_font'               => array(
@@ -914,17 +713,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			$checkbox_defaults = array(
 				'lafka_is_responsive'                  => 1,
 				'lafka_show_preloader'                 => 1,
-				'lafka_sticky_header'                  => 1,
-				'lafka_enable_top_header'              => 1,
-				'lafka_header_top_mobile_visibility'   => 1,
-				'lafka_main_menu_transf_to_uppercase'  => 1,
 				'lafka_fancy_title_font'               => 0,
 				'lafka_uppercase_page_titles'          => 1,
 				'lafka_show_my_account'                => 1,
-				'lafka_show_shopping_cart'             => 1,
-				'lafka_shopping_cart_on_add'           => 1,
-				'lafka_show_wish_in_header'            => 1,
-				'lafka_add_to_cart_sound'              => 1,
 				'lafka_enable_shop_infinite'           => 1,
 				'lafka_use_load_more_on_shop'          => 0,
 				'lafka_show_refine_area'               => 1,
@@ -968,10 +759,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 			$string_defaults = array(
 				'lafka_general_layout'                   => 'lafka_fullwidth',
-				'lafka_header_width'                     => '',
-				'lafka_submenu_color_scheme'             => '',
 				'lafka_footer_style'                     => '',
-				'lafka_footer_width'                     => '',
 				'lafka_all_buttons_style'                => 'round',
 				'lafka_date_format'                      => 'default',
 				'lafka_shop_header_style'                => '',
@@ -1143,9 +931,13 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		/**
 		 * Add a color setting + WP_Customize_Color_Control.
 		 *
-		 * @param string $type 'option' (legacy lafka[] storage) or 'theme_mod'.
+		 * @param string $type      'option' (legacy lafka[] storage) or 'theme_mod'.
+		 * @param string $transport Setting transport. Defaults to a full-refresh
+		 *                          reload; pass the live-JS transport (requires a
+		 *                          matching preview binding, see NX2-04 Task 4)
+		 *                          to update the preview without reloading.
 		 */
-		private static function add_color( $wp_customize, $id, $section, $label, $default = '#000000', $description = '', $type = 'option' ): void {
+		private static function add_color( $wp_customize, $id, $section, $label, $default = '#000000', $description = '', $type = 'option', $transport = 'refresh' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
@@ -1153,7 +945,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 					'default'           => $default,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'sanitize_hex_color',
-					'transport'         => 'refresh',
+					'transport'         => $transport,
 				)
 			);
 			$wp_customize->add_control(
@@ -1327,37 +1119,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				$clean[ sanitize_key( $sub_key ) ] = ( ! empty( $flag ) && '0' !== $flag ) ? 1 : 0;
 			}
 			return $clean;
-		}
-
-		// ====================================================================
-		// Admin notice on Theme Options page directing operators to Customizer
-		// ====================================================================
-
-		/**
-		 * Show a one-time-per-pageload notice on the Theme Options admin page
-		 * explaining that editing now happens in Customizer.
-		 */
-		public static function theme_options_notice(): void {
-			$screen = function_exists( 'get_current_screen' ) ? get_current_screen() : null;
-			if ( ! $screen || ! isset( $screen->id ) ) {
-				return;
-			}
-			// Theme Options framework uses the slug 'lafka_options' for its page.
-			if ( false === strpos( (string) $screen->id, 'lafka_options' )
-				&& false === strpos( (string) $screen->id, 'lafka-options' ) ) {
-				return;
-			}
-			$customizer_url = admin_url( 'customize.php?autofocus[panel]=lafka_settings' );
-			?>
-			<div class="notice notice-info">
-				<p>
-					<strong><?php esc_html_e( 'Editing moved to the Customizer.', 'lafka' ); ?></strong>
-					<?php esc_html_e( 'The fields here still work, but the operator UI now lives in', 'lafka' ); ?>
-					<a href="<?php echo esc_url( $customizer_url ); ?>"><strong><?php esc_html_e( 'Appearance → Customize → Lafka — Site Settings', 'lafka' ); ?></strong></a>.
-					<?php esc_html_e( 'Both surfaces read/write the same DB row, so existing values are preserved either way.', 'lafka' ); ?>
-				</p>
-			</div>
-			<?php
 		}
 	}
 

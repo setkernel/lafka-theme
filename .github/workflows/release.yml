@@ -58,8 +58,11 @@ jobs:
           # Excluded: VCS/CI metadata, dependencies, package manifests, lint +
           # phpunit + playwright + wp-env tooling, the test suite, the build
           # scripts (already run in the step above), and the contributor/design
-          # docs. Runtime assets STAY — the freshly-built .min siblings, the
-          # store/demo one-click importer, readme.txt, languages/, theme.json.
+          # docs, and the contrast-gate fixture preset. Runtime assets STAY — the
+          # freshly-built .min siblings, readme.txt, languages/, theme.json,
+          # presets/, and every LICENSE (the root GPL
+          # text and the per-family OFL font licences, which must travel with
+          # the fonts — an unanchored LICENSE exclude used to strip them).
           # `readme.md` is the GitHub project readme (dev-only); the lowercase
           # exclude is required because `README.md` does not match it on the
           # case-sensitive Linux runner.
@@ -80,14 +83,15 @@ jobs:
                    --exclude='eslint.config.mjs' \
                    --exclude='phpunit.xml.dist' \
                    --exclude='.phpunit.result.cache' \
-                   --exclude='playwright.config.js' \
+                   --exclude='playwright*.config.js' \
+                   --exclude='presets/__fixtures__' \
                    --exclude='tests' \
                    --exclude='scripts' \
                    --exclude='CONTRIBUTING.md' \
                    --exclude='DESIGN_SYSTEM.md' \
+                   --exclude='docs' \
                    --exclude='README.md' \
                    --exclude='readme.md' \
-                   --exclude='LICENSE' \
                    ./ lafka/
           zip -r lafka.zip lafka/
 

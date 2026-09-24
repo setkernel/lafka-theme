@@ -1,0 +1,22 @@
+{
+	"slug": "lowcontrast",
+	"schema": 1,
+	"label": "Low Contrast (test fixture)",
+	"description": "NX2-02 negative fixture — a DELIBERATELY inaccessible palette (light-grey body text on a white page). Nested under __fixtures__ so the registry glob (presets/*/preset.json) never discovers it; loaded only by PresetContrastTest to prove the contrast gate has teeth. It must FAIL WCAG AA.",
+	"dark": false,
+	"extends": null,
+	"tokens": {
+		"--lafka-color-surface-page": "#ffffff",
+		"--lafka-color-text-primary": "#b0b0b0",
+		"--lafka-color-text-secondary": "#bdbdbd",
+		"--lafka-color-text-muted": "#c9c9c9"
+	},
+	"chrome": {},
+	"fonts": {
+		"body": { "family": "Rubik", "source": "base" },
+		"display": { "family": "Fraunces", "source": "base" }
+	},
+	"category_emoji": {},
+	"variants": {},
+	"contrast_exceptions": []
+}

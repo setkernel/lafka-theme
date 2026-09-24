@@ -18,28 +18,12 @@ use PHPUnit\Framework\TestCase;
  * test fails. It scans project files as text rather than executing Node.
  */
 final class AssetBuildPipelineTest extends TestCase {
-
 	private static function root(): string {
 		return dirname( __DIR__, 2 );
 	}
 
 	private static function read( string $relative ): string {
 		return (string) file_get_contents( self::root() . '/' . $relative );
-	}
-
-	public function test_build_script_exists_and_minifies_with_esbuild(): void {
-		$this->assertFileExists( self::root() . '/scripts/build-assets.mjs' );
-		$src = self::read( 'scripts/build-assets.mjs' );
-		$this->assertStringContainsString(
-			"from 'esbuild'",
-			$src,
-			'build-assets.mjs must use esbuild.'
-		);
-		$this->assertStringContainsString(
-			'minify: true',
-			$src,
-			'build-assets.mjs must run esbuild in minify mode.'
-		);
 	}
 
 	public function test_package_json_wires_build_and_esbuild_devdep(): void {
@@ -68,19 +52,6 @@ final class AssetBuildPipelineTest extends TestCase {
 			'/js/*.min.js',
 			$ignore,
 			'.gitignore must exclude generated js/*.min.js.'
-		);
-	}
-
-	public function test_lint_configs_ignore_generated_min_files(): void {
-		$this->assertStringContainsString(
-			'**/*.min.js',
-			self::read( 'eslint.config.mjs' ),
-			'eslint must ignore generated *.min.js so the build never fails CI.'
-		);
-		$this->assertStringContainsString(
-			'**/*.min.css',
-			self::read( '.stylelintrc.json' ),
-			'stylelint must ignore generated *.min.css so the build never fails CI.'
 		);
 	}
 

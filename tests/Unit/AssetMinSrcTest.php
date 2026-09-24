@@ -19,62 +19,21 @@ declare(strict_types=1);
  *
  * The version query arg is preserved verbatim so cache-busting never regresses.
  *
- * The WP shims live in the GLOBAL namespace (the helper resolves its calls
- * there) and are driven by $GLOBALS so a per-test temp theme dir can stand in
- * for the real one. Each test runs in its own process so these shims win
- * regardless of the shims other test files define for the same function names
- * (and so a per-test SCRIPT_DEBUG define stays isolated).
+ * A per-test temp theme dir stands in for the real one (the shared shims read
+ * $GLOBALS['lafka_test_tpl_dir'] / _tpl_uri). Only the SCRIPT_DEBUG test needs
+ * its own process, because it defines a constant.
  */
 
 namespace {
-
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	// Override slot for the lafka_use_min_assets decision: null = use the
-	// helper's own SCRIPT_DEBUG-derived default; bool = force it.
-	if ( ! array_key_exists( 'lafka_test_use_min', $GLOBALS ) ) {
-		$GLOBALS['lafka_test_use_min'] = null;
-	}
-
-	if ( ! function_exists( 'get_template_directory' ) ) {
-		function get_template_directory() {
-			return $GLOBALS['lafka_test_tpl_dir'];
-		}
-	}
-	if ( ! function_exists( 'get_template_directory_uri' ) ) {
-		function get_template_directory_uri() {
-			return $GLOBALS['lafka_test_tpl_uri'];
-		}
-	}
-	if ( ! function_exists( 'apply_filters' ) ) {
-		function apply_filters( $tag, $value = null ) {
-			if ( 'lafka_use_min_assets' === $tag
-				&& array_key_exists( 'lafka_test_use_min', $GLOBALS )
-				&& null !== $GLOBALS['lafka_test_use_min'] ) {
-				return $GLOBALS['lafka_test_use_min'];
-			}
-			return $value;
-		}
-	}
-	if ( ! function_exists( 'add_filter' ) ) {
-		function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
-			return true;
-		}
-	}
-
 	require_once dirname( __DIR__, 2 ) . '/incl/system/asset-min.php';
 }
 
 namespace Lafka\Tests\Unit {
 
 	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
+	use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class AssetMinSrcTest extends TestCase {
 
 		private string $tpl_dir;
@@ -87,7 +46,6 @@ namespace Lafka\Tests\Unit {
 			mkdir( $this->tpl_dir . '/js', 0777, true );
 			$GLOBALS['lafka_test_tpl_dir'] = $this->tpl_dir;
 			$GLOBALS['lafka_test_tpl_uri'] = $this->tpl_uri;
-			$GLOBALS['lafka_test_use_min'] = null;
 		}
 
 		protected function tearDown(): void {
@@ -182,12 +140,14 @@ namespace Lafka\Tests\Unit {
 		public function test_no_op_when_use_min_filter_forces_raw(): void {
 			$this->write( 'styles/lafka-base.css' );
 			$this->write( 'styles/lafka-base.min.css' );
-			$GLOBALS['lafka_test_use_min'] = false; // e.g. an operator debugging on prod.
+			\add_filter( 'lafka_use_min_assets', '__return_false' ); // e.g. an operator debugging on prod.
 
 			$src = $this->tpl_uri . '/styles/lafka-base.css?ver=6.19.0';
 			$this->assertSame( $src, \lafka_maybe_min_src( $src, 'lafka-base' ) );
 		}
 
+		#[RunInSeparateProcess]
+		#[PreserveGlobalState( false )]
 		public function test_no_op_when_script_debug_on(): void {
 			if ( ! defined( 'SCRIPT_DEBUG' ) ) {
 				define( 'SCRIPT_DEBUG', true );
@@ -200,19 +160,8 @@ namespace Lafka\Tests\Unit {
 		}
 
 		public function test_hooks_both_loader_src_filters(): void {
-			$source = (string) file_get_contents(
-				dirname( __DIR__, 2 ) . '/incl/system/asset-min.php'
-			);
-			$this->assertMatchesRegularExpression(
-				"/add_filter\(\s*'style_loader_src',\s*'lafka_maybe_min_src'/",
-				$source,
-				'asset-min.php must hook style_loader_src.'
-			);
-			$this->assertMatchesRegularExpression(
-				"/add_filter\(\s*'script_loader_src',\s*'lafka_maybe_min_src'/",
-				$source,
-				'asset-min.php must hook script_loader_src.'
-			);
+			$this->assertSame( 10, \has_filter( 'style_loader_src', 'lafka_maybe_min_src' ) );
+			$this->assertSame( 10, \has_filter( 'script_loader_src', 'lafka_maybe_min_src' ) );
 		}
 	}
 }

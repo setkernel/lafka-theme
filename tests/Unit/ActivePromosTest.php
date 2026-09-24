@@ -8,14 +8,13 @@ use PHPUnit\Framework\TestCase;
 require_once dirname( __DIR__, 2 ) . '/incl/lafka-active-promos.php';
 
 /**
- * Active-promo surfacing: pure formatting helpers + structural source locks.
+ * Active-promo surfacing: formatting helpers, the no-plugin guard and the render.
  */
 final class ActivePromosTest extends TestCase {
-
 	private string $src;
 
 	protected function setUp(): void {
-		$this->src = file_get_contents( dirname( __DIR__, 2 ) . '/incl/lafka-active-promos.php' );
+		$this->src = (string) file_get_contents( dirname( __DIR__, 2 ) . '/incl/lafka-active-promos.php' );
 	}
 
 	public function test_fmt_pct_trims_trailing_zeros(): void {
@@ -42,14 +41,17 @@ final class ActivePromosTest extends TestCase {
 		}
 	}
 
-	public function test_render_emits_tracking_attrs_and_hides_when_empty(): void {
-		self::assertStringContainsString( 'data-lafka-promo=', $this->src );
-		self::assertStringContainsString( "if ( empty( \$messages ) ) {", $this->src,
-			'must render nothing when no promo is active (no fabricated offers).' );
+	public function test_renders_nothing_when_no_offer_is_active(): void {
+		ob_start();
+		lafka_render_active_promos();
+		self::assertSame( '', ob_get_clean(), 'No fabricated offers: an empty promo set renders no markup.' );
 	}
 
-	public function test_enqueue_detects_menu_by_slug(): void {
-		self::assertStringContainsString( "is_page( 'menu' )", $this->src,
-			'menu page resolves by slug, so enqueue must use is_page(menu).' );
+	public function test_renders_a_tracked_chip_per_active_offer(): void {
+		$GLOBALS['lafka_test_free_delivery_threshold'] = 30;
+		ob_start();
+		lafka_render_active_promos();
+		$html = (string) ob_get_clean();
+		self::assertStringContainsString( 'data-lafka-promo="free_delivery"', $html );
 	}
 }

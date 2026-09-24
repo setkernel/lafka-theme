@@ -105,16 +105,45 @@ if ( taxonomy_exists( 'product_cat' ) ) {
 			<?php if ( ! empty( $lafka_mn_terms ) ) : ?>
 				<section class="lafka-mobile-nav__section">
 					<h2 class="lafka-mobile-nav__section-title"><?php esc_html_e( 'Categories', 'lafka' ); ?></h2>
-					<ul class="lafka-mobile-nav__list">
-						<?php foreach ( $lafka_mn_terms as $lafka_mn_term ) : ?>
-							<li>
-								<a href="<?php echo esc_url( get_term_link( $lafka_mn_term ) ); ?>">
-									<?php echo esc_html( $lafka_mn_term->name ); ?>
-									<span class="lafka-mobile-nav__count"><?php echo esc_html( (string) $lafka_mn_term->count ); ?></span>
-								</a>
-							</li>
+					<?php
+					// P6-UX-6 W3-T10: operator opt-in grouping (Pizzas / Mains / …).
+					// The slug heuristic lives in the plugin walker class; the toggle
+					// defaults OFF so the flat list (the shipped pixels) is untouched.
+					$lafka_mn_grouped = array();
+					if ( 'yes' === get_theme_mod( 'lafka_mobile_menu_grouping', 'no' )
+						&& class_exists( 'LafkaMobileGroupedWalker' )
+						&& method_exists( 'LafkaMobileGroupedWalker', 'group_terms' ) ) {
+						$lafka_mn_grouped = LafkaMobileGroupedWalker::group_terms( $lafka_mn_terms );
+					}
+					?>
+					<?php if ( ! empty( $lafka_mn_grouped ) ) : ?>
+						<?php foreach ( $lafka_mn_grouped as $lafka_mn_group_label => $lafka_mn_group_terms ) : ?>
+							<div class="lafka-mobile-menu-group lafka-group-<?php echo esc_attr( sanitize_title( $lafka_mn_group_label ) ); ?>">
+								<h3 class="lafka-mobile-menu-group-label"><?php echo esc_html( $lafka_mn_group_label ); ?></h3>
+								<ul class="lafka-mobile-nav__list lafka-mobile-menu-group-items">
+									<?php foreach ( $lafka_mn_group_terms as $lafka_mn_term ) : ?>
+										<li>
+											<a href="<?php echo esc_url( get_term_link( $lafka_mn_term ) ); ?>">
+												<?php echo esc_html( $lafka_mn_term->name ); ?>
+												<span class="lafka-mobile-nav__count"><?php echo esc_html( (string) $lafka_mn_term->count ); ?></span>
+											</a>
+										</li>
+									<?php endforeach; ?>
+								</ul>
+							</div>
 						<?php endforeach; ?>
-					</ul>
+					<?php else : ?>
+						<ul class="lafka-mobile-nav__list">
+							<?php foreach ( $lafka_mn_terms as $lafka_mn_term ) : ?>
+								<li>
+									<a href="<?php echo esc_url( get_term_link( $lafka_mn_term ) ); ?>">
+										<?php echo esc_html( $lafka_mn_term->name ); ?>
+										<span class="lafka-mobile-nav__count"><?php echo esc_html( (string) $lafka_mn_term->count ); ?></span>
+									</a>
+								</li>
+							<?php endforeach; ?>
+						</ul>
+					<?php endif; ?>
 				</section>
 			<?php endif; ?>
 

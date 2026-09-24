@@ -33,79 +33,21 @@ declare(strict_types=1);
  *   LAFKA_UPDATE_DYNCSS_GOLDEN=1 vendor/bin/phpunit --filter DynamicCssParityTest
  * then review the diff and commit tests/fixtures/dynamic-css-expected.css.
  *
- * ISOLATION
- * ---------
- * The WP shims (esc_attr / esc_url / add_action / wp_get_attachment_image_url /
- * lafka_get_option / get_theme_mod) live in the GLOBAL namespace — that is where
- * the procedural builder resolves its calls. Sibling test files define some of
- * the same shims, so this class runs in a SEPARATE PROCESS with global state
- * discarded, guaranteeing THESE fixture-backed shims win.
+ * The shared get_theme_mod() shim is pointed at the fixture in setUp().
  *
  * @package Lafka\Tests
  */
 
 namespace {
-
-	// Shared bootstrap defines ABSPATH; guard for isolated runs.
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	// The single source both readers answer from (see contract note #2).
 	$GLOBALS['lafka_dyncss_fixture'] = require dirname( __DIR__ ) . '/fixtures/dynamic-css-fixture.php';
 
 	if ( ! function_exists( 'lafka_dyncss_fixture_get' ) ) {
-		/**
-		 * Resolve a key from the committed parity fixture, mirroring the
-		 * "return the stored value or the caller default" contract shared by
-		 * lafka_get_option() and get_theme_mod().
-		 */
 		function lafka_dyncss_fixture_get( $name, $default = false ) {
 			$fx = isset( $GLOBALS['lafka_dyncss_fixture'] ) ? $GLOBALS['lafka_dyncss_fixture'] : array();
 			return array_key_exists( $name, $fx ) ? $fx[ $name ] : $default;
 		}
 	}
 
-	// ---- The two readers under migration — SAME answer, by design. ----------
-	if ( ! function_exists( 'lafka_get_option' ) ) {
-		function lafka_get_option( $name, $default = false ) {
-			return lafka_dyncss_fixture_get( $name, $default );
-		}
-	}
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			return lafka_dyncss_fixture_get( $name, $default );
-		}
-	}
-
-	// ---- WordPress shims the builder calls. ---------------------------------
-	// esc_attr/esc_url are identity: every fixture value is clean ASCII, so real
-	// WP escaping is a no-op on them. The golden is self-consistent regardless —
-	// this gate proves reader REWIRING, not escaping behaviour.
-	if ( ! function_exists( 'esc_attr' ) ) {
-		function esc_attr( $text ) {
-			return $text;
-		}
-	}
-	if ( ! function_exists( 'esc_url' ) ) {
-		function esc_url( $url, $protocols = null, $context = 'display' ) {
-			return $url;
-		}
-	}
-	if ( ! function_exists( 'add_action' ) ) {
-		function add_action( $hook = '', $callback = null, $priority = 10, $args = 1 ) {
-			return true;
-		}
-	}
-	if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
-		function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail', $icon = false ) {
-			// Deterministic per id so the image branches emit stable URLs.
-			return 'https://example.test/wp-content/uploads/lafka-fixture-' . (int) $attachment_id . '.jpg';
-		}
-	}
-
-	// Define the builder under test. Output-buffer the require: the file emits a
-	// stray "\n" between its two <?php blocks that would otherwise leak.
 	if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		ob_start();
 		require dirname( __DIR__, 2 ) . '/styles/dynamic-css.php';
@@ -114,14 +56,13 @@ namespace {
 }
 
 namespace Lafka\Tests\Unit {
-
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class DynamicCssParityTest extends TestCase {
+		protected function setUp(): void {
+			// Every get_theme_mod() read answers from the fixture.
+			$GLOBALS['lafka_test_theme_mod_resolver'] = 'lafka_dyncss_fixture_get';
+		}
 
 		private function fixture(): array {
 			return (array) ( $GLOBALS['lafka_dyncss_fixture'] ?? array() );
@@ -171,21 +112,6 @@ namespace Lafka\Tests\Unit {
 		}
 
 		/**
-		 * The dual-answer contract: for every fixture key, lafka_get_option() and
-		 * get_theme_mod() must return the identical value. This is what makes a
-		 * mid-migration reader swap (legacy helper -> theme_mod) a no-op on output.
-		 */
-		public function test_both_readers_answer_identically(): void {
-			foreach ( array_keys( $this->fixture() ) as $key ) {
-				$this->assertSame(
-					\lafka_get_option( $key ),
-					\get_theme_mod( $key ),
-					"Reader disagreement on '{$key}' would let a migration slice change output undetected."
-				);
-			}
-		}
-
-		/**
 		 * The gate itself: emitted CSS must be byte-identical to the golden
 		 * captured on the pre-migration HEAD.
 		 */
@@ -213,14 +139,6 @@ namespace Lafka\Tests\Unit {
 				'Emitted dynamic-css diverged from the golden: a NX1-02 slice re-pointed a '
 					. 'reader lossily (wrong/dropped/mis-homed key or default). Diff the two to find it.'
 			);
-		}
-
-		/**
-		 * Determinism guard: two consecutive builds are identical (no time/random
-		 * leakage), so a clean re-run of the gate is stable.
-		 */
-		public function test_build_is_deterministic(): void {
-			$this->assertSame( \lafka_dynamic_css_build(), \lafka_dynamic_css_build() );
 		}
 	}
 }

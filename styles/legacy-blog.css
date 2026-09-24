@@ -2,8 +2,8 @@
  *
  * Classic blog / archive / single / search / comments / widgets / sidebars. Enqueued on is_home/is_archive/is_single/is_search/is_attachment or when comments are open.
  *
- * EXTRACTED from the legacy style.css monolith by scripts/nx1-10a-extract.mjs
- * (NX1-10a). Every rule here was proven to match ZERO elements on the six
+ * EXTRACTED from the legacy style.css monolith in NX1-10a (the one-shot
+ * extractor is in git history). Every rule here was proven to match ZERO elements on the six
  * handoff surfaces, so it is enqueued only on the legacy surface below. Kept in
  * @layer legacy so it stays below the unlayered modular sheets, exactly as it
  * did inside the monolith.
@@ -122,7 +122,6 @@ div.widget_nav_menu ul {
     margin: 0;
 }
 
-
 .widget_categories ul {
     padding: 0 10px !important;
 }
@@ -187,25 +186,15 @@ div.widget_archive ul li a:hover {
     text-decoration: none;
 }
 
-
 div.widget_nav_menu ul li {
     width: 100%;
     font-size: 14px;
 }
 
-.error404 div.blog-post-excerpt #searchform div input[type="text"],
 .blog-post-excerpt input#s {
     padding: 8px;
     border: 1px solid #e5e5e5;
     width: 201px;
-    -webkit-appearance: none;
-}
-
-.error404 div.blog-post-excerpt #searchform div input[type="text"] {
-    padding: 12px;
-    margin: 25px 0;
-    border: 1px solid #e5e5e5;
-    width: 280px;
     -webkit-appearance: none;
 }
 
@@ -214,31 +203,8 @@ div.widget_nav_menu ul li {
     margin: 8px 0 20px 0;
 }
 
-
-.error404 div.blog-post-excerpt #searchform div input[type="submit"],
 .blog-post-excerpt input#searchsubmit {
     display: none;
-}
-
-.error404 div.blog-post-excerpt {
-    text-align: center;
-    padding-bottom: 40px;
-    margin-top: 40px;
-}
-
-.error404 div.blog-post-excerpt::before {
-    display: block;
-    content: "404";
-    font-weight: 800;
-    font-size: 140px;
-    line-height: normal;
-    margin-bottom: 60px;
-    color: #fff;
-    text-shadow: 0 1px 0 #ccc, 0 2px 0 #c9c9c9, 0 3px 0 #bbb, 0 4px 0 #b9b9b9, 0 5px 0 #aaa, 0 6px 1px rgba(0, 0, 0, .1), 0 0 5px rgba(0, 0, 0, .1), 0 1px 3px rgba(0, 0, 0, .15), 0 3px 5px rgba(0, 0, 0, .1), 0 5px 10px rgba(0, 0, 0, .15), 0 10px 10px rgba(0, 0, 0, .1), 0 20px 20px rgba(0, 0, 0, .10);
-}
-
-.error404 .content_holder h2.heading-title {
-    text-align: center;
 }
 
 .lafka_title_holder {
@@ -405,7 +371,6 @@ body.lafka_transparent_header .lafka_title_holder.title_has_image .inner {
     margin-bottom: 15px;
 }
 
-
 .lafka-is-custom-footer-sidebar>.widget.box {
     clear: none;
 }
@@ -452,27 +417,6 @@ body.single.single-product .inner a.sidebar-trigger,
     right: 40px;
 }
 
-.lafka-search-cart-holder a.sidebar-trigger {
-    display: block;
-    width: 36px;
-    height: 36px;
-    line-height: 36px;
-    background: none;
-    position: relative;
-    top: auto !Important;
-    right: auto;
-    color: #333;
-    font-size: 0;
-    vertical-align: middle;
-    text-align: center;
-    text-decoration: none !Important;
-    z-index: 1;
-    float: right;
-    border: none;
-    box-shadow: none !important;
-    margin-left: 2px;
-}
-
 a.sidebar-trigger::before {
     display: block;
     content: "\e87e";
@@ -486,18 +430,6 @@ a.sidebar-trigger::before {
     -webkit-transition: all 0.4s ease 0s;
     transition: all 0.4s ease 0s;
     color: #333;
-}
-
-.lafka-search-cart-holder a.sidebar-trigger::before {
-    height: 36px;
-    line-height: 36px;
-    font-size: 21px !important;
-    font-weight: 400 !important;
-    width: 36px;
-}
-
-.lafka-search-cart-holder a.sidebar-trigger::after {
-    display: none;
 }
 
 #main a.sidebar-trigger:hover,
@@ -603,66 +535,8 @@ body.single-product .has-sidebar .content_holder .lafka-has-product-cover-image 
     padding-left: 40px;
 }
 
-.error404 .content_holder {
-    width: 100%;
-    height: auto !important;
-    text-align: center;
-}
-
-.error404 .lafka_title_holder:not(.title_has_image) .inner h1.heading-title {
-    text-align: center;
-}
-
-.error404 .content_holder p:first-of-type {
-    font-size: 17px;
-    text-align: center;
-}
-
-.error404 .content_holder input#s {
-    width: 80%;
-    text-align: center;
-    font-size: 19px;
-    padding: 20px 10px;
-    border: none;
-    margin: 0 auto;
-    display: block;
-}
-
-.error404 .content_holder #searchform::before {
-    display: block;
-    width: 100%;
-    max-width: 700px;
-    height: 430px;
-    margin: 0 auto;
-    content: "";
-    background-image: url(image/404.jpg);
-    background-size: cover;
-}
-
-
-.error404 .content_holder small.lafka-search-hint-text {
-    margin-bottom: 50px;
-}
-
 .sidebar small.lafka-search-hint-text {
     display: none;
-}
-
-#main-menu li ul.sub-menu .widget ul.product_list_widget {
-    padding: 0;
-    width: 100%;
-}
-
-#main-menu li ul.sub-menu .widget ul.product_list_widget li {
-    padding: 10px 0;
-    width: 100%;
-    float: none;
-}
-
-#main-menu li ul.sub-menu .widget ul.product_list_widget li a {
-    padding: 0;
-    width: 100%;
-    display: block;
 }
 
 .widget>h3:first-of-type {
@@ -678,15 +552,6 @@ body.single-product .has-sidebar .content_holder .lafka-has-product-cover-image 
     color: #333;
     font-size: 21px;
     margin-bottom: 45px;
-}
-
-.lafka_mega_text_block .widget>h3:first-of-type {
-    background: none;
-    margin-bottom: 12px;
-}
-
-#pre_header .widget>h3:first-child {
-    color: #5e5e5e; /* P6-A11Y-2: #999→#5e5e5e, 4.6:1 WCAG AA */
 }
 
 #footer .widget>h3:first-child {
@@ -778,14 +643,9 @@ body.lafka_transparent_header .term-description+.content_holder div.lafka_woo_ca
     left: 0;
 }
 
-.lafka-mega-menu .widget .star-rating {
-    display: none;
-}
-
 .lafka_shortcode_latest_posts.lafka_blog_masonry.lafka-latest-blog-col-2 .blog-post {
     width: 50%;
 }
-
 
 .lafka_shortcode_latest_posts.lafka_blog_masonry.lafka-latest-blog-col-3 .blog-post {
     width: 33.33%;
@@ -795,11 +655,9 @@ body.lafka_transparent_header .term-description+.content_holder div.lafka_woo_ca
     width: 25%;
 }
 
-
 .lafka_shortcode_latest_posts.lafka_blog_masonry.lafka-latest-blog-col-5 .blog-post {
     width: 20%;
 }
-
 
 .lafka_shortcode_latest_posts.lafka_blog_masonry.lafka-latest-blog-col-6 .blog-post {
     width: 16.66%;
@@ -1077,7 +935,7 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
 
 .lafka-foodmenu-light .foodmenu-unit-info h4>span.lafka-item-weight-list {
     background-color: rgba(0, 0, 0, 0.17);
-    color: #5e5e5e; /* C-A11Y-Audit-2026-04-29: #999→#5e5e5e, 4.6:1 WCAG AA (light foodmenu bg) */
+    color: inherit; /* Light scheme = white titles on a dark section; #5e5e5e was ~4.4:1 even over white. */
 }
 
 .similar_projects .foodmenu-unit-info h4>span.lafka-item-weight-list {
@@ -1099,7 +957,6 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
     color: #333;
     text-decoration: none;
 }
-
 
 .blog-post {
     padding-bottom: 30px;
@@ -1337,7 +1194,6 @@ body.single-post #content:not(.has-sidebar) .content_holder>.post>.lafka_post_da
     margin-left: auto;
     margin-right: auto;
 }
-
 
 body.single-post .content_holder>.post>.post-unit-holder img.attachment-lafka-foodmenu-single-thumb.wp-post-image {
     margin-bottom: 60px;
@@ -1776,11 +1632,6 @@ body>div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content .
     top: 75px;
 }
 
-body>div.widget.woocommerce.widget_shopping_cart.active_cart {
-    top: 0;
-    display: block;
-}
-
 body>div.widget.woocommerce.widget_shopping_cart {
     z-index: 222000;
 }
@@ -2058,14 +1909,6 @@ body.lafka_transparent_header.lafka-transparent-dark #lafka_page_title.lafka_tit
     border-color: transparent var(--lafka-page-title-border-color) var(--lafka-page-title-border-color) transparent;
 }
 
-#pre_header .widget > h3:first-child {
-    color: var(--lafka-collapsible-title-color);
-}
-
-#pre_header > .inner div.widget_categories ul li, #pre_header > .inner div.widget_archive ul li {
-    border-color: var(--lafka-collapsible-title-border-color);
-}
-
 .lafka_title_holder .inner h1.heading-title {
     font-size: var(--lafka-title-bg-font-size);
 }
@@ -2087,6 +1930,5 @@ body.lafka_transparent_header.lafka-transparent-dark #lafka_page_title.lafka_tit
 .lafka-uppercase-titles .lafka_title_holder .inner h1.heading-title {
     text-transform: uppercase;
 }
-
 
 }

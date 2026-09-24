@@ -39,7 +39,7 @@ $lafka_ft_logo  = function_exists( 'lafka_get_logo_id' ) ? lafka_get_logo_id() :
 
 $lafka_ft_about = (string) get_theme_mod(
 	'lafka_footer_about',
-	__( 'Fresh-baked pizza, poutine, donair and more — made to order from scratch in our kitchen.', 'lafka' )
+	__( 'Fresh food, made to order from scratch in our kitchen. Order online for pickup or delivery.', 'lafka' )
 );
 
 // Only ship the built-in form when an integration has actually registered a
@@ -213,7 +213,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 	// Header search overlay — opened by the [data-lafka-search-toggle] icon in
 	// header.php. Native <dialog>: showModal() handles Escape + focus trapping;
 	// the close button is a method="dialog" form. (Audit 2026-06-27 #3.)
-	if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_show_searchform', true ) ) :
+	if ( get_theme_mod( 'lafka_show_searchform', true ) ) :
 		?>
 		<dialog id="lafka-search-dialog" class="lafka-search-dialog" aria-label="<?php esc_attr_e( 'Search', 'lafka' ); ?>">
 			<div class="lafka-search-dialog__panel">

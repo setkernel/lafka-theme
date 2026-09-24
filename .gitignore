@@ -16,12 +16,11 @@ Thumbs.db
 node_modules/
 vendor/
 
-# WordPress
-wp-config.php
-wp-content/uploads/
-
-# Test artefacts
+# Test artefacts and tool caches
 .phpunit.result.cache
+.phpcs.cache
+.eslintcache
+.stylelintcache
 .tmp-screenshots/
 .wp-env-uploads/
 
@@ -31,13 +30,10 @@ wp-content/uploads/
 # only when present on disk.
 /styles/*.min.css
 /js/*.min.js
-# Exceptions: a few first-party scripts ship a committed, hand-tuned `.min`
-# sibling consumed by an existing SCRIPT_DEBUG `$suffix` enqueue, and two
-# vendored libraries are distributed only in minified form. Keep these tracked.
-!/js/lafka-front.min.js
+# Exceptions: lafka-dialog.min.js is build output that lafka-plugin registers
+# by path, so it stays committed (CI fails if it drifts from `npm run build`);
+# two vendored libraries are distributed only in minified form.
 !/js/lafka-dialog.min.js
-!/js/lafka-libs-config.min.js
-!/js/lafka-price-slider.min.js
 !/js/typed.min.js
 !/js/jquery.nice-select.min.js
 
@@ -46,13 +42,16 @@ wp-content/uploads/
 *.bak
 *.orig
 
+# Local agent/brainstorming scratch
+/.superpowers/
+
 # Playwright e2e artifacts
 /test-results/
 /playwright-report/
 /blob-report/
 /.playwright/
 
-# NX1-02 visual parity harness (playwright.visual.config.js): goldens are LOCAL,
+# Visual gates (playwright.visual.config.js, projects peppery/dark/contrast): goldens are LOCAL,
 # machine-specific, and regenerated only intentionally — never committed, never
 # run in CI. See tests/visual/nx1-02.spec.js.
 /tests/visual/__screenshots__/

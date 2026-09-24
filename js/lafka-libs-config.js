@@ -228,40 +228,6 @@
 				e.preventDefault();
 			});
 		}
-
-		/***********************************
-		 * "lafka-variation-prod-cloudzoom"
-		 ***********************************/
-		if (typeof lafka_variation_prod_cloudzoom !== 'undefined') {
-			if (jQuery('#zoom1').length) {
-				jQuery(document).on('update_variation_values', function () {
-
-					jQuery('a.reset_variations').on('click', jQuery(this), function (event) {
-
-						var o_href = $('#zoom1').attr('data-o_href');
-
-						$('#zoom1').attr('href', o_href);
-						jQuery('#zoom1').CloudZoom();
-					});
-
-					jQuery('table.variations select option').on('click', jQuery(this), function (event) {
-						// Destroy the previous zoom
-						if (jQuery('#zoom1').data('zoom')) {
-							jQuery('#zoom1').data('zoom').destroy();
-							jQuery('#zoom1').CloudZoom();
-							return false;
-						}
-					});
-				});
-			}
-		}
-
-		/***********************************
-		 * "lafka-ytplayer-conf"
-		 ***********************************/
-		if (typeof lafka_ytplayer_conf !== 'undefined') {
-			$("div.lafka_bckgr_player").YTPlayer();
-		}
 		/* End Ready */
 	});
 
@@ -651,17 +617,6 @@ if (typeof lafka_quickview !== 'undefined') {
 
             // Custom event for when variation selection has been changed
             form.$form.trigger('woocommerce_variation_has_changed');
-        };
-
-        /**
-         * Escape quotes in a string.
-         * @param {string} string
-         * @return {string}
-         */
-        LafkaVariationForm.prototype.addSlashes = function (string) {
-            string = string.replace(/'/g, '\\\'');
-            string = string.replace(/"/g, '\\\"');
-            return string;
         };
 
         /**
@@ -1087,79 +1042,3 @@ if (typeof lafka_quickview !== 'undefined') {
  * END "lafka-quickview"
  *********************/
 
-/* NON jQuery */
-
-/**********************
- * "lafka-map-config"
- *********************/
-if (typeof lafka_map_config !== 'undefined') {
-	var directionsDisplayCnt;
-	var directionsServiceCnt = new google.maps.DirectionsService();
-
-// Here you can customize the direction line color, weigth and opacity.
-	var polylineOptionsActualCnt = new google.maps.Polyline({strokeColor: '#585858', strokeOpacity: 0.7, strokeWeight: 4});
-
-	function initializeCnt() { // Place the coordinates of your store here.
-		var latlng = new google.maps.LatLng(lafka_map_config.lattitude, lafka_map_config.longitude);
-		directionsDisplayCnt = new google.maps.DirectionsRenderer();
-		directionsDisplayCnt = new google.maps.DirectionsRenderer({suppressMarkers: true, polylineOptions: polylineOptionsActualCnt});
-
-		var myOptionsCnt = {
-			// By changing this number you can define the resolution of the current view.
-			// Zoom level between 0 (the lowest zoom level, in which the entire world can be seen on one map) to 21+
-			// (down to individual buildings)
-			zoom: 17,
-			center: latlng,
-			mapTypeId: google.maps.MapTypeId.ROADMAP,
-			mapTypeControl: true,
-			scrollwheel: false
-		};
-
-		var mapCnt = new google.maps.Map(document.getElementById("lafka_map_canvas"), myOptionsCnt);
-
-		directionsDisplayCnt.setMap(mapCnt);
-		//directionsDisplayCnt.setPanel(document.getElementById("directionsPanel"));
-
-		// Here you can change the path, size and pivot point of the marker on the map.
-		var image = new google.maps.MarkerImage(lafka_map_config.images + 'marker.png', new google.maps.Size(45, 48), new google.maps.Point(0, 0), new google.maps.Point(25, 40));
-
-		// Here you can change the path, size and pivot point of the marker's shadow on the map.
-		var shadow = new google.maps.MarkerImage(lafka_map_config.images + 'shadow.png', new google.maps.Size(26, 10), new google.maps.Point(0, 0), new google.maps.Point(10, 4));
-
-		// Change the title of your store. People see this when they hover over your marker.
-		var marker = new google.maps.Marker({position: latlng, map: mapCnt, shadow: shadow, title: lafka_map_config.location_title, icon: image});
-
-		// This function will make your marker bounce. When you click on it, it will toggle between bouncing and static.
-		// You can comment out if you don't whant your marker to bounce.
-		toggleBounce();
-
-		google.maps.event.addListener(marker, 'click', toggleBounce);
-
-		function toggleBounce() {
-			if (marker.getAnimation() != null) {
-				marker.setAnimation(null);
-			} else {
-				marker.setAnimation(google.maps.Animation.BOUNCE);
-			}
-		}
-	}
-
-// Change the coordinates below to those of your store. (should be the same as the coordinates above.
-	function calcRouteOnContacts() {
-		var start = document.getElementById("routeStart").value;
-// Fill in the cordinates of your store. See readme file for help.
-		var end = lafka_map_config.lattitude + "," + lafka_map_config.longitude;
-		var request = {origin: start, destination: end, travelMode: google.maps.DirectionsTravelMode.DRIVING};
-
-		directionsServiceCnt.route(request, function (response, status) {
-			if (status == google.maps.DirectionsStatus.OK) {
-				directionsDisplayCnt.setDirections(response);
-			}
-		});
-	}
-
-	google.maps.event.addDomListener(window, 'load', initializeCnt);
-}
-/*************************
- * END "lafka-map-config"
- *************************/

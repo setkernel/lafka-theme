@@ -1,19 +1,6 @@
 /*
 RTL Specific Styles For lafka Theme by Althemist
 */
-#main-menu, .lafka-search-cart-holder, #header_top .lafka-social, #header_top .has-top-menu .lafka-top-bar-message {
-	float: left;
-}
-
-.rtl .lafka-search-cart-holder::before {
-	left: auto;
-	right: -1px;
-}
-
-.main_menu_holder .lafka-search-cart-holder {
-	padding-left: 0;
-	padding-right: 5px;
-}
 
 #lafka_price_range {
 	float: left;
@@ -92,22 +79,6 @@ div.prod_hold .links {
 	margin-left: 8px;
 }
 
-ul.lafka-top-menu > li.menu-item-has-children > a::after, #main-menu > ul > li.dropdown > a::after, #main-menu ul#main_nav > li > ul.sub-menu li.dropdown > a::after {
-    margin-right: 3px;
-	margin-left: 0;
-}
-
-#main-menu li ul.sub-menu {
-    text-align: right;
-	left: auto;
-	right: 0;
-}
-
-#main-menu li.dropdown > div.lafka-mega-menu {
-	left: auto;
-	right: 0;
-}
-
 .tagcloud {
     text-align: right;
 }
@@ -121,7 +92,7 @@ ul.lafka-top-menu > li.menu-item-has-children > a::after, #main-menu > ul > li.d
 	margin-left: 30px;
 }
 
-.lafka_post_data_holder, .woocommerce-billing-fields, body.single-tribe_venue #tribe-events, body.single-tribe_organizer #tribe-events, #tribe-events-content, div.woocommerce-MyAccount-content, .woocommerce-shipping-fields, body.woocommerce-cart .cart-collaterals, form.checkout.woocommerce-checkout #order_review, .foodmenu-unit.list-unit .foodmenu-unit-info h4, .foodmenu-unit.list-unit .foodmenu-unit-info small, .breadcrumb, .lafka_title_holder .inner h1.heading-title, .lafka_title_holder .inner h6, .sidebar, #main-menu li ul.sub-menu li a, .widget, .foodmenu-unit-info h6, .foodmenu-unit.list-unit .foodmenu-unit-info {
+.lafka_post_data_holder, .woocommerce-billing-fields, body.single-tribe_venue #tribe-events, body.single-tribe_organizer #tribe-events, #tribe-events-content, div.woocommerce-MyAccount-content, .woocommerce-shipping-fields, body.woocommerce-cart .cart-collaterals, form.checkout.woocommerce-checkout #order_review, .foodmenu-unit.list-unit .foodmenu-unit-info h4, .foodmenu-unit.list-unit .foodmenu-unit-info small, .breadcrumb, .lafka_title_holder .inner h1.heading-title, .lafka_title_holder .inner h6, .sidebar, .widget, .foodmenu-unit-info h6, .foodmenu-unit.list-unit .foodmenu-unit-info {
 	text-align: right;
 }
 
@@ -145,27 +116,13 @@ div.post .post-date, div.product.type-product .post-date, div.page.type-page .po
 	padding-right: 16px;
 }
 
-.widget > h3:first-child::before, #main-menu li ul.sub-menu li.lafka_colum_title > a::before, .widget > h3:first-child::after, #main-menu li ul.sub-menu li.lafka_colum_title > a::after, .footer_time::before, .footer_address::before, .footer_phone::before, .footer_fax::before, .footer_mail::before, .footer_skype::before {
+.widget > h3:first-child::before, .widget > h3:first-child::after, .footer_time::before, .footer_address::before, .footer_phone::before, .footer_fax::before, .footer_mail::before, .footer_skype::before {
 	left: auto;
 	right: 0;
 }
 
-#main-menu li div.lafka-mega-menu > ul.sub-menu > li > a, #main-menu li div.lafka-mega-menu > ul.sub-menu > li > a:hover {
-	padding: 10px 0 10px 8px !important;
-}
-
 ul.post-list li {
 	float: none;
-}
-
-#cart-module div.widget.woocommerce.widget_shopping_cart {
-	right: auto;
-	left: 0;
-}
-
-#cart-module div.widget.woocommerce.widget_shopping_cart::before {
-	right: auto;
-	left: 22px;
 }
 
 .foodmenu-unit.list-unit .foodmenu-unit-info a.foodmenu-lightbox-link {
@@ -177,17 +134,6 @@ ul.post-list li {
 	left: -40px;
 	padding-right: 0;
 	padding-left: 40px;
-}
-
-ul#mobile-menu.menu {
-	margin: 0 18px 150px 0;
-	padding-left: 17px;
-	padding-right: 0;
-}
-
-a.mob-menu-toggle {
-	float: left;
-	margin: 0 10px 0 0;
 }
 
 .widget_display_replies li a {
@@ -246,11 +192,6 @@ dd.tribe-venue, dd.tribe-organizer {
 .tribe-events-list div.type-tribe_events .tribe-events-event-cost {
 	right: auto;
 	left: 20px;
-}
-
-body.lafka_logo_left_menu_below #main-menu ul.menu, body.lafka_logo_center_menu_below #main-menu ul.menu {
-	float: right;
-	text-align: right;
 }
 
 .vc_toggle_title > h4 {
@@ -397,7 +338,7 @@ div.product input.qty, .star-rating span {
     text-align: right;
 }
 
-.lafka-item-weight::before, .lafka-nutrition-allergens::before, #main-menu ul.menu li a i {
+.lafka-item-weight::before, .lafka-nutrition-allergens::before {
 	margin-right: 0;
 	margin-left: 5px;
 }
@@ -436,40 +377,6 @@ a.lafka-post-nav.lafka-post-next .entry-info::after {
 
 .last, .lafka-is-custom-footer-sidebar > .widget:nth-child(4) {
     clear: right;
-}
-
-#main-menu ul.menu > li > a .lafka-custom-menu-label {
-	right: auto;
-	left: 0;
-	-webkit-transform: rotate(12deg);
-	transform: rotate(12deg);
-}
-
-#main-menu li div.lafka-mega-menu > ul.sub-menu > li {
-    text-align: right;
-    padding: 40px 40px 40px 0;
-}
-
-#main-menu li div.lafka-mega-menu > ul.sub-menu > li:last-of-type, #main-menu li div.lafka-mega-menu > ul.sub-menu > li:only-child {
-    padding-left: 40px;
-}
-
-ul#mobile-menu.menu > li.menu-item-has-children > a > span.drop-mob {
-    right: auto;
-    left: 8px;
-}
-
-ul#mobile-menu.menu li a, #lafka_mobile_account_tab li a {
-    padding: 8px 17px 8px 5px;
-}
-
-ul.lafka-top-menu li > ul.sub-menu {
-	left: auto;
-	right: 0;
-}
-
-ul.lafka-top-menu ul.sub-menu a, ul.lafka-top-menu li:hover ul.sub-menu a {
-	text-align: right;
 }
 
 @media only screen and (max-width: 600px) {

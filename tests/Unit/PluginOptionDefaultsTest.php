@@ -17,22 +17,13 @@
  */
 
 namespace {
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
 	require_once dirname( __DIR__, 2 ) . '/incl/system/lafka-option-defaults.php';
 }
 
 namespace Lafka\Tests\Unit {
-
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class PluginOptionDefaultsTest extends TestCase {
-
 		public function test_flag_and_shared_defaults_match_legacy_std(): void {
 			$defaults = \lafka_get_default_values();
 
@@ -77,26 +68,6 @@ namespace Lafka\Tests\Unit {
 					$defaults,
 					"Migrated appearance key '{$migrated}' must not be a plugin-owned default (it lives in a theme_mod now)."
 				);
-			}
-		}
-
-		/**
-		 * Every plugin-owned key excluded from the migration map must have a slim
-		 * default, so the shim's fallback for that key never regresses to false.
-		 */
-		public function test_shared_keys_read_via_shim_all_have_defaults(): void {
-			$defaults = \lafka_get_default_values();
-			$shared   = array(
-				'product_addons',
-				'foodmenu_currency',
-				'foodmenu_currency_position',
-				'category_description_position',
-				'custom_product_popup_link',
-				'custom_product_popup_content',
-				'google_maps_api_key',
-			);
-			foreach ( $shared as $key ) {
-				$this->assertArrayHasKey( $key, $defaults );
 			}
 		}
 	}

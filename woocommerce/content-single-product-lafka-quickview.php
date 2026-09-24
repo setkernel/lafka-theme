@@ -86,18 +86,7 @@ if ( $product->is_downloadable() ) {
 			});
 		</script>
 	<?php endif; ?>
-	<?php
-	$lafka_has_product_addon = false;
-	if ( class_exists( 'WC_Product_Addons_Helper' ) && function_exists( 'is_lafka_product_addons' ) && is_lafka_product_addons() ) {
-		$lafka_has_product_addon = count( WC_Product_Addons_Helper::get_product_addons( get_the_ID() ) );
-	}
-	?>
-	<div class="summary entry-summary
-	<?php
-	if ( $lafka_has_product_addon ) {
-		echo ' lafka-product-has-addons';}
-	?>
-	">
+	<div class="summary entry-summary">
 		<?php
 		/**
 		 * woocommerce_single_product_summary hook

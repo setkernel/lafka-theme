@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
  * can't be require_once'd in isolation; assert the structural contract on source.
  */
 final class FreeDeliveryProgressTest extends TestCase {
-
 	private string $src;
 
 	protected function setUp(): void {
@@ -34,27 +33,11 @@ final class FreeDeliveryProgressTest extends TestCase {
 		);
 	}
 
-	public function test_honours_explicit_caller_override(): void {
-		self::assertStringContainsString(
-			"isset( \$args['threshold'] )",
-			$this->src,
-			'an explicit $args[\'threshold\'] must still win over the resolver.'
-		);
-	}
-
 	public function test_plugin_absent_fallback_defaults_to_zero(): void {
 		self::assertMatchesRegularExpression(
 			"/get_theme_mod\(\s*'lafka_pdp_free_delivery_threshold'\s*,\s*0\s*\)/",
 			$this->src,
 			'plugin-absent fallback must default to 0 (feature off).'
-		);
-	}
-
-	public function test_reapplies_legacy_filter_for_back_compat(): void {
-		self::assertStringContainsString(
-			"apply_filters( 'lafka_pdp_free_delivery_threshold'",
-			$this->src,
-			'legacy lafka_pdp_free_delivery_threshold filter must still fire for child back-compat.'
 		);
 	}
 }

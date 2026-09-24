@@ -44,7 +44,7 @@ if ( ! function_exists( 'lafka_customize_register_announce_bar' ) ) {
 			array(
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
-				'transport'         => 'refresh',
+				'transport'         => 'postMessage',
 			)
 		);
 		$wp_customize->add_control(
@@ -62,7 +62,7 @@ if ( ! function_exists( 'lafka_customize_register_announce_bar' ) ) {
 			array(
 				'default'           => true,
 				'sanitize_callback' => 'rest_sanitize_boolean',
-				'transport'         => 'refresh',
+				'transport'         => 'postMessage',
 			)
 		);
 		$wp_customize->add_control(
@@ -80,7 +80,7 @@ if ( ! function_exists( 'lafka_customize_register_announce_bar' ) ) {
 			array(
 				'default'           => 30,
 				'sanitize_callback' => 'absint',
-				'transport'         => 'refresh',
+				'transport'         => 'postMessage',
 			)
 		);
 		$wp_customize->add_control(
@@ -96,6 +96,26 @@ if ( ! function_exists( 'lafka_customize_register_announce_bar' ) ) {
 				),
 			)
 		);
+
+		// NX2-04: announce-bar toggles re-render just the bar.
+		if ( isset( $wp_customize->selective_refresh ) ) {
+			$wp_customize->selective_refresh->add_partial(
+				'lafka_announce_bar',
+				array(
+					'selector'            => '.lafka-announce-bar',
+					'settings'            => array(
+						'lafka_announce_bar_enabled',
+						'lafka_announce_bar_show_delivery',
+						'lafka_announce_bar_delivery_threshold',
+					),
+					'container_inclusive' => true,
+					'fallback_refresh'    => true, // bar may render nothing when disabled/unconfigured → full refresh covers reappearance
+					'render_callback'     => static function () {
+						get_template_part( 'partials/announce-bar' );
+					},
+				)
+			);
+		}
 	}
 }
 add_action( 'customize_register', 'lafka_customize_register_announce_bar' );

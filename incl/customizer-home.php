@@ -61,7 +61,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			),
 			'lafka_home_hero_lead'              => array(
 				'label'   => __( 'Sub-headline', 'lafka' ),
-				'default' => __( 'Fresh dough, locally-sourced toppings, and recipes refined over years of serving our neighbors. Ready in about 25 minutes.', 'lafka' ),
+				'default' => __( 'Fresh ingredients and recipes refined over years of serving our neighbours. Ready in about 25 minutes.', 'lafka' ),
 				'type'    => 'textarea',
 			),
 			'lafka_home_hero_primary_cta_label' => array(
@@ -76,13 +76,18 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			),
 		);
 
+		// NX2-04: these four copy fields are the highest-traffic hero edits;
+		// they ride postMessage so the operator sees the change live without a
+		// full preview reload (the lafka_home_hero selective-refresh partial
+		// below re-renders the real template part). This loop holds ONLY the
+		// four copy fields, so the transport is set directly here.
 		foreach ( $lafka_home_hero_fields as $lafka_setting_id => $lafka_field ) {
 			$wp_customize->add_setting(
 				$lafka_setting_id,
 				array(
 					'default'           => $lafka_field['default'],
 					'sanitize_callback' => 'url' === $lafka_field['type'] ? 'esc_url_raw' : ( 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field' ),
-					'transport'         => 'refresh',
+					'transport'         => 'postMessage',
 				)
 			);
 			$wp_customize->add_control(
@@ -119,9 +124,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		// the OSS bundle look without uploading. Default applied via
 		// `lafka_home_hero_default_bg_url` filter so child themes can
 		// inject a brand-specific fallback without overriding operator's
-		// Customizer choice. On pepperypizzapoutine.com the operator's
-		// existing yellow-texture upload (uploaded 2021-06 for WPBakery
-		// hero) is the right default.
+		// Customizer choice.
 		$lafka_home_hero_bg_default = (string) apply_filters(
 			'lafka_home_hero_default_bg_url',
 			''
@@ -204,11 +207,13 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			),
 			'lafka_home_hero_stat_3_value' => array(
 				'label'   => __( 'Stat 3 — value', 'lafka' ),
-				'default' => __( 'Free', 'lafka' ),
+				// Derived from the free-delivery threshold SSOT so the
+				// Customizer preview matches the front end (empty = off).
+				'default' => function_exists( 'lafka_home_hero_stat3_defaults' ) ? lafka_home_hero_stat3_defaults()['value'] : '',
 			),
 			'lafka_home_hero_stat_3_label' => array(
 				'label'   => __( 'Stat 3 — caption', 'lafka' ),
-				'default' => __( 'delivery $30+', 'lafka' ),
+				'default' => function_exists( 'lafka_home_hero_stat3_defaults' ) ? lafka_home_hero_stat3_defaults()['label'] : '',
 			),
 		);
 		foreach ( $lafka_home_hero_stat_fields as $lafka_setting_id => $lafka_field ) {
@@ -230,104 +235,30 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			);
 		}
 
-		// -----------------------------------------------------------------
-		// 4. Story split
-		// -----------------------------------------------------------------
-		$wp_customize->add_section(
-			'lafka_home_story',
-			array(
-				'title'       => __( 'Story (Made Here)', 'lafka' ),
-				'description' => __( 'Local-brand differentiation block — kitchen photo + short story. Hide entirely via the toggle below if you prefer.', 'lafka' ),
-				'panel'       => 'lafka_home',
-				'priority'    => 40,
-			)
-		);
-
-		$wp_customize->add_setting(
-			'lafka_home_story_visible',
-			array(
-				'default'           => true,
-				'sanitize_callback' => 'wp_validate_boolean',
-				'transport'         => 'refresh',
-			)
-		);
-		$wp_customize->add_control(
-			'lafka_home_story_visible',
-			array(
-				'label'   => __( 'Show this section', 'lafka' ),
-				'section' => 'lafka_home_story',
-				'type'    => 'checkbox',
-			)
-		);
-
-		$lafka_home_story_fields = array(
-			'lafka_home_story_eyebrow'   => array(
-				'label' => __( 'Eyebrow', 'lafka' ),
-				'default' => __( 'Made here', 'lafka' ),
-				'type' => 'text',
-			),
-			'lafka_home_story_headline'  => array(
-				'label' => __( 'Headline', 'lafka' ),
-				'default' => '',
-				'type' => 'text',
-			),
-			'lafka_home_story_body'      => array(
-				'label' => __( 'Body paragraph', 'lafka' ),
-				'default' => '',
-				'type' => 'textarea',
-			),
-			'lafka_home_story_cta_label' => array(
-				'label' => __( 'CTA label', 'lafka' ),
-				'default' => __( 'Visit us', 'lafka' ),
-				'type' => 'text',
-			),
-			'lafka_home_story_cta_url'   => array(
-				'label' => __( 'CTA URL (leave blank to hide CTA)', 'lafka' ),
-				'default' => '',
-				'type' => 'url',
-			),
-		);
-		foreach ( $lafka_home_story_fields as $lafka_setting_id => $lafka_field ) {
-			$wp_customize->add_setting(
-				$lafka_setting_id,
+		// NX2-04: hero copy edits re-render just the hero via selective
+		// refresh instead of a full preview reload.
+		if ( isset( $wp_customize->selective_refresh ) ) {
+			$wp_customize->selective_refresh->add_partial(
+				'lafka_home_hero',
 				array(
-					'default'           => $lafka_field['default'],
-					'sanitize_callback' => 'url' === $lafka_field['type'] ? 'esc_url_raw' : ( 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field' ),
-					'transport'         => 'refresh',
-				)
-			);
-			$wp_customize->add_control(
-				$lafka_setting_id,
-				array(
-					'label'   => $lafka_field['label'],
-					'section' => 'lafka_home_story',
-					'type'    => $lafka_field['type'],
+					'selector'            => '.lafka-hero',
+					'settings'            => array(
+						'lafka_home_hero_headline',
+						'lafka_home_hero_lead',
+						'lafka_home_hero_primary_cta_label',
+						'lafka_home_hero_primary_cta_url',
+					),
+					'container_inclusive' => true,
+					'fallback_refresh'    => true,
+					'render_callback'     => static function () {
+						get_template_part( 'partials/home-hero' );
+					},
 				)
 			);
 		}
 
-		$wp_customize->add_setting(
-			'lafka_home_story_image_id',
-			array(
-				'default'           => 0,
-				'sanitize_callback' => 'absint',
-				'transport'         => 'refresh',
-			)
-		);
-		$wp_customize->add_control(
-			new WP_Customize_Media_Control(
-				$wp_customize,
-				'lafka_home_story_image_id',
-				array(
-					'label'     => __( 'Story image (kitchen, owner portrait, etc.)', 'lafka' ),
-					'section'   => 'lafka_home_story',
-					'mime_type' => 'image',
-				)
-			)
-		);
-
 		// -----------------------------------------------------------------
-		// 5. Reviews wall
+		// 4. Reviews wall
 		// -----------------------------------------------------------------
 		$wp_customize->add_section(
 			'lafka_home_reviews',
@@ -357,11 +288,6 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		);
 
 		$lafka_home_reviews_fields = array(
-			'lafka_home_reviews_eyebrow'  => array(
-				'label' => __( 'Eyebrow', 'lafka' ),
-				'default' => __( 'Loved locally', 'lafka' ),
-				'type' => 'text',
-			),
 			'lafka_home_reviews_headline' => array(
 				'label' => __( 'Headline', 'lafka' ),
 				'default' => __( 'What our neighbors say', 'lafka' ),
@@ -375,11 +301,6 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			'lafka_home_reviews_count'    => array(
 				'label' => __( 'Number of reviews (e.g. 230)', 'lafka' ),
 				'default' => '',
-				'type' => 'text',
-			),
-			'lafka_home_reviews_source'   => array(
-				'label' => __( 'Review source (e.g. Google, Yelp)', 'lafka' ),
-				'default' => 'Google',
 				'type' => 'text',
 			),
 		);
@@ -464,7 +385,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		}
 
 		// -----------------------------------------------------------------
-		// 6. CTA closer band
+		// 5. CTA closer band
 		// -----------------------------------------------------------------
 		$wp_customize->add_section(
 			'lafka_home_closer',

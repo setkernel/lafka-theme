@@ -9,8 +9,8 @@
  * Content lives in Customizer (panel "Lafka — Editorial Contact"). NAP and
  * hours come from lafka_get_restaurant_info() (W2-T1 source-of-truth).
  *
- * Assets (Fraunces font + editorial.css) are conditionally enqueued by
- * lafka_editorial_assets_enqueue() — only loaded when this template is active.
+ * Assets (Fraunces font + editorial.css) are conditionally enqueued by a
+ * wp_enqueue_scripts closure in functions.php — only when this template is active.
  *
  * @package Lafka
  */
@@ -20,7 +20,7 @@ defined( 'ABSPATH' ) || exit;
 get_header();
 ?>
 
-<main id="content" class="lafka-editorial-contact" tabindex="-1">
+<div class="lafka-editorial-contact">
 
     <?php /* Utility bar */ ?>
     <?php get_template_part( 'partials/editorial-utility-bar' ); ?>
@@ -43,7 +43,7 @@ get_header();
         <?php get_template_part( 'partials/editorial-contact-form' ); ?>
     </div>
 
-</main>
+</div>
 
 <?php
 get_footer();

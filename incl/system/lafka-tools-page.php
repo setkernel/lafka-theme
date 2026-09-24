@@ -13,15 +13,19 @@
  * maintenance utilities, not configuration. Tools is the WP-canonical
  * home for "do something to the site, then go back".
  *
+ * The class is Lafka_Maintenance_Page (not Lafka_Tools_Page): lafka-plugin
+ * 10 ships its own Lafka_Tools_Page, and since plugins load first the theme's
+ * guarded class never got defined, so this page silently disappeared.
+ *
  * @package Lafka
  * @since   6.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'Lafka_Tools_Page' ) ) {
+if ( ! class_exists( 'Lafka_Maintenance_Page' ) ) {
 
-	final class Lafka_Tools_Page {
+	final class Lafka_Maintenance_Page {
 
 		const MENU_SLUG = 'lafka-maintenance';
 
@@ -130,6 +134,17 @@ if ( ! class_exists( 'Lafka_Tools_Page' ) ) {
 					);
 					?>
 				</p>
+				<p class="description">
+					<?php
+					printf(
+						/* translators: %1$s: option key, %2$s: option name, %3$s: example WP-CLI command */
+						esc_html__( 'Hitting the GitHub API rate limit? Store a personal access token in the %1$s key of the %2$s option, e.g. %3$s.', 'lafka' ),
+						'<code>lafka_github_token</code>',
+						'<code>lafka</code>',
+						'<code>wp option patch insert lafka lafka_github_token &lt;token&gt;</code>'
+					);
+					?>
+				</p>
 
 				<h2 style="margin-top: 32px;"><?php esc_html_e( 'Quick links', 'lafka' ); ?></h2>
 				<ul style="list-style: disc; margin-left: 24px;">
@@ -146,5 +161,5 @@ if ( ! class_exists( 'Lafka_Tools_Page' ) ) {
 		}
 	}
 
-	Lafka_Tools_Page::init();
+	Lafka_Maintenance_Page::init();
 }

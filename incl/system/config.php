@@ -5,10 +5,6 @@ if ( ! defined( 'LAFKA_IMAGES_PATH' ) ) {
 	define( 'LAFKA_IMAGES_PATH', get_template_directory_uri() . '/image/' );
 }
 
-if ( ! defined( 'LAFKA_BACKGROUNDS_PATH' ) ) {
-	define( 'LAFKA_BACKGROUNDS_PATH', LAFKA_IMAGES_PATH . 'backgrounds/' );
-}
-
 if ( ! defined( 'LAFKA_IS_BBPRESS' ) ) {
 	if ( class_exists( 'bbPress' ) ) {
 		define( 'LAFKA_IS_BBPRESS', true );
@@ -74,22 +70,6 @@ if ( class_exists( 'WCVendors_Pro' ) || function_exists( 'activate_wcvendors_pro
 	define( 'LAFKA_IS_WC_VENDORS_PRO', false );
 }
 
-if ( class_exists( 'Vc_Manager' ) ) {
-	define( 'LAFKA_IS_VC', true );
-} else {
-	define( 'LAFKA_IS_VC', false );
-}
-
-if ( class_exists( 'Envato_Market' ) ) {
-	define( 'LAFKA_IS_ENVATO_MARKET', true );
-} else {
-	define( 'LAFKA_IS_ENVATO_MARKET', false );
-}
-
-// Is blank page template
-global $lafka_is_blank;
-$lafka_is_blank = false;
-
 /**
  * Force Visual Composer to initialize as "built into the theme". This will hide certain tabs under the Settings->Visual Composer page
  */
@@ -124,33 +104,9 @@ if ( ! function_exists( 'lafka_vc_set_cpt' ) ) {
 }
 
 /**
- * Include Lafka_Font_Awesome
- * PERF-C04: Only load the 3,026-line icon data class in admin — its static arrays
- * (icon picker data) are only used by VC icon pickers and admin UI.
- */
-if ( is_admin() ) {
-	require_once get_template_directory() . '/incl/Lafka_Font_Awesome.php';
-}
-
-/**
  * Include TGM-Plugin-Activation
  */
 require_once get_template_directory() . '/incl/tgm-plugin-activation/class-tgm-plugin-activation.php';
-
-/**
- * Include Lafka_Transfer_Content
- */
-require_once get_template_directory() . '/incl/LafkaTransferContent.class.php';
-
-/**
- * Include Mega Menu functionality
- */
-require_once get_template_directory() . '/incl/LafkaMegaMenu.php';
-
-/**
- * Include LafkaMobileMenuWalker
- */
-require_once get_template_directory() . '/incl/LafkaMobileMenuWalker.php';
 
 /*
  * Register theme text domain

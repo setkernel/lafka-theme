@@ -5,8 +5,6 @@
  * Replaces the WC stock template with a clean handoff layout per
  * /design_handoff_peppery_ordering/README.md "Menu page (/menu, /menu/:cat)".
  *
- * Legacy template preserved as archive-product-legacy.php.
- *
  * Handles three views:
  *   - Shop page (is_shop() — flat or grouped-by-category)
  *   - Category archive (is_product_category() — flat in one category)
@@ -20,10 +18,15 @@
  * here by design. (Third-party integrations that rely on those hooks will
  * therefore not run on these archives; re-introducing them would require
  * firing the actions after removing WC's default wrapper callbacks plus the
- * loop/structured-data hooks — out of scope of this template.)
+ * loop/structured-data hooks — out of scope of this template.) The one
+ * core behaviour kept is the store notice output WooCommerce hangs on
+ * woocommerce_before_shop_loop, printed at the top of the body below.
+ *
+ * Reviewed against WooCommerce core archive-product.php 8.6.0.
  *
  * @package Lafka
  * @since   5.61.0
+ * @version 8.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -173,6 +176,12 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 		<div class="lafka-container">
 
 			<?php
+			// Store notices (e.g. "added to cart" after a non-AJAX add) — core
+			// prints these from woocommerce_before_shop_loop, which never fires here.
+			if ( function_exists( 'woocommerce_output_all_notices' ) ) {
+				woocommerce_output_all_notices();
+			}
+
 			if ( $lafka_arch_is_shop && ! empty( $lafka_arch_terms ) ) :
 				// "All" view — render items grouped by category. The per-group cap
 				// is operator-configurable (Customizer mod `lafka_menu_group_limit`,
@@ -190,8 +199,12 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 							'page'     => 1,
 							'paginate' => true,
 							'category' => array( $lafka_arch_group->slug ),
-							'orderby'  => 'menu_order',
-							'order'    => 'ASC',
+							// Title breaks menu_order ties (WooCommerce's own default catalog
+							// order), so equal-order items never shuffle between requests.
+							'orderby'  => array(
+								'menu_order' => 'ASC',
+								'title'      => 'ASC',
+							),
 						)
 					);
 					$lafka_arch_group_products = ( is_object( $lafka_arch_group_query ) && isset( $lafka_arch_group_query->products ) ) ? $lafka_arch_group_query->products : array();

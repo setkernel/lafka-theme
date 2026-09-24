@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Lafka\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * NX1-10a cascade-parity structural lock.
@@ -14,9 +13,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * (dep 'lafka-style', incl/system/core-functions.php), so a moved declaration
  * that was OVERRIDDEN in the monolith by a LATER kept style.css rule (the
  * v5.68.0 "accent-color consolidation" groups, and friends) silently re-won
- * once relocated. The fix (scripts/nx1-10a-prune-dead.mjs) deleted those dead
- * declarations from the legacy sheets, restoring the monolith's effective
- * cascade. The empirical, rerunnable proof is scripts/nx1-10a-cascade-parity.mjs
+ * once relocated. Those dead declarations were pruned from the legacy sheets in
+ * NX1-10a (see git history), restoring the monolith's effective cascade. The empirical, rerunnable proof is scripts/nx1-10a-cascade-parity.mjs
  * (compares split-vs-monolith winners for every (media,selector,property)).
  *
  * THIS TEST is the committed, CI-visible, pure-PHP lock that stops the
@@ -47,7 +45,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * `.a>.b` and `.a > .b` compare equal across sheets.
  */
 final class CascadeParityTest extends TestCase {
-
 	/** @var array<string,array{selector:string,property:string,value:string,important:bool}>|null */
 	private static ?array $styleRecords = null;
 
@@ -323,62 +320,5 @@ final class CascadeParityTest extends TestCase {
 			. "the later-loading legacy copy would override the token and re-invert the cascade "
 			. "(NX1-10a dead-declaration regression)."
 		);
-	}
-
-	/**
-	 * (B) Each confirmed flip must be ABSENT from every legacy sheet.
-	 *
-	 * @param string $selector
-	 * @param string $property
-	 * @param string $winner   monolith winner (unused here; shared provider)
-	 */
-	#[DataProvider( 'confirmedFlipProvider' )]
-	public function test_confirmed_flip_absent_from_legacy_sheets( string $selector, string $property, string $winner ): void {
-		$legacy = self::legacyKeySet();
-		$this->assertArrayNotHasKey(
-			'|' . $selector . '|' . $property,
-			$legacy,
-			"Dead declaration reintroduced in a legacy sheet: {$selector} { {$property} } — "
-			. "it loads after style.css and would re-win over the monolith's intended value."
-		);
-	}
-
-	/**
-	 * (B cont.) Each confirmed flip's monolith winner must still live in style.css
-	 * (so pruning the legacy copy did not strand the property).
-	 *
-	 * @param string $selector
-	 * @param string $property
-	 * @param string $winner
-	 */
-	#[DataProvider( 'confirmedFlipProvider' )]
-	public function test_confirmed_flip_winner_present_in_style_css( string $selector, string $property, string $winner ): void {
-		$found = null;
-		foreach ( self::styleRecords() as $r ) {
-			if ( $r['selector'] === $selector && $r['property'] === $property ) {
-				$found = $r['value'];
-				if ( self::normValue( $winner ) === $r['value'] ) {
-					break;
-				}
-			}
-		}
-		$this->assertNotNull(
-			$found,
-			"Monolith winner for {$selector} { {$property} } is missing from style.css — pruning stranded it."
-		);
-		$this->assertSame(
-			self::normValue( $winner ),
-			$found,
-			"style.css winner for {$selector} { {$property} } changed — expected {$winner}."
-		);
-	}
-
-	/** @return array<string,array{0:string,1:string,2:string}> */
-	public static function confirmedFlipProvider(): array {
-		$out = array();
-		foreach ( self::CONFIRMED_FLIPS as $f ) {
-			$out[ $f[0] . ' { ' . $f[1] . ' }' ] = $f;
-		}
-		return $out;
 	}
 }

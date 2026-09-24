@@ -20,7 +20,7 @@ get_header();
 $lafka_404_path = isset( $_SERVER['REQUEST_URI'] ) ? wp_strip_all_tags( wp_unslash( (string) $_SERVER['REQUEST_URI'] ) ) : '';
 $lafka_404_path = strtok( $lafka_404_path, '?' );
 ?>
-<main id="main" class="lafka-404" role="main">
+<div id="main" class="lafka-404">
 	<div class="lafka-container lafka-404__inner">
 
 		<span class="lafka-404__emoji" aria-hidden="true">🤷</span>
@@ -49,6 +49,6 @@ $lafka_404_path = strtok( $lafka_404_path, '?' );
 		</div>
 
 	</div>
-</main>
+</div>
 <?php
 get_footer();

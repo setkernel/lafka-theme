@@ -3,206 +3,31 @@ declare(strict_types=1);
 
 namespace Lafka\Tests\Unit;
 
+use Lafka_Color_Contrast;
 use PHPUnit\Framework\TestCase;
 
 /**
- * C-A11Y-Audit-2026-04-29: WCAG 1.4.3 contrast regression lock.
+ * Small-text colours in the static sheets meet WCAG AA (4.5:1) on white.
  *
- * Asserts that specific failing color values (#999/#888 on light backgrounds)
- * have been replaced with the compliant value (#5e5e5e, 4.6:1 on white) in
- * both lafka-theme/style.css and lafka-child/style.css.
- *
- * Negative assertions: forbidden values must NOT appear in rule declarations.
- * Positive assertions: compliant replacements must be present.
- *
- * Note: #999 is still allowed in:
- *   - text-shadow declarations (shadow colors, not foreground text)
- *   - rgba() values
- *   - comments
- *   - .video_controlls a:hover (dark background, exempted with comment)
- *   - background-color declarations
- * The regex patterns below are scoped to `color:` declarations to avoid
- * false-positives on shadow/rgba/background uses.
+ * The preset palettes are covered by PresetContrastTest; these are literal
+ * colours the parent sheets set on markup the parent emits.
  */
 final class ContrastFixesTest extends TestCase {
 
-	private string $theme_css;
-	private string $base_css;
-
-	protected function setUp(): void {
-		parent::setUp();
-		// Audit 2026-06-27 #6: the .foodmenu-unit-info .ingredients rule moved
-		// from lafka-child into the PARENT (styles/lafka-base.css), since the
-		// parent emits that markup. These assertions now run against the parent's
-		// own CSS — both files are always present, so the suite no longer skips
-		// in isolated CI (it used to silently skip when the child was absent).
-		// NX1-10a: the legacy blog/foodmenu/forum/events CSS was extracted out of
-		// style.css into scoped styles/legacy-*.css sheets. The contrast lock must
-		// follow the rules wherever they now live, so theme_css is the monolith
-		// remainder PLUS those extracted sheets.
-		$root            = dirname( __DIR__, 2 );
-		$this->theme_css = file_get_contents( $root . '/style.css' );
-		foreach ( array( 'legacy-blog', 'legacy-shortcodes', 'legacy-forum', 'legacy-events' ) as $legacy ) {
-			$legacy_path = $root . '/styles/' . $legacy . '.css';
-			if ( is_file( $legacy_path ) ) {
-				$this->theme_css .= "\n" . file_get_contents( $legacy_path );
-			}
-		}
-		$this->base_css = file_get_contents( $root . '/styles/lafka-base.css' );
+	public static function setUpBeforeClass(): void {
+		require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-color-contrast.php';
 	}
 
-	// ------------------------------------------------------------------
-	// Parent baseline: .foodmenu-unit-info .ingredients (styles/lafka-base.css)
-	// ------------------------------------------------------------------
+	public function test_foodmenu_ingredients_text_meets_aa_on_white(): void {
+		$css   = (string) file_get_contents( dirname( __DIR__, 2 ) . '/styles/lafka-base.css' );
+		$color = $this->declared_color( $css, '.foodmenu-unit-info .ingredients' );
 
-	/** .ingredients must not use #999 for its text color. */
-	public function test_ingredients_color_not_999_in_base(): void {
-		// Match only the ingredients rule block to avoid false positives.
-		preg_match(
-			'/\.foodmenu-unit-info\s+\.ingredients\s*\{([^}]+)\}/s',
-			$this->base_css,
-			$m
-		);
-		$ruleBlock = $m[1] ?? '';
-		$this->assertNotEmpty( $ruleBlock, '.foodmenu-unit-info .ingredients rule not found in styles/lafka-base.css' );
-
-		$this->assertDoesNotMatchRegularExpression(
-			'/color\s*:\s*#999\b/',
-			$ruleBlock,
-			'.ingredients color must not be #999 (fails WCAG 4.5:1) — C-A11Y-Audit-2026-04-29'
-		);
+		$this->assertGreaterThanOrEqual( 4.5, Lafka_Color_Contrast::ratio( $color, '#ffffff' ), "Ingredients colour {$color} is below 4.5:1 on white." );
 	}
 
-	/** .ingredients must use #5e5e5e for its text color. */
-	public function test_ingredients_color_is_5e5e5e_in_base(): void {
-		preg_match(
-			'/\.foodmenu-unit-info\s+\.ingredients\s*\{([^}]+)\}/s',
-			$this->base_css,
-			$m
-		);
-		$ruleBlock = $m[1] ?? '';
-
-		$this->assertMatchesRegularExpression(
-			'/color\s*:\s*#5e5e5e\b/',
-			$ruleBlock,
-			'.ingredients color must be #5e5e5e (4.6:1 WCAG AA) — C-A11Y-Audit-2026-04-29'
-		);
-	}
-
-	/** The parent baseline CSS must carry the audit provenance comment. */
-	public function test_base_css_audit_comment_present(): void {
-		$this->assertStringContainsString(
-			'C-A11Y-Audit-2026-04-29',
-			$this->base_css,
-			'styles/lafka-base.css must carry the C-A11Y-Audit-2026-04-29 provenance comment'
-		);
-	}
-
-	// ------------------------------------------------------------------
-	// Theme: sub-menu icon color
-	// ------------------------------------------------------------------
-
-	/** #main-menu sub-menu icon color must not be #999. */
-	public function test_submenu_icon_color_not_999_in_theme(): void {
-		preg_match(
-			'/#main-menu\s+li\s+ul\.sub-menu\s+li\s+a\s+i\s*,\s*#main-menu\s+li\s+ul\.sub-menu\s+li\s+a\s+i::before\s*\{([^}]+)\}/s',
-			$this->theme_css,
-			$m
-		);
-		$ruleBlock = $m[1] ?? '';
-		$this->assertNotEmpty( $ruleBlock, 'Sub-menu icon rule not found in theme style.css' );
-
-		$this->assertDoesNotMatchRegularExpression(
-			'/color\s*:\s*#999\b/',
-			$ruleBlock,
-			'Sub-menu icon color must not be #999 (fails WCAG 4.5:1) — C-A11Y-Audit-2026-04-29'
-		);
-	}
-
-	/** #main-menu sub-menu icon color must be #5e5e5e. */
-	public function test_submenu_icon_color_is_5e5e5e_in_theme(): void {
-		preg_match(
-			'/#main-menu\s+li\s+ul\.sub-menu\s+li\s+a\s+i\s*,\s*#main-menu\s+li\s+ul\.sub-menu\s+li\s+a\s+i::before\s*\{([^}]+)\}/s',
-			$this->theme_css,
-			$m
-		);
-		$ruleBlock = $m[1] ?? '';
-
-		$this->assertMatchesRegularExpression(
-			'/color\s*:\s*#5e5e5e\b/',
-			$ruleBlock,
-			'Sub-menu icon color must be #5e5e5e (4.6:1 WCAG AA) — C-A11Y-Audit-2026-04-29'
-		);
-	}
-
-	// ------------------------------------------------------------------
-	// Theme: lafka-foodmenu-light weight badge
-	// ------------------------------------------------------------------
-
-	/** lafka-foodmenu-light weight badge must not use #999. */
-	public function test_foodmenu_light_weight_badge_not_999(): void {
-		preg_match(
-			'/\.lafka-foodmenu-light\s+\.foodmenu-unit-info\s+h4\s*>\s*span\.lafka-item-weight-list\s*\{([^}]+)\}/s',
-			$this->theme_css,
-			$m
-		);
-		$ruleBlock = $m[1] ?? '';
-		$this->assertNotEmpty( $ruleBlock, 'lafka-foodmenu-light weight badge rule not found in theme style.css' );
-
-		$this->assertDoesNotMatchRegularExpression(
-			'/color\s*:\s*#999\b/',
-			$ruleBlock,
-			'lafka-foodmenu-light weight badge color must not be #999 — C-A11Y-Audit-2026-04-29'
-		);
-	}
-
-	/** lafka-foodmenu-light weight badge must use #5e5e5e. */
-	public function test_foodmenu_light_weight_badge_is_5e5e5e(): void {
-		preg_match(
-			'/\.lafka-foodmenu-light\s+\.foodmenu-unit-info\s+h4\s*>\s*span\.lafka-item-weight-list\s*\{([^}]+)\}/s',
-			$this->theme_css,
-			$m
-		);
-		$ruleBlock = $m[1] ?? '';
-
-		$this->assertMatchesRegularExpression(
-			'/color\s*:\s*#5e5e5e\b/',
-			$ruleBlock,
-			'lafka-foodmenu-light weight badge color must be #5e5e5e — C-A11Y-Audit-2026-04-29'
-		);
-	}
-
-	// ------------------------------------------------------------------
-	// Theme: audit provenance
-	// ------------------------------------------------------------------
-
-	/** Theme style.css must carry audit provenance comments on changed rules. */
-	public function test_theme_css_audit_comment_present(): void {
-		$this->assertStringContainsString(
-			'C-A11Y-Audit-2026-04-29',
-			$this->theme_css,
-			'lafka-theme/style.css must carry C-A11Y-Audit-2026-04-29 provenance comments'
-		);
-	}
-
-	// ------------------------------------------------------------------
-	// Theme: video_controlls hover — exempted (dark bg)
-	// ------------------------------------------------------------------
-
-	/** .video_controlls a:hover must carry the large-text / dark-bg exemption comment. */
-	public function test_video_controlls_hover_has_exemption_comment(): void {
-		preg_match(
-			'/\.video_controlls\s+a:hover\s*\{([^}]+)\}/s',
-			$this->theme_css,
-			$m
-		);
-		$ruleBlock = $m[1] ?? '';
-		$this->assertNotEmpty( $ruleBlock, '.video_controlls a:hover rule not found in theme style.css' );
-
-		$this->assertStringContainsString(
-			'C-A11Y-Audit-2026-04-29',
-			$ruleBlock,
-			'.video_controlls a:hover must carry the audit exemption comment'
-		);
+	private function declared_color( string $css, string $selector ): string {
+		$this->assertSame( 1, preg_match( '/' . preg_quote( $selector, '/' ) . '\s*\{([^}]*)\}/', $css, $rule ), "{$selector} rule not found." );
+		$this->assertSame( 1, preg_match( '/(?<![-\w])color\s*:\s*(#[0-9a-f]{3,6})/i', $rule[1], $m ), "{$selector} declares no hex colour." );
+		return $m[1];
 	}
 }

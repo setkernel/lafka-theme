@@ -1,0 +1,66 @@
+/* NX2-04 — Design Preset card grid (Customizer controls pane only). */
+.lafka-preset-grid {
+	display: grid;
+	grid-template-columns: 1fr 1fr;
+	gap: 8px;
+	margin-top: 8px;
+}
+
+.lafka-preset-card {
+	position: relative;
+	display: block;
+	border: 2px solid #dcdcde;
+	border-radius: 6px;
+	overflow: hidden;
+	cursor: pointer;
+	background: #fff;
+}
+
+.lafka-preset-card input[type="radio"] {
+	position: absolute;
+	top: 6px;
+	left: 6px;
+	z-index: 1;
+	margin: 0;
+}
+
+.lafka-preset-card:has(input:checked) {
+	border-color: #2271b1;
+	box-shadow: 0 0 0 1px #2271b1;
+}
+
+.lafka-preset-card__thumb {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 4 / 3;
+	object-fit: cover;
+	object-position: top;
+}
+
+.lafka-preset-card__swatch {
+	display: flex;
+	width: 100%;
+	aspect-ratio: 4 / 3;
+}
+
+.lafka-preset-card__swatch span {
+	flex: 1;
+}
+
+.lafka-preset-card__label {
+	display: block;
+	padding: 6px 8px 0;
+	font-weight: 600;
+}
+
+.lafka-preset-card__desc {
+	display: block;
+	padding: 0 8px 8px;
+	font-size: 11px;
+	color: #646970;
+}
+
+.lafka-preset-card--dark .lafka-preset-card__label::after {
+	content: " \1F319"; /* 🌙 marks dark presets */
+}

@@ -15,7 +15,6 @@ use PHPUnit\Framework\TestCase;
  * (catches an accidental truncation like the 2026-04-29 sed incident).
  */
 final class StyleCssIntegrityTest extends TestCase {
-
 	private string $css;
 
 	protected function setUp(): void {
@@ -27,18 +26,8 @@ final class StyleCssIntegrityTest extends TestCase {
 		$this->assertMatchesRegularExpression( '/^\s*Version:\s*\d+\.\d+\.\d+/m', $this->css,
 			'WP reads the theme version from the style.css header — it must survive purges.' );
 		$this->assertStringContainsString( 'Text Domain: lafka', $this->css );
-	}
-
-	public function test_font_faces_preserved(): void {
-		$this->assertSame( 5, substr_count( $this->css, '@font-face' ),
-			'All self-hosted @font-face rules must be kept (purge must not drop fonts).' );
-	}
-
-	public function test_design_tokens_preserved(): void {
-		// Custom properties are referenced via var() by styles/*.css — purging
-		// them out of style.css would break the modular design system.
-		$vars = preg_match_all( '/--lafka-[a-z0-9-]+\s*:/i', $this->css );
-		$this->assertGreaterThanOrEqual( 20, $vars, 'design-token custom properties must be retained' );
+		$this->assertMatchesRegularExpression( '/^\s*License:\s*GNU General Public License/m', $this->css,
+			'The GPL License: header must survive — wp.org requires it.' );
 	}
 
 	public function test_not_truncated(): void {

@@ -24,7 +24,6 @@
  *    it is the plugin's flag storage (module registry, order_notifications,
  *    functional-shared secrets). Only the theme's appearance keys are copied
  *    out; plugin-owned keys are absent from the map (invariant 1).
- *  - It does not delete or rewrite the `lafka` array (see above).
  *
  * ONE-TIME UPGRADE TRIGGER (NX1-02 Retire phase)
  * ----------------------------------------------
@@ -195,7 +194,6 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'show_shopping_cart'              => 'lafka_show_shopping_cart',
 			'shopping_cart_on_add'            => 'lafka_shopping_cart_on_add',
 			'show_wish_in_header'             => 'lafka_show_wish_in_header',
-			'add_to_cart_sound'               => 'lafka_add_to_cart_sound',
 			'show_breadcrumb'                 => 'lafka_show_breadcrumb',
 			'show_prev_next'                  => 'lafka_show_prev_next',
 			'enable_smooth_scroll'            => 'lafka_enable_smooth_scroll',

@@ -1,10 +1,9 @@
 /* lafka-theme/tests/visual/support/capture.js
  *
- * Shared full-page capture helpers for the visual harness. Extracted so the
- * NX1-10a monolith-teardown spec (tests/visual/nx1-10a.spec.js) can reuse the
- * exact settle-and-shoot behaviour the NX1-02 parity gate established, without
- * editing the pristine NX1-02 spec. Same three product breakpoints, same font +
- * lazy-image settling, same frozen animations.
+ * Shared full-page capture helpers for the visual harness (the NX1-02 parity
+ * gate, the NX1-10a monolith-teardown spec and the NX2-07 dark-preset spec).
+ * Same three product breakpoints, same font + lazy-image settling, same frozen
+ * animations; each spec passes its own mask selectors.
  *
  * @since lafka-theme 6.21.0 (NX1-10a monolith teardown safety net)
  */

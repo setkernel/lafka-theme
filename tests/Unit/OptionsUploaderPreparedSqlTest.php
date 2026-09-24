@@ -24,7 +24,6 @@ namespace Lafka\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 final class OptionsUploaderPreparedSqlTest extends TestCase {
-
 	private function source(): string {
 		$path = __DIR__ . '/../../incl/lafka-options-framework/lafka-options-medialibrary-uploader.php';
 		$this->assertFileExists( $path );
@@ -39,16 +38,6 @@ final class OptionsUploaderPreparedSqlTest extends TestCase {
 			'$wpdb->prepare(',
 			$src,
 			'Options uploader query must use $wpdb->prepare() instead of string concatenation'
-		);
-	}
-
-	public function test_uses_placeholder_for_string_values(): void {
-		$src = $this->source();
-
-		$this->assertStringContainsString(
-			'%s',
-			$src,
-			'Prepared statement must use %s placeholders for string columns'
 		);
 	}
 

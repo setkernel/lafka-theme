@@ -5,7 +5,7 @@
  *
  * Root cause: WordPress's URL resolver matches the slug against any
  * eligible post (attachment, page, single product) before it considers
- * the taxonomy archive. On pepperypizzapoutine.com:
+ * the taxonomy archive. Seen in production:
  *   - /product-category/pizza/ resolves to attachment 7587 ("pizza.png")
  *   - /product-category/donair/ resolves to product "donair"
  *   - /product-category/nachos/ resolves to product "nachos"

@@ -19,7 +19,6 @@ use PHPUnit\Framework\TestCase;
  * The unfulfilled "$5 off" promise is removed.
  */
 final class FooterSignupTest extends TestCase {
-
 	private string $footer;
 
 	protected function setUp(): void {
@@ -31,14 +30,6 @@ final class FooterSignupTest extends TestCase {
 			"/has_action\(\s*['\"]wp_ajax_nopriv_lafka_footer_subscribe['\"]\s*\)/",
 			$this->footer,
 			'The default signup form must only render when a subscribe handler is actually registered.'
-		);
-	}
-
-	public function test_filter_escape_hatch_preserved(): void {
-		$this->assertMatchesRegularExpression(
-			"/apply_filters\(\s*['\"]lafka_footer_signup_html['\"]/",
-			$this->footer,
-			'Integrators must still be able to supply their own signup form via the filter.'
 		);
 	}
 

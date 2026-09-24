@@ -11,7 +11,7 @@
  * What we kept from legacy:
  *  - doctype + html + head + wp_head() (WP plumbing)
  *  - LCP image preload for PDPs
- *  - Skip-link, preloader gate, cart_add_sound gate (operator options)
+ *  - Skip-link, preloader gate (operator option)
  *  - wp_body_open() — fires the v5.54.0 announce bar + promo bar
  *  - <main id="content"> + <div id="container"> open (closed by footer.php)
  *
@@ -95,6 +95,18 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 	?>
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-600.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-800.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
+	<?php
+	// NX2-03: when the active preset's DISPLAY face is a pool font (not the base
+	// Fraunces the two static links above preload), preload its heaviest weight so
+	// the heading face lands within the LCP window. Peppery / any base-display
+	// preset yields '' here, so no link is printed and the head stays byte-identical.
+	$lafka_pool_display_font = function_exists( 'lafka_preset_display_preload_href' ) ? lafka_preset_display_preload_href() : '';
+	if ( '' !== $lafka_pool_display_font ) :
+		?>
+	<link rel="preload" href="<?php echo esc_url( $lafka_pool_display_font ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
+		<?php
+	endif;
+	?>
 
 	<?php wp_head(); ?>
 </head>
@@ -108,20 +120,13 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'lafka' ); ?></a>
 
-	<?php if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_show_preloader', true ) ) : ?>
+	<?php if ( get_theme_mod( 'lafka_show_preloader', true ) ) : ?>
 		<div class="mask" aria-hidden="true">
 			<div id="spinner">
 				<div class="double-bounce1"></div>
 				<div class="double-bounce2"></div>
 			</div>
 		</div>
-	<?php endif; ?>
-
-	<?php if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_add_to_cart_sound', true ) ) : ?>
-		<?php // preload="none" — 352 KB wav stays uncached until add-to-cart fires. ?>
-		<audio id="cart_add_sound" controls preload="none" hidden>
-			<source src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cart_add.wav' ); ?>" type="audio/wav">
-		</audio>
 	<?php endif; ?>
 
 	<header id="header" class="lafka-header" role="banner">
@@ -206,7 +211,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 
 			<div class="lafka-header__actions">
 
-				<?php if ( function_exists( 'lafka_get_option' ) && get_theme_mod( 'lafka_show_searchform', true ) ) : ?>
+				<?php if ( get_theme_mod( 'lafka_show_searchform', true ) ) : ?>
 					<a class="lafka-header__icon-btn lafka-header__search" href="#search" aria-label="<?php esc_attr_e( 'Search', 'lafka' ); ?>" data-lafka-search-toggle>
 						<i class="fa fa-search" aria-hidden="true"></i>
 					</a>

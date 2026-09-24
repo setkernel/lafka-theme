@@ -2,48 +2,45 @@
 const { defineConfig } = require( '@playwright/test' );
 
 /**
- * Playwright config for the NX1-02 VISUAL PARITY harness (tests/visual/).
+ * Playwright config for the local visual and rendered-contrast gates
+ * (tests/visual/). Kept separate from playwright.config.js (the e2e suite CI
+ * runs) because the goldens are LOCAL and UNTRACKED (see .gitignore): they are
+ * captured on a developer's wp-env and regenerated only on an intentional,
+ * reviewed visual change.
  *
- * DELIBERATELY SEPARATE from playwright.config.js (the e2e conversion suite) so
- * this NEVER runs in CI: the e2e job invokes the default config (testDir
- * ./tests/e2e); this config (testDir ./tests/visual) is only ever run by the
- * `npm run test:visual:nx1-02` script a developer runs locally. Its goldens are
- * LOCAL and UNTRACKED (see .gitignore) — the NX1-02 migration gate, regenerated
- * only on an intentional, reviewed visual change.
+ * Projects (run one at a time via the npm scripts):
+ *   - peppery  — default-preset full-page goldens at 375/768/1280: the handoff
+ *                pages (nx1-02.spec.js) and the legacy blog surfaces
+ *                (nx1-10a.spec.js). `npm run test:visual`
+ *   - dark     — Midnight (dark preset) goldens on home, menu, PDP and cart
+ *                (nx2-dark.spec.js). `npm run test:visual:dark`
+ *   - contrast — rendered text/CTA WCAG contrast for every registered preset
+ *                (nx2-contrast.spec.js). No goldens, so it can never bless a
+ *                regression. `npm run test:contrast`
+ * Add `-- --update-snapshots` to (re)capture goldens.
  *
- * Target: LAFKA_E2E_BASE_URL (default http://localhost:8890 — the umbrella
- * wp-env dev site). global-setup reseeds for determinism; global-teardown
- * restores the env's blocks-checkout baseline.
+ * Target: LAFKA_E2E_BASE_URL (default http://localhost:8890 — the theme's
+ * wp-env). global-setup reseeds the store; global-teardown restores the
+ * blocks-checkout baseline. The dark and contrast specs switch the active
+ * preset and restore it, so everything runs single-worker.
  *
- * Single-worker, non-parallel: the store's checkout mode is global state the
- * spec toggles (classic for cart/checkout), so workers must not race it.
- *
- * @since lafka-theme 6.21.0 (NX1-02 harness)
+ * @since lafka-theme 6.21.0 (NX1-02 harness); projects since 7.1.0
  */
 module.exports = defineConfig( {
 	testDir: './tests/visual',
 	globalSetup: require.resolve( './tests/visual/support/global-setup.js' ),
 	globalTeardown: require.resolve( './tests/visual/support/global-teardown.js' ),
 
-	// Goldens + diffs live UNDER untracked dirs (gitignored). Regenerate with
-	// `npm run test:visual:nx1-02 -- --update-snapshots`.
 	snapshotPathTemplate: '{testDir}/__screenshots__/{testFileName}/{arg}{ext}',
 	outputDir: './tests/visual/.output',
 
 	timeout: 120 * 1000,
 	expect: {
 		timeout: 15 * 1000,
-		// Freeze CSS animations; allow a tiny sub-pixel AA tolerance so text
-		// rendering jitter across runs can't flake the gate.
-		//
-		// NX1-10a: a bare maxDiffPixelRatio: 0.01 let the cascade-inversion badge
-		// flip slip through — a badge-sized colour change (a few hundred px) is
-		// far under 1% of a full-page screenshot. We now ALSO cap the ABSOLUTE
-		// differing-pixel count. Playwright takes Math.min() of the two limits
-		// (coreBundle.js: maxDiffPixels = min(maxDiffPixels, ratio*w*h)), so with
-		// both set the 50-pixel cap is the effective gate on every page large
-		// enough to matter — a badge-sized colour flip can never pass again. The
-		// ratio is retained only as a belt-and-braces ceiling on tiny images.
+		// Freeze animations and allow a tiny anti-aliasing tolerance. Playwright
+		// applies the stricter of the two limits, so on a full-page shot the
+		// 50-pixel cap is the effective gate: a badge-sized colour flip (a few
+		// hundred pixels, far under 1%) still fails.
 		toHaveScreenshot: {
 			animations: 'disabled',
 			maxDiffPixels: 50,
@@ -51,7 +48,7 @@ module.exports = defineConfig( {
 		},
 	},
 
-	// Shared global store state → no cross-spec parallelism.
+	// Shared store state (checkout mode, active preset) → no parallelism.
 	fullyParallel: false,
 	workers: 1,
 	forbidOnly: !! process.env.CI,
@@ -66,4 +63,10 @@ module.exports = defineConfig( {
 		video: 'off',
 		trace: 'off',
 	},
+
+	projects: [
+		{ name: 'peppery', testMatch: [ '**/nx1-02.spec.js', '**/nx1-10a.spec.js' ] },
+		{ name: 'dark', testMatch: '**/nx2-dark.spec.js' },
+		{ name: 'contrast', testMatch: '**/nx2-contrast.spec.js' },
+	],
 } );

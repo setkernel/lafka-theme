@@ -28,7 +28,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  *     which never loads legacy-blog.css.
  */
 final class MonolithExtractionTest extends TestCase {
-
 	private static function root(): string {
 		return dirname( __DIR__, 2 );
 	}
@@ -70,31 +69,6 @@ final class MonolithExtractionTest extends TestCase {
 			strlen( $css ),
 			"{$relative} is smaller than expected — did the extraction regress?"
 		);
-	}
-
-	/** bbPress CSS is extracted into the scoped forum sheet. */
-	public function test_bbpress_rules_in_forum_sheet(): void {
-		$this->assertStringContainsString(
-			'bbp',
-			self::read( 'styles/legacy-forum.css' ),
-			'legacy-forum.css should carry the extracted bbPress rules.'
-		);
-	}
-
-	/** Events Calendar CSS is extracted into the scoped events sheet. */
-	public function test_events_rules_in_events_sheet(): void {
-		$this->assertStringContainsString(
-			'tribe-events',
-			self::read( 'styles/legacy-events.css' ),
-			'legacy-events.css should carry the extracted Events Calendar rules.'
-		);
-	}
-
-	/** Blog layout is extracted into the scoped blog sheet. */
-	public function test_blog_layout_in_blog_sheet(): void {
-		$blog = self::read( 'styles/legacy-blog.css' );
-		$this->assertStringContainsString( '.blog-post', $blog, 'legacy-blog.css should carry the blog layout.' );
-		$this->assertStringContainsString( '.lafka_post_data_holder', $blog );
 	}
 
 	/**

@@ -4,18 +4,23 @@
 	"private": true,
 	"description": "Lafka WordPress Theme",
 	"scripts": {
-		"lint:js": "eslint .",
-		"lint:js:fix": "eslint . --fix",
-		"lint:css": "stylelint '**/*.css'",
-		"lint:css:fix": "stylelint '**/*.css' --fix",
+		"lint:js": "eslint --cache --cache-strategy content --cache-location .eslintcache .",
+		"lint:js:fix": "eslint --cache --cache-strategy content --cache-location .eslintcache . --fix",
+		"lint:css": "stylelint --cache --cache-strategy content --cache-location .stylelintcache '**/*.css'",
+		"lint:css:fix": "stylelint --cache --cache-strategy content --cache-location .stylelintcache '**/*.css' --fix",
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:fix": "npm run lint:js:fix && npm run lint:css:fix",
 		"build": "node scripts/build-assets.mjs",
 		"build:theme-json": "node scripts/build-theme-json.mjs",
+		"i18n:pot": "npx -y @wordpress/env run cli wp i18n make-pot wp-content/themes/lafka wp-content/themes/lafka/languages/lafka.pot --slug=lafka --domain=lafka --package-name=Lafka --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/setkernel/lafka-theme/issues\"}' --exclude=node_modules,vendor,tests,scripts,docs,test-results,playwright-report,blob-report,presets,assets",
+		"sync:fonts": "node scripts/nx2-03-sync-fonts.mjs",
+		"previews:presets": "node scripts/nx2-04-preset-previews.mjs",
 		"test:e2e": "playwright test",
 		"test:e2e:smoke": "playwright test --grep @smoke",
 		"test:e2e:install": "playwright install --with-deps chromium",
-		"test:visual:nx1-02": "playwright test --config playwright.visual.config.js",
+		"test:visual": "playwright test --config playwright.visual.config.js --project=peppery",
+		"test:visual:dark": "playwright test --config playwright.visual.config.js --project=dark",
+		"test:contrast": "playwright test --config playwright.visual.config.js --project=contrast",
 		"sync-version": "node scripts/sync-version.mjs",
 		"check-version": "node scripts/sync-version.mjs --check",
 		"version": "node scripts/sync-version.mjs --stage"
@@ -28,18 +33,26 @@
 			"required": true
 		},
 		{
-			"file": "DESIGN_SYSTEM.md",
-			"pattern": "current theme v(\\d+\\.\\d+\\.\\d+)",
-			"required": false
+			"file": "readme.txt",
+			"pattern": "^Version:\\s*(\\d+\\.\\d+\\.\\d+[^\\s]*)",
+			"flags": "m",
+			"required": true
 		},
 		{
-			"file": "readme.md",
-			"pattern": "Main stylesheet \\(v(\\d+\\.\\d+\\.\\d+)\\)",
+			"file": "DESIGN_SYSTEM.md",
+			"pattern": "current theme v(\\d+\\.\\d+\\.\\d+)",
 			"required": false
 		}
 	],
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
+		"@fontsource/archivo": "^5.2.8",
+		"@fontsource/dm-serif-display": "^5.2.8",
+		"@fontsource/inter": "^5.2.8",
+		"@fontsource/lora": "^5.2.8",
+		"@fontsource/manrope": "^5.2.8",
+		"@fontsource/rubik": "^5.2.8",
+		"@fontsource/space-grotesk": "^5.2.10",
 		"@playwright/test": "^1.61.1",
 		"@wordpress/stylelint-config": "^23.41.0",
 		"esbuild": "^0.27.7",

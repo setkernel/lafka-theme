@@ -20,17 +20,8 @@ use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\Attributes\DataProvider;
 
 final class ThemeRegistrationsTest extends TestCase {
-
 	private const CORE_FUNCTIONS = __DIR__ . '/../../incl/system/core-functions.php';
 	private const FUNCTIONS_PHP  = __DIR__ . '/../../functions.php';
-
-	// ─── Nav menu locations ─────────────────────────────────────────────────
-
-	public function test_nav_menus_registered(): void {
-		$src = file_get_contents( self::CORE_FUNCTIONS );
-		self::assertStringContainsString( "add_action( 'after_setup_theme', 'lafka_register_nav_menus' )", $src );
-		self::assertStringContainsString( "register_nav_menus(", $src );
-	}
 
 	#[DataProvider('expected_nav_locations')]
 	public function test_nav_location_present( string $slug ): void {
@@ -71,7 +62,6 @@ final class ThemeRegistrationsTest extends TestCase {
 			'lafka-general-small-size'       => array( 'lafka-general-small-size' ),
 			'lafka-general-small-size-nocrop' => array( 'lafka-general-small-size-nocrop' ),
 			'lafka-widgets-thumb'            => array( 'lafka-widgets-thumb' ),
-			'lafka-related-posts'            => array( 'lafka-related-posts' ),
 		);
 	}
 }

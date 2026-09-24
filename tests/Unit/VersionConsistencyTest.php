@@ -34,6 +34,15 @@ final class VersionConsistencyTest extends TestCase {
 		self::assertSame( $this->canonical_version(), $m[1], 'style.css Version drifted from package.json — run `npm version`' );
 	}
 
+	public function test_readme_txt_version_matches_package_json(): void {
+		// The wp.org-format readme drifted 32 releases (6.19.0 vs 7.0.0)
+		// because versionSync never covered it and no test read it — this
+		// guard + the package.json versionSync entry close that hole.
+		$readme = (string) file_get_contents( self::ROOT . '/readme.txt' );
+		self::assertSame( 1, preg_match( '/^Version:\s*(\d+\.\d+\.\d+[^\s]*)/m', $readme, $m ), 'no Version line in readme.txt' );
+		self::assertSame( $this->canonical_version(), $m[1], 'readme.txt Version drifted from package.json — run `npm version`' );
+	}
+
 	public function test_package_lock_matches_package_json(): void {
 		$lock = json_decode( (string) file_get_contents( self::ROOT . '/package-lock.json' ), true );
 		self::assertIsArray( $lock, 'package-lock.json unreadable' );

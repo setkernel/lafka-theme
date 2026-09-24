@@ -1,22 +1,19 @@
 <?php
 /**
- * Single product template — overrides woocommerce/templates/single-product.php (WC 10.7).
+ * Single product template — overrides woocommerce/templates/single-product.php.
  *
- * When the redesign feature flag is OFF, falls through to the parent theme's
- * legacy template via locate_template().
+ * When the PDP-redesign flag is OFF (or the plugin is inactive), renders
+ * WooCommerce's default single-product flow inline (identical to core 1.6.4).
  *
  * @package Lafka\WooCommerce
  * @since   5.16.0
+ * @version 1.6.4
  */
 
 defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
     // Redesign OFF — render WooCommerce's default single-product flow inline.
-    // (Cannot delegate to the parent theme: lafka-theme has no
-    // woocommerce/single-product.php override, and locate_template() with
-    // $load=false simply returns the path with no side effect, which left
-    // product pages blank when the flag was disabled.)
     get_header( 'shop' );
     do_action( 'woocommerce_before_main_content' );
 

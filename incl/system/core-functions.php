@@ -433,15 +433,20 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 
 		// Heavy scripts only on pages that need them.
 		$needs_editor  = in_array( $hook, array( 'post.php', 'post-new.php' ), true );
-		$needs_menus   = ( 'nav-menus.php' === $hook );
 		$needs_options = ( false !== strpos( $hook, 'lafka' ) || false !== strpos( $hook, 'theme-options' ) );
+		// Product category/tag screens: lafka-plugin attaches its "title
+		// background image" picker to the lafka-back handle, and the picker
+		// opens the media modal.
+		$needs_terms = false;
+		if ( in_array( $hook, array( 'edit-tags.php', 'term.php' ), true ) && function_exists( 'get_current_screen' ) ) {
+			$screen      = get_current_screen();
+			$needs_terms = $screen && in_array( $screen->taxonomy, array( 'product_cat', 'product_tag' ), true );
+		}
 
 		if ( $needs_editor || $needs_options ) {
 			wp_register_script( 'lafka-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-medialibrary-uploader.js', array( 'jquery-ui-accordion', 'media-upload' ), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-medialibrary-uploader.js' ), true );
 			wp_enqueue_script( 'lafka-medialibrary-uploader' );
-		}
 
-		if ( $needs_editor || $needs_menus || $needs_options ) {
 			// wp-color-picker
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );
@@ -452,41 +457,16 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 			wp_enqueue_style( 'et-line-font', get_template_directory_uri() . '/styles/et-line-font/style.css', false, lafka_asset_version( '/styles/et-line-font/style.css' ), 'screen' );
 		}
 
-		if ( $needs_menus ) {
-			// Flaticon + Fonticonpicker — only used on menu editor
-			wp_enqueue_style( 'flaticon', get_template_directory_uri() . '/styles/flaticon/font/flaticon.css', false, lafka_asset_version( '/styles/flaticon/font/flaticon.css' ), 'screen' );
-			wp_enqueue_script( 'fonticonpicker', get_template_directory_uri() . '/js/fonticonpicker/jquery.fonticonpicker.min.js', array( 'jquery' ), lafka_asset_version( '/js/fonticonpicker/jquery.fonticonpicker.min.js' ), true );
-			wp_enqueue_style( 'fonticonpicker', get_template_directory_uri() . '/styles/fonticonpicker/css/jquery.fonticonpicker.min.css', array(), lafka_asset_version( '/styles/fonticonpicker/css/jquery.fonticonpicker.min.css' ) );
-			wp_enqueue_style( 'fonticonpicker-gray-theme', get_template_directory_uri() . '/styles/fonticonpicker/themes/grey-theme/jquery.fonticonpicker.grey.min.css', array( 'fonticonpicker' ), lafka_asset_version( '/styles/fonticonpicker/themes/grey-theme/jquery.fonticonpicker.grey.min.css' ) );
-
-			// Mega Menu
-			wp_enqueue_style( 'lafka-mega-menu', get_template_directory_uri() . '/styles/lafka-admin-megamenu.css', array(), lafka_asset_version( '/styles/lafka-admin-megamenu.css' ) );
-			wp_enqueue_script( 'lafka-mega-menu', get_template_directory_uri() . '/js/lafka-admin-mega-menu.js', array( 'jquery', 'jquery-ui-sortable' ), lafka_asset_version( '/js/lafka-admin-mega-menu.js' ), true );
-			wp_localize_script(
-				'lafka-mega-menu',
-				'lafka_mega_menu_js_params',
-				array(
-					'mega_menu_label' => esc_html__( 'Mega Menu', 'lafka' ),
-					'column_label'    => esc_html__( 'Column', 'lafka' ),
-				)
-			);
+		if ( $needs_terms ) {
+			wp_enqueue_media();
 		}
 
-		if ( $needs_editor || $needs_menus || $needs_options ) {
+		if ( $needs_editor || $needs_options || $needs_terms ) {
 			wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), true );
 
-			// New-order notification poller moved to lafka-plugin (NX1-08b); the theme
-			// only ships the remaining admin helpers (colour pickers, metabox layout,
-			// menu-icon picker) here plus the options-import nonce.
+			// Admin helpers (colour pickers, metabox layout). The new-order
+			// notification poller lives in lafka-plugin (NX1-08b).
 			wp_enqueue_script( 'lafka-back', get_template_directory_uri() . '/js/lafka-back.js', array( 'jquery', 'nice-select', 'wp-color-picker' ), lafka_asset_version( '/js/lafka-back.js' ), true );
-			wp_localize_script(
-				'lafka-back',
-				'lafka_back_js_params',
-				array(
-					'import_nonce' => wp_create_nonce( 'lafka_import_nonce' ),
-					'admin_url'    => admin_url( 'admin-ajax.php' ),
-				)
-			);
 		}
 	}
 
@@ -1040,12 +1020,6 @@ if ( ! function_exists( 'lafka_style_loader_tag_filter' ) ) {
 			$link_preload    = str_replace( "id='" . $handle . "-css'", '', $link_preload );
 
 			return $link_preload . $link_stylesheet;
-		} elseif ( in_array( $handle, array( 'feather', 'tiza' ), true ) ) {
-			$link_preload = str_replace( "rel='stylesheet'", "rel='preload' as='font'", $html );
-			$link_preload = str_replace( "type='text/css'", "type='font/woff' crossorigin='anonymous'", $link_preload );
-			$link_preload = str_replace( "media='all'", '', $link_preload );
-
-			return $link_preload;
 		}
 
 		return $html;
@@ -1127,8 +1101,10 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 		if ( lafka_is_legacy_blog_surface() ) {
 			return true;
 		}
-		if ( is_post_type_archive( 'lafka_foodmenu' )
-			|| is_singular( 'lafka_foodmenu' )
+		// The plugin registers the CPT as 'lafka-foodmenu' (hyphen); only the
+		// taxonomy uses underscores.
+		if ( is_post_type_archive( 'lafka-foodmenu' )
+			|| is_singular( 'lafka-foodmenu' )
 			|| ( function_exists( 'is_tax' ) && is_tax( 'lafka_foodmenu_category' ) ) ) {
 			return true;
 		}
@@ -1144,6 +1120,62 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_needs_cloud_zoom' ) ) {
+	/**
+	 * Whether the current request renders CloudZoom markup: a foodmenu single
+	 * whose gallery type is "cloud", or singular content that embeds the
+	 * plugin's [lafka_cloudzoom_gallery] shortcode.
+	 *
+	 * @return bool
+	 */
+	function lafka_needs_cloud_zoom() {
+		if ( ! is_singular() ) {
+			return false;
+		}
+		if ( is_singular( 'lafka-foodmenu' ) && 'cloud' === get_post_meta( get_queried_object_id(), 'lafka_prtfl_gallery', true ) ) {
+			return true;
+		}
+		$post = get_post();
+		return $post instanceof WP_Post && false !== strpos( (string) $post->post_content, '[lafka_cloudzoom_gallery' );
+	}
+}
+
+if ( ! function_exists( 'lafka_enqueue_countdown' ) ) {
+	/**
+	 * Enqueue the jQuery countdown library (plus its locale file when the site
+	 * language has one). Safe to call while a template renders: the handles are
+	 * footer scripts, so a late enqueue still prints in wp_footer.
+	 *
+	 * @return void
+	 */
+	function lafka_enqueue_countdown() {
+		wp_enqueue_script( 'countdown' );
+		if ( wp_script_is( 'jquery-countdown-local', 'registered' ) ) {
+			wp_enqueue_script( 'jquery-countdown-local' );
+		}
+	}
+}
+
+if ( ! function_exists( 'lafka_store_closed_countdown_visible' ) ) {
+	/**
+	 * Whether the plugin's "store closed" card may render its opening
+	 * countdown on this request (store closed + countdown option on). The card
+	 * can appear in the mini cart on any page, so this is not route-gated.
+	 *
+	 * @return bool
+	 */
+	function lafka_store_closed_countdown_visible() {
+		if ( ! class_exists( 'Lafka_Order_Hours' ) || ! isset( Lafka_Order_Hours::$lafka_order_hours_options ) ) {
+			return false;
+		}
+		$options = (array) Lafka_Order_Hours::$lafka_order_hours_options;
+		if ( empty( $options['lafka_order_hours_message_countdown'] ) ) {
+			return false;
+		}
+		return ! Lafka_Order_Hours::is_shop_open();
+	}
+}
+
 /**
  * Register / Enqueue theme scripts
  */
@@ -1151,8 +1183,6 @@ add_action( 'wp_enqueue_scripts', 'lafka_enqueue_scripts_and_styles' );
 if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 	function lafka_enqueue_scripts_and_styles() {
-		$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
-
 		// v5.26.0: design-system tokens — enqueued FIRST so every other
 		// Lafka stylesheet can read --lafka-* custom properties. See
 		// styles/lafka-tokens.css for the full token list.
@@ -1809,12 +1839,36 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
 		}
 
+		// NX2-01: register the Preset-Token Layer as an inline-only handle
+		// (src=false → no HTTP request) that depends on lafka-tokens, so the
+		// active preset's :root overrides print AFTER the base tokens. lafka-style
+		// then depends on lafka-preset so the operator's dynamic-css :root inline
+		// still prints LAST and always wins. Peppery emits an empty PTL, so this
+		// adds zero bytes for the default preset (byte-identical dynamic-css +
+		// pixel-identical goldens). See docs/PRESET_ENGINE.md §4.
+		$lafka_style_deps = array( 'lafka-tokens' );
+		if ( function_exists( 'lafka_preset_register_ptl' ) ) {
+			lafka_preset_register_ptl();
+			$lafka_style_deps[] = 'lafka-preset';
+		}
+
+		// NX2-03: register the active preset's pool @font-face declarations as a
+		// second inline-only handle (src=false → no HTTP request for the CSS). The
+		// browser fetches ONLY the two woff2 families the preset references. Peppery
+		// (Rubik + Fraunces, source:"base") attaches nothing — those faces already
+		// live in the static CSS — so this is zero-cost for the default preset. See
+		// docs/PRESET_ENGINE.md §11 (NX2-03) + incl/presets/lafka-preset-fonts.php.
+		if ( function_exists( 'lafka_preset_register_fonts' ) ) {
+			lafka_preset_register_fonts();
+			$lafka_style_deps[] = 'lafka-preset-fonts';
+		}
+
 		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
-		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', array( 'lafka-tokens' ), wp_get_theme( get_template() )->get( 'Version' ) );
+		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', $lafka_style_deps, wp_get_theme( get_template() )->get( 'Version' ) );
 
 		// NX1-10a: the legacy monolith remainder, split out of style.css into
 		// scoped sheets that load ONLY on the surfaces which render the matching
-		// legacy markup. Every rule in them was proven (scripts/nx1-10a-extract.mjs)
+		// legacy markup. Every rule in them was proven (by the one-shot NX1-10a extractor, now in git history)
 		// to match zero elements on the six handoff pages, so home/menu/PDP/cart/
 		// checkout download none of it. Each depends on lafka-style so its
 		// @layer legacy rules keep the monolith's original source order (below the
@@ -1935,11 +1989,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			$categories_fancy = 'yes';
 		}
 
-		$shopping_cart_on_add = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_shopping_cart_on_add', true ) ) {
-			$shopping_cart_on_add = 'yes';
-		}
-
 		$order_hours_cart_update = 'no';
 		if ( LAFKA_IS_WOOCOMMERCE && class_exists( 'Lafka_Order_Hours' ) && isset( Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_cache_enable'] ) && Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_cache_enable'] ) {
 			$order_hours_cart_update = 'yes';
@@ -1964,9 +2013,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// parsed first.
 		wp_enqueue_script(
 			'lafka-front',
-			get_template_directory_uri() . '/js/lafka-front' . $suffix . '.js',
+			get_template_directory_uri() . '/js/lafka-front.js',
 			$lafka_front_deps,
-			lafka_asset_version( '/js/lafka-front' . $suffix . '.js' ),
+			lafka_asset_version( '/js/lafka-front.js' ),
 			array(
 				'in_footer' => true,
 				'strategy'  => 'defer',
@@ -1979,10 +2028,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'img_path'                => esc_js( LAFKA_IMAGES_PATH ),
 				'admin_url'               => esc_js( admin_url( 'admin-ajax.php' ) ),
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
-				'product_label'           => esc_js( __( 'Product', 'lafka' ) ),
-				'added_to_cart_label'     => esc_js( __( 'was added to the cart', 'lafka' ) ),
 				'show_preloader'          => esc_js( get_theme_mod( 'lafka_show_preloader', true ) ),
-				'sticky_header'           => esc_js( get_theme_mod( 'lafka_sticky_header', true ) ),
 				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
 				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
 				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),
@@ -1994,7 +2040,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'use_product_filter_ajax' => $use_product_filter_ajax,
 				'categories_fancy'        => $categories_fancy,
 				'order_hours_cart_update' => $order_hours_cart_update,
-				'shopping_cart_on_add'    => $shopping_cart_on_add,
 				'is_rtl'                  => ( is_rtl() ? 'true' : 'false' ),
 			)
 		);
@@ -2032,19 +2077,27 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		wp_enqueue_style( 'owl-carousel-animate', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/animate.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/animate.css' ) );
 		$owl_enqueue = true;
 
-		// cloud-zoom — only on single product pages
+		// cloud-zoom — only where CloudZoom markup renders: a foodmenu single on
+		// the "cloud" gallery, or content embedding [lafka_cloudzoom_gallery].
+		// The redesigned PDP has no zoom gallery, so product pages skip it.
 		wp_register_script( 'cloud-zoom', get_template_directory_uri() . '/js/cloud-zoom/cloud-zoom.1.0.2.min.js', array( 'jquery' ), lafka_asset_version( '/js/cloud-zoom/cloud-zoom.1.0.2.min.js' ), $footer_defer );
 		wp_register_style( 'cloud-zoom', get_template_directory_uri() . '/styles/cloud-zoom/cloud-zoom.css', array(), lafka_asset_version( '/styles/cloud-zoom/cloud-zoom.css' ) );
-		if ( function_exists( 'is_product' ) && is_product() ) {
+		if ( lafka_needs_cloud_zoom() ) {
 			wp_enqueue_script( 'cloud-zoom' );
 			wp_enqueue_style( 'cloud-zoom' );
 		}
 
-		// countdown — only on single product pages when enabled
+		// countdown — registered everywhere, enqueued only where countdown
+		// markup renders (see lafka_enqueue_countdown()). The locale file is a
+		// dependant of the base library, so it never loads on its own.
 		wp_register_script( 'jquery-plugin', get_template_directory_uri() . '/js/count/jquery.plugin.min.js', array( 'jquery' ), lafka_asset_version( '/js/count/jquery.plugin.min.js' ), $footer_defer );
 		wp_register_script( 'countdown', get_template_directory_uri() . '/js/count/jquery.countdown.min.js', array( 'jquery', 'jquery-plugin' ), lafka_asset_version( '/js/count/jquery.countdown.min.js' ), $footer_defer );
-		if ( function_exists( 'is_product' ) && is_product() ) {
-			wp_enqueue_script( 'countdown' );
+		$lafka_local = lafka_wp_lang_to_valid_language_code( get_locale() );
+		if ( $lafka_local ) {
+			wp_register_script( 'jquery-countdown-local', get_template_directory_uri() . "/js/count/jquery.countdown-$lafka_local.js", array( 'jquery', 'countdown' ), lafka_asset_version( "/js/count/jquery.countdown-$lafka_local.js" ), $footer_defer );
+		}
+		if ( ( function_exists( 'is_product' ) && is_product() ) || lafka_store_closed_countdown_visible() ) {
+			lafka_enqueue_countdown();
 		}
 
 		// P3-04: magnific replaced by lafka-dialog (native <dialog>). The
@@ -2052,7 +2105,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// the branch-locations modal — which is a critical-path ordering
 		// flow and ships as a pre-minified vendor file — can still depend
 		// on it. Everywhere else uses window.lafkaDialog.
-		wp_enqueue_script( 'lafka-dialog', get_template_directory_uri() . '/js/lafka-dialog' . $suffix . '.js', array(), lafka_asset_version( '/js/lafka-dialog' . $suffix . '.js' ), $footer_defer );
+		wp_enqueue_script( 'lafka-dialog', get_template_directory_uri() . '/js/lafka-dialog.js', array(), lafka_asset_version( '/js/lafka-dialog.js' ), $footer_defer );
 		wp_enqueue_style( 'lafka-dialog', get_template_directory_uri() . '/styles/lafka-dialog.css', array(), lafka_asset_version( '/styles/lafka-dialog.css' ) );
 
 		// jquery.appear + isInViewport replaced by lafkaOnVisible() (IntersectionObserver)
@@ -2098,19 +2151,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		$lafka_local = lafka_wp_lang_to_valid_language_code( get_locale() );
-		if ( $lafka_local ) {
-			wp_enqueue_script( 'jquery-countdown-local', get_template_directory_uri() . "/js/count/jquery.countdown-$lafka_local.js", array( 'jquery', 'countdown' ), lafka_asset_version( "/js/count/jquery.countdown-$lafka_local.js" ), true );
-		}
-
-		$is_compare = false;
-		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- YITH WooCompare view detection from $_GET['action']; read-only display gating, no state mutation.
-		if ( isset( $_GET['action'] ) && $_GET['action'] === 'yith-woocompare-view-table' ) {
-			$is_compare = true;
-		}
-
-		$to_include_backgr_video = lafka_has_to_include_backgr_video( $is_compare );
-
 		/* JavaScript to pages with the comment form
 		 * to support sites with threaded comments (when in use).
 		 */
@@ -2132,14 +2172,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if ( $nice_enqueue ) {
 			$lafka_libs_deps[] = 'nice-select';
 		}
-		if ( function_exists( 'is_product' ) && is_product() ) {
-			$lafka_libs_deps[] = 'cloud-zoom';
-			$lafka_libs_deps[] = 'countdown';
-		}
 		// lafka-libs-config calls window.lafkaDialog — depend on it explicitly
 		// so the script load order is correct even when defer is on.
 		$lafka_libs_deps[] = 'lafka-dialog';
-		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config' . $suffix . '.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config' . $suffix . '.js' ), $footer_defer );
+		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config.js' ), $footer_defer );
 
 		// send is_rtl to js for owl carousel
 		wp_localize_script(
@@ -2176,33 +2212,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_localize_script(
 				'lafka-libs-config',
 				'lafka_ajax_search',
-				array(
-					'include' => 'true',
-				)
-			);
-		}
-
-		if ( LAFKA_IS_WOOCOMMERCE && is_product() ) {
-			wp_localize_script(
-				'lafka-libs-config',
-				'lafka_variation_prod_cloudzoom',
-				array(
-					'include' => 'true',
-				)
-			);
-		}
-
-		// Register video background plugin
-		wp_register_style( 'ytplayer', get_template_directory_uri() . '/styles/jquery.mb.YTPlayer/css/jquery.mb.YTPlayer.min.css', array(), lafka_asset_version( '/styles/jquery.mb.YTPlayer/css/jquery.mb.YTPlayer.min.css' ) );
-		wp_register_script( 'ytplayer', get_template_directory_uri() . '/js/jquery.mb.YTPlayer/jquery.mb.YTPlayer.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.mb.YTPlayer/jquery.mb.YTPlayer.min.js' ), true );
-
-		// Load video background plugin
-		if ( $to_include_backgr_video ) {
-			wp_enqueue_style( 'ytplayer' );
-			wp_enqueue_script( 'ytplayer' );
-			wp_localize_script(
-				'lafka-libs-config',
-				'lafka_ytplayer_conf',
 				array(
 					'include' => 'true',
 				)
@@ -2566,16 +2575,6 @@ if ( ! function_exists( 'lafka_is_blog' ) ) {
 
 }
 
-add_action( 'after_switch_theme', 'lafka_redirect_to_options', 99 );
-if ( ! function_exists( 'lafka_redirect_to_options' ) ) {
-
-	// Redirect to theme options on theme activation
-	function lafka_redirect_to_options() {
-		wp_redirect( admin_url( 'themes.php?page=lafka-optionsframework' ) );
-	}
-
-}
-
 add_filter( 'wp_nav_menu_args', 'lafka_set_menu_on_primary' );
 if ( ! function_exists( 'lafka_set_menu_on_primary' ) ) {
 
@@ -2911,18 +2910,6 @@ if ( ! function_exists( 'lafka_is_events_part' ) ) {
  */
 function lafka_strip_script_tag_from_js_block( $source ) {
 	return trim( preg_replace( '#<script[^>]*>(.*)</script>#is', '$1', $source ) );
-}
-
-if ( ! function_exists( 'lafka_write_log' ) ) {
-	// Fallback: only fires if lafka-plugin is not active. Plugin's class-lafka-options.php
-	// definition supersedes this when both load. Both bodies are identical.
-	function lafka_write_log( $log ) {
-		if ( is_array( $log ) || is_object( $log ) ) {
-			error_log( print_r( $log, true ) );
-		} else {
-			error_log( $log );
-		}
-	}
 }
 
 // P6-PERF-5: inline critical CSS + defer non-critical stylesheets.

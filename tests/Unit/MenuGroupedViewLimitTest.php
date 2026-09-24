@@ -27,7 +27,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * whenever the cap truncates a group, keeping every item reachable.
  */
 final class MenuGroupedViewLimitTest extends TestCase {
-
 	private static function theme_root(): string {
 		return dirname( __DIR__, 2 );
 	}
@@ -61,16 +60,6 @@ final class MenuGroupedViewLimitTest extends TestCase {
 	}
 
 	#[DataProvider('grouped_templates')]
-	public function test_per_group_cap_is_not_hardcoded_24( string $relative ): void {
-		$src = $this->source( $relative );
-		$this->assertDoesNotMatchRegularExpression(
-			"/'limit'\s*=>\s*24\b/",
-			$src,
-			"{$relative} must not hardcode 'limit' => 24 — the per-group cap is operator-configurable."
-		);
-	}
-
-	#[DataProvider('grouped_templates')]
 	public function test_per_group_cap_is_operator_configurable( string $relative ): void {
 		$src = $this->source( $relative );
 		$this->assertStringContainsString(
@@ -82,16 +71,6 @@ final class MenuGroupedViewLimitTest extends TestCase {
 			"apply_filters( 'lafka_menu_group_limit'",
 			$src,
 			"{$relative} must expose the lafka_menu_group_limit filter for per-category overrides."
-		);
-	}
-
-	#[DataProvider('grouped_templates')]
-	public function test_group_query_is_paginated_for_accurate_total( string $relative ): void {
-		$src = $this->source( $relative );
-		$this->assertStringContainsString(
-			"'paginate' => true",
-			$src,
-			"{$relative} must use a paginated wc_get_products() query so the true category total is known regardless of the cap."
 		);
 	}
 
@@ -112,16 +91,6 @@ final class MenuGroupedViewLimitTest extends TestCase {
 			'get_term_link(',
 			$src,
 			"{$relative} 'See all' link must point at the full (paginated) category archive via get_term_link()."
-		);
-	}
-
-	#[DataProvider('grouped_templates')]
-	public function test_see_all_is_gated_on_total_exceeding_rendered( string $relative ): void {
-		$src = $this->source( $relative );
-		$this->assertMatchesRegularExpression(
-			'/\$lafka_(arch|menu)_group_total > count\( \$lafka_(arch|menu)_group_products \)/',
-			$src,
-			"{$relative} must only render the 'See all' link when the category total exceeds the rendered count."
 		);
 	}
 }

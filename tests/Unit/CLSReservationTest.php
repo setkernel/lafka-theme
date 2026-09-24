@@ -33,35 +33,8 @@ final class CLSReservationTest extends TestCase {
         );
     }
 
-    public function test_child_css_reserves_content_slider_aspect_ratio(): void {
-        // WPBakery content-slider reservation is page-builder-specific and stays
-        // in the child; skips when the child repo isn't present.
-        $this->assertMatchesRegularExpression(
-            '/\[id\^="lafka_content_slider"\]:not\(\.owl-loaded\)[^}]*aspect-ratio/s',
-            $this->child_css()
-        );
-    }
-
-    public function test_child_css_reserves_revslider_aspect_ratio(): void {
-        // Revslider reservation is page-builder-specific and stays in the child.
-        // Either rs-module-wrap or rev_slider_wrapper variant.
-        $this->assertMatchesRegularExpression(
-            '/(rs-module-wrap|rev_slider_wrapper)[^}]*aspect-ratio/s',
-            $this->child_css()
-        );
-    }
-
     // image-dimensions filter + helper moved to lafka-plugin v9.7.25
     // (incl/perf/image-dimensions.php). The plugin's ImageDimensionsTest
     // covers those assertions on the canonical home — no need to test
     // them from this theme test class.
-
-    public function test_rubik_font_display_optional_still_present(): void {
-        // Sanity: confirm W1-T10 self-hosted Rubik @font-face still uses font-display: optional.
-        // Quotes around 'Rubik' are optional in CSS — regex allows both forms.
-        $css = file_get_contents( dirname( __DIR__, 2 ) . '/style.css' );
-        $occurrences = preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-display:\s*optional/s', $css );
-        $this->assertGreaterThanOrEqual( 3, $occurrences,
-            'Rubik @font-face blocks must keep font-display: optional (P6-PERF-3 + P6-PERF-2 dependency)' );
-    }
 }

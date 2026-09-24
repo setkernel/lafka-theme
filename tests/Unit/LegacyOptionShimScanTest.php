@@ -94,7 +94,11 @@ namespace Lafka\Tests\Unit {
 			$violations = array();
 
 			$it = new \RecursiveIteratorIterator(
-				new \RecursiveDirectoryIterator( $root, \FilesystemIterator::SKIP_DOTS )
+				new \RecursiveCallbackFilterIterator(
+					new \RecursiveDirectoryIterator( $root, \FilesystemIterator::SKIP_DOTS ),
+					// Never descend into dependencies, build output or the tests.
+					static fn( \SplFileInfo $f ): bool => ! ( $f->isDir() && in_array( $f->getFilename(), array( 'node_modules', 'vendor', 'tests', '.git', 'test-results', 'playwright-report' ), true ) )
+				)
 			);
 			foreach ( $it as $file ) {
 				if ( 'php' !== strtolower( $file->getExtension() ) ) {

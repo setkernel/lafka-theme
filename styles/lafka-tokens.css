@@ -57,10 +57,10 @@
 :root {
 
 	/* ------- Colour: brand ramp — PEPPER YELLOW (operator identity) -----
-	 * WCAG: text-primary (#18181b) on brand-50 = 16.1:1 (AAA)
-	 *       text-primary (#18181b) on brand-500 = 7.92:1 (AAA)
-	 *       brand-900 (#451a03) on brand-50    = 13.2:1 (AAA)
-	 *       white          on brand-500       = 2.04:1  ❌  (use dark text on yellow)
+	 * WCAG: text-primary (#18181b) on brand-50 = 16.69:1 (AAA)
+	 *       text-primary (#18181b) on brand-500 = 8.25:1 (AAA)
+	 *       brand-900 (#451a03) on brand-50    = 14.11:1 (AAA)
+	 *       white          on brand-500       = 2.15:1  ❌  (use dark text on yellow)
 	 * Note: brand-300 = #fdba74 (orange-300) per handoff 2026-05-15
 	 * lock. Previously #fcd34d (yellow-300). Hover overlays will read
 	 * warmer/peachier after this change. */
@@ -74,9 +74,9 @@
 	--lafka-color-on-brand: var(--lafka-color-text-primary);
 
 	/* ------- Colour: accent ramp — PIZZA RED (calls to action) ----------
-	 * WCAG: white on accent-500 = 5.07:1 (AA)
-	 *       white on accent-600 = 6.42:1 (AAA)
-	 *       accent-700 on white = 7.41:1 (AAA) */
+	 * WCAG: white on accent-500 = 4.83:1 (AA)
+	 *       white on accent-600 = 6.47:1 (AA)
+	 *       accent-700 on white = 8.31:1 (AAA) */
 	--lafka-color-accent-50: #fef2f2;
 	--lafka-color-accent-500: #dc2626;
 	--lafka-color-accent-600: #b91c1c;
@@ -87,7 +87,7 @@
 	 *
 	 * --lafka-color-accent-500 with a Customizer override flowing
 	 * through dynamic-css.php SSOT can land at any brand red the
-	 * operator chooses. For Peppery's #f2002d, accent-on-white
+	 * operator chooses. For an operator red like #f2002d, accent-on-white
 	 * yields 4.36:1 — failing WCAG AA (needs 4.5:1).
 	 *
 	 * color-mix(85%) darkens by ~15% which is enough to clear AA
@@ -103,13 +103,12 @@
 	--lafka-color-accent-text: var(--lafka-color-accent-600);
 
 	/* ------- Colour: text -----------------------------------------------
-	 * Note: handoff specifies text-muted #71717a (4.48:1 on white — sub-AA
-	 * for body sizes ≤17px). Adopted verbatim per 2026-05-15 design lock.
-	 * If accessibility audit flags, raise to #65656b (5.07:1, AA) via
-	 * Customizer override or revisit lock. */
-	--lafka-color-text-primary: #18181b;   /* AAA 16.6:1 */
-	--lafka-color-text-secondary: #3f3f46; /* AAA 10.4:1 */
-	--lafka-color-text-muted: #71717a;     /* AA-ish 4.48:1 — handoff value */
+	 * Ratios on white. text-muted #71717a is the 2026-05-15 handoff value and
+	 * clears AA (4.83:1); on surface-muted it is 4.40:1 (the one audited
+	 * Peppery contrast exception — see PresetContrastTest). */
+	--lafka-color-text-primary: #18181b;   /* AAA 17.72:1 */
+	--lafka-color-text-secondary: #3f3f46; /* AAA 10.44:1 */
+	--lafka-color-text-muted: #71717a;     /* AA 4.83:1 — handoff value */
 	--lafka-color-text-inverse: #fff;
 	--lafka-color-text-on-accent: #fff;
 
@@ -123,11 +122,32 @@
 	--lafka-color-surface-overlay: rgba(24, 24, 27, 0.55);
 	--lafka-color-surface-brand-soft: var(--lafka-color-brand-50);
 
-	/* Extras not in handoff — preserved for existing dark-section components */
+	/* NX2-07: frosted sticky-chrome surface (header + menu category strip).
+	 * Translucent so the blurred content shows through. Light value == the
+	 * literal these bars shipped, so Peppery stays pixel-identical; the dark
+	 * scaffold below flips it so a dark preset's sticky bars aren't white. */
+	--lafka-color-surface-glass: rgba(255, 255, 255, 0.92);
+
+	/* NX2-07: the permanent dark "inverse" footer band. Was read off
+	 * --lafka-color-text-primary (the ink), which INVERTS to near-white under a
+	 * dark preset — the footer became a white slab. A dedicated surface token
+	 * (light value == the old ink, so Peppery is byte/pixel-identical) stays
+	 * dark in every preset. See .lafka-footer in lafka-footer-chrome.css. */
+	--lafka-color-surface-footer: #18181b;
+
+	/* NX2-07: the top-of-page announce band is a PERMANENT dark "inverse" strip
+	 * (like the footer). It used to read its background off
+	 * --lafka-color-text-primary (the ink), which a dark preset inverts to
+	 * near-white — turning the strip into a white slab with white text on it.
+	 * A dedicated always-dark surface (light value == the old ink, so Peppery is
+	 * byte/pixel-identical) stays dark in every preset. See .lafka-announce-bar
+	 * in lafka-announce-bar.css. */
+	--lafka-color-surface-announce: #18181b;
+
+	/* Extras not in handoff — preserved for existing dark-section components.
+	 * (surface-cream + the two scrim gradients were retired in the 2026-07
+	 * lean pass: zero var() consumers anywhere in the codebase.) */
 	--lafka-color-surface-dark: #0f0f10;
-	--lafka-color-surface-cream: #fdf8ed;
-	--lafka-color-scrim-bottom: linear-gradient(to top, rgba(24, 24, 27, 0.78) 0%, rgba(24, 24, 27, 0) 60%);
-	--lafka-color-scrim-left: linear-gradient(to right, rgba(24, 24, 27, 0.72) 0%, rgba(24, 24, 27, 0) 60%);
 
 	/* ------- Colour: border --------------------------------------------- */
 	--lafka-color-border-subtle: #e4e4e7;
@@ -251,7 +271,7 @@
 	 * failing WCAG 1.4.11 (3:1 non-text contrast). Now opaque + offset:
 	 * a 2px surface-coloured spacer guarantees separation even on a
 	 * same-colour (red / ink) surface, then a 4px solid accent-700 ring.
-	 * accent-700 (#991b1b) on white = 7.41:1; the spacer keeps the ring
+	 * accent-700 (#991b1b) on white = 8.31:1; the spacer keeps the ring
 	 * visible on #dc2626 (CTA) and on --lafka-color-text-primary (active
 	 * chip) backgrounds. Every focusable control on the conversion path
 	 * reads this single token, so the fix propagates site-wide. */
@@ -414,12 +434,31 @@
 	--lafka-color-surface-active: #3f3f46;
 	--lafka-color-surface-overlay: rgba(0, 0, 0, 0.7);
 
+	/* NX2-07: dark values for the surfaces tokenised this wave, so a dark
+	 * preset renders dark-on-dark instead of light chrome islands. glass =
+	 * the near-black page tint, translucent; footer = a grounded deep band. */
+	--lafka-color-surface-glass: rgba(15, 15, 16, 0.92);
+	--lafka-color-surface-footer: #050505;
+	--lafka-color-surface-announce: #050505;
+
+	/* NX2-07: accent-50 is only ever used as a "warm panel" BACKGROUND (PDP
+	 * toppings/side callouts, cart/checkout notices) — never as text — so a dark
+	 * preset needs a dark tint here or those panels stay light islands. Faintly
+	 * warm near-black keeps the appetising-panel intent. */
+	--lafka-color-accent-50: #241a1a;
+
 	--lafka-color-border-subtle: #27272a;
 	--lafka-color-border-default: #3f3f46;
 	--lafka-color-border-strong: #52525b;
 
-	--lafka-color-accent-500: #ef4444;
-	--lafka-color-accent-600: #f87171;
+	/* NX2-01: the dark --lafka-color-accent-500 / -600 overrides were DELETED
+	 * here. At (0,2,0) they out-ranked the operator's (0,1,0) dynamic-css :root
+	 * accent, so in dark mode an operator accent override was silently ignored.
+	 * Dark accent now comes from the active preset's chrome.lafka_accent_color
+	 * (theme_mod-default layer, operator-overridable); accent-text is lightened
+	 * for dark surfaces by the preset emitter's dark @supports block. Peppery
+	 * never stamps data-theme, so this deletion is provably zero-impact on the 30
+	 * Peppery goldens. See docs/PRESET_ENGINE.md §6. */
 
 	--lafka-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
 	--lafka-shadow-2: 0 2px 6px rgba(0, 0, 0, 0.45);
@@ -456,6 +495,40 @@
 html body,
 html .lafka-body {
 	color: var(--lafka-color-text-primary);
+}
+
+/* NX2-07: body background base. WordPress emits a `global-styles` inline rule
+ * `body { background: var(--wp--preset--color--background) }` (from theme.json's
+ * styles.color.background) AFTER our stylesheets, pinning the page to #fff and
+ * clobbering critical.css's tokenised body background at equal specificity.
+ * Mirror the color guard above: `html body` (0,0,2) beats it (0,0,1) by
+ * specificity regardless of source order, so the page surface follows the
+ * active preset. Peppery's surface-page == #fff → byte/pixel-identical; a dark
+ * preset paints the page near-black (the fix that makes dark mode functional). */
+html body {
+	background-color: var(--lafka-color-surface-page);
+}
+
+/* NX2-07 verify-pass: the WooCommerce `.breadcrumb` colour ships as a fixed
+ * #767676 from styles/dynamic-css.php (operator-fed, so it stays put across
+ * presets). On Peppery's white page that clears AA (4.54:1), but on a dark
+ * preset's near-black page it drops to 4.36:1 (sub-AA). Lift it to a muted
+ * light ink in the dark scope only (0,2,0 beats the 0,1,0 dynamic-css rule by
+ * specificity regardless of order); Peppery has no data-theme, so the shipped
+ * #767676 and its byte-identical dynamic-css output are untouched. */
+:root[data-theme="dark"] .breadcrumb {
+	color: var(--lafka-color-text-muted);
+}
+
+/* NX2-08: the same fixed #767676 also dips below AA on a LIGHT preset's off-white
+ * page surface (4.28:1 on terracotta's #fff7ed, 4.34:1 on fjord's #f8fafc, etc.).
+ * Lift it to the preset's muted ink for every NON-default preset (marked with
+ * data-lafka-preset on <html> by lafka_preset_language_attributes); Peppery
+ * carries no marker — its page is pure #fff where #767676 clears AA at 4.54:1 —
+ * so its dynamic-css bytes + the 30 goldens stay byte/pixel-identical. Dark
+ * presets are already handled by the rule above (this scope excludes them). */
+:root[data-lafka-preset]:not([data-theme="dark"]) .breadcrumb {
+	color: var(--lafka-color-text-muted);
 }
 
 h1,
@@ -541,7 +614,7 @@ h2,
 	letter-spacing: var(--lafka-letter-spacing-wide);
 	text-transform: uppercase;
 
-	/* v5.99.1: was accent-500 — failed WCAG AA on Peppery's #f2002d
+	/* v5.99.1: was accent-500 — failed WCAG AA on an operator red like #f2002d
 	 * (4.36:1 on white). accent-text is the SSOT for accent-as-text-
 	 * on-light usage and clears 5:1+. */
 	color: var(--lafka-color-accent-text);

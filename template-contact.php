@@ -64,7 +64,7 @@ $lafka_faqs = (array) apply_filters(
 	)
 );
 ?>
-<main id="main" class="lafka-contact" role="main">
+<div id="main" class="lafka-contact">
 	<div class="lafka-container">
 
 		<header class="lafka-contact__header">
@@ -196,6 +196,6 @@ $lafka_faqs = (array) apply_filters(
 		<?php endif; ?>
 
 	</div>
-</main>
+</div>
 <?php
 get_footer();

@@ -14,7 +14,6 @@ use PHPUnit\Framework\TestCase;
  * on /menu/ (the highest-traffic surface).
  */
 final class MenuCardQuickAddTest extends TestCase {
-
 	private string $card;
 	private string $core;
 
@@ -34,20 +33,5 @@ final class MenuCardQuickAddTest extends TestCase {
 		) as $attr ) {
 			$this->assertStringContainsString( $attr, $this->card, "card link must emit $attr for select_item." );
 		}
-	}
-
-	public function test_card_renders_quick_add_pill(): void {
-		$this->assertStringContainsString( 'lafka_archive_quickadd_render', $this->card,
-			'card must render the one-tap quick-add pill (Add / Choose).' );
-	}
-
-	public function test_quickadd_assets_load_on_menu_and_archive(): void {
-		// Must include the custom /menu/ page (slug hierarchy) + the WC loops.
-		$this->assertMatchesRegularExpression(
-			"/is_page\(\s*'menu'\s*\)/",
-			$this->core,
-			"quick-add must enqueue on the /menu/ page (is_page('menu'))."
-		);
-		$this->assertStringContainsString( 'is_shop()', $this->core );
 	}
 }

@@ -11,9 +11,19 @@
  * ========================================================================= */
 
 .lafka-announce-bar {
+
+	/* NX2-07: the announce bar is a PERMANENT dark "inverse" band (like the
+	 * footer). It used to read its background off --lafka-color-text-primary
+	 * (the ink), which a dark preset inverts to near-white — a white slab with
+	 * white children on it. Point it at the dedicated always-dark announce
+	 * surface, and PIN the inverse-text token to its light value in this scope
+	 * so a dark preset keeps light-on-dark text instead of flipping it dark.
+	 * Both equal the values Peppery already resolves, so Peppery stays
+	 * byte/pixel-identical. */
+	--lafka-color-text-inverse: #fff;
 	position: relative;
 	z-index: var(--lafka-z-header);
-	background: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-announce);
 	color: var(--lafka-color-text-inverse);
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-caption);

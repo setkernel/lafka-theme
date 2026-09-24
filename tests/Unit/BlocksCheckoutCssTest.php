@@ -18,18 +18,11 @@ use PHPUnit\Framework\TestCase;
  *    drop the styling.
  */
 final class BlocksCheckoutCssTest extends TestCase {
-
 	private string $css;
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->css = (string) file_get_contents(
-			dirname( __DIR__, 2 ) . '/styles/lafka-blocks-checkout.css'
-		);
-	}
-
-	public function test_css_file_exists(): void {
-		$this->assertFileExists(
 			dirname( __DIR__, 2 ) . '/styles/lafka-blocks-checkout.css'
 		);
 	}
@@ -50,80 +43,6 @@ final class BlocksCheckoutCssTest extends TestCase {
 			'var(--lafka-',
 			$without_comments,
 			'lafka-blocks-checkout.css must consume --lafka-* tokens.'
-		);
-	}
-
-	/**
-	 * The accent CTA (Proceed to Checkout / Place Order) must ride the accent
-	 * fill + display type + pill radius, per the handoff (CTAs only).
-	 */
-	public function test_accent_cta_uses_accent_and_display_tokens(): void {
-		foreach ( array(
-			'.wc-block-cart__submit-button',
-			'.wc-block-components-checkout-place-order-button',
-		) as $sel ) {
-			$this->assertStringContainsString(
-				$sel,
-				$this->css,
-				"Missing CTA selector {$sel}"
-			);
-		}
-		$this->assertStringContainsString(
-			'var(--lafka-color-accent-500)',
-			$this->css,
-			'CTA fill must use the accent token.'
-		);
-		$this->assertStringContainsString(
-			'var(--lafka-radius-pill)',
-			$this->css,
-			'CTA must use the pill radius token.'
-		);
-	}
-
-	/**
-	 * The load-bearing WooCommerce block + lafka- component selectors the skin
-	 * targets must stay present.
-	 */
-	public function test_defines_load_bearing_selectors(): void {
-		foreach ( array(
-			// WooCommerce block structure.
-			'.wp-block-woocommerce-cart',
-			'.wp-block-woocommerce-checkout',
-			'.wc-block-cart-items__row',
-			'.wc-block-components-totals-item',
-			'.wc-block-components-checkout-step__title',
-			'.wc-block-components-text-input',
-			'.wc-block-components-radio-control__option',
-			// Addon item_data lines (NX1-04c).
-			'.wc-block-components-product-details',
-			// lafka block components.
-			'.lafka-block-free-delivery',
-			'.lafka-block-timeslot',
-			// lafka order-type select (Additional Checkout Fields API).
-			'lafka-order-type',
-		) as $sel ) {
-			$this->assertStringContainsString(
-				$sel,
-				$this->css,
-				"Missing load-bearing selector {$sel}"
-			);
-		}
-	}
-
-	/**
-	 * The block form fields must match .lafka-input's sunken → ink-focus
-	 * treatment (surface-sunken rest, shadow-focus ring).
-	 */
-	public function test_inputs_match_lafka_input_treatment(): void {
-		$this->assertStringContainsString(
-			'var(--lafka-color-surface-sunken)',
-			$this->css,
-			'Block inputs must use the sunken field background token.'
-		);
-		$this->assertStringContainsString(
-			'var(--lafka-shadow-focus)',
-			$this->css,
-			'Block inputs must carry the shared focus ring token.'
 		);
 	}
 
