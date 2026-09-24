@@ -33,13 +33,13 @@ rebuilt single-product page.
 **Highlights**
 
 * Mobile-first, responsive layouts verified at 375 / 768 / 1280.
-* Token-driven design system — one visual source of truth (see `DESIGN_SYSTEM.md`).
+* Token-driven design system — one visual source of truth (https://github.com/setkernel/lafka-theme/blob/main/DESIGN_SYSTEM.md).
 * Deep WooCommerce integration: custom shop/archive layouts, AJAX cart drawer, inline quick-add.
 * Redesigned single-product page with topping/size pickers and a sticky add-to-cart bar.
 * List-card menu archive: image-left / body-right product rows.
 * Editorial / long-form page system on the same token system.
 * Mega menu, multiple header styles, and a purpose-built mobile navigation.
-* Opt-in dark-mode scaffold plus an operator accent override in the Customizer.
+* Ten built-in design presets (two dark) with live Customizer preview, plus an operator accent override.
 * Self-hosted web fonts — no third-party font-CDN requests.
 * Accessibility-minded: visible focus rings, ARIA labelling, and reduced-motion support.
 * Structured, SEO-friendly markup and styling (JSON-LD schema is emitted by the companion plugin).
@@ -50,7 +50,7 @@ rebuilt single-product page.
 
 1. In your WordPress admin, go to **Appearance -> Themes -> Add New -> Upload Theme**.
 2. Upload the theme ZIP, click **Install Now**, then **Activate**.
-3. Configure appearance under **Appearance -> Customize** (colours, logo, header style, accent override, and the dark-mode option).
+3. Configure appearance under **Appearance -> Customize** (design preset, colours, logo, header style, and accent override).
 4. (Recommended) Install the free companion Lafka plugin — https://github.com/setkernel/lafka-plugin — to add the online-ordering feature set (food menu, addons, delivery zones, order hours, kitchen display, local-SEO schema).
 5. (Recommended) For any code-level customisation, create a child theme so your changes survive theme updates.
 
@@ -97,8 +97,8 @@ included.
 
 = Where is the design documentation? =
 
-`DESIGN_SYSTEM.md` in the theme root documents the token system and is the
-single visual source of truth for the theme.
+The token system is documented in `DESIGN_SYSTEM.md` in the source repository
+(https://github.com/setkernel/lafka-theme/blob/main/DESIGN_SYSTEM.md) and is the single visual source of truth for the theme.
 
 == Changelog ==
 
@@ -127,9 +127,12 @@ TODO are pending that audit.
 Fonts (self-hosted, `assets/fonts/`):
 
 * Rubik — SIL Open Font License 1.1 — https://github.com/googlefonts/rubik
-  (`assets/fonts/rubik/`; OFL license-copy to be added — TODO NX5-01).
+  — license: `assets/fonts/rubik/LICENSE`.
 * Fraunces — SIL Open Font License 1.1 — Copyright 2018 The Fraunces Project
   Authors — license: `assets/fonts/fraunces/OFL.txt`.
+* Inter, Archivo, Lora, Manrope, Space Grotesk, DM Serif Display (design-preset
+  font pool) — SIL Open Font License 1.1 — sourced via @fontsource — license:
+  `assets/fonts/<family>/LICENSE`.
 
 Scripts and styles (verified from the bundled file headers):
 
@@ -148,10 +151,8 @@ Scripts and styles (verified from the bundled file headers):
 * Cloud Zoom v1.0.2 — MIT — Copyright 2010 R. Cecco (`js/cloud-zoom/`).
 * jQuery Nice Select v1.0 — MIT — by Hernan Sartorio
   (`js/jquery.nice-select.min.js`).
-* jQuery Nicescroll v3.7.6 — MIT — Copyright InuYaksa (`js/jquery.nicescroll/`).
 * jQuery fontIconPicker v2.0.0 — MIT — by Alessandro Benoit and Swashata
   (`js/fonticonpicker/`).
-* Modernizr (custom touch-detection build) — MIT (`js/modernizr.custom.js`).
 * Typed.js — MIT — by Matt Boldt (`js/typed.min.js`; bundled minified build
   carries no version/license header — verify — TODO NX5-01).
 * jquery.mb.YTPlayer — Copyright 2020 Matteo Bicocchi (`js/jquery.mb.YTPlayer/`;

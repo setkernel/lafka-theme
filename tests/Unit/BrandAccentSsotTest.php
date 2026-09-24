@@ -15,9 +15,10 @@ use PHPUnit\Framework\TestCase;
  *  - dynamic-css.php must bridge the Customizer brand_color into the handoff
  *    brand ramp anchor (--lafka-color-brand-500) at the pepper-yellow default;
  *  - critical.css must name the handoff accent/brand tokens above-fold at the
- *    design-system defaults (no out-of-box divergence);
- *  - the child theme docs must point future rebrands at the handoff token
- *    names, not only the legacy --lafka-accent-color.
+ *    design-system defaults (no out-of-box divergence).
+ *
+ * The matching child-theme guard (rebrand recipes name the handoff tokens)
+ * lives in lafka-child's ThinLayerTest.
  */
 final class BrandAccentSsotTest extends TestCase {
 
@@ -99,25 +100,6 @@ final class BrandAccentSsotTest extends TestCase {
 			'/--lafka-color-brand-500:\s*#f59e0b;/',
 			$css,
 			'critical.css above-fold subset must name --lafka-color-brand-500 at the design default.'
-		);
-	}
-
-	public function test_child_theme_docs_reference_handoff_tokens(): void {
-		// Cross-repo: lafka-child is a sibling repo, absent in isolated CI.
-		$child = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
-		if ( ! file_exists( $child ) ) {
-			$this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
-		}
-		$css = (string) file_get_contents( $child );
-		$this->assertStringContainsString(
-			'--lafka-color-accent-500',
-			$css,
-			'Child theme docs must steer future rebrands at the handoff accent token, not only the legacy name.'
-		);
-		$this->assertStringContainsString(
-			'--lafka-color-brand-500',
-			$css,
-			'Child theme docs must mention the handoff brand ramp token.'
 		);
 	}
 }
