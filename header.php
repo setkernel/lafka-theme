@@ -11,7 +11,7 @@
  * What we kept from legacy:
  *  - doctype + html + head + wp_head() (WP plumbing)
  *  - LCP image preload for PDPs
- *  - Skip-link, preloader gate, cart_add_sound gate (operator options)
+ *  - Skip-link, preloader gate (operator option)
  *  - wp_body_open() — fires the v5.54.0 announce bar + promo bar
  *  - <main id="content"> + <div id="container"> open (closed by footer.php)
  *
@@ -127,13 +127,6 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 				<div class="double-bounce2"></div>
 			</div>
 		</div>
-	<?php endif; ?>
-
-	<?php if ( get_theme_mod( 'lafka_add_to_cart_sound', true ) ) : ?>
-		<?php // preload="none" — 352 KB wav stays uncached until add-to-cart fires. ?>
-		<audio id="cart_add_sound" controls preload="none" hidden>
-			<source src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cart_add.wav' ); ?>" type="audio/wav">
-		</audio>
 	<?php endif; ?>
 
 	<header id="header" class="lafka-header" role="banner">

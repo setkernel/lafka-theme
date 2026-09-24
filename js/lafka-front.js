@@ -1200,10 +1200,6 @@
         var notice = $("<div class='lafka_added_to_cart_notification'>" + product.image + "<div class='added-product-text'><strong>" + product.name + " " + lafka_main_js_params.added_to_cart_label + "</strong></div></div>");
 
         if (typeof event !== 'undefined') {
-            var $cart_add_sound = $('#cart_add_sound');
-            if ($cart_add_sound.length) {
-                $cart_add_sound[0].play && $cart_add_sound[0].play();
-            }
             if (lafka_main_js_params.shopping_cart_on_add === 'yes') {
                 $(document.body).find("div.widget.woocommerce.widget_shopping_cart").addClass("active_cart");
             }

@@ -1446,13 +1446,6 @@ textarea:focus-visible,
     outline-offset: 2px;
 }
 
-audio#cart_add_sound {
-    display: none !important;
-    position: absolute;
-    left: -9999px;
-    top: -9999px;
-}
-
 a.button {
     display: inline-block;
     text-decoration: none;

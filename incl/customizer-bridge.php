@@ -926,7 +926,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_show_shopping_cart'             => 1,
 				'lafka_shopping_cart_on_add'           => 1,
 				'lafka_show_wish_in_header'            => 1,
-				'lafka_add_to_cart_sound'              => 1,
 				'lafka_enable_shop_infinite'           => 1,
 				'lafka_use_load_more_on_shop'          => 0,
 				'lafka_show_refine_area'               => 1,
