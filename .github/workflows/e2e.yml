@@ -23,9 +23,17 @@ on:
     paths:
       - 'tests/e2e/**'
       - 'playwright.config.js'
+      - 'incl/**'
+      - 'styles/**'
+      - 'presets/**'
+      - 'template-parts/**'
+      - 'assets/**'
       - 'partials/**'
       - 'woocommerce/**'
       - 'js/**'
+      - 'header.php'
+      - 'footer.php'
+      - 'style.css'
       - 'functions.php'
       - '.github/workflows/e2e.yml'
   push:
@@ -33,9 +41,17 @@ on:
     paths:
       - 'tests/e2e/**'
       - 'playwright.config.js'
+      - 'incl/**'
+      - 'styles/**'
+      - 'presets/**'
+      - 'template-parts/**'
+      - 'assets/**'
       - 'partials/**'
       - 'woocommerce/**'
       - 'js/**'
+      - 'header.php'
+      - 'footer.php'
+      - 'style.css'
       - 'functions.php'
       - '.github/workflows/e2e.yml'
 
@@ -85,8 +101,8 @@ jobs:
         run: |
           cat > .wp-env.json <<'JSON'
           {
-            "core": "WordPress/WordPress#6.9.4",
-            "phpVersion": "8.3",
+            "core": "WordPress/WordPress#7.0",
+            "phpVersion": "8.4",
             "plugins": [
               "./lafka-plugin",
               "https://downloads.wordpress.org/plugin/woocommerce.10.9.1.zip"

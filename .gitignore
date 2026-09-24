@@ -16,10 +16,6 @@ Thumbs.db
 node_modules/
 vendor/
 
-# WordPress
-wp-config.php
-wp-content/uploads/
-
 # Test artefacts
 .phpunit.result.cache
 .tmp-screenshots/
@@ -45,6 +41,9 @@ wp-content/uploads/
 *.log
 *.bak
 *.orig
+
+# Local agent/brainstorming scratch
+/.superpowers/
 
 # Playwright e2e artifacts
 /test-results/
