@@ -193,7 +193,7 @@
 	min-height: 44px;
 	width: 44px;
 	height: 44px;
-	color: #999;
+	color: var(--lafka-color-text-muted); /* × is text: 4.5:1 on the cart surface in every preset (#999 was 2.8:1). */
 	font-size: 18px;
 	line-height: 1;
 	text-decoration: none;

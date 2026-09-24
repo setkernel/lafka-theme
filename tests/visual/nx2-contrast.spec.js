@@ -298,6 +298,8 @@ for ( const slug of PRESET_SLUGS ) {
 				// (1.4:1). Guard both dark-scoped fixes.
 				{ sel: '.lafka-cart-tab.is-active .lafka-cart-tab__meta', min: T.text, label: 'cart tab meta' },
 				{ sel: '.lafka-direct--line', min: T.text, label: 'cart reassurance line' },
+				// The remove × is a text glyph (was #999, 2.8:1 on white).
+				{ sel: '.lafka-cart-item__remove', min: T.text, label: 'cart line remove control' },
 			] );
 		} );
 	} );
