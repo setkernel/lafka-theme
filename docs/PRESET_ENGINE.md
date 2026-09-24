@@ -266,7 +266,7 @@ token (logged).
   that expects failure, so the suite stays green while proving the gate has teeth).
 - **Rendered contrast gate (NX2-07/08)** — `npm run test:contrast` measures real rendered
   text/CTA contrast for every registered preset on home, menu, PDP and cart (local, not in
-  CI); `npm run test:visual:nx2-dark` holds the dark-preset goldens.
+  CI); `npm run test:visual:dark` holds the dark-preset goldens.
 - **`PresetEnqueueOrderTest`** — asserts the `lafka-preset` handle sits between
   `lafka-tokens` and `lafka-style` in the dependency graph.
 - **Switcher** — `PresetSwitcherWiringTest`, `PresetPreviewPayloadTest`,

@@ -31,9 +31,9 @@
  * price, section headings, primary CTAs) so a future preset regression is caught
  * where a customer would actually read.
  *
- * ISOLATION: run by its OWN config (playwright.contrast.config.js,
- * `npm run test:contrast`) and testIgnore'd by playwright.visual.config.js, so
- * the 30 Peppery goldens never trip over its preset activations and vice-versa.
+ * ISOLATION: its own project (`contrast` in playwright.visual.config.js,
+ * `npm run test:contrast`), so the Peppery goldens never trip over its preset
+ * activations and vice-versa.
  * Each preset's describe toggles lafka_active_preset -> <slug> in beforeAll and
  * REMOVES it in afterAll (leaving it on would poison a later Peppery run); the
  * whole file runs serially so the global active-preset theme_mod is never shared

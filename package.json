@@ -18,9 +18,9 @@
 		"test:e2e": "playwright test",
 		"test:e2e:smoke": "playwright test --grep @smoke",
 		"test:e2e:install": "playwright install --with-deps chromium",
-		"test:visual": "playwright test --config playwright.visual.config.js",
-		"test:visual:nx2-dark": "playwright test --config playwright.visual.dark.config.js",
-		"test:contrast": "playwright test --config playwright.contrast.config.js",
+		"test:visual": "playwright test --config playwright.visual.config.js --project=peppery",
+		"test:visual:dark": "playwright test --config playwright.visual.config.js --project=dark",
+		"test:contrast": "playwright test --config playwright.visual.config.js --project=contrast",
 		"sync-version": "node scripts/sync-version.mjs",
 		"check-version": "node scripts/sync-version.mjs --check",
 		"version": "node scripts/sync-version.mjs --stage"

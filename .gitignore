@@ -48,17 +48,9 @@ vendor/
 /blob-report/
 /.playwright/
 
-# NX1-02 visual parity harness (playwright.visual.config.js): goldens are LOCAL,
+# Visual gates (playwright.visual.config.js, projects peppery/dark/contrast): goldens are LOCAL,
 # machine-specific, and regenerated only intentionally — never committed, never
 # run in CI. See tests/visual/nx1-02.spec.js.
 /tests/visual/__screenshots__/
 /tests/visual/.output/
 /tests/visual/.report/
-# NX2-07 dark-preset visual gate (playwright.visual.dark.config.js) — same
-# LOCAL/untracked contract. See tests/visual/nx2-dark.spec.js.
-/tests/visual/.output-dark/
-/tests/visual/.report-dark/
-# NX2-07 rendered text-contrast gate (playwright.contrast.config.js) — no
-# goldens; only run artefacts. See tests/visual/nx2-contrast.spec.js.
-/tests/visual/.output-contrast/
-/tests/visual/.report-contrast/

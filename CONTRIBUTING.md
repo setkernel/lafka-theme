@@ -78,7 +78,7 @@ CI** — only the e2e `@smoke` job does.
 | `previews:presets` | Screenshot each preset's home page into `presets/<slug>/preview.jpg` (Customizer switcher thumbnails); restores the previously active preset. `-- --only=ember,koyo` to limit. |
 | `test:e2e` / `test:e2e:smoke` / `test:e2e:install` | Playwright e2e suite / `@smoke` subset / browser install (above). |
 | `test:visual` | Peppery full-page goldens at 375/768/1280 (NX1-02 parity + NX1-10a surfaces). `-- --update-snapshots` to (re)capture. |
-| `test:visual:nx2-dark` | Midnight (dark preset) goldens on home, menu, PDP and cart — same local contract. |
+| `test:visual:dark` | Midnight (dark preset) goldens on home, menu, PDP and cart — same local contract. |
 | `test:contrast` | Rendered text/CTA contrast for every registered preset on home, menu, PDP and cart (no goldens). |
 | `sync-version` | Write the version from `package.json` into the `versionSync` targets. |
 | `check-version` | Fail if any `versionSync` target drifted from `package.json` (CI runs it). |
