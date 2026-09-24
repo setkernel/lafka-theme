@@ -611,8 +611,9 @@
             });
         }
 
-        // Initialise the small countdowns on products list
-        lafkaInitSmallCountdowns($('div.prod_hold'));
+        // Initialise the small countdowns on products list (the shop card is
+        // an <li class="prod_hold">, so match the class on any element).
+        lafkaInitSmallCountdowns($('.prod_hold'));
 
         // if is set infinite load on shop - run it de..
         if (lafka_main_js_params.enable_infinite_on_shop === 'yes') {
@@ -947,6 +948,10 @@
      * @param prodHoldElements
      */
     window.lafkaInitSmallCountdowns = function(prodHoldElements) {
+        // The countdown library is only enqueued where countdown markup renders.
+        if (typeof $.fn.countdown !== 'function') {
+            return;
+        }
         $(prodHoldElements).each(function() {
             var data = $(this).find('.count_holder_small').data();
             if (typeof data !== 'undefined') {
@@ -986,6 +991,9 @@
      * Initialize the counter for opening the store
      */
     window.lafkaOrderHoursCountdown = function() {
+        if (typeof $.fn.countdown !== 'function') {
+            return;
+        }
         $(document.body).find('.lafka_order_hours_countdown').each(function() {
             var count_to = '+' + $(this).data('diff-days') + 'd +' + $(this).data('diff-hours') + 'h +' + $(this).data('diff-minutes') + 'm +' + $(this).data('diff-seconds') + 's';
             var counter_format = $(this).data('output-format');

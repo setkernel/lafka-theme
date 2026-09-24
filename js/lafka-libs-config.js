@@ -230,33 +230,6 @@
 		}
 
 		/***********************************
-		 * "lafka-variation-prod-cloudzoom"
-		 ***********************************/
-		if (typeof lafka_variation_prod_cloudzoom !== 'undefined') {
-			if (jQuery('#zoom1').length) {
-				jQuery(document).on('update_variation_values', function () {
-
-					jQuery('a.reset_variations').on('click', jQuery(this), function (event) {
-
-						var o_href = $('#zoom1').attr('data-o_href');
-
-						$('#zoom1').attr('href', o_href);
-						jQuery('#zoom1').CloudZoom();
-					});
-
-					jQuery('table.variations select option').on('click', jQuery(this), function (event) {
-						// Destroy the previous zoom
-						if (jQuery('#zoom1').data('zoom')) {
-							jQuery('#zoom1').data('zoom').destroy();
-							jQuery('#zoom1').CloudZoom();
-							return false;
-						}
-					});
-				});
-			}
-		}
-
-		/***********************************
 		 * "lafka-ytplayer-conf"
 		 ***********************************/
 		if (typeof lafka_ytplayer_conf !== 'undefined') {

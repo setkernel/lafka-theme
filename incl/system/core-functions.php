@@ -1132,6 +1132,62 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_needs_cloud_zoom' ) ) {
+	/**
+	 * Whether the current request renders CloudZoom markup: a foodmenu single
+	 * whose gallery type is "cloud", or singular content that embeds the
+	 * plugin's [lafka_cloudzoom_gallery] shortcode.
+	 *
+	 * @return bool
+	 */
+	function lafka_needs_cloud_zoom() {
+		if ( ! is_singular() ) {
+			return false;
+		}
+		if ( is_singular( 'lafka-foodmenu' ) && 'cloud' === get_post_meta( get_queried_object_id(), 'lafka_prtfl_gallery', true ) ) {
+			return true;
+		}
+		$post = get_post();
+		return $post instanceof WP_Post && false !== strpos( (string) $post->post_content, '[lafka_cloudzoom_gallery' );
+	}
+}
+
+if ( ! function_exists( 'lafka_enqueue_countdown' ) ) {
+	/**
+	 * Enqueue the jQuery countdown library (plus its locale file when the site
+	 * language has one). Safe to call while a template renders: the handles are
+	 * footer scripts, so a late enqueue still prints in wp_footer.
+	 *
+	 * @return void
+	 */
+	function lafka_enqueue_countdown() {
+		wp_enqueue_script( 'countdown' );
+		if ( wp_script_is( 'jquery-countdown-local', 'registered' ) ) {
+			wp_enqueue_script( 'jquery-countdown-local' );
+		}
+	}
+}
+
+if ( ! function_exists( 'lafka_store_closed_countdown_visible' ) ) {
+	/**
+	 * Whether the plugin's "store closed" card may render its opening
+	 * countdown on this request (store closed + countdown option on). The card
+	 * can appear in the mini cart on any page, so this is not route-gated.
+	 *
+	 * @return bool
+	 */
+	function lafka_store_closed_countdown_visible() {
+		if ( ! class_exists( 'Lafka_Order_Hours' ) || ! isset( Lafka_Order_Hours::$lafka_order_hours_options ) ) {
+			return false;
+		}
+		$options = (array) Lafka_Order_Hours::$lafka_order_hours_options;
+		if ( empty( $options['lafka_order_hours_message_countdown'] ) ) {
+			return false;
+		}
+		return ! Lafka_Order_Hours::is_shop_open();
+	}
+}
+
 /**
  * Register / Enqueue theme scripts
  */
@@ -2042,19 +2098,27 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		wp_enqueue_style( 'owl-carousel-animate', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/animate.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/animate.css' ) );
 		$owl_enqueue = true;
 
-		// cloud-zoom — only on single product pages
+		// cloud-zoom — only where CloudZoom markup renders: a foodmenu single on
+		// the "cloud" gallery, or content embedding [lafka_cloudzoom_gallery].
+		// The redesigned PDP has no zoom gallery, so product pages skip it.
 		wp_register_script( 'cloud-zoom', get_template_directory_uri() . '/js/cloud-zoom/cloud-zoom.1.0.2.min.js', array( 'jquery' ), lafka_asset_version( '/js/cloud-zoom/cloud-zoom.1.0.2.min.js' ), $footer_defer );
 		wp_register_style( 'cloud-zoom', get_template_directory_uri() . '/styles/cloud-zoom/cloud-zoom.css', array(), lafka_asset_version( '/styles/cloud-zoom/cloud-zoom.css' ) );
-		if ( function_exists( 'is_product' ) && is_product() ) {
+		if ( lafka_needs_cloud_zoom() ) {
 			wp_enqueue_script( 'cloud-zoom' );
 			wp_enqueue_style( 'cloud-zoom' );
 		}
 
-		// countdown — only on single product pages when enabled
+		// countdown — registered everywhere, enqueued only where countdown
+		// markup renders (see lafka_enqueue_countdown()). The locale file is a
+		// dependant of the base library, so it never loads on its own.
 		wp_register_script( 'jquery-plugin', get_template_directory_uri() . '/js/count/jquery.plugin.min.js', array( 'jquery' ), lafka_asset_version( '/js/count/jquery.plugin.min.js' ), $footer_defer );
 		wp_register_script( 'countdown', get_template_directory_uri() . '/js/count/jquery.countdown.min.js', array( 'jquery', 'jquery-plugin' ), lafka_asset_version( '/js/count/jquery.countdown.min.js' ), $footer_defer );
-		if ( function_exists( 'is_product' ) && is_product() ) {
-			wp_enqueue_script( 'countdown' );
+		$lafka_local = lafka_wp_lang_to_valid_language_code( get_locale() );
+		if ( $lafka_local ) {
+			wp_register_script( 'jquery-countdown-local', get_template_directory_uri() . "/js/count/jquery.countdown-$lafka_local.js", array( 'jquery', 'countdown' ), lafka_asset_version( "/js/count/jquery.countdown-$lafka_local.js" ), $footer_defer );
+		}
+		if ( ( function_exists( 'is_product' ) && is_product() ) || lafka_store_closed_countdown_visible() ) {
+			lafka_enqueue_countdown();
 		}
 
 		// P3-04: magnific replaced by lafka-dialog (native <dialog>). The
@@ -2108,11 +2172,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		$lafka_local = lafka_wp_lang_to_valid_language_code( get_locale() );
-		if ( $lafka_local ) {
-			wp_enqueue_script( 'jquery-countdown-local', get_template_directory_uri() . "/js/count/jquery.countdown-$lafka_local.js", array( 'jquery', 'countdown' ), lafka_asset_version( "/js/count/jquery.countdown-$lafka_local.js" ), true );
-		}
-
 		$is_compare = false;
 		// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- YITH WooCompare view detection from $_GET['action']; read-only display gating, no state mutation.
 		if ( isset( $_GET['action'] ) && $_GET['action'] === 'yith-woocompare-view-table' ) {
@@ -2141,10 +2200,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		}
 		if ( $nice_enqueue ) {
 			$lafka_libs_deps[] = 'nice-select';
-		}
-		if ( function_exists( 'is_product' ) && is_product() ) {
-			$lafka_libs_deps[] = 'cloud-zoom';
-			$lafka_libs_deps[] = 'countdown';
 		}
 		// lafka-libs-config calls window.lafkaDialog — depend on it explicitly
 		// so the script load order is correct even when defer is on.
@@ -2186,16 +2241,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_localize_script(
 				'lafka-libs-config',
 				'lafka_ajax_search',
-				array(
-					'include' => 'true',
-				)
-			);
-		}
-
-		if ( LAFKA_IS_WOOCOMMERCE && is_product() ) {
-			wp_localize_script(
-				'lafka-libs-config',
-				'lafka_variation_prod_cloudzoom',
 				array(
 					'include' => 'true',
 				)

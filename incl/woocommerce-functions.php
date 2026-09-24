@@ -618,6 +618,11 @@ if ( ! function_exists( 'lafka_shop_sale_countdown' ) ) {
 			$sales_dates = lafka_get_product_sales_dates( $post );
 			$now         = time();
 			if ( $sales_dates['to'] && $now < $sales_dates['to'] ) {
+				// Late enqueue: the countdown handles are footer scripts, so
+				// they still print even though the loop is mid-render.
+				if ( function_exists( 'lafka_enqueue_countdown' ) ) {
+					lafka_enqueue_countdown();
+				}
 				$random_num = uniqid();
 				?>
 				<div class="count_holder_small" data-countdown-id="<?php echo esc_js( '#lafkaCountSmallLatest' . $post->ID . $random_num ); ?>"
@@ -659,6 +664,9 @@ if ( ! function_exists( 'lafka_product_sale_countdown' ) ) {
 					(function ($) {
 						"use strict";
 						$(window).on("load lafka_quickview_loaded", function () {
+							if (typeof $.fn.countdown !== 'function') {
+								return;
+							}
 							$('#<?php echo esc_attr( $unique_id ); ?>').countdown({
 								until: new Date("<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>"),
 								compact: false,
