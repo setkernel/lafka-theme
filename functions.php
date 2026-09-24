@@ -1418,97 +1418,17 @@ if ( ! function_exists( 'lafka_should_show_wishlist_icon' ) ) {
 }
 
 if ( ! function_exists( 'lafka_build_mobile_menu_items_wrap' ) ) {
+	/**
+	 * Markup for the pre-handoff mobile menu drawer (#menu_mobile).
+	 *
+	 * @deprecated 7.1.0 Nothing renders the old drawer; the mobile nav is
+	 *             partials/mobile-nav.php. Returns an empty string.
+	 *
+	 * @return string
+	 */
 	function lafka_build_mobile_menu_items_wrap() {
-		global $post;
-		ob_start();
-		$current_user = wp_get_current_user();
-		?>
-		<ul class="lafka-mobile-menu-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Mobile menu navigation', 'lafka' ); ?>">
-			<li>
-				<a id="lafka-tab-menu"
-					class="lafka-mobile-menu-tab-link"
-					href="#lafka_mobile_menu_tab"
-					role="tab"
-					aria-controls="lafka_mobile_menu_tab"
-					aria-selected="true"
-					tabindex="0"><?php echo esc_html__( 'Menu', 'lafka' ); ?></a>
-			</li>
-			<?php $has_shortcode_my_account = isset( $post->post_content ) && has_shortcode( $post->post_content, 'woocommerce_my_account' ); ?>
-			<?php if ( lafka_should_show_account_icon() && wp_is_mobile() && ( is_user_logged_in() || ( ! is_user_logged_in() && ! $has_shortcode_my_account ) ) ) : ?>
-				<li>
-					<a id="lafka-tab-account"
-						class="lafka-mobile-account-tab-link"
-						href="#lafka_mobile_account_tab"
-						role="tab"
-						aria-controls="lafka_mobile_account_tab"
-						aria-selected="false"
-						tabindex="-1"><?php echo esc_html__( 'My Account', 'lafka' ); ?></a>
-				</li>
-			<?php endif; ?>
-			<?php if ( lafka_should_show_wishlist_icon() ) : ?>
-				<li>
-					<a class="lafka-mobile-wishlist" href="<?php echo esc_url( str_replace( '%', '%%', YITH_WCWL()->get_wishlist_url() ) ); ?>"><?php echo esc_html__( 'Wishlist', 'lafka' ); ?></a>
-				</li>
-			<?php endif; ?>
-			<li>
-				<a class="mob-close-toggle" href="#" role="button" aria-label="<?php esc_attr_e( 'Close menu', 'lafka' ); ?>"><i class="fa fa-times" aria-hidden="true"></i></a>
-			</li>
-		</ul>
-		<div id="lafka_mobile_menu_tab"
-			role="tabpanel"
-			aria-labelledby="lafka-tab-menu"
-			tabindex="0">
-			<ul id="%1$s" class="%2$s">%3$s</ul>
-		</div>
-		<?php if ( lafka_should_show_account_icon() && wp_is_mobile() ) : ?>
-			<div id="lafka_mobile_account_tab"
-				role="tabpanel"
-				aria-labelledby="lafka-tab-account"
-				tabindex="0">
-				<?php if ( is_user_logged_in() ) : ?>
-					<ul>
-						<li>
-							<span class="lafka-header-user-data">
-								<?php echo get_avatar( $current_user->ID, 60 ); ?>
-								<small><?php echo esc_html( $current_user->display_name ); ?></small>
-							</span>
-						</li>
-						<?php if ( LAFKA_IS_WC_MARKETPLACE && is_user_wcmp_vendor( $current_user ) ) : ?>
-							<li class="lafka-header-account-wcmp-dash">
-								<?php $lafka_wcmp_dashboard_page_link = wcmp_vendor_dashboard_page_id() ? get_permalink( wcmp_vendor_dashboard_page_id() ) : '#'; ?>
-								<?php
-								// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- default markup uses esc_url/esc_html__; filter consumers responsible for safe output.
-								echo apply_filters( 'wcmp_vendor_goto_dashboard', '<a href="' . esc_url( str_replace( '%', '%%', $lafka_wcmp_dashboard_page_link ) ) . '">' . esc_html__( 'Vendor Dashboard', 'lafka' ) . '</a>' );
-								?>
-							</li>
-						<?php elseif ( LAFKA_IS_WC_VENDORS_PRO && WCV_Vendors::is_vendor( $current_user->ID ) ) : ?>
-							<li class="lafka-header-account-vcvendors-pro-dash">
-								<?php $lafka_wcv_pro_dashboard_page = WCVendors_Pro::get_option( 'dashboard_page_id' ); ?>
-								<?php if ( $lafka_wcv_pro_dashboard_page ) : ?>
-									<a href="<?php echo esc_url( str_replace( '%', '%%', get_permalink( $lafka_wcv_pro_dashboard_page ) ) ); ?>"><?php echo esc_html__( 'Vendor Dashboard', 'lafka' ); ?></a>
-								<?php endif; ?>
-							</li>
-						<?php elseif ( LAFKA_IS_WC_VENDORS && WCV_Vendors::is_vendor( $current_user->ID ) ) : ?>
-							<li class="lafka-header-account-vcvendors-dash">
-								<?php $lafka_wcv_free_dashboard_page = WC_Vendors::$pv_options->get_option( 'vendor_dashboard_page' ); ?>
-								<?php if ( $lafka_wcv_free_dashboard_page ) : ?>
-									<a href="<?php echo esc_url( str_replace( '%', '%%', get_permalink( $lafka_wcv_free_dashboard_page ) ) ); ?>"><?php echo esc_html__( 'Vendor Dashboard', 'lafka' ); ?></a>
-								<?php endif; ?>
-							</li>
-						<?php endif; ?>
-						<?php foreach ( wc_get_account_menu_items() as $endpoint => $label ) : ?>
-							<li class="<?php echo esc_attr( wc_get_account_menu_item_classes( $endpoint ) ); ?>">
-								<a href="<?php echo esc_url( str_replace( '%', '%%', wc_get_account_endpoint_url( $endpoint ) ) ); ?>"><?php echo esc_html( $label ); ?></a>
-							</li>
-						<?php endforeach; ?>
-					</ul>
-				<?php elseif ( isset( $post->post_content ) && ! has_shortcode( $post->post_content, 'woocommerce_my_account' ) ) : ?>
-					<?php echo wp_kses_post( urldecode( do_shortcode( '[woocommerce_my_account]' ) ) ); ?>
-				<?php endif; ?>
-			</div>
-		<?php endif; ?>
-		<?php
-		return ob_get_clean();
+		_deprecated_function( __FUNCTION__, '7.1.0' );
+		return '';
 	}
 }
 
@@ -1570,7 +1490,15 @@ if ( ! function_exists( 'lafka_get_formatted_price' ) ) {
 }
 
 if ( ! function_exists( 'lafka_is_text_logo' ) ) {
+	/**
+	 * @deprecated 7.1.0 Only the removed legacy logo partial used this; the
+	 *             header resolves its logo through lafka_get_logo_id().
+	 *
+	 * @param mixed $lafka_theme_logo_img Logo image, if any.
+	 * @return bool
+	 */
 	function lafka_is_text_logo( $lafka_theme_logo_img ) {
+		_deprecated_function( __FUNCTION__, '7.1.0', 'lafka_get_logo_id()' );
 		$to_return = false;
 
 		if ( ! $lafka_theme_logo_img && ( get_bloginfo( 'name' ) || get_bloginfo( 'description' ) ) ) {

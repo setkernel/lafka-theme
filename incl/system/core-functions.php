@@ -1989,11 +1989,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			$categories_fancy = 'yes';
 		}
 
-		$shopping_cart_on_add = 'no';
-		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_shopping_cart_on_add', true ) ) {
-			$shopping_cart_on_add = 'yes';
-		}
-
 		$order_hours_cart_update = 'no';
 		if ( LAFKA_IS_WOOCOMMERCE && class_exists( 'Lafka_Order_Hours' ) && isset( Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_cache_enable'] ) && Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_cache_enable'] ) {
 			$order_hours_cart_update = 'yes';
@@ -2033,10 +2028,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'img_path'                => esc_js( LAFKA_IMAGES_PATH ),
 				'admin_url'               => esc_js( admin_url( 'admin-ajax.php' ) ),
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
-				'product_label'           => esc_js( __( 'Product', 'lafka' ) ),
-				'added_to_cart_label'     => esc_js( __( 'was added to the cart', 'lafka' ) ),
 				'show_preloader'          => esc_js( get_theme_mod( 'lafka_show_preloader', true ) ),
-				'sticky_header'           => esc_js( get_theme_mod( 'lafka_sticky_header', true ) ),
 				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
 				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
 				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),
@@ -2048,7 +2040,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'use_product_filter_ajax' => $use_product_filter_ajax,
 				'categories_fancy'        => $categories_fancy,
 				'order_hours_cart_update' => $order_hours_cart_update,
-				'shopping_cart_on_add'    => $shopping_cart_on_add,
 				'is_rtl'                  => ( is_rtl() ? 'true' : 'false' ),
 			)
 		);

@@ -1,7 +1,6 @@
 (function($) {
     "use strict";
     var lafka_ajaxXHR = null;
-    var is_mailto_or_tel_link = false;
     var is_rtl = false;
     if (lafka_main_js_params.is_rtl === 'true') {
         is_rtl = true;
@@ -68,7 +67,6 @@
     lafkaOnLoad(function() {
         checkRevealFooter();
         checkProductGalleryCarousel();
-        defineMegaMenuSizing();
     });
 
     $(document).ready(function() {
@@ -118,20 +116,8 @@
 
         $('div.content_holder.lafka_blog_masonry div.box.box-common').has('.pagination').parent().addClass('lafka-blog-has-pagination');
 
-        // Keep srcset for responsive images; CloudZoom works with src directly
         $("div.summary.entry-summary table.variations td").has('div.lafka-wcs-swatches').addClass("lafka-has-swatches-option");
         $("ul#topnav li, ul#topnav2 li, ul.menu li").has('ul').addClass("dropdown");
-        $("ul.menu li").has('div').addClass("has-mega");
-        $('#main-menu li ul.sub-menu li').has('.lafka-custom-menu-label').addClass('has-menu-label');
-
-
-        /*
-         * Manipulate the cart
-         */
-
-        $('#header #cart-module div.widget.woocommerce.widget_shopping_cart').prependTo('body');
-        $('body > div.widget.woocommerce.widget_shopping_cart').prepend('<span class="close-cart-button"></span>');
-        $('body > #search').prepend('<span class="close-search-button"></span>');
 
         /* REMOVE PARENTHESIS ON WOO CATEGORIES */
 
@@ -139,43 +125,17 @@
             return text.replace(/\(|\)/g, '');
         });
 
-        /**
-         * Sticky header (if on)
-         */
-        if ((lafka_main_js_params.sticky_header) && ($('#container').has('#header').length)) {
-            lafkaStickyHeaderInit();
-        }
-
-        $("#header #lafka-account-holder > a").on('click', function(event) {
-            event.preventDefault();
-            event.stopPropagation();
-            $("#lafka-account-holder, .lafka-header-account-link-holder").toggleClass("active");
-        });
-
-        if ($("#header .lafka-header-account-link-holder .woocommerce").has('ul.woocommerce-error').length) {
-            $("#header .lafka-header-account-link-holder").addClass("active");
-        }
-
         checkSummaryHeight();
         checkSidebarHeight();
         checkCommentsHeight();
         checkFoodmenuHeight();
-        defineCartIconClickBehaviour();
 
         var customTitleHeight = $('body.lafka_transparent_header #header').height();
         $('body.lafka_transparent_header .lafka_title_holder .inner').css({ "padding-top": customTitleHeight + 160, "padding-bottom": customTitleHeight - 60 });
 
-        $('#header .lafka-search-trigger a, .close-search-button').on('click', function(event) {
-            event.stopPropagation();
-            $("body > #search").toggleClass("active");
-            $("body > #search #s").trigger('focus'); // P6-PERF-7: .focus() shorthand deprecated
-        });
-
-        $('#main-menu .lafka-mega-menu').css("display", "");
-
         $('p.demo_store').prependTo('#header');
 
-        var $accountMenuSliderElement = $('body.woocommerce-account .content_holder #customer_login.col2-set, .content_holder .woocommerce #customer_login.u-columns.col2-set, .lafka-header-account-link-holder .woocommerce #customer_login.u-columns.col2-set, #lafka_mobile_account_tab .woocommerce #customer_login.u-columns.col2-set');
+        var $accountMenuSliderElement = $('body.woocommerce-account .content_holder #customer_login.col2-set, .content_holder .woocommerce #customer_login.u-columns.col2-set');
         if ($accountMenuSliderElement.length) {
             $accountMenuSliderElement.addClass('owl-carousel');
             $accountMenuSliderElement.owlCarousel({
@@ -191,85 +151,10 @@
             });
         }
 
-        //
-        // -------------------------------------------------------------------------------------------------------
-        // Mobile Menu
-        // -------------------------------------------------------------------------------------------------------
-
-        // C-12 C-A11Y-Audit-2026-04-29: keyboard trap fix (WCAG 2.1.2).
-        // #menu_mobile is hidden by transform (left: -320px) but its links remain
-        // in the tab order, forcing keyboard users through 26+ off-screen items.
-        // Fix: apply `inert` when the drawer is closed so AT and keyboard skip it.
-        // `inert` is supported in all evergreen browsers since 2023.
-        var $mobileMenuDrawer = $("#menu_mobile");
-        if ($mobileMenuDrawer.length) {
-            // Set inert initially (drawer starts closed).
-            $mobileMenuDrawer[0].setAttribute('inert', '');
-        }
-
-        function lafkaMobileMenuOpen() {
-            if ($mobileMenuDrawer.length) {
-                $mobileMenuDrawer[0].removeAttribute('inert');
-            }
-        }
-        function lafkaMobileMenuClose() {
-            if ($mobileMenuDrawer.length) {
-                $mobileMenuDrawer[0].setAttribute('inert', '');
-            }
-        }
-
-        $(".mob-menu-toggle, .mob-close-toggle, ul#mobile-menu.menu li:not(.menu-item-has-children) a").on('click', function(event) {
-            event.stopPropagation();
-            $("#menu_mobile").toggleClass("active");
-            if ($("#menu_mobile").hasClass("active")) {
-                lafkaMobileMenuOpen();
-            } else {
-                lafkaMobileMenuClose();
-            }
-        });
-        $("ul#mobile-menu.menu .menu-item a").each(function() {
-            if ($(this).html() == "–") {
-                $(this).remove();
-            }
-        });
-
-        $("ul#mobile-menu.menu > li.menu-item-has-children:not(.current-menu-item) > a").prepend('<span class="drop-mob">+</span>');
-        $("ul#mobile-menu.menu > li.menu-item-has-children.current-menu-item > a").prepend('<span class="drop-mob">-</span>');
-        $("ul#mobile-menu.menu > li.menu-item-has-children > a .drop-mob").on('click', function(event) {
-            event.preventDefault();
-            $(this).closest('li').find('ul.sub-menu').toggleClass("active");
-
-            var $activeSubmenus = $(this).closest('li').find('ul.sub-menu.active');
-
-            if ($activeSubmenus.length) {
-                $(this).html("-");
-            } else if (!$(this).closest('li').hasClass('current-menu-item')) {
-                $(this).html("+");
-            }
-        });
         $(document).on('click', function(e) {
-            if (!$(e.target).closest('.widget_shopping_cart').hasClass('active_cart')) {
-                $("body > div.widget.woocommerce.widget_shopping_cart").removeClass("active_cart");
-            }
-            if (!$(e.target).closest('#menu_mobile').hasClass('active')) {
-                if ($("#menu_mobile").hasClass("active")) {
-                    lafkaMobileMenuClose();
-                }
-                $("#menu_mobile").removeClass("active");
-            }
-            if (!$(e.target).closest('#search').hasClass('active')) {
-                $("#search.active").removeClass("active");
-            }
             if (!$(e.target).closest('.off-canvas-sidebar').hasClass('active_sidebar')) {
                 $(".sidebar.off-canvas-sidebar").removeClass("active_sidebar");
             }
-            if (!$(e.target).closest('.lafka-header-account-link-holder').hasClass('active')) {
-                $("body, .lafka-header-account-link-holder").removeClass("active");
-            }
-        });
-
-        $(".video_controlls a#video-volume").on('click', function() {
-            $(".video_controlls a#video-volume").toggleClass("disabled");
         });
 
         $(document.body).find('a[href="#"], a.cloud-zoom').on('click', function(event) {
@@ -313,14 +198,6 @@
         } else {
             $(document.body).addClass('page-has-title');
         }
-
-        $('.sidebar-trigger').prependTo('#header .lafka-search-cart-holder');
-        if ($('div#lafka_page_title .inner').has('div.breadcrumb').length) {
-            $('.video_controlls').appendTo('div.breadcrumb');
-        } else {
-            $('.video_controlls').prependTo('#header .lafka-search-cart-holder');
-        }
-
 
         $('.sidebar-trigger, .close-off-canvas').on('click', function(event) {
             event.stopPropagation();
@@ -426,11 +303,6 @@
         $(document.body).on('click', '.lafka-qty-plus', addQty);
         $(document.body).on('click', '.lafka-qty-minus', subtractQty);
         $(document.body).on('change input', '.quantity .qty', lafka_handle_quantity_on_listing);
-
-        if ($('#cart-module').length !== 0) {
-            track_ajax_add_to_cart();
-            $(document.body).on('added_to_cart', update_cart_dropdown);
-        }
 
         $(".lafka-latest-grid.lafka-latest-blog-col-3 div.post:nth-child(3n)").after("<div class='clear'></div>");
         $(".lafka-latest-grid.lafka-latest-blog-col-2 div.post:nth-child(2n)").after("<div class='clear'></div>");
@@ -761,11 +633,6 @@
             });
         }
 
-        // Set flag when mailto: and tel: links are clicked
-        $(document.body).on('click', 'div.widget_lafka_contacts_widget a, div.lafka-top-bar-message a', function(e) {
-            is_mailto_or_tel_link = true;
-        });
-
         // Share links
         $(document.body).on('click', 'div.lafka-share-links a', function(e) {
             window.open(this.href, 'targetWindow', 'toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=300');
@@ -801,62 +668,6 @@
         // Show reset button if there are active filters
         $.lafka_handle_active_filters_reset_button();
 
-        // P6-A11Y-3: Custom mobile menu tab switching — replaces jQuery UI .tabs()
-        // so that role="tab" lives on the <a> (focusable element), not the <li>.
-        // ARIA attributes (role, aria-selected, tabindex) are set in PHP; JS
-        // manages show/hide, aria-selected, and the CSS ui-state-active class.
-        ( function () {
-            var $menuMobile = $( 'div#menu_mobile' );
-            if ( ! $menuMobile.length ) { return; }
-
-            var $tabs    = $menuMobile.find( '[role="tab"]' );
-            var $panels  = $menuMobile.find( '[role="tabpanel"]' );
-
-            // Initialise: show first panel, hide others, mark first li active
-            $panels.hide();
-            $panels.first().show();
-            $tabs.first().closest( 'li' ).addClass( 'ui-state-active' );
-
-            $tabs.on( 'click', function ( e ) {
-                e.preventDefault();
-                var $tab    = $( this );
-
-                // Wishlist: redirect, no panel switch
-                if ( $tab.hasClass( 'lafka-mobile-wishlist' ) ) {
-                    window.location.href = $tab.attr( 'href' );
-                    return;
-                }
-
-                var targetId = $tab.attr( 'aria-controls' );
-                if ( ! targetId ) { return; }
-
-                // Update ARIA on tabs
-                $tabs.attr( { 'aria-selected': 'false', tabindex: '-1' } );
-                $tab.attr( { 'aria-selected': 'true', tabindex: '0' } );
-
-                // Update CSS active class on li
-                $tabs.closest( 'li' ).removeClass( 'ui-state-active' );
-                $tab.closest( 'li' ).addClass( 'ui-state-active' );
-
-                // Show target panel, hide others
-                $panels.hide();
-                $( '#' + targetId ).show();
-            } );
-
-            // Keyboard: arrow key navigation within tablist
-            $tabs.on( 'keydown', function ( e ) {
-                var $all = $tabs.filter( '[role="tab"]' );
-                var idx  = $all.index( this );
-                if ( e.key === 'ArrowRight' || e.key === 'ArrowDown' ) {
-                    e.preventDefault();
-                    $all.eq( ( idx + 1 ) % $all.length ).trigger( 'click' ).trigger('focus'); // P6-PERF-7
-                } else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
-                    e.preventDefault();
-                    $all.eq( ( idx - 1 + $all.length ) % $all.length ).trigger( 'click' ).trigger('focus'); // P6-PERF-7
-                }
-            } );
-        } )();
-
         // Handle unavailable variations swatches on single product
         $(document.body).find(".variations_form").on("woocommerce_update_variation_values", function() {
             var $swatches = $('.lafka-wcs-swatches');
@@ -873,13 +684,8 @@
 
         lafkaOrderHoursCountdown();
 
-        // Add column classes to mega menu
-        defineMegaMenuColumns();
-
         // Full-width elements
         lafka_fullwidth_elements();
-
-        defineMegaMenuSizing();
 
         // End of document.ready()
     });
@@ -936,7 +742,6 @@
                 checkCommentsHeight();
                 checkFoodmenuHeight();
                 lafka_fullwidth_elements();
-                defineMegaMenuSizing();
                 resizeTicking = false;
             });
             resizeTicking = true;
@@ -969,25 +774,6 @@
     };
 
     /**
-     * Initialize the sticky header
-     */
-    window.lafkaStickyHeaderInit = function() {
-        var headerHeight = $('body:not(.lafka_transparent_header) #header').height();
-        $("body").addClass("lafka-sticky-header").css("padding-top", headerHeight + "px");
-        var stickyTicking = false;
-        $(window).on("scroll", function() {
-            if (!stickyTicking) {
-                window.requestAnimationFrame(function() {
-                    var $header = $("#header");
-                    $(window).scrollTop() > 0 ? $header.addClass("lafka-sticksy") : $header.removeClass("lafka-sticksy");
-                    stickyTicking = false;
-                });
-                stickyTicking = true;
-            }
-        });
-    };
-
-    /**
      * Initialize the counter for opening the store
      */
     window.lafkaOrderHoursCountdown = function() {
@@ -1003,78 +789,6 @@
                 compact: false,
                 layout: '<span class="countdown_time_small">' + counter_format + '</span>'
             });
-        });
-    }
-
-    /* Mega Menu */
-
-    function defineMegaMenuColumns() {
-        $('#main-menu .lafka-mega-menu').each(function() {
-            var menuColumns = $(this).find('li.lafka_colum_title').length;
-            $(this).addClass('menu-columns' + menuColumns);
-        });
-    }
-
-    function defineMegaMenuSizing() {
-        var $menuElement = $('#main-menu');
-
-        var $menuHolderElement = $('#header .menu-main-menu-container');
-        var menuOffset = $menuHolderElement.offset();
-
-        // P6-PERF-8: Two-pass to prevent layout thrashing.
-        // Old pattern read .outerWidth()/.offset() on each menu item AFTER the
-        // previous iteration had written a new max-width/margin, forcing the
-        // browser to recalculate layout on every iteration.
-        // Pass 1: read all geometry values before any writes.
-        var $megaMenus = $menuElement.find('.lafka-mega-menu');
-        var menuHolderWidth = $menuHolderElement.outerWidth();
-        var windowWidth = $(window).width();
-        var menuGeometry = [];
-        $megaMenus.each(function() {
-            menuGeometry.push({
-                dropdownOffset: $(this).parent().offset(),
-                ownWidth:       $(this).outerWidth(),
-                parentWidth:    $(this).parent().outerWidth()
-            });
-        });
-
-        // Pass 2: apply all writes using the pre-read values.
-        $megaMenus.each(function(idx) {
-            $(this).css('max-width', menuHolderWidth + 'px');
-            var geo = menuGeometry[idx];
-            var dropdown = geo.dropdownOffset;
-            var i;
-            if (is_rtl) {
-                var dropdown_right_offset = windowWidth - (dropdown.left + geo.parentWidth);
-                i = (dropdown_right_offset + geo.ownWidth) - (menuOffset.left + menuHolderWidth);
-                if (i > 0) {
-                    $(this).css('margin-right', '-' + (i) + 'px');
-                }
-            } else {
-                i = (dropdown.left + geo.ownWidth) - (menuOffset.left + menuHolderWidth);
-                if (i > 0) {
-                    $(this).css('margin-left', '-' + (i) + 'px');
-                }
-            }
-        });
-
-        $menuElement.find('li.lafka_colum_title > .sub-menu').each(function() {
-            if ($(this).children("li").length == $(this).children("li.lafka_mega_text_block").length) {
-                $(this).parent().addClass("lafka_mega_text_block_parent");
-            }
-        });
-    }
-
-    /**
-     * Define behaviour for click on shopping cart icon.
-     * (The legacy #lafka_quick_cart_link opener was removed — lafka_cart_link()
-     * no longer exists, so that node never rendered; the auto-open path at the
-     * added_to_cart handler is what adds .active_cart now.)
-     */
-    function defineCartIconClickBehaviour() {
-        $(document).on("click", ".close-cart-button", function(event) {
-            var $parent = $(this).parent();
-            $parent.removeClass('active_cart');
         });
     }
 
@@ -1193,56 +907,6 @@
         }
     }
 
-
-    //updates the shopping cart in the sidebar, hooks into the added_to_cart event which is triggered by woocommerce
-    function update_cart_dropdown(event) {
-        var product = jQuery.extend({ name: lafka_main_js_params.product_label, price: "", image: "" }, lafka_added_product);
-        var notice = $("<div class='lafka_added_to_cart_notification'>" + product.image + "<div class='added-product-text'><strong>" + product.name + " " + lafka_main_js_params.added_to_cart_label + "</strong></div></div>");
-
-        if (typeof event !== 'undefined') {
-            if (lafka_main_js_params.shopping_cart_on_add === 'yes') {
-                $(document.body).find("div.widget.woocommerce.widget_shopping_cart").addClass("active_cart");
-            }
-            defineCartIconClickBehaviour();
-            notice.appendTo($("body")).hide().fadeIn('slow');
-
-            setTimeout(function() {
-                notice.fadeOut('slow');
-            }, 2000);
-            setTimeout(function() {
-                $(document.body).find("div.widget.woocommerce.widget_shopping_cart").removeClass("active_cart");
-            }, 8000);
-
-            if (typeof $.fn.niceScroll === 'function') {
-                $(document.body).find('div.widget.woocommerce.widget_shopping_cart .widget_shopping_cart_content ul.cart_list.product_list_widget').niceScroll({ horizrailenabled: false });
-            }
-        }
-    }
-
-    var lafka_added_product = {};
-
-    function track_ajax_add_to_cart() {
-        jQuery('body').on('click', '.add_to_cart_button', function() {
-            var productContainer = jQuery(this).parents('.product').eq(0),
-                product = {};
-            product.name = productContainer.find('span.name').text();
-            product.image = productContainer.find('div.image img');
-            product.price = productContainer.find('.price_hold .amount').last().text();
-
-            /*fallbacks*/
-            if (productContainer.length === 0) {
-                return;
-            }
-
-            if (product.image.length) {
-                product.image = "<img class='added-product-image' src='" + product.image.get(0).src + "' title='' alt='' />";
-            } else {
-                product.image = "";
-            }
-
-            lafka_added_product = product;
-        });
-    }
 
     // Showing loader
     jQuery.lafka_show_loader = function() {
