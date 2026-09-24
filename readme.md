@@ -17,23 +17,18 @@ These match the floors declared in `style.css`. The [Lafka Plugin](https://githu
 
 ## Highlights
 
-- **Design-token system** — single visual source of truth in `styles/lafka-tokens.css` (color/type/space/radii/motion) with opt-in dark mode; see [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)
+- **Design-token system** — single visual source of truth in `styles/lafka-tokens.css` (color/type/space/radii/motion); see [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)
 - **10 built-in design presets** — pure-data `presets/<slug>/preset.json`, WCAG-AA contrast-gated, including two dark presets; see [docs/PRESET_ENGINE.md](docs/PRESET_ENGINE.md)
 - **Customizer-first configuration** — every knob has a sane default, a Customizer control, and a filter hook
 - **Redesigned ordering surfaces** — token-driven single product page with topping/size pickers and sticky add-to-cart, list-card menu archive with inline quick-add, ajax cart drawer
 - **Deep WooCommerce integration** — classic and block Cart/Checkout, quick view, wishlist, product comparison
 - **Editorial page system, mega menu, multiple header styles, blog layouts**
-- **7 demo content packages**, WPML/RTL, bbPress and The Events Calendar support
+- WPML/RTL, bbPress and The Events Calendar support
 - Optional commercial integrations (not required): WPBakery Page Builder, Revolution Slider
 
-## Structure (short)
+## Structure
 
-- `styles/` — design tokens + component CSS (visual SSOT)
-- `presets/` + `incl/presets/` — preset engine (10 presets)
-- `incl/` — theme classes and Customizer sections (`incl/lafka-options-framework/` remains only as a deprecated `lafka_get_option()` shim)
-- `partials/`, `woocommerce/`, `page_templates/`, `tribe-events/` — templates and partials
-- `js/` — front-end behaviour
-- `store/demo/` — demo content packages
+See the "Where things live" table in [CONTRIBUTING.md](CONTRIBUTING.md#where-things-live).
 
 ## Development
 
