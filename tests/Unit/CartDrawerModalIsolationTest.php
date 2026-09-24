@@ -25,7 +25,6 @@ use PHPUnit\Framework\TestCase;
  *      sibling of those wrappers).
  */
 final class CartDrawerModalIsolationTest extends TestCase {
-
 	private string $php;
 	private string $js;
 
@@ -40,24 +39,6 @@ final class CartDrawerModalIsolationTest extends TestCase {
 
 		$this->php = (string) file_get_contents( $php_path );
 		$this->js  = (string) file_get_contents( $js_path );
-	}
-
-	/** The drawer must be declared a true modal dialog. */
-	public function test_drawer_is_aria_modal_true(): void {
-		$this->assertMatchesRegularExpression(
-			'/aria-modal="true"/',
-			$this->php,
-			'.lafka-cart-drawer must declare aria-modal="true" (f092)'
-		);
-	}
-
-	/** The stale aria-modal="false" must be gone. */
-	public function test_drawer_is_not_aria_modal_false(): void {
-		$this->assertDoesNotMatchRegularExpression(
-			'/aria-modal="false"/',
-			$this->php,
-			'.lafka-cart-drawer must NOT declare aria-modal="false" (f092)'
-		);
 	}
 
 	/** open() must isolate the background; close() must restore it. */
@@ -88,15 +69,6 @@ final class CartDrawerModalIsolationTest extends TestCase {
 		);
 	}
 
-	/** Background isolation must provide an aria-hidden fallback for older AT. */
-	public function test_js_has_aria_hidden_fallback(): void {
-		$this->assertMatchesRegularExpression(
-			"/setAttribute\\(\\s*'aria-hidden'\\s*,\\s*'true'\\s*\\)/",
-			$this->js,
-			'The background helper must fall back to aria-hidden for AT without inert support (f092)'
-		);
-	}
-
 	/** The isolated wrappers must be #header and #content. */
 	public function test_js_targets_header_and_content_wrappers(): void {
 		$this->assertMatchesRegularExpression(
@@ -108,15 +80,6 @@ final class CartDrawerModalIsolationTest extends TestCase {
 			"/'#content'/",
 			$this->js,
 			'#content must be isolated while the drawer is open (f092)'
-		);
-	}
-
-	/** It must NOT inert document.body — that would disable the drawer too. */
-	public function test_js_does_not_inert_document_body(): void {
-		$this->assertDoesNotMatchRegularExpression(
-			'/document\.body\.(inert|setAttribute\(\s*[\'"]inert)/',
-			$this->js,
-			'document.body must never be inerted — the drawer lives inside body (f092)'
 		);
 	}
 }

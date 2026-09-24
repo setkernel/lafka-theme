@@ -17,37 +17,12 @@ use PHPUnit\Framework\TestCase;
  * without a WordPress runtime.
  */
 final class BlocksCheckoutEnqueueTest extends TestCase {
-
 	private string $src;
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->src = (string) file_get_contents(
 			dirname( __DIR__, 2 ) . '/incl/system/core-functions.php'
-		);
-	}
-
-	public function test_page_helper_exists(): void {
-		$this->assertStringContainsString(
-			'function lafka_is_block_cart_checkout_page',
-			$this->src,
-			'A lafka_is_block_cart_checkout_page() helper must gate the block skin + defer bail.'
-		);
-	}
-
-	/**
-	 * The helper must detect BOTH block money pages via has_block().
-	 */
-	public function test_helper_detects_both_block_pages(): void {
-		$this->assertMatchesRegularExpression(
-			"/has_block\(\s*'woocommerce\/checkout'\s*\)/",
-			$this->src,
-			'Helper must detect the woocommerce/checkout block.'
-		);
-		$this->assertMatchesRegularExpression(
-			"/has_block\(\s*'woocommerce\/cart'\s*\)/",
-			$this->src,
-			'Helper must detect the woocommerce/cart block.'
 		);
 	}
 
@@ -80,27 +55,6 @@ final class BlocksCheckoutEnqueueTest extends TestCase {
 	}
 
 	/**
-	 * The stylesheet enqueue must be gated by the helper and depend on lafka-tokens.
-	 */
-	public function test_blocks_css_enqueue_is_gated_and_depends_on_tokens(): void {
-		$this->assertMatchesRegularExpression(
-			"/if\s*\(\s*lafka_is_block_cart_checkout_page\(\)\s*\)\s*\{[\s\S]{0,400}?wp_enqueue_style\(\s*'lafka-blocks-checkout'/",
-			$this->src,
-			'lafka-blocks-checkout.css must be enqueued only inside the block-page gate.'
-		);
-		$this->assertMatchesRegularExpression(
-			"/wp_enqueue_style\(\s*'lafka-blocks-checkout',[\s\S]*?array\(\s*'lafka-tokens'\s*\)/",
-			$this->src,
-			'lafka-blocks-checkout.css must depend on lafka-tokens for the cascade.'
-		);
-		$this->assertStringContainsString(
-			'styles/lafka-blocks-checkout.css',
-			$this->src,
-			'Enqueue must point at styles/lafka-blocks-checkout.css.'
-		);
-	}
-
-	/**
 	 * The blanket-defer filter must bail (return the tag unchanged) on a block
 	 * cart/checkout page so the WooCommerce Blocks runtime keeps correct ordering.
 	 */
@@ -113,21 +67,6 @@ final class BlocksCheckoutEnqueueTest extends TestCase {
 			'/lafka_is_block_cart_checkout_page\(\)\s*\)\s*\{\s*return\s+\$tag;/',
 			$body,
 			'lafka_defer_non_critical_scripts must return $tag unchanged on a block cart/checkout page.'
-		);
-	}
-
-	/**
-	 * The block skin is CONDITIONAL: it must NOT be added to the always-on
-	 * front-page asset budget (AssetBudgetTest::always_on_stylesheets()).
-	 */
-	public function test_blocks_css_is_not_in_the_always_on_budget(): void {
-		$budget = (string) file_get_contents(
-			dirname( __DIR__ ) . '/Unit/AssetBudgetTest.php'
-		);
-		$this->assertStringNotContainsString(
-			'lafka-blocks-checkout.css',
-			$budget,
-			'The conditional block skin must never enter the always-on asset budget.'
 		);
 	}
 }

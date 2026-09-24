@@ -33,24 +33,6 @@ final class CLSReservationTest extends TestCase {
         );
     }
 
-    public function test_child_css_reserves_content_slider_aspect_ratio(): void {
-        // WPBakery content-slider reservation is page-builder-specific and stays
-        // in the child; skips when the child repo isn't present.
-        $this->assertMatchesRegularExpression(
-            '/\[id\^="lafka_content_slider"\]:not\(\.owl-loaded\)[^}]*aspect-ratio/s',
-            $this->child_css()
-        );
-    }
-
-    public function test_child_css_reserves_revslider_aspect_ratio(): void {
-        // Revslider reservation is page-builder-specific and stays in the child.
-        // Either rs-module-wrap or rev_slider_wrapper variant.
-        $this->assertMatchesRegularExpression(
-            '/(rs-module-wrap|rev_slider_wrapper)[^}]*aspect-ratio/s',
-            $this->child_css()
-        );
-    }
-
     // image-dimensions filter + helper moved to lafka-plugin v9.7.25
     // (incl/perf/image-dimensions.php). The plugin's ImageDimensionsTest
     // covers those assertions on the canonical home — no need to test

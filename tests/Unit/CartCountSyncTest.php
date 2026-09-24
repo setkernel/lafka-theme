@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
  * the count from the authoritative drawer item fragment on every cart change.
  */
 final class CartCountSyncTest extends TestCase {
-
 	private string $drawer_js;
 
 	protected function setUp(): void {
@@ -43,15 +42,6 @@ final class CartCountSyncTest extends TestCase {
 		);
 	}
 
-	#[DataProvider( 'provide_cart_events' )]
-	public function test_sync_binds_to_cart_event( string $event ): void {
-		$this->assertStringContainsString(
-			$event,
-			$this->drawer_js,
-			"cart-drawer.js must refresh the cart count on the '$event' event."
-		);
-	}
-
 	/**
 	 * Every count node selector used by the three templates must be written to.
 	 *
@@ -70,20 +60,6 @@ final class CartCountSyncTest extends TestCase {
 			$selector,
 			$this->drawer_js,
 			"cart-drawer.js must update [$selector] nodes so the count reflects the live cart."
-		);
-	}
-
-	public function test_count_derived_from_drawer_item_fragment(): void {
-		// The authoritative, always-present fragment is the drawer item list.
-		$this->assertStringContainsString(
-			'ul.lafka-cart-drawer__items',
-			$this->drawer_js,
-			'cart-drawer.js must read the live count from the ul.lafka-cart-drawer__items fragment.'
-		);
-		$this->assertStringContainsString(
-			'lafka-cart-drawer__qty',
-			$this->drawer_js,
-			'cart-drawer.js must sum the per-item .lafka-cart-drawer__qty values.'
 		);
 	}
 

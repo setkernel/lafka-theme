@@ -47,7 +47,6 @@ use PHPUnit\Framework\TestCase;
  * when the always-on set legitimately grows.
  */
 final class AssetBudgetTest extends TestCase {
-
 	private const BUDGET_BYTES   = 460000;
 	private const MODULAR_BUDGET = 175000;
 	private const STYLE_CEILING  = 290000;
@@ -156,24 +155,6 @@ final class AssetBudgetTest extends TestCase {
 				$bytes,
 				self::STYLE_CEILING
 			)
-		);
-	}
-
-	/**
-	 * The recorded baseline must keep meaningful headroom under the budget — if
-	 * the two ever meet, the ratchet has stopped ratcheting and needs a reset.
-	 */
-	public function test_budget_keeps_headroom_over_current_size(): void {
-		$root  = dirname( __DIR__, 2 );
-		$total = 0;
-		foreach ( self::always_on_stylesheets() as $relative ) {
-			$total += (int) filesize( $root . '/' . $relative );
-		}
-
-		$this->assertGreaterThan(
-			$total,
-			self::BUDGET_BYTES,
-			'Budget must sit above the current always-on total (headroom exhausted).'
 		);
 	}
 

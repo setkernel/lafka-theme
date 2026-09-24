@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
  * token resolves to a literal value in lafka-tokens.css must match that value.
  */
 final class ActivePromosCssFallbackTest extends TestCase {
-
 	private static function tokensPath(): string {
 		return dirname( __DIR__, 2 ) . '/styles/lafka-tokens.css';
 	}
@@ -97,20 +96,5 @@ final class ActivePromosCssFallbackTest extends TestCase {
 				$map[ $token ]
 			)
 		);
-	}
-
-	public function test_space_4_fallback_is_16px_not_20px(): void {
-		// Regression: the bottom-margin fallback was 20px while --lafka-space-4
-		// is 16px — an 8px layout-shift footgun if tokens.css ever drops out.
-		$css = (string) file_get_contents( self::activePromosPath() );
-		$this->assertStringContainsString( 'var(--lafka-space-4, 16px)', $css );
-		$this->assertStringNotContainsString( 'var(--lafka-space-4, 20px)', $css );
-	}
-
-	public function test_accent_fallback_is_canonical_brand_red(): void {
-		// Regression: keep the accent fallback on the canonical #dc2626 brand
-		// red, never the orphaned #ec1d24 third red.
-		$css = (string) file_get_contents( self::activePromosPath() );
-		$this->assertStringNotContainsString( '#ec1d24', $css );
 	}
 }

@@ -1,0 +1,351 @@
+<?php
+/**
+ * Shared WordPress shims for the unit suite.
+ *
+ * Every test runs in one PHP process, so a global function can only be defined
+ * once. These are the WordPress (and a few lafka-plugin) functions that several
+ * test files need, each backed by a $GLOBALS store instead of hard-coded
+ * behaviour. Tests configure the store in setUp(); ResetWpShimsExtension resets
+ * it before every test, so no state leaks between tests or files.
+ *
+ * Stores (all reset per test):
+ *   lafka_test_theme_mods          get_theme_mod() values
+ *   lafka_test_theme_mod_resolver  optional callable( $name, $default ) that
+ *                                  answers get_theme_mod() instead
+ *   lafka_test_options             get_option() / update_option()
+ *   lafka_test_filters             hook registry: [hook][priority][] = callback
+ *                                  (reset to what the test files registered at
+ *                                  load time, not to empty)
+ *   lafka_test_registered          wp_register_style() calls, by handle
+ *   lafka_test_inline              wp_add_inline_style() data, by handle
+ *   lafka_test_cache / _transients object-cache and transient stores
+ *   lafka_test_counters            call counters (cache/transient reads, writes)
+ *   lafka_test_is_preview          is_customize_preview()
+ *   lafka_test_home_url            home_url() base (default http://example.test)
+ *   lafka_test_tpl_dir / _tpl_uri  template directory path / URI
+ *   lafka_test_restaurant_info     lafka_get_restaurant_info()
+ *
+ * @package Lafka\Tests
+ */
+
+declare(strict_types=1);
+
+// ---------------------------------------------------------------- hooks ----
+
+if ( ! function_exists( 'add_filter' ) ) {
+	function add_filter( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+		$GLOBALS['lafka_test_filters'][ $hook ][ (int) $priority ][] = $callback;
+		return true;
+	}
+}
+if ( ! function_exists( 'add_action' ) ) {
+	function add_action( $hook, $callback, $priority = 10, $accepted_args = 1 ) {
+		return add_filter( $hook, $callback, $priority, $accepted_args );
+	}
+}
+if ( ! function_exists( 'remove_filter' ) ) {
+	function remove_filter( $hook, $callback, $priority = 10 ) {
+		$removed = false;
+		foreach ( $GLOBALS['lafka_test_filters'][ $hook ][ (int) $priority ] ?? array() as $i => $registered ) {
+			if ( $registered === $callback ) {
+				unset( $GLOBALS['lafka_test_filters'][ $hook ][ (int) $priority ][ $i ] );
+				$removed = true;
+			}
+		}
+		return $removed;
+	}
+}
+if ( ! function_exists( 'remove_action' ) ) {
+	function remove_action( $hook, $callback, $priority = 10 ) {
+		return remove_filter( $hook, $callback, $priority );
+	}
+}
+if ( ! function_exists( 'has_filter' ) ) {
+	function has_filter( $hook, $callback = false ) {
+		$by_priority = $GLOBALS['lafka_test_filters'][ $hook ] ?? array();
+		if ( false === $callback ) {
+			foreach ( $by_priority as $callbacks ) {
+				if ( $callbacks ) {
+					return true;
+				}
+			}
+			return false;
+		}
+		foreach ( $by_priority as $priority => $callbacks ) {
+			if ( in_array( $callback, $callbacks, true ) ) {
+				return $priority;
+			}
+		}
+		return false;
+	}
+}
+if ( ! function_exists( 'has_action' ) ) {
+	function has_action( $hook, $callback = false ) {
+		return has_filter( $hook, $callback );
+	}
+}
+if ( ! function_exists( 'lafka_test_callbacks' ) ) {
+	/** Registered callbacks for a hook, in priority order. */
+	function lafka_test_callbacks( $hook ) {
+		$by_priority = $GLOBALS['lafka_test_filters'][ $hook ] ?? array();
+		ksort( $by_priority );
+		return $by_priority ? array_merge( ...array_values( $by_priority ) ) : array();
+	}
+}
+if ( ! function_exists( 'apply_filters' ) ) {
+	function apply_filters( $hook, $value = null, ...$args ) {
+		foreach ( lafka_test_callbacks( $hook ) as $callback ) {
+			$value = call_user_func_array( $callback, array_merge( array( $value ), $args ) );
+		}
+		return $value;
+	}
+}
+if ( ! function_exists( 'do_action' ) ) {
+	function do_action( $hook, ...$args ) {
+		foreach ( lafka_test_callbacks( $hook ) as $callback ) {
+			call_user_func_array( $callback, $args );
+		}
+	}
+}
+
+if ( ! function_exists( '__return_true' ) ) {
+	function __return_true() {
+		return true;
+	}
+}
+if ( ! function_exists( '__return_false' ) ) {
+	function __return_false() {
+		return false;
+	}
+}
+
+// ------------------------------------------------------ settings stores ----
+
+if ( ! function_exists( 'get_theme_mod' ) ) {
+	function get_theme_mod( $name, $default = false ) {
+		$resolver = $GLOBALS['lafka_test_theme_mod_resolver'] ?? null;
+		if ( is_callable( $resolver ) ) {
+			return $resolver( $name, $default );
+		}
+		$mods = $GLOBALS['lafka_test_theme_mods'] ?? array();
+		return array_key_exists( $name, $mods ) ? $mods[ $name ] : $default;
+	}
+}
+if ( ! function_exists( 'set_theme_mod' ) ) {
+	function set_theme_mod( $name, $value ) {
+		$GLOBALS['lafka_test_theme_mods'][ $name ] = $value;
+		return true;
+	}
+}
+if ( ! function_exists( 'get_option' ) ) {
+	function get_option( $name, $default = false ) {
+		$options = $GLOBALS['lafka_test_options'] ?? array();
+		return array_key_exists( $name, $options ) ? $options[ $name ] : $default;
+	}
+}
+if ( ! function_exists( 'update_option' ) ) {
+	function update_option( $name, $value, $autoload = null ) {
+		$GLOBALS['lafka_test_options'][ $name ] = $value;
+		return true;
+	}
+}
+if ( ! function_exists( 'wp_cache_get' ) ) {
+	function wp_cache_get( $key, $group = '' ) {
+		$GLOBALS['lafka_test_counters']['cache_get'] = ( $GLOBALS['lafka_test_counters']['cache_get'] ?? 0 ) + 1;
+		return $GLOBALS['lafka_test_cache'][ $group ][ $key ] ?? false;
+	}
+}
+if ( ! function_exists( 'wp_cache_set' ) ) {
+	function wp_cache_set( $key, $value, $group = '', $expire = 0 ) {
+		$GLOBALS['lafka_test_counters']['cache_set'] = ( $GLOBALS['lafka_test_counters']['cache_set'] ?? 0 ) + 1;
+		$GLOBALS['lafka_test_cache'][ $group ][ $key ] = $value;
+		return true;
+	}
+}
+if ( ! function_exists( 'get_transient' ) ) {
+	function get_transient( $key ) {
+		$GLOBALS['lafka_test_counters']['transient_get'] = ( $GLOBALS['lafka_test_counters']['transient_get'] ?? 0 ) + 1;
+		return $GLOBALS['lafka_test_transients'][ $key ] ?? false;
+	}
+}
+if ( ! function_exists( 'set_transient' ) ) {
+	function set_transient( $key, $value, $expiration = 0 ) {
+		$GLOBALS['lafka_test_counters']['transient_set'] = ( $GLOBALS['lafka_test_counters']['transient_set'] ?? 0 ) + 1;
+		$GLOBALS['lafka_test_transients'][ $key ] = $value;
+		return true;
+	}
+}
+if ( ! function_exists( 'is_customize_preview' ) ) {
+	function is_customize_preview() {
+		return (bool) ( $GLOBALS['lafka_test_is_preview'] ?? false );
+	}
+}
+
+// ------------------------------------------------------ theme / assets ----
+
+if ( ! function_exists( 'get_template' ) ) {
+	function get_template() {
+		return 'lafka';
+	}
+}
+if ( ! function_exists( 'get_stylesheet' ) ) {
+	function get_stylesheet() {
+		return 'lafka';
+	}
+}
+if ( ! function_exists( 'get_template_directory' ) ) {
+	function get_template_directory() {
+		return $GLOBALS['lafka_test_tpl_dir'] ?? dirname( __DIR__, 2 );
+	}
+}
+if ( ! function_exists( 'get_template_directory_uri' ) ) {
+	function get_template_directory_uri() {
+		return $GLOBALS['lafka_test_tpl_uri'] ?? 'http://example.test/wp-content/themes/lafka';
+	}
+}
+if ( ! function_exists( 'wp_get_theme' ) ) {
+	function wp_get_theme( $stylesheet = null ) {
+		return new class() {
+			public function get( $header ) {
+				return 'Version' === $header ? '9.9.9' : '';
+			}
+		};
+	}
+}
+if ( ! function_exists( 'home_url' ) ) {
+	function home_url( $path = '' ) {
+		return ( $GLOBALS['lafka_test_home_url'] ?? 'http://example.test' ) . $path;
+	}
+}
+if ( ! function_exists( 'wp_register_style' ) ) {
+	function wp_register_style( $handle, $src = '', $deps = array(), $ver = false, $media = 'all' ) {
+		$GLOBALS['lafka_test_registered'][ $handle ] = array(
+			'src'  => $src,
+			'deps' => $deps,
+			'ver'  => $ver,
+		);
+		return true;
+	}
+}
+if ( ! function_exists( 'wp_add_inline_style' ) ) {
+	function wp_add_inline_style( $handle, $data ) {
+		$GLOBALS['lafka_test_inline'][ $handle ][] = $data;
+		return true;
+	}
+}
+if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
+	function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail', $icon = false ) {
+		return 'https://example.test/wp-content/uploads/lafka-fixture-' . (int) $attachment_id . '.jpg';
+	}
+}
+
+// ------------------------------------------- formatting / i18n / escaping ----
+
+if ( ! function_exists( '__' ) ) {
+	function __( $text, $domain = 'default' ) {
+		return $text;
+	}
+}
+if ( ! function_exists( 'esc_html__' ) ) {
+	function esc_html__( $text, $domain = 'default' ) {
+		return $text;
+	}
+}
+if ( ! function_exists( 'esc_attr__' ) ) {
+	function esc_attr__( $text, $domain = 'default' ) {
+		return $text;
+	}
+}
+if ( ! function_exists( 'esc_html_e' ) ) {
+	function esc_html_e( $text, $domain = 'default' ) {
+		echo $text; // phpcs:ignore
+	}
+}
+if ( ! function_exists( 'esc_attr_e' ) ) {
+	function esc_attr_e( $text, $domain = 'default' ) {
+		echo $text; // phpcs:ignore
+	}
+}
+if ( ! function_exists( 'esc_html' ) ) {
+	function esc_html( $text ) {
+		return $text;
+	}
+}
+if ( ! function_exists( 'esc_attr' ) ) {
+	function esc_attr( $text ) {
+		return $text;
+	}
+}
+if ( ! function_exists( 'esc_url' ) ) {
+	function esc_url( $url, $protocols = null, $context = 'display' ) {
+		return $url;
+	}
+}
+if ( ! function_exists( 'wp_kses_post' ) ) {
+	function wp_kses_post( $data ) {
+		return $data;
+	}
+}
+if ( ! function_exists( 'sanitize_key' ) ) {
+	function sanitize_key( $key ) {
+		return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
+	}
+}
+if ( ! function_exists( 'absint' ) ) {
+	function absint( $value ) {
+		return abs( (int) $value );
+	}
+}
+if ( ! function_exists( 'wp_json_encode' ) ) {
+	function wp_json_encode( $data, $options = 0, $depth = 512 ) {
+		return json_encode( $data, $options, $depth );
+	}
+}
+if ( ! function_exists( 'wp_parse_url' ) ) {
+	function wp_parse_url( $url, $component = -1 ) {
+		return parse_url( (string) $url, (int) $component );
+	}
+}
+if ( ! function_exists( 'wp_strip_all_tags' ) ) {
+	function wp_strip_all_tags( $text ) {
+		return trim( strip_tags( (string) $text ) );
+	}
+}
+if ( ! function_exists( 'get_locale' ) ) {
+	function get_locale() {
+		return 'en_US';
+	}
+}
+if ( ! function_exists( 'current_time' ) ) {
+	function current_time( $type, $gmt = 0 ) {
+		return '2026-07-06 00:00:00';
+	}
+}
+
+// --------------------------------------------------- lafka-plugin API ----
+
+if ( ! function_exists( 'lafka_get_restaurant_info' ) ) {
+	function lafka_get_restaurant_info() {
+		return $GLOBALS['lafka_test_restaurant_info'] ?? array();
+	}
+}
+
+if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
+	/**
+	 * Reset every per-test store. $filters is the load-time hook registry to
+	 * restore (hooks the theme files registered when the tests required them).
+	 */
+	function lafka_test_reset_wp( array $filters = array() ) {
+		$GLOBALS['lafka_test_filters']            = $filters;
+		$GLOBALS['lafka_test_theme_mods']         = array();
+		$GLOBALS['lafka_test_theme_mod_resolver'] = null;
+		$GLOBALS['lafka_test_options']            = array();
+		$GLOBALS['lafka_test_registered']         = array();
+		$GLOBALS['lafka_test_inline']             = array();
+		$GLOBALS['lafka_test_cache']              = array();
+		$GLOBALS['lafka_test_transients']         = array();
+		$GLOBALS['lafka_test_counters']           = array();
+		$GLOBALS['lafka_test_is_preview']         = false;
+		unset( $GLOBALS['lafka_test_home_url'], $GLOBALS['lafka_test_tpl_dir'], $GLOBALS['lafka_test_tpl_uri'], $GLOBALS['lafka_test_restaurant_info'] );
+	}
+}

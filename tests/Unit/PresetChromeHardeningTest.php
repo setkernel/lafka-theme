@@ -22,61 +22,18 @@ declare(strict_types=1);
  *    lafka_preset_sanitize_chrome_value() — recursive over arrays, and
  *    leaf-sanitising (not brace-stripping) the legacy JSON `style` string.
  *
- * ISOLATION: global-namespace WP shims, separate process (same pattern as
- * PresetCascadeTest) so sibling files' shims never interfere.
- *
  * @package Lafka\Tests
  */
 
 namespace {
-
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			return $default;
-		}
-	}
-	if ( ! function_exists( 'get_option' ) ) {
-		function get_option( $name, $default = false ) {
-			return $default;
-		}
-	}
-	if ( ! function_exists( 'add_action' ) ) {
-		function add_action( $hook, $cb, $priority = 10, $args = 1 ) {
-			return true;
-		}
-	}
-	if ( ! function_exists( 'add_filter' ) ) {
-		function add_filter( $hook, $cb, $priority = 10, $args = 1 ) {
-			return true;
-		}
-	}
-	if ( ! function_exists( 'esc_attr' ) ) {
-		function esc_attr( $text ) {
-			return $text;
-		}
-	}
-	if ( ! function_exists( 'wp_json_encode' ) ) {
-		function wp_json_encode( $data, $options = 0, $depth = 512 ) {
-			return json_encode( $data, $options, $depth );
-		}
-	}
-
 	require_once dirname( __DIR__, 2 ) . '/styles/dynamic-css.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-emit.php';
 }
 
 namespace Lafka\Tests\Unit {
 
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class PresetChromeHardeningTest extends TestCase {
 
 		// ── 1. Composite style decode: crash class ───────────────────────────

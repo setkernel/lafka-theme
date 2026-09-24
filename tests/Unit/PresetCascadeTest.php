@@ -9,48 +9,10 @@ declare(strict_types=1);
  * lafka_preset_ptl_css against a controllable theme_mod store. See
  * docs/PRESET_ENGINE.md §4-6, §9.
  *
- * ISOLATION: the WP shims (get_theme_mod / add_filter / apply_filters /
- * sanitize_key) live in the GLOBAL namespace where the preset code resolves
- * them; sibling test files define some of the same shims, so this class runs in
- * a SEPARATE PROCESS with global state discarded so THESE shims win.
- *
  * @package Lafka\Tests
  */
 
 namespace {
-
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			$store = isset( $GLOBALS['lafka_test_theme_mods'] ) ? $GLOBALS['lafka_test_theme_mods'] : array();
-			return array_key_exists( $name, $store ) ? $store[ $name ] : $default;
-		}
-	}
-	if ( ! function_exists( 'add_filter' ) ) {
-		function add_filter( $hook, $cb, $priority = 10, $args = 1 ) {
-			$GLOBALS['lafka_test_filters'][ $hook ][] = $cb;
-			return true;
-		}
-	}
-	if ( ! function_exists( 'apply_filters' ) ) {
-		function apply_filters( $hook, $value = null, ...$rest ) {
-			if ( ! empty( $GLOBALS['lafka_test_filters'][ $hook ] ) ) {
-				foreach ( $GLOBALS['lafka_test_filters'][ $hook ] as $cb ) {
-					$value = $cb( $value, ...$rest );
-				}
-			}
-			return $value;
-		}
-	}
-	if ( ! function_exists( 'sanitize_key' ) ) {
-		function sanitize_key( $key ) {
-			return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
-		}
-	}
-
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-tokens.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-preset.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-presets.php';
@@ -59,12 +21,8 @@ namespace {
 
 namespace Lafka\Tests\Unit {
 
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class PresetCascadeTest extends TestCase {
 
 		protected function setUp(): void {

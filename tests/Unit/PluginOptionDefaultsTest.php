@@ -17,20 +17,13 @@
  */
 
 namespace {
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
 	require_once dirname( __DIR__, 2 ) . '/incl/system/lafka-option-defaults.php';
 }
 
 namespace Lafka\Tests\Unit {
 
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class PluginOptionDefaultsTest extends TestCase {
 
 		public function test_flag_and_shared_defaults_match_legacy_std(): void {

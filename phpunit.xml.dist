@@ -9,6 +9,9 @@
 	failOnRisky="true"
 	beStrictAboutOutputDuringTests="true"
 >
+	<extensions>
+		<bootstrap class="Lafka\Tests\Support\ResetWpShimsExtension"/>
+	</extensions>
 	<testsuites>
 		<testsuite name="unit">
 			<directory>tests/Unit</directory>

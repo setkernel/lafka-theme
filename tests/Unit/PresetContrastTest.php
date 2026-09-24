@@ -36,35 +36,10 @@ declare(strict_types=1);
  * dynamic-css reads, critical keys a subset of the token whitelist) already live
  * in PresetSchemaTest, so they are not duplicated here.
  *
- * ISOLATION: minimal WP shims live in the GLOBAL namespace (guarded); sibling
- * test files declare the same shims, so this class runs in a SEPARATE PROCESS
- * with global state discarded. See docs/PRESET_ENGINE.md §9.
- *
  * @package Lafka\Tests
  */
 
 namespace {
-
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	if ( ! function_exists( 'apply_filters' ) ) {
-		function apply_filters( $hook, $value = null, ...$rest ) {
-			return $value;
-		}
-	}
-	if ( ! function_exists( 'sanitize_key' ) ) {
-		function sanitize_key( $key ) {
-			return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
-		}
-	}
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			return $default;
-		}
-	}
-
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-tokens.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-preset.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-presets.php';
@@ -74,12 +49,8 @@ namespace {
 namespace Lafka\Tests\Unit {
 
 	use PHPUnit\Framework\Attributes\DataProvider;
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class PresetContrastTest extends TestCase {
 
 		private static function root(): string {

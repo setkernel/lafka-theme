@@ -19,70 +19,15 @@ declare(strict_types=1);
  * REGENERATE (only on an intentional default-path change):
  *   LAFKA_UPDATE_PRESET_GOLDEN=1 vendor/bin/phpunit --filter PresetDefaultsGoldenTest
  *
- * ISOLATION: WP shims live in the GLOBAL namespace and this class runs in a
- * SEPARATE PROCESS (sibling test files define the same shims) — here
- * get_theme_mod answers the DEFAULT for every key except lafka_active_preset,
- * and lafka_preset_default IS defined so the default path actually fires.
- *
  * @package Lafka\Tests
  */
 
 namespace {
-
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	// All theme_mods UNSET => return the caller default. The active-preset slug
-	// is steered per-test via $GLOBALS['lafka_active_slug'].
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			if ( 'lafka_active_preset' === $name ) {
-				return isset( $GLOBALS['lafka_active_slug'] ) ? $GLOBALS['lafka_active_slug'] : 'peppery';
-			}
-			return $default;
-		}
-	}
-
-	// Identity WP shims (same contract as DynamicCssParityTest).
-	if ( ! function_exists( 'esc_attr' ) ) {
-		function esc_attr( $text ) {
-			return $text;
-		}
-	}
-	if ( ! function_exists( 'esc_url' ) ) {
-		function esc_url( $url, $protocols = null, $context = 'display' ) {
-			return $url;
-		}
-	}
-	if ( ! function_exists( 'add_action' ) ) {
-		function add_action( $hook = '', $callback = null, $priority = 10, $args = 1 ) {
-			return true;
-		}
-	}
-	if ( ! function_exists( 'apply_filters' ) ) {
-		function apply_filters( $hook, $value = null, ...$rest ) {
-			return $value;
-		}
-	}
-	if ( ! function_exists( 'sanitize_key' ) ) {
-		function sanitize_key( $key ) {
-			return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
-		}
-	}
-	if ( ! function_exists( 'wp_get_attachment_image_url' ) ) {
-		function wp_get_attachment_image_url( $attachment_id, $size = 'thumbnail', $icon = false ) {
-			return 'https://example.test/wp-content/uploads/lafka-fixture-' . (int) $attachment_id . '.jpg';
-		}
-	}
-
-	// The preset engine (defines lafka_preset_default so the wrap fires).
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-tokens.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-preset.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-presets.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-emit.php';
 
-	// The builder under test (buffer the stray newline between its two <?php blocks).
 	if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		ob_start();
 		require dirname( __DIR__, 2 ) . '/styles/dynamic-css.php';
@@ -93,12 +38,8 @@ namespace {
 namespace Lafka\Tests\Unit {
 
 	use PHPUnit\Framework\Attributes\DataProvider;
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class PresetDefaultsGoldenTest extends TestCase {
 
 		private static function root(): string {
@@ -122,7 +63,7 @@ namespace Lafka\Tests\Unit {
 				'styles/dynamic-css.php did not define lafka_dynamic_css_build().'
 			);
 
-			$GLOBALS['lafka_active_slug'] = $slug;
+			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = $slug;
 			\Lafka_Presets::reset();
 
 			$actual = \lafka_dynamic_css_build();

@@ -8,69 +8,23 @@ declare(strict_types=1);
  * the REAL registry + the REAL shipped presets (ember has a map; peppery and
  * midnight ship empty maps and must pass the incoming glyph through untouched).
  *
- * ISOLATION: mirrors PresetCascadeTest — the global-namespace WP shims live
- * where the preset code resolves them; sibling test files declare some of the
- * same shims, so this class runs in a SEPARATE PROCESS with global state
- * discarded so THESE shims win.
- *
  * @package Lafka\Tests
  */
 
 namespace {
-
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			$store = isset( $GLOBALS['lafka_test_theme_mods'] ) ? $GLOBALS['lafka_test_theme_mods'] : array();
-			return array_key_exists( $name, $store ) ? $store[ $name ] : $default;
-		}
-	}
-	if ( ! function_exists( 'add_filter' ) ) {
-		function add_filter( $hook, $cb, $priority = 10, $args = 1 ) {
-			$GLOBALS['lafka_test_filters'][ $hook ][] = $cb;
-			return true;
-		}
-	}
-	if ( ! function_exists( 'apply_filters' ) ) {
-		function apply_filters( $hook, $value = null, ...$rest ) {
-			if ( ! empty( $GLOBALS['lafka_test_filters'][ $hook ] ) ) {
-				foreach ( $GLOBALS['lafka_test_filters'][ $hook ] as $cb ) {
-					$value = $cb( $value, ...$rest );
-				}
-			}
-			return $value;
-		}
-	}
-	if ( ! function_exists( 'sanitize_key' ) ) {
-		function sanitize_key( $key ) {
-			return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
-		}
-	}
-
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-tokens.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-preset.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-presets.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-emit.php';
 
-	// Snapshot the filters registered at INCLUDE time (lafka-preset-emit.php's
-	// guarded add_filter block) before setUp() clears the live filter store, so
-	// the registration proof survives the per-test reset.
-	$GLOBALS['lafka_test_include_filters'] = isset( $GLOBALS['lafka_test_filters'] )
-		? $GLOBALS['lafka_test_filters']
-		: array();
+	// Hooks registered when the preset code was loaded (the category-emoji filter).
+	$GLOBALS['lafka_test_include_filters'] = $GLOBALS['lafka_test_filters'] ?? array();
 }
 
 namespace Lafka\Tests\Unit {
 
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class PresetCategoryEmojiTest extends TestCase {
 
 		protected function setUp(): void {
@@ -89,12 +43,8 @@ namespace Lafka\Tests\Unit {
 
 		/** The callback is actually registered on the filter at include time. */
 		public function test_callback_is_registered_on_the_filter(): void {
-			$registered = $GLOBALS['lafka_test_include_filters']['lafka_category_emoji'] ?? array();
-			$this->assertNotEmpty(
-				$registered,
-				'lafka-preset-emit.php must register lafka_preset_category_emoji on lafka_category_emoji'
-			);
-			$this->assertContains( 'lafka_preset_category_emoji', $registered );
+			$registered = $GLOBALS['lafka_test_include_filters']['lafka_category_emoji'][10] ?? array();
+			$this->assertContains( 'lafka_preset_category_emoji', $registered, 'lafka-preset-emit.php must register lafka_preset_category_emoji on lafka_category_emoji' );
 		}
 
 		/** (a) Preset WITH a map: exact slug hit returns the preset glyph. */

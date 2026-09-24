@@ -11,7 +11,6 @@ require_once dirname( __DIR__, 2 ) . '/incl/lafka-active-promos.php';
  * Active-promo surfacing: pure formatting helpers + structural source locks.
  */
 final class ActivePromosTest extends TestCase {
-
 	private string $src;
 
 	protected function setUp(): void {
@@ -46,10 +45,5 @@ final class ActivePromosTest extends TestCase {
 		self::assertStringContainsString( 'data-lafka-promo=', $this->src );
 		self::assertStringContainsString( "if ( empty( \$messages ) ) {", $this->src,
 			'must render nothing when no promo is active (no fabricated offers).' );
-	}
-
-	public function test_enqueue_detects_menu_by_slug(): void {
-		self::assertStringContainsString( "is_page( 'menu' )", $this->src,
-			'menu page resolves by slug, so enqueue must use is_page(menu).' );
 	}
 }

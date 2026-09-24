@@ -14,85 +14,10 @@ declare(strict_types=1);
  * (source:"base", emitted by the static CSS, so the engine adds no @font-face
  * and the goldens stay byte/pixel-identical).
  *
- * ISOLATION: WP shims live in the GLOBAL namespace; runs in SEPARATE PROCESSES
- * so these shims win over sibling test files' definitions (mirrors
- * PresetEnqueueOrderTest).
- *
  * @package Lafka\Tests
  */
 
 namespace {
-
-	if ( ! defined( 'ABSPATH' ) ) {
-		define( 'ABSPATH', __DIR__ . '/' );
-	}
-
-	if ( ! class_exists( 'Lafka_Test_Fonts_Theme_Stub' ) ) {
-		class Lafka_Test_Fonts_Theme_Stub {
-			public function get( $key ) {
-				return 'Version' === $key ? '9.9.9' : '';
-			}
-		}
-	}
-
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			$store = isset( $GLOBALS['lafka_test_theme_mods'] ) ? $GLOBALS['lafka_test_theme_mods'] : array();
-			return array_key_exists( $name, $store ) ? $store[ $name ] : $default;
-		}
-	}
-	if ( ! function_exists( 'apply_filters' ) ) {
-		function apply_filters( $hook, $value = null, ...$rest ) {
-			return $value;
-		}
-	}
-	if ( ! function_exists( 'add_filter' ) ) {
-		function add_filter( $hook, $cb, $priority = 10, $args = 1 ) {
-			return true;
-		}
-	}
-	if ( ! function_exists( 'sanitize_key' ) ) {
-		function sanitize_key( $key ) {
-			return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
-		}
-	}
-	if ( ! function_exists( 'get_template' ) ) {
-		function get_template() {
-			return 'lafka-theme';
-		}
-	}
-	if ( ! function_exists( 'get_template_directory' ) ) {
-		function get_template_directory() {
-			return dirname( __DIR__, 2 );
-		}
-	}
-	if ( ! function_exists( 'wp_get_theme' ) ) {
-		function wp_get_theme( $stylesheet = null ) {
-			return new \Lafka_Test_Fonts_Theme_Stub();
-		}
-	}
-	if ( ! function_exists( 'wp_register_style' ) ) {
-		function wp_register_style( $handle, $src = '', $deps = array(), $ver = false, $media = 'all' ) {
-			$GLOBALS['lafka_test_registered'][ $handle ] = array(
-				'src'  => $src,
-				'deps' => $deps,
-				'ver'  => $ver,
-			);
-			return true;
-		}
-	}
-	if ( ! function_exists( 'wp_add_inline_style' ) ) {
-		function wp_add_inline_style( $handle, $data ) {
-			$GLOBALS['lafka_test_inline'][ $handle ][] = $data;
-			return true;
-		}
-	}
-	if ( ! function_exists( 'esc_url' ) ) {
-		function esc_url( $url ) {
-			return $url;
-		}
-	}
-
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-tokens.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-fonts.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/class-lafka-preset.php';
@@ -102,12 +27,8 @@ namespace {
 
 namespace Lafka\Tests\Unit {
 
-	use PHPUnit\Framework\Attributes\PreserveGlobalState;
-	use PHPUnit\Framework\Attributes\RunTestsInSeparateProcesses;
 	use PHPUnit\Framework\TestCase;
 
-	#[RunTestsInSeparateProcesses]
-	#[PreserveGlobalState( false )]
 	final class SelfHostedFontsTest extends TestCase {
 
 		private static function root(): string {

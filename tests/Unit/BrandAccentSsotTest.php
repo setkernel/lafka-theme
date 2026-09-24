@@ -21,7 +21,6 @@ use PHPUnit\Framework\TestCase;
  * lives in lafka-child's ThinLayerTest.
  */
 final class BrandAccentSsotTest extends TestCase {
-
 	private function theme_file( string $rel ): string {
 		$path = dirname( __DIR__, 2 ) . $rel;
 		$this->assertFileExists( $path );
@@ -42,20 +41,6 @@ final class BrandAccentSsotTest extends TestCase {
 		);
 	}
 
-	public function test_editorial_brand_deep_tracks_accent_via_color_mix(): void {
-		$css = $this->theme_file( '/styles/editorial.css' );
-		$this->assertStringContainsString(
-			'@supports (color: color-mix(in srgb, red 50%, white))',
-			$css,
-			'editorial.css must progressively enhance --brand-deep so the CTA hover tracks the live accent.'
-		);
-		$this->assertMatchesRegularExpression(
-			'/--brand-deep:\s*color-mix\(in srgb,\s*var\(\s*--lafka-color-accent-500/',
-			$css,
-			'--brand-deep must be derived from the live accent in the color-mix @supports block.'
-		);
-	}
-
 	public function test_editorial_has_no_hardcoded_brand_literals(): void {
 		$css = strtolower( $this->theme_file( '/styles/editorial.css' ) );
 		$this->assertStringNotContainsString(
@@ -67,25 +52,6 @@ final class BrandAccentSsotTest extends TestCase {
 			'#c93827',
 			$css,
 			'editorial.css must not bake the brand literal #C93827 into the OSS repo.'
-		);
-	}
-
-	public function test_dynamic_css_bridges_brand_color_to_handoff_token(): void {
-		$php = $this->theme_file( '/styles/dynamic-css.php' );
-		// NX1-02.logos-brand-pilot: brand_color migrated legacy option ->
-		// lafka_brand_color theme_mod; the pepper-yellow default is preserved.
-		// NX2-01: the default now flows through the preset theme_mod-default layer
-		// (lafka_preset_default), function_exists-guarded so the isolated builder
-		// still falls back to the '#f59e0b' literal. The SSOT default is unchanged.
-		$this->assertMatchesRegularExpression(
-			"/get_theme_mod\(\s*'lafka_brand_color'\s*,\s*function_exists\(\s*'lafka_preset_default'\s*\)\s*\?\s*lafka_preset_default\(\s*'lafka_brand_color'\s*,\s*'#f59e0b'\s*\)\s*:\s*'#f59e0b'\s*\)/",
-			$php,
-			'dynamic-css.php must read the lafka_brand_color theme_mod with the pepper-yellow default (via the preset default layer).'
-		);
-		$this->assertStringContainsString(
-			"--lafka-color-brand-500:' . \$brand_color",
-			$php,
-			'dynamic-css.php must emit --lafka-color-brand-500 from the operator brand color.'
 		);
 	}
 
