@@ -40,7 +40,7 @@
  * across two presets at once.
  *
  * @since lafka-theme 7.1.0 (NX2-07 dark text/CTA inversion remediation)
- * @since lafka-theme 7.2.0 (NX2-08 generalized to every registered preset)
+ * @since lafka-theme 7.1.0 (NX2-08 generalized to every registered preset)
  */
 const fs = require( 'node:fs' );
 const path = require( 'node:path' );

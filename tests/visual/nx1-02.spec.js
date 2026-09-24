@@ -40,10 +40,7 @@
 const { test, expect } = require( '@playwright/test' );
 const { SEED, useClassicCartCheckout } = require( '../e2e/support/store' );
 const { wpCli } = require( '../e2e/support/wp-cli' );
-
-// The three product breakpoints every visual ship is verified at (375/768/1280).
-const BREAKPOINTS = [ 375, 768, 1280 ];
-const HEIGHTS = { 375: 812, 768: 1024, 1280: 900 };
+const { shootAllBreakpoints } = require( './support/capture' );
 
 // Non-deterministic regions to blank out so the goldens are reproducible:
 //   - [data-lafka-status]   the announce-bar open/closed dot + "Open until
@@ -67,56 +64,6 @@ const MASK_SELECTORS = [
 	'.lafka-related-carousel',
 	'.lafka-pdp-upsell__grid',
 ];
-
-/**
- * Settle the page so a full-page capture is deterministic: wait for web fonts,
- * force any lazy-loaded imagery to fetch by scrolling the full height, then
- * return to the top and let the network go idle.
- *
- * @param {import('@playwright/test').Page} page
- */
-async function stabilize( page ) {
-	await page.evaluate( async () => {
-		if ( document.fonts && document.fonts.ready ) {
-			await document.fonts.ready;
-		}
-		await new Promise( ( resolve ) => {
-			const total = document.body.scrollHeight;
-			let y = 0;
-			const step = () => {
-				y += Math.max( 400, window.innerHeight );
-				window.scrollTo( 0, y );
-				if ( y < total ) {
-					setTimeout( step, 40 );
-				} else {
-					window.scrollTo( 0, 0 );
-					setTimeout( resolve, 120 );
-				}
-			};
-			step();
-		} );
-	} );
-	await page.waitForLoadState( 'networkidle' ).catch( () => {} );
-}
-
-/**
- * Capture one surface at all three breakpoints as `${name}-${width}.png`.
- *
- * @param {import('@playwright/test').Page} page
- * @param {string}                          name Golden basename (surface id).
- */
-async function shootAllBreakpoints( page, name ) {
-	const mask = MASK_SELECTORS.map( ( sel ) => page.locator( sel ) );
-	for ( const width of BREAKPOINTS ) {
-		await page.setViewportSize( { width, height: HEIGHTS[ width ] } );
-		await stabilize( page );
-		await expect( page ).toHaveScreenshot( `${ name }-${ width }.png`, {
-			fullPage: true,
-			mask,
-			animations: 'disabled',
-		} );
-	}
-}
 
 /**
  * Seed the browser context's WooCommerce cart with one simple product using the
@@ -154,7 +101,7 @@ test.describe.configure( { mode: 'serial' } );
 test.describe( 'NX1-02 visual goldens', () => {
 	test( 'home', async ( { page } ) => {
 		await page.goto( '/' );
-		await shootAllBreakpoints( page, 'home' );
+		await shootAllBreakpoints( page, 'home', MASK_SELECTORS );
 	} );
 
 	test( 'menu', async ( { page } ) => {
@@ -162,12 +109,12 @@ test.describe( 'NX1-02 visual goldens', () => {
 		await expect(
 			page.locator( '.lafka-menu__cats' ).first()
 		).toBeVisible();
-		await shootAllBreakpoints( page, 'menu' );
+		await shootAllBreakpoints( page, 'menu', MASK_SELECTORS );
 	} );
 
 	test( 'pdp-simple (garlic-bread)', async ( { page } ) => {
 		await page.goto( `/product/${ SEED.simpleSlug }/` );
-		await shootAllBreakpoints( page, 'pdp-simple' );
+		await shootAllBreakpoints( page, 'pdp-simple', MASK_SELECTORS );
 	} );
 
 	test( 'pdp-variable (margherita-pizza)', async ( { page } ) => {
@@ -175,7 +122,7 @@ test.describe( 'NX1-02 visual goldens', () => {
 		await expect(
 			page.locator( '.lafka-pdp-summary__title' )
 		).toContainText( 'Margherita Pizza' );
-		await shootAllBreakpoints( page, 'pdp-variable' );
+		await shootAllBreakpoints( page, 'pdp-variable', MASK_SELECTORS );
 	} );
 
 	test.describe( 'classic cart + checkout (production mode)', () => {
@@ -207,7 +154,7 @@ test.describe( 'NX1-02 visual goldens', () => {
 			await expect(
 				page.locator( '.woocommerce-cart-form' )
 			).toBeVisible( { timeout: 15000 } );
-			await shootAllBreakpoints( page, 'cart-classic' );
+			await shootAllBreakpoints( page, 'cart-classic', MASK_SELECTORS );
 		} );
 
 		test( 'checkout (classic)', async ( { page } ) => {
@@ -216,7 +163,7 @@ test.describe( 'NX1-02 visual goldens', () => {
 			await expect( page.locator( 'form.checkout' ) ).toBeVisible( {
 				timeout: 15000,
 			} );
-			await shootAllBreakpoints( page, 'checkout-classic' );
+			await shootAllBreakpoints( page, 'checkout-classic', MASK_SELECTORS );
 		} );
 	} );
 } );
