@@ -59,8 +59,8 @@ jobs:
           # phpunit + playwright + wp-env tooling, the test suite, the build
           # scripts (already run in the step above), and the contributor/design
           # docs, and the contrast-gate fixture preset. Runtime assets STAY — the
-          # freshly-built .min siblings, the store/demo one-click importer,
-          # readme.txt, languages/, theme.json, and every LICENSE (the root GPL
+          # freshly-built .min siblings, readme.txt, languages/, theme.json,
+          # presets/, and every LICENSE (the root GPL
           # text and the per-family OFL font licences, which must travel with
           # the fonts — an unanchored LICENSE exclude used to strip them).
           # `readme.md` is the GitHub project readme (dev-only); the lowercase

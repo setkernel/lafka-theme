@@ -512,19 +512,6 @@
     border-color: #0eafcc !important;
 }
 
-.lafka_import_btn {
-    position: absolute;
-    top: 50% !important;
-    left: 50% !important;
-    margin-left: -70px !important;
-    margin-top: -10px !important;
-    width: 100px;
-    text-align: center;
-    padding: 10px;
-    display: block;
-    z-index: 5;
-}
-
 .lafka-optionsframework-submit .button-primary, .lafka-optionsframework-submit-top .button-primary, .lafka-optionsframework-submit .button-secondary, .lafka-optionsframework-submit-top .button-secondary, #lafka-optionsframework .lafka_upload_button, .lafka_upload_image_button.button {
     border: none;
     box-shadow: none !important;
@@ -545,7 +532,7 @@
     padding: 20px !important;
 }
 
-#lafka-optionsframework .reset-button, #lafka_import_options, #lafka_export_options {
+#lafka-optionsframework .reset-button {
     float: left;
     cursor: pointer;
     margin-right: 4px;

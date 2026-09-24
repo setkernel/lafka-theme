@@ -477,16 +477,8 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 
 			// New-order notification poller moved to lafka-plugin (NX1-08b); the theme
 			// only ships the remaining admin helpers (colour pickers, metabox layout,
-			// menu-icon picker) here plus the options-import nonce.
+			// menu-icon picker) here.
 			wp_enqueue_script( 'lafka-back', get_template_directory_uri() . '/js/lafka-back.js', array( 'jquery', 'nice-select', 'wp-color-picker' ), lafka_asset_version( '/js/lafka-back.js' ), true );
-			wp_localize_script(
-				'lafka-back',
-				'lafka_back_js_params',
-				array(
-					'import_nonce' => wp_create_nonce( 'lafka_import_nonce' ),
-					'admin_url'    => admin_url( 'admin-ajax.php' ),
-				)
-			);
 		}
 	}
 

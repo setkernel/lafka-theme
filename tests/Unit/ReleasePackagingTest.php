@@ -8,7 +8,7 @@
  * to end users if that exclude list isn't kept in step. This test parses the
  * workflow's `--exclude=` patterns and asserts the known dev-file classes are
  * excluded — and, symmetrically, that runtime assets (readme.txt, languages/,
- * theme.json, the store/demo importer, the built .min files) are NOT excluded.
+ * theme.json, the presets, the built .min files) are NOT excluded.
  * Scans the workflow as text; runs no rsync, needs no node_modules.
  *
  * The build-runs-before-zip ordering is separately guarded by
@@ -95,8 +95,6 @@ final class ReleasePackagingTest extends TestCase {
 	public function test_runtime_files_not_excluded_from_zip(): void {
 		$excludes = $this->release_excludes();
 
-		// `store` must stay: incl/LafkaTransferContent.class.php loads
-		// store/demo/ at runtime for the one-click demo importer.
 		$runtime = array(
 			'readme.txt',
 			'languages',
@@ -104,7 +102,6 @@ final class ReleasePackagingTest extends TestCase {
 			'incl',
 			'styles',
 			'js',
-			'store',
 			'woocommerce',
 			'theme.json',
 			'partials',

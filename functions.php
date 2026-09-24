@@ -931,62 +931,6 @@ if ( ! function_exists( 'lafka_bust_ajax_search_cache_on_save' ) ) {
 	}
 }
 
-	add_filter( 'wp_import_post_data_processed', 'lafka_preserve_post_ids', 10, 2 );
-
-if ( ! function_exists( 'lafka_preserve_post_ids' ) ) {
-
-	/**
-	 * WP Import.
-	 * Add post id if the record exists
-	 *
-	 * @param type $postdata
-	 * @param type $post
-	 * @return Array
-	 */
-	function lafka_preserve_post_ids( $postdata, $post ) {
-
-		if ( is_array( $post ) && isset( $post['post_id'] ) && get_post( $post['post_id'] ) ) {
-			$postdata['ID'] = $post['post_id'];
-		}
-
-		return $postdata;
-	}
-
-}
-
-	/* Define ajax calls for each import */
-if ( ! function_exists( 'lafka_import_demo_callback' ) ) {
-	function lafka_import_demo_callback( $demo_name ) {
-		check_ajax_referer( 'lafka_import_nonce', 'security' );
-
-		if ( ! current_user_can( 'manage_options' ) ) {
-			wp_die( 'Unauthorized', 403 );
-		}
-
-		if ( function_exists( 'set_time_limit' ) ) {
-			set_time_limit( 1200 );
-		}
-
-		$transfer = Lafka_Transfer_Content::getInstance();
-		$result   = $transfer->doImportDemo( $demo_name );
-
-		if ( $result ) {
-			echo 'lafka_import_done';
-		}
-
-		wp_die();
-	}
-}
-
-for ( $i = 0; $i <= 6; $i++ ) {
-	add_action(
-		'wp_ajax_lafka_import_lafka' . $i,
-		function () use ( $i ) {
-			lafka_import_demo_callback( 'lafka' . $i );
-		}
-	);
-}
-
 	// Tracking code field is now stored as raw text and emitted via dedicated wp_head/wp_footer
 	// hooks; we no longer expand $allowedposttags globally because admin_init scope leaks the
 	// permissive allow-list to every authenticated request, creating a stored-XSS surface if any
