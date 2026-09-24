@@ -1113,8 +1113,10 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 		if ( lafka_is_legacy_blog_surface() ) {
 			return true;
 		}
-		if ( is_post_type_archive( 'lafka_foodmenu' )
-			|| is_singular( 'lafka_foodmenu' )
+		// The plugin registers the CPT as 'lafka-foodmenu' (hyphen); only the
+		// taxonomy uses underscores.
+		if ( is_post_type_archive( 'lafka-foodmenu' )
+			|| is_singular( 'lafka-foodmenu' )
 			|| ( function_exists( 'is_tax' ) && is_tax( 'lafka_foodmenu_category' ) ) ) {
 			return true;
 		}
