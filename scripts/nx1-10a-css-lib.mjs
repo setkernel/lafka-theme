@@ -1,10 +1,10 @@
 /* lafka-theme/scripts/nx1-10a-css-lib.mjs
  *
- * Shared CSS parsing for the NX1-10a cascade-parity tooling. Extends the
- * rule/at-rule tokeniser from scripts/nx1-10a-extract.mjs with declaration-level
- * parsing and a small cascade resolver, so both the prune tool
- * (nx1-10a-prune-dead.mjs) and the parity verifier (nx1-10a-cascade-parity.mjs)
- * share one implementation.
+ * CSS parsing for the NX1-10a cascade-parity verifier
+ * (nx1-10a-cascade-parity.mjs): a string-aware rule/at-rule tokeniser with
+ * declaration-level parsing and a small cascade resolver. (The one-shot
+ * extract / usage-map / prune tools that also used it were applied in NX1-10a
+ * and removed; see git history.)
  *
  * Cascade model (deliberately narrow, matching the defect's shape):
  *   Everything compared here lives inside `@layer legacy`. Within a single
@@ -40,9 +40,8 @@ export function layerBodyRange( css ) {
 
 /**
  * Tokenise a CSS body into top-level items with ABSOLUTE offsets into the parent
- * string. `base` is the offset of `body[0]` within that parent. Mirrors the
- * tokeniser in nx1-10a-extract.mjs (string-aware brace matching) but records
- * offsets and does not merge whitespace.
+ * string. `base` is the offset of `body[0]` within that parent. String-aware
+ * brace matching; records offsets and does not merge whitespace.
  *
  * @return {Array<{type:string,text:string,selectors:string[],start:number,end:number,contentStart:number}>}
  */

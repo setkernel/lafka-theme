@@ -14,9 +14,8 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * (dep 'lafka-style', incl/system/core-functions.php), so a moved declaration
  * that was OVERRIDDEN in the monolith by a LATER kept style.css rule (the
  * v5.68.0 "accent-color consolidation" groups, and friends) silently re-won
- * once relocated. The fix (scripts/nx1-10a-prune-dead.mjs) deleted those dead
- * declarations from the legacy sheets, restoring the monolith's effective
- * cascade. The empirical, rerunnable proof is scripts/nx1-10a-cascade-parity.mjs
+ * once relocated. Those dead declarations were pruned from the legacy sheets in
+ * NX1-10a (see git history), restoring the monolith's effective cascade. The empirical, rerunnable proof is scripts/nx1-10a-cascade-parity.mjs
  * (compares split-vs-monolith winners for every (media,selector,property)).
  *
  * THIS TEST is the committed, CI-visible, pure-PHP lock that stops the
