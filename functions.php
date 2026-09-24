@@ -991,7 +991,7 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 
 		// check is singular and not Blog/Shop/Forum so we get the real post_meta
 		if ( ! ( LAFKA_IS_WOOCOMMERCE && is_shop() ) && ! lafka_is_blog() && ! ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() ) && is_singular() ) {
-			// Pull the full meta array once instead of four separate single-key
+			// Pull the full meta array once instead of two separate single-key
 			// reads (which all hit `get_metadata_raw()` independently). The
 			// returned array is already in WP's meta cache, so individual key
 			// reads after this are O(1) memory lookups for the rest of the
@@ -999,17 +999,11 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 			// guaranteed to be a cache hit.
 			$_meta                 = get_post_meta( $wp_query->post->ID );
 			$_get                  = static fn( $k ) => isset( $_meta[ $k ][0] ) ? $_meta[ $k ][0] : '';
-			$_header               = $_get( 'lafka_header_size' );
-			$specific_header_size  = $_header === '' ? 'default' : $_header;
-			$_footer               = $_get( 'lafka_footer_size' );
-			$specific_footer_size  = $_footer === '' ? 'default' : $_footer;
 			$_fstyle               = $_get( 'lafka_footer_style' );
 			$specific_footer_style = $_fstyle === '' ? 'default' : $_fstyle;
 			$_layout               = $_get( 'lafka_layout' );
 			$specific_layout       = $_layout === '' ? 'default' : $_layout;
 		} else {
-			$specific_header_size  = 'default';
-			$specific_footer_size  = 'default';
 			$specific_footer_style = 'default';
 			$specific_layout       = 'default';
 		}
@@ -1063,35 +1057,11 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 			}
 		}
 
-		// if no header-top
-		if ( ! get_theme_mod( 'lafka_enable_top_header', true ) ) {
-			$classes[] = sanitize_html_class( 'lafka-no-top-header' );
-		}
-
 		// footer reveal
 		if ( get_theme_mod( 'lafka_footer_style', '' ) && $specific_footer_style === 'default' ) {
 			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_footer_style', '' ) );
 		} elseif ( $specific_footer_style !== 'standard' && $specific_footer_style !== 'default' ) {
 			$classes[] = sanitize_html_class( $specific_footer_style );
-		}
-
-		// Header size
-		if ( get_theme_mod( 'lafka_header_width', '' ) && $specific_header_size === 'default' ) {
-			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_header_width', '' ) );
-		} elseif ( $specific_header_size !== 'standard' && $specific_header_size !== 'default' ) {
-			$classes[] = sanitize_html_class( $specific_header_size );
-		}
-
-		// Footer size
-		if ( get_theme_mod( 'lafka_footer_width', '' ) && $specific_footer_size === 'default' ) {
-			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_footer_width', '' ) );
-		} elseif ( $specific_footer_size !== 'standard' && $specific_footer_size !== 'default' ) {
-			$classes[] = sanitize_html_class( $specific_footer_size );
-		}
-
-		// Sub-menu color Scheme
-		if ( get_theme_mod( 'lafka_submenu_color_scheme', '' ) ) {
-			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_submenu_color_scheme', '' ) );
 		}
 
 		// If using video background
@@ -1119,53 +1089,21 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		if ( get_theme_mod( 'lafka_uppercase_page_titles', true ) ) {
 			$classes[] = 'lafka-uppercase-titles';
 		}
-		if ( get_theme_mod( 'lafka_main_menu_transf_to_uppercase', true ) ) {
-			$classes[] = 'lafka-uppercase-menu';
-		}
 		if ( get_theme_mod( 'lafka_categories_fancy', false ) ) {
 			$classes[] = 'lafka-fancy-categories';
 		}
-		if ( ! get_theme_mod( 'lafka_header_top_mobile_visibility', true ) ) {
-			$classes[] = 'lafka-no-top-header-mobile';
-		}
-		if ( get_theme_mod( 'lafka_disable_logo_point_down', 0 ) ) {
-			$classes[] = 'lafka-no-logo-point';
-		}
-		$logo_bg_body = get_theme_mod( 'lafka_logo_background_color', '#fccc4c' );
-		if ( ! $logo_bg_body ) {
-			$classes[] = 'lafka-no-logo-bg';
-		}
-		// NX1-02.dyncss-typography-backgrounds: header/footer backgrounds +
+		// NX1-02.dyncss-typography-backgrounds: footer background +
 		// use_google_face_for read from their migrated `lafka_<key>` theme_mods.
 		// Defaults reproduce the Options-Framework `std` so these body classes are
 		// added/omitted exactly as before on a fresh install.
-		$header_backgr_body = get_theme_mod(
-			'lafka_header_background',
-			array(
-				'color'      => '#ffffff',
-				'image'      => '',
-				'repeat'     => '',
-				'position'   => '',
-				'attachment' => 'scroll',
-			)
-		);
-		if ( $logo_bg_body && $logo_bg_body === $header_backgr_body['color'] ) {
-			$classes[] = 'lafka-logo-matches-header';
-		}
 		if ( ! get_theme_mod( 'lafka_use_quickview', true ) ) {
 			$classes[] = 'lafka-no-quickview';
-		}
-		if ( get_theme_mod( 'lafka_mobile_theme_logo', '' ) ) {
-			$classes[] = 'lafka-has-mobile-logo';
 		}
 		if ( get_theme_mod( 'lafka_show_quantity_on_listing', false ) ) {
 			$classes[] = 'lafka-qty-on-listing';
 		}
 		if ( get_theme_mod( 'lafka_product_columns_mobile', '1' ) === '2' ) {
 			$classes[] = 'lafka-mobile-2col';
-		}
-		if ( ! get_theme_mod( 'lafka_show_searchform', true ) && ! get_theme_mod( 'lafka_show_shopping_cart', true ) && ! get_theme_mod( 'lafka_show_my_account', true ) && ! get_theme_mod( 'lafka_show_wish_in_header', true ) ) {
-			$classes[] = 'lafka-no-header-services';
 		}
 		$use_google_face_for_body = get_theme_mod(
 			'lafka_use_google_face_for',
@@ -1174,17 +1112,8 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 				'buttons'   => 1,
 			)
 		);
-		if ( ! empty( $use_google_face_for_body['main_menu'] ) ) {
-			$classes[] = 'lafka-headings-for-menu';
-		}
 		if ( ! empty( $use_google_face_for_body['buttons'] ) ) {
 			$classes[] = 'lafka-headings-for-buttons';
-		}
-		if ( get_theme_mod( 'lafka_footer_copyright_bar_text_color', '#aeaeae' ) === '#ffffff' ) {
-			$classes[] = 'lafka-light-copyright';
-		}
-		if ( ! empty( $header_backgr_body['image'] ) ) {
-			$classes[] = 'lafka-has-header-bg';
 		}
 		$footer_backgr_body = get_theme_mod(
 			'lafka_footer_background',

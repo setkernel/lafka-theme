@@ -288,11 +288,6 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		);
 
 		$lafka_home_reviews_fields = array(
-			'lafka_home_reviews_eyebrow'  => array(
-				'label' => __( 'Eyebrow', 'lafka' ),
-				'default' => __( 'Loved locally', 'lafka' ),
-				'type' => 'text',
-			),
 			'lafka_home_reviews_headline' => array(
 				'label' => __( 'Headline', 'lafka' ),
 				'default' => __( 'What our neighbors say', 'lafka' ),
@@ -306,11 +301,6 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			'lafka_home_reviews_count'    => array(
 				'label' => __( 'Number of reviews (e.g. 230)', 'lafka' ),
 				'default' => '',
-				'type' => 'text',
-			),
-			'lafka_home_reviews_source'   => array(
-				'label' => __( 'Review source (e.g. Google, Yelp)', 'lafka' ),
-				'default' => 'Google',
 				'type' => 'text',
 			),
 		);
