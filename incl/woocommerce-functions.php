@@ -1162,10 +1162,12 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 				update_meta_cache( 'post', $child_ids );
 			}
 
-			// Load addons once outside the loop (was previously inside = N queries for N variations)
+			// Load addons once outside the loop (was previously inside = N queries for N variations).
+			// Lafka_Engine_Helper is lafka-plugin's addon API (it replaced
+			// WC_Product_Addons_Helper, whose alias the plugin dropped in 8.18.0).
 			$product_addons = array();
-			if ( class_exists( 'WC_Product_Addons_Helper' ) ) {
-				$product_addons = WC_Product_Addons_Helper::get_product_addons( $product->get_id() );
+			if ( class_exists( 'Lafka_Engine_Helper' ) && function_exists( 'is_lafka_product_addons' ) && is_lafka_product_addons() ) {
+				$product_addons = Lafka_Engine_Helper::get_product_addons( $product->get_id() );
 			}
 
 			// PERF-C06: Batch-fetch all attribute terms for all variations at once,
