@@ -67,6 +67,17 @@ jobs:
       # mutate package-lock.json on lockfile/registry inconsistencies.
       - run: npm ci --no-audit --no-fund
 
+      # Lint caches use content hashes (see package.json), so a restored cache
+      # is safe across checkouts; unchanged files are skipped.
+      - uses: actions/cache@v6
+        with:
+          path: |
+            .eslintcache
+            .stylelintcache
+          key: ${{ runner.os }}-lint-${{ hashFiles('package-lock.json', 'eslint.config.mjs', '.stylelintrc.json') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-lint-${{ hashFiles('package-lock.json', 'eslint.config.mjs', '.stylelintrc.json') }}-
+
       - name: ESLint
         run: npm run lint:js
 
@@ -108,6 +119,15 @@ jobs:
 
       - name: Install dependencies
         run: composer install --no-interaction --prefer-dist --no-progress
+
+      # PHPCS result cache (.phpcs.cache, see .phpcs.xml.dist): the cache
+      # re-checks each file's hash, so restoring an older one is safe.
+      - uses: actions/cache@v6
+        with:
+          path: .phpcs.cache
+          key: ${{ runner.os }}-phpcs-${{ hashFiles('composer.lock', '.phpcs.xml.dist') }}-${{ github.sha }}
+          restore-keys: |
+            ${{ runner.os }}-phpcs-${{ hashFiles('composer.lock', '.phpcs.xml.dist') }}-
 
       - name: PHPCS
         run: composer phpcs

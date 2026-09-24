@@ -10,6 +10,11 @@
 	<arg name="colors"/>
 	<arg name="extensions" value="php"/>
 
+	<!-- Speed: sniff files in parallel and skip unchanged files on re-runs
+	     (.phpcs.cache is git-ignored; CI restores it with actions/cache). -->
+	<arg name="parallel" value="8"/>
+	<arg name="cache" value=".phpcs.cache"/>
+
 	<!-- Warnings are advisory; only errors fail CI. -->
 	<arg name="warning-severity" value="0"/>
 
@@ -96,6 +101,9 @@
 	<!-- Exclude third-party / vendor directories -->
 	<exclude-pattern>/vendor/*</exclude-pattern>
 	<exclude-pattern>/node_modules/*</exclude-pattern>
+	<exclude-pattern>/test-results/*</exclude-pattern>
+	<exclude-pattern>/playwright-report/*</exclude-pattern>
+	<exclude-pattern>/.wp-env-uploads/*</exclude-pattern>
 	<exclude-pattern>/incl/tgm-plugin-activation/*</exclude-pattern>
 	<exclude-pattern>/incl/lafka-options-framework/*</exclude-pattern>
 	<!-- PHPUnit tests use their own PascalCase naming convention, not WP kebab-case. -->

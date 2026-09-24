@@ -2,9 +2,8 @@
 #
 # Pre-push hook for lafka-theme.
 #
-# Runs the same gates CI runs: PHPCS, PHPUnit, ESLint, Stylelint.
-# Catches lint/test failures locally before they hit a stylelint-fail
-# CI cycle that costs a patch release to recover from.
+# Runs the same gates CI runs — PHPCS, PHPUnit, ESLint, Stylelint — in
+# parallel, and prints the output of any gate that fails.
 #
 # Install (one-time per clone):
 #     git config core.hooksPath .githooks
@@ -13,7 +12,7 @@
 #     git push --no-verify
 #
 
-set -euo pipefail
+set -uo pipefail
 
 cd "$(git rev-parse --show-toplevel)"
 
@@ -21,27 +20,42 @@ red()   { printf '\033[31m%s\033[0m\n' "$1"; }
 green() { printf '\033[32m%s\033[0m\n' "$1"; }
 blue()  { printf '\033[36m%s\033[0m\n' "$1"; }
 
-fail() {
-	red "✖ pre-push: $1 FAILED"
-	red "   fix locally, or bypass with: git push --no-verify"
-	exit 1
+logs="$(mktemp -d)"
+trap 'rm -rf "$logs"' EXIT
+
+names=()
+pids=()
+run() {
+	local name="$1"
+	shift
+	names+=( "$name" )
+	"$@" >"$logs/$name.log" 2>&1 &
+	pids+=( $! )
 }
 
-blue "▸ pre-push: composer phpcs"
-composer phpcs --quiet 2>&1 | tail -5 || fail "PHPCS"
-
-blue "▸ pre-push: composer test"
-composer test --quiet 2>&1 | tail -3 || fail "PHPUnit"
-
+blue "▸ pre-push: PHPCS, PHPUnit, ESLint and Stylelint (in parallel)"
+run PHPCS composer phpcs
+run PHPUnit composer test
 if [ -d node_modules ]; then
-	blue "▸ pre-push: npm run lint:js"
-	npm run lint:js --silent 2>&1 | tail -5 || fail "ESLint"
-
-	blue "▸ pre-push: npm run lint:css"
-	npm run lint:css --silent 2>&1 | tail -5 || fail "Stylelint"
+	run ESLint npm run lint:js --silent
+	run Stylelint npm run lint:css --silent
 else
 	red "⚠ pre-push: node_modules absent — skipping JS/CSS lint."
 	red "   run 'npm ci' to enable full local checks."
+fi
+
+failed=0
+for i in "${!pids[@]}"; do
+	if ! wait "${pids[$i]}"; then
+		failed=1
+		red "✖ pre-push: ${names[$i]} FAILED"
+		tail -n 40 "$logs/${names[$i]}.log"
+	fi
+done
+
+if [ "$failed" -ne 0 ]; then
+	red "   fix locally, or bypass with: git push --no-verify"
+	exit 1
 fi
 
 green "✓ pre-push: all gates passed"

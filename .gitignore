@@ -16,8 +16,11 @@ Thumbs.db
 node_modules/
 vendor/
 
-# Test artefacts
+# Test artefacts and tool caches
 .phpunit.result.cache
+.phpcs.cache
+.eslintcache
+.stylelintcache
 .tmp-screenshots/
 .wp-env-uploads/
 
