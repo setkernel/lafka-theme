@@ -23,8 +23,8 @@
  *
  * Accent assertions target `--lafka-accent-color:` specifically (not the bare
  * hex): Peppery's accent #dc2626 ALSO appears in Ember's payload as the
- * sale-label colour, and Ember's accent hex doubles as its menu-hover colour,
- * so bare-hex contains/not-contains checks would false-fail.
+ * sale-label colour, so bare-hex contains/not-contains checks would
+ * false-fail.
  *
  * @since lafka-theme 7.1.0 (NX2-04)
  */
@@ -34,9 +34,9 @@ const { wpCli, bustDynamicCss } = require( './support/wp-cli' );
 // presets/ember/preset.json chrome.lafka_accent_color / peppery default accent.
 const EMBER_ACCENT = '#f97316';
 const PEPPERY_ACCENT = '#dc2626';
-// Ember chrome.lafka_main_menu_links_hover_color (same hex as its accent) —
-// proves preset chrome still lands alongside a posted accent override.
-const EMBER_MENU_HOVER = '#f97316';
+// Ember chrome.lafka_brand_color — proves the rest of the preset's chrome
+// still lands alongside a posted accent override.
+const EMBER_BRAND = '#fbbf24';
 // Arbitrary unsaved operator override posted through the changeset.
 const POSTED_ACCENT = '#123456';
 
@@ -219,7 +219,7 @@ test.describe( 'NX2-04 Customizer preset switcher', () => {
 		);
 
 		// Swap back to Ember: posted accent beats Ember's chrome accent while
-		// the REST of Ember's chrome still lands (menu hover keeps its hex).
+		// the REST of Ember's chrome still lands (its brand colour lands).
 		const emberCss2 = await swapPresetNoReload(
 			page,
 			frame2,
@@ -233,7 +233,7 @@ test.describe( 'NX2-04 Customizer preset switcher', () => {
 			`--lafka-accent-color:${ EMBER_ACCENT }`
 		);
 		expect( emberCss2 ).toContain(
-			`--lafka-menu-link-hover-color:${ EMBER_MENU_HOVER }`
+			`--lafka-color-brand-500:${ EMBER_BRAND }`
 		);
 
 		// --- Publish (persists ember + the posted accent; afterAll restores) ---
@@ -263,7 +263,7 @@ test.describe( 'NX2-04 Customizer preset switcher', () => {
 			`--lafka-accent-color:${ POSTED_ACCENT }`
 		);
 		expect( frontCss ).toContain(
-			`--lafka-menu-link-hover-color:${ EMBER_MENU_HOVER }`
+			`--lafka-color-brand-500:${ EMBER_BRAND }`
 		);
 	} );
 } );
