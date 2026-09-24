@@ -28,6 +28,13 @@ final class EditorialCustomizerTest extends TestCase {
 		$this->assertStringContainsString( "'lafka_editorial_contact'", $src );
 	}
 
+	public function test_customizer_file_registers_core_editorial_settings(): void {
+		$src = file_get_contents( dirname( __DIR__, 2 ) . '/incl/customizer-editorial.php' );
+		$this->assertStringContainsString( "'lafka_editorial_home_hero_eyebrow'", $src );
+		$this->assertStringContainsString( "'lafka_editorial_contact_h1'", $src );
+		$this->assertStringContainsString( "'lafka_editorial_contact_cf7_form_id'", $src );
+	}
+
 	public function test_customizer_hooks_into_customize_register(): void {
 		$src = file_get_contents( dirname( __DIR__, 2 ) . '/incl/customizer-editorial.php' );
 		$this->assertMatchesRegularExpression(

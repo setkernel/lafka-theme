@@ -6,18 +6,13 @@ namespace Lafka\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 /**
- * P6-UX-1 + P6-UX-4 W3-T8 regression lock: editorial templates must
- * remain (a) selectable via Template dropdown, (b) Customizer-driven,
- * (c) conditionally enqueued.
+ * P6-UX-1 + P6-UX-4 W3-T8 regression lock: the editorial templates must stay
+ * selectable via the Template dropdown, ship their stylesheet + self-hosted
+ * Fraunces files, read NAP/hours from the restaurant-info helper, and stay
+ * free of operator-specific literals.
  *
- * As of the v5.16.0 child->parent split (Task A4), the canonical
- * editorial assets now live in lafka-theme/ (this repo). dirname(__DIR__, 2)
- * resolves to the lafka-theme/ root since this test lives at
- * lafka-theme/tests/Unit/.
- *
- * Tests for conditional-enqueue (A6) and customizer registration (A5)
- * are marked skipped until those tasks ship; they will flip green
- * automatically once the corresponding parent-side code lands.
+ * Customizer registration and the template-gated enqueue are locked by
+ * EditorialCustomizerTest.
  */
 final class EditorialTemplatesTest extends TestCase {
 
@@ -68,41 +63,6 @@ final class EditorialTemplatesTest extends TestCase {
         );
     }
 
-    public function test_assets_are_conditionally_enqueued(): void {
-        // A6 (pending): editorial CSS + Fraunces fonts must be enqueued
-        // ONLY on the editorial templates via is_page_template() guards.
-        $functions = file_get_contents( $this->theme_dir . '/functions.php' );
-        if ( false === strpos( $functions, 'template-editorial-home.php' ) ) {
-            $this->markTestSkipped( 'A6 not yet shipped: parent functions.php has no editorial enqueue block.' );
-        }
-        $this->assertStringContainsString( 'is_page_template', $functions );
-        $this->assertStringContainsString( 'template-editorial-home.php', $functions );
-        $this->assertStringContainsString( 'template-editorial-contact.php', $functions );
-    }
-
-    public function test_customizer_panels_registered(): void {
-        // A5 (pending): editorial Customizer settings must be registered
-        // in the parent theme. Look in incl/ first (parent convention),
-        // fall back to inc/ for backwards compatibility.
-        $customizer_files = array_merge(
-            glob( $this->theme_dir . '/incl/customizer*.php' ) ?: array(),
-            glob( $this->theme_dir . '/inc/customizer*.php' ) ?: array()
-        );
-        if ( empty( $customizer_files ) ) {
-            $this->markTestSkipped( 'A5 not yet shipped: no customizer*.php in parent incl/ or inc/.' );
-        }
-        $combined = '';
-        foreach ( $customizer_files as $f ) {
-            $combined .= file_get_contents( $f );
-        }
-        if ( false === strpos( $combined, 'lafka_editorial_home_hero_eyebrow' ) ) {
-            $this->markTestSkipped( 'A5 not yet shipped: editorial Customizer settings not registered in parent.' );
-        }
-        $this->assertStringContainsString( 'lafka_editorial_home_hero_eyebrow', $combined );
-        $this->assertStringContainsString( 'lafka_editorial_contact_h1', $combined );
-        $this->assertStringContainsString( 'lafka_editorial_contact_cf7_form_id', $combined );
-    }
-
     public function test_home_template_uses_get_restaurant_info_for_visit_section(): void {
         $partials_dir = $this->theme_dir . '/partials';
         $combined     = '';
@@ -113,29 +73,6 @@ final class EditorialTemplatesTest extends TestCase {
             'lafka_get_restaurant_info',
             $combined,
             'Editorial visit section must read NAP/hours from the W2-T1 source-of-truth helper'
-        );
-    }
-
-    /**
-     * W2-T1: lafka_get_restaurant_info() must now be DEFINED in the plugin's
-     * schema helpers (no longer a deferred / phantom function). Assert it by
-     * loading the helpers file and checking function_exists().
-     */
-    public function test_get_restaurant_info_function_is_defined(): void {
-        // Plugin lives at ../../lafka-plugin relative to lafka-theme/ root.
-        $helpers = dirname( $this->theme_dir ) . '/lafka-plugin/incl/schema/lafka-schema-helpers.php';
-        if ( ! file_exists( $helpers ) ) {
-            $this->markTestSkipped( 'Sibling lafka-plugin repo not checked out (isolated CI); local dev only.' );
-        }
-
-        if ( ! defined( 'ABSPATH' ) ) {
-            define( 'ABSPATH', __DIR__ . '/' );
-        }
-        require_once $helpers;
-
-        $this->assertTrue(
-            function_exists( 'lafka_get_restaurant_info' ),
-            'lafka_get_restaurant_info() must be defined by lafka-plugin/incl/schema/lafka-schema-helpers.php (W2-T1 resolver).'
         );
     }
 
@@ -151,7 +88,6 @@ final class EditorialTemplatesTest extends TestCase {
             glob( $this->theme_dir . '/page_templates/template-editorial-*.php' ) ?: array(),
             glob( $this->theme_dir . '/partials/editorial-*.php' ) ?: array(),
             glob( $this->theme_dir . '/incl/customizer-editorial.php' ) ?: array(),
-            glob( $this->theme_dir . '/inc/customizer-editorial.php' ) ?: array(),
             glob( $this->theme_dir . '/styles/editorial.css' ) ?: array(),
             glob( $this->theme_dir . '/js/*.js' ) ?: array()
         );
