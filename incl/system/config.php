@@ -86,10 +86,6 @@ if ( class_exists( 'Envato_Market' ) ) {
 	define( 'LAFKA_IS_ENVATO_MARKET', false );
 }
 
-// Is blank page template
-global $lafka_is_blank;
-$lafka_is_blank = false;
-
 /**
  * Force Visual Composer to initialize as "built into the theme". This will hide certain tabs under the Settings->Visual Composer page
  */
