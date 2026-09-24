@@ -34,12 +34,92 @@ Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
   chrome surfaces (header glass, footer, announce bar, panels) now read
   `--lafka-*` tokens, so dark presets render dark end-to-end; dark mode is
   driven by `dark: true` presets stamping `data-theme="dark"`.
+- **Default copy is cuisine-neutral** — the fallback hero headline and lead,
+  footer blurb, empty-cart lead and how-it-works steps no longer name the
+  reference restaurant's menu (pizza, poutine, donair, dough, pies). Every
+  string is still a Customizer setting; existing operator copy is untouched.
+- The "Blank page" template is renamed **Content only**: it has rendered the
+  normal header and footer since 5.55 and only omits the title, breadcrumb and
+  hero. The file name is unchanged, so assigned pages keep it.
+- `--lafka-color-accent-500` and the menu-highlight fallback are emitted as
+  `var(--lafka-accent-color)`, so a live Customizer accent change reaches them.
+- WooCommerce overrides reconciled with 10.9: `cart/cart.php` (10.8.0),
+  `content-product.php` (9.4.0, now fires `woocommerce_shop_loop_item_title`),
+  `archive-product.php` (8.6.0, prints store notices), `cart/cart-empty.php`
+  (7.0.1, honours `woocommerce_return_to_shop_redirect` / `_text`),
+  `single-product.php` (1.6.4).
+- Theme tags use the WordPress.org list: `e-commerce, food-and-drink` replace
+  `woocommerce, restaurant, food`.
+- `wpml-config.xml` registers the migrated Customizer copy under
+  `theme_mods_lafka` / `theme_mods_lafka-child`; plugin-owned keys moved out.
+- All first-party scripts, including `lafka-front`, `lafka-libs-config`,
+  `lafka-price-slider` and `lafka-dialog`, are minified by `npm run build`; the
+  hand-tuned committed `.min` files are gone (`lafka-dialog.min.js` stays
+  committed for the plugin, and CI checks it matches the build).
+- `languages/lafka.pot` regenerated from the current code with a GPL header
+  (`npm run i18n:pot`).
 
 ### Fixed
 - The Customizer preview served stale saved-value dynamic CSS instead of the
   unsaved values being edited.
 - Mobile-nav grouped-categories toggle wiring; home free-delivery claims now
   derive from the threshold setting.
+- `legacy-shortcodes.css` now loads on foodmenu pages (the loader checked the
+  wrong post-type slug).
+- CloudZoom loads where its markup renders (foodmenu singles on the cloud
+  gallery, `[lafka_cloudzoom_gallery]`) instead of on every product page,
+  which also fixes the TypeError on those pages.
+- Shop-card sale countdowns start (wrong selector, and the library only
+  loaded on product pages); the countdown library and its locale file load
+  only where a countdown renders or the store-closed countdown can show.
+- The product category/tag "title background image" picker opens the media
+  modal (its script handle was never enqueued on those screens).
+- Tools → Lafka Maintenance is reachable again with lafka-plugin 10 (class
+  name clash), and the GitHub updater's notices and links point at it.
+- Exactly one `<main>` landmark per page: the page, post, 404, contact and
+  editorial templates no longer nest a second one.
+- The cart page's backorder notice only shows for lines actually on backorder.
+- Variation-in-listings prices include default add-on options again (the
+  theme looked for a class alias the plugin removed in 8.18.0).
+- The cart remove-link hover used a hard-coded brand red; it now uses the
+  error tokens.
+
+### Removed
+- The add-to-cart sound (`lafka_add_to_cart_sound`, the `<audio>` element and
+  the 352 KB `image/cart_add.wav`): it could never play.
+- The nav-menus.php mega-menu editor (label, colour, icon, image, mega/column
+  fields), its save hook, `LafkaFrontWalker`, the admin mega-menu JS/CSS and
+  the fontIconPicker library. Nothing rendered these since the handoff header;
+  menu-item meta already saved is left in place.
+- ~600 CSS selectors for the pre-handoff header, mega menu, mini-cart module
+  and mobile drawer, and the matching JS in `lafka-front.js` (cart module,
+  mega-menu sizing, drawer tabs, sticky-header init, search/account holders)
+  plus the unused `lafka_map_config` block in `lafka-libs-config.js` and its
+  images.
+- Options-Framework rules in `lafka-admin.css` (27.7 KB → 7.6 KB).
+- `jquery.mb.YTPlayer` (no stated licence; its initialiser targeted markup no
+  template renders).
+- Constants `LAFKA_BACKGROUNDS_PATH`, `LAFKA_IS_VC`, `LAFKA_IS_ENVATO_MARKET`;
+  the `$lafka_is_blank` global; `lafka_remove_page_template()` and its WP All
+  Import hook, which deleted page templates on every import.
+- Deprecated (kept for one cycle): `lafka_build_mobile_menu_items_wrap()`
+  (returns an empty string) and `lafka_is_text_logo()`.
+
+### Performance
+- style.css 279.6 KB → 223.2 KB (gzip 46.1 → 38.2 KB); always-on first-party
+  CSS+JS on the front page 705.7 KB → 638.5 KB. Product pages also drop
+  CloudZoom; non-English sites no longer load a countdown locale everywhere.
+- The shipped theme is ~0.8 MB smaller (the sound file, YTPlayer,
+  fontIconPicker, map images, dead CSS/JS).
+- Unit suite: 747 → 362 tests, now in one process (~1 s instead of 25–45 s):
+  shared store-backed WordPress shims replace per-file shims and process
+  isolation, and implementation-pinning tests were removed or replaced by
+  render tests. PHPCS runs in parallel with a result cache, ESLint and
+  Stylelint use content-hash caches (all restored in CI), and the pre-push
+  hook runs its four gates concurrently.
+- The three local visual configs are one `playwright.visual.config.js` with
+  `peppery`, `dark` and `contrast` projects; `test:visual:nx2-dark` is now
+  `test:visual:dark`.
 
 ### Lean pass
 - Release zip now ships the GPL `LICENSE` and every OFL font licence, and

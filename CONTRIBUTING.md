@@ -21,13 +21,22 @@ npx @wordpress/env run cli wp theme activate lafka
 ## Before opening a PR
 
 ```bash
-npm run lint        # ESLint + Stylelint
-composer phpcs      # WordPress coding standards (security sniffs enforced)
+npm run lint        # ESLint + Stylelint (content-hash caches: .eslintcache, .stylelintcache)
+composer phpcs      # WordPress coding standards (security sniffs enforced; parallel, cached in .phpcs.cache)
 composer phpcbf     # auto-fix what PHPCS can fix
-composer test       # PHPUnit — pure unit tests, WordPress stubbed with global function_exists shims
+composer test       # PHPUnit — pure unit tests in one process, ~1 s
 ```
 
-A pre-push hook that runs all four gates ships in `.githooks/` — install once per clone:
+Unit tests run without WordPress. Common WordPress functions come from
+`tests/support/wp-shims.php`: each is backed by a `$GLOBALS` store
+(`lafka_test_theme_mods`, `lafka_test_options`, the `lafka_test_filters` hook
+registry, …) that `ResetWpShimsExtension` resets before every test, and shared
+class stubs (`WC_Product`, `Lafka_Order_Hours`) live in `tests/support/stubs.php`.
+Configure the stores in `setUp()`; shim anything test-specific in the test file
+behind `function_exists()`. Prefer rendering a partial or calling the helper and
+asserting on the output over grepping source files.
+
+A pre-push hook that runs all four gates in parallel ships in `.githooks/` — install once per clone:
 
 ```bash
 git config core.hooksPath .githooks
@@ -72,14 +81,18 @@ CI** — only the e2e `@smoke` job does.
 |--------|--------------|
 | `lint` / `lint:fix` | ESLint + Stylelint (check / auto-fix). |
 | `lint:js`, `lint:js:fix`, `lint:css`, `lint:css:fix` | The two linters individually. |
-| `build` | Minify top-level `styles/*.css` + `js/*.js` to gitignored `.min` siblings (`scripts/build-assets.mjs`); served when `SCRIPT_DEBUG` is off; release.yml runs it before packaging. |
+| `build` | Minify top-level `styles/*.css` + `js/*.js` to gitignored `.min` siblings (`scripts/build-assets.mjs`); served when `SCRIPT_DEBUG` is off; release.yml runs it before packaging. `js/lafka-dialog.min.js` is the one committed output (lafka-plugin registers it by path); CI fails if it drifts from the build. |
 | `build:theme-json` | Regenerate `theme.json` editor presets from the `--lafka-*` token SSOT. |
+| `i18n:pot` | Regenerate `languages/lafka.pot` with WP-CLI inside the theme's wp-env. |
 | `sync:fonts` | Re-copy the six pool families' woff2 + licences from the dev-only `@fontsource/*` packages into `assets/fonts/` (Rubik/Fraunces woff2 untouched). |
 | `previews:presets` | Screenshot each preset's home page into `presets/<slug>/preview.jpg` (Customizer switcher thumbnails); restores the previously active preset. `-- --only=ember,koyo` to limit. |
 | `test:e2e` / `test:e2e:smoke` / `test:e2e:install` | Playwright e2e suite / `@smoke` subset / browser install (above). |
 | `test:visual` | Peppery full-page goldens at 375/768/1280 (NX1-02 parity + NX1-10a surfaces). `-- --update-snapshots` to (re)capture. |
 | `test:visual:dark` | Midnight (dark preset) goldens on home, menu, PDP and cart — same local contract. |
 | `test:contrast` | Rendered text/CTA contrast for every registered preset on home, menu, PDP and cart (no goldens). |
+
+The three visual/contrast scripts are projects of one config,
+`playwright.visual.config.js` (`peppery`, `dark`, `contrast`).
 | `sync-version` | Write the version from `package.json` into the `versionSync` targets. |
 | `check-version` | Fail if any `versionSync` target drifted from `package.json` (CI runs it). |
 | `version` | npm lifecycle hook used by `npm version`; not run directly. |

@@ -38,7 +38,7 @@ rebuilt single-product page.
 * Redesigned single-product page with topping/size pickers and a sticky add-to-cart bar.
 * List-card menu archive: image-left / body-right product rows.
 * Editorial / long-form page system on the same token system.
-* Mega menu, multiple header styles, and a purpose-built mobile navigation.
+* A purpose-built mobile navigation drawer with optional grouped categories.
 * Ten built-in design presets (two dark) with live Customizer preview, plus an operator accent override.
 * Self-hosted web fonts — no third-party font-CDN requests.
 * Accessibility-minded: visible focus rings, ARIA labelling, and reduced-motion support.

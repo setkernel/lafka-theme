@@ -22,7 +22,7 @@ These match the floors declared in `style.css`. The [Lafka Plugin](https://githu
 - **Customizer-first configuration** — every knob has a sane default, a Customizer control, and a filter hook
 - **Redesigned ordering surfaces** — token-driven single product page with topping/size pickers and sticky add-to-cart, list-card menu archive with inline quick-add, ajax cart drawer
 - **Deep WooCommerce integration** — classic and block Cart/Checkout, quick view, wishlist, product comparison
-- **Editorial page system, mega menu, multiple header styles, blog layouts**
+- **Editorial page system and blog layouts**
 - WPML/RTL, bbPress and The Events Calendar support
 - Optional commercial integrations (not required): WPBakery Page Builder, Revolution Slider
 
