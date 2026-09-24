@@ -82,7 +82,10 @@ Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
 - Variation-in-listings prices include default add-on options again (the
   theme looked for a class alias the plugin removed in 8.18.0).
 - The cart remove-link hover used a hard-coded brand red; it now uses the
-  error tokens.
+  error tokens. The remove × itself uses the muted-text token instead of
+  `#999`, and the rendered-contrast gate now checks it in every preset.
+- The `[lafka_foodmenu]` light scheme's weight badge was grey on a dark
+  section (2.7:1); it now follows the title colour (11.6:1).
 
 ### Removed
 - The add-to-cart sound (`lafka_add_to_cart_sound`, the `<audio>` element and
@@ -97,6 +100,20 @@ Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
   plus the unused `lafka_map_config` block in `lafka-libs-config.js` and its
   images.
 - Options-Framework rules in `lafka-admin.css` (27.7 KB → 7.6 KB).
+- CSS/JS for the collapsible pre-header, top-bar menu, old footer menu and
+  stretched header/footer widths (no markup renders them).
+- 29 `dynamic-css.php` custom properties nothing reads (main-menu, top-bar,
+  pre-header, logo/menu typography, copyright-bar colours, …); the preset
+  chrome whitelist goes from 55 to 34 keys and four presets drop their
+  main-menu colours.
+- Customizer settings with no remaining front-end effect: sticky header,
+  cart-on-add, top header (+ mobile), uppercase menu, header cart/wishlist
+  toggles, logo point, header/footer width, submenu scheme, main-menu /
+  top-bar / pre-header / copyright-bar colours, main-menu / top-menu /
+  text-logo typography, home reviews eyebrow and source. The Main Menu
+  Colors section is gone; stored values are left in place. The body classes
+  those settings (and a few others) added without any CSS consumer are no
+  longer printed.
 - `jquery.mb.YTPlayer` (no stated licence; its initialiser targeted markup no
   template renders).
 - Constants `LAFKA_BACKGROUNDS_PATH`, `LAFKA_IS_VC`, `LAFKA_IS_ENVATO_MARKET`;
