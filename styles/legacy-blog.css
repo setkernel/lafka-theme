@@ -935,7 +935,7 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
 
 .lafka-foodmenu-light .foodmenu-unit-info h4>span.lafka-item-weight-list {
     background-color: rgba(0, 0, 0, 0.17);
-    color: #5e5e5e; /* C-A11Y-Audit-2026-04-29: #999→#5e5e5e, 4.6:1 WCAG AA (light foodmenu bg) */
+    color: inherit; /* Light scheme = white titles on a dark section; #5e5e5e was ~4.4:1 even over white. */
 }
 
 .similar_projects .foodmenu-unit-info h4>span.lafka-item-weight-list {
