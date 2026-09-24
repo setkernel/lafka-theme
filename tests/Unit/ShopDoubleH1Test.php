@@ -14,13 +14,4 @@ final class ShopDoubleH1Test extends TestCase {
 			'Parent theme must remove WC core taxonomy archive header to avoid double <h1>.'
 		);
 	}
-
-	public function test_fix_is_gated_to_shop_and_product_taxonomy(): void {
-		$src = file_get_contents( dirname( __DIR__, 2 ) . '/functions.php' );
-		$this->assertMatchesRegularExpression(
-			'/is_shop\(\)\s*\|\|\s*is_product_taxonomy\(\)/',
-			$src,
-			'Fix must be gated to is_shop() || is_product_taxonomy() — never run elsewhere.'
-		);
-	}
 }

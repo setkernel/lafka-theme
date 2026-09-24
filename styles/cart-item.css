@@ -202,8 +202,8 @@
 
 .lafka-cart-item__remove:hover,
 .lafka-cart-item__remove:focus {
-	color: #c62828;
-	background: rgba(198, 40, 40, 0.06);
+	color: var(--lafka-color-error);
+	background: var(--lafka-color-error-bg);
 }
 
 /* Cart actions row (coupon + update). */

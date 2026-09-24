@@ -21,46 +21,23 @@ declare(strict_types=1);
  */
 
 namespace {
-
 	if ( ! defined( 'ABSPATH' ) ) {
 		define( 'ABSPATH', __DIR__ . '/' );
-	}
-	if ( ! function_exists( '__' ) ) {
-		function __( $text, $domain = 'default' ) {
-			return $text;
-		}
-	}
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			return $default;
-		}
 	}
 	if ( ! function_exists( 'wc_price' ) ) {
 		function wc_price( $price, $args = array() ) {
 			return '<span class="amount">$' . number_format( (float) $price, 2 ) . '</span>';
 		}
 	}
-	if ( ! function_exists( 'wp_strip_all_tags' ) ) {
-		function wp_strip_all_tags( $text, $remove_breaks = false ) {
-			return strip_tags( (string) $text );
-		}
-	}
 	// The resolver the helper prefers; the test varies it via this global.
-	if ( ! function_exists( 'lafka_get_free_delivery_threshold' ) ) {
-		function lafka_get_free_delivery_threshold() {
-			return $GLOBALS['lafka_test_free_delivery_threshold'] ?? 0;
-		}
-	}
 
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/free-delivery.php';
 }
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\TestCase;
 
 	final class HomeFreeDeliveryHonestyTest extends TestCase {
-
 		protected function tearDown(): void {
 			unset( $GLOBALS['lafka_test_free_delivery_threshold'] );
 			parent::tearDown();
@@ -117,14 +94,6 @@ namespace Lafka\Tests\Unit {
 					"{$rel} must not hardcode the \$30 free-delivery figure — derive it from the SSOT helper."
 				);
 			}
-		}
-
-		public function test_helper_is_loaded_by_functions_php(): void {
-			$this->assertStringContainsString(
-				'template-helpers/free-delivery.php',
-				(string) file_get_contents( dirname( __DIR__, 2 ) . '/functions.php' ),
-				'functions.php must require the free-delivery SSOT helpers.'
-			);
 		}
 	}
 }

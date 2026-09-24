@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Lafka\Tests\Unit;
 
 use PHPUnit\Framework\TestCase;
-use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * NX1-10a cascade-parity structural lock.
@@ -321,14 +320,5 @@ final class CascadeParityTest extends TestCase {
 			. "the later-loading legacy copy would override the token and re-invert the cascade "
 			. "(NX1-10a dead-declaration regression)."
 		);
-	}
-
-	/** @return array<string,array{0:string,1:string,2:string}> */
-	public static function confirmedFlipProvider(): array {
-		$out = array();
-		foreach ( self::CONFIRMED_FLIPS as $f ) {
-			$out[ $f[0] . ' { ' . $f[1] . ' }' ] = $f;
-		}
-		return $out;
 	}
 }

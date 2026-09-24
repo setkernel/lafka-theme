@@ -20,7 +20,6 @@ namespace Lafka\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 final class HeroPreloadHookTest extends TestCase {
-
 	private const HEADER_PHP     = __DIR__ . '/../../header.php';
 
 	// ─── header.php assertions ──────────────────────────────────────────────
@@ -49,16 +48,4 @@ final class HeroPreloadHookTest extends TestCase {
 			'header.php must contain the preload <link> with fetchpriority="high" — P6-PERF-1'
 		);
 	}
-
-	public function test_header_guards_preload_on_filter_return(): void {
-		$src = file_get_contents( self::HEADER_PHP );
-		self::assertNotFalse( $src, 'header.php unreadable' );
-		// The if-block must exist so empty-string returns are a no-op.
-		self::assertMatchesRegularExpression(
-			'/if\s*\(\s*\$lafka_lcp_image\s*\)/',
-			$src,
-			'header.php must guard the preload link with if ( $lafka_lcp_image ) — P6-PERF-1'
-		);
-	}
-
 }

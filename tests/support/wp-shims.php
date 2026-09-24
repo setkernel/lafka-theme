@@ -21,9 +21,13 @@
  *   lafka_test_cache / _transients object-cache and transient stores
  *   lafka_test_counters            call counters (cache/transient reads, writes)
  *   lafka_test_is_preview          is_customize_preview()
+ *   lafka_test_is_admin            is_admin()
  *   lafka_test_home_url            home_url() base (default http://example.test)
  *   lafka_test_tpl_dir / _tpl_uri  template directory path / URI
  *   lafka_test_restaurant_info     lafka_get_restaurant_info()
+ *   lafka_test_attachments         wp_get_attachment_image(): [ id => src ]
+ *   lafka_test_pdp_redesign        lafka_pdp_redesign_enabled() (default true)
+ *   lafka_test_free_delivery_threshold  lafka_get_free_delivery_threshold()
  *
  * @package Lafka\Tests
  */
@@ -181,6 +185,19 @@ if ( ! function_exists( 'is_customize_preview' ) ) {
 	}
 }
 
+// ------------------------------------------------------ request state ----
+
+if ( ! function_exists( 'is_admin' ) ) {
+	function is_admin() {
+		return (bool) ( $GLOBALS['lafka_test_is_admin'] ?? false );
+	}
+}
+if ( ! function_exists( 'is_feed' ) ) {
+	function is_feed() {
+		return false;
+	}
+}
+
 // ------------------------------------------------------ theme / assets ----
 
 if ( ! function_exists( 'get_template' ) ) {
@@ -306,9 +323,43 @@ if ( ! function_exists( 'wp_parse_url' ) ) {
 		return parse_url( (string) $url, (int) $component );
 	}
 }
+if ( ! function_exists( 'trailingslashit' ) ) {
+	function trailingslashit( $value ) {
+		return rtrim( (string) $value, '/\\' ) . '/';
+	}
+}
 if ( ! function_exists( 'wp_strip_all_tags' ) ) {
 	function wp_strip_all_tags( $text ) {
 		return trim( strip_tags( (string) $text ) );
+	}
+}
+if ( ! function_exists( '_n' ) ) {
+	function _n( $single, $plural, $number, $domain = 'default' ) {
+		return 1 === (int) $number ? $single : $plural;
+	}
+}
+if ( ! function_exists( 'number_format_i18n' ) ) {
+	function number_format_i18n( $number, $decimals = 0 ) {
+		return number_format( (float) $number, (int) $decimals );
+	}
+}
+if ( ! function_exists( 'wp_date' ) ) {
+	function wp_date( $format, $timestamp = null ) {
+		return gmdate( $format, $timestamp ?? time() );
+	}
+}
+if ( ! function_exists( 'wp_get_attachment_image' ) ) {
+	/** Renders attachments registered in $GLOBALS['lafka_test_attachments'][ id ] = src. */
+	function wp_get_attachment_image( $attachment_id, $size = 'thumbnail', $icon = false, $attr = array() ) {
+		$src = $GLOBALS['lafka_test_attachments'][ (int) $attachment_id ] ?? '';
+		if ( '' === $src ) {
+			return '';
+		}
+		$html = '<img src="' . $src . '"';
+		foreach ( (array) $attr as $name => $value ) {
+			$html .= ' ' . $name . '="' . $value . '"';
+		}
+		return $html . '>';
 	}
 }
 if ( ! function_exists( 'get_locale' ) ) {
@@ -330,6 +381,17 @@ if ( ! function_exists( 'lafka_get_restaurant_info' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_get_free_delivery_threshold' ) ) {
+	function lafka_get_free_delivery_threshold() {
+		return $GLOBALS['lafka_test_free_delivery_threshold'] ?? 0;
+	}
+}
+if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) ) {
+	function lafka_pdp_redesign_enabled() {
+		return (bool) ( $GLOBALS['lafka_test_pdp_redesign'] ?? true );
+	}
+}
+
 if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 	/**
 	 * Reset every per-test store. $filters is the load-time hook registry to
@@ -346,6 +408,15 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_transients']         = array();
 		$GLOBALS['lafka_test_counters']           = array();
 		$GLOBALS['lafka_test_is_preview']         = false;
+		$GLOBALS['lafka_test_is_admin']           = false;
+		$GLOBALS['lafka_test_attachments']        = array();
+		$GLOBALS['lafka_test_pdp_redesign']       = true;
+		$GLOBALS['lafka_test_free_delivery_threshold'] = 0;
+		if ( class_exists( 'Lafka_Order_Hours' ) ) {
+			Lafka_Order_Hours::$lafka_order_hours_options = array();
+			Lafka_Order_Hours::$shop_open                 = true;
+			Lafka_Order_Hours::$next_open_human           = '';
+		}
 		unset( $GLOBALS['lafka_test_home_url'], $GLOBALS['lafka_test_tpl_dir'], $GLOBALS['lafka_test_tpl_uri'], $GLOBALS['lafka_test_restaurant_info'] );
 	}
 }

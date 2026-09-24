@@ -21,49 +21,6 @@ declare(strict_types=1);
 
 namespace {
 
-	// Product the partial reads via `global $product`: a simple product, so the
-	// render stays off the variable/pickers path.
-	if ( ! class_exists( 'WC_Product' ) ) {
-		class WC_Product {
-			public function is_type( $type ) {
-				return 'simple' === $type;
-			}
-			public function get_permalink() {
-				return 'http://example.test/product/margherita/';
-			}
-			public function get_name() {
-				return 'Margherita Pizza';
-			}
-			public function get_short_description() {
-				return '<p>Classic tomato and mozzarella.</p>';
-			}
-			public function get_price() {
-				return '12.50';
-			}
-			public function get_variation_price( $min_or_max = 'min', $display = false ) {
-				return '8.00';
-			}
-			public function get_id() {
-				return 42;
-			}
-		}
-	}
-
-	if ( ! class_exists( 'Lafka_Order_Hours' ) ) {
-		class Lafka_Order_Hours {
-			public static $lafka_order_hours_options = array();
-			public static $shop_open                  = true;
-
-			public static function is_shop_open() {
-				return self::$shop_open;
-			}
-
-			public static function echo_closed_store_message() {
-				echo '<div class="lafka-store-closed-card"><p class="lafka-store-closed-card__title">Closed right now</p></div>';
-			}
-		}
-	}
-
 	if ( ! class_exists( 'Lafka_Nutrition_Display' ) ) {
 		class Lafka_Nutrition_Display {
 			public function display_nutrition() {
@@ -93,10 +50,9 @@ namespace Lafka\Tests\Unit {
 		private const CONTROLLER = __DIR__ . '/../../woocommerce/single-product.php';
 
 		protected function setUp(): void {
-			$GLOBALS['product']                            = new \WC_Product();
-			$GLOBALS['Lafka_Nutrition_Display']            = new \Lafka_Nutrition_Display();
-			\Lafka_Order_Hours::$shop_open                 = true;
-			\Lafka_Order_Hours::$lafka_order_hours_options = array();
+			// A simple product keeps the render off the variable/pickers path.
+			$GLOBALS['product']                 = new \WC_Product();
+			$GLOBALS['Lafka_Nutrition_Display'] = new \Lafka_Nutrition_Display();
 		}
 
 		protected function tearDown(): void {

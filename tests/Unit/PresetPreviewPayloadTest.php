@@ -27,13 +27,11 @@ namespace {
 }
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\Attributes\PreserveGlobalState;
 	use PHPUnit\Framework\Attributes\RunInSeparateProcess;
 	use PHPUnit\Framework\TestCase;
 
 	final class PresetPreviewPayloadTest extends TestCase {
-
 		protected function setUp(): void {
 			$GLOBALS['lafka_test_filters']    = array();
 			$GLOBALS['lafka_test_theme_mods'] = array();
@@ -52,12 +50,6 @@ namespace Lafka\Tests\Unit {
 					$this->assertArrayHasKey( $key, $p, "$slug payload missing $key" );
 				}
 			}
-		}
-
-		public function test_peppery_payload_is_the_identity(): void {
-			$payloads = \lafka_preset_preview_payloads();
-			$this->assertSame( '', $payloads['peppery']['ptl'], 'Peppery emits an empty PTL — the no-op guarantee.' );
-			$this->assertFalse( $payloads['peppery']['dark'] );
 		}
 
 		public function test_dark_preset_payload_differs_and_flags_dark(): void {

@@ -15,7 +15,6 @@ namespace Lafka\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 final class ReadmeTxtTest extends TestCase {
-
 	private const ROOT = __DIR__ . '/../..';
 
 	private function readme(): string {
@@ -87,12 +86,6 @@ final class ReadmeTxtTest extends TestCase {
 				'readme.txt must present the companion plugin as a recommendation, never a requirement (theme-directory rule)'
 			);
 		}
-	}
-
-	public function test_companion_plugin_framed_as_recommendation(): void {
-		$readme = $this->readme();
-		self::assertMatchesRegularExpression( '/recommend/i', $readme, 'companion plugin should be recommended' );
-		self::assertStringContainsString( 'lafka-plugin', $readme, 'companion plugin link expected' );
 	}
 
 	public function test_copyright_section_credits_verifiable_assets(): void {

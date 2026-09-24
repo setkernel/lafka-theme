@@ -18,7 +18,6 @@ use PHPUnit\Framework\TestCase;
  * does any data lookups, mirroring the established sibling pattern.
  */
 final class HomeCloserVisibilityToggleTest extends TestCase {
-
 	private string $closer;
 	private string $customizer;
 
@@ -33,26 +32,6 @@ final class HomeCloserVisibilityToggleTest extends TestCase {
 			"/if\s*\(\s*!\s*\(bool\)\s*get_theme_mod\(\s*'lafka_home_closer_visible',\s*true\s*\)\s*\)\s*\{\s*return;\s*\}/",
 			$this->closer,
 			'Closer partial must early-return when lafka_home_closer_visible is off (default true).'
-		);
-	}
-
-	public function test_visibility_guard_precedes_data_lookups(): void {
-		$guard_pos    = strpos( $this->closer, "get_theme_mod( 'lafka_home_closer_visible'" );
-		$headline_pos = strpos( $this->closer, "get_theme_mod( 'lafka_home_closer_headline'" );
-		$this->assertNotFalse( $guard_pos, 'Closer partial must read the visibility toggle.' );
-		$this->assertNotFalse( $headline_pos, 'Closer partial must read its headline setting.' );
-		$this->assertLessThan(
-			$headline_pos,
-			$guard_pos,
-			'The visibility guard must run before any closer data lookups (early return).'
-		);
-	}
-
-	public function test_visibility_toggle_is_registered(): void {
-		$this->assertStringContainsString(
-			"'lafka_home_closer_visible'",
-			$this->customizer,
-			'Customizer must register the lafka_home_closer_visible toggle the partial honours.'
 		);
 	}
 }

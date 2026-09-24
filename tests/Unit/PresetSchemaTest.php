@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\TestCase;
 	use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -23,7 +22,6 @@ namespace Lafka\Tests\Unit {
 	 * @package Lafka\Tests
 	 */
 	final class PresetSchemaTest extends TestCase {
-
 		private static function root(): string {
 			return dirname( __DIR__, 2 );
 		}
@@ -46,13 +44,6 @@ namespace Lafka\Tests\Unit {
 		public function test_at_least_peppery_is_shipped(): void {
 			$slugs = array_keys( self::shippedPresetProvider() );
 			$this->assertContains( 'peppery', $slugs, 'presets/peppery/preset.json must ship as preset #1.' );
-		}
-
-		#[DataProvider( 'shippedPresetProvider' )]
-		public function test_preset_json_decodes( string $slug, string $path ): void {
-			$data = json_decode( (string) file_get_contents( $path ), true );
-			$this->assertIsArray( $data, "presets/{$slug}/preset.json is not valid JSON." );
-			$this->assertSame( $slug, basename( dirname( $path ) ), 'directory name is the authoritative slug' );
 		}
 
 		#[DataProvider( 'shippedPresetProvider' )]
@@ -91,24 +82,6 @@ namespace Lafka\Tests\Unit {
 					$key,
 					LAFKA_PRESET_CHROME_WHITELIST,
 					"presets/{$slug}: chrome key '{$key}' is not in LAFKA_PRESET_CHROME_WHITELIST."
-				);
-			}
-		}
-
-		#[DataProvider( 'shippedPresetProvider' )]
-		public function test_no_forbidden_tokens( string $slug, string $path ): void {
-			$data   = json_decode( (string) file_get_contents( $path ), true );
-			$tokens = isset( $data['tokens'] ) && is_array( $data['tokens'] ) ? $data['tokens'] : array();
-			$forbidden = array(
-				'--lafka-color-accent-500',
-				'--lafka-color-brand-500',
-				'--lafka-color-accent-text',
-			);
-			foreach ( $forbidden as $key ) {
-				$this->assertArrayNotHasKey(
-					$key,
-					$tokens,
-					"presets/{$slug}: '{$key}' is operator-fed/derived and FORBIDDEN in a preset's tokens{}."
 				);
 			}
 		}

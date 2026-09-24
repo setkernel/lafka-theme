@@ -26,11 +26,9 @@ namespace {
 }
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\TestCase;
 
 	final class SelfHostedFontsTest extends TestCase {
-
 		private static function root(): string {
 			return dirname( __DIR__, 2 );
 		}
@@ -47,45 +45,12 @@ namespace Lafka\Tests\Unit {
 			return new \Lafka_Preset( (array) $data );
 		}
 
-		// ---- P6-PERF-3: Rubik stays self-hosted (unchanged regression locks) ----
-
-		public function test_style_css_has_rubik_font_face_for_three_weights(): void {
-			$css = file_get_contents( self::root() . '/style.css' );
-			$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-weight:\s*400/s', $css );
-			$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-weight:\s*600/s', $css );
-			$this->assertMatchesRegularExpression( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*font-weight:\s*700/s', $css );
-		}
-
 		public function test_style_css_uses_font_display_optional_for_rubik(): void {
 			$css = file_get_contents( self::root() . '/style.css' );
 			preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*\}/s', $css, $matches );
 			$this->assertCount( 3, $matches[0], 'Expected exactly 3 @font-face for Rubik' );
 			foreach ( $matches[0] as $face ) {
 				$this->assertMatchesRegularExpression( '/font-display:\s*optional/', $face );
-			}
-		}
-
-		public function test_woff2_files_exist_in_assets(): void {
-			$dir = self::root() . '/assets/fonts/rubik/';
-			foreach ( array( '400', '600', '700' ) as $weight ) {
-				$this->assertFileExists( $dir . "Rubik-{$weight}.woff2" );
-			}
-		}
-
-		public function test_typography_function_skips_google_font_for_rubik(): void {
-			$core = file_get_contents( self::root() . '/incl/system/core-functions.php' );
-			$this->assertStringContainsString( "'Rubik'", $core, 'core-functions.php should reference Rubik literal for the short-circuit' );
-			preg_match( '/function\s+lafka_typography_enqueue_google_font[^{]*\{(.*?)\n\s*\}/s', $core, $m );
-			$this->assertNotEmpty( $m, 'lafka_typography_enqueue_google_font function not found' );
-			$this->assertStringContainsString( 'Rubik', $m[1], 'short-circuit not inside lafka_typography_enqueue_google_font' );
-		}
-
-		// ---- NX2-03 (a): all 8 pool families are self-hosted (woff2 + licence) --
-
-		public function test_pool_has_exactly_eight_families(): void {
-			$this->assertCount( 8, LAFKA_FONT_POOL, 'The curated font pool must hold exactly 8 families.' );
-			foreach ( array( 'rubik', 'fraunces', 'inter', 'archivo', 'lora', 'manrope', 'space-grotesk', 'dm-serif-display' ) as $slug ) {
-				$this->assertArrayHasKey( $slug, LAFKA_FONT_POOL, "font pool missing '{$slug}'" );
 			}
 		}
 

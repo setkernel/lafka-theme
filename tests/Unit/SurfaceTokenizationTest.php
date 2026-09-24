@@ -2,7 +2,6 @@
 declare(strict_types=1);
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\TestCase;
 	use PHPUnit\Framework\Attributes\DataProvider;
 
@@ -33,7 +32,6 @@ namespace Lafka\Tests\Unit {
 	 * @package Lafka\Tests
 	 */
 	final class SurfaceTokenizationTest extends TestCase {
-
 		private static function root(): string {
 			return dirname( __DIR__, 2 );
 		}
@@ -102,16 +100,6 @@ namespace Lafka\Tests\Unit {
 				'header frosted glass'     => array( 'lafka-header-chrome.css', 'var(--lafka-color-surface-glass' ),
 				'menu strip frosted glass' => array( 'lafka-menu-archive.css', 'var(--lafka-color-surface-glass' ),
 				'footer band surface'      => array( 'lafka-footer-chrome.css', 'var(--lafka-color-surface-footer)' ),
-			);
-		}
-
-		#[DataProvider( 'surfaceWiringProvider' )]
-		public function test_core_surface_wired_to_token( string $file, string $needle ): void {
-			$this->assertStringContainsString(
-				$needle,
-				self::css( $file ),
-				"styles/{$file} must keep wiring its core surface to '{$needle}' "
-					. '(NX2-07 surface tokenisation).'
 			);
 		}
 

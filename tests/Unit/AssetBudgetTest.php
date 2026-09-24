@@ -38,18 +38,19 @@ use PHPUnit\Framework\TestCase;
  *   - Vendored/font CSS (font-awesome, owl, et-line, …) — third-party weight,
  *     not something this budget is meant to police.
  *
- * Baselines recorded 2026-07-06:
- *   - modular-only (12 sheets)     158,115 B  → MODULAR_BUDGET 175,000 (≈10.7%).
- *   - style.css (shrunk monolith)  279,589 B  → STYLE_CEILING  290,000 (≈3.6%).
- *   - total always-on front page   437,704 B  → BUDGET_BYTES   460,000 (≈5.1%).
- * Pre-NX1-10a the same front page shipped 158,115 + 348,870 = 506,985 B of
- * always-on first-party CSS. Re-baseline intentionally (and bump this docblock)
+ * Baselines recorded 2026-09-24 (after the dead pre-handoff header CSS was
+ * pruned from style.css and lafka-responsive.css):
+ *   - modular-only (12 sheets)     162,160 B  → MODULAR_BUDGET 175,000 (≈7.9%).
+ *   - style.css                    223,205 B  → STYLE_CEILING  232,000 (≈3.9%).
+ *   - total always-on front page   385,365 B  → BUDGET_BYTES   400,000 (≈3.8%).
+ * Pre-NX1-10a the same front page shipped 506,985 B of always-on first-party
+ * CSS; 7.0.0 shipped 444,995 B. Re-baseline intentionally (and bump this docblock)
  * when the always-on set legitimately grows.
  */
 final class AssetBudgetTest extends TestCase {
-	private const BUDGET_BYTES   = 460000;
+	private const BUDGET_BYTES   = 400000;
 	private const MODULAR_BUDGET = 175000;
-	private const STYLE_CEILING  = 290000;
+	private const STYLE_CEILING  = 232000;
 
 	/**
 	 * Always-on front-page first-party modular stylesheets, relative to the theme
@@ -150,7 +151,7 @@ final class AssetBudgetTest extends TestCase {
 			self::STYLE_CEILING,
 			$bytes,
 			sprintf(
-				'style.css is %d bytes, over the %d-byte NX1-10a shrink ceiling (was 348,870 pre-teardown). '
+				'style.css is %d bytes, over the %d-byte ceiling (was 348,870 before NX1-10a, 279,588 in 7.0.0). '
 				. 'New legacy surfaces belong in a scoped styles/legacy-*.css, not back in the monolith.',
 				$bytes,
 				self::STYLE_CEILING

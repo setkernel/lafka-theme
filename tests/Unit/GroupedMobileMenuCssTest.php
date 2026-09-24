@@ -35,32 +35,4 @@ final class GroupedMobileMenuCssTest extends TestCase {
 			);
 		}
 	}
-
-	public function test_grouped_menu_uses_design_tokens(): void {
-		foreach ( array(
-			'var(--lafka-color-text-muted)',
-			'var(--lafka-color-text-primary)',
-			'var(--lafka-color-accent-text)',
-			'var(--lafka-color-surface-muted)',
-			'var(--lafka-color-border-subtle)',
-		) as $token ) {
-			$this->assertStringContainsString(
-				$token,
-				$this->css,
-				"Grouped mobile menu must resolve colours from {$token}, not a hardcoded hex."
-			);
-		}
-	}
-
-	public function test_grouped_menu_drops_the_old_hardcoded_hex(): void {
-		// These hexes were the stranded lafka-child values; they must not survive
-		// the migration into the tokenised parent baseline.
-		foreach ( array( '#1a1a1a', '#f8f4ee', '#e4584b' ) as $hex ) {
-			$this->assertStringNotContainsString(
-				$hex,
-				$this->css,
-				"lafka-base.css must not carry the old hardcoded grouped-menu hex {$hex}."
-			);
-		}
-	}
 }

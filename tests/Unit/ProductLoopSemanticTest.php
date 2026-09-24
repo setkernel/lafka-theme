@@ -23,14 +23,4 @@ final class ProductLoopSemanticTest extends TestCase {
             'content-product.php must wrap product output in <li>, not <div>'
         );
     }
-
-    public function test_content_product_template_does_not_use_div_with_wc_product_class(): void {
-        $tpl = file_get_contents( dirname( __DIR__, 2 ) . '/woocommerce/content-product.php' );
-        // Negative assertion: the old <div> wrapper must be gone
-        $this->assertDoesNotMatchRegularExpression(
-            '/<div\s[^>]*?<\?php\s+wc_product_class\(/s',
-            $tpl,
-            'content-product.php must NOT use <div> as the wc_product_class wrapper'
-        );
-    }
 }

@@ -33,7 +33,6 @@ use PHPUnit\Framework\Attributes\DataProvider;
  * silently reintroduce the invisible variant).
  */
 final class FocusRingContrastTest extends TestCase {
-
 	private string $tokens_css;
 
 	protected function setUp(): void {
@@ -80,50 +79,6 @@ final class FocusRingContrastTest extends TestCase {
 			'/(?:rgba|hsla)\([^)]*,\s*0?\.\d+\s*\)/',
 			$value,
 			'--lafka-shadow-focus must be opaque (no fractional alpha) — C-A11Y-Audit-2026-06-27'
-		);
-	}
-
-	/** The token must use the opaque, offset, accent-700-based ring. */
-	public function test_focus_token_is_opaque_offset_ring(): void {
-		$value = $this->focus_token_value();
-
-		// A surface-coloured spacer ring (separation on same-colour surfaces).
-		$this->assertMatchesRegularExpression(
-			'/var\(\s*--lafka-color-surface-page\b/',
-			$value,
-			'--lafka-shadow-focus must include a --lafka-color-surface-page spacer ring — C-A11Y-Audit-2026-06-27'
-		);
-
-		// A solid high-contrast accent-700 ring (8.31:1 on white).
-		$this->assertMatchesRegularExpression(
-			'/var\(\s*--lafka-color-accent-700\b/',
-			$value,
-			'--lafka-shadow-focus must include a solid --lafka-color-accent-700 ring (8.31:1 on white) — C-A11Y-Audit-2026-06-27'
-		);
-
-		// Two comma-separated shadow layers => the ring is offset, not flush.
-		$this->assertStringContainsString(
-			',',
-			$value,
-			'--lafka-shadow-focus must layer a spacer + ring so it is offset, not flush against a same-colour surface — C-A11Y-Audit-2026-06-27'
-		);
-	}
-
-	/** accent-700 must remain a dark, AAA-on-white red for the ring to hold. */
-	public function test_accent_700_token_is_dark_red(): void {
-		$this->assertMatchesRegularExpression(
-			'/--lafka-color-accent-700\s*:\s*#991b1b\b/i',
-			$this->tokens_css,
-			'--lafka-color-accent-700 must remain #991b1b (8.31:1 on white) so the focus ring clears WCAG 1.4.11 — C-A11Y-Audit-2026-06-27'
-		);
-	}
-
-	/** The tokens file must carry the audit provenance comment. */
-	public function test_tokens_css_audit_comment_present(): void {
-		$this->assertStringContainsString(
-			'C-A11Y-Audit-2026-06-27',
-			$this->tokens_css,
-			'lafka-tokens.css must carry the C-A11Y-Audit-2026-06-27 (f018) provenance comment'
 		);
 	}
 

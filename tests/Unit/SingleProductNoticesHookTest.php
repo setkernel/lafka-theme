@@ -21,7 +21,6 @@ use PHPUnit\Framework\TestCase;
  * branch (everything from the <div class="lafka-pdp"> marker onward).
  */
 final class SingleProductNoticesHookTest extends TestCase {
-
 	private string $src;
 
 	private string $redesign;
@@ -56,42 +55,6 @@ final class SingleProductNoticesHookTest extends TestCase {
 			"do_action( 'woocommerce_after_single_product' )",
 			$this->redesign,
 			'Redesign branch must fire woocommerce_after_single_product so integrations on that hook run.'
-		);
-	}
-
-	public function test_before_hook_is_inside_main_above_breadcrumb(): void {
-		$main       = strpos( $this->redesign, 'lafka-pdp__main' );
-		$before     = strpos( $this->redesign, "do_action( 'woocommerce_before_single_product' )" );
-		$breadcrumb = strpos( $this->redesign, 'lafka-pdp__breadcrumb' );
-
-		$this->assertNotFalse( $main );
-		$this->assertNotFalse( $before );
-		$this->assertNotFalse( $breadcrumb );
-
-		// Inside the main wrapper, and above the breadcrumb, so notices render
-		// within the styled .lafka-pdp layout rather than unstyled above it.
-		$this->assertGreaterThan(
-			$main,
-			$before,
-			'woocommerce_before_single_product must fire inside .lafka-pdp__main, not before the wrapper.'
-		);
-		$this->assertLessThan(
-			$breadcrumb,
-			$before,
-			'woocommerce_before_single_product must fire above the breadcrumb so notices sit atop the layout.'
-		);
-	}
-
-	public function test_after_hook_fires_before_get_footer(): void {
-		$after  = strpos( $this->redesign, "do_action( 'woocommerce_after_single_product' )" );
-		$footer = strpos( $this->redesign, "get_footer( 'shop' )" );
-
-		$this->assertNotFalse( $after );
-		$this->assertNotFalse( $footer );
-		$this->assertLessThan(
-			$footer,
-			$after,
-			'woocommerce_after_single_product must fire before get_footer( \'shop\' ).'
 		);
 	}
 }

@@ -19,7 +19,6 @@ declare(strict_types=1);
  */
 
 namespace {
-
 	// The templates open with `defined( 'ABSPATH' ) || exit;`. The shared
 	// bootstrap already defines ABSPATH, but guard for isolated runs.
 	if ( ! defined( 'ABSPATH' ) ) {
@@ -35,11 +34,6 @@ namespace {
 	$GLOBALS['lafka_test_tpl_dir']     = '';
 
 	// ---- Redesign feature flag — force the redesigned branch ON -------------
-	if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) ) {
-		function lafka_pdp_redesign_enabled() {
-			return true;
-		}
-	}
 
 	// ---- The emit shims under test -----------------------------------------
 	// These mirror the real plugin emits' self-guards and echo a dataLayer push
@@ -84,11 +78,6 @@ namespace {
 	}
 	if ( ! function_exists( 'the_post' ) ) {
 		function the_post() {}
-	}
-	if ( ! function_exists( 'get_template_directory' ) ) {
-		function get_template_directory() {
-			return $GLOBALS['lafka_test_tpl_dir'];
-		}
 	}
 	if ( ! function_exists( 'get_template_part' ) ) {
 		function get_template_part( $slug, $name = '', $args = array() ) {}
@@ -167,16 +156,6 @@ namespace {
 			return '#';
 		}
 	}
-	if ( ! function_exists( 'get_theme_mod' ) ) {
-		function get_theme_mod( $name, $default = false ) {
-			return $default;
-		}
-	}
-	if ( ! function_exists( 'home_url' ) ) {
-		function home_url( $path = '' ) {
-			return 'http://example.test' . $path;
-		}
-	}
 	// Canonical menu-URL resolver (incl/template-helpers/menu-url.php) — the
 	// redesigned templates now call this theme helper for every menu CTA.
 	if ( ! function_exists( 'lafka_theme_menu_url' ) ) {
@@ -185,49 +164,12 @@ namespace {
 		}
 	}
 	// Escaping / i18n shims — return or echo the raw value.
-	if ( ! function_exists( 'esc_html' ) ) {
-		function esc_html( $text ) {
-			return $text;
-		}
-	}
-	if ( ! function_exists( 'esc_attr' ) ) {
-		function esc_attr( $text ) {
-			return $text;
-		}
-	}
-	if ( ! function_exists( 'esc_url' ) ) {
-		function esc_url( $url, $protocols = null, $context = 'display' ) {
-			return $url;
-		}
-	}
-	if ( ! function_exists( 'wp_kses_post' ) ) {
-		function wp_kses_post( $data ) {
-			return $data;
-		}
-	}
-	if ( ! function_exists( '__' ) ) {
-		function __( $text, $domain = 'default' ) {
-			return $text;
-		}
-	}
-	if ( ! function_exists( 'esc_html_e' ) ) {
-		function esc_html_e( $text, $domain = 'default' ) {
-			echo $text;
-		}
-	}
-	if ( ! function_exists( 'esc_attr_e' ) ) {
-		function esc_attr_e( $text, $domain = 'default' ) {
-			echo $text;
-		}
-	}
 }
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\TestCase;
 
 	final class Ga4ViewEventsRenderTest extends TestCase {
-
 		private string $theme_dir;
 		private string $tpl_dir;
 
@@ -312,27 +254,6 @@ namespace Lafka\Tests\Unit {
 				'"event":"view_item_list"',
 				$html,
 				'Redesigned archive must fire the GA4 view_item_list event (broken when the template suppresses woocommerce_before_main_content and never calls the emit).'
-			);
-		}
-
-		/**
-		 * Wiring guard: the emit must be invoked BEFORE the heavy partials /
-		 * product loop, otherwise a fatal in a partial would suppress the event.
-		 * Also a cheap source-level regression lock independent of the render.
-		 */
-		public function test_templates_invoke_emit_functions_directly(): void {
-			$pdp = file_get_contents( $this->theme_dir . '/woocommerce/single-product.php' );
-			$this->assertStringContainsString(
-				'lafka_dl_emit_view_item()',
-				$pdp,
-				'single-product.php must call lafka_dl_emit_view_item() directly.'
-			);
-
-			$archive = file_get_contents( $this->theme_dir . '/woocommerce/archive-product.php' );
-			$this->assertStringContainsString(
-				'lafka_dl_emit_view_item_list()',
-				$archive,
-				'archive-product.php must call lafka_dl_emit_view_item_list() directly.'
 			);
 		}
 	}

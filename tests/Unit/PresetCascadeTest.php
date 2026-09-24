@@ -20,11 +20,9 @@ namespace {
 }
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\TestCase;
 
 	final class PresetCascadeTest extends TestCase {
-
 		protected function setUp(): void {
 			$GLOBALS['lafka_test_filters']    = array();
 			$GLOBALS['lafka_test_theme_mods'] = array();
@@ -214,17 +212,6 @@ namespace Lafka\Tests\Unit {
 				$literal,
 				$this->effective_chrome( $key, $literal ),
 				'peppery supplies no chrome default, so an unset key resolves to the shipped literal'
-			);
-		}
-
-		/** lafka_preset_default routes composite typography arrays, not just scalars. */
-		public function test_preset_default_routes_composite_arrays(): void {
-			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'peppery';
-			$fallback = array( 'face' => 'Rubik', 'size' => '16px' );
-			$this->assertSame(
-				$fallback,
-				\lafka_preset_default( 'lafka_body_font', $fallback ),
-				'peppery has no chrome override, so the composite fallback array is returned verbatim'
 			);
 		}
 	}

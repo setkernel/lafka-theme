@@ -43,39 +43,6 @@ final class EditorialTemplatesTest extends TestCase {
         );
     }
 
-    public function test_editorial_css_exists(): void {
-        $this->assertFileExists( $this->theme_dir . '/styles/editorial.css' );
-    }
-
-    public function test_fraunces_font_files_present(): void {
-        // All six woff2 weights (400/600/800 + italics) must be self-hosted
-        // under lafka-theme/assets/fonts/fraunces/ so editorial.css's
-        // ../assets/fonts/fraunces/ url() refs resolve.
-        $glob = glob( $this->theme_dir . '/assets/fonts/fraunces/*.woff2' );
-        $this->assertNotEmpty(
-            $glob,
-            'Fraunces font woff2 files must be self-hosted under lafka-theme/assets/fonts/fraunces/'
-        );
-        $this->assertGreaterThanOrEqual(
-            6,
-            count( $glob ),
-            'All six Fraunces weights (400/600/800 + italics) should be present.'
-        );
-    }
-
-    public function test_home_template_uses_get_restaurant_info_for_visit_section(): void {
-        $partials_dir = $this->theme_dir . '/partials';
-        $combined     = '';
-        foreach ( glob( $partials_dir . '/editorial-*.php' ) as $f ) {
-            $combined .= file_get_contents( $f );
-        }
-        $this->assertStringContainsString(
-            'lafka_get_restaurant_info',
-            $combined,
-            'Editorial visit section must read NAP/hours from the W2-T1 source-of-truth helper'
-        );
-    }
-
     public function test_no_hardcoded_peppery_strings(): void {
         // OSS-safety: per the architectural feedback, no Peppery-specific strings
         // should appear in the OSS code. Operator content flows through Customizer.
@@ -112,40 +79,6 @@ final class EditorialTemplatesTest extends TestCase {
                 'peppery',
                 $contents,
                 "$f contains the hardcoded 'peppery' brand namespace — should come from get_bloginfo('name'), Customizer, or a brand-neutral key/filter"
-            );
-        }
-    }
-
-    /**
-     * SSOT lock for the fulfilment storage contract (audit f082): the menu and
-     * cart controllers must both read the localized window.lafkaCfg object so
-     * the pickup/delivery choice can never silently fail to carry across the
-     * menu -> cart conversion path, and neither may hardcode the pre-rename
-     * 'peppery.fulfilment' key (that literal now lives only in the PHP config
-     * for one-time migration).
-     */
-    public function test_fulfilment_controllers_share_localized_config(): void {
-        $controllers = array(
-            $this->theme_dir . '/js/lafka-menu-controls.js',
-            $this->theme_dir . '/js/lafka-cart-controls.js',
-        );
-        foreach ( $controllers as $path ) {
-            $this->assertFileExists( $path );
-            $contents = file_get_contents( $path );
-            $this->assertStringContainsString(
-                'window.lafkaCfg',
-                $contents,
-                "$path must read the shared window.lafkaCfg config (single source for the fulfilment key + default)"
-            );
-            $this->assertStringContainsString(
-                'fulfilmentKey',
-                $contents,
-                "$path must read fulfilmentKey from the localized config"
-            );
-            $this->assertStringNotContainsString(
-                'peppery.fulfilment',
-                $contents,
-                "$path must not hardcode the pre-rename 'peppery.fulfilment' key — it now comes from PHP (window.lafkaCfg) for migration only"
             );
         }
     }

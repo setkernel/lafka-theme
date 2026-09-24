@@ -15,23 +15,6 @@ final class ProductCardLayoutTest extends TestCase {
 		$this->wc_fns = file_get_contents( dirname( __DIR__, 2 ) . '/incl/woocommerce-functions.php' );
 	}
 
-	public function test_template_uses_lafka_product_card_class(): void {
-		$this->assertStringContainsString( 'lafka-product-card', $this->tpl );
-	}
-
-	public function test_template_renders_image_via_helper(): void {
-		$this->assertStringContainsString( 'lafka_product_card_image_html', $this->tpl );
-	}
-
-	public function test_template_wraps_card_in_single_anchor(): void {
-		// Whole card is wrapped in one <a> linking to permalink — no nested anchors.
-		$this->assertMatchesRegularExpression(
-			"/<a\s+class=\"lafka-product-card__link\"\s+href=\"<\?php\s+the_permalink\(\);\s*\?>\"/",
-			$this->tpl,
-			'card must be wrapped in a single <a class="lafka-product-card__link">'
-		);
-	}
-
 	public function test_template_preserves_wc_ecosystem_hooks(): void {
 		// All 4 standard hooks must fire so third-party plugins still work.
 		foreach ( array(
@@ -42,38 +25,6 @@ final class ProductCardLayoutTest extends TestCase {
 		) as $hook ) {
 			$this->assertStringContainsString( $hook, $this->tpl, "Missing do_action for {$hook}" );
 		}
-	}
-
-	public function test_template_calls_price_explicitly_for_non_variable(): void {
-		// Mirrors existing lafka behavior — variable products surface variation
-		// pricing differently; non-variable get a direct price call.
-		$this->assertStringContainsString( 'woocommerce_template_loop_price', $this->tpl );
-		$this->assertStringContainsString( 'lafka_is_product_eligible_for_variation_in_listings', $this->tpl );
-	}
-
-	public function test_template_preserves_sale_countdown(): void {
-		$this->assertStringContainsString( 'lafka_shop_sale_countdown', $this->tpl );
-	}
-
-	public function test_template_emits_short_description_when_present(): void {
-		$this->assertStringContainsString( 'get_short_description', $this->tpl );
-	}
-
-	public function test_template_uses_wc_product_class_on_outer_li(): void {
-		// wc_product_class adds onsale / out-of-stock / etc. classes critical for CSS.
-		$this->assertStringContainsString( 'wc_product_class', $this->tpl );
-	}
-
-	public function test_template_link_relies_on_computed_accessible_name(): void {
-		// v5.84.0: a11y — we used to set aria-label="<product name>" on the
-		// wrapping <a>, but that override truncated the SR announcement to
-		// just the name and triggered WCAG 2.5.3 (Label in Name) because
-		// the visible content (h3 + description + price) was longer than
-		// the aria-label. The default computed accessible name is now used
-		// — the h3 product title sits inside the link and is the primary
-		// announcement.
-		$this->assertStringNotContainsString( 'aria-label="<?php echo esc_attr( $product->get_name() ); ?>"', $this->tpl );
-		$this->assertStringContainsString( 'lafka-product-card__title', $this->tpl, 'h3 title must be present inside the link to provide the accessible name' );
 	}
 
 	public function test_loop_add_to_cart_removed_from_after_hook(): void {

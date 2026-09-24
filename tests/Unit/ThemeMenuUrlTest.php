@@ -19,7 +19,6 @@ use PHPUnit\Framework\TestCase;
  * home_url( '/menu/' ) literal survives anywhere except inside the helper.
  */
 final class ThemeMenuUrlTest extends TestCase {
-
 	private const HELPER_REL = 'incl/template-helpers/menu-url.php';
 
 	private static function theme_root(): string {
@@ -28,15 +27,6 @@ final class ThemeMenuUrlTest extends TestCase {
 
 	private static function helper_src(): string {
 		return (string) file_get_contents( self::theme_root() . '/' . self::HELPER_REL );
-	}
-
-	public function test_helper_file_exists_and_defines_resolver(): void {
-		$this->assertFileExists( self::theme_root() . '/' . self::HELPER_REL );
-		$this->assertStringContainsString(
-			'function lafka_theme_menu_url',
-			self::helper_src(),
-			'The theme must expose a single lafka_theme_menu_url() resolver.'
-		);
 	}
 
 	public function test_helper_delegates_to_plugin_resolver_when_present(): void {

@@ -16,4 +16,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 require_once __DIR__ . '/support/wp-shims.php';
+require_once __DIR__ . '/support/stubs.php';
 require_once __DIR__ . '/support/ResetWpShimsExtension.php';

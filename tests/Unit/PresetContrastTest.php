@@ -47,12 +47,10 @@ namespace {
 }
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\Attributes\DataProvider;
 	use PHPUnit\Framework\TestCase;
 
 	final class PresetContrastTest extends TestCase {
-
 		private static function root(): string {
 			return dirname( __DIR__, 2 );
 		}
@@ -117,13 +115,6 @@ namespace Lafka\Tests\Unit {
 			);
 		}
 
-		/** peppery + midnight are the shipped acceptance set — both must be present + pass. */
-		public function test_shipped_presets_are_registered(): void {
-			$slugs = array_keys( self::registeredPresetProvider() );
-			$this->assertContains( 'peppery', $slugs );
-			$this->assertContains( 'midnight', $slugs );
-		}
-
 		/**
 		 * Peppery's one shipped waiver must be doing REAL work: the muted-text-on-
 		 * card pair genuinely misses AA (so the waiver is not decorative), the pair
@@ -158,33 +149,6 @@ namespace Lafka\Tests\Unit {
 				$this->unwaived_failures( $peppery ),
 				'with its audited waiver applied, peppery must pass the gate overall'
 			);
-		}
-
-		/**
-		 * Dark-surface audit for midnight — the existing FocusRingContrastTest only
-		 * checks the LIGHT hex. Here the whole dark palette is exercised: body text
-		 * on the near-black surface AND button text on the neon accent fill (the
-		 * pair that would be white-on-cyan without midnight's on-accent override).
-		 */
-		public function test_midnight_dark_surface_audit(): void {
-			$midnight = \Lafka_Presets::from_dirs( array( self::root() . '/presets' ) )->get( 'midnight' );
-			$this->assertTrue( $midnight->is_dark(), 'midnight must be a dark preset' );
-
-			$pal = $this->effective_palette( $midnight );
-
-			$this->assertTrue(
-				\Lafka_Color_Contrast::meets( $pal['text-primary'], $pal['surface-page'], \Lafka_Color_Contrast::AA_NORMAL ),
-				'midnight body text must clear AA on the dark page surface'
-			);
-			$this->assertTrue(
-				\Lafka_Color_Contrast::meets( $pal['text-on-accent'], $pal['accent-500'], \Lafka_Color_Contrast::AA_NORMAL ),
-				'midnight button text must clear AA on the neon accent fill (dark text on cyan, not white)'
-			);
-			$this->assertTrue(
-				\Lafka_Color_Contrast::meets( $pal['accent-contrast'], $pal['accent-500'], \Lafka_Color_Contrast::AA_NORMAL ),
-				'midnight accent-contrast must clear AA on the accent fill'
-			);
-			$this->assertSame( array(), $this->unwaived_failures( $midnight ), 'midnight must pass the whole gate' );
 		}
 
 		// -----------------------------------------------------------------

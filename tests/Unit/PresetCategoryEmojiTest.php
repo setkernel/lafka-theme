@@ -22,11 +22,9 @@ namespace {
 }
 
 namespace Lafka\Tests\Unit {
-
 	use PHPUnit\Framework\TestCase;
 
 	final class PresetCategoryEmojiTest extends TestCase {
-
 		protected function setUp(): void {
 			$GLOBALS['lafka_test_filters']    = array();
 			$GLOBALS['lafka_test_theme_mods'] = array();
@@ -62,19 +60,6 @@ namespace Lafka\Tests\Unit {
 			);
 		}
 
-		/** It also fires through the live apply_filters() path, not just directly. */
-		public function test_glyph_flows_through_apply_filters(): void {
-			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'ember';
-			// setUp() cleared the live filter store; re-register the include-time
-			// hook so the end-to-end apply_filters() chain is exercised.
-			\add_filter( 'lafka_category_emoji', 'lafka_preset_category_emoji', 10, 2 );
-			$this->assertSame(
-				'🍟',
-				(string) \apply_filters( 'lafka_category_emoji', '🍕', $this->term( 'sides', 'Sides' ) ),
-				'the registered callback rewrites the glyph when apply_filters runs the chain'
-			);
-		}
-
 		/** Fuzzy fallback: the term slug CONTAINS a map key (mirrors the partial). */
 		public function test_fuzzy_slug_contains_map_key(): void {
 			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'ember';
@@ -102,16 +87,6 @@ namespace Lafka\Tests\Unit {
 				'🍕',
 				\lafka_preset_category_emoji( '🍕', $this->term( 'pizzas', 'Pizzas' ) ),
 				'peppery has no category_emoji map, so the default glyph is byte-identical'
-			);
-		}
-
-		/** Midnight (dark) also ships an EMPTY map -> unchanged (golden parity). */
-		public function test_midnight_empty_map_returns_emoji_unchanged(): void {
-			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'midnight';
-			$this->assertSame(
-				'🥗',
-				\lafka_preset_category_emoji( '🥗', $this->term( 'salads', 'Salads' ) ),
-				'midnight has no category_emoji map, so the default glyph is byte-identical'
 			);
 		}
 

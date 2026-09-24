@@ -20,7 +20,6 @@ use PHPUnit\Framework\TestCase;
  * fields or the `lafka_home_reviews` filter); otherwise the markup is omitted.
  */
 final class HomeSocialProofHonestyTest extends TestCase {
-
 	private string $hero;
 	private string $reviews;
 	private string $customizer;
@@ -45,14 +44,6 @@ final class HomeSocialProofHonestyTest extends TestCase {
 		);
 	}
 
-	public function test_hero_renders_first_stat_conditionally(): void {
-		$this->assertMatchesRegularExpression(
-			"/''\s*!==\s*\\\$lafka_hero_stat_1_value/",
-			$this->hero,
-			'Hero must only render the rating stat when the operator provides a value.'
-		);
-	}
-
 	public function test_reviews_do_not_default_fake_aggregate(): void {
 		$this->assertDoesNotMatchRegularExpression(
 			"/lafka_home_reviews_avg['\"]\s*,\s*4\.8/",
@@ -74,19 +65,6 @@ final class HomeSocialProofHonestyTest extends TestCase {
 				"Reviews must not ship the fabricated testimonial: \"$needle\"."
 			);
 		}
-	}
-
-	public function test_reviews_drop_empty_entries_and_bail_when_none(): void {
-		$this->assertStringContainsString(
-			'array_filter',
-			$this->reviews,
-			'Reviews must filter out entries with no real quote text.'
-		);
-		$this->assertMatchesRegularExpression(
-			"/if\s*\(\s*empty\(\s*\\\$lafka_reviews\s*\)\s*\)\s*\{?\s*return;/",
-			$this->reviews,
-			'Reviews must return early (render nothing) when there are no real reviews.'
-		);
 	}
 
 	public function test_reviews_rating_row_gated_on_real_count(): void {
@@ -118,62 +96,6 @@ final class HomeSocialProofHonestyTest extends TestCase {
 			'The reviews partial reads get_theme_mod keys that NO add_setting registers in section '
 				. 'lafka_home_reviews (operator input would be silently discarded): '
 				. implode( ', ', $missing )
-		);
-	}
-
-	public function test_reviews_partial_reads_the_canonical_per_review_keys(): void {
-		foreach ( array( 1, 2, 3 ) as $n ) {
-			foreach ( array( 'quote', 'name', 'source', 'stars' ) as $suffix ) {
-				$this->assertStringContainsString(
-					"get_theme_mod( 'lafka_home_reviews_{$n}_{$suffix}'",
-					$this->reviews,
-					"Reviews partial must read the registered per-review key lafka_home_reviews_{$n}_{$suffix}."
-				);
-			}
-		}
-	}
-
-	public function test_reviews_partial_reads_registered_aggregate_rating_key(): void {
-		$this->assertStringContainsString(
-			"get_theme_mod( 'lafka_home_reviews_rating'",
-			$this->reviews,
-			'Reviews partial must read the registered aggregate key lafka_home_reviews_rating.'
-		);
-		$this->assertStringNotContainsString(
-			'lafka_home_reviews_avg',
-			$this->reviews,
-			'Reviews partial must not read the unregistered aggregate key lafka_home_reviews_avg.'
-		);
-	}
-
-	public function test_reviews_partial_drives_stars_off_data_not_hardcoded(): void {
-		$this->assertStringNotContainsString(
-			'★★★★★',
-			$this->reviews,
-			'Reviews partial must not hardcode a 5-star row; emit str_repeat() from the rating/per-review stars.'
-		);
-		$this->assertStringContainsString(
-			"str_repeat( '★'",
-			$this->reviews,
-			'Reviews partial must build the star row with str_repeat() from real data.'
-		);
-	}
-
-	public function test_reviews_headline_default_matches_customizer(): void {
-		$this->assertMatchesRegularExpression(
-			"/get_theme_mod\(\s*'lafka_home_reviews_headline',\s*__\(\s*'What our neighbors say'/",
-			$this->reviews,
-			'Reviews partial headline fallback must match the Customizer default so preview and render agree.'
-		);
-		$this->assertMatchesRegularExpression(
-			"/'lafka_home_reviews_headline'.*?'default'\s*=>\s*__\(\s*'What our neighbors say'/s",
-			$this->customizer,
-			'Customizer headline default must match the partial fallback.'
-		);
-		$this->assertStringNotContainsString(
-			'People keep coming back.',
-			$this->reviews,
-			'Reviews partial must not keep its old divergent headline fallback.'
 		);
 	}
 

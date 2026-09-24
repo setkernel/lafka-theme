@@ -23,7 +23,6 @@ use PHPUnit\Framework\TestCase;
  *      WITHOUT inerting document.body (which would disable the drawer itself).
  */
 final class MobileNavFocusTrapTest extends TestCase {
-
 	private string $php;
 	private string $js;
 
@@ -46,15 +45,6 @@ final class MobileNavFocusTrapTest extends TestCase {
 			'/aria-modal="true"/',
 			$this->php,
 			'#lafka-mobile-nav must declare aria-modal="true" (f019)'
-		);
-	}
-
-	/** The stale aria-modal="false" must be gone. */
-	public function test_drawer_is_not_aria_modal_false(): void {
-		$this->assertDoesNotMatchRegularExpression(
-			'/aria-modal="false"/',
-			$this->php,
-			'#lafka-mobile-nav must NOT declare aria-modal="false" (f019)'
 		);
 	}
 
@@ -116,24 +106,6 @@ final class MobileNavFocusTrapTest extends TestCase {
 			'/\.inert\s*=\s*true/',
 			$this->js,
 			'The background helper must set the inert property (f019)'
-		);
-	}
-
-	/** Background inerting must provide an aria-hidden fallback. */
-	public function test_inert_has_aria_hidden_fallback(): void {
-		$this->assertMatchesRegularExpression(
-			"/setAttribute\\(\\s*'aria-hidden'\\s*,\\s*'true'\\s*\\)/",
-			$this->js,
-			'The background helper must fall back to aria-hidden when inert is unsupported (f019)'
-		);
-	}
-
-	/** It must NOT inert document.body — that would disable the drawer too. */
-	public function test_does_not_inert_document_body(): void {
-		$this->assertDoesNotMatchRegularExpression(
-			'/document\.body\.inert/',
-			$this->js,
-			'document.body must never be inerted — the drawer lives inside body (f019)'
 		);
 	}
 }

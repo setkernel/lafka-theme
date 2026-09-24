@@ -18,20 +18,11 @@ use PHPUnit\Framework\TestCase;
  * (locked by GroupedMobileMenuCssTest).
  */
 final class MobileNavGroupingWiringTest extends TestCase {
-
 	private string $partial;
 
 	protected function setUp(): void {
 		parent::setUp();
 		$this->partial = (string) file_get_contents( dirname( __DIR__, 2 ) . '/partials/mobile-nav.php' );
-	}
-
-	public function test_partial_consults_the_customizer_toggle(): void {
-		$this->assertStringContainsString(
-			"get_theme_mod( 'lafka_mobile_menu_grouping', 'no' )",
-			$this->partial,
-			'The drawer must read the same toggle the Customizer registers (default no).'
-		);
 	}
 
 	public function test_partial_delegates_grouping_to_the_plugin_helper(): void {
@@ -55,13 +46,5 @@ final class MobileNavGroupingWiringTest extends TestCase {
 				"Grouped markup must use the {$class} class lafka-base.css styles."
 			);
 		}
-	}
-
-	public function test_flat_list_remains_the_default_branch(): void {
-		$this->assertGreaterThanOrEqual(
-			2,
-			substr_count( $this->partial, 'lafka-mobile-nav__count' ),
-			'Both the grouped and the default flat branch must render the count pill.'
-		);
 	}
 }

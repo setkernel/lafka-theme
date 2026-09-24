@@ -133,6 +133,12 @@ final class ThemeJsonTokenParityTest extends TestCase {
 		return $out;
 	}
 
+	public function test_theme_json_is_schema_v3_with_only_curated_colours(): void {
+		$json = self::theme_json();
+		self::assertSame( 3, $json['version'], 'theme.json schema version must be 3 (WP 6.6+).' );
+		self::assertFalse( $json['settings']['color']['defaultPalette'] ?? true, 'Only the Lafka palette may appear in the editor colour picker.' );
+	}
+
 	public function test_tokens_are_parsed(): void {
 		$tokens = self::parse_root_tokens();
 		// Sanity: the SSOT ships ~212 custom properties; guard against a broken parse.

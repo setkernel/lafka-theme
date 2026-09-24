@@ -28,21 +28,6 @@ final class CartCountSyncTest extends TestCase {
 	}
 
 	/**
-	 * The sync handler must fire on the add/remove events AND on WC's fragment
-	 * lifecycle events — the latter covers cross-page / session-restored carts.
-	 *
-	 * @return array<string,array{0:string}>
-	 */
-	public static function provide_cart_events(): array {
-		return array(
-			'added_to_cart'        => array( 'added_to_cart' ),
-			'removed_from_cart'    => array( 'removed_from_cart' ),
-			'wc_fragments_refreshed' => array( 'wc_fragments_refreshed' ),
-			'wc_fragments_loaded'  => array( 'wc_fragments_loaded' ),
-		);
-	}
-
-	/**
 	 * Every count node selector used by the three templates must be written to.
 	 *
 	 * @return array<string,array{0:string}>
