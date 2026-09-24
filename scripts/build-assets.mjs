@@ -33,15 +33,14 @@ import { dirname, join } from 'node:path';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 
 /* First-party assets that already ship a committed, hand-tuned `.min` sibling
- * (consumed by a SCRIPT_DEBUG `$suffix` enqueue), plus the vendored top-level
- * Modernizr build. The build must not regenerate these — doing so would clobber
- * the tuned output and dirty the tree. */
+ * (consumed by a SCRIPT_DEBUG `$suffix` enqueue). The build must not
+ * regenerate these — doing so would clobber the tuned output and dirty the
+ * tree. */
 const SKIP = new Set([
 	'lafka-front.js',
 	'lafka-dialog.js',
 	'lafka-libs-config.js',
 	'lafka-price-slider.js',
-	'modernizr.custom.js',
 ]);
 
 const TARGETS = [

@@ -108,11 +108,9 @@ export default [
 			"js/fonticonpicker/**",
 			"js/isotope/**",
 			"js/jquery.nice-select.min.js",
-			"js/jquery.nicescroll/**",
 			"js/jquery.mb.YTPlayer/**",
 			"js/magnific/**",
 			"js/owl-carousel2-dist/**",
-			"js/modernizr.custom.js",
 			"js/typed.min.js",
 			// Vendor admin JS
 			"incl/lafka-options-framework/**",
