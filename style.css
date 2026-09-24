@@ -9437,15 +9437,15 @@ body.lafka-store-closed>div.widget.woocommerce.widget_shopping_cart .widget_shop
     color: var(--lafka-accent-color);
 }
 
- .double-bounce1, #products-wrapper div.product-category.product:hover h2 {
+.double-bounce1, #products-wrapper div.product-category.product:hover h2 {
     background-color: var(--lafka-logo-bg-color);
 }
 
- .woocommerce-tabs ul.tabs li.active::before, .woocommerce-tabs ul.tabs li:hover::before {
+.woocommerce-tabs ul.tabs li.active::before, .woocommerce-tabs ul.tabs li:hover::before {
     border-color: transparent var(--lafka-logo-bg-color) var(--lafka-logo-bg-color) transparent;
 }
 
- .woocommerce-tabs ul.tabs li.active::after, .woocommerce-tabs ul.tabs li:hover::after {
+.woocommerce-tabs ul.tabs li.active::after, .woocommerce-tabs ul.tabs li:hover::after {
     border-color: transparent transparent var(--lafka-logo-bg-color) var(--lafka-logo-bg-color);
 }
 
@@ -9618,7 +9618,7 @@ h1, h2, h3, h4, h5, h6, .foodmenu_top .project-data .project-details .lafka-food
 }
 
  /* Headings font for menu */
- .lafka-headings-for-menu ul.lafka-top-menu > li a {
+.lafka-headings-for-menu ul.lafka-top-menu > li a {
     font-family: var(--lafka-headings-font-family);
     font-display: swap;
 }
@@ -9749,7 +9749,7 @@ button.single_add_to_cart_button, .foodmenu_top .project-data .project-details a
 }
 
 /* Uppercase menu */
- .lafka-uppercase-menu #lafka_footer_menu > li a, .lafka-uppercase-menu ul.lafka-top-menu > li a {
+.lafka-uppercase-menu #lafka_footer_menu > li a, .lafka-uppercase-menu ul.lafka-top-menu > li a {
     text-transform: uppercase;
 }
 

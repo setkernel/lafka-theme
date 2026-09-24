@@ -4,13 +4,6 @@
 (function ($) {
 	"use strict";
 	$(document).ready(function () {
-        // Init wpColorPicker color picker for theme options
-        $('input.lafka-theme-options-colorpicker').wpColorPicker({
-            change: function(event, ui){
-                $(this).closest('div.controls').find('div.lafka_font_preview p').css({color: ui.color});
-			}
-		});
-
 		// Proper position featured images metaboxes
 		var featured_img_meta = $('#postimagediv');
 		var featured_imgs_arr = new Array();
