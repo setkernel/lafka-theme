@@ -86,6 +86,9 @@ Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
   `#999`, and the rendered-contrast gate now checks it in every preset.
 - The `[lafka_foodmenu]` light scheme's weight badge was grey on a dark
   section (2.7:1); it now follows the title colour (11.6:1).
+- Menu items that share a `menu_order` no longer reshuffle between requests
+  on /menu/ and the grouped shop view: title breaks the tie, as in
+  WooCommerce's default catalog order.
 
 ### Removed
 - The add-to-cart sound (`lafka_add_to_cart_sound`, the `<audio>` element and
