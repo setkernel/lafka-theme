@@ -1,6 +1,7 @@
 <?php
 /**
- * NX2-03 preset FONT POOL — curated 8-family OFL registry (pure-data).
+ * NX2-03 preset FONT POOL — curated 10-family OFL registry (pure-data; GX4 added
+ * Atkinson Hyperlegible Next + the variable Bricolage Grotesque).
  *
  * The preset engine's font layer mirrors the pure-data whitelist idiom of
  * incl/presets/lafka-preset-tokens.php: a single constant that BOTH the emitter
