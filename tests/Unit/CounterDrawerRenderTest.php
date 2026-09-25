@@ -101,6 +101,17 @@ namespace Lafka\Tests\Unit {
 			$this->assertStringContainsString( '<h2 id="lafka-cart-drawer-title" class="lafka-cart-drawer__title">', $classic );
 		}
 
+		public function test_the_delivery_choice_explains_minimum_free_threshold_and_fee(): void {
+			$GLOBALS['lafka_test_fulfilment_modes'] = array( 'pickup', 'delivery' );
+			$html = $this->render( array( 'a' => array( 'quantity' => 1 ) ) );
+
+			$this->assertMatchesRegularExpression( '#<p class="lafka-drawer__note" data-lafka-fulfilment-note="delivery"[^>]*>#', $html );
+			$this->assertStringContainsString( 'The delivery fee shows at checkout once you enter your address.', $html );
+
+			\add_filter( 'lafka_counter_drawer_delivery_note', static fn( $note, $min ) => 'min=' . $min . '|' . $note, 10, 3 );
+			$this->assertStringContainsString( 'min=0|The delivery fee', $this->render( array( 'a' => array( 'quantity' => 1 ) ) ), 'No minimum without the plugin: nothing invented.' );
+		}
+
 		public function test_drawer_fragments_and_upsell_wording(): void {
 			$this->render( array( 'a' => array( 'quantity' => 1 ) ), '8.50' );
 			$fragments = \apply_filters( 'woocommerce_add_to_cart_fragments', array() );
