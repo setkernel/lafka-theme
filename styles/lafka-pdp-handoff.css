@@ -574,3 +574,30 @@
 .lafka-pdp .lafka-pdp-tabs {
 	display: none;
 }
+
+/* Age / ID notice (GX M-25; incl/template-helpers/age-notice.php). Also in
+ * lafka-pdp-handoff.css — kept out of the always-on sheets. */
+.lafka-age-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	margin: 8px 0 0;
+	flex-basis: 100%;
+	order: 3;
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-body-sm);
+	line-height: 1.4;
+	hyphens: manual;
+}
+
+.lafka-age-notice__badge {
+	flex: none;
+	padding: 1px 6px;
+	border: 1.5px solid currentcolor;
+	border-radius: 4px;
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: 0.04em;
+	line-height: 1.3;
+}

@@ -95,4 +95,112 @@ function lafka_menu_landing_customizer_register( WP_Customize_Manager $wp_custom
 			'type'        => 'textarea',
 		)
 	);
+
+	// ---------------------------------------------------------------------
+	// Section: Behaviour (GX QA — M-03, M-14, M-15, M-25)
+	// ---------------------------------------------------------------------
+
+	$wp_customize->add_section(
+		'lafka_menu_landing_behaviour',
+		array(
+			'title'    => __( 'Behaviour', 'lafka' ),
+			'panel'    => 'lafka_menu_landing',
+			'priority' => 20,
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_menu_group_limit',
+		array(
+			'default'           => 0,
+			'sanitize_callback' => 'absint',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_menu_group_limit',
+		array(
+			'label'       => __( 'Items per category on the menu page', 'lafka' ),
+			'description' => __( '0 shows every item. A limit adds a "See all" link to the full category page.', 'lafka' ),
+			'section'     => 'lafka_menu_landing_behaviour',
+			'type'        => 'number',
+			'input_attrs' => array(
+				'min'  => 0,
+				'max'  => 200,
+				'step' => 1,
+			),
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_menu_subheads',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_menu_subheads',
+		array(
+			'label'       => __( 'Show subcategory headings', 'lafka' ),
+			'description' => __( 'A category with subcategories (e.g. Pizza → Classic, Speciality) lists each one under its own heading, in the Products → Categories order.', 'lafka' ),
+			'section'     => 'lafka_menu_landing_behaviour',
+			'type'        => 'checkbox',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_shop_to_menu_redirect',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_shop_to_menu_redirect',
+		array(
+			'label'       => __( 'Send the shop page to the menu page', 'lafka' ),
+			'description' => __( 'The WooCommerce shop page (and a /shop/ address) permanently redirect to the menu page, so search engines see one menu. Product and category addresses are unchanged.', 'lafka' ),
+			'section'     => 'lafka_menu_landing_behaviour',
+			'type'        => 'checkbox',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_age_notice_categories',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_age_notice_categories',
+		array(
+			'label'       => __( 'Age-restricted categories', 'lafka' ),
+			'description' => __( 'Category slugs, comma-separated (e.g. beer, wine). Their products and menu sections show the ID notice below. Leave blank for none.', 'lafka' ),
+			'section'     => 'lafka_menu_landing_behaviour',
+			'type'        => 'text',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_age_notice_text',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_age_notice_text',
+		array(
+			'label'       => __( 'Age notice text', 'lafka' ),
+			'description' => __( 'Blank uses "Age-restricted item. Valid photo ID is required at pickup or delivery." Add your legal age if you like (e.g. "19+ only").', 'lafka' ),
+			'section'     => 'lafka_menu_landing_behaviour',
+			'type'        => 'text',
+		)
+	);
 }

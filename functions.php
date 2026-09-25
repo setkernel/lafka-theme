@@ -164,6 +164,9 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-fix-category-ca
 // Version bridges for the woocommerce/ template overrides (media gallery, cart item name, meta ordering).
 require_once get_template_directory() . '/incl/woocommerce/lafka-wc-template-compat.php';
 
+// One menu URL: the WC shop page (and a stray /shop/) 301 to /menu/ (GX M-14).
+require_once get_template_directory() . '/incl/woocommerce/lafka-shop-to-menu.php';
+
 // No-op fallbacks for orphan 3rd-party shortcodes (v5.40.0).
 require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
 
@@ -214,6 +217,7 @@ require_once get_template_directory() . '/incl/template-helpers/price-columns.ph
 require_once get_template_directory() . '/incl/template-helpers/hours-display.php';
 require_once get_template_directory() . '/incl/template-helpers/deal-value.php';
 require_once get_template_directory() . '/incl/template-helpers/menu-data.php';
+require_once get_template_directory() . '/incl/template-helpers/age-notice.php';
 require_once get_template_directory() . '/incl/template-helpers/counter-chrome.php';
 require_once get_template_directory() . '/incl/customizer-counter.php';
 require_once get_template_directory() . '/incl/system/lafka-preset-reset.php';

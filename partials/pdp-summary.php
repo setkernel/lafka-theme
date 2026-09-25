@@ -59,6 +59,20 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
         <?php echo wp_kses_post( $product->get_short_description() ); ?>
     </div>
 
+    <?php
+    // GX M-25: operator-chosen age-restricted categories (empty by default).
+    if ( function_exists( 'lafka_product_age_notice_html' ) ) {
+        echo lafka_product_age_notice_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_age_notice_html().
+    }
+    ?>
+
+    <?php
+    // GX M-25: operator-chosen age-restricted categories (empty by default).
+    if ( function_exists( 'lafka_product_age_notice_html' ) ) {
+        echo lafka_product_age_notice_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_age_notice_html().
+    }
+    ?>
+
     <div class="lafka-pdp-summary__price">
         <?php
         // Currency symbol/position MUST come from WC settings (wc_price()
