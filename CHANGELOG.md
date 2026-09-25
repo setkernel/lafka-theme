@@ -7,6 +7,8 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+## [7.2.0] — 2026-09-25
+
 Phases GX0 ("stop losing orders"), GX1 (diagnostics) and GX4 ("The counter");
 pairs with lafka-plugin.
 
@@ -68,6 +70,16 @@ pairs with lafka-plugin.
   plugin's formatter; tel: links unchanged).
 - **WooCommerce**: related-products args pass an int limit (no more
   "Invalid limit type" log errors on every product page).
+
+### Platform (GX5)
+- WooCommerce template overrides reconciled with core: `single-product/product-image.php` (11.1.0 media gallery, native video first item), `cart/cart.php` (11.2.0 item naming), `single-product/meta.php` (11.2.0 category ordering).
+- Editor styles load into WordPress 7.1's iframed canvas; the catch-all `defer` filter is replaced by the script strategy API on the theme's own handles; FlexSlider reuses WooCommerce's `wc-flexslider`; `$.trim`/`$.proxy` removed (jQuery 4 ready).
+- Tested up to WordPress 7.1 / WooCommerce 11.1; `responsive-embeds` + safe `html5` supports; theme.json schema 7.1; stylelint 17; PHPCompatibility 10 (PHP 8.x checks).
+
+### Fixed
+- Counter layout: the checkered band element reused the `<body>` flag class, so its default `display:none` hid the whole page — renamed to `.lafka-motif-band`, locked by `BodyFlagClassCollisionTest`.
+- Counter polish from the browser review: header controls never overlap (1024–1440), both hero dishes visible with captions in clear space, every deal renders (legacy product types included via `lafka_listing_extra_product_types`), price columns never break words (2×2 on narrow rows), Bricolage tabular figures for prices, contact shadow for cut-outs vs rounded crop for photos, content-visibility sections keep remembered sizes and jump links land correctly, find-us hours grid, quiet footer from its own menu location (no legacy link walls), one-line brand on phones.
+- Tests: the preset registry singleton resets between tests; CI also runs PHPUnit in reverse and seeded random order.
 
 ## [7.1.0] — 2026-09-24
 
