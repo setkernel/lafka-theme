@@ -45,9 +45,19 @@
 		pill.classList.toggle('added', state === 'added');
 	}
 
-	function ajaxAddToCart(pill) {
-		var productId = pill.dataset.lafkaQuickaddProductId;
-		var fallbackUrl = pill.dataset.lafkaQuickaddUrl;
+	/**
+	 * Add one product (or variation id) through WooCommerce's wc-ajax
+	 * `add_to_cart`, firing `adding_to_cart` / `added_to_cart` exactly like
+	 * WC's own buttons (so the drawer + fragments refresh). Shared with the
+	 * counter rows and size chooser via window.lafkaQuickAdd.add (GX4).
+	 *
+	 * @param {string|number} productId  Product or variation id.
+	 * @param {Element}       trigger    Element that gets the loading/added state.
+	 * @param {Object}        [opts]     { fallbackUrl, beforeAdded(response), onSuccess(response), onError(response) }
+	 */
+	function add(productId, trigger, opts) {
+		opts = opts || {};
+		var fallbackUrl = opts.fallbackUrl || '';
 		var ajaxUrl = getWcAjaxUrl('add_to_cart');
 
 		if (!ajaxUrl || !window.jQuery) {
@@ -56,28 +66,40 @@
 			return;
 		}
 
-		setPillState(pill, 'loading');
+		setPillState(trigger, 'loading');
 		var $body = window.jQuery(document.body);
-		$body.trigger('adding_to_cart', [window.jQuery(pill), { product_id: productId }]);
+		$body.trigger('adding_to_cart', [window.jQuery(trigger), { product_id: productId }]);
 
 		window.jQuery.post(ajaxUrl, {
 			product_id: productId,
 			quantity: 1
 		}).done(function (response) {
-			if (!response) { return; }
+			if (!response) { setPillState(trigger, 'idle'); return; }
 			if (response.error) {
+				setPillState(trigger, 'idle');
+				if (opts.onError) { opts.onError(response); }
 				if (response.product_url) {
 					window.location.href = response.product_url;
 				}
 				return;
 			}
-			$body.trigger('added_to_cart', [response.fragments, response.cart_hash, window.jQuery(pill)]);
-			setPillState(pill, 'added');
-			window.setTimeout(function () { setPillState(pill, 'idle'); }, 1500);
+			// e.g. the size chooser closes its dialog BEFORE the drawer opens,
+			// so the drawer remembers the row's Add as the focus to return to.
+			if (opts.beforeAdded) { opts.beforeAdded(response); }
+			$body.trigger('added_to_cart', [response.fragments, response.cart_hash, window.jQuery(trigger)]);
+			setPillState(trigger, 'added');
+			window.setTimeout(function () { setPillState(trigger, 'idle'); }, 1500);
+			if (opts.onSuccess) { opts.onSuccess(response); }
 		}).fail(function () {
-			setPillState(pill, 'idle');
+			setPillState(trigger, 'idle');
 			if (fallbackUrl) { window.location.href = fallbackUrl; }
 		});
+	}
+
+	window.lafkaQuickAdd = { add: add };
+
+	function ajaxAddToCart(pill) {
+		add(pill.dataset.lafkaQuickaddProductId, pill, { fallbackUrl: pill.dataset.lafkaQuickaddUrl });
 	}
 
 	function handleActivation(pill) {

@@ -290,18 +290,21 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 			}
 		}
 		if ( lafka_layout_is( 'home', 'counter' ) || lafka_layout_is( 'menu', 'counter' ) || lafka_layout_is( 'drawer', 'counter' ) ) {
-			wp_enqueue_script( 'lafka-size-chooser', get_template_directory_uri() . '/js/lafka-size-chooser.js', array(), lafka_asset_version( '/js/lafka-size-chooser.js' ), $defer );
+			// The single add path (window.lafkaQuickAdd.add) — same handle and
+			// args as the archive quick-add enqueue, so it never loads twice.
+			wp_enqueue_script( 'lafka-archive-quickadd', get_template_directory_uri() . '/js/lafka-archive-quickadd.js', array( 'jquery' ), lafka_asset_version( '/js/lafka-archive-quickadd.js' ), $defer );
+			wp_enqueue_script( 'lafka-size-chooser', get_template_directory_uri() . '/js/lafka-size-chooser.js', array( 'lafka-archive-quickadd' ), lafka_asset_version( '/js/lafka-size-chooser.js' ), $defer );
 			wp_localize_script(
 				'lafka-size-chooser',
 				'lafkaCounter',
 				array(
-					'addUrl'  => class_exists( 'WC_AJAX' ) ? WC_AJAX::get_endpoint( 'add_to_cart' ) : '',
-					'i18n'    => array(
+					'i18n' => array(
 						/* translators: 1: product name, 2: option (e.g. "Medium") */
 						'added'       => __( 'Added %1$s, %2$s', 'lafka' ),
 						/* translators: %s: product name */
 						'addedSimple' => __( 'Added %s', 'lafka' ),
 						'unavailable' => __( 'Not available', 'lafka' ),
+						'addToOrder'  => __( 'Add to order', 'lafka' ),
 						/* translators: 1: option (e.g. "Medium"), 2: price */
 						'option'      => __( '%1$s, %2$s, add to order', 'lafka' ),
 						'error'       => __( 'Could not add that. Opening the product page…', 'lafka' ),
