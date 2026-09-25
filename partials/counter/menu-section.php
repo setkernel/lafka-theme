@@ -32,7 +32,7 @@ $lafka_sec_show    = is_string( $lafka_sec_link ) && ( ! empty( $args['always_li
 /* translators: %s: number of items in the category */
 $lafka_sec_all = (string) apply_filters( 'lafka_counter_see_all_label', sprintf( __( 'See all %s', 'lafka' ), number_format_i18n( $lafka_sec_total ) ), $lafka_sec_term, $lafka_sec_total );
 ?>
-<section class="lafka-counter-section lafka-counter-section--<?php echo esc_attr( $lafka_sec_style ); ?>" id="<?php echo esc_attr( $lafka_sec_anchor ); ?>" aria-labelledby="<?php echo esc_attr( $lafka_sec_anchor . '-h' ); ?>">
+<section class="lafka-counter-section lafka-counter-section--<?php echo esc_attr( $lafka_sec_style ); ?>" id="<?php echo esc_attr( $lafka_sec_anchor ); ?>" style="<?php echo esc_attr( '--lafka-rows: ' . count( $lafka_sec_ids ) ); ?>" aria-labelledby="<?php echo esc_attr( $lafka_sec_anchor . '-h' ); ?>">
 	<div class="lafka-counter-head lafka-counter-head--ruled">
 		<div>
 			<h2 id="<?php echo esc_attr( $lafka_sec_anchor . '-h' ); ?>" class="lafka-counter-head__title"><?php echo esc_html( $lafka_sec_term->name ); ?></h2>

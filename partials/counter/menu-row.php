@@ -70,13 +70,16 @@ if ( isset( $args['list'] ) ) {
 // quick-add on), or a "Choose" link to the product page.
 $lafka_row_add_label = (string) apply_filters( 'lafka_counter_add_label', __( 'Add', 'lafka' ), $lafka_row_p );
 
-$lafka_row_img = '';
+$lafka_row_img  = '';
+$lafka_row_kind = '';
 if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
-	$lafka_row_img = lafka_card_image_html(
+	// Cut-out → contact shadow; opaque photo → rounded crop (dish-image.php).
+	$lafka_row_kind = function_exists( 'lafka_dish_kind' ) ? lafka_dish_kind( (int) $lafka_row_p->get_image_id() ) : 'cutout';
+	$lafka_row_img  = lafka_card_image_html(
 		$lafka_row_p,
 		array(
 			'size'  => 'woocommerce_thumbnail',
-			'class' => 'lafka-row__img lafka-counter-dish',
+			'class' => 'lafka-row__img lafka-counter-dish lafka-counter-dish--' . $lafka_row_kind,
 			'sizes' => (string) apply_filters( 'lafka_counter_row_image_sizes', 'compact' === $lafka_row_style ? '96px' : '(min-width: 1024px) 140px, 104px', $lafka_row_p ),
 		)
 	);
@@ -88,7 +91,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 	data-lafka-product-tags="<?php echo esc_attr( implode( ',', $lafka_row_tags ) ); ?>"
 >
 	<?php if ( '' !== $lafka_row_img ) : ?>
-		<a class="lafka-row__media" href="<?php echo esc_url( $lafka_row_url ); ?>" tabindex="-1" aria-hidden="true">
+		<a class="lafka-row__media lafka-dish-frame lafka-dish-frame--<?php echo esc_attr( $lafka_row_kind ); ?>" href="<?php echo esc_url( $lafka_row_url ); ?>" tabindex="-1" aria-hidden="true">
 			<?php echo $lafka_row_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core. ?>
 		</a>
 	<?php endif; ?>
@@ -108,7 +111,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 		<?php endif; ?>
 		<div class="lafka-row__foot">
 			<?php if ( 'columns' === $lafka_row_prices['type'] ) : ?>
-				<dl class="lafka-prices">
+				<dl class="lafka-prices lafka-prices--cols-<?php echo esc_attr( (string) min( 6, count( $lafka_row_prices['columns'] ) ) ); ?>">
 					<?php foreach ( $lafka_row_prices['columns'] as $lafka_row_col ) : ?>
 						<div class="lafka-prices__col">
 							<dt><?php echo esc_html( $lafka_row_col['label'] ); ?></dt>

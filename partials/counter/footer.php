@@ -1,9 +1,13 @@
 <?php
 /**
  * Counter layout: the quiet footer — one line of "{name} · {address}" and a
- * few plain links. Links: the "Footer Menu" location (tertiary, depth 1) when
- * assigned, else Full menu · Deals · Your account; the privacy policy link
- * always (when the site has one). No logo wall, no signup (classic keeps them).
+ * few plain links on one row. Links: the counter's own "Footer menu (counter
+ * layout)" location when assigned (depth 1, capped by
+ * lafka_counter_footer_max_links), else Menu · Deals · Find us
+ * (lafka_counter_footer_items()); the privacy policy link always (when the
+ * site has one). The legacy tertiary "Footer Menu" is never printed here — on
+ * migrated stores it holds the old link wall. No logo wall, no signup
+ * (classic keeps them).
  *
  * Rendered inside footer.php, which keeps the #container / #content closing
  * tags, the search dialog and wp_footer() exactly where they were.
@@ -14,31 +18,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$lafka_cf_nap   = lafka_counter_nap();
-$lafka_cf_line  = implode( ' · ', array_filter( array( $lafka_cf_nap['name'], $lafka_cf_nap['address_short'] ) ) );
-$lafka_cf_items = array();
-if ( ! ( function_exists( 'has_nav_menu' ) && has_nav_menu( 'tertiary' ) ) ) {
-	$lafka_cf_items[] = array(
-		'label' => __( 'Full menu', 'lafka' ),
-		'url'   => lafka_theme_menu_url(),
-	);
-	$lafka_cf_deals = lafka_counter_deals_url();
-	if ( '' !== $lafka_cf_deals ) {
-		$lafka_cf_items[] = array(
-			'label' => __( 'Deals', 'lafka' ),
-			'url'   => $lafka_cf_deals,
-		);
-	}
-	$lafka_cf_account = (int) get_option( 'woocommerce_myaccount_page_id', 0 );
-	if ( $lafka_cf_account ) {
-		$lafka_cf_items[] = array(
-			'label' => __( 'Your account', 'lafka' ),
-			'url'   => get_permalink( $lafka_cf_account ),
-		);
-	}
-}
-$lafka_cf_items  = (array) apply_filters( 'lafka_counter_footer_links', $lafka_cf_items );
-$lafka_cf_policy = function_exists( 'get_the_privacy_policy_link' ) ? (string) get_the_privacy_policy_link() : '';
+$lafka_cf_nap      = lafka_counter_nap();
+$lafka_cf_line     = implode( ' · ', array_filter( array( $lafka_cf_nap['name'], $lafka_cf_nap['address_short'] ) ) );
+$lafka_cf_location = lafka_counter_footer_location();
+$lafka_cf_menu     = function_exists( 'has_nav_menu' ) && has_nav_menu( $lafka_cf_location );
+$lafka_cf_items    = $lafka_cf_menu ? array() : lafka_counter_footer_items();
+$lafka_cf_policy   = function_exists( 'get_the_privacy_policy_link' ) ? (string) get_the_privacy_policy_link() : '';
 ?>
 <footer id="footer" class="lafka-footer lafka-footer--counter" role="contentinfo">
 	<div class="lafka-counter-footer lafka-counter-wrap">
@@ -47,10 +32,10 @@ $lafka_cf_policy = function_exists( 'get_the_privacy_policy_link' ) ? (string) g
 		<?php endif; ?>
 		<nav class="lafka-counter-footer__nav" aria-label="<?php esc_attr_e( 'Footer', 'lafka' ); ?>">
 			<?php
-			if ( function_exists( 'has_nav_menu' ) && has_nav_menu( 'tertiary' ) ) {
+			if ( $lafka_cf_menu ) {
 				wp_nav_menu(
 					array(
-						'theme_location' => 'tertiary',
+						'theme_location' => $lafka_cf_location,
 						'container'      => false,
 						'menu_class'     => 'lafka-counter-footer__list',
 						'depth'          => 1,

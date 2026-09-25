@@ -108,6 +108,7 @@ require_once get_template_directory() . '/incl/customizer-editorial.php';
 
 // Product card image helper (v5.17.0).
 require_once get_template_directory() . '/incl/template-helpers/product-card-image.php';
+require_once get_template_directory() . '/incl/template-helpers/dish-image.php';
 
 // Product listings Customizer settings (v5.17.0).
 require_once get_template_directory() . '/incl/customizer-product-listings.php';
@@ -150,6 +151,9 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-cart-empty-popu
 
 // Exclude WC default "Uncategorized" from customer-facing listings (v5.37.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-exclude-uncategorized.php';
+
+// Legacy / unregistered product types stay listable in wc_get_products() (GX4 polish).
+require_once get_template_directory() . '/incl/woocommerce/lafka-listing-product-types.php';
 
 // Variable-product price formatting — "from $X" instead of range (v5.38.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-variable-price-from.php';

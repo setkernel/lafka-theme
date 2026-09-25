@@ -74,7 +74,8 @@
 		"--lafka-shadow-2": "0 2px 8px rgba(60, 40, 20, 0.08)",
 		"--lafka-shadow-3": "0 8px 24px rgba(60, 40, 20, 0.10)",
 		"--lafka-shadow-4": "0 16px 40px rgba(31, 27, 24, 0.18)",
-		"--lafka-dish-shadow": "drop-shadow(0 18px 18px rgba(60, 40, 20, 0.18))"
+		"--lafka-dish-shadow": "drop-shadow(0 18px 18px rgba(60, 40, 20, 0.18))",
+		"--lafka-dish-contact": "rgba(60, 40, 20, 0.24)"
 	},
 	"chrome": {
 		"lafka_accent_color": "#B0271D",

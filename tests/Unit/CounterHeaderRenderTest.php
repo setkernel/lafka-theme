@@ -135,5 +135,36 @@ namespace Lafka\Tests\Unit {
 			$GLOBALS['lafka_test_theme_mods']['lafka_counter_header_nav'] = false;
 			$this->assertStringNotContainsString( 'lafka-counter-nav', $this->render() );
 		}
+
+		public function test_phone_number_is_the_links_text_even_when_shown_as_an_icon(): void {
+			// <1440 the number is visually hidden (clip), never removed: the
+			// icon-only link still announces the number.
+			$this->assertMatchesRegularExpression(
+				'#class="lafka-counter-header__phone"[^>]*>.*<span class="lafka-counter-header__phone-number">\(555\) 0100</span>#s',
+				$this->render()
+			);
+		}
+
+		public function test_full_name_only_without_a_short_name(): void {
+			$html = $this->render();
+			$this->assertStringContainsString( '<span class="lafka-counter-header__name">Example Kitchen</span>', $html );
+			$this->assertStringNotContainsString( 'lafka-counter-header__name-short', $html );
+		}
+
+		public function test_short_name_is_the_phone_label_and_the_full_name_stays_accessible(): void {
+			$GLOBALS['lafka_test_theme_mods']['lafka_counter_brand_short'] = 'Example';
+			$html = $this->render();
+			$this->assertStringContainsString( 'lafka-counter-header__name--has-short', $html );
+			$this->assertStringContainsString( '<span class="lafka-counter-header__name-full">Example Kitchen</span>', $html );
+			$this->assertStringContainsString( '<span class="lafka-counter-header__name-short" aria-hidden="true">Example</span>', $html );
+		}
+
+		public function test_short_name_equal_to_the_full_name_is_ignored_and_filterable(): void {
+			$GLOBALS['lafka_test_theme_mods']['lafka_counter_brand_short'] = 'Example Kitchen';
+			$this->assertStringNotContainsString( 'name-short', $this->render() );
+
+			\add_filter( 'lafka_counter_brand_short', static fn() => 'EK' );
+			$this->assertStringContainsString( 'aria-hidden="true">EK</span>', $this->render() );
+		}
 	}
 }

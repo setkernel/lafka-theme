@@ -15,6 +15,7 @@ namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-emit.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/layout.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/product-card-image.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/dish-image.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/price-columns.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/woocommerce/lafka-archive-quickadd.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/menu-url.php';
@@ -48,6 +49,7 @@ namespace Lafka\Tests\Unit {
 			$this->assertStringContainsString( 'data-lafka-add-mode="chooser"', $html );
 			$this->assertStringContainsString( 'Add<span class="screen-reader-text"> Classic Combo</span></button>', $html );
 			$this->assertStringContainsString( 'lafka-row--wide-prices', $html );
+			$this->assertStringContainsString( '<dl class="lafka-prices lafka-prices--cols-4">', $html, 'the column count drives the 2×2 fallback on narrow rows' );
 			$this->assertArrayHasKey( 7, $GLOBALS['lafka_chooser_registry'], 'variable rows register their chooser payload' );
 		}
 
@@ -90,13 +92,24 @@ namespace Lafka\Tests\Unit {
 			);
 
 			$html = $this->row( $p, array( 'list' => 'Home' ) );
-			$this->assertStringContainsString( 'class="lafka-row__media" href="http://example.test/product/loaded-fries/" tabindex="-1" aria-hidden="true"', $html );
+			$this->assertStringContainsString( 'class="lafka-row__media lafka-dish-frame lafka-dish-frame--photo" href="http://example.test/product/loaded-fries/" tabindex="-1" aria-hidden="true"', $html, 'no readable file → treated as an opaque photo' );
+			$this->assertStringContainsString( 'lafka-row__img lafka-counter-dish lafka-counter-dish--photo', $html );
 			$this->assertStringContainsString( 'sizes="(min-width: 1024px) 140px, 104px"', $html );
 			foreach ( array( 'data-lafka-item-id="9"', 'data-lafka-item-name="Loaded Fries"', 'data-lafka-item-category="Fries"', 'data-lafka-item-price="10.99"', 'data-lafka-list-name="Home"' ) as $attr ) {
 				$this->assertStringContainsString( $attr, $html );
 			}
 			$this->assertStringContainsString( 'data-lafka-product-name="Loaded Fries"', $html, 'menu-controls search keeps working' );
 			$this->assertStringContainsString( 'data-lafka-product-tags="vegetarian"', $html, 'menu-controls dietary chips keep working' );
+		}
+
+		public function test_cutout_thumbnail_gets_the_contact_shadow_frame(): void {
+			$p                                     = \Lafka_Test_Catalog::two_size( 9 );
+			$p->data['image_id']                   = 55;
+			$GLOBALS['lafka_test_attachments'][55] = 'http://example.test/dish.png';
+			$GLOBALS['lafka_test_post_meta'][55]   = array( '_lafka_is_cutout' => '1' );
+			$html                                  = $this->row( $p );
+			$this->assertStringContainsString( 'lafka-row__media lafka-dish-frame lafka-dish-frame--cutout', $html );
+			$this->assertStringContainsString( 'lafka-counter-dish--cutout', $html );
 		}
 
 		public function test_compact_row_can_drop_the_thumbnail(): void {

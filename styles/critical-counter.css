@@ -27,15 +27,15 @@ body {
 	}
 }
 
-/* ── HEADER SKELETON ──
- * <600: logo + name / status under it + Menu + Cart.
- * 600–1023: + Order online.  ≥1024: one row with status, Pickup/Delivery,
- * phone, Cart, Order online, and the slim nav row. */
+/* ── HEADER SKELETON ── (nothing may overlap at any width)
+ * <600: logo + one-line name / status under it + Menu + Cart (label <440).
+ * 600–1023: + Order online.  1024–1279: status stays under the name; phone is
+ * an icon.  ≥1280: one row.  ≥1440: the phone number shows. */
 .lafka-counter-header .lafka-counter-header__bar {
 	display: grid;
 	grid-template-columns: minmax(0, 1fr) auto;
 	align-items: center;
-	column-gap: 12px;
+	column-gap: 10px;
 	min-height: 64px;
 	padding-block: 8px;
 }
@@ -45,26 +45,65 @@ body {
 	grid-row: 1;
 	display: flex;
 	align-items: center;
-	gap: 10px;
+	gap: 8px;
 	min-width: 0;
 }
 
 .lafka-counter-header .lafka-counter-header__logo {
 	flex: none;
-	width: 44px;
-	height: 44px;
+	width: 40px;
+	height: 40px;
 	object-fit: contain;
 }
 
 .lafka-counter-header .lafka-counter-header__name {
-	font-size: 17px;
+	min-width: 0;
+	overflow: hidden;
+	font-size: clamp(14px, 4vw, 17px);
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.lafka-counter-header .lafka-counter-header__name-short {
+	display: none;
+}
+
+.lafka-counter-header .lafka-counter-header__phone-number {
+	position: absolute;
+	width: 1px;
+	height: 1px;
+	overflow: hidden;
+	clip-path: inset(50%);
+	white-space: nowrap;
 }
 
 .lafka-counter-header .lafka-counter-status {
 	grid-column: 1;
 	grid-row: 2;
-	padding-left: 54px;
+	padding-left: 48px;
 	font-size: var(--lafka-font-size-body-sm);
+}
+
+@media (max-width: 599px) {
+
+	.lafka-counter-header .lafka-counter-header__name--has-short .lafka-counter-header__name-full {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		overflow: hidden;
+		clip-path: inset(50%);
+	}
+
+	.lafka-counter-header .lafka-counter-header__name-short {
+		display: inline;
+	}
+}
+
+@media (max-width: 439px) {
+
+	.lafka-counter-header .lafka-counter-header__cart-label {
+		display: none;
+	}
 }
 
 .lafka-counter-header .lafka-counter-header__actions {
@@ -99,7 +138,7 @@ body {
 	}
 
 	.lafka-counter-header .lafka-counter-status {
-		padding-left: 62px;
+		padding-left: 60px;
 	}
 
 	.lafka-counter-header .lafka-counter-header__order,
@@ -111,9 +150,41 @@ body {
 @media (min-width: 1024px) {
 
 	.lafka-counter-header .lafka-counter-header__bar {
+		grid-template-columns: minmax(0, 1fr) auto auto;
+		column-gap: 20px;
+		min-height: 88px;
+	}
+
+	.lafka-counter-header .lafka-fulfilment--header {
+		grid-column: 2;
+		grid-row: 1 / span 2;
+		display: flex;
+	}
+
+	.lafka-counter-header .lafka-counter-header__actions {
+		grid-column: 3;
+		gap: 10px;
+	}
+
+	.lafka-counter-header .lafka-counter-header__phone {
+		display: flex;
+	}
+
+	.lafka-counter-header .lafka-counter-header__menu {
+		display: none;
+	}
+
+	.lafka-counter-header .lafka-counter-nav {
+		display: block;
+		min-height: 44px;
+	}
+}
+
+@media (min-width: 1280px) {
+
+	.lafka-counter-header .lafka-counter-header__bar {
 		display: flex;
 		gap: 24px;
-		min-height: 88px;
 		padding-block: 0;
 	}
 
@@ -129,6 +200,7 @@ body {
 	.lafka-counter-header .lafka-counter-header__brand {
 		gap: 14px;
 		flex: none;
+		max-width: 40%;
 	}
 
 	.lafka-counter-header .lafka-counter-status {
@@ -137,22 +209,18 @@ body {
 		font-size: inherit;
 	}
 
-	.lafka-counter-header .lafka-fulfilment--header,
-	.lafka-counter-header .lafka-counter-header__phone {
-		display: flex;
-	}
-
-	.lafka-counter-header .lafka-counter-header__menu {
-		display: none;
-	}
-
 	.lafka-counter-header .lafka-counter-header__actions {
 		gap: 12px;
 	}
+}
 
-	.lafka-counter-header .lafka-counter-nav {
-		display: block;
-		min-height: 44px;
+@media (min-width: 1440px) {
+
+	.lafka-counter-header .lafka-counter-header__phone-number {
+		position: static;
+		width: auto;
+		height: auto;
+		clip-path: none;
 	}
 }
 
@@ -183,14 +251,14 @@ body {
 .lafka-counter-hero__dish--front {
 	left: 0;
 	bottom: 0;
-	width: 62%;
+	width: 58%;
 	z-index: 1;
 }
 
 .lafka-counter-hero__dish--back {
 	right: 0;
 	top: 0;
-	width: 52%;
+	width: 54%;
 }
 
 .lafka-counter-hero__art--1 .lafka-counter-hero__dish--front {
@@ -218,11 +286,14 @@ body {
 	}
 
 	.lafka-counter-hero__dish--back {
-		right: 10%;
-		width: 38%;
+		right: 6%;
+		width: 44%;
 	}
 }
 
+/* ≥1024: the board's composition — back dish top-right, front dish bottom-left
+ * overlapping its lower-left edge at a similar size; the captions sit in the
+ * clear corners (lafka-counter.css), never over food. */
 @media (min-width: 1024px) {
 
 	.lafka-counter-hero__inner {
@@ -245,16 +316,14 @@ body {
 	}
 
 	.lafka-counter-hero__dish--front {
-		left: -6%;
-		top: 44px;
-		bottom: auto;
-		width: 86%;
+		left: 0;
+		bottom: 0;
+		width: 58%;
 	}
 
 	.lafka-counter-hero__dish--back {
-		left: 29%;
-		right: auto;
-		top: -34px;
-		width: 72%;
+		right: 0;
+		top: 0;
+		width: 66%;
 	}
 }

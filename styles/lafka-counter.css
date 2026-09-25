@@ -65,8 +65,47 @@ body[class*="lafka-layout-"][class*="-counter"] {
 	color: var(--lafka-color-accent-text);
 }
 
-.lafka-counter-dish {
+/* Dish imagery (dish-image.php decides cut-out vs opaque photo).
+ * Thumbnails: a cut-out sits on a soft elliptical contact shadow drawn by
+ * its frame (no filter: a blurred drop-shadow on a small dish read as a pale
+ * grey box); an opaque photo gets a subtle rounded crop and no shadow.
+ * The big hero cut-outs keep the preset's drop-shadow. */
+.lafka-dish-frame {
+	position: relative;
+	isolation: isolate;
+}
+
+.lafka-dish-frame--cutout::after {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	left: 16%;
+	right: 16%;
+	bottom: 0;
+	height: 18%;
+	border-radius: 50%;
+	background: radial-gradient(closest-side, var(--lafka-dish-contact), transparent);
+	pointer-events: none;
+}
+
+/* Big cut-outs (hero, featured deal) float inside a roomy box: a contact
+ * ellipse at the box's bottom would sit far below the food, so they keep the
+ * preset's drop-shadow instead. */
+.lafka-counter-hero__img.lafka-counter-dish--cutout,
+.lafka-deal--featured .lafka-counter-dish--cutout {
 	filter: var(--lafka-dish-shadow);
+}
+
+.lafka-deal--featured .lafka-dish-frame--cutout::after {
+	content: none;
+}
+
+.lafka-counter-dish--photo.lafka-row__img,
+.lafka-counter-dish--photo.lafka-deal__img,
+.lafka-counter-dish--photo.lafka-counter-hero__img {
+	object-fit: cover;
+	border-radius: var(--lafka-radius-md);
+	transform: none;
 }
 
 /* ── Buttons ──────────────────────────────────────────────────────────── */
@@ -212,12 +251,18 @@ body.lafka-layout-header-counter .lafka-header {
 	line-height: 1.1;
 }
 
+/* Below 1440 the number is visually hidden (critical-counter.css) and the
+ * link is a 48 px phone icon; its accessible name stays the number. */
 .lafka-counter-header__phone {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 8px;
+	min-width: 48px;
 	min-height: 48px;
 	padding: 0 6px;
+	box-sizing: border-box;
 	color: var(--lafka-color-text-primary);
 	font-weight: var(--lafka-font-weight-bold);
 	text-decoration: none;
@@ -272,8 +317,16 @@ body.lafka-layout-header-counter .lafka-header {
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	min-width: 0;
 	color: var(--lafka-color-text-primary);
 	white-space: nowrap;
+}
+
+/* A long "Closed · opens …" line truncates instead of pushing the controls. */
+.lafka-counter-status__text {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .lafka-counter-status__dot {
@@ -306,6 +359,8 @@ body.lafka-layout-header-counter .lafka-header {
 }
 
 .lafka-fulfilment--header {
+	flex: none;
+	align-self: center;
 	display: flex;
 	gap: 3px;
 	padding: 3px;
@@ -331,12 +386,15 @@ body.lafka-layout-header-counter .lafka-header {
 .lafka-fulfilment--header .lafka-fulfilment__label {
 	display: inline-flex;
 	align-items: center;
-	height: 42px;
-	padding: 0 16px;
+	height: 40px;
+	padding: 0 14px;
 	border: 1.5px solid transparent;
 	border-radius: calc(var(--lafka-radius-button) - 2px);
 	color: var(--lafka-color-text-secondary);
-	font-size: var(--lafka-font-size-body-lg);
+	font-size: var(--lafka-font-size-body);
+	letter-spacing: normal;
+	text-transform: none; /* legacy label styles uppercase it */
+	white-space: nowrap;
 }
 
 .lafka-fulfilment--header input:checked + .lafka-fulfilment__label {
@@ -466,6 +524,7 @@ body.lafka-layout-header-counter .lafka-header {
 
 .lafka-row__desc {
 	grid-area: desc;
+	align-self: start; /* a stretched clamp box shows a sliver of line 3 */
 	margin: 2px 0 0;
 	color: var(--lafka-color-text-secondary);
 	display: -webkit-box;
@@ -551,11 +610,21 @@ body.lafka-layout-header-counter .lafka-header {
 	}
 }
 
-/* ── Size-price columns ───────────────────────────────────────────────── */
+/* ── Size-price columns ───────────────────────────────────────────────────
+ * The columns are ONE group: a single row of max-content columns that never
+ * breaks a label or a price ("X-Large", "6 Piece"). When the group and the
+ * Add button do not fit side by side, the button wraps under the group; when
+ * four columns do not fit the row at all, they become a 2×2 grid. */
+.lafka-row__foot {
+	container: lafka-row-foot / inline-size;
+}
+
 .lafka-prices {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 4px 20px;
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	gap: 2px 14px;
+	width: max-content;
 	margin: 0;
 }
 
@@ -568,6 +637,7 @@ body.lafka-layout-header-counter .lafka-header {
 	font-size: var(--lafka-font-size-body-sm);
 	color: var(--lafka-color-text-secondary);
 	line-height: 1.4;
+	white-space: nowrap;
 }
 
 .lafka-prices dd {
@@ -575,17 +645,43 @@ body.lafka-layout-header-counter .lafka-header {
 	font-size: var(--lafka-font-size-body-lg);
 	font-weight: var(--lafka-font-weight-bold);
 	line-height: 1.3;
+	white-space: nowrap;
+}
+
+@container lafka-row-foot (max-width: 279px) {
+
+	.lafka-prices--cols-4 {
+		grid-auto-flow: row;
+		grid-template-columns: repeat(2, max-content);
+		row-gap: 8px;
+	}
 }
 
 @media (min-width: 1024px) {
 
 	.lafka-prices {
-		column-gap: 24px;
+		column-gap: 15px;
 	}
+}
 
-	.lafka-prices dd {
-		font-size: var(--lafka-font-size-body-lg-desk);
-	}
+/* Numerals: prices and other big / bold figures use the display face's
+ * tabular figures (the body face draws a slashed zero). */
+.lafka-prices dd,
+.lafka-row__price,
+.lafka-deal__price,
+.lafka-chooser__option-price,
+.lafka-counter-hero__caption span,
+.lafka-counter-header__phone-number,
+.lafka-counter-num,
+.lafka-counter-bar__number,
+.lafka-counter-header__count,
+.lafka-counter-bar__count,
+.lafka-counter-find__phone,
+.lafka-drawer__checkout-total,
+.lafka-cart-drawer--counter .woocommerce-Price-amount {
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-variant-numeric: tabular-nums;
 }
 
 /* ── 2-tap size chooser (native <dialog>) ─────────────────────────────── */
@@ -887,22 +983,32 @@ body.lafka-layout-header-counter .lafka-header {
 		font-size: var(--lafka-font-size-body-lg-desk);
 	}
 
+	/* Captions live in the clear corners the composition leaves (critical-
+	 * counter.css): the front dish's ABOVE it on the left, the back dish's
+	 * BELOW it on the right. The max-widths keep each one inside its corner
+	 * (front: < the gap left of the back dish; back: right of the front dish). */
 	.lafka-counter-hero__caption {
 		display: block;
 		position: absolute;
 		z-index: 2;
+		text-wrap: balance;
 	}
 
 	.lafka-counter-hero__dish--front .lafka-counter-hero__caption {
 		left: 0;
-		top: 26%;
+		bottom: calc(100% + 12px);
+		max-width: 56%;
 	}
 
 	.lafka-counter-hero__dish--back .lafka-counter-hero__caption {
-		right: -2%;
-		top: 96%;
+		right: 0;
+		top: calc(100% + 12px);
+		max-width: 60%;
 		text-align: right;
-		white-space: nowrap;
+	}
+
+	.lafka-counter-hero__art--1 .lafka-counter-hero__caption {
+		max-width: none;
 	}
 }
 
@@ -1102,8 +1208,11 @@ body.lafka-layout-header-counter .lafka-header {
 		gap: 22px;
 	}
 
+	/* Back to a column: stretch, or the 600–1023 centring shrinks the motif
+	 * band to 0 px and the photo to its content. */
 	.lafka-deal--featured {
 		display: flex;
+		align-items: stretch;
 	}
 
 	.lafka-deal--featured .lafka-deal__media {
@@ -1189,13 +1298,23 @@ body.lafka-layout-header-counter .lafka-header {
 
 .lafka-counter-rest__grid {
 	display: grid;
+	grid-template-columns: minmax(0, 1fr);
 	gap: 36px;
 }
 
+/* Off-screen sections skip rendering. Only the BLOCK size is estimated
+ * (head + --lafka-rows × an average row; menu-section.php prints the row
+ * count) and `auto` then remembers the real height; the inline size always
+ * comes from the grid track. Jump links render every section before
+ * scrolling (.is-rendered, js/lafka-size-chooser.js) so they land exactly. */
 .lafka-counter-rest .lafka-counter-section {
 	content-visibility: auto;
-	contain-intrinsic-size: auto 480px;
-	scroll-margin-top: 120px;
+	contain-intrinsic-block-size: auto calc(56px + var(--lafka-rows, 4) * 150px);
+	scroll-margin-top: 24px;
+}
+
+.lafka-counter-rest.is-rendered .lafka-counter-section {
+	content-visibility: visible;
 }
 
 .lafka-counter-rest .lafka-counter-head__title {
@@ -1259,20 +1378,32 @@ body.lafka-layout-header-counter .lafka-header {
 	font-style: normal;
 }
 
+/* Days | hours as a two-column grid (the row <div>s are layout-transparent);
+ * neither side breaks mid-range ("11 am–midnight"). */
 .lafka-counter-find__hours {
 	display: grid;
-	gap: 2px;
+	grid-template-columns: max-content fit-content(100%);
+	justify-content: start;
+	gap: 2px 16px;
 	margin: 0;
 }
 
 .lafka-counter-find__hours div {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0 8px;
+	display: contents;
 }
 
+.lafka-counter-find__hours dt,
 .lafka-counter-find__hours dd {
+	float: none; /* the legacy theme floats and sizes dt/dd */
+	width: auto;
 	margin: 0;
+	padding: 0;
+	font-weight: inherit;
+	line-height: var(--lafka-line-body);
+}
+
+.lafka-counter-find__hours dt {
+	white-space: nowrap;
 }
 
 .lafka-counter-find__phone {
@@ -1280,12 +1411,16 @@ body.lafka-layout-header-counter .lafka-header {
 	font-size: var(--lafka-font-size-body-lg-desk);
 	font-weight: var(--lafka-font-weight-bold);
 	text-underline-offset: 4px;
+	white-space: nowrap;
 }
 
+/* The hours column always gets the most room (two columns of day | time):
+ * 600–839 address | hours with the phone under the address, 840–1199 three
+ * columns under the heading, ≥1200 the board's four columns. */
 @media (min-width: 600px) {
 
 	.lafka-counter-find__grid {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
 		column-gap: 32px;
 	}
 
@@ -1294,10 +1429,17 @@ body.lafka-layout-header-counter .lafka-header {
 	}
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 840px) {
 
 	.lafka-counter-find__grid {
-		grid-template-columns: 260px repeat(3, minmax(0, 1fr));
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+	}
+}
+
+@media (min-width: 1200px) {
+
+	.lafka-counter-find__grid {
+		grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
 		column-gap: 40px;
 	}
 
@@ -1305,6 +1447,8 @@ body.lafka-layout-header-counter .lafka-header {
 		grid-column: auto;
 		flex-direction: column;
 		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 16px;
 	}
 }
 
@@ -1766,6 +1910,13 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 
 .lafka-counter-footer__line {
 	margin: 0;
+}
+
+/* An assigned menu's list and the privacy link share one row. */
+.lafka-counter-footer__nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 28px;
 }
 
 .lafka-counter-footer__list {

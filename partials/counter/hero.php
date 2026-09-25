@@ -96,8 +96,15 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 						<?php echo lafka_counter_icon( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 						<span>
 						<?php
-						/* translators: %s: phone number */
-						echo esc_html( sprintf( __( 'Call %s', 'lafka' ), $lafka_hero_nap['phone'] ) );
+						// The number gets its own span so it can use the display face's figures.
+						echo wp_kses(
+							sprintf(
+								/* translators: %s: phone number */
+								esc_html__( 'Call %s', 'lafka' ),
+								'<span class="lafka-counter-num">' . esc_html( $lafka_hero_nap['phone'] ) . '</span>'
+							),
+							array( 'span' => array( 'class' => true ) )
+						);
 						?>
 						</span>
 					</a>
@@ -150,7 +157,7 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 							'woocommerce_single',
 							false,
 							array(
-								'class'         => 'lafka-counter-hero__img lafka-counter-dish',
+								'class'         => 'lafka-counter-hero__img lafka-counter-dish lafka-counter-dish--' . ( function_exists( 'lafka_dish_kind' ) ? lafka_dish_kind( (int) $lafka_hero_dish->get_image_id() ) : 'cutout' ),
 								'alt'           => function_exists( 'lafka_card_image_alt' ) ? lafka_card_image_alt( $lafka_hero_dish, (int) $lafka_hero_dish->get_image_id() ) : $lafka_hero_dish->get_name(),
 								'loading'       => 'eager',
 								'decoding'      => 'async',

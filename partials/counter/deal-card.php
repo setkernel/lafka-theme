@@ -35,13 +35,15 @@ if ( '' === $lafka_deal_line && 'text' !== $lafka_deal_variant ) {
 }
 $lafka_deal_label = (string) apply_filters( 'lafka_counter_deal_add_label', __( 'Add to order', 'lafka' ), $lafka_deal );
 $lafka_deal_img   = '';
+$lafka_deal_kind  = '';
 if ( 'text' !== $lafka_deal_variant && (int) $lafka_deal->get_image_id() ) {
-	$lafka_deal_img = (string) wp_get_attachment_image(
+	$lafka_deal_kind = function_exists( 'lafka_dish_kind' ) ? lafka_dish_kind( (int) $lafka_deal->get_image_id() ) : 'cutout';
+	$lafka_deal_img  = (string) wp_get_attachment_image(
 		(int) $lafka_deal->get_image_id(),
 		'featured' === $lafka_deal_variant ? 'woocommerce_single' : 'woocommerce_thumbnail',
 		false,
 		array(
-			'class'    => 'lafka-deal__img lafka-counter-dish',
+			'class'    => 'lafka-deal__img lafka-counter-dish lafka-counter-dish--' . $lafka_deal_kind,
 			'alt'      => '',
 			'loading'  => 'lazy',
 			'decoding' => 'async',
@@ -56,7 +58,7 @@ $lafka_deal_button_class = 'featured' === $lafka_deal_variant ? 'lafka-counter-b
 		<div class="lafka-motif-band" aria-hidden="true"></div>
 	<?php endif; ?>
 	<?php if ( '' !== $lafka_deal_img ) : ?>
-		<a class="lafka-deal__media" href="<?php echo esc_url( $lafka_deal_url ); ?>" tabindex="-1" aria-hidden="true">
+		<a class="lafka-deal__media lafka-dish-frame lafka-dish-frame--<?php echo esc_attr( $lafka_deal_kind ); ?>" href="<?php echo esc_url( $lafka_deal_url ); ?>" tabindex="-1" aria-hidden="true">
 			<?php echo $lafka_deal_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup. ?>
 		</a>
 	<?php endif; ?>

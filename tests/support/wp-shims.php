@@ -26,7 +26,9 @@
  *   lafka_test_tpl_dir / _tpl_uri  template directory path / URI
  *   lafka_test_restaurant_info     lafka_get_restaurant_info()
  *   lafka_test_attachments         wp_get_attachment_image(): [ id => src ]
- *   lafka_test_post_meta           get_post_meta(): [ post_id ][ key ] = value
+ *   lafka_test_post_meta           get/update/delete_post_meta(): [ post_id ][ key ] = value
+ *   lafka_test_attached_files      get_attached_file(): [ id => absolute path ]
+ *   lafka_test_attachment_meta     wp_get_attachment_metadata(): [ id => meta ]
  *   lafka_test_pdp_redesign        lafka_pdp_redesign_enabled() (default true)
  *   lafka_test_free_delivery_threshold  lafka_get_free_delivery_threshold()
  *
@@ -314,6 +316,12 @@ if ( ! function_exists( 'wp_kses_post' ) ) {
 		return $data;
 	}
 }
+if ( ! function_exists( 'wp_kses' ) ) {
+	/** Pass-through, like the wp_kses_post() shim. */
+	function wp_kses( $data, $allowed_html = array(), $allowed_protocols = array() ) {
+		return $data;
+	}
+}
 if ( ! function_exists( 'sanitize_key' ) ) {
 	function sanitize_key( $key ) {
 		return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );
@@ -384,6 +392,31 @@ if ( ! function_exists( 'get_post_meta' ) ) {
 			return $single ? '' : array();
 		}
 		return $single ? $meta[ $key ] : array( $meta[ $key ] );
+	}
+}
+if ( ! function_exists( 'update_post_meta' ) ) {
+	/** Writes $GLOBALS['lafka_test_post_meta'][ post_id ][ key ]. */
+	function update_post_meta( $post_id, $key, $value ) {
+		$GLOBALS['lafka_test_post_meta'][ (int) $post_id ][ $key ] = $value;
+		return true;
+	}
+}
+if ( ! function_exists( 'delete_post_meta' ) ) {
+	function delete_post_meta( $post_id, $key ) {
+		unset( $GLOBALS['lafka_test_post_meta'][ (int) $post_id ][ $key ] );
+		return true;
+	}
+}
+if ( ! function_exists( 'get_attached_file' ) ) {
+	/** Reads $GLOBALS['lafka_test_attached_files'][ id ] (absolute path). */
+	function get_attached_file( $attachment_id ) {
+		return $GLOBALS['lafka_test_attached_files'][ (int) $attachment_id ] ?? false;
+	}
+}
+if ( ! function_exists( 'wp_get_attachment_metadata' ) ) {
+	/** Reads $GLOBALS['lafka_test_attachment_meta'][ id ]. */
+	function wp_get_attachment_metadata( $attachment_id ) {
+		return $GLOBALS['lafka_test_attachment_meta'][ (int) $attachment_id ] ?? false;
 	}
 }
 if ( ! function_exists( 'date_i18n' ) ) {
@@ -539,6 +572,9 @@ if ( ! function_exists( 'get_terms' ) ) {
 				return array( (int) $a->order, (string) $a->name ) <=> array( (int) $b->order, (string) $b->name );
 			}
 		);
+		if ( 'slugs' === ( $args['fields'] ?? '' ) ) {
+			return array_map( static fn( $t ) => (string) $t->slug, $terms );
+		}
 		return $terms;
 	}
 }
@@ -644,9 +680,16 @@ if ( ! function_exists( 'has_nav_menu' ) ) {
 		return ! empty( $GLOBALS['lafka_test_nav_menus'][ $location ] );
 	}
 }
+if ( ! function_exists( 'register_nav_menu' ) ) {
+	/** Records into $GLOBALS['lafka_test_registered_menus'][ location ] = description. */
+	function register_nav_menu( $location, $description ) {
+		$GLOBALS['lafka_test_registered_menus'][ $location ] = $description;
+	}
+}
 if ( ! function_exists( 'wp_nav_menu' ) ) {
 	function wp_nav_menu( $args = array() ) {
 		$items = $GLOBALS['lafka_test_nav_menus'][ $args['theme_location'] ?? '' ] ?? array();
+		$items = (array) apply_filters( 'wp_nav_menu_objects', $items, (object) $args );
 		$html  = '<ul class="' . ( $args['menu_class'] ?? 'menu' ) . '">';
 		foreach ( $items as $item ) {
 			$html .= '<li class="menu-item"><a href="' . $item['url'] . '">' . $item['label'] . '</a></li>';
@@ -745,6 +788,8 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_is_admin']           = false;
 		$GLOBALS['lafka_test_attachments']        = array();
 		$GLOBALS['lafka_test_post_meta']          = array();
+		$GLOBALS['lafka_test_attached_files']     = array();
+		$GLOBALS['lafka_test_attachment_meta']    = array();
 		$GLOBALS['lafka_test_pdp_redesign']       = true;
 		$GLOBALS['lafka_test_free_delivery_threshold'] = 0;
 		$GLOBALS['lafka_test_variations']         = array();
@@ -759,6 +804,7 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_parts_live']         = false;
 		$GLOBALS['lafka_test_bloginfo']           = array();
 		$GLOBALS['lafka_test_nav_menus']          = array();
+		$GLOBALS['lafka_test_registered_menus']   = array();
 		$GLOBALS['lafka_test_post_terms']         = array();
 		$GLOBALS['lafka_test_is_tax']             = false;
 		$GLOBALS['lafka_test_is_cart']            = false;
