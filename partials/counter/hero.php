@@ -45,8 +45,8 @@ if ( '' === $lafka_hero_cta_url ) {
 }
 
 // Meta lines — real data only.
-$lafka_hero_eta   = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
-$lafka_hero_eta   = is_array( $lafka_hero_eta ) ? trim( (string) ( '' !== $lafka_hero_eta['pickup'] ? $lafka_hero_eta['pickup'] : $lafka_hero_eta['delivery'] ) ) : '';
+// H-09: the same ready time the PDP quotes (Service ETA, else the prep time).
+$lafka_hero_eta   = function_exists( 'lafka_ready_time_text' ) ? lafka_ready_time_text() : '';
 $lafka_hero_modes = lafka_counter_fulfilment_modes();
 if ( 2 === count( $lafka_hero_modes ) ) {
 	$lafka_hero_modes_text = __( 'Pickup or delivery', 'lafka' );
@@ -114,7 +114,7 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 				<ul class="lafka-counter-hero__meta">
 					<?php if ( '' !== $lafka_hero_eta || '' !== $lafka_hero_modes_text ) : ?>
 						<li>
-							<?php echo lafka_counter_icon( 'clock' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+							<?php echo lafka_counter_icon( '' !== $lafka_hero_eta ? 'clock' : 'bag' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG (H-25: a clock only beside a time). ?>
 							<span>
 								<?php if ( '' !== $lafka_hero_eta ) : ?>
 									<strong>

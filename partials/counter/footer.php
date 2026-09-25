@@ -19,7 +19,10 @@
 defined( 'ABSPATH' ) || exit;
 
 $lafka_cf_nap      = lafka_counter_nap();
-$lafka_cf_line     = implode( ' · ', array_filter( array( $lafka_cf_nap['name'], $lafka_cf_nap['address_short'] ) ) );
+// H-24: the full street + city/region/postcode line (the address display's
+// first two lines, not the short form), then the phone.
+$lafka_cf_address  = $lafka_cf_nap['address_lines'] ? implode( ', ', array_slice( $lafka_cf_nap['address_lines'], 0, 2 ) ) : $lafka_cf_nap['address_short'];
+$lafka_cf_line     = implode( ' · ', array_filter( array( $lafka_cf_nap['name'], $lafka_cf_address ) ) );
 $lafka_cf_location = lafka_counter_footer_location();
 $lafka_cf_menu     = function_exists( 'has_nav_menu' ) && has_nav_menu( $lafka_cf_location );
 $lafka_cf_items    = $lafka_cf_menu ? array() : lafka_counter_footer_items();
@@ -27,8 +30,13 @@ $lafka_cf_policy   = function_exists( 'get_the_privacy_policy_link' ) ? (string)
 ?>
 <footer id="footer" class="lafka-footer lafka-footer--counter" role="contentinfo">
 	<div class="lafka-counter-footer lafka-counter-wrap">
-		<?php if ( '' !== $lafka_cf_line ) : ?>
-			<p class="lafka-counter-footer__line"><?php echo esc_html( $lafka_cf_line ); ?></p>
+		<?php if ( '' !== $lafka_cf_line || '' !== $lafka_cf_nap['phone'] ) : ?>
+			<p class="lafka-counter-footer__line">
+				<?php echo esc_html( $lafka_cf_line ); ?>
+				<?php if ( '' !== $lafka_cf_nap['phone'] ) : ?>
+					<?php echo '' !== $lafka_cf_line ? ' · ' : ''; ?><a class="lafka-counter-footer__phone" href="<?php echo esc_attr( 'tel:' . $lafka_cf_nap['tel'] ); ?>" data-lafka-channel="phone"><?php echo esc_html( $lafka_cf_nap['phone'] ); ?></a>
+				<?php endif; ?>
+			</p>
 		<?php endif; ?>
 		<nav class="lafka-counter-footer__nav" aria-label="<?php esc_attr_e( 'Footer', 'lafka' ); ?>">
 			<?php

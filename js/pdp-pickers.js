@@ -13,7 +13,10 @@
   'use strict';
 
   var root = document.querySelector('.lafka-pdp-pickers');
-  if (!root) return;
+  // Simple products have no pickers but share the quantity stepper below
+  // (it used to be dead on them: this script returned before binding it).
+  var summary = document.querySelector('.lafka-pdp-summary');
+  if (!root && !summary) return;
 
   // Currency formatter — reads symbol, position, separators, and decimal
   // count from a localized var (wired in lafka-theme/functions.php from
@@ -45,7 +48,7 @@
   var priceEl   = document.querySelector('[data-lafka-live-price]');
   var ctas      = document.querySelectorAll('[data-lafka-add-to-cart]');
   var ctaLabels = document.querySelectorAll('[data-lafka-cta-label]');
-  var formEl    = root.closest('form.cart');
+  var formEl    = root ? root.closest('form.cart') : (summary ? summary.querySelector('form.cart') : null);
 
   // WC's canonical variations data — emitted as data-product_variations on
   // the form (pdp-summary.php uses $product->get_available_variations()).
@@ -63,7 +66,7 @@
 
   // Legacy: data-prices was a custom price map. Kept as a fallback only.
   var variationPrices;
-  try { variationPrices = JSON.parse(root.dataset.prices || '{}'); }
+  try { variationPrices = JSON.parse((root && root.dataset.prices) || '{}'); }
   catch (e) { variationPrices = {}; }
 
   function getSelectedAttrs() {
@@ -217,27 +220,102 @@
     return ok;
   }
 
+  var I18N = (typeof window.lafkaPdpI18n === 'object' && window.lafkaPdpI18n) ? window.lafkaPdpI18n : {};
+  function t(key, fallback) { return I18N[key] || fallback; }
+
+  // The price line as rendered ("From $10.50" / the default variation) —
+  // restored whenever the selection stops resolving to one variation.
+  var initialPriceText = priceEl ? priceEl.textContent : '';
+
+  function getQty() {
+    var q = formEl ? formEl.querySelector('input[name="quantity"]') : null;
+    var n = q ? parseInt(q.value, 10) : 1;
+    return isNaN(n) || n < 1 ? 1 : n;
+  }
+
+  // Every variation that could still be bought with this (partial) selection.
+  function candidates(attrs) {
+    var selected = lowerAttrKeys(attrs);
+    return wcVariations.filter(function (v) {
+      if (!v || !v.attributes || v.is_purchasable === false || v.is_in_stock === false) return false;
+      var stored = lowerAttrKeys(v.attributes);
+      for (var k in selected) {
+        if (!Object.prototype.hasOwnProperty.call(selected, k)) continue;
+        var sv = stored[k];
+        if (sv !== '' && sv != null && sv !== selected[k]) return false;
+      }
+      return true;
+    });
+  }
+
+  // GX M-09 — mirror the /menu/ chooser (lafka_chooser_match()): a chip is
+  // available only if some variation matches it together with the OTHER
+  // attributes already chosen; its price is the lowest such variation's.
+  // An unavailable chip is disabled (and unchecked if it was chosen).
+  function refreshChips() {
+    if (!wcVariations.length) return false;
+    var changed = false;
+    root.querySelectorAll('.lafka-pdp-picker').forEach(function (field) {
+      var name = field.getAttribute('data-attribute');
+      var others = getSelectedAttrs();
+      delete others[name];
+      field.querySelectorAll('input[type=radio]').forEach(function (input) {
+        var want = {};
+        Object.keys(others).forEach(function (k) { want[k] = others[k]; });
+        want[name] = input.value;
+        var list = candidates(want);
+        var ok = list.length > 0;
+        var chip = input.closest('.lafka-pdp-chip');
+        input.disabled = !ok;
+        if (chip) {
+          chip.classList.toggle('is-unavailable', !ok);
+          var na = chip.querySelector('[data-lafka-chip-na]');
+          var priceNode = chip.querySelector('[data-lafka-chip-price]');
+          if (na) na.hidden = ok;
+          if (priceNode) {
+            priceNode.hidden = !ok;
+            if (ok) {
+              var min = Math.min.apply(null, list.map(function (v) { return parseFloat(v.display_price) || 0; }));
+              priceNode.textContent = formatPrice(min);
+            }
+          }
+        }
+        if (!ok && input.checked) {
+          input.checked = false;
+          changed = true;
+        }
+      });
+    });
+    return changed;
+  }
+
   function recompute() {
+    if (!root) return; // Simple product: nothing to resolve.
+    // Re-run once if a now-impossible choice was cleared.
+    if (refreshChips()) refreshChips();
     var attrs = getSelectedAttrs();
 
     // Resolve the matching variation via WC's canonical data — without this
     // the hidden variation_id stays at 0 and WC's add-to-cart handler
-    // rejects with "Please choose product options for X". Falls back to
-    // the legacy data-prices walker only if WC variations data is missing.
-    var match = findMatchingVariation(attrs);
+    // rejects with "Please choose product options for X". The legacy
+    // data-prices walker is only a fallback when WC variations data is
+    // missing, and only for a COMPLETE selection (it used to match anything
+    // on an empty selection and show a price nobody picked — M-10).
+    var complete = allRequiredSet();
+    var match = complete ? findMatchingVariation(attrs) : null;
     setVariationId(match ? (match.variation_id || 0) : 0, match);
 
     var basePrice = null;
     if (match && match.display_price !== undefined && match.display_price !== '') {
       basePrice = parseFloat(match.display_price);
-    } else {
+    } else if (complete && !wcVariations.length) {
       basePrice = findVariationPrice(attrs);
     }
     var addonDelta = getAddonDelta(attrs);
-    var total = (basePrice || 0) + addonDelta;
+    var unit = (basePrice || 0) + addonDelta;
 
-    if (priceEl && basePrice !== null) {
-      priceEl.textContent = formatPrice(total);
+    if (priceEl) {
+      priceEl.textContent = basePrice !== null ? formatPrice(unit) : initialPriceText;
     }
 
     // Per-topping price label updates (e.g. "+$1.50" next to each topping)
@@ -250,23 +328,23 @@
       if ($form.length) $form.trigger('lafka-product-addons-update');
     }
 
-    var ok = allRequiredSet() && basePrice !== null;
+    var ok = complete && basePrice !== null;
     ctas.forEach(function (cta) {
       cta.disabled = !ok;
       cta.dataset.lafkaState = ok ? 'ready' : 'incomplete';
     });
     ctaLabels.forEach(function (label) {
       if (ok) {
-        label.textContent = 'Add to Cart · ' + formatPrice(total);
+        // M-11: the line total — unit (+ add-ons) × quantity.
+        label.textContent = t('addToOrder', 'Add to order · %s').replace('%s', formatPrice(unit * getQty()));
       } else {
         var firstMissing = null;
         var fields = root.querySelectorAll('[data-required="true"]');
         for (var i = 0; i < fields.length; i++) {
           if (fields[i].querySelectorAll('input:checked').length === 0) { firstMissing = fields[i]; break; }
         }
-        var legend = firstMissing ? firstMissing.querySelector('.lafka-pdp-picker__label') : null;
-        var hint = legend ? ('Pick a ' + legend.textContent.toLowerCase() + ' to continue') : 'Make a selection';
-        label.textContent = hint;
+        var prompt = firstMissing ? firstMissing.getAttribute('data-choose-label') : '';
+        label.textContent = prompt || t('chooseOptions', 'Choose your options');
       }
     });
   }
@@ -279,8 +357,7 @@
   // mobile sticky bar always shipped qty 1 regardless of what the
   // operator clicked.
   function getQtyInput() {
-    var form = root.closest('form.cart');
-    return form ? form.querySelector('input[name="quantity"]') : null;
+    return formEl ? formEl.querySelector('input[name="quantity"]') : null;
   }
 
   function syncQtyDisplays(value) {
@@ -310,6 +387,7 @@
     }
     // Trigger native change event so any other listeners pick it up.
     qtyInput.dispatchEvent(new Event('change', { bubbles: true }));
+    recompute();
   });
 
   // Direct keyboard edits to the input also need to mirror to the mobile
@@ -319,9 +397,10 @@
     if (!e.target.matches('input[name="quantity"]')) return;
     var v = parseInt(e.target.value, 10);
     if (!isNaN(v)) syncQtyDisplays(v);
+    recompute();
   });
 
-  root.addEventListener('change', recompute);
+  if (root) root.addEventListener('change', recompute);
   document.addEventListener('change', function (e) {
     if (e.target.matches && e.target.matches('input[name^="addon-"]')) recompute();
   });

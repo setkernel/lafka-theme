@@ -578,6 +578,31 @@ if ( ! function_exists( 'get_terms' ) ) {
 		return $terms;
 	}
 }
+if ( ! function_exists( 'get_term_by' ) ) {
+	/** Reads the lafka_test_terms store (slug / id / name). */
+	function get_term_by( $field, $value, $taxonomy = '', $output = 'OBJECT', $filter = 'raw' ) {
+		foreach ( (array) ( $GLOBALS['lafka_test_terms'][ (string) $taxonomy ] ?? array() ) as $term ) {
+			if ( ( 'slug' === $field && (string) $term->slug === (string) $value )
+				|| ( in_array( $field, array( 'id', 'term_id' ), true ) && (int) $term->term_id === (int) $value )
+				|| ( 'name' === $field && (string) $term->name === (string) $value ) ) {
+				return $term;
+			}
+		}
+		return false;
+	}
+}
+if ( ! function_exists( 'wc_get_featured_product_ids' ) ) {
+	/** Ids of the featured products in the lafka_test_catalog store. */
+	function wc_get_featured_product_ids() {
+		$ids = array();
+		foreach ( (array) ( $GLOBALS['lafka_test_catalog'] ?? array() ) as $product ) {
+			if ( $product->is_featured() ) {
+				$ids[] = (int) $product->get_id();
+			}
+		}
+		return $ids;
+	}
+}
 if ( ! function_exists( 'get_term_link' ) ) {
 	function get_term_link( $term, $taxonomy = '' ) {
 		$slug = is_object( $term ) ? (string) $term->slug : (string) $term;

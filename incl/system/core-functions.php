@@ -1083,7 +1083,7 @@ if ( ! function_exists( 'lafka_is_legacy_blog_surface' ) ) {
 		return ( is_home() && ! is_front_page() )
 			|| is_category() || is_tag() || is_author() || is_date()
 			|| is_singular( 'post' )
-			|| is_search()
+			|| ( is_search() && 'product' !== get_query_var( 'post_type' ) && ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) ) ) // Product / counter searches use the menu sheet (GX M-04, O-15).
 			|| is_attachment();
 	}
 }
@@ -1102,6 +1102,11 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	function lafka_needs_legacy_shortcode_styles() {
 		if ( lafka_is_legacy_blog_surface() ) {
 			return true;
+		}
+		// page-menu.php ignores the page's own content (often an old WPBakery
+		// layout), so its shortcodes never render there (GX M-37).
+		if ( isset( $GLOBALS['template'] ) && 'page-menu.php' === basename( (string) $GLOBALS['template'] ) ) {
+			return false;
 		}
 		// The plugin registers the CPT as 'lafka-foodmenu' (hyphen); only the
 		// taxonomy uses underscores.
@@ -1626,6 +1631,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if (
 			( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) )
 			|| $lafka_is_menu_slug
+			|| ( is_search() && function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) )
 		) {
 			wp_enqueue_style(
 				'lafka-home-v2',
@@ -1646,6 +1652,17 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				array(),
 				lafka_asset_version( '/js/lafka-menu-controls.js' ),
 				true
+			);
+			// Result-count announcements for the live search / filter chips.
+			wp_localize_script(
+				'lafka-menu-controls',
+				'lafkaMenuI18n',
+				array(
+					'none' => __( 'No menu items match.', 'lafka' ),
+					'one'  => __( '1 item matches.', 'lafka' ),
+					/* translators: %d: number of matching menu items (kept literal for the script). */
+					'many' => __( '%d items match.', 'lafka' ),
+				)
 			);
 		}
 
@@ -1846,8 +1863,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		// Preloader style
-		if ( get_theme_mod( 'lafka_show_preloader', true ) ) {
+		// Preloader style (never under the counter header — H-31).
+		if ( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ) {
 			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
 		}
 
@@ -2040,7 +2057,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'img_path'                => esc_js( LAFKA_IMAGES_PATH ),
 				'admin_url'               => esc_js( admin_url( 'admin-ajax.php' ) ),
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
-				'show_preloader'          => esc_js( get_theme_mod( 'lafka_show_preloader', true ) ),
+				'show_preloader'          => esc_js( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ),
 				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
 				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
 				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),

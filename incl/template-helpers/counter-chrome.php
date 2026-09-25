@@ -88,8 +88,31 @@ if ( ! function_exists( 'lafka_counter_brand_short' ) ) {
 	 * @return string '' when unset or identical to the full name.
 	 */
 	function lafka_counter_brand_short( string $full ): string {
-		$short = trim( wp_strip_all_tags( (string) apply_filters( 'lafka_counter_brand_short', (string) get_theme_mod( 'lafka_counter_brand_short', '' ), $full ) ) );
+		$short = trim( (string) get_theme_mod( 'lafka_counter_brand_short', '' ) );
+		if ( '' === $short ) {
+			$short = lafka_counter_brand_short_auto( $full );
+		}
+		$short = trim( wp_strip_all_tags( (string) apply_filters( 'lafka_counter_brand_short', $short, $full ) ) );
 		return $short === trim( $full ) ? '' : $short;
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_brand_short_auto' ) ) {
+	/**
+	 * H-01: a long name with no operator short name falls back to its first
+	 * part — "Harbour Pizza & Poutine" → "Harbour Pizza" — on narrow headers.
+	 * Names of 18 characters or fewer, or without a joiner, stay whole ('').
+	 *
+	 * @param string $full Full brand name.
+	 */
+	function lafka_counter_brand_short_auto( string $full ): string {
+		$full = trim( html_entity_decode( wp_strip_all_tags( $full ), ENT_QUOTES, 'UTF-8' ) );
+		if ( mb_strlen( $full ) <= 18 ) {
+			return '';
+		}
+		$parts = preg_split( '/\s+(?:&|\+|and|\||-|–|—)\s+/u', $full, 2 );
+		$first = is_array( $parts ) ? trim( (string) $parts[0] ) : '';
+		return ( '' !== $first && $first !== $full && mb_strlen( $first ) >= 3 ) ? $first : '';
 	}
 }
 
@@ -316,11 +339,31 @@ if ( ! function_exists( 'lafka_counter_render_nav' ) ) {
 		if ( ! $items ) {
 			return;
 		}
+		$request = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['REQUEST_URI'] ) ) : '';
 		echo '<ul class="' . esc_attr( $class ) . '">';
 		foreach ( $items as $item ) {
-			echo '<li class="menu-item"><a href="' . esc_url( $item['url'] ) . '">' . esc_html( $item['label'] ) . '</a></li>';
+			$current = lafka_counter_nav_is_current( (string) $item['url'], $request );
+			echo '<li class="menu-item' . ( $current ? ' current-menu-item' : '' ) . '"><a href="' . esc_url( $item['url'] ) . '"' . ( $current ? ' aria-current="page"' : '' ) . '>' . esc_html( $item['label'] ) . '</a></li>';
 		}
 		echo '</ul>';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_nav_is_current' ) ) {
+	/**
+	 * PURE: whether a nav link points at the page being viewed (H-23). In-page
+	 * anchors ("/#deals") are never "the current page".
+	 *
+	 * @param string $url     Link URL.
+	 * @param string $request Request URI (path + query).
+	 */
+	function lafka_counter_nav_is_current( string $url, string $request ): bool {
+		if ( '' === $url || false !== strpos( $url, '#' ) ) {
+			return false;
+		}
+		$link = (string) wp_parse_url( $url, PHP_URL_PATH );
+		$here = (string) wp_parse_url( $request, PHP_URL_PATH );
+		return '' !== $here && rtrim( $link, '/' ) === rtrim( $here, '/' ) && '' !== rtrim( $link, '/' );
 	}
 }
 
@@ -428,6 +471,9 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 						/* translators: 1: option (e.g. "Medium"), 2: price */
 						'option'      => __( '%1$s, %2$s, add to order', 'lafka' ),
 						'error'       => __( 'Could not add that. Opening the product page…', 'lafka' ),
+						/* translators: %s: attribute name in lower case, e.g. "size", "pieces". */
+						'chooseOne'   => __( 'Choose %s', 'lafka' ),
+						'chooseMany'  => __( 'Choose your options', 'lafka' ),
 					),
 				)
 			);
@@ -473,8 +519,11 @@ if ( ! function_exists( 'lafka_counter_add_action' ) ) {
 		$url  = (string) $product->get_permalink();
 		$mode = lafka_counter_add_mode( $product );
 		if ( '' !== $mode ) {
+			// A one-variation variable product adds that variation directly.
+			$payload = 'direct' === $mode ? lafka_chooser_payload( $product ) : array();
+			$add_id  = ! empty( $payload['variation_id'] ) ? (int) $payload['variation_id'] : (int) $product->get_id();
 			return '<button type="button" class="' . esc_attr( trim( 'lafka-counter-btn ' . $class ) ) . '"'
-				. ' data-lafka-add="' . esc_attr( (string) $product->get_id() ) . '"'
+				. ' data-lafka-add="' . esc_attr( (string) $add_id ) . '"'
 				. ' data-lafka-add-mode="' . esc_attr( $mode ) . '"'
 				. ' data-lafka-add-url="' . esc_url( $url ) . '">'
 				. esc_html( $label ) . '<span class="screen-reader-text"> ' . esc_html( $name ) . '</span></button>';
@@ -723,3 +772,45 @@ if ( ! function_exists( 'lafka_counter_upsell_button_label' ) ) {
 	}
 }
 add_filter( 'lafka_cart_drawer_upsell_add_label', 'lafka_counter_upsell_button_label' );
+
+if ( ! function_exists( 'lafka_counter_disable_emoji_enabled' ) ) {
+	/**
+	 * H-27: skip WordPress's emoji script + s.w.org images on counter
+	 * storefronts (Customizer → Layouts → "Use the visitor's own emoji",
+	 * default on). Filter `lafka_disable_wp_emoji`.
+	 */
+	function lafka_counter_disable_emoji_enabled(): bool {
+		$on = (bool) get_theme_mod( 'lafka_disable_wp_emoji', true )
+			&& function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' );
+		return (bool) apply_filters( 'lafka_disable_wp_emoji', $on );
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_disable_emoji' ) ) {
+	/** template_redirect: unhook the front-end emoji detection script + styles. */
+	function lafka_counter_disable_emoji(): void {
+		if ( is_admin() || ! lafka_counter_disable_emoji_enabled() ) {
+			return;
+		}
+		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+		remove_action( 'wp_print_styles', 'print_emoji_styles' );
+		remove_action( 'wp_enqueue_scripts', 'wp_enqueue_emoji_styles' );
+		remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+		remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+		add_filter( 'emoji_svg_url', '__return_false' );
+	}
+}
+add_action( 'template_redirect', 'lafka_counter_disable_emoji', 0 );
+
+if ( ! function_exists( 'lafka_preloader_enabled' ) ) {
+	/**
+	 * H-31: the legacy full-screen preloader (markup + stylesheet) — the
+	 * operator option, but never under the counter header, whose pages paint
+	 * their skeleton from critical CSS. Filter `lafka_preloader_enabled`.
+	 */
+	function lafka_preloader_enabled(): bool {
+		$on = (bool) get_theme_mod( 'lafka_show_preloader', true )
+			&& ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) );
+		return (bool) apply_filters( 'lafka_preloader_enabled', $on );
+	}
+}

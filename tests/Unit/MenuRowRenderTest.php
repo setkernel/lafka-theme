@@ -53,6 +53,13 @@ namespace Lafka\Tests\Unit {
 			$this->assertArrayHasKey( 7, $GLOBALS['lafka_chooser_registry'], 'variable rows register their chooser payload' );
 		}
 
+		public function test_short_parenthetical_never_breaks_and_heading_level_follows_the_template(): void {
+			$html = $this->row( new \WC_Product( array( 'name' => 'Chicken Fingers (3 pc)' ) ), array( 'heading' => 4 ) );
+			$this->assertStringContainsString( ">Chicken Fingers (3\u{00A0}pc)</a>", $html );
+			$this->assertStringContainsString( 'data-lafka-product-name="Chicken Fingers (3 pc)"', $html, 'search still sees plain spaces' );
+			$this->assertStringContainsString( '<h4 class="lafka-row__name">', $html );
+		}
+
 		public function test_simple_row_adds_directly(): void {
 			$html = $this->row( new \WC_Product( array( 'price' => '8.50' ) ) );
 			$this->assertStringContainsString( 'data-lafka-add-mode="direct"', $html );

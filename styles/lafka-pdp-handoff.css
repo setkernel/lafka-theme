@@ -574,3 +574,238 @@
 .lafka-pdp .lafka-pdp-tabs {
 	display: none;
 }
+
+/* Age / ID notice (GX M-25; incl/template-helpers/age-notice.php). Also in
+ * lafka-pdp-handoff.css — kept out of the always-on sheets. */
+.lafka-age-notice {
+	display: flex;
+	align-items: flex-start;
+	gap: 8px;
+	margin: 8px 0 0;
+	flex-basis: 100%;
+	order: 3;
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-body-sm);
+	line-height: 1.4;
+	hyphens: manual;
+}
+
+.lafka-age-notice__badge {
+	flex: none;
+	padding: 1px 6px;
+	border: 1.5px solid currentcolor;
+	border-radius: 4px;
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-caption);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: 0.04em;
+	line-height: 1.3;
+}
+
+/* =============================================================================
+ * GX sx2 — PDP fixes (M-09 M-22 M-23 M-24 M-28 M-39 T-20 T-21 T-33).
+ * ========================================================================= */
+
+/* One gutter with the counter header and /menu/ (M-22). */
+body.lafka-layout-header-counter .lafka-pdp__main {
+	max-width: var(--lafka-container-max);
+	padding-inline: clamp(16px, 4.45vw, 64px);
+}
+
+/* Breadcrumb: sentence case, readable, underlined, bigger targets. */
+.lafka-pdp__breadcrumb,
+.lafka-pdp__breadcrumb .breadcrumb {
+	font-size: var(--lafka-font-size-body-sm);
+	text-transform: none;
+	letter-spacing: normal;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-pdp__breadcrumb .breadcrumb {
+	line-height: 2;
+}
+
+/* Inline padding widens the hit area without spreading wrapped lines. */
+.lafka-pdp__breadcrumb a {
+	padding-block: 10px;
+	color: var(--lafka-color-text-primary);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+}
+
+/* Gallery: the whole dish, never cropped (M-23); the zoom trigger is a
+ * labelled 44 px button in the image corner, not a floating emoji. */
+.lafka-pdp__gallery .woocommerce-product-gallery {
+	position: relative;
+}
+
+.lafka-pdp__gallery .woocommerce-product-gallery__image img {
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1;
+	object-fit: contain;
+}
+
+.lafka-pdp__gallery .woocommerce-product-gallery__trigger {
+	position: absolute;
+	top: 12px;
+	right: 12px;
+	z-index: 2;
+	display: grid;
+	place-items: center;
+	width: 44px;
+	height: 44px;
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: 50%;
+	background: var(--lafka-color-surface-raised);
+	font-size: 0;
+	color: transparent;
+	text-decoration: none;
+}
+
+.lafka-pdp__gallery .woocommerce-product-gallery__trigger > * {
+	display: none;
+}
+
+.lafka-pdp__gallery .woocommerce-product-gallery__trigger::before {
+	content: "";
+	width: 20px;
+	height: 20px;
+	background: var(--lafka-color-text-primary);
+	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6'/%3E%3C/svg%3E") center / contain no-repeat;
+}
+
+.lafka-pdp__gallery .woocommerce-product-gallery__trigger:focus-visible {
+	box-shadow: var(--lafka-shadow-focus);
+	outline: none;
+}
+
+/* Chips: sentence case, legible prices in the display face (M-28, M-39). */
+.lafka-pdp-summary .lafka-pdp-chip__name,
+.lafka-pdp-summary .lafka-pdp-picker__label,
+.lafka-pdp-summary .product-addon label,
+.lafka-pdp-summary .product-addon h3,
+.lafka-pdp-summary .product-addon-name {
+	text-transform: none;
+	letter-spacing: normal;
+}
+
+.lafka-pdp-summary .lafka-pdp-chip__name {
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.lafka-pdp-summary .lafka-pdp-picker__label {
+	margin-bottom: 6px;
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+/* Equal-height chips when a long name wraps. */
+.lafka-pdp-summary .lafka-pdp-picker .lafka-pdp-chip {
+	align-self: stretch;
+}
+
+.lafka-pdp-summary .lafka-pdp-picker .lafka-pdp-chip__inner {
+	height: 100%;
+	box-sizing: border-box;
+	justify-content: center;
+}
+
+.lafka-pdp-summary .lafka-pdp-chip__price,
+.lafka-pdp-summary .lafka-pdp-chip__na,
+.lafka-pdp-summary .product-addon .amount {
+	font-family: var(--lafka-font-family-display);
+	font-size: max(13px, var(--lafka-font-size-caption));
+	font-variant-numeric: tabular-nums;
+}
+
+.lafka-pdp-summary .lafka-pdp-chip__price[hidden],
+.lafka-pdp-summary .lafka-pdp-chip__na[hidden] {
+	display: none;
+}
+
+/* A size that does not exist for the other choice (M-09). */
+.lafka-pdp-summary .lafka-pdp-chip.is-unavailable {
+	cursor: not-allowed;
+}
+
+.lafka-pdp-summary .lafka-pdp-chip.is-unavailable .lafka-pdp-chip__inner {
+	border-style: dashed;
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-secondary);
+	box-shadow: none;
+}
+
+.lafka-pdp-summary .lafka-pdp-chip.is-unavailable .lafka-pdp-chip__name {
+	text-decoration: line-through;
+}
+
+/* Disabled add button: readable, not a faded ghost (T-20). */
+.lafka-pdp-summary__cta:disabled,
+.lafka-pdp-mobile-cta__btn:disabled {
+	opacity: 1;
+	border: 1.5px dashed var(--lafka-color-border-strong);
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-primary);
+}
+
+/* No empty band; the trust line spans the buy box (M-24). */
+.lafka-pdp-summary .single_variation:empty,
+.lafka-pdp-summary .single_variation_wrap > .woocommerce-variation:empty {
+	display: none;
+}
+
+.lafka-pdp-summary__trust {
+	width: 100%;
+	flex-basis: 100%;
+}
+
+.lafka-pdp-summary__trust:not(:has(*)) {
+	display: none;
+}
+
+/* "Make it a meal": counter-style cards, 2 then 4 columns — never 3 + 1
+ * (M-17); the price in ink, the Add a 44 px outline button (T-21). */
+.lafka-pdp .lafka-pdp-upsell__heading {
+	font-size: var(--lafka-font-size-h4);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-pdp .lafka-pdp-upsell__grid {
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 12px;
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-pdp .lafka-pdp-upsell__grid {
+		grid-template-columns: repeat(4, minmax(0, 1fr));
+	}
+}
+
+.lafka-pdp .lafka-pdp-upsell__price {
+	color: var(--lafka-color-text-primary);
+	font-family: var(--lafka-font-family-display);
+	font-size: var(--lafka-font-size-body-sm) !important;
+	font-variant-numeric: tabular-nums;
+}
+
+.lafka-pdp .lafka-pdp-upsell__price .lafka-price-from__label {
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-pdp .lafka-pdp-upsell__add {
+	min-height: 44px;
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button, var(--lafka-radius-md));
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-pdp .lafka-pdp-upsell__add:hover {
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}

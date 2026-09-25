@@ -27,12 +27,16 @@ $lafka_mn_phone = isset( $lafka_mn_info['phone_display'] ) ? (string) $lafka_mn_
 $lafka_mn_tel   = isset( $lafka_mn_info['phone_e164'] ) ? (string) $lafka_mn_info['phone_e164'] : $lafka_mn_phone;
 
 $lafka_mn_terms = array();
-if ( taxonomy_exists( 'product_cat' ) ) {
+if ( taxonomy_exists( 'product_cat' ) && function_exists( 'lafka_menu_top_categories' ) ) {
+	// H-12: the same top-level list, in the same WooCommerce order, as the
+	// menu page and the counter home.
+	$lafka_mn_terms = lafka_menu_top_categories();
+} elseif ( taxonomy_exists( 'product_cat' ) ) {
 	$lafka_mn_args = array(
 		'taxonomy'   => 'product_cat',
 		'hide_empty' => true,
-		'orderby'    => 'count',
-		'order'      => 'DESC',
+		'parent'     => 0,
+		'orderby'    => 'menu_order',
 		'number'     => 24,
 	);
 	if ( function_exists( 'lafka_uncategorized_excluded_ids' ) ) {
@@ -87,8 +91,8 @@ if ( taxonomy_exists( 'product_cat' ) ) {
 			<?php if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) && function_exists( 'lafka_counter_render_nav' ) ) : ?>
 				<?php // GX4: the counter header's links collapse into this drawer below 1024px. ?>
 				<section class="lafka-mobile-nav__section">
-					<h2 class="lafka-mobile-nav__section-title"><?php esc_html_e( 'Menu', 'lafka' ); ?></h2>
-					<nav class="lafka-mobile-nav__nav" aria-label="<?php esc_attr_e( 'Main', 'lafka' ); ?>">
+					<?php // H-12 / T-33: no second "Menu" heading (the drawer is "Main menu"), and a label distinct from the header's "Main" nav. ?>
+					<nav class="lafka-mobile-nav__nav" aria-label="<?php esc_attr_e( 'Pages', 'lafka' ); ?>">
 						<?php lafka_counter_render_nav( 'lafka-mobile-nav__list' ); ?>
 					</nav>
 				</section>

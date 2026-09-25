@@ -71,7 +71,7 @@ $lafka_ch_short  = lafka_counter_brand_short( $lafka_ch_nap['name'] );
 				</a>
 			<?php endif; ?>
 
-			<button type="button" class="lafka-counter-header__menu" aria-controls="lafka-mobile-nav" aria-expanded="false" data-lafka-menu-toggle>
+			<button type="button" class="lafka-counter-header__menu" aria-label="<?php esc_attr_e( 'Menu', 'lafka' ); ?>" aria-controls="lafka-mobile-nav" aria-expanded="false" data-lafka-menu-toggle>
 				<?php echo lafka_counter_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
 				<span class="lafka-counter-header__menu-label"><?php esc_html_e( 'Menu', 'lafka' ); ?></span>
 			</button>

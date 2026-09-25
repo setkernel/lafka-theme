@@ -130,6 +130,23 @@ if ( ! class_exists( 'WC_Product_Variable' ) ) {
 		public function get_variation_attributes() {
 			return $this->data['variation_attributes'] ?? array();
 		}
+		/** WC's get_available_variations() shape, from the same rows. */
+		public function get_available_variations( $return = 'array' ) {
+			$out = array();
+			foreach ( (array) ( $this->data['variations'] ?? array() ) as $vid => $row ) {
+				if ( false === ( $row['visible'] ?? true ) ) {
+					continue;
+				}
+				$out[] = array(
+					'variation_id'   => (int) $vid,
+					'attributes'     => (array) ( $row['attributes'] ?? array() ),
+					'display_price'  => (float) ( $row['price'] ?? 0 ),
+					'is_purchasable' => (bool) ( $row['purchasable'] ?? true ),
+					'is_in_stock'    => true,
+				);
+			}
+			return $out;
+		}
 	}
 }
 

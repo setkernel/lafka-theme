@@ -124,7 +124,7 @@ get_header( 'shop' );
 			do_action( 'woocommerce_before_single_product' );
 			?>
 
-            <nav class="lafka-pdp__breadcrumb"><?php woocommerce_breadcrumb(); ?></nav>
+            <nav class="lafka-pdp__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>"><?php woocommerce_breadcrumb(); ?></nav>
 
             <div class="lafka-pdp__hero">
                 <div class="lafka-pdp__gallery">

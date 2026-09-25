@@ -48,7 +48,7 @@ if ( 2 === count( $lafka_find_modes ) ) {
 		<?php endif; ?>
 		<?php if ( $lafka_find_hours ) : ?>
 			<div class="lafka-counter-find__block">
-				<h3 class="lafka-counter-find__label"><?php echo esc_html( lafka_hours_open_every_day( $lafka_find['hours'] ) ? __( 'Hours, every day', 'lafka' ) : __( 'Hours', 'lafka' ) ); ?></h3>
+				<h3 class="lafka-counter-find__label"><?php echo esc_html( 1 === count( $lafka_find_hours ) && lafka_hours_open_every_day( $lafka_find['hours'] ) ? __( 'Hours, every day', 'lafka' ) : __( 'Hours', 'lafka' ) ); // H-24: "every day" only above one row. ?></h3>
 				<dl class="lafka-counter-find__hours">
 					<?php foreach ( $lafka_find_hours as $lafka_find_row ) : ?>
 						<div>

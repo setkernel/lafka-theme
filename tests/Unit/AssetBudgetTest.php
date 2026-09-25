@@ -46,9 +46,14 @@ use PHPUnit\Framework\TestCase;
  * Pre-NX1-10a the same front page shipped 506,985 B of always-on first-party
  * CSS; 7.0.0 shipped 444,995 B. Re-baseline intentionally (and bump this docblock)
  * when the always-on set legitimately grows.
+ *
+ * 2026-09-25 (GX QA, sx2): BUDGET_BYTES 400,000 → 402,000 for the counter
+ * home fixes (masonry rest-of-menu, rim-label hero captions, row alignment,
+ * landscape bar, one "Order online") — the counter front page measured
+ * 400,892 B; page-specific fixes went to the menu / PDP sheets instead.
  */
 final class AssetBudgetTest extends TestCase {
-	private const BUDGET_BYTES   = 400000;
+	private const BUDGET_BYTES   = 402000;
 	private const MODULAR_BUDGET = 175000;
 	private const STYLE_CEILING  = 232000;
 

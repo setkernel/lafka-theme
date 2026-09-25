@@ -82,9 +82,19 @@ body {
 	grid-row: 2;
 	padding-left: 48px;
 	font-size: var(--lafka-font-size-body-sm);
+	white-space: normal; /* H-01: wrap under the name, never "until mi…" */
+	align-items: flex-start;
 }
 
-@media (max-width: 599px) {
+.lafka-counter-header .lafka-counter-status__dot {
+	margin-top: 0.45em;
+}
+
+.lafka-counter-header .lafka-counter-status__text {
+	overflow: visible;
+}
+
+@media (max-width: 767px) {
 
 	.lafka-counter-header .lafka-counter-header__name--has-short .lafka-counter-header__name-full {
 		position: absolute;
@@ -184,7 +194,7 @@ body {
 
 	.lafka-counter-header .lafka-counter-header__bar {
 		display: flex;
-		gap: 24px;
+		gap: 16px;
 		padding-block: 0;
 	}
 
@@ -194,19 +204,26 @@ body {
 	}
 
 	.lafka-counter-header .lafka-counter-header__name {
-		font-size: 26px;
+		font-size: 24px;
 	}
 
+	/* The status keeps its full line; a too-long name gives way first. */
 	.lafka-counter-header .lafka-counter-header__brand {
 		gap: 14px;
-		flex: none;
-		max-width: 40%;
+		flex: 0 1 auto;
 	}
 
 	.lafka-counter-header .lafka-counter-status {
+		flex: none;
+		align-items: center;
 		margin-right: auto;
 		padding-left: 0;
 		font-size: inherit;
+		white-space: nowrap;
+	}
+
+	.lafka-counter-header .lafka-counter-status__dot {
+		margin-top: 0;
 	}
 
 	.lafka-counter-header .lafka-counter-header__actions {
@@ -215,6 +232,10 @@ body {
 }
 
 @media (min-width: 1440px) {
+
+	.lafka-counter-header .lafka-counter-header__name {
+		font-size: 26px;
+	}
 
 	.lafka-counter-header .lafka-counter-header__phone-number {
 		position: static;

@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/price-columns.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/pdp-selection.php';
 }
 
 namespace Lafka\Tests\Unit {
@@ -142,6 +143,53 @@ namespace Lafka\Tests\Unit {
 			$this->assertTrue( $payload['addable'] );
 			$this->assertSame( 'direct', $payload['mode'] );
 			$this->assertSame( array(), $payload['variations'] );
+		}
+
+		public function test_a_single_variation_is_a_direct_add_of_that_variation(): void {
+			$p = new \WC_Product_Variable(
+				array(
+					'id'                   => 31,
+					'name'                 => 'Platter',
+					'variation_attributes' => array( 'pa_size' => array( 'large' ) ),
+					'variations'           => array(
+						3101 => array(
+							'price'      => 13.99,
+							'attributes' => array( 'attribute_pa_size' => 'large' ),
+						),
+					),
+				)
+			);
+			$payload = \lafka_chooser_payload( $p );
+			$this->assertTrue( $payload['addable'] );
+			$this->assertSame( 'direct', $payload['mode'], 'one size is not a choice (H-20)' );
+			$this->assertSame( 3101, $payload['variation_id'] );
+		}
+
+		public function test_a_deal_with_add_on_groups_is_chosen_on_its_page(): void {
+			require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/menu-data.php';
+			$GLOBALS['lafka_test_terms']['product_cat'] = array(
+				new \WP_Term( array( 'term_id' => 30, 'slug' => 'combos', 'name' => 'Combos', 'count' => 3 ) ),
+				new \WP_Term( array( 'term_id' => 31, 'slug' => 'pizza', 'name' => 'Pizza', 'count' => 3, 'order' => 1 ) ),
+			);
+			\add_filter( 'lafka_product_has_addons', '__return_true' );
+			$deal = new \WC_Product( array( 'id' => 70, 'category_ids' => array( 30 ) ) );
+			$this->assertSame( 'deal_choices', \lafka_chooser_payload( $deal )['reason'], 'H-04: "Any 2 pizzas" with add-ons → Choose' );
+			$pizza = new \WC_Product( array( 'id' => 71, 'category_ids' => array( 31 ) ) );
+			$this->assertTrue( \lafka_chooser_payload( $pizza )['addable'], 'optional add-ons elsewhere keep one-tap Add' );
+		}
+
+		public function test_a_deal_without_add_ons_stays_a_one_tap_add(): void {
+			require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/menu-data.php';
+			$GLOBALS['lafka_test_terms']['product_cat'] = array(
+				new \WP_Term( array( 'term_id' => 30, 'slug' => 'combos', 'name' => 'Combos', 'count' => 3 ) ),
+			);
+			$this->assertTrue( \lafka_chooser_payload( new \WC_Product( array( 'id' => 72, 'category_ids' => array( 30 ) ) ) )['addable'] );
+		}
+
+		public function test_lowercase_attribute_labels_are_capitalised(): void {
+			$GLOBALS['lafka_test_attr_labels']['pa_size'] = 'size';
+			$payload = \lafka_chooser_payload( \Lafka_Test_Catalog::pizza() );
+			$this->assertSame( 'Size', self::attr( $payload, 'pa_size' )['label'] );
 		}
 
 		public function test_registered_payloads_print_as_one_json_island(): void {

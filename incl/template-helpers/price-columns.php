@@ -284,6 +284,8 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 			$reason = 'unavailable';
 		} elseif ( function_exists( 'lafka_product_has_required_addons' ) && lafka_product_has_required_addons( $id ) ) {
 			$reason = 'required_addons';
+		} elseif ( lafka_chooser_deal_needs_choices( $product, $payload['has_addons'] ) ) {
+			$reason = 'deal_choices';
 		}
 
 		if ( $variable ) {
@@ -337,7 +339,7 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 				$payload['attributes'][] = array(
 					'key'     => $key,
 					'name'    => $name,
-					'label'   => function_exists( 'wc_attribute_label' ) ? (string) wc_attribute_label( $name, $product ) : $name,
+					'label'   => lafka_chooser_attribute_label( $name, $product ),
 					'primary' => $name === $primary,
 					'default' => $default,
 					'options' => $options,
@@ -364,12 +366,55 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 			$payload['primary'] = $primary_key;
 		}
 
+		// GX H-20 / M-18: one buyable variation, every attribute fixed, is not
+		// a choice — the row adds that variation in one tap ("Add"), like a
+		// simple product.
+		if ( '' === $reason && $variable && 1 === count( $payload['variations'] ) ) {
+			$payload['mode']         = 'direct';
+			$payload['variation_id'] = (int) $payload['variations'][0]['id'];
+		}
+
 		if ( '' !== $reason ) {
 			$payload['addable'] = false;
 			$payload['reason']  = $reason;
 		}
 
 		return (array) apply_filters( 'lafka_chooser_payload', $payload, $product );
+	}
+}
+
+if ( ! function_exists( 'lafka_chooser_deal_needs_choices' ) ) {
+	/**
+	 * GX H-04 / M-07: a deal ("Any 2 pizzas + pop") that carries ANY add-on
+	 * group is chosen on its product page ("Choose"), never added in one tap
+	 * with nothing picked. A deal = a product in the counter's deals category
+	 * (Customizer, else a deals / combos / specials slug). Filter
+	 * `lafka_chooser_force_choose` (bool, $product) forces either way.
+	 *
+	 * @param WC_Product $product    Product.
+	 * @param bool       $has_addons lafka_product_has_addons().
+	 */
+	function lafka_chooser_deal_needs_choices( $product, bool $has_addons ): bool {
+		$force = false;
+		if ( $has_addons && function_exists( 'lafka_counter_deals_term_id' ) ) {
+			$deals = lafka_counter_deals_term_id();
+			$cats  = method_exists( $product, 'get_category_ids' ) ? array_map( 'intval', (array) $product->get_category_ids() ) : array();
+			$force = $deals > 0 && in_array( $deals, $cats, true );
+		}
+		return (bool) apply_filters( 'lafka_chooser_force_choose', $force, $product );
+	}
+}
+
+if ( ! function_exists( 'lafka_chooser_attribute_label' ) ) {
+	/**
+	 * An attribute's customer-facing label ("size" → "Size", H-17 / M-27).
+	 *
+	 * @param string     $name    Attribute name.
+	 * @param WC_Product $product Product.
+	 */
+	function lafka_chooser_attribute_label( string $name, $product ): string {
+		$label = function_exists( 'wc_attribute_label' ) ? (string) wc_attribute_label( $name, $product ) : $name;
+		return function_exists( 'lafka_attribute_display_label' ) ? lafka_attribute_display_label( $label ) : $label;
 	}
 }
 

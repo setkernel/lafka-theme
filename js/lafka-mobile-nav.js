@@ -32,7 +32,7 @@
 	function getBackgroundEls() {
 		if ( null === backgroundEls ) {
 			backgroundEls = [];
-			[ '#header', '#content', '#footer' ].forEach( function ( sel ) {
+			[ '#header', '#content', '#main', '#footer', '.lafka-counter-bar' ].forEach( function ( sel ) {
 				var el = document.querySelector( sel );
 				if ( el && el !== nav && ! nav.contains( el ) ) {
 					backgroundEls.push( el );

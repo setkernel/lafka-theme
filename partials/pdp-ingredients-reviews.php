@@ -140,11 +140,11 @@ if ( '' === $lafka_pdp_long_desc && empty( $lafka_pdp_allergens ) && ! $lafka_pd
 	return;
 }
 ?>
-<section class="lafka-pdp-info" aria-label="<?php esc_attr_e( 'Ingredients and reviews', 'lafka' ); ?>">
+<section class="lafka-pdp-info" aria-label="<?php echo esc_attr( $lafka_pdp_reviews_show && ! empty( $lafka_pdp_reviews ) ? __( 'Ingredients and reviews', 'lafka' ) : __( 'Ingredients', 'lafka' ) ); ?>">
 	<div class="lafka-container lafka-pdp-info__grid">
 
 		<article class="lafka-pdp-info__card">
-			<h3 class="lafka-pdp-info__card-title"><?php esc_html_e( "What's in it", 'lafka' ); ?></h3>
+			<h2 class="lafka-pdp-info__card-title"><?php esc_html_e( "What's in it", 'lafka' ); ?></h2>
 			<div class="lafka-pdp-info__body">
 				<?php
 				if ( '' !== $lafka_pdp_long_desc ) {
@@ -157,7 +157,7 @@ if ( '' === $lafka_pdp_long_desc && empty( $lafka_pdp_allergens ) && ! $lafka_pd
 				?>
 			</div>
 			<?php if ( ! empty( $lafka_pdp_allergens ) ) : ?>
-				<h4 class="lafka-pdp-info__sublabel"><?php esc_html_e( 'Allergens', 'lafka' ); ?></h4>
+				<h3 class="lafka-pdp-info__sublabel"><?php esc_html_e( 'Allergens', 'lafka' ); ?></h3>
 				<ul class="lafka-pdp-info__allergens" role="list">
 					<?php foreach ( $lafka_pdp_allergens as $lafka_pdp_allergen ) : ?>
 						<li class="lafka-pdp-info__allergen-chip"><?php echo esc_html( $lafka_pdp_allergen ); ?></li>
@@ -171,12 +171,12 @@ if ( '' === $lafka_pdp_long_desc && empty( $lafka_pdp_allergens ) && ! $lafka_pd
 
 		<?php if ( $lafka_pdp_reviews_show && ! empty( $lafka_pdp_reviews ) ) : ?>
 			<article class="lafka-pdp-info__card">
-				<h3 class="lafka-pdp-info__card-title">
+				<h2 class="lafka-pdp-info__card-title">
 					<?php
 					/* translators: %s — average rating, e.g. "4.8" */
 					printf( esc_html__( 'Reviews · %s', 'lafka' ), esc_html( number_format_i18n( $lafka_pdp_rating_avg, 1 ) ) );
 					?>
-				</h3>
+				</h2>
 
 				<ul class="lafka-pdp-info__reviews" role="list">
 					<?php foreach ( $lafka_pdp_reviews as $lafka_pdp_rev ) : ?>

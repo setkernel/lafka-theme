@@ -151,3 +151,40 @@ if ( ! function_exists( 'lafka_service_eta_checkout_button_text' ) ) {
 	}
 }
 add_filter( 'woocommerce_order_button_text', 'lafka_service_eta_checkout_button_text' );
+
+if ( ! function_exists( 'lafka_ready_time_text' ) ) {
+	/**
+	 * The one "ready in" figure the storefront quotes (H-09): the operator's
+	 * Service ETA pickup text (Customizer), else lafka-plugin's store-wide
+	 * prep time ("~25 min"), else ''. The hero and the PDP both read it.
+	 *
+	 * @return string e.g. "20–30 min", "~25 min", or ''.
+	 */
+	function lafka_ready_time_text(): string {
+		$data = lafka_service_eta_get_data();
+		$text = is_array( $data ) ? trim( (string) $data['pickup'] ) : '';
+		if ( '' === $text && function_exists( 'lafka_pdp_get_prep_time' ) ) {
+			$minutes = (int) get_theme_mod( 'lafka_pdp_prep_time_default', 25 );
+			/* translators: %d: minutes. */
+			$text = $minutes > 0 ? sprintf( __( '~%d min', 'lafka' ), $minutes ) : '';
+		}
+		return (string) apply_filters( 'lafka_ready_time_text', $text );
+	}
+}
+
+if ( ! function_exists( 'lafka_ready_time_pdp_text' ) ) {
+	/**
+	 * lafka_pdp_prep_time_text: when the operator set a Service ETA, the PDP's
+	 * trust line quotes it too, so hero and PDP never disagree.
+	 *
+	 * @param string $text Plugin line ("Ready in ~25 min").
+	 * @return string
+	 */
+	function lafka_ready_time_pdp_text( $text ) {
+		$data   = lafka_service_eta_get_data();
+		$pickup = is_array( $data ) ? trim( (string) $data['pickup'] ) : '';
+		/* translators: %s: ready time, e.g. "20–30 min". */
+		return '' !== $pickup ? sprintf( __( 'Ready in %s', 'lafka' ), $pickup ) : $text;
+	}
+}
+add_filter( 'lafka_pdp_prep_time_text', 'lafka_ready_time_pdp_text' );

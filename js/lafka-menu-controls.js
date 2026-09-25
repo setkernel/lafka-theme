@@ -1,8 +1,9 @@
 /**
  * Menu page controls — fulfilment toggle + search + dietary filter chips.
  *
- * Filters .lafka-favs__item cards based on:
- *   - data-lafka-product-name (text-match against search input)
+ * Filters .lafka-favs__item cards / counter rows based on:
+ *   - data-lafka-product-search (name + short description; case- and
+ *     accent-insensitive, every word must match), else the product name
  *   - data-lafka-product-tags (CSV of WC product tag slugs, matched
  *     against active dietary chips)
  *
@@ -10,15 +11,16 @@
  * use by other surfaces (cart, checkout). It does NOT hide products —
  * the operator's catalogue is the same for pickup and delivery.
  *
+ * Also drives the category strip: the sticky offset used by section anchors,
+ * the scroll-spy that marks the chip of the section in view, and keeping the
+ * active chip visible in the horizontally scrolling strip.
+ *
  * @since 5.68.0
  */
 ( function () {
 	'use strict';
 
-	var root = document.querySelector( '[data-lafka-menu-controls]' );
-	if ( ! root ) {
-		return;
-	}
+	var root = document.querySelector( '[data-lafka-menu-controls]' ) || document.createElement( 'div' );
 
 	// The fulfilment storage contract is defined once in PHP and handed to the
 	// JS via window.lafkaCfg (wp_localize_script), so the menu and cart
@@ -134,14 +136,35 @@
 	}
 
 	// -------- Search ------------------------------------------------------
+	// Case- and accent-insensitive ("jalapeno" finds "Jalapeño").
+	function fold( text ) {
+		var out = String( text || '' ).toLowerCase();
+		if ( out.normalize ) {
+			out = out.normalize( 'NFD' ).replace( /[̀-ͯ]/g, '' );
+		}
+		return out.replace( /\s+/g, ' ' ).trim();
+	}
+
+	function searchForm() {
+		return root.querySelector( '[data-lafka-menu-search]' );
+	}
+
+	function isServerSearch() {
+		var form = searchForm();
+		return !! form && form.getAttribute( 'data-lafka-menu-search-mode' ) === 'server';
+	}
+
 	function initSearch() {
+		var form = searchForm();
 		var input = root.querySelector( '[data-lafka-menu-search-input]' );
 		var clear = root.querySelector( '[data-lafka-menu-search-clear]' );
 		if ( ! input ) { return; }
 
 		input.addEventListener( 'input', function () {
 			if ( clear ) { clear.hidden = ! input.value; }
-			applyFilter();
+			if ( ! isServerSearch() ) {
+				applyFilter();
+			}
 		} );
 
 		if ( clear ) {
@@ -149,7 +172,24 @@
 				input.value = '';
 				clear.hidden = true;
 				input.focus();
-				applyFilter();
+				if ( ! isServerSearch() ) {
+					applyFilter();
+				}
+			} );
+		}
+
+		// Live mode filters in place; Enter only leaves the page (a real
+		// product search) when nothing here matches, or the page has no rows.
+		if ( form ) {
+			form.addEventListener( 'submit', function ( e ) {
+				if ( isServerSearch() ) {
+					if ( ! input.value.trim() ) { e.preventDefault(); }
+					return;
+				}
+				var visible = applyFilter();
+				if ( ! input.value.trim() || visible > 0 ) {
+					e.preventDefault();
+				}
 			} );
 		}
 	}
@@ -171,40 +211,84 @@
 
 		if ( clearAll ) {
 			clearAll.addEventListener( 'click', function () {
-				chips.forEach( function ( chip ) {
-					chip.setAttribute( 'aria-pressed', 'false' );
-					chip.classList.remove( 'is-on' );
-				} );
-				updateClearAllVisibility();
+				resetChips();
 				applyFilter();
 			} );
 		}
+	}
 
-		function updateClearAllVisibility() {
-			if ( ! clearAll ) { return; }
-			var any = chips.some( function ( c ) { return c.getAttribute( 'aria-pressed' ) === 'true'; } );
-			clearAll.hidden = ! any;
-		}
+	function resetChips() {
+		$$( '[data-lafka-filter]', root ).forEach( function ( chip ) {
+			chip.setAttribute( 'aria-pressed', 'false' );
+			chip.classList.remove( 'is-on' );
+		} );
+		updateClearAllVisibility();
+	}
+
+	function updateClearAllVisibility() {
+		var clearAll = root.querySelector( '[data-lafka-clear-filters]' );
+		if ( ! clearAll ) { return; }
+		clearAll.hidden = ! $$( '[data-lafka-filter]', root ).some( function ( c ) {
+			return c.getAttribute( 'aria-pressed' ) === 'true';
+		} );
+	}
+
+	// "Clear search and filters" in the empty state.
+	function initReset() {
+		$$( '[data-lafka-menu-reset]' ).forEach( function ( btn ) {
+			btn.addEventListener( 'click', function () {
+				var input = root.querySelector( '[data-lafka-menu-search-input]' );
+				var clear = root.querySelector( '[data-lafka-menu-search-clear]' );
+				if ( input ) { input.value = ''; }
+				if ( clear ) { clear.hidden = true; }
+				resetChips();
+				applyFilter();
+				if ( input ) { input.focus(); }
+			} );
+		} );
 	}
 
 	// -------- Apply combined filter to product cards ----------------------
+	var announceTimer = null;
+
+	function announce( text ) {
+		var status = document.querySelector( '[data-lafka-menu-status]' );
+		if ( ! status ) { return; }
+		window.clearTimeout( announceTimer );
+		announceTimer = window.setTimeout( function () {
+			status.textContent = text;
+		}, 400 );
+	}
+
+	function countLabel( n ) {
+		var i18n = window.lafkaMenuI18n || {};
+		if ( 0 === n ) {
+			return i18n.none || 'No menu items match.';
+		}
+		if ( 1 === n ) {
+			return i18n.one || '1 item matches.';
+		}
+		return ( i18n.many || '%d items match.' ).replace( '%d', String( n ) );
+	}
+
 	function applyFilter() {
 		var input = root.querySelector( '[data-lafka-menu-search-input]' );
-		var query = input ? input.value.trim().toLowerCase() : '';
+		var query = input && ! isServerSearch() ? fold( input.value ) : '';
 		var activeChips = $$( '[data-lafka-filter][aria-pressed="true"]', root ).map( function ( c ) {
 			return c.getAttribute( 'data-lafka-filter' );
 		} );
+		var filtering = '' !== query || activeChips.length > 0;
 
 		var cards = $$( '.lafka-favs__item, .lafka-menu__grid > li' );
-		var emptyTargets = $$( '.lafka-menu__group' );
 		var totalVisible = 0;
-		var visiblePerGroup = new Map();
 
 		cards.forEach( function ( card ) {
-			var name = ( card.getAttribute( 'data-lafka-product-name' ) || card.textContent || '' ).toLowerCase();
+			var haystack = fold( card.getAttribute( 'data-lafka-product-search' ) || card.getAttribute( 'data-lafka-product-name' ) || card.textContent );
 			var tags = ( card.getAttribute( 'data-lafka-product-tags' ) || '' ).toLowerCase().split( ',' ).map( function ( t ) { return t.trim(); } );
 
-			var matchSearch = ! query || name.indexOf( query ) !== -1;
+			var matchSearch = ! query || query.split( ' ' ).every( function ( word ) {
+				return haystack.indexOf( word ) !== -1;
+			} );
 			var matchChips = activeChips.length === 0 || activeChips.every( function ( chip ) {
 				return tags.indexOf( chip ) !== -1;
 			} );
@@ -214,29 +298,150 @@
 			card.classList.toggle( 'is-hidden-by-filter', ! visible );
 			if ( visible ) {
 				totalVisible++;
-				var group = card.closest( '.lafka-menu__group' );
-				if ( group ) {
-					visiblePerGroup.set( group, ( visiblePerGroup.get( group ) || 0 ) + 1 );
-				}
 			}
 		} );
 
-		// Hide entire group sections when they have no visible cards.
-		emptyTargets.forEach( function ( g ) {
-			g.hidden = ! ( visiblePerGroup.get( g ) > 0 );
+		// Hide subsections, then whole sections, left without a visible row.
+		$$( '[data-lafka-menu-sub], .lafka-menu__group' ).forEach( function ( g ) {
+			g.hidden = ! g.querySelector( '.lafka-favs__item:not([hidden]), .lafka-menu__grid > li:not([hidden])' );
 		} );
 
-		// Show / hide global empty state.
+		// Show / hide the empty state (it carries the reset button).
 		var emptyEl = document.querySelector( '[data-lafka-menu-empty]' );
-		if ( emptyEl ) {
+		if ( emptyEl && cards.length ) {
 			emptyEl.hidden = totalVisible > 0;
 		}
+
+		if ( filtering ) {
+			announce( countLabel( totalVisible ) );
+		}
+		document.body.classList.toggle( 'lafka-menu-is-filtered', filtering );
+		return totalVisible;
+	}
+
+	// -------- Category strip: sticky offset, scroll-spy, active chip -------
+	function initCategoryStrip() {
+		var nav = document.querySelector( '.lafka-menu__cats' );
+		if ( ! nav ) { return; }
+		var list = nav.querySelector( '.lafka-menu__cats-list' );
+		var chips = $$( '.lafka-menu__cat-chip', nav );
+
+		// Keep a chip visible inside the horizontally-scrolling strip without
+		// scrolling the page vertically (scrollIntoView would).
+		function reveal( chip ) {
+			if ( ! list || ! chip || list.scrollWidth <= list.clientWidth ) { return; }
+			var left = chip.offsetLeft - ( ( list.clientWidth - chip.offsetWidth ) / 2 );
+			list.scrollLeft = Math.max( 0, left );
+		}
+
+		// Section anchors land below the sticky strip.
+		function measure() {
+			var top = parseFloat( window.getComputedStyle( nav ).top ) || 0;
+			document.documentElement.style.setProperty( '--lafka-menu-cats-offset', Math.round( top + nav.offsetHeight + 8 ) + 'px' );
+		}
+		measure();
+		window.addEventListener( 'resize', measure, { passive: true } );
+
+		reveal( nav.querySelector( '.lafka-menu__cat-chip.is-active' ) );
+
+		// In-page chips only (/menu/): archives link to other pages.
+		var targets = [];
+		chips.forEach( function ( chip ) {
+			var href = chip.getAttribute( 'href' ) || '';
+			if ( href.charAt( 0 ) !== '#' ) { return; }
+			var el = document.getElementById( href.slice( 1 ) );
+			if ( el ) {
+				targets.push( { chip: chip, el: el } );
+			}
+		} );
+		if ( targets.length < 2 ) { return; }
+
+		var current = null;
+		function setActive( chip ) {
+			if ( chip === current ) { return; }
+			current = chip;
+			chips.forEach( function ( c ) {
+				var on = c === chip;
+				c.classList.toggle( 'is-active', on );
+				if ( on ) {
+					c.setAttribute( 'aria-current', 'true' );
+				} else {
+					c.removeAttribute( 'aria-current' );
+				}
+			} );
+			reveal( chip );
+		}
+
+		var ticking = false;
+		function spy() {
+			ticking = false;
+			// A section is "in view" once its top passes a quarter of the way
+			// down the visible area below the strip.
+			var navBottom = nav.getBoundingClientRect().bottom;
+			var line = navBottom + Math.max( 16, ( window.innerHeight - navBottom ) * 0.25 );
+			// The first target is "All" (the whole body); a section wins once
+			// its top has scrolled up to just below the strip.
+			var active = targets[ 0 ].chip;
+			for ( var i = 1; i < targets.length; i++ ) {
+				var t = targets[ i ];
+				if ( t.el.hidden ) { continue; }
+				if ( t.el.getBoundingClientRect().top <= line ) {
+					active = t.chip;
+				} else {
+					break;
+				}
+			}
+			setActive( active );
+		}
+
+		window.addEventListener( 'scroll', function () {
+			if ( ! ticking ) {
+				ticking = true;
+				window.requestAnimationFrame( spy );
+			}
+		}, { passive: true } );
+
+		chips.forEach( function ( chip ) {
+			chip.addEventListener( 'click', function () {
+				setActive( chip );
+			} );
+		} );
+
+		spy();
+	}
+
+	// M-34: on the menu page the sticky bar's "Order online" (empty cart)
+	// points at this very page — take the customer to the menu instead of
+	// reloading it. Delegated: the bar is a refreshed cart fragment.
+	function initBarShortcut() {
+		var body = document.getElementById( 'lafka-menu-all' );
+		if ( ! body ) { return; }
+		document.addEventListener( 'click', function ( e ) {
+			var link = e.target && e.target.closest ? e.target.closest( 'a.lafka-counter-bar__order' ) : null;
+			if ( ! link || link.hash || link.pathname !== window.location.pathname || link.host !== window.location.host ) {
+				return;
+			}
+			e.preventDefault();
+			body.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+			var input = root.querySelector( '[data-lafka-menu-search-input]' );
+			if ( input ) {
+				input.focus( { preventScroll: true } );
+			}
+		} );
 	}
 
 	function init() {
+		initBarShortcut();
 		initTabs();
 		initSearch();
 		initFilters();
+		initReset();
+		initCategoryStrip();
+		// A prefilled live search (browser back / autofill) applies at once.
+		var input = root.querySelector( '[data-lafka-menu-search-input]' );
+		if ( input && input.value && ! isServerSearch() ) {
+			applyFilter();
+		}
 	}
 
 	if ( document.readyState === 'loading' ) {

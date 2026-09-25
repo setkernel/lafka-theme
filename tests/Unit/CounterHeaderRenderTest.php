@@ -166,5 +166,23 @@ namespace Lafka\Tests\Unit {
 			\add_filter( 'lafka_counter_brand_short', static fn() => 'EK' );
 			$this->assertStringContainsString( 'aria-hidden="true">EK</span>', $this->render() );
 		}
+	
+		public function test_a_long_name_without_a_short_name_falls_back_to_its_first_part(): void {
+			$this->assertSame( 'Harbour Pizza', \lafka_counter_brand_short_auto( 'Harbour Pizza &amp; Poutine' ) );
+			$this->assertSame( 'Harbour Pizza', \lafka_counter_brand_short( 'Harbour Pizza and Poutine' ) );
+			$this->assertSame( '', \lafka_counter_brand_short( 'Example Kitchen' ), 'short names stay whole' );
+			$this->assertSame( '', \lafka_counter_brand_short_auto( 'The Very Long Kitchen Of Example' ), 'no joiner, nothing to cut at' );
+		}
+	
+		public function test_menu_button_always_has_a_name(): void {
+			$this->assertMatchesRegularExpression( '#<button type="button" class="lafka-counter-header__menu" aria-label="Menu"#', $this->render() );
+		}
+
+		public function test_nav_marks_the_current_page_but_not_anchors(): void {
+			$this->assertTrue( \lafka_counter_nav_is_current( 'http://example.test/menu/', '/menu/?x=1' ) );
+			$this->assertFalse( \lafka_counter_nav_is_current( 'http://example.test/#deals', '/' ) );
+			$this->assertFalse( \lafka_counter_nav_is_current( 'http://example.test/', '/' ), 'home is not a nav destination' );
+			$this->assertFalse( \lafka_counter_nav_is_current( 'http://example.test/menu/', '/order/' ) );
+		}
 	}
 }

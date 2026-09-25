@@ -44,7 +44,7 @@ if ( ! function_exists( 'lafka_counter_settings' ) ) {
 			'deals_lead'     => (string) get_theme_mod( 'lafka_counter_deals_lead', '' ),
 			'deals_limit'    => $clamp( get_theme_mod( 'lafka_counter_deals_limit', 6 ), 1, 12, 6 ),
 			'costar_limit'   => $clamp( get_theme_mod( 'lafka_counter_costar_limit', 3 ), 1, 12, 3 ),
-			'menu_limit'     => $clamp( get_theme_mod( 'lafka_counter_menu_limit', 6 ), 1, 24, 6 ),
+			'menu_limit'     => $clamp( get_theme_mod( 'lafka_counter_menu_limit', 3 ), 1, 24, 3 ), // H-08: a compact taste; "See all" links the rest.
 			'menu_style'     => in_array( $style, array( 'compact', 'photo' ), true ) ? $style : 'compact',
 			'menu_thumbs'    => (bool) get_theme_mod( 'lafka_counter_menu_thumbs', true ),
 			'menu_heading'   => (string) get_theme_mod( 'lafka_counter_menu_heading', __( 'More from our menu', 'lafka' ) ),
@@ -90,7 +90,8 @@ if ( ! function_exists( 'lafka_counter_resolve_sections' ) ) {
 	 *
 	 *  - deals:   settings[deals_cat], else the first term whose slug is in
 	 *             `lafka_counter_deals_slugs` (deals, combos, specials), else null;
-	 *  - costars: settings[costar_a/_b], else the first two non-deal terms;
+	 *  - costars: slot A then slot B — settings[costar_a/_b], an empty slot
+ *             taking the next unused term in WC order;
 	 *  - rest:    everything else, in order.
 	 * No term appears twice.
 	 *
@@ -121,28 +122,31 @@ if ( ! function_exists( 'lafka_counter_resolve_sections' ) ) {
 		}
 		$used = $deals ? array( (int) $deals->term_id => true ) : array();
 
-		$costars = array();
+		// Slot A then slot B (H-09: the default headline reads "A and b").
+		// An explicit pick keeps its slot; an empty slot takes the next
+		// unused category in WooCommerce order.
+		$slots = array();
 		foreach ( array( 'costar_a', 'costar_b' ) as $key ) {
-			$id = (int) ( $settings[ $key ] ?? 0 );
+			$id            = (int) ( $settings[ $key ] ?? 0 );
+			$slots[ $key ] = null;
 			if ( $id && isset( $by_id[ $id ] ) && ! isset( $used[ $id ] ) ) {
-				$costars[]   = $by_id[ $id ];
-				$used[ $id ] = true;
+				$slots[ $key ] = $by_id[ $id ];
+				$used[ $id ]   = true;
 			}
 		}
-		foreach ( $by_id as $id => $term ) {
-			if ( count( $costars ) >= 2 ) {
-				break;
+		foreach ( $slots as $key => $term ) {
+			if ( null !== $term ) {
+				continue;
 			}
-			if ( ! isset( $used[ $id ] ) ) {
-				$costars[]   = $term;
-				$used[ $id ] = true;
+			foreach ( $by_id as $id => $candidate ) {
+				if ( ! isset( $used[ $id ] ) ) {
+					$slots[ $key ] = $candidate;
+					$used[ $id ]   = true;
+					break;
+				}
 			}
 		}
-		// Keep the co-stars in WC order unless both were picked explicitly.
-		if ( ! ( ( $settings['costar_a'] ?? 0 ) && ( $settings['costar_b'] ?? 0 ) ) ) {
-			$order = array_flip( array_keys( $by_id ) );
-			usort( $costars, static fn( $a, $b ) => $order[ (int) $a->term_id ] <=> $order[ (int) $b->term_id ] );
-		}
+		$costars = array_values( array_filter( $slots ) );
 
 		$rest = array();
 		foreach ( $by_id as $id => $term ) {
@@ -430,5 +434,149 @@ if ( ! function_exists( 'lafka_category_tagline' ) ) {
 			}
 		}
 		return (string) apply_filters( 'lafka_category_tagline', $tagline, $term );
+	}
+}
+
+if ( ! function_exists( 'lafka_menu_filter_chip_defs' ) ) {
+	/**
+	 * The dietary / popularity filter chips the menu controls can offer, keyed
+	 * by product_tag slug. Filter `lafka_menu_filter_chips` adds, removes or
+	 * relabels chips (each value: label + optional icon).
+	 *
+	 * @return array<string, array{label:string, icon:string}>
+	 */
+	function lafka_menu_filter_chip_defs(): array {
+		$defs = (array) apply_filters(
+			'lafka_menu_filter_chips',
+			array(
+				'popular'    => array(
+					'label' => __( 'Popular', 'lafka' ),
+					'icon'  => '★',
+				),
+				'vegetarian' => array(
+					'label' => __( 'Vegetarian', 'lafka' ),
+					'icon'  => '🌱',
+				),
+				'vegan'      => array(
+					'label' => __( 'Vegan', 'lafka' ),
+					'icon'  => '🥬',
+				),
+				'spicy'      => array(
+					'label' => __( 'Spicy', 'lafka' ),
+					'icon'  => '🌶',
+				),
+			)
+		);
+		$out = array();
+		foreach ( $defs as $slug => $def ) {
+			$slug = sanitize_key( (string) $slug );
+			if ( '' === $slug || ! is_array( $def ) || empty( $def['label'] ) ) {
+				continue;
+			}
+			$out[ $slug ] = array(
+				'label' => (string) $def['label'],
+				'icon'  => isset( $def['icon'] ) ? (string) $def['icon'] : '',
+			);
+		}
+		return $out;
+	}
+}
+
+if ( ! function_exists( 'lafka_menu_filter_has_products' ) ) {
+	/**
+	 * Whether a filter chip would match at least one product: a product_tag
+	 * with that slug and a non-zero count, or — for "popular" — any featured
+	 * product (the rows tag featured products "popular").
+	 *
+	 * @param string $slug Chip / tag slug.
+	 */
+	function lafka_menu_filter_has_products( string $slug ): bool {
+		$term = function_exists( 'get_term_by' ) ? get_term_by( 'slug', $slug, 'product_tag' ) : false;
+		if ( is_object( $term ) && isset( $term->count ) && (int) $term->count > 0 ) {
+			return true;
+		}
+		if ( 'popular' === $slug && function_exists( 'wc_get_featured_product_ids' ) ) {
+			return ! empty( wc_get_featured_product_ids() );
+		}
+		return false;
+	}
+}
+
+if ( ! function_exists( 'lafka_menu_filter_chips' ) ) {
+	/**
+	 * The filter chips to render: only those with at least one matching product,
+	 * so no chip empties the menu (M-02). An install with no tagged or featured
+	 * products shows no filter row at all.
+	 *
+	 * @return array<string, array{label:string, icon:string}>
+	 */
+	function lafka_menu_filter_chips(): array {
+		return array_filter(
+			lafka_menu_filter_chip_defs(),
+			static fn( $def, $slug ) => lafka_menu_filter_has_products( (string) $slug ),
+			ARRAY_FILTER_USE_BOTH
+		);
+	}
+}
+
+if ( ! function_exists( 'lafka_menu_pagination_html' ) ) {
+	/**
+	 * Numbered pagination for a product archive / product search (the handoff
+	 * archive template runs its own loop, so WooCommerce's pagination hook never
+	 * fires). Empty when everything fits on one page.
+	 *
+	 * @param int|null $total   Total pages (default: the main query's).
+	 * @param int|null $current Current page (default: the `paged` query var).
+	 */
+	function lafka_menu_pagination_html( ?int $total = null, ?int $current = null ): string {
+		if ( null === $total ) {
+			$query = $GLOBALS['wp_query'] ?? null;
+			$total = is_object( $query ) && isset( $query->max_num_pages ) ? (int) $query->max_num_pages : 0;
+		}
+		if ( $total < 2 || ! function_exists( 'paginate_links' ) ) {
+			return '';
+		}
+		if ( null === $current ) {
+			$current = function_exists( 'get_query_var' ) ? (int) get_query_var( 'paged' ) : 1;
+		}
+		$links = paginate_links(
+			array(
+				'total'     => $total,
+				'current'   => max( 1, min( $total, $current ) ),
+				'type'      => 'array',
+				'mid_size'  => 1,
+				'end_size'  => 1,
+				'prev_text' => '<span aria-hidden="true">←</span> ' . esc_html__( 'Previous', 'lafka' ),
+				'next_text' => esc_html__( 'Next', 'lafka' ) . ' <span aria-hidden="true">→</span>',
+			)
+		);
+		if ( empty( $links ) || ! is_array( $links ) ) {
+			return '';
+		}
+		$items = '';
+		foreach ( $links as $link ) {
+			$items .= '<li>' . $link . '</li>';
+		}
+		return '<nav class="lafka-menu__pagination" aria-label="' . esc_attr__( 'More menu items', 'lafka' ) . '"><ul role="list">' . $items . '</ul></nav>';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_deals_term_id' ) ) {
+	/**
+	 * The deals category's term id (the same resolution as the homepage's
+	 * deals section), 0 when there is none. Cached for the request.
+	 */
+	function lafka_counter_deals_term_id(): int {
+		$cached = wp_cache_get( 'deals_term_id', 'lafka_counter' );
+		if ( false !== $cached ) {
+			return (int) $cached;
+		}
+		if ( function_exists( 'wp_cache_add_non_persistent_groups' ) ) {
+			wp_cache_add_non_persistent_groups( array( 'lafka_counter' ) ); // Per request only.
+		}
+		$resolved = lafka_counter_resolve_sections( lafka_menu_top_categories(), lafka_counter_settings() );
+		$id       = $resolved['deals'] ? (int) $resolved['deals']->term_id : 0;
+		wp_cache_set( 'deals_term_id', $id, 'lafka_counter' );
+		return $id;
 	}
 }

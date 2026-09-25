@@ -88,7 +88,6 @@
 	font-weight: var(--lafka-font-weight-display);
 	font-size: 1.125rem;
 	letter-spacing: -0.01em;
-	text-transform: lowercase;
 	line-height: 1;
 }
 
@@ -96,8 +95,8 @@
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	width: 40px;
-	height: 40px;
+	width: 44px;
+	height: 44px;
 	border: none;
 	background: transparent;
 	border-radius: var(--lafka-radius-pill);
@@ -182,7 +181,13 @@
 	font-weight: var(--lafka-font-weight-semibold);
 }
 
+.lafka-mobile-nav__list > li > a:focus-visible {
+	outline: 3px solid var(--lafka-color-accent-700);
+	outline-offset: -3px;
+}
+
 .lafka-mobile-nav__count {
+	font-family: var(--lafka-font-family-display);
 	font-size: var(--lafka-font-size-caption);
 	color: var(--lafka-color-text-muted);
 	font-weight: var(--lafka-font-weight-regular);

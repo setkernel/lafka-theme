@@ -729,9 +729,8 @@ h2,
 }
 
 .lafka-price-from__label {
-	font-size: 0.75em;
+	font-size: max(0.75em, 12px); /* T-20: was 9px at .7 opacity (3.5:1) */
 	font-weight: var(--lafka-font-weight-medium);
-	opacity: 0.7;
 	text-transform: lowercase;
 	letter-spacing: 0.02em;
 	margin-right: 0.15em;
