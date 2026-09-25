@@ -316,6 +316,12 @@ if ( ! function_exists( 'wp_kses_post' ) ) {
 		return $data;
 	}
 }
+if ( ! function_exists( 'wp_kses' ) ) {
+	/** Pass-through, like the wp_kses_post() shim. */
+	function wp_kses( $data, $allowed_html = array(), $allowed_protocols = array() ) {
+		return $data;
+	}
+}
 if ( ! function_exists( 'sanitize_key' ) ) {
 	function sanitize_key( $key ) {
 		return preg_replace( '/[^a-z0-9_\-]/', '', strtolower( (string) $key ) );

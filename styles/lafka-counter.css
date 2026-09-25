@@ -88,8 +88,16 @@ body[class*="lafka-layout-"][class*="-counter"] {
 	pointer-events: none;
 }
 
-.lafka-counter-hero__img.lafka-counter-dish--cutout {
+/* Big cut-outs (hero, featured deal) float inside a roomy box: a contact
+ * ellipse at the box's bottom would sit far below the food, so they keep the
+ * preset's drop-shadow instead. */
+.lafka-counter-hero__img.lafka-counter-dish--cutout,
+.lafka-deal--featured .lafka-counter-dish--cutout {
 	filter: var(--lafka-dish-shadow);
+}
+
+.lafka-deal--featured .lafka-dish-frame--cutout::after {
+	content: none;
 }
 
 .lafka-counter-dish--photo.lafka-row__img,
@@ -664,6 +672,8 @@ body.lafka-layout-header-counter .lafka-header {
 .lafka-chooser__option-price,
 .lafka-counter-hero__caption span,
 .lafka-counter-header__phone-number,
+.lafka-counter-num,
+.lafka-counter-bar__number,
 .lafka-counter-header__count,
 .lafka-counter-bar__count,
 .lafka-counter-find__phone,
@@ -1198,8 +1208,11 @@ body.lafka-layout-header-counter .lafka-header {
 		gap: 22px;
 	}
 
+	/* Back to a column: stretch, or the 600–1023 centring shrinks the motif
+	 * band to 0 px and the photo to its content. */
 	.lafka-deal--featured {
 		display: flex;
+		align-items: stretch;
 	}
 
 	.lafka-deal--featured .lafka-deal__media {

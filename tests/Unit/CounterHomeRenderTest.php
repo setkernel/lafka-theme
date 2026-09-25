@@ -193,6 +193,12 @@ namespace Lafka\Tests\Unit {
 			$this->assertStringContainsString( 'http://example.test/pizza-1.png', $html );
 		}
 
+		public function test_hero_call_button_sets_the_number_apart(): void {
+			self::seed();
+			// The number gets the display face's figures (no slashed zero).
+			$this->assertStringContainsString( 'Call <span class="lafka-counter-num">(555) 0100</span>', self::render() );
+		}
+
 		public function test_unpublished_hero_pick_falls_back_to_automatic(): void {
 			self::seed();
 			$GLOBALS['lafka_test_products'][105]->data['status']            = 'draft';
