@@ -888,3 +888,16 @@ button.lafka-menu__empty-cta {
 	letter-spacing: 0.04em;
 	line-height: 1.3;
 }
+
+/* One gutter with the counter header and the PDP (M-22). */
+body.lafka-layout-header-counter .lafka-menu .lafka-container {
+	padding-inline: clamp(16px, 4.45vw, 64px);
+}
+
+/* M-01: body { overflow-x: hidden } (style.css / critical.css) makes <body>
+ * a scroll container, so the sticky category strip stuck to a box that
+ * never scrolls. `clip` clips the same way without being a scroll container
+ * (the PDP solves the same problem with body.single-product overflow:unset). */
+body:has(.lafka-menu__cats) {
+	overflow-x: clip;
+}

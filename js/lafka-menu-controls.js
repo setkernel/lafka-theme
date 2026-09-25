@@ -375,7 +375,10 @@
 		var ticking = false;
 		function spy() {
 			ticking = false;
-			var line = nav.getBoundingClientRect().bottom + 16;
+			// A section is "in view" once its top passes a quarter of the way
+			// down the visible area below the strip.
+			var navBottom = nav.getBoundingClientRect().bottom;
+			var line = navBottom + Math.max( 16, ( window.innerHeight - navBottom ) * 0.25 );
 			// The first target is "All" (the whole body); a section wins once
 			// its top has scrolled up to just below the strip.
 			var active = targets[ 0 ].chip;
