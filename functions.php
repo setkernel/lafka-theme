@@ -3,6 +3,13 @@
 require_once get_template_directory() . '/incl/system/core-functions.php';
 
 /*
+ * GX1: lafka_theme_log() — logs through the Lafka plugin's `lafka_log` action
+ * (WooCommerce logs, scrubbed) without depending on the plugin. Loaded before
+ * the preset engine and the updater, which log through it.
+ */
+require_once get_template_directory() . '/incl/system/lafka-log-shim.php';
+
+/*
  * NX1-02 (theme 7.0): legacy Options Framework -> Customizer theme_mod
  * migration map + idempotent copy. Also hooks the one-time upgrade run
  * (lafka_legacy_migrate_maybe_run on after_setup_theme).
