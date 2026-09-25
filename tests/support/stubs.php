@@ -218,6 +218,8 @@ if ( ! class_exists( 'Lafka_Order_Hours' ) ) {
 		public static $shop_open                  = true;
 		public static $next_open_human            = '';
 		public static $can_order_ahead            = false;
+		// GX4: the plugin's force-override static (read by lafka_counter_open_status()).
+		public static $lafka_order_hours_force_override_check = false;
 
 		public static function is_shop_open() {
 			return self::$shop_open;

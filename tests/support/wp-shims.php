@@ -376,6 +376,11 @@ if ( ! function_exists( 'get_post_meta' ) ) {
 		return $single ? $meta[ $key ] : array( $meta[ $key ] );
 	}
 }
+if ( ! function_exists( 'date_i18n' ) ) {
+	function date_i18n( $format, $timestamp = false, $gmt = false ) {
+		return date( $format, false === $timestamp ? time() : (int) $timestamp ); // phpcs:ignore
+	}
+}
 if ( ! function_exists( 'get_locale' ) ) {
 	function get_locale() {
 		return 'en_US';
@@ -399,6 +404,12 @@ if ( ! function_exists( 'lafka_get_restaurant_info' ) ) {
 //   lafka_test_required_addons   [ product_id => bool ]
 //   lafka_test_fulfilment_modes  list<'pickup'|'delivery'>
 //   lafka_test_fulfilment_pref   'pickup'|'delivery'|''
+//   lafka_test_order_hours_on    is_lafka_order_hours() (module on/off)
+if ( ! function_exists( 'is_lafka_order_hours' ) ) {
+	function is_lafka_order_hours( $lafka_options = null ) {
+		return (bool) ( $GLOBALS['lafka_test_order_hours_on'] ?? false );
+	}
+}
 if ( ! function_exists( 'lafka_product_has_required_addons' ) ) {
 	function lafka_product_has_required_addons( int $product_id ): bool {
 		return (bool) ( $GLOBALS['lafka_test_required_addons'][ $product_id ] ?? false );
@@ -471,6 +482,121 @@ if ( ! function_exists( 'wc_get_product' ) ) {
 	}
 }
 
+// ------------------------------------------- GX4: terms, catalogue, parts ----
+//
+// Stores (reset per test):
+//   lafka_test_terms           get_terms(): [ taxonomy => list<WP_Term> ] (sorted by ->order, then ->name)
+//   lafka_test_term_meta       get_term_meta(): [ term_id ][ key ] = value
+//   lafka_test_catalog         wc_get_products(): list<WC_Product> in menu order; a product's
+//                              data['cats'] lists its product_cat slugs
+//   lafka_test_parts_live      get_template_part() includes the real part when true
+//                              (default false = no-op, which older render tests rely on)
+
+if ( ! function_exists( 'is_wp_error' ) ) {
+	function is_wp_error( $thing ) {
+		return class_exists( 'WP_Error' ) && $thing instanceof WP_Error;
+	}
+}
+if ( ! function_exists( 'get_terms' ) ) {
+	function get_terms( $args = array(), $deprecated = '' ) {
+		$args     = (array) $args;
+		$taxonomy = (string) ( $args['taxonomy'] ?? '' );
+		$terms    = array_values( $GLOBALS['lafka_test_terms'][ $taxonomy ] ?? array() );
+		$exclude  = array_map( 'intval', (array) ( $args['exclude'] ?? array() ) );
+		$terms    = array_values(
+			array_filter(
+				$terms,
+				static function ( $t ) use ( $args, $exclude ) {
+					if ( isset( $args['parent'] ) && (int) $t->parent !== (int) $args['parent'] ) {
+						return false;
+					}
+					if ( ! empty( $args['hide_empty'] ) && (int) $t->count < 1 ) {
+						return false;
+					}
+					return ! in_array( (int) $t->term_id, $exclude, true );
+				}
+			)
+		);
+		usort(
+			$terms,
+			static function ( $a, $b ) {
+				return array( (int) $a->order, (string) $a->name ) <=> array( (int) $b->order, (string) $b->name );
+			}
+		);
+		return $terms;
+	}
+}
+if ( ! function_exists( 'get_term_link' ) ) {
+	function get_term_link( $term, $taxonomy = '' ) {
+		$slug = is_object( $term ) ? (string) $term->slug : (string) $term;
+		return home_url( '/product-category/' . $slug . '/' );
+	}
+}
+if ( ! function_exists( 'get_term_meta' ) ) {
+	function get_term_meta( $term_id, $key = '', $single = false ) {
+		$value = $GLOBALS['lafka_test_term_meta'][ (int) $term_id ][ $key ] ?? '';
+		return $single ? $value : ( '' === $value ? array() : array( $value ) );
+	}
+}
+if ( ! function_exists( 'wc_get_products' ) ) {
+	function wc_get_products( $args = array() ) {
+		$args     = (array) $args;
+		$products = array_values( $GLOBALS['lafka_test_catalog'] ?? array() );
+		$cats     = (array) ( $args['category'] ?? array() );
+		$exclude  = array_map( 'intval', (array) ( $args['exclude'] ?? array() ) );
+		$include  = array_map( 'intval', (array) ( $args['include'] ?? array() ) );
+		$products = array_values(
+			array_filter(
+				$products,
+				static function ( $p ) use ( $args, $cats, $exclude, $include ) {
+					if ( $cats && ! array_intersect( $cats, (array) ( $p->data['cats'] ?? array() ) ) ) {
+						return false;
+					}
+					if ( isset( $args['featured'] ) && (bool) $args['featured'] !== $p->is_featured() ) {
+						return false;
+					}
+					if ( $include && ! in_array( (int) $p->get_id(), $include, true ) ) {
+						return false;
+					}
+					return ! in_array( (int) $p->get_id(), $exclude, true );
+				}
+			)
+		);
+		$total = count( $products );
+		$limit = (int) ( $args['limit'] ?? -1 );
+		if ( $limit >= 0 ) {
+			$products = array_slice( $products, 0, $limit );
+		}
+		if ( 'ids' === ( $args['return'] ?? '' ) ) {
+			$products = array_map( static fn( $p ) => (int) $p->get_id(), $products );
+		}
+		if ( ! empty( $args['paginate'] ) ) {
+			return (object) array(
+				'products'      => $products,
+				'total'         => $total,
+				'max_num_pages' => $limit > 0 ? (int) ceil( $total / $limit ) : 1,
+			);
+		}
+		return $products;
+	}
+}
+if ( ! function_exists( 'get_template_part' ) ) {
+	function get_template_part( $slug, $name = null, $args = array() ) {
+		if ( empty( $GLOBALS['lafka_test_parts_live'] ) ) {
+			return null;
+		}
+		$dir  = get_template_directory();
+		$file = ( null !== $name && '' !== $name && is_file( "{$dir}/{$slug}-{$name}.php" ) ) ? "{$dir}/{$slug}-{$name}.php" : "{$dir}/{$slug}.php";
+		if ( ! is_file( $file ) ) {
+			return false;
+		}
+		( static function ( $lafka_test_file, $args ) {
+			require $lafka_test_file;
+		} )( $file, (array) $args );
+		return null;
+	}
+}
+
 if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 	/**
 	 * Reset every per-test store. $filters is the load-time hook registry to
@@ -497,13 +623,19 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_attr_labels']        = array();
 		$GLOBALS['lafka_test_products']           = array();
 		$GLOBALS['lafka_test_required_addons']    = array();
+		$GLOBALS['lafka_test_terms']              = array();
+		$GLOBALS['lafka_test_term_meta']          = array();
+		$GLOBALS['lafka_test_catalog']            = array();
+		$GLOBALS['lafka_test_parts_live']         = false;
 		$GLOBALS['lafka_test_fulfilment_modes']   = array( 'pickup', 'delivery' );
 		$GLOBALS['lafka_test_fulfilment_pref']    = '';
 		if ( class_exists( 'Lafka_Order_Hours' ) ) {
 			Lafka_Order_Hours::$lafka_order_hours_options = array();
 			Lafka_Order_Hours::$shop_open                 = true;
 			Lafka_Order_Hours::$next_open_human           = '';
+			Lafka_Order_Hours::$lafka_order_hours_force_override_check = false;
 		}
+		$GLOBALS['lafka_test_order_hours_on'] = false;
 		unset( $GLOBALS['lafka_test_home_url'], $GLOBALS['lafka_test_tpl_dir'], $GLOBALS['lafka_test_tpl_uri'], $GLOBALS['lafka_test_restaurant_info'] );
 	}
 }
