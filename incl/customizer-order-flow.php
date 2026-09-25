@@ -61,6 +61,57 @@ function lafka_order_flow_customizer_register( WP_Customize_Manager $wp_customiz
 	);
 
 	// ---------------------------------------------------------------------
+	// Section: Payment trust line — "Secure checkout · Credit card · Cash"
+	// under the checkout CTA (cart drawer + cart page). Built from the
+	// ENABLED WooCommerce gateways (incl/template-helpers/payment-trust.php).
+	// ---------------------------------------------------------------------
+
+	$wp_customize->add_section(
+		'lafka_order_flow_trust',
+		array(
+			'title'       => __( 'Payment trust line', 'lafka' ),
+			'description' => __( 'Small reassurance line under the checkout button in the cart drawer and on the cart page. By default it lists the payment methods you have enabled in WooCommerce → Settings → Payments, so it never advertises a method customers can\'t use.', 'lafka' ),
+			'panel'       => 'lafka_order_flow',
+			'priority'    => 15,
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_payment_trust_enabled',
+		array(
+			'default'           => true,
+			'sanitize_callback' => 'rest_sanitize_boolean',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_payment_trust_enabled',
+		array(
+			'label'   => __( 'Show payment trust line', 'lafka' ),
+			'section' => 'lafka_order_flow_trust',
+			'type'    => 'checkbox',
+		)
+	);
+
+	$wp_customize->add_setting(
+		'lafka_payment_trust_text',
+		array(
+			'default'           => '',
+			'sanitize_callback' => 'sanitize_text_field',
+			'transport'         => 'refresh',
+		)
+	);
+	$wp_customize->add_control(
+		'lafka_payment_trust_text',
+		array(
+			'label'       => __( 'Custom text', 'lafka' ),
+			'description' => __( 'Leave empty to build it automatically from your enabled payment methods (e.g. "Secure checkout · Credit card · Cash"). Only name methods you actually accept.', 'lafka' ),
+			'section'     => 'lafka_order_flow_trust',
+			'type'        => 'text',
+		)
+	);
+
+	// ---------------------------------------------------------------------
 	// Section: Product page (PDP) — v5.27.0
 	// ---------------------------------------------------------------------
 

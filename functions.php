@@ -130,6 +130,10 @@ require_once get_template_directory() . '/incl/template-helpers/service-eta.php'
 // threshold (announce bar, hero, how-it-works, cart, PDP) reads via these.
 require_once get_template_directory() . '/incl/template-helpers/free-delivery.php';
 
+// Payment trust line ("Secure checkout · <enabled gateways>") for the cart
+// drawer + cart page — never names a method the store hasn't enabled.
+require_once get_template_directory() . '/incl/template-helpers/payment-trust.php';
+
 // Empty-cart "Popular" entry-points (v5.32.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-cart-empty-popular.php';
 

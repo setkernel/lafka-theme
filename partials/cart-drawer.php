@@ -125,10 +125,14 @@ $lafka_cart_empty = 0 === $lafka_cart_count;
 				</a>
 			</div>
 
-			<p class="lafka-cart-drawer__trust">
-				<span aria-hidden="true">🔒</span>
-				<?php esc_html_e( 'Secure checkout · Apple Pay · Visa · Mastercard', 'lafka' ); ?>
-			</p>
+			<?php
+			/* Payment trust line — names only the gateways the store has
+			 * enabled (incl/template-helpers/payment-trust.php); operator
+			 * override + toggle in Customizer → Lafka — Order Flow. */
+			if ( function_exists( 'lafka_payment_trust_render' ) ) {
+				lafka_payment_trust_render( 'lafka-cart-drawer__trust' );
+			}
+			?>
 		</footer>
 
 	</div>
