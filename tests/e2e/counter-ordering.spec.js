@@ -112,6 +112,35 @@ test.describe.serial( 'Counter ordering @smoke', () => {
 		}
 	} );
 
+	test( 'drawer: stepper, remove, checkout label and pickup into checkout', async ( { page } ) => {
+		const row = page.locator( '.lafka-row', { hasText: /Garlic Bread/i } ).first();
+		await row.locator( 'button[data-lafka-add]' ).click();
+		const drawer = page.locator( '.lafka-cart-drawer--counter' );
+		await expect( drawer ).toHaveAttribute( 'data-open', 'true', { timeout: 6000 } );
+		const checkout = drawer.locator( '.lafka-drawer__checkout-total' );
+		const before = await checkout.textContent();
+
+		// lafka-plugin's quantity stepper (theme support lafka-drawer-stepper).
+		await drawer.getByRole( 'button', { name: /^One more / } ).first().click();
+		await expect.poll( async () => ( await cartItems( page ) )[ 0 ].quantity ).toBe( 2 );
+		await expect( checkout ).not.toHaveText( before || '' );
+		await expect( drawer.locator( '.lafka-drawer__summary' ) ).toHaveText( /2 items/ );
+
+		// Pickup chosen in the drawer is the preference checkout preselects.
+		await drawer.locator( 'label', { hasText: 'Pickup' } ).click();
+		expect( ( await page.context().cookies() ).find( ( c ) => c.name === 'lafka_order_method' )?.value ).toBe( 'pickup' );
+		await drawer.locator( '.lafka-cart-drawer__checkout' ).click();
+		await expect( page ).toHaveURL( /checkout/ );
+		await expect( page.locator( 'input[name^="shipping_method"]:checked' ) ).toHaveValue( /pickup/ );
+
+		// Remove empties the drawer again.
+		await page.goto( '/menu/' );
+		await page.locator( '[data-lafka-cart-open]' ).first().click();
+		await drawer.getByRole( 'button', { name: /^Remove|Remove / } ).first().click();
+		await expect.poll( async () => ( await cartItems( page ) ).length ).toBe( 0 );
+		await expect( drawer.locator( '.lafka-drawer__checkout-total' ) ).toHaveText( 'Go to checkout' );
+	} );
+
 	test( 'no visible text below 14px on the counter menu', async ( { page } ) => {
 		const tooSmall = await page.evaluate( () => {
 			const out = [];

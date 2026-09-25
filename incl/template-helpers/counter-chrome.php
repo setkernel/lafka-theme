@@ -505,10 +505,79 @@ if ( ! function_exists( 'lafka_counter_cart_fragments' ) ) {
 		if ( lafka_layout_is( 'header', 'counter' ) ) {
 			$fragments['a.lafka-counter-bar__order'] = lafka_counter_bar_order_html();
 		}
-		if ( lafka_layout_is( 'drawer', 'counter' ) && function_exists( 'lafka_counter_drawer_checkout_label' ) ) {
+		if ( lafka_layout_is( 'drawer', 'counter' ) ) {
 			$fragments['span.lafka-drawer__checkout-total'] = lafka_counter_drawer_checkout_label();
+			$fragments['span.lafka-drawer__summary']        = lafka_counter_drawer_summary();
 		}
 		return $fragments;
 	}
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'lafka_counter_cart_fragments' );
+
+if ( ! function_exists( 'lafka_counter_drawer_summary' ) ) {
+	/** "3 items" under the drawer title (also a cart fragment). */
+	function lafka_counter_drawer_summary(): string {
+		$count = lafka_counter_cart_count();
+		/* translators: %d: number of items in the order */
+		return '<span class="lafka-drawer__summary">' . esc_html( sprintf( _n( '%d item', '%d items', $count, 'lafka' ), $count ) ) . '</span>';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_drawer_checkout_label' ) ) {
+	/** "Go to checkout — $42.94" (also a cart fragment). */
+	function lafka_counter_drawer_checkout_label(): string {
+		$subtotal = lafka_counter_cart_count() > 0 ? lafka_counter_cart_subtotal_text() : '';
+		$label    = '' !== $subtotal
+			/* translators: %s: order subtotal */
+			? sprintf( __( 'Go to checkout — %s', 'lafka' ), $subtotal )
+			: __( 'Go to checkout', 'lafka' );
+		return '<span class="lafka-drawer__checkout-total">' . esc_html( $label ) . '</span>';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_upsell_heading' ) ) {
+	/**
+	 * Counter wording for lafka-plugin's drawer upsell (gx4p filters).
+	 *
+	 * @param string $heading Plugin heading.
+	 */
+	function lafka_counter_upsell_heading( $heading ) {
+		return function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter' ) ? __( 'Add a little extra?', 'lafka' ) : $heading;
+	}
+}
+add_filter( 'lafka_cart_drawer_upsell_heading', 'lafka_counter_upsell_heading' );
+
+if ( ! function_exists( 'lafka_counter_upsell_row_note' ) ) {
+	/**
+	 * A short note under each upsell (the product's short description, up to
+	 * 40 characters, never cut mid-word), else nothing.
+	 *
+	 * @param string     $note    Plugin note ('' by default).
+	 * @param WC_Product $product Upsell product.
+	 */
+	function lafka_counter_upsell_row_note( $note, $product = null ) {
+		if ( '' !== (string) $note || ! is_object( $product ) || ! function_exists( 'lafka_layout_is' ) || ! lafka_layout_is( 'drawer', 'counter' ) ) {
+			return $note;
+		}
+		$text = trim( (string) preg_replace( '/\s+/', ' ', wp_strip_all_tags( (string) $product->get_short_description() ) ) );
+		if ( mb_strlen( $text ) > 40 ) {
+			$cut   = mb_substr( $text, 0, 40 );
+			$space = mb_strrpos( $cut, ' ' );
+			$text  = rtrim( false !== $space ? mb_substr( $cut, 0, $space ) : $cut, ' ,;:.' ) . '…';
+		}
+		return $text;
+	}
+}
+add_filter( 'lafka_cart_drawer_upsell_row_note', 'lafka_counter_upsell_row_note', 10, 2 );
+
+if ( ! function_exists( 'lafka_counter_upsell_button_label' ) ) {
+	/**
+	 * Worded "Add" on the drawer upsell buttons.
+	 *
+	 * @param string $label Plugin label.
+	 */
+	function lafka_counter_upsell_button_label( $label ) {
+		return function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter' ) ? __( 'Add', 'lafka' ) : $label;
+	}
+}
+add_filter( 'lafka_cart_drawer_upsell_button_label', 'lafka_counter_upsell_button_label' );

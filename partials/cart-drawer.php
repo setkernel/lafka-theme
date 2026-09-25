@@ -32,6 +32,13 @@ if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 
 $lafka_cart_count = (int) WC()->cart->get_cart_contents_count();
 $lafka_cart_empty = 0 === $lafka_cart_count;
+
+// GX4: the counter drawer (C-Mobile-Order) keeps the same shell, fragment
+// targets and trust line; the classic drawer below is unchanged.
+if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter' ) ) {
+	require __DIR__ . '/counter/drawer.php';
+	return;
+}
 ?>
 <aside
 	class="lafka-cart-drawer"
