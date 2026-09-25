@@ -142,6 +142,16 @@ if ( ! function_exists( 'set_theme_mod' ) ) {
 		return true;
 	}
 }
+if ( ! function_exists( 'get_theme_mods' ) ) {
+	function get_theme_mods() {
+		return $GLOBALS['lafka_test_theme_mods'] ?? array();
+	}
+}
+if ( ! function_exists( 'remove_theme_mod' ) ) {
+	function remove_theme_mod( $name ) {
+		unset( $GLOBALS['lafka_test_theme_mods'][ $name ] );
+	}
+}
 if ( ! function_exists( 'get_option' ) ) {
 	function get_option( $name, $default = false ) {
 		$options = $GLOBALS['lafka_test_options'] ?? array();

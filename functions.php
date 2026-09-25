@@ -212,6 +212,7 @@ require_once get_template_directory() . '/incl/template-helpers/deal-value.php';
 require_once get_template_directory() . '/incl/template-helpers/menu-data.php';
 require_once get_template_directory() . '/incl/template-helpers/counter-chrome.php';
 require_once get_template_directory() . '/incl/customizer-counter.php';
+require_once get_template_directory() . '/incl/system/lafka-preset-reset.php';
 
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
 require_once get_template_directory() . '/incl/contact-template-loader.php';
