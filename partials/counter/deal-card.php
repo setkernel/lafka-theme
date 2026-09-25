@@ -53,7 +53,7 @@ $lafka_deal_button_class = 'featured' === $lafka_deal_variant ? 'lafka-counter-b
 ?>
 <article class="lafka-deal lafka-deal--<?php echo esc_attr( $lafka_deal_variant ); ?><?php echo '' === $lafka_deal_img ? ' lafka-deal--no-img' : ''; ?>">
 	<?php if ( 'featured' === $lafka_deal_variant ) : ?>
-		<div class="lafka-motif-check" aria-hidden="true"></div>
+		<div class="lafka-motif-band" aria-hidden="true"></div>
 	<?php endif; ?>
 	<?php if ( '' !== $lafka_deal_img ) : ?>
 		<a class="lafka-deal__media" href="<?php echo esc_url( $lafka_deal_url ); ?>" tabindex="-1" aria-hidden="true">

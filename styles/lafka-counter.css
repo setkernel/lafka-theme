@@ -128,11 +128,15 @@ body[class*="lafka-layout-"][class*="-counter"] {
 }
 
 /* ── Motif: the checkered band (only with body.lafka-motif-check) ───────── */
-.lafka-motif-check {
+
+/* The band element is .lafka-motif-band — never reuse the body flag class
+   (.lafka-motif-check) on an element: a bare `.lafka-motif-check` rule would
+   also match <body> and hide the whole page. */
+.lafka-motif-band {
 	display: none;
 }
 
-body.lafka-motif-check .lafka-motif-check {
+body.lafka-motif-check .lafka-motif-band {
 	display: block;
 	height: var(--lafka-motif-check-h);
 	background: repeating-conic-gradient(var(--lafka-motif-check-a) 0 25%, var(--lafka-motif-check-b) 0 50%) 0 0 / var(--lafka-motif-check-size) var(--lafka-motif-check-size);
@@ -140,7 +144,7 @@ body.lafka-motif-check .lafka-motif-check {
 
 @media (forced-colors: active) {
 
-	body.lafka-motif-check .lafka-motif-check {
+	body.lafka-motif-check .lafka-motif-band {
 		display: none;
 	}
 }
@@ -1063,7 +1067,7 @@ body.lafka-layout-header-counter .lafka-header {
 		align-items: center;
 	}
 
-	.lafka-deal--featured .lafka-motif-check {
+	.lafka-deal--featured .lafka-motif-band {
 		grid-column: 1 / -1;
 	}
 

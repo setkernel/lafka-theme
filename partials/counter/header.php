@@ -87,5 +87,5 @@ $lafka_ch_hours  = function_exists( 'lafka_open_status_hours_for_client' ) ? laf
 		</nav>
 	<?php endif; ?>
 
-	<div class="lafka-motif-check" aria-hidden="true"></div>
+	<div class="lafka-motif-band" aria-hidden="true"></div>
 </div>
