@@ -51,9 +51,14 @@ $lafka_arch_queried    = get_queried_object();
 
 $lafka_arch_title = '';
 $lafka_arch_lead  = '';
+$lafka_arch_intro = '';
 if ( $lafka_arch_is_cat || $lafka_arch_is_tag ) {
 	$lafka_arch_title = ( $lafka_arch_queried && isset( $lafka_arch_queried->name ) ) ? (string) $lafka_arch_queried->name : '';
-	$lafka_arch_lead  = ( $lafka_arch_queried && isset( $lafka_arch_queried->description ) ) ? (string) $lafka_arch_queried->description : '';
+	// GX3: the term description is the category's landing copy (often several
+	// paragraphs) — rendered as an intro block, not squeezed into the one-line
+	// <p> lead the shop view uses.
+	$lafka_arch_desc  = ( $lafka_arch_queried && isset( $lafka_arch_queried->description ) ) ? (string) $lafka_arch_queried->description : '';
+	$lafka_arch_intro = function_exists( 'lafka_menu_term_intro_html' ) ? lafka_menu_term_intro_html( $lafka_arch_desc ) : '';
 } else {
 	$lafka_arch_title = (string) get_theme_mod( 'lafka_menu_archive_title', __( 'The full menu', 'lafka' ) );
 	$lafka_arch_lead  = (string) get_theme_mod(
@@ -108,6 +113,11 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 			<?php if ( '' !== $lafka_arch_lead ) : ?>
 				<p class="lafka-menu__lead"><?php echo wp_kses_post( $lafka_arch_lead ); ?></p>
 			<?php endif; ?>
+			<?php
+			if ( '' !== $lafka_arch_intro ) {
+				echo $lafka_arch_intro; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- lafka_menu_term_intro_html() returns wp_kses_post()-sanitised markup.
+			}
+			?>
 		</div>
 	</header>
 
@@ -257,6 +267,13 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 						<?php require __DIR__ . '/loop/lafka-product-card.php'; ?>
 					<?php endwhile; ?>
 				</ul>
+				<?php
+				// GX3: optional per-category FAQ (lafka-plugin term meta; the
+				// plugin emits the FAQPage JSON-LD). Renders nothing when empty.
+				if ( $lafka_arch_is_cat && $lafka_arch_queried && isset( $lafka_arch_queried->term_id ) ) {
+					get_template_part( 'partials/menu-category-faq', null, array( 'term_id' => (int) $lafka_arch_queried->term_id ) );
+				}
+				?>
 			<?php else : ?>
 				<div class="lafka-menu__empty" data-lafka-menu-empty>
 					<span class="lafka-menu__empty-icon" aria-hidden="true">🤔</span>

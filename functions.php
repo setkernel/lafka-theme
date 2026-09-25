@@ -192,6 +192,9 @@ require_once get_template_directory() . '/incl/template-helpers/address-filters.
 // across every theme CTA (audit #97). v6.19.0.
 require_once get_template_directory() . '/incl/template-helpers/menu-url.php';
 
+// Category landing content — term intro + optional category FAQ (GX3).
+require_once get_template_directory() . '/incl/template-helpers/menu-category-seo.php';
+
 // Public "Reach us" email resolver — host-only fallback, never leaks a port
 // (audit V4). v6.19.0.
 require_once get_template_directory() . '/incl/template-helpers/contact-email.php';
