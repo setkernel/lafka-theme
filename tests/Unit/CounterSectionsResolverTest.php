@@ -60,6 +60,14 @@ namespace Lafka\Tests\Unit {
 			$this->assertSame( array( 'combos', 'wings' ), self::slugs( $r['rest'] ) );
 		}
 
+		public function test_a_single_pick_keeps_its_slot(): void {
+			$terms = self::terms();
+			$only_b = \lafka_counter_resolve_sections( $terms, array( 'costar_b' => 11 ) );
+			$this->assertSame( 'fries', self::slugs( $only_b['costars'] )[1], 'costar B stays second' );
+			$only_a = \lafka_counter_resolve_sections( $terms, array( 'costar_a' => 12 ) );
+			$this->assertSame( 'pizza', self::slugs( $only_a['costars'] )[0], 'costar A leads the headline' );
+		}
+
 		public function test_no_deals_term_and_no_duplicates(): void {
 			$terms = array_slice( self::terms(), 1 );
 			$r     = \lafka_counter_resolve_sections( $terms, array( 'costar_a' => 11, 'costar_b' => 11 ) );

@@ -90,7 +90,8 @@ if ( ! function_exists( 'lafka_counter_resolve_sections' ) ) {
 	 *
 	 *  - deals:   settings[deals_cat], else the first term whose slug is in
 	 *             `lafka_counter_deals_slugs` (deals, combos, specials), else null;
-	 *  - costars: settings[costar_a/_b], else the first two non-deal terms;
+	 *  - costars: slot A then slot B — settings[costar_a/_b], an empty slot
+ *             taking the next unused term in WC order;
 	 *  - rest:    everything else, in order.
 	 * No term appears twice.
 	 *
@@ -121,28 +122,31 @@ if ( ! function_exists( 'lafka_counter_resolve_sections' ) ) {
 		}
 		$used = $deals ? array( (int) $deals->term_id => true ) : array();
 
-		$costars = array();
+		// Slot A then slot B (H-09: the default headline reads "A and b").
+		// An explicit pick keeps its slot; an empty slot takes the next
+		// unused category in WooCommerce order.
+		$slots = array();
 		foreach ( array( 'costar_a', 'costar_b' ) as $key ) {
-			$id = (int) ( $settings[ $key ] ?? 0 );
+			$id            = (int) ( $settings[ $key ] ?? 0 );
+			$slots[ $key ] = null;
 			if ( $id && isset( $by_id[ $id ] ) && ! isset( $used[ $id ] ) ) {
-				$costars[]   = $by_id[ $id ];
-				$used[ $id ] = true;
+				$slots[ $key ] = $by_id[ $id ];
+				$used[ $id ]   = true;
 			}
 		}
-		foreach ( $by_id as $id => $term ) {
-			if ( count( $costars ) >= 2 ) {
-				break;
+		foreach ( $slots as $key => $term ) {
+			if ( null !== $term ) {
+				continue;
 			}
-			if ( ! isset( $used[ $id ] ) ) {
-				$costars[]   = $term;
-				$used[ $id ] = true;
+			foreach ( $by_id as $id => $candidate ) {
+				if ( ! isset( $used[ $id ] ) ) {
+					$slots[ $key ] = $candidate;
+					$used[ $id ]   = true;
+					break;
+				}
 			}
 		}
-		// Keep the co-stars in WC order unless both were picked explicitly.
-		if ( ! ( ( $settings['costar_a'] ?? 0 ) && ( $settings['costar_b'] ?? 0 ) ) ) {
-			$order = array_flip( array_keys( $by_id ) );
-			usort( $costars, static fn( $a, $b ) => $order[ (int) $a->term_id ] <=> $order[ (int) $b->term_id ] );
-		}
+		$costars = array_values( array_filter( $slots ) );
 
 		$rest = array();
 		foreach ( $by_id as $id => $term ) {

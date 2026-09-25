@@ -306,8 +306,6 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
     // so the lafka-theme OSS bundle stays neutral.
     $lafka_pdp_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
     $lafka_pdp_pickup_addr = isset( $lafka_pdp_info['address_short'] ) ? (string) $lafka_pdp_info['address_short'] : '';
-    $lafka_pdp_eta        = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
-    $lafka_pdp_pickup_eta = $lafka_pdp_eta && ! empty( $lafka_pdp_eta['pickup'] ) ? (string) $lafka_pdp_eta['pickup'] : '~25 min';
     // SSOT: read the same threshold the plugin's free-delivery rule enforces;
     // fall back to the single shared theme_mod (0 = off) when the plugin isn't
     // loaded. The free-delivery assurance is suppressed entirely when <= 0.
@@ -315,16 +313,8 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
         ? (float) lafka_get_free_delivery_threshold()
         : (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
     ?>
+    <?php // H-09: the ready time is the trust line above (one source); no second "Ready in". ?>
     <ul class="lafka-pdp-summary__assurances" role="list">
-        <li>
-            <span class="lafka-pdp-summary__assurance-icon" aria-hidden="true">⏱</span>
-            <span>
-            <?php
-                /* translators: %s — pickup ETA, e.g. "~25 min" */
-                printf( esc_html__( 'Ready in %s', 'lafka' ), esc_html( $lafka_pdp_pickup_eta ) );
-            ?>
-            </span>
-        </li>
         <?php if ( $lafka_pdp_threshold > 0 ) : ?>
         <li>
             <span class="lafka-pdp-summary__assurance-icon" aria-hidden="true">🚚</span>
