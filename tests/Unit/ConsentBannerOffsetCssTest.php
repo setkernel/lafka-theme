@@ -81,6 +81,7 @@ final class ConsentBannerOffsetCssTest extends TestCase {
 			'exit-intent toast'          => array( 'styles/lafka-exit-intent.css', '.lafka-exit-toast' ),
 			'review banner'              => array( 'styles/lafka-review-banner.css', '.lafka-review-banner' ),
 			'push prompt'                => array( 'styles/lafka-push-prompt.css', '.lafka-push-prompt' ),
+			'counter mobile bar (GX4)'   => array( 'styles/lafka-counter.css', '.lafka-counter-bar' ),
 		);
 	}
 
@@ -113,6 +114,7 @@ final class ConsentBannerOffsetCssTest extends TestCase {
 			array( 'styles/lafka-sticky-cart.css', '.lafka-sticky-cart' ),
 			array( 'styles/lafka-pdp-cta.css', '.lafka-pdp-cta' ),
 			array( 'styles/pdp-redesign.css', '.lafka-pdp-mobile-cta' ),
+			array( 'styles/lafka-counter.css', '.lafka-counter-bar' ),
 		) as list( $file, $selector ) ) {
 			$padding = '';
 			foreach ( self::rules( $file ) as $rule ) {

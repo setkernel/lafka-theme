@@ -88,6 +88,25 @@ if ( ! function_exists( 'lafka_counter_customize_register_layouts' ) ) {
 		);
 
 		$wp_customize->add_setting(
+			'lafka_counter_mobile_bar',
+			array(
+				'default'           => true,
+				'type'              => 'theme_mod',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_counter_mobile_bar',
+			array(
+				'label'       => __( 'Show the Call / Order bar on phones and tablets (counter header)', 'lafka' ),
+				'description' => __( 'Hidden on the cart, checkout and product pages. Replaces the classic sticky cart bar.', 'lafka' ),
+				'section'     => 'lafka_layouts',
+				'type'        => 'checkbox',
+			)
+		);
+
+		$wp_customize->add_setting(
 			'lafka_motif',
 			array(
 				'default'           => function_exists( 'lafka_preset_variant' ) ? lafka_sanitize_motif( lafka_preset_variant( 'motif', 'none' ) ) : 'none',

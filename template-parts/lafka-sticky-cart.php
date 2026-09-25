@@ -27,6 +27,11 @@ if ( ! function_exists( 'lafka_sticky_cart_render' ) ) {
 		if ( ! function_exists( 'WC' ) ) {
 			return;
 		}
+		// GX4: under the counter header the sticky mobile bar
+		// (partials/counter/mobile-bar.php) carries the cart summary.
+		if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) ) {
+			return;
+		}
 		if ( is_cart() || is_checkout() ) {
 			return;
 		}

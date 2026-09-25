@@ -1209,7 +1209,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// suppressed anyway (the partial early-returns there too).
 		$lafka_sticky_cart_active = ! ( function_exists( 'is_cart' ) && is_cart() )
 			&& ! ( function_exists( 'is_checkout' ) && is_checkout() )
-			&& (bool) get_theme_mod( 'lafka_sticky_cart_enabled', true );
+			&& (bool) get_theme_mod( 'lafka_sticky_cart_enabled', true )
+			// GX4: the counter header's mobile bar replaces the sticky cart bar.
+			&& ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) );
 		if ( $lafka_sticky_cart_active ) {
 			wp_enqueue_style( 'lafka-sticky-cart', get_template_directory_uri() . '/styles/lafka-sticky-cart.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-sticky-cart.css' ) );
 			wp_enqueue_script(

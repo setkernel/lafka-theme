@@ -405,3 +405,110 @@ if ( ! function_exists( 'lafka_counter_cart_count' ) ) {
 		return ( function_exists( 'WC' ) && WC() && isset( WC()->cart ) && WC()->cart ) ? (int) WC()->cart->get_cart_contents_count() : 0;
 	}
 }
+
+if ( ! function_exists( 'lafka_counter_cart_subtotal_text' ) ) {
+	/** The cart subtotal as plain text ("$42.94"), in WC's display tax mode. */
+	function lafka_counter_cart_subtotal_text(): string {
+		if ( ! function_exists( 'WC' ) || ! WC() || empty( WC()->cart ) || ! method_exists( WC()->cart, 'get_cart_subtotal' ) ) {
+			return '';
+		}
+		return trim( html_entity_decode( wp_strip_all_tags( (string) WC()->cart->get_cart_subtotal() ), ENT_QUOTES, 'UTF-8' ) );
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_bar_active' ) ) {
+	/**
+	 * Whether the sticky mobile bar renders on this request: counter header,
+	 * Customizer toggle on, and not the cart / checkout / a product page.
+	 */
+	function lafka_counter_bar_active(): bool {
+		if ( ! function_exists( 'lafka_layout_is' ) || ! lafka_layout_is( 'header', 'counter' ) ) {
+			return false;
+		}
+		if ( ! (bool) get_theme_mod( 'lafka_counter_mobile_bar', true ) ) {
+			return false;
+		}
+		foreach ( array( 'is_cart', 'is_checkout', 'is_product' ) as $conditional ) {
+			if ( function_exists( $conditional ) && $conditional() ) {
+				return false;
+			}
+		}
+		return true;
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_bar_order_html' ) ) {
+	/**
+	 * The mobile bar's order control — also the `a.lafka-counter-bar__order`
+	 * cart fragment. Empty cart: "Order online →" to the menu. Otherwise
+	 * "View order · 3 · $42.94", which opens the drawer.
+	 */
+	function lafka_counter_bar_order_html(): string {
+		$count = lafka_counter_cart_count();
+		$arrow = lafka_counter_icon( 'arrow' );
+		if ( 0 === $count ) {
+			return '<a class="lafka-counter-bar__order lafka-counter-btn lafka-counter-btn--primary" href="' . esc_url( lafka_theme_menu_url() ) . '">'
+				. '<span>' . esc_html__( 'Order online', 'lafka' ) . '</span>' . $arrow . '</a>';
+		}
+		$subtotal = lafka_counter_cart_subtotal_text();
+		$cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : lafka_theme_menu_url();
+		/* translators: 1: number of items, 2: subtotal */
+		$label = sprintf( _n( 'View order, %1$d item, %2$s', 'View order, %1$d items, %2$s', $count, 'lafka' ), $count, $subtotal );
+		return '<a class="lafka-counter-bar__order lafka-counter-btn lafka-counter-btn--primary" href="' . esc_url( $cart_url ) . '" data-lafka-cart-open aria-label="' . esc_attr( $label ) . '">'
+			. '<span>' . esc_html__( 'View order', 'lafka' ) . '</span>'
+			. '<span class="lafka-counter-bar__count" aria-hidden="true">' . esc_html( (string) $count ) . '</span>'
+			. ( '' !== $subtotal ? '<span aria-hidden="true">' . esc_html( $subtotal ) . '</span>' : '' )
+			. '</a>';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_render_mobile_bar' ) ) {
+	/** wp_footer: the sticky mobile bar (replaces the classic sticky cart bar). */
+	function lafka_counter_render_mobile_bar(): void {
+		if ( is_admin() || ! lafka_counter_bar_active() ) {
+			return;
+		}
+		get_template_part( 'partials/counter/mobile-bar' );
+	}
+}
+add_action( 'wp_footer', 'lafka_counter_render_mobile_bar', 5 );
+
+if ( ! function_exists( 'lafka_counter_bar_body_class' ) ) {
+	/**
+	 * Reserve room for the bar so it never covers content.
+	 *
+	 * @param string[] $classes Body classes.
+	 * @return string[]
+	 */
+	function lafka_counter_bar_body_class( $classes ) {
+		if ( lafka_counter_bar_active() ) {
+			$classes[] = 'lafka-has-counter-bar';
+		}
+		return $classes;
+	}
+}
+add_filter( 'body_class', 'lafka_counter_bar_body_class' );
+
+if ( ! function_exists( 'lafka_counter_cart_fragments' ) ) {
+	/**
+	 * WooCommerce cart fragments for the counter chrome (mobile bar order
+	 * control; the drawer's checkout-total label once the drawer is counter).
+	 *
+	 * @param array<string,string> $fragments Fragments.
+	 * @return array<string,string>
+	 */
+	function lafka_counter_cart_fragments( $fragments ) {
+		if ( ! function_exists( 'lafka_layout_is' ) ) {
+			return $fragments;
+		}
+		$fragments = (array) $fragments;
+		if ( lafka_layout_is( 'header', 'counter' ) ) {
+			$fragments['a.lafka-counter-bar__order'] = lafka_counter_bar_order_html();
+		}
+		if ( lafka_layout_is( 'drawer', 'counter' ) && function_exists( 'lafka_counter_drawer_checkout_label' ) ) {
+			$fragments['span.lafka-drawer__checkout-total'] = lafka_counter_drawer_checkout_label();
+		}
+		return $fragments;
+	}
+}
+add_filter( 'woocommerce_add_to_cart_fragments', 'lafka_counter_cart_fragments' );
