@@ -395,6 +395,26 @@ if ( ! function_exists( 'lafka_get_restaurant_info' ) ) {
 	}
 }
 
+// GX4 (lafka-plugin gx4p contracts, store-backed; reset per test):
+//   lafka_test_required_addons   [ product_id => bool ]
+//   lafka_test_fulfilment_modes  list<'pickup'|'delivery'>
+//   lafka_test_fulfilment_pref   'pickup'|'delivery'|''
+if ( ! function_exists( 'lafka_product_has_required_addons' ) ) {
+	function lafka_product_has_required_addons( int $product_id ): bool {
+		return (bool) ( $GLOBALS['lafka_test_required_addons'][ $product_id ] ?? false );
+	}
+}
+if ( ! function_exists( 'lafka_fulfilment_modes' ) ) {
+	function lafka_fulfilment_modes(): array {
+		return $GLOBALS['lafka_test_fulfilment_modes'] ?? array( 'pickup', 'delivery' );
+	}
+}
+if ( ! function_exists( 'lafka_fulfilment_preference' ) ) {
+	function lafka_fulfilment_preference(): string {
+		return (string) ( $GLOBALS['lafka_test_fulfilment_pref'] ?? '' );
+	}
+}
+
 if ( ! function_exists( 'lafka_get_free_delivery_threshold' ) ) {
 	function lafka_get_free_delivery_threshold() {
 		return $GLOBALS['lafka_test_free_delivery_threshold'] ?? 0;
@@ -403,6 +423,51 @@ if ( ! function_exists( 'lafka_get_free_delivery_threshold' ) ) {
 if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) ) {
 	function lafka_pdp_redesign_enabled() {
 		return (bool) ( $GLOBALS['lafka_test_pdp_redesign'] ?? true );
+	}
+}
+
+// ------------------------------------------- GX4: WooCommerce catalogue ----
+//
+// Stores (reset per test):
+//   lafka_test_variations     wc_get_product_variation_attributes(): [ vid => [ 'attribute_pa_size' => 'medium' ] ]
+//                             (WC_Product_Variable's constructor fills it from its rows)
+//   lafka_test_attr_terms     wc_get_product_terms(): [ taxonomy => list<WP_Term> ] in attribute (custom) order
+//   lafka_test_attr_labels    wc_attribute_label(): [ name => label ] (else derived: pa_size -> Size)
+//   lafka_test_products       wc_get_product(): [ id => WC_Product ]
+
+if ( ! function_exists( 'sanitize_title' ) ) {
+	function sanitize_title( $title, $fallback_title = '', $context = 'save' ) {
+		$title = strtolower( trim( wp_strip_all_tags( (string) $title ) ) );
+		$title = (string) preg_replace( '/[^a-z0-9_\-]+/', '-', $title );
+		return trim( $title, '-' );
+	}
+}
+if ( ! function_exists( 'wc_get_product_variation_attributes' ) ) {
+	function wc_get_product_variation_attributes( $variation_id ) {
+		return $GLOBALS['lafka_test_variations'][ (int) $variation_id ] ?? array();
+	}
+}
+if ( ! function_exists( 'wc_get_product_terms' ) ) {
+	function wc_get_product_terms( $product_id, $taxonomy, $args = array() ) {
+		return $GLOBALS['lafka_test_attr_terms'][ $taxonomy ] ?? array();
+	}
+}
+if ( ! function_exists( 'wc_attribute_label' ) ) {
+	function wc_attribute_label( $name, $product = '' ) {
+		if ( isset( $GLOBALS['lafka_test_attr_labels'][ $name ] ) ) {
+			return $GLOBALS['lafka_test_attr_labels'][ $name ];
+		}
+		return ucfirst( str_replace( array( 'pa_', '-', '_' ), array( '', ' ', ' ' ), (string) $name ) );
+	}
+}
+if ( ! function_exists( 'wc_get_price_to_display' ) ) {
+	function wc_get_price_to_display( $product, $args = array() ) {
+		return (float) ( $args['price'] ?? $product->get_price() );
+	}
+}
+if ( ! function_exists( 'wc_get_product' ) ) {
+	function wc_get_product( $product_id = false ) {
+		return $GLOBALS['lafka_test_products'][ (int) $product_id ] ?? null;
 	}
 }
 
@@ -427,6 +492,13 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_post_meta']          = array();
 		$GLOBALS['lafka_test_pdp_redesign']       = true;
 		$GLOBALS['lafka_test_free_delivery_threshold'] = 0;
+		$GLOBALS['lafka_test_variations']         = array();
+		$GLOBALS['lafka_test_attr_terms']         = array();
+		$GLOBALS['lafka_test_attr_labels']        = array();
+		$GLOBALS['lafka_test_products']           = array();
+		$GLOBALS['lafka_test_required_addons']    = array();
+		$GLOBALS['lafka_test_fulfilment_modes']   = array( 'pickup', 'delivery' );
+		$GLOBALS['lafka_test_fulfilment_pref']    = '';
 		if ( class_exists( 'Lafka_Order_Hours' ) ) {
 			Lafka_Order_Hours::$lafka_order_hours_options = array();
 			Lafka_Order_Hours::$shop_open                 = true;

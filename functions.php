@@ -206,6 +206,7 @@ require_once get_template_directory() . '/incl/template-helpers/contact-email.ph
 // counter data helpers and the Customizer controls. Classic layouts are
 // untouched; every counter surface is reached through lafka_layout_is().
 require_once get_template_directory() . '/incl/template-helpers/layout.php';
+require_once get_template_directory() . '/incl/template-helpers/price-columns.php';
 require_once get_template_directory() . '/incl/customizer-counter.php';
 
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
