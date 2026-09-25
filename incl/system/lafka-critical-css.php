@@ -60,10 +60,17 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 			return;
 		}
 
-		// Strip block comments (/* … */) and collapse whitespace runs.
-		$css = preg_replace( '#/\*.*?\*/#s', '', $css );
-		$css = preg_replace( '/\s+/', ' ', $css );
-		$css = trim( $css );
+		$css = lafka_critical_css_minify( $css );
+
+		// GX4: under a counter layout, append the active preset's above-fold
+		// tokens + the var()-only counter slice (body face/size/ink, header +
+		// hero skeleton). Classic layouts inline exactly the pre-GX4 bundle.
+		$preset_block = lafka_critical_preset_css();
+		if ( '' !== $preset_block ) {
+			$slice_path = get_template_directory() . '/styles/critical-counter.css';
+			$slice      = file_exists( $slice_path ) ? (string) file_get_contents( $slice_path ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$css       .= ' ' . $preset_block . ' ' . lafka_critical_css_minify( $slice );
+		}
 
 		// Rewrite relative url() refs to absolute URLs.
 		// critical.css lives at <theme>/styles/critical.css, so its base URL is
@@ -91,6 +98,47 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 		);
 
 		echo "\n<style id=\"lafka-critical-css\">" . $css . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+	}
+}
+
+if ( ! function_exists( 'lafka_critical_css_minify' ) ) {
+	/**
+	 * Strip block comments and collapse whitespace runs.
+	 *
+	 * @param string $css Raw CSS.
+	 */
+	function lafka_critical_css_minify( string $css ): string {
+		$css = (string) preg_replace( '#/\*.*?\*/#s', '', $css );
+		$css = (string) preg_replace( '/\s+/', ' ', $css );
+		return trim( $css );
+	}
+}
+
+if ( ! function_exists( 'lafka_critical_preset_css' ) ) {
+	/**
+	 * GX4 (NX2-04.1, minimal): the active preset's LAFKA_PRESET_CRITICAL_KEYS
+	 * values as one `:root{}` block, returned only while a counter header or
+	 * home layout is active (else '' — classic first paint is untouched).
+	 * Values pass the same sanitiser as the Preset-Token Layer.
+	 */
+	function lafka_critical_preset_css(): string {
+		if ( ! function_exists( 'lafka_layout_is' ) || ! function_exists( 'lafka_active_preset' ) ) {
+			return '';
+		}
+		if ( ! lafka_layout_is( 'header', 'counter' ) && ! lafka_layout_is( 'home', 'counter' ) ) {
+			return '';
+		}
+		$keys   = defined( 'LAFKA_PRESET_CRITICAL_KEYS' ) ? LAFKA_PRESET_CRITICAL_KEYS : array();
+		$tokens = lafka_active_preset()->tokens();
+		$decls  = '';
+		foreach ( $keys as $key ) {
+			if ( isset( $tokens[ $key ] ) && is_scalar( $tokens[ $key ] ) ) {
+				$decls .= $key . ':' . lafka_preset_css_value( (string) $tokens[ $key ] ) . ';';
+			}
+		}
+		// Always non-empty under a counter layout so the slice is appended even
+		// for a preset that sets none of the critical keys.
+		return ':root{' . $decls . '}';
 	}
 }
 

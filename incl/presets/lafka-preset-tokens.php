@@ -260,11 +260,13 @@ if ( ! defined( 'LAFKA_PRESET_CRITICAL_KEYS' ) ) {
 		array(
 			'--lafka-color-surface-page',
 			'--lafka-color-surface-raised',
+			'--lafka-color-surface-muted',  // GX4: the counter hero band.
 			'--lafka-color-text-primary',
 			'--lafka-color-text-secondary',
 			'--lafka-color-border-subtle',
 			'--lafka-color-accent-600',
 			'--lafka-color-accent-700',
+			'--lafka-color-success-500',    // GX4: the header "Open now" dot.
 			'--lafka-font-family-body',
 			'--lafka-font-family-display',
 		)

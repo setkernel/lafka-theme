@@ -1,0 +1,26 @@
+/*
+ * GX4: critical slice for the counter layout — inlined AFTER styles/critical.css
+ * (and the active preset's critical :root block) by lafka_inline_critical_css()
+ * ONLY while a counter header/home layout is active. var()-only: every value
+ * comes from --lafka-* tokens (lafka-tokens.css is render-blocking + the preset
+ * layer prints before first paint), so first paint already shows the preset's
+ * face, ink and surfaces, and the header/hero boxes are reserved (no CLS).
+ *
+ * Keep it small: the whole inline bundle stays under 9 KB (CriticalPresetTokensTest).
+ */
+
+/* ── BODY (the legacy critical.css body rule is Rubik 13px grey) ── */
+body {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	line-height: var(--lafka-line-body);
+	color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-page);
+}
+
+@media (min-width: 768px) {
+
+	body {
+		font-size: var(--lafka-font-size-body-desk);
+	}
+}
