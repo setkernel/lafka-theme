@@ -1577,3 +1577,147 @@ body.lafka-has-counter-bar {
 		background: var(--lafka-color-border-strong);
 	}
 }
+
+/* ── /menu/ + category archive under the counter menu layout ──────────────
+ * Scoped to body.lafka-layout-menu-counter; lafka-menu-archive.css is not
+ * edited. The counter header does not stick (the phone bar carries the cart),
+ * so the category tabs stick to the top of the viewport. */
+body.lafka-layout-header-counter .lafka-header {
+	position: relative;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__header {
+	padding-block: 28px 12px;
+	background: var(--lafka-color-surface-page);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__crumbs {
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__title {
+	font-size: var(--lafka-font-size-h2);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	font-optical-sizing: auto;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__lead,
+body.lafka-layout-menu-counter .lafka-menu__intro {
+	color: var(--lafka-color-text-secondary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cats {
+	top: 0;
+	background: var(--lafka-color-surface-page);
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+	border-bottom: 1px solid var(--lafka-color-border-default);
+	padding-block: 0;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cats-list {
+	gap: 4px 22px;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cat-chip {
+	min-height: 48px;
+	padding: 0;
+	border: 0;
+	border-bottom: 3px solid transparent;
+	border-radius: 0;
+	background: none;
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-body);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cat-chip:hover,
+body.lafka-layout-menu-counter .lafka-menu__cat-chip.is-active {
+	border-bottom-color: var(--lafka-color-accent-500);
+	background: none;
+	color: var(--lafka-color-text-primary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cat-count {
+	display: none;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__chip,
+body.lafka-layout-menu-counter .lafka-menu__search-input {
+	border-radius: var(--lafka-radius-button);
+	font-size: var(--lafka-font-size-body);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group + .lafka-menu__group {
+	margin-top: 40px;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 4px 24px;
+	margin-bottom: 0;
+	padding-bottom: 14px;
+	border-bottom: 2px solid var(--lafka-color-text-primary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-title {
+	margin: 0;
+	font-size: var(--lafka-font-size-h2);
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	font-optical-sizing: auto;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-rule,
+body.lafka-layout-menu-counter .lafka-menu__group-count {
+	display: none;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-all {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-blurb {
+	flex-basis: 100%;
+	order: 2;
+	margin: 0;
+	color: var(--lafka-color-text-secondary);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__grid {
+	display: block;
+	gap: 0;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__faq {
+	color: var(--lafka-color-text-primary);
+}
+
+@media (min-width: 1024px) {
+
+	body.lafka-layout-menu-counter .lafka-menu__grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 64px;
+	}
+
+	body.lafka-layout-menu-counter .lafka-menu__grid .lafka-row:nth-last-child(2):nth-child(odd) {
+		border-bottom: 0;
+	}
+
+	body.lafka-layout-menu-counter .lafka-menu__title,
+	body.lafka-layout-menu-counter .lafka-menu__group-title {
+		font-size: var(--lafka-font-size-h2-desk);
+	}
+}

@@ -492,6 +492,12 @@ if ( ! function_exists( 'wc_get_product' ) ) {
 //   lafka_test_parts_live      get_template_part() includes the real part when true
 //                              (default false = no-op, which older render tests rely on)
 
+if ( ! function_exists( 'taxonomy_exists' ) ) {
+	/** Registered taxonomies: $GLOBALS['lafka_test_taxonomies'] (default none). */
+	function taxonomy_exists( $taxonomy ) {
+		return in_array( $taxonomy, (array) ( $GLOBALS['lafka_test_taxonomies'] ?? array() ), true );
+	}
+}
 if ( ! function_exists( 'is_wp_error' ) ) {
 	function is_wp_error( $thing ) {
 		return class_exists( 'WP_Error' ) && $thing instanceof WP_Error;
@@ -730,6 +736,7 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_products']           = array();
 		$GLOBALS['lafka_test_required_addons']    = array();
 		$GLOBALS['lafka_test_terms']              = array();
+		$GLOBALS['lafka_test_taxonomies']         = array();
 		$GLOBALS['lafka_test_term_meta']          = array();
 		$GLOBALS['lafka_test_catalog']            = array();
 		$GLOBALS['lafka_test_parts_live']         = false;
