@@ -284,6 +284,8 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 			$reason = 'unavailable';
 		} elseif ( function_exists( 'lafka_product_has_required_addons' ) && lafka_product_has_required_addons( $id ) ) {
 			$reason = 'required_addons';
+		} elseif ( lafka_chooser_deal_needs_choices( $product, $payload['has_addons'] ) ) {
+			$reason = 'deal_choices';
 		}
 
 		if ( $variable ) {
@@ -378,6 +380,28 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 		}
 
 		return (array) apply_filters( 'lafka_chooser_payload', $payload, $product );
+	}
+}
+
+if ( ! function_exists( 'lafka_chooser_deal_needs_choices' ) ) {
+	/**
+	 * GX H-04 / M-07: a deal ("Any 2 pizzas + pop") that carries ANY add-on
+	 * group is chosen on its product page ("Choose"), never added in one tap
+	 * with nothing picked. A deal = a product in the counter's deals category
+	 * (Customizer, else a deals / combos / specials slug). Filter
+	 * `lafka_chooser_force_choose` (bool, $product) forces either way.
+	 *
+	 * @param WC_Product $product    Product.
+	 * @param bool       $has_addons lafka_product_has_addons().
+	 */
+	function lafka_chooser_deal_needs_choices( $product, bool $has_addons ): bool {
+		$force = false;
+		if ( $has_addons && function_exists( 'lafka_counter_deals_term_id' ) ) {
+			$deals = lafka_counter_deals_term_id();
+			$cats  = method_exists( $product, 'get_category_ids' ) ? array_map( 'intval', (array) $product->get_category_ids() ) : array();
+			$force = $deals > 0 && in_array( $deals, $cats, true );
+		}
+		return (bool) apply_filters( 'lafka_chooser_force_choose', $force, $product );
 	}
 }
 

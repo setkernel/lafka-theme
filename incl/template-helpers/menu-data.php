@@ -560,3 +560,23 @@ if ( ! function_exists( 'lafka_menu_pagination_html' ) ) {
 		return '<nav class="lafka-menu__pagination" aria-label="' . esc_attr__( 'More menu items', 'lafka' ) . '"><ul role="list">' . $items . '</ul></nav>';
 	}
 }
+
+if ( ! function_exists( 'lafka_counter_deals_term_id' ) ) {
+	/**
+	 * The deals category's term id (the same resolution as the homepage's
+	 * deals section), 0 when there is none. Cached for the request.
+	 */
+	function lafka_counter_deals_term_id(): int {
+		$cached = wp_cache_get( 'deals_term_id', 'lafka_counter' );
+		if ( false !== $cached ) {
+			return (int) $cached;
+		}
+		if ( function_exists( 'wp_cache_add_non_persistent_groups' ) ) {
+			wp_cache_add_non_persistent_groups( array( 'lafka_counter' ) ); // Per request only.
+		}
+		$resolved = lafka_counter_resolve_sections( lafka_menu_top_categories(), lafka_counter_settings() );
+		$id       = $resolved['deals'] ? (int) $resolved['deals']->term_id : 0;
+		wp_cache_set( 'deals_term_id', $id, 'lafka_counter' );
+		return $id;
+	}
+}

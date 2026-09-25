@@ -410,7 +410,28 @@
 		spy();
 	}
 
+	// M-34: on the menu page the sticky bar's "Order online" (empty cart)
+	// points at this very page — take the customer to the menu instead of
+	// reloading it. Delegated: the bar is a refreshed cart fragment.
+	function initBarShortcut() {
+		var body = document.getElementById( 'lafka-menu-all' );
+		if ( ! body ) { return; }
+		document.addEventListener( 'click', function ( e ) {
+			var link = e.target && e.target.closest ? e.target.closest( 'a.lafka-counter-bar__order' ) : null;
+			if ( ! link || link.hash || link.pathname !== window.location.pathname || link.host !== window.location.host ) {
+				return;
+			}
+			e.preventDefault();
+			body.scrollIntoView( { behavior: 'smooth', block: 'start' } );
+			var input = root.querySelector( '[data-lafka-menu-search-input]' );
+			if ( input ) {
+				input.focus( { preventScroll: true } );
+			}
+		} );
+	}
+
 	function init() {
+		initBarShortcut();
 		initTabs();
 		initSearch();
 		initFilters();
