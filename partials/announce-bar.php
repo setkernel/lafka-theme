@@ -34,6 +34,13 @@ if ( ! (bool) get_theme_mod( 'lafka_announce_bar_enabled', true ) ) {
 	return;
 }
 
+// GX4: the counter header carries status + phone itself (and the approved
+// design has no strip above it), so the classic announce bar stays off under
+// a counter header unless a site opts back in.
+if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) && ! apply_filters( 'lafka_counter_show_announce_bar', false ) ) {
+	return;
+}
+
 $lafka_ann_status = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
 
 $lafka_ann_info  = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();

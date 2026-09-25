@@ -129,6 +129,14 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 	<?php endif; ?>
 
 	<header id="header" class="lafka-header" role="banner">
+		<?php
+		// GX4: the counter layout renders its own header inner (same single
+		// <header id="header"> banner, so skip-link / inert / sticky targets
+		// are unchanged). The classic markup below is byte-identical.
+		if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) ) :
+			get_template_part( 'partials/counter/header' );
+		else :
+			?>
 		<div class="lafka-header__inner lafka-container">
 
 			<button
@@ -255,6 +263,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 			</div>
 
 		</div>
+		<?php endif; ?>
 	</header>
 
 	<main id="content" tabindex="-1">

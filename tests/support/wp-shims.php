@@ -597,6 +597,53 @@ if ( ! function_exists( 'get_template_part' ) ) {
 	}
 }
 
+// ------------------------------------------------- GX4: chrome helpers ----
+//
+// Stores (reset per test):
+//   lafka_test_bloginfo        get_bloginfo(): [ show => value ] (name defaults to "Example Kitchen")
+//   lafka_test_nav_menus       has_nav_menu() / wp_nav_menu(): [ location => list<array{label,url}> ]
+
+if ( ! function_exists( 'get_bloginfo' ) ) {
+	function get_bloginfo( $show = '', $filter = 'raw' ) {
+		$info = ( $GLOBALS['lafka_test_bloginfo'] ?? array() ) + array( 'name' => 'Example Kitchen' );
+		return (string) ( $info[ '' === $show ? 'name' : $show ] ?? '' );
+	}
+}
+if ( ! function_exists( 'wp_unslash' ) ) {
+	function wp_unslash( $value ) {
+		return is_string( $value ) ? stripslashes( $value ) : $value;
+	}
+}
+if ( ! function_exists( 'checked' ) ) {
+	function checked( $checked, $current = true, $display = true ) {
+		$result = (string) $checked === (string) $current ? " checked='checked'" : '';
+		if ( $display ) {
+			echo $result; // phpcs:ignore
+		}
+		return $result;
+	}
+}
+if ( ! function_exists( 'has_nav_menu' ) ) {
+	function has_nav_menu( $location ) {
+		return ! empty( $GLOBALS['lafka_test_nav_menus'][ $location ] );
+	}
+}
+if ( ! function_exists( 'wp_nav_menu' ) ) {
+	function wp_nav_menu( $args = array() ) {
+		$items = $GLOBALS['lafka_test_nav_menus'][ $args['theme_location'] ?? '' ] ?? array();
+		$html  = '<ul class="' . ( $args['menu_class'] ?? 'menu' ) . '">';
+		foreach ( $items as $item ) {
+			$html .= '<li class="menu-item"><a href="' . $item['url'] . '">' . $item['label'] . '</a></li>';
+		}
+		$html .= '</ul>';
+		if ( ! empty( $args['echo'] ) || ! array_key_exists( 'echo', $args ) ) {
+			echo $html; // phpcs:ignore
+			return null;
+		}
+		return $html;
+	}
+}
+
 if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 	/**
 	 * Reset every per-test store. $filters is the load-time hook registry to
@@ -627,6 +674,8 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_term_meta']          = array();
 		$GLOBALS['lafka_test_catalog']            = array();
 		$GLOBALS['lafka_test_parts_live']         = false;
+		$GLOBALS['lafka_test_bloginfo']           = array();
+		$GLOBALS['lafka_test_nav_menus']          = array();
 		$GLOBALS['lafka_test_fulfilment_modes']   = array( 'pickup', 'delivery' );
 		$GLOBALS['lafka_test_fulfilment_pref']    = '';
 		if ( class_exists( 'Lafka_Order_Hours' ) ) {

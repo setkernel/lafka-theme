@@ -65,6 +65,25 @@ if ( ! function_exists( 'lafka_counter_customize_register_layouts' ) ) {
 		}
 
 		$wp_customize->add_setting(
+			'lafka_counter_header_nav',
+			array(
+				'default'           => true,
+				'type'              => 'theme_mod',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_counter_header_nav',
+			array(
+				'label'       => __( 'Show the header links row (counter header)', 'lafka' ),
+				'description' => __( 'Links come from Appearance → Menus → "Header menu (counter layout)"; without a menu: Menu · Deals · Find us. Below 1024 px they move into the menu drawer.', 'lafka' ),
+				'section'     => 'lafka_layouts',
+				'type'        => 'checkbox',
+			)
+		);
+
+		$wp_customize->add_setting(
 			'lafka_motif',
 			array(
 				'default'           => function_exists( 'lafka_preset_variant' ) ? lafka_sanitize_motif( lafka_preset_variant( 'motif', 'none' ) ) : 'none',

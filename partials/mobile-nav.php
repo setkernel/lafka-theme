@@ -84,7 +84,15 @@ if ( taxonomy_exists( 'product_cat' ) ) {
 
 		<div class="lafka-mobile-nav__body">
 
-			<?php if ( has_nav_menu( 'primary' ) ) : ?>
+			<?php if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) && function_exists( 'lafka_counter_render_nav' ) ) : ?>
+				<?php // GX4: the counter header's links collapse into this drawer below 1024px. ?>
+				<section class="lafka-mobile-nav__section">
+					<h2 class="lafka-mobile-nav__section-title"><?php esc_html_e( 'Menu', 'lafka' ); ?></h2>
+					<nav class="lafka-mobile-nav__nav" aria-label="<?php esc_attr_e( 'Main', 'lafka' ); ?>">
+						<?php lafka_counter_render_nav( 'lafka-mobile-nav__list' ); ?>
+					</nav>
+				</section>
+			<?php elseif ( has_nav_menu( 'primary' ) ) : ?>
 				<section class="lafka-mobile-nav__section">
 					<h2 class="lafka-mobile-nav__section-title"><?php esc_html_e( 'Menu', 'lafka' ); ?></h2>
 					<?php

@@ -183,3 +183,203 @@ body.lafka-motif-check .lafka-motif-check {
 		font-size: var(--lafka-font-size-h2-desk);
 	}
 }
+
+/* ── Header ───────────────────────────────────────────────────────────────
+ * Layout skeleton (bar grid, heights, what shows at each width) is inlined
+ * via styles/critical-counter.css so first paint does not shift. */
+body.lafka-layout-header-counter .lafka-header {
+	background: var(--lafka-color-surface-page);
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+	border-bottom: 0;
+	box-shadow: none;
+}
+
+.lafka-counter-header__brand {
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+}
+
+.lafka-counter-header__name {
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.1;
+}
+
+.lafka-counter-header__phone {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 48px;
+	padding: 0 6px;
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.lafka-counter-header__phone:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-counter-header__cart,
+.lafka-counter-header__menu {
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-width: 48px;
+	min-height: 48px;
+	padding: 0 14px;
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font: inherit;
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.lafka-counter-header__count {
+	min-width: 24px;
+	height: 24px;
+	padding: 0 6px;
+	box-sizing: border-box;
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-surface-page);
+	font-size: var(--lafka-font-size-caption);
+	line-height: 24px;
+	text-align: center;
+}
+
+.lafka-counter-header__count.is-empty {
+	display: none;
+}
+
+/* ── Open / closed status ─────────────────────────────────────────────── */
+.lafka-counter-status {
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--lafka-color-text-primary);
+	white-space: nowrap;
+}
+
+.lafka-counter-status__dot {
+	flex: none;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-status strong {
+	font-weight: var(--lafka-font-weight-bold);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-status.is-open .lafka-counter-status__dot {
+	background: var(--lafka-color-success-500);
+}
+
+.lafka-counter-status.is-open strong {
+	color: var(--lafka-color-success-500);
+}
+
+/* ── Pickup / Delivery (segmented radios; large cards in the drawer) ─── */
+.lafka-fulfilment {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	min-width: 0;
+}
+
+.lafka-fulfilment--header {
+	display: flex;
+	gap: 3px;
+	padding: 3px;
+	background: var(--lafka-color-surface-muted);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-button);
+}
+
+.lafka-fulfilment__option {
+	position: relative;
+	display: flex;
+	cursor: pointer;
+}
+
+.lafka-fulfilment__option input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+}
+
+.lafka-fulfilment--header .lafka-fulfilment__label {
+	display: inline-flex;
+	align-items: center;
+	height: 42px;
+	padding: 0 16px;
+	border: 1.5px solid transparent;
+	border-radius: calc(var(--lafka-radius-button) - 2px);
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-body-lg);
+}
+
+.lafka-fulfilment--header input:checked + .lafka-fulfilment__label {
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-fulfilment input:focus-visible + .lafka-fulfilment__label {
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* ── Header nav (slim row; collapses into the mobile menu <1024) ──────── */
+.lafka-counter-nav {
+	display: none;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-counter-nav__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 28px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-counter-nav__list a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: none;
+}
+
+.lafka-counter-nav__list a:hover,
+.lafka-counter-nav__list .current-menu-item > a {
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 6px;
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-nav {
+		display: block;
+	}
+}
