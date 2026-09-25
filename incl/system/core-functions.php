@@ -2055,8 +2055,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// unconditionally on `window.load`, so we keep it enqueued globally.
 		// The defer strategy is the real win here. JS guard added at the call
 		// site protects against future narrowing.
-		wp_enqueue_script( 'flexslider', get_template_directory_uri() . '/js/flex/jquery.flexslider-min.js', array( 'jquery' ), lafka_asset_version( '/js/flex/jquery.flexslider-min.js' ), $footer_defer );
-		wp_enqueue_style( 'flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
+		// WooCommerce 10.3+ registers the same library (FlexSlider 2.7.2) as
+		// `wc-flexslider` (with `flexslider` as a legacy alias) before this runs,
+		// so the theme reuses it — product pages never load two copies and the
+		// generic `flexslider` handle is never claimed by the theme. Without it
+		// (no WooCommerce / WooCommerce < 10.3) the bundled copy loads under the
+		// theme's own `lafka-flexslider` handle (lafka_enqueue_flexslider()).
+		$lafka_flexslider_handle = lafka_enqueue_flexslider( $footer_defer );
+		wp_enqueue_style( 'lafka-flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
 		$flex_enqueue = true;
 
 		// owl-carousel — same story; `lafka-libs-config.js` runs
@@ -2153,7 +2159,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		/* Include js configs — conditionally loaded scripts removed from hard deps */
 		$lafka_libs_deps = array( 'jquery', 'wp-util' );
 		if ( $flex_enqueue ) {
-			$lafka_libs_deps[] = 'flexslider';
+			$lafka_libs_deps[] = $lafka_flexslider_handle;
 		}
 		if ( $owl_enqueue ) {
 			$lafka_libs_deps[] = 'owl-carousel';

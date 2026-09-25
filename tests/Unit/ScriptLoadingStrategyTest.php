@@ -5,7 +5,9 @@ declare(strict_types=1);
  * incl/system/lafka-script-loading.php: the theme defers only its own
  * allowlisted script handles, through the WP strategy API — never
  * WooCommerce, gateway, checkout or order-attribution scripts, never in the
- * admin, and never over a strategy a script already chose.
+ * admin, and never over a strategy a script already chose. FlexSlider reuses
+ * WooCommerce's `wc-flexslider` and otherwise loads under `lafka-flexslider`,
+ * never the generic `flexslider` handle.
  */
 
 namespace {
@@ -30,6 +32,20 @@ namespace {
 					return $GLOBALS['lafka_test_scripts'][ $handle ][ $key ] ?? false;
 				}
 			};
+		}
+	}
+
+	if ( ! function_exists( 'wp_enqueue_script' ) ) {
+		function wp_enqueue_script( $handle, $src = '', $deps = array(), $ver = false, $args = array() ) {
+			if ( ! isset( $GLOBALS['lafka_test_scripts'][ $handle ] ) ) {
+				$GLOBALS['lafka_test_scripts'][ $handle ] = array( 'src' => $src, 'args' => $args );
+			}
+			$GLOBALS['lafka_test_scripts'][ $handle ]['enqueued'] = true;
+		}
+	}
+	if ( ! function_exists( 'lafka_asset_version' ) ) {
+		function lafka_asset_version( $relative_path ) {
+			return '1';
 		}
 	}
 
@@ -137,6 +153,23 @@ namespace Lafka\Tests\Unit {
 
 			$this->assertSame( '', $this->strategy( 'lafka-front' ) );
 			$this->assertSame( 'defer', $this->strategy( 'my-child-theme-js' ) );
+		}
+
+		public function test_flexslider_reuses_woocommerces_registration(): void {
+			$this->register( array( 'wc-flexslider', 'flexslider' ) );
+
+			$this->assertSame( 'wc-flexslider', \lafka_enqueue_flexslider( array( 'strategy' => 'defer' ) ) );
+			$this->assertTrue( $GLOBALS['lafka_test_scripts']['wc-flexslider']['enqueued'] ?? false );
+			$this->assertArrayNotHasKey( 'lafka-flexslider', $GLOBALS['lafka_test_scripts'] );
+			$this->assertArrayNotHasKey( 'enqueued', $GLOBALS['lafka_test_scripts']['flexslider'], 'The generic alias is not used.' );
+		}
+
+		public function test_flexslider_falls_back_to_the_bundled_copy_under_the_theme_handle(): void {
+			$this->register( array( 'flexslider' ) ); // Some other plugin's "flexslider".
+
+			$this->assertSame( 'lafka-flexslider', \lafka_enqueue_flexslider( array( 'strategy' => 'defer' ) ) );
+			$this->assertStringEndsWith( '/js/flex/jquery.flexslider-min.js', $GLOBALS['lafka_test_scripts']['lafka-flexslider']['src'] );
+			$this->assertArrayNotHasKey( 'enqueued', $GLOBALS['lafka_test_scripts']['flexslider'] );
 		}
 	}
 }
