@@ -543,7 +543,6 @@
 	line-height: 1.5;
 	color: var(--lafka-color-text-secondary);
 	font-style: normal;
-	quotes: """ """;
 }
 
 .lafka-pdp-info__review-quote::before {

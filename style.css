@@ -9,10 +9,10 @@ License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Text Domain: lafka
 Requires at least: 6.6
-Tested up to: 7.0
+Tested up to: 7.1
 Requires PHP: 8.1
 WC requires at least: 9.5
-WC tested up to: 10.9
+WC tested up to: 11.1
 Tags: e-commerce, food-and-drink, full-width-template, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, accessibility-ready, block-styles, wide-blocks
 */
 
@@ -466,7 +466,7 @@ ol ol {
 
 .heading-title {
     -ms-word-wrap: break-word;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .widget_categories ul,
@@ -620,7 +620,7 @@ pre {
     padding: 12px;
     white-space: pre;
     white-space: pre-wrap;
-    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 img.alignright {
@@ -3129,7 +3129,6 @@ button.single_add_to_cart_button:disabled:hover {
 
 div.product .option {
     margin-bottom: 10px;
-    font-family: 12px;
 }
 
 div.product .option span {
@@ -3471,7 +3470,6 @@ ul.tabs a {
 }
 
 .panel.entry-content {
-    background-color: none !important;
     min-height: 40px;
     padding: 20px;
     z-index: 2;
@@ -5769,7 +5767,6 @@ div.post.lafka-post-no-image .lafka-no-avatar .post-date {
 .lafka_shortcode_latest_posts {
     display: -webkit-box;
     display: -moz-box;
-    display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
 }
@@ -5778,7 +5775,6 @@ div.post.lafka-post-no-image .lafka-no-avatar .post-date {
     padding: 2px;
     display: -webkit-box;
     display: -webkit-flex;
-    display: -ms-flexbox;
     -webkit-flex-wrap: wrap;
     -ms-flex-wrap: wrap;
     flex-wrap: wrap;
@@ -6010,7 +6006,6 @@ p.logged-in-as a:first-of-type::before {
 
 a.sidebar-trigger::before {
     font-family: feather !important;
-    speak: none;
     font-style: normal;
     font-weight: 400;
     font-variant: normal;
@@ -6914,7 +6909,7 @@ a.btn.button.show-title-form i {
 
 .lafka-author-content .description {
     font-size: 17px;
-    font-weight: lighter;
+    font-weight: lighter; /* stylelint-disable-line font-weight-notation -- relative to the parent weight, no numeric equivalent */
     line-height: 1.4;
     color: #666;
 }
@@ -9377,19 +9372,16 @@ body {
     font-family: var(--lafka-body-font-family);
     font-size: var(--lafka-body-font-size);
     color: var(--lafka-body-font-color);
-    font-display: swap;
 }
 
 /* Headings font */
 h1, h2, h3, h4, h5, h6, .foodmenu_top .project-data .project-details .lafka-foodmenu-main-price, p.wp-block-cover-text, .lafka-product-summary-wrapper div.lafka-share-links span, #comments .nav-next a, #comments .nav-previous a, .woocommerce-form-coupon-toggle .woocommerce-info, .woocommerce-form-login-toggle .woocommerce-info, .r_more_blog, p.woocommerce-thankyou-order-received, nav.woocommerce-MyAccount-navigation ul li a, .lafka-header-user-data small, a.lafka-post-nav .entry-info span.entry-title, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .lafka-product-popup-link > a, .tribe-events-schedule .tribe-events-cost, .lafka-page-load-status, section.woocommerce-order-details, ul.woocommerce-error, table.woocommerce-checkout-review-order-table, body.woocommerce-cart .cart-collaterals, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li, .countdown_time_tiny, blockquote, q, .lafka-pagination-numbers .owl-dot::before, .lafka-wcs-swatches .swatch.swatch-label, .foodmenu-unit-info small, div.widget_nav_menu ul li a, .comment-body span, span.edit-link a, #reviews .commentlist li .meta, div.widget_categories ul li a, div.widget_archive ul li a, .woocommerce p.cart-empty, div.woocommerce-MyAccount-content .myaccount_user, label, .lafka-pricing-table-content, p.product.woocommerce.add_to_cart_inline, .product-filter .limit b, .product-filter .sort b, .product-filter .price_label, .contact-form .content span, .lafka-event-countdown .is-countdown, .lafka-foodmenu-categories ul li a, .prod_hold .name, .lafka-counter-h1, .lafka-typed-h1, .lafka-typed-h2, .lafka-typed-h3, .lafka-typed-h4, .lafka-typed-h5, .lafka-typed-h6, .lafka-counter-h2, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .lafka-counter-h3, .error404 div.blog-post-excerpt::before, div.added-product-text strong, .lafka-product-slide-price, .lafka-counter-h4, .lafka-counter-h5, .lafka-counter-h6, div.product .price span, p.logged-in-as, .lafka-pricing-table-price, .breadcrumb, .offer_title, ul.tabs a, .lafka-products-list-view .prod_hold .name, .lafka_shortcode_count_holder .countdown-amount, .blog-post-meta a, .widget_shopping_cart_content p.total, .foodmenu_top .project-data .project-details .simple-list-underlined li {
     font-family: var(--lafka-headings-font-family);
-    font-display: swap;
 }
 
 /* Headings font for buttons */
 .lafka-headings-for-buttons a.button, .lafka-headings-for-buttons input.button, .lafka-headings-for-buttons .lafka-filter-widgets-triger, .lafka-headings-for-buttons .lafka-reset-filters, .lafka-headings-for-buttons .wcv-navigation ul.menu.horizontal li a, .lafka-headings-for-buttons .wcv-pro-dashboard input[type="submit"], .lafka-headings-for-buttons button.button, .lafka-headings-for-buttons input[type="submit"], .lafka-headings-for-buttons a.button-inline, .lafka-headings-for-buttons .lafka_banner_buton, .lafka-headings-for-buttons #submit_btn, .lafka-headings-for-buttons #submit, .lafka-headings-for-buttons .wpcf7-submit, .lafka-headings-for-buttons .col2-set.addresses header a.edit, .lafka-headings-for-buttons div.product input.qty, .lafka-headings-for-buttons .lafka-pricing-table-button a {
     font-family: var(--lafka-headings-font-family);
-    font-display: swap;
 }
 
 /* H1 */

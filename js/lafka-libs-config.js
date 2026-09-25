@@ -253,7 +253,7 @@
 					{
 						bind_keyup: function ()
 						{
-							this.scope.on('keyup', '#s', $.proxy(this.attempt_search, this));
+							this.scope.on('keyup', '#s', this.attempt_search.bind(this));
 						},
 						attempt_search: function (e)
 						{
@@ -266,10 +266,10 @@
 							}
 
 							//only execute search if chars are at least "minChars" and search differs from last one
-							if (e.currentTarget.value.length >= this.options.minChars && this.lastVal != $.trim(e.currentTarget.value))
+							if (e.currentTarget.value.length >= this.options.minChars && this.lastVal != e.currentTarget.value.trim())
 							{
 								//wait at least "delay" miliseconds to execute ajax. if user types again during that time dont execute
-								this.timer = setTimeout($.proxy(this.execute_search, this, e), this.options.delay);
+								this.timer = setTimeout(this.execute_search.bind(this, e), this.options.delay);
 							}
 						},
 						execute_search: function (e)
@@ -591,7 +591,7 @@ if (typeof lafka_quickview !== 'undefined') {
             }
 
             // Reveal
-            if ($.trim(form.$singleVariation.text())) {
+            if (form.$singleVariation.text().trim()) {
                 form.$singleVariation.slideDown(200).trigger('show_variation', [variation, purchasable]);
             } else {
                 form.$singleVariation.show().trigger('show_variation', [variation, purchasable]);

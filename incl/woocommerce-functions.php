@@ -305,7 +305,9 @@ if ( ! function_exists( 'lafka_price_filter' ) ) {
 		}
 
 		wp_enqueue_style( 'jquery-ui' );
-		wp_enqueue_script( 'lafka-price-slider', get_template_directory_uri() . '/js/lafka-price-slider.js', array( 'jquery-ui-slider', 'wc-jquery-ui-touchpunch', 'accounting' ), lafka_asset_version( '/js/lafka-price-slider.js' ), true );
+		// `wc-accounting` is WooCommerce's canonical accounting.js handle; `accounting` is its deprecated alias (WC < 10.3 only has the alias).
+		$lafka_accounting_handle = wp_script_is( 'wc-accounting', 'registered' ) ? 'wc-accounting' : 'accounting';
+		wp_enqueue_script( 'lafka-price-slider', get_template_directory_uri() . '/js/lafka-price-slider.js', array( 'jquery-ui-slider', 'wc-jquery-ui-touchpunch', $lafka_accounting_handle ), lafka_asset_version( '/js/lafka-price-slider.js' ), true );
 
 		// Round values to nearest 10 by default.
 		$step = max( apply_filters( 'woocommerce_price_filter_widget_step', 10 ), 1 );

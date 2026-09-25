@@ -1,9 +1,10 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 <?php
 /**
- * Insert the customized css from selected options on wp_head hook + the custom css for Gutenberg
+ * The Customizer-driven typography CSS for the block editor. Attached to the
+ * editor stylesheet by lafka_enqueue_gutenberg_styles() (incl/system/lafka-editor-styles.php)
+ * on enqueue_block_assets, so it reaches the iframed editor canvas.
  */
-add_action( 'admin_enqueue_scripts', 'lafka_add_custom_gutenberg_css', 99 );
 
 if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 

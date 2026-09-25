@@ -11,11 +11,14 @@
  *
  * Reconciled with WooCommerce core cart/cart.php 10.8.0 (product-instance
  * guard, backorder check, sold-individually quantity input, filtered product
- * name on the quantity input and the linked name).
+ * name on the quantity input and the linked name), 11.0.0 (table `scope`
+ * attributes — not applicable to this list layout) and 11.2.0 (selected-
+ * variation-aware item name fed to the name filters and the item data, via
+ * lafka_wc_cart_item_product_name(); older WooCommerce keeps get_name()).
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package Lafka\WooCommerce
- * @version 10.8.0
+ * @version 11.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -150,7 +153,8 @@ do_action( 'woocommerce_before_cart' );
 
 			if ( $_product instanceof WC_Product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
 				$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
-				$product_name      = apply_filters( 'woocommerce_cart_item_name', $_product->get_name(), $cart_item, $cart_item_key );
+				$cart_item_name    = lafka_wc_cart_item_product_name( $cart_item, $_product );
+				$product_name      = apply_filters( 'woocommerce_cart_item_name', $cart_item_name, $cart_item, $cart_item_key );
 				?>
 				<li class="lafka-cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 					<div class="lafka-cart-item__img-wrap">
@@ -179,14 +183,15 @@ do_action( 'woocommerce_before_cart' );
 								echo wp_kses_post( $product_name . '&nbsp;' );
 							} else {
 								// Same filter WooCommerce core applies to the linked name.
-								echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $_product->get_name() ), $cart_item, $cart_item_key ) );
+								echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $cart_item_name ), $cart_item, $cart_item_key ) );
 							}
 							?>
 						</p>
 						<?php do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key ); ?>
 
 						<?php
-						$item_data = wc_get_formatted_cart_item_data( $cart_item );
+						// WC 11.2+ reads the name to skip attributes it already shows; older WC ignores the argument.
+						$item_data = wc_get_formatted_cart_item_data( $cart_item, false, $cart_item_name );
 						if ( ! empty( $item_data ) ) :
 							?>
 							<div class="lafka-cart-item__meta"><?php echo wp_kses_post( $item_data ); ?></div>

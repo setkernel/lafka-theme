@@ -54,10 +54,10 @@
 		"@fontsource/rubik": "^5.2.8",
 		"@fontsource/space-grotesk": "^5.2.10",
 		"@playwright/test": "^1.61.1",
-		"@wordpress/stylelint-config": "^23.41.0",
+		"@wordpress/stylelint-config": "^26.0.0",
 		"esbuild": "^0.27.7",
 		"eslint": "^10.6.0",
 		"globals": "^17.7.0",
-		"stylelint": "^16.26.1"
+		"stylelint": "^17.15.0"
 	}
 }

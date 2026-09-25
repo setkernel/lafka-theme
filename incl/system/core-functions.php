@@ -97,6 +97,16 @@ if ( ! function_exists( 'lafka_register_theme_features' ) ) {
 
 		// Gutenberg
 		add_theme_support( 'align-wide' );
+		// Embed blocks keep their aspect ratio (`wp-embed-responsive` body class).
+		add_theme_support( 'responsive-embeds' );
+
+		// HTML5 markup where it cannot change the shipped look: the search form
+		// (searchform.php overrides it anyway), [gallery], and nav-menu widgets
+		// (wrapped in <nav>). Deliberately NOT 'comment-form' (turns the Website
+		// field into type="url", which the input styles don't cover) nor 'caption'
+		// (div.wp-caption -> figure, which the caption styles target), and not
+		// 'script'/'style' (deprecated and ignored since WordPress 7.0).
+		add_theme_support( 'html5', array( 'search-form', 'gallery', 'navigation-widgets' ) );
 
 		// Use the classic widget editor — theme widgets are WP_Widget-based.
 		// Filter is used instead of remove_theme_support because WP adds the
@@ -473,16 +483,8 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 }
 add_action( 'admin_enqueue_scripts', 'lafka_enqueue_admin_js' );
 
-add_action( 'enqueue_block_editor_assets', 'lafka_enqueue_gutenberg_styles' );
-if ( ! function_exists( 'lafka_enqueue_gutenberg_styles' ) ) {
-	/**
-	 * Enqueue the Gutenberg styles
-	 */
-	function lafka_enqueue_gutenberg_styles() {
-		wp_enqueue_style( 'lafka_block_editor_assets', get_template_directory_uri() . '/styles/lafka-gutenberg-styles.css', array(), lafka_asset_version( '/styles/lafka-gutenberg-styles.css' ) );
-		lafka_typography_enqueue_google_font();
-	}
-}
+// Block-editor content styles (iframed canvas, WP 7.1) — enqueue_block_assets, admin only.
+require_once __DIR__ . '/lafka-editor-styles.php';
 
 /**
  * Checks if post has 'lafka_video_bckgr_url' meta
@@ -1037,9 +1039,9 @@ if ( ! function_exists( 'lafka_is_block_cart_checkout_page' ) ) {
 	 * class_exists guard so the theme still degrades to plain-WC block styling when
 	 * the plugin is absent, and NEVER treats a classic-mode page (where the shim
 	 * serves the shortcode checkout, or the pages are physically shortcodes) as a
-	 * block page. Used to gate both the block-checkout stylesheet and the
-	 * defer-suppression below — the WooCommerce Blocks runtime must not be
-	 * `defer`-reordered (see lafka_defer_non_critical_scripts).
+	 * block page. Used to gate the block-checkout stylesheet. (The WooCommerce
+	 * Blocks runtime is never `defer`-reordered: the theme only defers its own
+	 * allowlisted handles — incl/system/lafka-script-loading.php.)
 	 *
 	 * @return bool
 	 */
@@ -2063,8 +2065,14 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// unconditionally on `window.load`, so we keep it enqueued globally.
 		// The defer strategy is the real win here. JS guard added at the call
 		// site protects against future narrowing.
-		wp_enqueue_script( 'flexslider', get_template_directory_uri() . '/js/flex/jquery.flexslider-min.js', array( 'jquery' ), lafka_asset_version( '/js/flex/jquery.flexslider-min.js' ), $footer_defer );
-		wp_enqueue_style( 'flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
+		// WooCommerce 10.3+ registers the same library (FlexSlider 2.7.2) as
+		// `wc-flexslider` (with `flexslider` as a legacy alias) before this runs,
+		// so the theme reuses it — product pages never load two copies and the
+		// generic `flexslider` handle is never claimed by the theme. Without it
+		// (no WooCommerce / WooCommerce < 10.3) the bundled copy loads under the
+		// theme's own `lafka-flexslider` handle (lafka_enqueue_flexslider()).
+		$lafka_flexslider_handle = lafka_enqueue_flexslider( $footer_defer );
+		wp_enqueue_style( 'lafka-flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
 		$flex_enqueue = true;
 
 		// owl-carousel — same story; `lafka-libs-config.js` runs
@@ -2161,7 +2169,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		/* Include js configs — conditionally loaded scripts removed from hard deps */
 		$lafka_libs_deps = array( 'jquery', 'wp-util' );
 		if ( $flex_enqueue ) {
-			$lafka_libs_deps[] = 'flexslider';
+			$lafka_libs_deps[] = $lafka_flexslider_handle;
 		}
 		if ( $owl_enqueue ) {
 			$lafka_libs_deps[] = 'owl-carousel';
@@ -2308,39 +2316,9 @@ if ( ! function_exists( 'lafka_deregister_plugins_awesome_stylesheet' ) ) {
 	}
 }
 
-// Add defer to non-critical scripts for faster initial render
-add_filter( 'script_loader_tag', 'lafka_defer_non_critical_scripts', 10, 3 );
-if ( ! function_exists( 'lafka_defer_non_critical_scripts' ) ) {
-	function lafka_defer_non_critical_scripts( $tag, $handle, $src ) {
-		// Don't defer in admin or for critical scripts
-		if ( is_admin() ) {
-			return $tag;
-		}
-		// NX1-04b: never brute-force `defer` on a block Cart/Checkout page. The
-		// WooCommerce Blocks runtime is a graph of wp-*/wc-* scripts that carry
-		// inline `-before`/`-after` data (the wc-settings Store API preload +
-		// nonce, wp-date's moment settings, wp-url). Those inline blocks run
-		// synchronously in source order; deferring the EXTERNAL file makes the
-		// inline data execute first and throw (normalizePath / moment /
-		// setSettings undefined), which leaves the block cart & checkout wedged on
-		// their empty-cart fallback and silently blocks every block-mode order.
-		// WordPress already orders these correctly without defer, so we simply opt
-		// the whole page out (classic pages are unaffected — their cart/checkout
-		// are shortcodes, not blocks).
-		if ( function_exists( 'lafka_is_block_cart_checkout_page' ) && lafka_is_block_cart_checkout_page() ) {
-			return $tag;
-		}
-		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore', 'wp-i18n', 'wp-api-fetch', 'wp-hooks', 'wp-polyfill' );
-		if ( in_array( $handle, $no_defer, true ) ) {
-			return $tag;
-		}
-		// Skip if already has defer or async
-		if ( strpos( $tag, ' defer' ) !== false || strpos( $tag, ' async' ) !== false ) {
-			return $tag;
-		}
-		return str_replace( ' src=', ' defer src=', $tag );
-	}
-}
+// Defer the theme's own scripts via the WP script-strategy API (explicit
+// allowlist; WooCommerce / gateway / checkout scripts are never touched).
+require_once __DIR__ . '/lafka-script-loading.php';
 
 add_filter( 'wp_resource_hints', 'lafka_add_resource_hints', 20, 2 );
 if ( ! function_exists( 'lafka_add_resource_hints' ) ) {

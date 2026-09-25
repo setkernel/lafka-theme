@@ -64,4 +64,16 @@ final class ThemeRegistrationsTest extends TestCase {
 			'lafka-widgets-thumb'            => array( 'lafka-widgets-thumb' ),
 		);
 	}
+
+	// ─── Theme supports ─────────────────────────────────────────────────────
+
+	public function test_responsive_embeds_and_safe_html5_supports_are_declared(): void {
+		$src = (string) file_get_contents( self::CORE_FUNCTIONS );
+		self::assertMatchesRegularExpression( "/add_theme_support\(\s*'responsive-embeds'\s*\)/", $src );
+		self::assertMatchesRegularExpression(
+			"/add_theme_support\(\s*'html5',\s*array\(\s*'search-form',\s*'gallery',\s*'navigation-widgets'\s*\)\s*\)/",
+			$src,
+			"html5 support must stay limited to markup the shipped CSS already covers (no 'comment-form' / 'caption')."
+		);
+	}
 }
