@@ -76,6 +76,23 @@ if ( ! function_exists( 'lafka_counter_nap' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_counter_brand_short' ) ) {
+	/**
+	 * Optional short brand name for the phone-width header (e.g. "Peppery"),
+	 * shown <600 in place of the full name so the logo + name stay one line.
+	 * Customizer → Lafka — Layouts → "Short name on phones"; filter
+	 * lafka_counter_brand_short. '' (the default) keeps the full name, which
+	 * the header then sizes to one line (critical-counter.css).
+	 *
+	 * @param string $full The full business name.
+	 * @return string '' when unset or identical to the full name.
+	 */
+	function lafka_counter_brand_short( string $full ): string {
+		$short = trim( wp_strip_all_tags( (string) apply_filters( 'lafka_counter_brand_short', (string) get_theme_mod( 'lafka_counter_brand_short', '' ), $full ) ) );
+		return $short === trim( $full ) ? '' : $short;
+	}
+}
+
 if ( ! function_exists( 'lafka_counter_fulfilment_modes' ) ) {
 	/**
 	 * The fulfilment modes the store offers (lafka-plugin decides from the

@@ -21,6 +21,7 @@ $lafka_ch_status = function_exists( 'lafka_counter_open_status' ) ? lafka_counte
 $lafka_ch_logo   = function_exists( 'lafka_get_logo_id' ) ? (int) lafka_get_logo_id() : 0;
 $lafka_ch_nav_on = (bool) get_theme_mod( 'lafka_counter_header_nav', true );
 $lafka_ch_hours  = function_exists( 'lafka_open_status_hours_for_client' ) ? lafka_open_status_hours_for_client() : array();
+$lafka_ch_short  = lafka_counter_brand_short( $lafka_ch_nap['name'] );
 ?>
 <div class="lafka-counter-header">
 	<div class="lafka-counter-header__bar lafka-counter-wrap">
@@ -41,7 +42,11 @@ $lafka_ch_hours  = function_exists( 'lafka_open_status_hours_for_client' ) ? laf
 				);
 			}
 			?>
-			<span class="lafka-counter-header__name"><?php echo esc_html( $lafka_ch_nap['name'] ); ?></span>
+			<?php if ( '' !== $lafka_ch_short ) : ?>
+				<span class="lafka-counter-header__name lafka-counter-header__name--has-short"><span class="lafka-counter-header__name-full"><?php echo esc_html( $lafka_ch_nap['name'] ); ?></span><span class="lafka-counter-header__name-short" aria-hidden="true"><?php echo esc_html( $lafka_ch_short ); ?></span></span>
+			<?php else : ?>
+				<span class="lafka-counter-header__name"><?php echo esc_html( $lafka_ch_nap['name'] ); ?></span>
+			<?php endif; ?>
 		</a>
 
 		<?php if ( $lafka_ch_status ) : ?>
@@ -62,7 +67,7 @@ $lafka_ch_hours  = function_exists( 'lafka_open_status_hours_for_client' ) ? laf
 			<?php if ( '' !== $lafka_ch_nap['phone'] ) : ?>
 				<a class="lafka-counter-header__phone" href="<?php echo esc_attr( 'tel:' . $lafka_ch_nap['tel'] ); ?>" data-lafka-channel="phone">
 					<?php echo lafka_counter_icon( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
-					<span><?php echo esc_html( $lafka_ch_nap['phone'] ); ?></span>
+					<span class="lafka-counter-header__phone-number"><?php echo esc_html( $lafka_ch_nap['phone'] ); ?></span>
 				</a>
 			<?php endif; ?>
 

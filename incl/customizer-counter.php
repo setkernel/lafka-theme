@@ -88,6 +88,25 @@ if ( ! function_exists( 'lafka_counter_customize_register_layouts' ) ) {
 		);
 
 		$wp_customize->add_setting(
+			'lafka_counter_brand_short',
+			array(
+				'default'           => '',
+				'type'              => 'theme_mod',
+				'sanitize_callback' => 'sanitize_text_field',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_counter_brand_short',
+			array(
+				'label'       => __( 'Short name on phones (counter header)', 'lafka' ),
+				'description' => __( 'Optional, e.g. the first word of your business name. Shown next to the logo below 600 px; empty keeps the full name, sized to fit one line.', 'lafka' ),
+				'section'     => 'lafka_layouts',
+				'type'        => 'text',
+			)
+		);
+
+		$wp_customize->add_setting(
 			'lafka_counter_mobile_bar',
 			array(
 				'default'           => true,

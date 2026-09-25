@@ -212,12 +212,18 @@ body.lafka-layout-header-counter .lafka-header {
 	line-height: 1.1;
 }
 
+/* Below 1440 the number is visually hidden (critical-counter.css) and the
+ * link is a 48 px phone icon; its accessible name stays the number. */
 .lafka-counter-header__phone {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
+	justify-content: center;
 	gap: 8px;
+	min-width: 48px;
 	min-height: 48px;
 	padding: 0 6px;
+	box-sizing: border-box;
 	color: var(--lafka-color-text-primary);
 	font-weight: var(--lafka-font-weight-bold);
 	text-decoration: none;
@@ -272,8 +278,16 @@ body.lafka-layout-header-counter .lafka-header {
 	display: flex;
 	align-items: center;
 	gap: 10px;
+	min-width: 0;
 	color: var(--lafka-color-text-primary);
 	white-space: nowrap;
+}
+
+/* A long "Closed · opens …" line truncates instead of pushing the controls. */
+.lafka-counter-status__text {
+	min-width: 0;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 
 .lafka-counter-status__dot {
@@ -306,6 +320,8 @@ body.lafka-layout-header-counter .lafka-header {
 }
 
 .lafka-fulfilment--header {
+	flex: none;
+	align-self: center;
 	display: flex;
 	gap: 3px;
 	padding: 3px;
@@ -331,12 +347,15 @@ body.lafka-layout-header-counter .lafka-header {
 .lafka-fulfilment--header .lafka-fulfilment__label {
 	display: inline-flex;
 	align-items: center;
-	height: 42px;
-	padding: 0 16px;
+	height: 40px;
+	padding: 0 14px;
 	border: 1.5px solid transparent;
 	border-radius: calc(var(--lafka-radius-button) - 2px);
 	color: var(--lafka-color-text-secondary);
-	font-size: var(--lafka-font-size-body-lg);
+	font-size: var(--lafka-font-size-body);
+	letter-spacing: normal;
+	text-transform: none; /* legacy label styles uppercase it */
+	white-space: nowrap;
 }
 
 .lafka-fulfilment--header input:checked + .lafka-fulfilment__label {
@@ -887,22 +906,32 @@ body.lafka-layout-header-counter .lafka-header {
 		font-size: var(--lafka-font-size-body-lg-desk);
 	}
 
+	/* Captions live in the clear corners the composition leaves (critical-
+	 * counter.css): the front dish's ABOVE it on the left, the back dish's
+	 * BELOW it on the right. The max-widths keep each one inside its corner
+	 * (front: < the gap left of the back dish; back: right of the front dish). */
 	.lafka-counter-hero__caption {
 		display: block;
 		position: absolute;
 		z-index: 2;
+		text-wrap: balance;
 	}
 
 	.lafka-counter-hero__dish--front .lafka-counter-hero__caption {
 		left: 0;
-		top: 26%;
+		bottom: calc(100% + 12px);
+		max-width: 56%;
 	}
 
 	.lafka-counter-hero__dish--back .lafka-counter-hero__caption {
-		right: -2%;
-		top: 96%;
+		right: 0;
+		top: calc(100% + 12px);
+		max-width: 60%;
 		text-align: right;
-		white-space: nowrap;
+	}
+
+	.lafka-counter-hero__art--1 .lafka-counter-hero__caption {
+		max-width: none;
 	}
 }
 
