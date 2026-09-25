@@ -185,6 +185,15 @@ namespace Lafka\Tests\Unit {
 			$this->assertStringContainsString( 'http://example.test/pizza-1.png', $html );
 		}
 
+		public function test_unpublished_hero_pick_falls_back_to_automatic(): void {
+			self::seed();
+			$GLOBALS['lafka_test_products'][105]->data['status']            = 'draft';
+			$GLOBALS['lafka_test_theme_mods']['lafka_counter_hero_product_a'] = 105;
+			$html = self::render();
+			$this->assertStringNotContainsString( 'http://example.test/pizza-1.png" loading="eager" decoding="async" fetchpriority="high"', $html );
+			$this->assertMatchesRegularExpression( '#lafka-counter-hero__dish--front">\s*<img src="http://example.test/fries-1.png"#', $html );
+		}
+
 		public function test_operator_copy_wins(): void {
 			self::seed();
 			$GLOBALS['lafka_test_theme_mods']['lafka_home_hero_headline'] = 'Our own headline';

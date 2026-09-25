@@ -52,6 +52,9 @@ if ( ! class_exists( 'WC_Product' ) ) {
 		}
 		// GX4: the fields the counter rows / chooser read. Defaults keep every
 		// pre-GX4 test's product behaving exactly as before.
+		public function get_status() {
+			return $this->data['status'] ?? 'publish';
+		}
 		public function get_type() {
 			return $this->data['type'];
 		}

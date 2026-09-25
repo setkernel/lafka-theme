@@ -256,7 +256,7 @@ if ( ! function_exists( 'lafka_counter_sections' ) ) {
 			$featured  = (int) $settings['featured_deal'];
 			if ( $featured && ! in_array( $featured, $ids, true ) ) {
 				$product = function_exists( 'wc_get_product' ) ? wc_get_product( $featured ) : null;
-				if ( ! $product ) {
+				if ( ! lafka_counter_product_is_live( $product ) ) {
 					$featured = 0;
 				} else {
 					$ids = array_slice( array_merge( array( $featured ), $ids ), 0, (int) $settings['deals_limit'] );
@@ -344,6 +344,24 @@ unset( $lafka_counter_bust_hook );
 add_action( 'updated_term_meta', 'lafka_counter_bust_on_term_meta', 10, 3 );
 add_action( 'added_term_meta', 'lafka_counter_bust_on_term_meta', 10, 3 );
 
+if ( ! function_exists( 'lafka_counter_product_is_live' ) ) {
+	/**
+	 * Whether a Customizer-picked product may be shown: published and visible
+	 * in the catalogue (a later-unpublished pick must not link to a 404).
+	 *
+	 * @param mixed $product WC_Product or anything wc_get_product() returned.
+	 */
+	function lafka_counter_product_is_live( $product ): bool {
+		if ( ! is_object( $product ) ) {
+			return false;
+		}
+		if ( method_exists( $product, 'get_status' ) && 'publish' !== $product->get_status() ) {
+			return false;
+		}
+		return ! method_exists( $product, 'is_visible' ) || (bool) $product->is_visible();
+	}
+}
+
 if ( ! function_exists( 'lafka_counter_hero_products' ) ) {
 	/**
 	 * The two hero dishes: the Customizer picks, else — per co-star category —
@@ -364,6 +382,9 @@ if ( ! function_exists( 'lafka_counter_hero_products' ) ) {
 			$pick    = (int) ( $settings[ $key ] ?? 0 );
 			if ( $pick ) {
 				$product = wc_get_product( $pick );
+				if ( ! lafka_counter_product_is_live( $product ) ) {
+					$product = null; // An unpublished / hidden pick falls back to automatic.
+				}
 			}
 			if ( ! $product && isset( $sections['costars'][ $slot ] ) ) {
 				foreach ( $sections['costars'][ $slot ]['ids'] as $id ) {
