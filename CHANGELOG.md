@@ -5,6 +5,30 @@ All notable changes to lafka-theme are documented here. The format follows
 semver (see the Releases section of CONTRIBUTING.md). Older history lives in
 git tags + GitHub Releases.
 
+## [Unreleased]
+
+Phase GX0 ("stop losing orders"); pairs with lafka-plugin's GX0 changes.
+
+### Added
+- **Cart**: the payment trust line names only the enabled WooCommerce
+  gateways ("Secure checkout · Credit Card · Cash") in the cart drawer and on
+  the classic cart page — no more hard-coded "Apple Pay · Visa · Mastercard".
+  Customizer → Lafka — Order Flow → Payment trust line (toggle + text
+  override); filters `lafka_payment_trust_line`, `lafka_payment_trust_label_map`.
+- **Checkout**: muted styling for the plugin's "enter your street address to
+  see the delivery cost" notice (classic + block).
+
+### Fixed
+- **Mobile**: fixed-bottom bars (sticky cart, PDP add-to-cart, toasts) sit
+  above the cookie-consent banner via `--lafka-consent-banner-h`.
+- **PDP**: size chips and menu variation rows follow the plugin's order (the
+  operator's term order, else cheapest first) instead of database order.
+- **PDP**: add-to-cart stays usable while a closed store takes orders ahead.
+- **NAP**: phone text is never a raw E.164 number (routed through the
+  plugin's formatter; tel: links unchanged).
+- **WooCommerce**: related-products args pass an int limit (no more
+  "Invalid limit type" log errors on every product page).
+
 ## [7.1.0] — 2026-09-24
 
 Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
