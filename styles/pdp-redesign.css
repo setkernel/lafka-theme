@@ -890,9 +890,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
   .lafka-pdp-summary__cart-row { display: none; }
 
+  /* Bottom edge rides above lafka-plugin's consent banner while it is open
+   * (--lafka-consent-banner-h, set by the plugin on <html>; 0px otherwise). */
   .lafka-pdp-mobile-cta {
     display: flex;
-    position: fixed; bottom: 0; left: 0; right: 0;
+    position: fixed; bottom: var(--lafka-consent-banner-h, 0); left: 0; right: 0;
     z-index: 90;
     background: var(--lafka-pdp-surface);
     border-top: 2px solid var(--lafka-pdp-accent);
