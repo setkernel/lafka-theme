@@ -156,9 +156,12 @@ body[class*="lafka-layout-"][class*="-counter"] {
 }
 
 .lafka-counter-btn:focus-visible,
-.lafka-counter-link:focus-visible {
+.lafka-counter-link:focus-visible,
+.lafka-counter-header a:focus-visible,
+.lafka-counter-header button:focus-visible,
+.lafka-counter-nav a:focus-visible {
 	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
+	box-shadow: var(--lafka-shadow-focus); /* M-38: the header's links too */
 }
 
 .lafka-counter-btn.loading {
@@ -789,6 +792,9 @@ body.lafka-layout-header-counter .lafka-header {
 	align-items: center;
 	min-height: 48px;
 	padding: 0 16px;
+	font-size: inherit;
+	letter-spacing: normal;
+	text-transform: none; /* H-17: legacy label styles shrink + uppercase it */
 	border: 1.5px solid var(--lafka-color-border-strong);
 	border-radius: var(--lafka-radius-button);
 }
