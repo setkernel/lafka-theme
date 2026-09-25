@@ -621,8 +621,12 @@ body.lafka-layout-header-counter .lafka-pdp__main {
 	color: var(--lafka-color-text-secondary);
 }
 
+.lafka-pdp__breadcrumb .breadcrumb {
+	line-height: 2;
+}
+
+/* Inline padding widens the hit area without spreading wrapped lines. */
 .lafka-pdp__breadcrumb a {
-	display: inline-block;
 	padding-block: 10px;
 	color: var(--lafka-color-text-primary);
 	text-decoration: underline;
