@@ -151,8 +151,13 @@ if ( ! function_exists( 'lafka_preset_ptl_css' ) ) {
 		$decls = '';
 		foreach ( $preset->tokens() as $key => $value ) {
 			if ( ! in_array( $key, $whitelist, true ) ) {
-				if ( defined( 'WP_DEBUG' ) && WP_DEBUG && function_exists( 'error_log' ) ) {
-					error_log( "[lafka] preset '{$preset->slug()}' dropped non-whitelisted token '{$key}'" ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log -- WP_DEBUG-gated diagnostic.
+				if ( function_exists( 'lafka_theme_log' ) ) {
+					// Debug level: kept only under WP_DEBUG (a developer diagnostic, not an incident).
+					lafka_theme_log(
+						'debug',
+						"Preset '{$preset->slug()}' dropped non-whitelisted token '{$key}'",
+						array( 'code' => 'preset_token_dropped' )
+					);
 				}
 				continue;
 			}

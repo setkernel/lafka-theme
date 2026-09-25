@@ -58,12 +58,17 @@ class Lafka_GitHub_Updater {
 	// =========================================================================
 
 	/**
-	 * Log a message prefixed with [Lafka Updater].
+	 * Log an updater message through the Lafka plugin (`lafka_log` action →
+	 * WooCommerce logs, source lafka-theme). Info-level lines are only kept
+	 * when WP_DEBUG is on; warnings also appear on Lafka → Diagnostics.
 	 *
-	 * @param string $message
+	 * @param string $message Message.
+	 * @param string $level   info | warning.
 	 */
-	private static function log( $message ) {
-		error_log( '[Lafka Updater] ' . $message );
+	private static function log( $message, $level = 'info' ) {
+		if ( function_exists( 'lafka_theme_log' ) ) {
+			lafka_theme_log( $level, '[Updater] ' . $message, array( 'code' => 'updater' ) );
+		}
 	}
 
 	/**
@@ -242,7 +247,7 @@ class Lafka_GitHub_Updater {
 
 		// -- Handle transport errors --
 		if ( is_wp_error( $response ) ) {
-			self::log( 'API request failed for ' . $repo . ': ' . $response->get_error_message() );
+			self::log( 'API request failed for ' . $repo . ': ' . $response->get_error_message(), 'warning' );
 			self::set_notice( 'Could not reach GitHub API: ' . esc_html( $response->get_error_message() ), 'error' );
 			set_transient( $transient_key, 'error', self::CACHE_FAILURE );
 			return false;
@@ -272,7 +277,7 @@ class Lafka_GitHub_Updater {
 		// -- Handle rate limiting (403 with remaining=0) --
 		if ( 403 === $status_code && 0 === $rate_remaining ) {
 			$reset_time = $rate_reset ? human_time_diff( time(), $rate_reset ) : 'unknown';
-			self::log( 'Rate limited by GitHub API for ' . $repo . '. Resets in ' . $reset_time . '.' );
+			self::log( 'Rate limited by GitHub API for ' . $repo . '. Resets in ' . $reset_time . '.', 'warning' );
 			self::set_notice(
 				sprintf(
 					'GitHub API rate limit reached. Updates will resume in %s. For higher limits, add a GitHub Personal Access Token — see <a href="%s">Tools → Lafka Maintenance</a>.',
@@ -289,7 +294,7 @@ class Lafka_GitHub_Updater {
 
 		// -- Handle other HTTP errors --
 		if ( 200 !== $status_code ) {
-			self::log( 'GitHub API returned HTTP ' . $status_code . ' for ' . $repo . '.' );
+			self::log( 'GitHub API returned HTTP ' . $status_code . ' for ' . $repo . '.', 'warning' );
 			if ( 404 === $status_code ) {
 				self::set_notice( 'No releases found for <code>' . esc_html( $repo ) . '</code>. The repository may not have any published releases yet.', 'info' );
 			} else {
@@ -301,7 +306,7 @@ class Lafka_GitHub_Updater {
 
 		$body = json_decode( wp_remote_retrieve_body( $response ) );
 		if ( empty( $body ) || empty( $body->tag_name ) ) {
-			self::log( 'Invalid JSON or missing tag_name in response for ' . $repo . '.' );
+			self::log( 'Invalid JSON or missing tag_name in response for ' . $repo . '.', 'warning' );
 			set_transient( $transient_key, 'error', self::CACHE_FAILURE );
 			return false;
 		}
@@ -343,7 +348,7 @@ class Lafka_GitHub_Updater {
 	 */
 	private static function get_asset_url( $release, $asset_name ) {
 		if ( empty( $release->assets ) || ! is_array( $release->assets ) ) {
-			self::log( 'Release ' . $release->tag_name . ' has no assets.' );
+			self::log( 'Release ' . $release->tag_name . ' has no assets.', 'warning' );
 			return false;
 		}
 
@@ -409,7 +414,7 @@ class Lafka_GitHub_Updater {
 						'package'     => $download_url,
 					);
 				} else {
-					self::log( 'Theme update ' . $remote_version . ' available but asset "' . self::THEME_ASSET . '" missing from release.' );
+					self::log( 'Theme update ' . $remote_version . ' available but asset "' . self::THEME_ASSET . '" missing from release.', 'warning' );
 					self::set_notice(
 						'Theme update <strong>' . esc_html( $remote_version ) . '</strong> is available but the download asset is missing from the GitHub release. Please report this to the theme maintainer.',
 						'warning'
@@ -438,7 +443,7 @@ class Lafka_GitHub_Updater {
 							'package'     => $child_url,
 						);
 					} else {
-						self::log( 'Child theme update ' . $child_remote . ' available but asset "' . self::CHILD_ASSET . '" missing from release.' );
+						self::log( 'Child theme update ' . $child_remote . ' available but asset "' . self::CHILD_ASSET . '" missing from release.', 'warning' );
 						self::set_notice(
 							'Child theme update <strong>' . esc_html( $child_remote ) . '</strong> is available but the download asset is missing from the GitHub release.',
 							'warning'
@@ -544,7 +549,7 @@ class Lafka_GitHub_Updater {
 					'tested'      => '6.7',
 				);
 			} else {
-				self::log( 'Plugin update ' . $remote_version . ' available but asset "' . self::PLUGIN_ASSET . '" missing from release.' );
+				self::log( 'Plugin update ' . $remote_version . ' available but asset "' . self::PLUGIN_ASSET . '" missing from release.', 'warning' );
 				self::set_notice(
 					'Plugin update <strong>' . esc_html( $remote_version ) . '</strong> is available but the download asset is missing from the GitHub release. Please report this to the theme maintainer.',
 					'warning'
@@ -647,7 +652,7 @@ class Lafka_GitHub_Updater {
 			return $corrected_source;
 		}
 
-		self::log( 'Failed to rename extracted directory "' . $source_slug . '" to "' . $expected_slug . '".' );
+		self::log( 'Failed to rename extracted directory "' . $source_slug . '" to "' . $expected_slug . '".', 'warning' );
 		return new WP_Error(
 			'lafka_updater_rename_failed',
 			sprintf(
