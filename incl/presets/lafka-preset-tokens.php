@@ -112,6 +112,7 @@ if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
 			'--lafka-font-size-h2-desk',
 			'--lafka-font-size-h1-desk',
 			'--lafka-font-size-display-desk',
+			'--lafka-font-size-body-desk', // GX4 (base = body; consumed by the counter layout only).
 
 			// ---- Typography: weight -------------------------------------------
 			'--lafka-font-weight-regular',
@@ -139,6 +140,14 @@ if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
 			'--lafka-radius-lg',
 			'--lafka-radius-xl',
 			'--lafka-radius-pill',
+			'--lafka-radius-button', // GX4 (base = pill).
+
+			// ---- GX4 motif + dish shadow (base values are no-ops) ------------
+			'--lafka-motif-check-a',
+			'--lafka-motif-check-b',
+			'--lafka-motif-check-size',
+			'--lafka-motif-check-h',
+			'--lafka-dish-shadow',
 
 			// ---- Shadows / elevation ------------------------------------------
 			'--lafka-shadow-0',

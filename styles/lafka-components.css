@@ -34,7 +34,7 @@
 	text-transform: uppercase;
 	text-decoration: none;
 	border: 1px solid transparent;
-	border-radius: var(--lafka-radius-pill);
+	border-radius: var(--lafka-radius-button);
 	cursor: pointer;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),

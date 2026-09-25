@@ -198,6 +198,11 @@
 	--lafka-font-size-h3-desk: 1.5rem;        /* 24 px */
 	--lafka-font-size-h2-desk: 2rem;          /* 32 px */
 
+	/* GX4: desktop body size. Base = the mobile body size (no-op). It is only
+	 * CONSUMED by the counter layout (lafka-counter.css, ≥768px) — no base
+	 * rule re-points --lafka-font-size-body, which would move every preset. */
+	--lafka-font-size-body-desk: var(--lafka-font-size-body);
+
 	/* v6.7.11: -desk alias now equals the responsive token (capped at 56). */
 	--lafka-font-size-h1-desk: clamp(2.5rem, 5vw, 3.5rem);
 	--lafka-font-size-display-desk: clamp(2.5rem, 4vw + 1rem, 4.5rem);
@@ -257,6 +262,21 @@
 	--lafka-radius-lg: 16px;
 	--lafka-radius-xl: 24px;
 	--lafka-radius-pill: 999px;
+
+	/* GX4: button radius. Base = pill (today's .lafka-btn), so no preset moves;
+	 * a preset can square its buttons off without touching chips/badges. */
+	--lafka-radius-button: var(--lafka-radius-pill);
+
+	/* GX4: checkered motif band (drawn only under body.lafka-motif-check).
+	 * check-a tracks the operator accent via the @supports block at the end
+	 * of this file; the static value is the accent tint. */
+	--lafka-motif-check-a: var(--lafka-color-accent-50);
+	--lafka-motif-check-b: var(--lafka-color-surface-page);
+	--lafka-motif-check-size: 14px;
+	--lafka-motif-check-h: 10px;
+
+	/* GX4: drop shadow under cut-out dish photos (a filter value). */
+	--lafka-dish-shadow: none;
 
 	/* ------- Shadows / elevation ---------------------------------------- */
 	--lafka-shadow-0: none;
@@ -722,5 +742,8 @@ h2,
 
 	:root {
 		--lafka-color-accent-text: color-mix(in srgb, var(--lafka-color-accent-500) 85%, #000);
+
+		/* GX4: the checkered motif tracks the operator accent (a pale tint). */
+		--lafka-motif-check-a: color-mix(in srgb, var(--lafka-color-accent-500) 28%, #fff);
 	}
 }
