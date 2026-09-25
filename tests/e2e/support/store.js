@@ -166,8 +166,32 @@ function restoreStoreOpen() {
 	] );
 }
 
+/** GX4: the five per-surface layout theme_mods (operator layer). */
+const LAYOUT_SURFACES = [ 'header', 'home', 'menu', 'footer', 'drawer' ];
+
+/**
+ * Pin every surface to one layout for a spec (Peppery — the default preset —
+ * defaults to "counter" since GX4; classic-surface specs pin "classic").
+ *
+ * @param {'classic'|'counter'} layout
+ */
+function useLayouts( layout ) {
+	for ( const surface of LAYOUT_SURFACES ) {
+		wpCli( [ 'theme', 'mod', 'set', `lafka_${ surface }_layout`, layout ] );
+	}
+}
+
+/** Drop the pinned layouts (back to the active preset's defaults). */
+function restoreLayouts() {
+	for ( const surface of LAYOUT_SURFACES ) {
+		wpCli( [ 'theme', 'mod', 'remove', `lafka_${ surface }_layout` ] );
+	}
+}
+
 module.exports = {
 	BASE_URL,
+	useLayouts,
+	restoreLayouts,
 	SEED,
 	prepareStore,
 	forceStoreClosed,

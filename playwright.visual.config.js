@@ -68,5 +68,7 @@ module.exports = defineConfig( {
 		{ name: 'peppery', testMatch: [ '**/nx1-02.spec.js', '**/nx1-10a.spec.js' ] },
 		{ name: 'dark', testMatch: '**/nx2-dark.spec.js' },
 		{ name: 'contrast', testMatch: '**/nx2-contrast.spec.js' },
+		// GX4: the counter surfaces (home, menu, archive, PDP, chooser, drawer).
+		{ name: 'counter', testMatch: '**/gx4-counter.spec.js' },
 	],
 } );

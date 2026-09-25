@@ -18,7 +18,7 @@
  * SERIAL + self-restoring: it mutates a store-level theme_mod.
  */
 const { test, expect } = require( '@playwright/test' );
-const { SEED } = require( './support/store' );
+const { SEED, useLayouts, restoreLayouts } = require( './support/store' );
 const { wpCli } = require( './support/wp-cli' );
 
 const GA4_MOD = 'lafka_ga4_measurement_id';
@@ -80,6 +80,7 @@ test.describe( 'Consent banner vs mobile sticky bars (375px)', () => {
 	} );
 
 	test.afterAll( () => {
+		restoreLayouts();
 		if ( previousGa4 ) {
 			wpCli( [ 'theme', 'mod', 'set', GA4_MOD, previousGa4 ] );
 		} else {
@@ -123,7 +124,23 @@ test.describe( 'Consent banner vs mobile sticky bars (375px)', () => {
 			.toBe( viewport.height );
 	} );
 
+	test( 'counter Call / Order bar sits above the banner (GX4)', async ( { page } ) => {
+		useLayouts( 'counter' );
+		try {
+			await page.goto( '/' );
+			const banner = await expectBannerOpen( page );
+			const bar = page.locator( '[data-lafka-counter-bar]' );
+			await expect( bar ).toBeVisible();
+			await expectBarAboveBanner( bar, banner );
+			await bar.locator( '.lafka-counter-bar__order' ).click( { trial: true } );
+		} finally {
+			restoreLayouts();
+		}
+	} );
+
 	test( 'global sticky cart bar sits above the banner', async ( { page } ) => {
+		// The classic sticky cart bar (GX4: the counter header replaces it).
+		useLayouts( 'classic' );
 		// Put a line in the cart (simple product adds straight from the PDP).
 		// At 375px the in-summary button is hidden; the mobile bar's CTA is the
 		// one to tap — and it is only tappable because it clears the banner.
@@ -145,5 +162,6 @@ test.describe( 'Consent banner vs mobile sticky bars (375px)', () => {
 		await expect( bar ).toBeVisible();
 		await expectBarAboveBanner( bar, banner );
 		await bar.locator( '.lafka-sticky-cart__link' ).click( { trial: true } );
+		restoreLayouts();
 	} );
 } );

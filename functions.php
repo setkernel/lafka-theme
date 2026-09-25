@@ -202,6 +202,18 @@ require_once get_template_directory() . '/incl/template-helpers/menu-category-se
 // (audit V4). v6.19.0.
 require_once get_template_directory() . '/incl/template-helpers/contact-email.php';
 
+// GX4 "The counter" (design direction C): per-surface layout resolver, the
+// counter data helpers and the Customizer controls. Classic layouts are
+// untouched; every counter surface is reached through lafka_layout_is().
+require_once get_template_directory() . '/incl/template-helpers/layout.php';
+require_once get_template_directory() . '/incl/template-helpers/price-columns.php';
+require_once get_template_directory() . '/incl/template-helpers/hours-display.php';
+require_once get_template_directory() . '/incl/template-helpers/deal-value.php';
+require_once get_template_directory() . '/incl/template-helpers/menu-data.php';
+require_once get_template_directory() . '/incl/template-helpers/counter-chrome.php';
+require_once get_template_directory() . '/incl/customizer-counter.php';
+require_once get_template_directory() . '/incl/system/lafka-preset-reset.php';
+
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
 require_once get_template_directory() . '/incl/contact-template-loader.php';
 

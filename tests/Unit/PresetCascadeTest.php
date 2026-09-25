@@ -54,6 +54,9 @@ namespace Lafka\Tests\Unit {
 							),
 						)
 					);
+					// GX4: the engine no-op now lives in the identity fixture
+					// (Peppery ships the counter design).
+					$presets['identity'] = \lafka_test_identity_preset();
 					return $presets;
 				}
 			);
@@ -157,9 +160,9 @@ namespace Lafka\Tests\Unit {
 			$this->assertStringNotContainsString( '}', substr( $css, 0, strlen( $css ) - 1 ) );
 		}
 
-		/** Peppery (shipped, empty tokens) is a provable no-op: empty PTL. */
-		public function test_peppery_ptl_is_empty(): void {
-			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'peppery';
+		/** The identity fixture (empty tokens) is a provable no-op: empty PTL. */
+		public function test_identity_ptl_is_empty(): void {
+			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'identity';
 			$this->assertSame( '', \lafka_preset_ptl_css( \lafka_active_preset() ) );
 		}
 
@@ -198,20 +201,20 @@ namespace Lafka\Tests\Unit {
 				'an operator theme_mod must win over the preset default'
 			);
 
-			// (3) Switch preset to peppery (empty chrome) -> operator SURVIVES + still wins.
-			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'peppery';
+			// (3) Switch to the identity fixture (empty chrome) -> operator SURVIVES + still wins.
+			$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'identity';
 			$this->assertSame(
 				'#00ff00',
 				$this->effective_chrome( $key, $literal ),
 				'the operator override must survive a preset switch and keep winning'
 			);
 
-			// (4) Remove the override on peppery -> falls back to the shipped literal.
+			// (4) Remove the override on the identity fixture -> falls back to the shipped literal.
 			unset( $GLOBALS['lafka_test_theme_mods'][ $key ] );
 			$this->assertSame(
 				$literal,
 				$this->effective_chrome( $key, $literal ),
-				'peppery supplies no chrome default, so an unset key resolves to the shipped literal'
+				'the identity fixture supplies no chrome default, so an unset key resolves to the shipped literal'
 			);
 		}
 	}

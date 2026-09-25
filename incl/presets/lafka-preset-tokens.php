@@ -112,6 +112,7 @@ if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
 			'--lafka-font-size-h2-desk',
 			'--lafka-font-size-h1-desk',
 			'--lafka-font-size-display-desk',
+			'--lafka-font-size-body-desk', // GX4 (base = body; consumed by the counter layout only).
 
 			// ---- Typography: weight -------------------------------------------
 			'--lafka-font-weight-regular',
@@ -139,6 +140,14 @@ if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
 			'--lafka-radius-lg',
 			'--lafka-radius-xl',
 			'--lafka-radius-pill',
+			'--lafka-radius-button', // GX4 (base = pill).
+
+			// ---- GX4 motif + dish shadow (base values are no-ops) ------------
+			'--lafka-motif-check-a',
+			'--lafka-motif-check-b',
+			'--lafka-motif-check-size',
+			'--lafka-motif-check-h',
+			'--lafka-dish-shadow',
 
 			// ---- Shadows / elevation ------------------------------------------
 			'--lafka-shadow-0',
@@ -219,6 +228,27 @@ if ( ! defined( 'LAFKA_PRESET_CHROME_WHITELIST' ) ) {
 }
 
 /**
+ * GX4: live per-surface layout variants. A preset's `variants{}` block may set
+ * any of these keys to one of the listed values; the value becomes the DEFAULT
+ * of the matching Customizer layout select (lafka_<surface>_layout), so the
+ * operator always wins. Anything outside this map fails Lafka_Preset::validate()
+ * and is ignored by lafka_preset_variant(). See docs/PRESET_ENGINE.md §3.
+ */
+if ( ! defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ) {
+	define(
+		'LAFKA_PRESET_VARIANT_WHITELIST',
+		array(
+			'header_layout' => array( 'classic', 'counter' ),
+			'home_layout'   => array( 'classic', 'counter' ),
+			'menu_layout'   => array( 'classic', 'counter' ),
+			'footer_layout' => array( 'classic', 'counter' ),
+			'drawer_layout' => array( 'classic', 'counter' ),
+			'motif'         => array( 'none', 'check' ),
+		)
+	);
+}
+
+/**
  * Above-fold subset of LAFKA_PRESET_TOKEN_WHITELIST. Inert this wave; the
  * NX2-04.1 critical.css preset-awareness will read it so first-paint on a
  * non-default preset reflects the preset's key surfaces/type. MUST stay a
@@ -230,11 +260,13 @@ if ( ! defined( 'LAFKA_PRESET_CRITICAL_KEYS' ) ) {
 		array(
 			'--lafka-color-surface-page',
 			'--lafka-color-surface-raised',
+			'--lafka-color-surface-muted',  // GX4: the counter hero band.
 			'--lafka-color-text-primary',
 			'--lafka-color-text-secondary',
 			'--lafka-color-border-subtle',
 			'--lafka-color-accent-600',
 			'--lafka-color-accent-700',
+			'--lafka-color-success-500',    // GX4: the header "Open now" dot.
 			'--lafka-font-family-body',
 			'--lafka-font-family-display',
 		)

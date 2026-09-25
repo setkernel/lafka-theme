@@ -43,27 +43,13 @@ while ( have_posts() ) :
 		__( 'Browse everything we make. Tap a category to jump to it or scroll through the whole menu.', 'lafka' )
 	);
 
-	// Build the category list (top-level WC product_cat terms, excluded
-	// "uncategorized" + operator-specified exclusions).
-	$lafka_menu_terms = array();
-	if ( taxonomy_exists( 'product_cat' ) ) {
-		$lafka_menu_term_args = array(
-			'taxonomy'   => 'product_cat',
-			'hide_empty' => true,
-			'parent'     => 0,
-			'orderby'    => 'menu_order',
-		);
-		if ( function_exists( 'lafka_uncategorized_excluded_ids' ) ) {
-			$lafka_menu_term_args['exclude'] = lafka_uncategorized_excluded_ids();
-		}
-		$lafka_menu_terms_raw = get_terms( $lafka_menu_term_args );
-		if ( ! is_wp_error( $lafka_menu_terms_raw ) ) {
-			$lafka_menu_terms = $lafka_menu_terms_raw;
-		}
-	}
-
-	// Allow operator overrides via the legacy filter for ordering / removal.
-	$lafka_menu_terms = (array) apply_filters( 'lafka_menu_landing_categories', $lafka_menu_terms );
+	// Build the category list: top-level, non-empty product_cat terms in
+	// WooCommerce order, minus the excluded "uncategorized" ids, through the
+	// `lafka_menu_landing_categories` filter — the shared GX4 helper, so the
+	// /menu/ page and the counter homepage always list the same categories.
+	$lafka_menu_terms = taxonomy_exists( 'product_cat' ) && function_exists( 'lafka_menu_top_categories' )
+		? lafka_menu_top_categories()
+		: array();
 
 	// Canonical browse target (f104): the /menu/ page via the shared resolver,
 	// so the "Back to all items" reset link matches every other menu CTA rather
@@ -203,7 +189,12 @@ while ( have_posts() ) :
 										?>
 									</a>
 								<?php endif; ?>
-								<?php if ( '' !== $lafka_menu_group->description ) : ?>
+								<?php if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) && function_exists( 'lafka_category_tagline' ) ) : ?>
+									<?php $lafka_menu_tagline = lafka_category_tagline( $lafka_menu_group ); // GX4: the short line, as on the counter home. ?>
+									<?php if ( '' !== $lafka_menu_tagline ) : ?>
+										<p class="lafka-menu__group-blurb"><?php echo esc_html( $lafka_menu_tagline ); ?></p>
+									<?php endif; ?>
+								<?php elseif ( '' !== $lafka_menu_group->description ) : ?>
 									<p class="lafka-menu__group-blurb"><?php echo wp_kses_post( $lafka_menu_group->description ); ?></p>
 								<?php endif; ?>
 							</header>

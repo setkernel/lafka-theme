@@ -1,6 +1,7 @@
 <?php
 /**
- * NX2-03 preset FONT POOL — curated 8-family OFL registry (pure-data).
+ * NX2-03 preset FONT POOL — curated 10-family OFL registry (pure-data; GX4 added
+ * Atkinson Hyperlegible Next + the variable Bricolage Grotesque).
  *
  * The preset engine's font layer mirrors the pure-data whitelist idiom of
  * incl/presets/lafka-preset-tokens.php: a single constant that BOTH the emitter
@@ -225,6 +226,46 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 						'latin-ext' => 'DMSerifDisplay-400-ext.woff2',
 					),
 				),
+			),
+
+			// ---- GX4 (counter / Peppery) ---------------------------------------
+			// Body: static 400/700 (the design's 500 maps to 400 — one file fewer).
+			'atkinson-hyperlegible-next' => array(
+				'family'   => 'Atkinson Hyperlegible Next',
+				'source'   => 'pool',
+				'dir'      => 'atkinson-hyperlegible-next',
+				'category' => 'sans',
+				'fallback' => '"Atkinson Hyperlegible Next", verdana, sans-serif',
+				'license'  => 'LICENSE',
+				'weights'  => array(
+					400 => array(
+						'latin' => 'AtkinsonHyperlegibleNext-400.woff2',
+						'latin-ext' => 'AtkinsonHyperlegibleNext-400-ext.woff2',
+					),
+					700 => array(
+						'latin' => 'AtkinsonHyperlegibleNext-700.woff2',
+						'latin-ext' => 'AtkinsonHyperlegibleNext-700-ext.woff2',
+					),
+				),
+			),
+			// Display: ONE variable file per subset (optical size + weight 200–800).
+			// `variable` entries carry `weight` (the font-weight range) + `files`
+			// (subset => file) instead of per-weight `weights`.
+			'bricolage-grotesque' => array(
+				'family'   => 'Bricolage Grotesque',
+				'source'   => 'pool',
+				'dir'      => 'bricolage-grotesque',
+				'category' => 'sans',
+				'fallback' => '"Bricolage Grotesque", "Trebuchet MS", sans-serif',
+				'license'  => 'LICENSE',
+				'variable' => array(
+					'weight' => '200 800',
+					'files'  => array(
+						'latin'     => 'BricolageGrotesque-opsz.woff2',
+						'latin-ext' => 'BricolageGrotesque-opsz-ext.woff2',
+					),
+				),
+				'weights'  => array(),
 			),
 		)
 	);

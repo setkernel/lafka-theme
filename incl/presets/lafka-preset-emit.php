@@ -84,6 +84,24 @@ if ( ! function_exists( 'lafka_preset_default' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_preset_variant' ) ) {
+	/**
+	 * The active preset's whitelisted variant value for $key, else $fallback.
+	 * GX4: the default of each per-surface layout select (lafka_layout()), so
+	 * the resolution order is operator theme_mod > preset variant > fallback.
+	 *
+	 * @param string $key      A LAFKA_PRESET_VARIANT_WHITELIST key (e.g. `home_layout`).
+	 * @param string $fallback Returned when the preset leaves the key unset.
+	 */
+	function lafka_preset_variant( string $key, string $fallback ): string {
+		if ( ! function_exists( 'lafka_active_preset' ) ) {
+			return $fallback;
+		}
+		$value = lafka_active_preset()->variant( $key );
+		return null === $value ? $fallback : $value;
+	}
+}
+
 if ( ! function_exists( 'lafka_preset_sanitize_chrome_value' ) ) {
 	/**
 	 * Defence-in-depth sanitiser for a chrome (theme_mod-default) value — the
@@ -278,14 +296,17 @@ if ( ! function_exists( 'lafka_preset_font_selection' ) ) {
 		$fonts = $preset->fonts();
 		$out   = array();
 		foreach ( array( 'body', 'display' ) as $role ) {
-			$decl   = isset( $fonts[ $role ] ) && is_array( $fonts[ $role ] ) ? $fonts[ $role ] : array();
-			$family = isset( $decl['family'] ) ? (string) $decl['family'] : '';
-			$source = isset( $decl['source'] ) ? (string) $decl['source'] : 'base';
+			$decl    = isset( $fonts[ $role ] ) && is_array( $fonts[ $role ] ) ? $fonts[ $role ] : array();
+			$family  = isset( $decl['family'] ) ? (string) $decl['family'] : '';
+			$source  = isset( $decl['source'] ) ? (string) $decl['source'] : 'base';
+			$display = isset( $decl['font_display'] ) ? (string) $decl['font_display'] : 'swap';
 			$out[ $role ] = array(
-				'role'   => $role,
-				'family' => $family,
-				'source' => $source,
-				'slug'   => 'pool' === $source ? lafka_font_pool_slug( $family ) : '',
+				'role'         => $role,
+				'family'       => $family,
+				'source'       => $source,
+				'slug'         => 'pool' === $source ? lafka_font_pool_slug( $family ) : '',
+				// GX4: per-preset font-display (swap|optional; anything else -> swap).
+				'font_display' => in_array( $display, array( 'swap', 'optional' ), true ) ? $display : 'swap',
 			);
 		}
 		return $out;
@@ -299,10 +320,15 @@ if ( ! function_exists( 'lafka_font_face_css_for_slug' ) ) {
 	 * so re-emitting them would be a duplicate (and would break Peppery's
 	 * byte/pixel identity). NX2-03.
 	 *
+	 * GX4: a `variable` entry emits one face per subset with a font-weight
+	 * RANGE; $font_display (swap|optional) comes from the preset (default swap,
+	 * so every pre-GX4 preset stays byte-identical).
+	 *
 	 * @param string $slug
+	 * @param string $font_display `swap` | `optional`.
 	 * @return string
 	 */
-	function lafka_font_face_css_for_slug( string $slug ): string {
+	function lafka_font_face_css_for_slug( string $slug, string $font_display = 'swap' ): string {
 		$pool = lafka_font_pool();
 		if ( ! isset( $pool[ $slug ] ) ) {
 			return '';
@@ -312,6 +338,7 @@ if ( ! function_exists( 'lafka_font_face_css_for_slug' ) ) {
 		if ( 'pool' !== $source ) {
 			return '';
 		}
+		$font_display = in_array( $font_display, array( 'swap', 'optional' ), true ) ? $font_display : 'swap';
 
 		$dir_uri = function_exists( 'get_template_directory_uri' )
 			? get_template_directory_uri()
@@ -324,6 +351,24 @@ if ( ! function_exists( 'lafka_font_face_css_for_slug' ) ) {
 		);
 
 		$css = '';
+		if ( ! empty( $entry['variable']['files'] ) && is_array( $entry['variable']['files'] ) ) {
+			$range_weight = isset( $entry['variable']['weight'] ) && preg_match( '/^\d{3} \d{3}$/', (string) $entry['variable']['weight'] )
+				? (string) $entry['variable']['weight']
+				: '400';
+			foreach ( $subsets as $subset => $range ) {
+				if ( empty( $entry['variable']['files'][ $subset ] ) ) {
+					continue;
+				}
+				$css .= '@font-face{'
+					. 'font-family:"' . $family . '";'
+					. 'font-style:normal;'
+					. 'font-display:' . $font_display . ';'
+					. 'font-weight:' . $range_weight . ';'
+					. 'src:url(' . $base . $entry['variable']['files'][ $subset ] . ') format("woff2");'
+					. ( '' !== $range ? 'unicode-range:' . $range . ';' : '' )
+					. '}';
+			}
+		}
 		foreach ( (array) ( isset( $entry['weights'] ) ? $entry['weights'] : array() ) as $weight => $files ) {
 			foreach ( $subsets as $subset => $range ) {
 				if ( empty( $files[ $subset ] ) ) {
@@ -332,7 +377,7 @@ if ( ! function_exists( 'lafka_font_face_css_for_slug' ) ) {
 				$css .= '@font-face{'
 					. 'font-family:"' . $family . '";'
 					. 'font-style:normal;'
-					. 'font-display:swap;'
+					. 'font-display:' . $font_display . ';'
 					. 'font-weight:' . (int) $weight . ';'
 					. 'src:url(' . $base . $files[ $subset ] . ') format("woff2");'
 					. ( '' !== $range ? 'unicode-range:' . $range . ';' : '' )
@@ -357,13 +402,13 @@ if ( ! function_exists( 'lafka_preset_font_face_css' ) ) {
 	function lafka_preset_font_face_css( Lafka_Preset $preset ): string {
 		$slugs = array();
 		foreach ( lafka_preset_font_selection( $preset ) as $sel ) {
-			if ( 'pool' === $sel['source'] && '' !== $sel['slug'] ) {
-				$slugs[ $sel['slug'] ] = true;
+			if ( 'pool' === $sel['source'] && '' !== $sel['slug'] && ! isset( $slugs[ $sel['slug'] ] ) ) {
+				$slugs[ $sel['slug'] ] = $sel['font_display'];
 			}
 		}
 		$css = '';
-		foreach ( array_keys( $slugs ) as $slug ) {
-			$css .= lafka_font_face_css_for_slug( $slug );
+		foreach ( $slugs as $slug => $font_display ) {
+			$css .= lafka_font_face_css_for_slug( $slug, $font_display );
 		}
 		return $css;
 	}
@@ -412,18 +457,104 @@ if ( ! function_exists( 'lafka_preset_display_preload_href' ) ) {
 		if ( ! isset( $sel['display'] ) || 'pool' !== $sel['display']['source'] || '' === $sel['display']['slug'] ) {
 			return '';
 		}
+		$files = lafka_font_pool_latin_files( $sel['display']['slug'], 'heaviest' );
+		return $files ? $files[0] : '';
+	}
+}
+
+if ( ! function_exists( 'lafka_font_pool_latin_files' ) ) {
+	/**
+	 * Latin-subset file URL(s) of one pool family, for preloading.
+	 *
+	 *  - variable entry: its single latin file;
+	 *  - static entry, $which = 'heaviest': the heaviest weight;
+	 *  - static entry, $which = 'body': the lightest + heaviest weights (400/700).
+	 *
+	 * @param string $slug  Pool slug.
+	 * @param string $which `heaviest` | `body`.
+	 * @return string[]
+	 */
+	function lafka_font_pool_latin_files( string $slug, string $which ): array {
 		$pool = lafka_font_pool();
-		$slug = $sel['display']['slug'];
-		if ( empty( $pool[ $slug ]['weights'] ) ) {
-			return '';
+		if ( ! isset( $pool[ $slug ] ) ) {
+			return array();
 		}
-		$weights  = $pool[ $slug ]['weights'];
-		$heaviest = max( array_map( 'intval', array_keys( $weights ) ) );
-		if ( empty( $weights[ $heaviest ]['latin'] ) ) {
-			return '';
-		}
+		$entry   = $pool[ $slug ];
 		$dir_uri = function_exists( 'get_template_directory_uri' ) ? get_template_directory_uri() : '..';
-		return $dir_uri . '/assets/fonts/' . ( isset( $pool[ $slug ]['dir'] ) ? $pool[ $slug ]['dir'] : $slug ) . '/' . $weights[ $heaviest ]['latin'];
+		$base    = $dir_uri . '/assets/fonts/' . ( isset( $entry['dir'] ) ? $entry['dir'] : $slug ) . '/';
+
+		if ( ! empty( $entry['variable']['files']['latin'] ) ) {
+			return array( $base . $entry['variable']['files']['latin'] );
+		}
+		if ( empty( $entry['weights'] ) ) {
+			return array();
+		}
+		$weights = array_map( 'intval', array_keys( $entry['weights'] ) );
+		$picks   = 'body' === $which ? array_unique( array( min( $weights ), max( $weights ) ) ) : array( max( $weights ) );
+		$out     = array();
+		foreach ( $picks as $weight ) {
+			if ( ! empty( $entry['weights'][ $weight ]['latin'] ) ) {
+				$out[] = $base . $entry['weights'][ $weight ]['latin'];
+			}
+		}
+		return $out;
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_font_preload_hrefs' ) ) {
+	/**
+	 * Every font file the active preset wants preloaded (GX4):
+	 *   - the pool DISPLAY face (variable latin file, else the heaviest weight);
+	 *   - the pool BODY face's 400 + 700 latin files, only when the preset sets
+	 *     body `font_display: optional` (optional drops a face that is not in
+	 *     cache within ~100 ms, so its files must be discovered at once).
+	 * Base fonts contribute nothing (the static Fraunces links cover them), so
+	 * every pre-GX4 preset keeps its exact head. The CALLER escapes (esc_url).
+	 *
+	 * @return string[]
+	 */
+	function lafka_preset_font_preload_hrefs(): array {
+		$sel  = lafka_preset_font_selection( lafka_active_preset() );
+		$urls = array();
+		if ( 'pool' === $sel['display']['source'] && '' !== $sel['display']['slug'] ) {
+			$urls = array_merge( $urls, lafka_font_pool_latin_files( $sel['display']['slug'], 'heaviest' ) );
+		}
+		if ( 'pool' === $sel['body']['source'] && '' !== $sel['body']['slug'] && 'optional' === $sel['body']['font_display'] ) {
+			$urls = array_merge( $urls, lafka_font_pool_latin_files( $sel['body']['slug'], 'body' ) );
+		}
+		return array_values( array_unique( $urls ) );
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_preloads_base_display' ) ) {
+	/**
+	 * Whether header.php should print the two static Fraunces preloads. True for
+	 * a base display face (Fraunces is the heading face) and for the legacy
+	 * `swap` pool presets (head byte-identical to pre-GX4); false for a preset
+	 * whose pool display face uses `optional` — it never renders Fraunces, so
+	 * downloading it would only compete with the real fonts.
+	 */
+	function lafka_preset_preloads_base_display(): bool {
+		$sel = lafka_preset_font_selection( lafka_active_preset() );
+		return ! ( 'pool' === $sel['display']['source'] && '' !== $sel['display']['slug'] && 'optional' === $sel['display']['font_display'] );
+	}
+}
+
+if ( ! function_exists( 'lafka_preset_print_font_preloads' ) ) {
+	/**
+	 * Print the `<link rel=preload as=font>` tags for the active preset
+	 * (header.php). Base/legacy presets print exactly the pre-GX4 links.
+	 */
+	function lafka_preset_print_font_preloads(): void {
+		$dir_uri = get_template_directory_uri();
+		if ( lafka_preset_preloads_base_display() ) {
+			foreach ( array( 'Fraunces-600.woff2', 'Fraunces-800.woff2' ) as $file ) {
+				echo "\t" . '<link rel="preload" href="' . esc_url( $dir_uri . '/assets/fonts/fraunces/' . $file ) . '" as="font" type="font/woff2" crossorigin="anonymous">' . "\n";
+			}
+		}
+		foreach ( lafka_preset_font_preload_hrefs() as $href ) {
+			echo "\t" . '<link rel="preload" href="' . esc_url( $href ) . '" as="font" type="font/woff2" crossorigin="anonymous">' . "\n";
+		}
 	}
 }
 

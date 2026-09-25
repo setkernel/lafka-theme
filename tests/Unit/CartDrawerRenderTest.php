@@ -53,6 +53,7 @@ namespace Lafka\Tests\Unit {
 
 		protected function setUp(): void {
 			$GLOBALS['lafka_test_drawer_calls'] = array();
+			\lafka_test_use_classic_layouts(); // The classic drawer (GX4: Peppery defaults to counter).
 		}
 
 		private function render( array $lines ): string {

@@ -7,9 +7,33 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
-Phases GX0 ("stop losing orders") and GX1 (diagnostics); pairs with lafka-plugin.
+Phases GX0 ("stop losing orders"), GX1 (diagnostics) and GX4 ("The counter");
+pairs with lafka-plugin.
 
 ### Added
+- **GX4 "The counter" (design direction C)** — Peppery's new default surfaces,
+  available to any preset per surface (Customizer → Lafka Settings → Page
+  layouts; preset `variants`): a calm header (order-gate-aware open/closed
+  status, Pickup/Delivery, phone, worded Cart, Order online, optional links
+  row from the new "Header menu (counter layout)" location); a homepage with
+  hero co-stars, today's deals, the two co-star categories and every other
+  category in WooCommerce order (per-section limits, jump index), and find-us
+  from the single NAP resolver; product rows with size-price columns and a
+  worded Add; a 2-tap size chooser on a native `<dialog>`; a sticky mobile
+  Call/Order bar; the order drawer (stepper rows via the plugin, "Add a
+  little extra?", Pickup or delivery, "Go to checkout — $total"); /menu/ and
+  category archives in the same rows; a quiet footer. Customizer → Lafka —
+  Home Page → Counter sections. No invented ratings, ETAs or savings: every
+  such line renders only from operator / product data.
+- **Presets**: variants are live (`LAFKA_PRESET_VARIANT_WHITELIST`,
+  `lafka_preset_variant()`); per-role `font_display` (swap|optional) with
+  matching preloads; variable-font pool entries; Atkinson Hyperlegible Next
+  and Bricolage Grotesque join the pool (10 families).
+- **Reset appearance to preset** — Customizer → Design Preset button and
+  `wp lafka preset reset [--dry-run] | restore <backup> | backups`: removes
+  only the preset engine's appearance overrides, with a backup.
+- **Critical CSS** follows the active preset under a counter layout (preset
+  above-fold tokens + a var()-only header/hero skeleton).
 - **Diagnostics (GX1)**: `lafka_theme_log()` logs through the Lafka plugin's
   `lafka_log` action (WooCommerce logs, source `lafka-theme`, scrubbed) with no
   hard dependency on the plugin; without a listener it writes to the PHP error
@@ -23,6 +47,13 @@ Phases GX0 ("stop losing orders") and GX1 (diagnostics); pairs with lafka-plugin
   see the delivery cost" notice (classic + block).
 
 ### Changed
+- **Peppery ships the counter design**: warm-white palette with ink
+  `#1F1B18`, tomato `#B0271D`, leaf green, 17/18 px body, 8 px buttons, the
+  checkered band; no contrast waiver. The engine's no-op moved to the test-only
+  `presets/__fixtures__/identity` preset. Sites with saved legacy colour/font
+  overrides keep them until "Reset appearance to preset" is used.
+- Primary CTAs (cart, checkout, PDP, account, 404) read `--lafka-radius-button`
+  (pill for every other preset).
 - The GitHub updater and the preset engine log through `lafka_theme_log()`
   instead of `error_log()`; updater failures are warnings (listed on
   Lafka → Diagnostics), routine updater lines are info.

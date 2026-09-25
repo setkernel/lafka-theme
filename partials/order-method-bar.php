@@ -17,6 +17,10 @@ if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_e
 if ( ! function_exists( 'lafka_get_restaurant_info' ) ) {
     return;
 }
+// GX4: the counter header owns fulfilment + status + phone.
+if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) ) {
+    return;
+}
 
 $info = lafka_get_restaurant_info();
 $method = isset( $_COOKIE['lafka_order_method'] ) && 'pickup' === $_COOKIE['lafka_order_method'] ? 'pickup' : 'delivery';

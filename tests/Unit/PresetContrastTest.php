@@ -116,15 +116,17 @@ namespace Lafka\Tests\Unit {
 		}
 
 		/**
-		 * Peppery's one shipped waiver must be doing REAL work: the muted-text-on-
-		 * card pair genuinely misses AA (so the waiver is not decorative), the pair
-		 * id is actually declared in contrast_exceptions, it still clears the
-		 * AA-large floor, and the waiver makes the preset pass overall.
+		 * The audited-waiver mechanism must do REAL work. GX4: Peppery ships the
+		 * counter palette and needs no waiver (text-muted 7.16:1 on the warm
+		 * band); the pre-GX4 palette lives on as the identity fixture, whose
+		 * muted-text-on-card pair genuinely misses AA, is declared in
+		 * contrast_exceptions, still clears the AA-large floor, and passes
+		 * overall only thanks to the waiver.
 		 */
-		public function test_peppery_muted_waiver_is_genuinely_exercised(): void {
-			$peppery = \Lafka_Presets::from_dirs( array( self::root() . '/presets' ) )->get( 'peppery' );
-			$pal     = $this->effective_palette( $peppery );
-			$pairs   = $this->critical_pairs( $pal );
+		public function test_identity_fixture_muted_waiver_is_genuinely_exercised(): void {
+			$identity = \lafka_test_identity_preset();
+			$pal      = $this->effective_palette( $identity );
+			$pairs    = $this->critical_pairs( $pal );
 
 			$this->assertArrayHasKey( 'text-muted-on-surface', $pairs );
 			[ $fg, $bg, $min ] = $pairs['text-muted-on-surface'];
@@ -132,23 +134,18 @@ namespace Lafka\Tests\Unit {
 
 			$this->assertFalse(
 				\Lafka_Color_Contrast::meets( $fg, $bg, $min ),
-				'peppery muted-on-card is expected to MISS AA (the waiver must be exercised, not decorative)'
+				'base muted-on-card is expected to MISS AA (the waiver must be exercised, not decorative)'
 			);
-			$this->assertContains(
-				'text-muted-on-surface',
-				$peppery->contrast_exceptions(),
-				'peppery must declare the text-muted-on-surface waiver it relies on'
-			);
-			$this->assertGreaterThanOrEqual(
-				\Lafka_Color_Contrast::AA_LARGE,
-				$ratio,
-				'even the waived muted pair must clear the AA-large floor (3.0)'
-			);
-			$this->assertSame(
-				array(),
-				$this->unwaived_failures( $peppery ),
-				'with its audited waiver applied, peppery must pass the gate overall'
-			);
+			$this->assertContains( 'text-muted-on-surface', $identity->contrast_exceptions() );
+			$this->assertGreaterThanOrEqual( \Lafka_Color_Contrast::AA_LARGE, $ratio );
+			$this->assertSame( array(), $this->unwaived_failures( $identity ) );
+		}
+
+		/** GX4: Peppery passes the gate with no waiver at all. */
+		public function test_peppery_needs_no_waiver(): void {
+			$peppery = \Lafka_Presets::from_dirs( array( self::root() . '/presets' ) )->get( 'peppery' );
+			$this->assertSame( array(), $peppery->contrast_exceptions() );
+			$this->assertSame( array(), $this->unwaived_failures( $peppery ) );
 		}
 
 		// -----------------------------------------------------------------

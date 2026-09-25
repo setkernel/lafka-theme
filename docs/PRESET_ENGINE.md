@@ -14,9 +14,12 @@ declared in `styles/lafka-tokens.css` have **no operator feed at all**. That spl
 whole design: a preset's output goes through two layers, each with a
 *trivial, independent* "operator always wins" proof.
 
-Peppery becomes **preset #1, the default, and a provable no-op**: it overrides nothing,
-so the engine emits nothing for it → byte-identical `dynamic-css` + pixel-identical
-30 visual goldens.
+The engine's **provable no-op** is the identity fixture
+`presets/__fixtures__/identity/preset.json` (test-only; the pre-GX4 Peppery): it overrides
+nothing, so the engine emits nothing for it → byte-identical `dynamic-css`. Since GX4
+(7.2.0) Peppery, still preset #1 and the default, ships design direction C ("The counter")
+— its own palette, type, pool fonts, chrome and counter layout variants — and
+`OtherPresetsUnchangedTest` pins the other nine presets byte-for-byte.
 
 ## 1. Terminology (PIN THIS — the panel inverted "Channel 1/2"; do not reuse those labels)
 
@@ -106,9 +109,16 @@ Public function surface (all `function_exists`-guarded, `lafka_` prefixed):
                                    // nothing) | "pool" (a LAFKA_FONT_POOL family — @font-face inline)
     "body":    { "family": "Rubik",    "source": "base" },
     "display": { "family": "Fraunces", "source": "base" }
+    // GX4: optional "font_display": "swap" (default) | "optional" per role. An optional
+    // preset preloads its display + body 400/700 latin files (lafka_preset_font_preload_hrefs())
+    // and skips the static Fraunces preloads. Pool entries may be VARIABLE: one file per
+    // subset + a weight range (`variable: { weight: "200 800", files: {...} }`).
   },
   "category_emoji": {},            // feeds lafka_category_emoji; empty = hardcoded default
-  "variants": {},                  // flat map reserved for body-class variants — inert (no consumer yet)
+  "variants": {},                  // GX4: live, keys/values in LAFKA_PRESET_VARIANT_WHITELIST —
+                                   // header/home/menu/footer/drawer_layout ∈ classic|counter,
+                                   // motif ∈ none|check. lafka_preset_variant() feeds the DEFAULT
+                                   // of the lafka_<surface>_layout Customizer selects (operator wins).
   "contrast_exceptions": []        // audited AA waivers, e.g. ["text-muted-on-surface"]
 }
 ```
@@ -131,13 +141,13 @@ the token whitelist).
    Add `'lafka-preset'` to `lafka-style`'s deps so the operator inline still prints last.
    - Light preset: `:root{ … }` (specificity 0,1,0) — beats base by source order.
    - Dark preset: `:root[data-theme="dark"]{ … }` (0,2,0) — supersedes the scaffold token-for-token.
-   - **Peppery emits an empty PTL** → nothing meaningful printed → byte-identical.
+   - **The identity fixture emits an empty PTL** → nothing printed → byte-identical.
    - PTL string is built per request from the transient-cached registry (see
      `Lafka_Presets` discovery cache) — a cheap string-concat over ~10-40 already-parsed
      entries, so no dedicated PTL-string cache is kept.
    - **Fonts** ride a second inline-only handle, `lafka-preset-fonts`, carrying the
-     `@font-face` rules (`font-display: swap`) for the active preset's `source:"pool"`
-     families only; base-only presets (Peppery) leave it empty.
+     `@font-face` rules (the preset's `font_display`, default `swap`) for the active
+     preset's `source:"pool"` families only; base-only presets leave it empty.
 3. **Operator** — `dynamic-css.php`'s existing `:root{}` inline on `lafka-style`. Unchanged
    in structure; §5 wraps its default args.
 
@@ -229,10 +239,15 @@ A `dark:true` preset (Midnight, Ember):
     `is_customize_preview()` it always rebuilds and never reads/writes the cache.
   - The PTL and pool `@font-face` strings are rebuilt per request from the cached registry
     (no cache of their own).
-- **Reset to preset** — NOT YET BUILT — planned as `remove_theme_mod()` on **only**
-  `array_keys($preset->chrome())` (+ the accent/brand/font operator keys), so unset keys fall
-  back to the **ACTIVE** preset's defaults (not Peppery's), reusing the NX1-02 sentinel idiom
-  and never touching secrets/KDS/functional keys.
+- **Reset to preset** (GX4, `incl/system/lafka-preset-reset.php`) —
+  `lafka_preset_reset_appearance( $dry_run )` removes **only**
+  `array_keys( $active->chrome() )` ∪ `LAFKA_PRESET_CHROME_WHITELIST` ∪ {accent, brand}, after
+  backing them up to a non-autoloaded `lafka_appearance_backup_<stamp>` option (registry
+  `lafka_appearance_backups`), so unset keys fall back to the **ACTIVE** preset's defaults.
+  `lafka_preset_restore_appearance( $backup )` undoes it. Never touches NAP / functional /
+  layout / module / checkout / KDS keys. Surfaces: Customizer → Design Preset → "Reset
+  appearance" (edit_theme_options + nonce) and `wp lafka preset reset [--dry-run] | restore
+  <backup> | backups`.
 
 ## 8. Extensibility
 
@@ -275,17 +290,26 @@ token (logged).
 
 ## 10. Worked examples
 
-**`presets/peppery/preset.json` (identity — emits nothing):**
+**`presets/__fixtures__/identity/preset.json` (identity — emits nothing; the pre-GX4 Peppery):**
 ```json
-{ "slug": "peppery", "schema": 1, "label": "Peppery",
-  "description": "Pizza & poutine — the Lafka default.", "dark": false, "extends": null,
+{ "slug": "identity", "schema": 1, "label": "Identity (test fixture)",
+  "description": "Engine no-op fixture …", "dark": false, "extends": null,
   "tokens": {}, "chrome": {},
   "fonts": { "body": {"family":"Rubik","source":"base"}, "display": {"family":"Fraunces","source":"base"} },
   "category_emoji": {}, "variants": {}, "contrast_exceptions": ["text-muted-on-surface"] }
 ```
-With `active_preset=peppery` and no operator overrides: PTL empty, chrome defaults = literals,
-no `data-theme`, base fonts already enqueued → **byte-identical dynamic-css + pixel-identical
-goldens**. This is the acceptance proof for NX2-01.
+With the identity fixture active and no operator overrides: PTL empty, chrome defaults =
+literals, no `data-theme`, base fonts already enqueued → **byte-identical dynamic-css**. This
+is the acceptance proof for NX2-01 (`PresetCascadeTest`, `PresetEnqueueOrderTest`,
+`SelfHostedFontsTest`, `PresetContrastTest` register it through the `lafka_presets` filter;
+discovery never finds `__fixtures__`).
+
+**`presets/peppery/preset.json` (GX4, the counter design):** tokens for the warm-white
+palette, 17/18 px body, 8 px button radius and dish shadow; chrome for every whitelisted key
+(tomato `#B0271D` accent, leaf-green brand, Atkinson/Bricolage typography arrays, white
+header/footer); `fonts` = Atkinson Hyperlegible Next + Bricolage Grotesque from the pool with
+`font_display: optional`; `variants` = every surface `counter` + `motif: check`; no contrast
+waiver (`PepperyCounterPresetTest`).
 
 **`presets/midnight/preset.json` (dark, exercises every path):** `dark:true`, `tokens` sets the
 dark surface/border/text ramp under the scoped selector, `chrome` sets
@@ -295,10 +319,12 @@ dark surface/border/text ramp under the scoped selector, `chrome` sets
 
 ## 11. Deferred / open
 
-- **critical.css preset-awareness** (first-paint flash on non-default presets + the
-  `#ffca3c`/`#fccc4c` menu-bg drift) → **NX2-04.1**, the intended consumer of
-  `LAFKA_PRESET_CRITICAL_KEYS`. `critical.css` is pixel-critical for Peppery, so it stays
-  untouched until then.
+- **critical.css preset-awareness** — minimal version shipped in GX4: under a counter
+  header/home layout, `lafka_inline_critical_css()` appends the active preset's
+  `LAFKA_PRESET_CRITICAL_KEYS` (now incl. `surface-muted`, `success-500`) as a `:root{}` block
+  plus the var()-only `styles/critical-counter.css` slice (body face/size/ink, header + hero
+  skeleton). Classic layouts inline the unchanged bundle; the legacy literals in
+  `critical.css` (and the `#ffca3c`/`#fccc4c` drift) remain for a later pass.
 - **Dedicated `styles/presets/<slug>.css` + `build-presets.mjs` generator** → only if/when
   browser-caching 10 presets justifies it; the inline-only handle (§4) needs no generator and
   costs no request (only one preset is active at a time).

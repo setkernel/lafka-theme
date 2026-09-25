@@ -142,6 +142,16 @@ if ( ! function_exists( 'set_theme_mod' ) ) {
 		return true;
 	}
 }
+if ( ! function_exists( 'get_theme_mods' ) ) {
+	function get_theme_mods() {
+		return $GLOBALS['lafka_test_theme_mods'] ?? array();
+	}
+}
+if ( ! function_exists( 'remove_theme_mod' ) ) {
+	function remove_theme_mod( $name ) {
+		unset( $GLOBALS['lafka_test_theme_mods'][ $name ] );
+	}
+}
 if ( ! function_exists( 'get_option' ) ) {
 	function get_option( $name, $default = false ) {
 		$options = $GLOBALS['lafka_test_options'] ?? array();
@@ -376,6 +386,11 @@ if ( ! function_exists( 'get_post_meta' ) ) {
 		return $single ? $meta[ $key ] : array( $meta[ $key ] );
 	}
 }
+if ( ! function_exists( 'date_i18n' ) ) {
+	function date_i18n( $format, $timestamp = false, $gmt = false ) {
+		return date( $format, false === $timestamp ? time() : (int) $timestamp ); // phpcs:ignore
+	}
+}
 if ( ! function_exists( 'get_locale' ) ) {
 	function get_locale() {
 		return 'en_US';
@@ -395,6 +410,32 @@ if ( ! function_exists( 'lafka_get_restaurant_info' ) ) {
 	}
 }
 
+// GX4 (lafka-plugin gx4p contracts, store-backed; reset per test):
+//   lafka_test_required_addons   [ product_id => bool ]
+//   lafka_test_fulfilment_modes  list<'pickup'|'delivery'>
+//   lafka_test_fulfilment_pref   'pickup'|'delivery'|''
+//   lafka_test_order_hours_on    is_lafka_order_hours() (module on/off)
+if ( ! function_exists( 'is_lafka_order_hours' ) ) {
+	function is_lafka_order_hours( $lafka_options = null ) {
+		return (bool) ( $GLOBALS['lafka_test_order_hours_on'] ?? false );
+	}
+}
+if ( ! function_exists( 'lafka_product_has_required_addons' ) ) {
+	function lafka_product_has_required_addons( int $product_id ): bool {
+		return (bool) ( $GLOBALS['lafka_test_required_addons'][ $product_id ] ?? false );
+	}
+}
+if ( ! function_exists( 'lafka_fulfilment_modes' ) ) {
+	function lafka_fulfilment_modes(): array {
+		return $GLOBALS['lafka_test_fulfilment_modes'] ?? array( 'pickup', 'delivery' );
+	}
+}
+if ( ! function_exists( 'lafka_fulfilment_preference' ) ) {
+	function lafka_fulfilment_preference(): string {
+		return (string) ( $GLOBALS['lafka_test_fulfilment_pref'] ?? '' );
+	}
+}
+
 if ( ! function_exists( 'lafka_get_free_delivery_threshold' ) ) {
 	function lafka_get_free_delivery_threshold() {
 		return $GLOBALS['lafka_test_free_delivery_threshold'] ?? 0;
@@ -403,6 +444,285 @@ if ( ! function_exists( 'lafka_get_free_delivery_threshold' ) ) {
 if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) ) {
 	function lafka_pdp_redesign_enabled() {
 		return (bool) ( $GLOBALS['lafka_test_pdp_redesign'] ?? true );
+	}
+}
+
+// ------------------------------------------- GX4: WooCommerce catalogue ----
+//
+// Stores (reset per test):
+//   lafka_test_variations     wc_get_product_variation_attributes(): [ vid => [ 'attribute_pa_size' => 'medium' ] ]
+//                             (WC_Product_Variable's constructor fills it from its rows)
+//   lafka_test_attr_terms     wc_get_product_terms(): [ taxonomy => list<WP_Term> ] in attribute (custom) order
+//   lafka_test_attr_labels    wc_attribute_label(): [ name => label ] (else derived: pa_size -> Size)
+//   lafka_test_products       wc_get_product(): [ id => WC_Product ]
+
+if ( ! function_exists( 'sanitize_title' ) ) {
+	function sanitize_title( $title, $fallback_title = '', $context = 'save' ) {
+		$title = strtolower( trim( wp_strip_all_tags( (string) $title ) ) );
+		$title = (string) preg_replace( '/[^a-z0-9_\-]+/', '-', $title );
+		return trim( $title, '-' );
+	}
+}
+if ( ! function_exists( 'wc_get_product_variation_attributes' ) ) {
+	function wc_get_product_variation_attributes( $variation_id ) {
+		return $GLOBALS['lafka_test_variations'][ (int) $variation_id ] ?? array();
+	}
+}
+if ( ! function_exists( 'wc_get_product_terms' ) ) {
+	function wc_get_product_terms( $product_id, $taxonomy, $args = array() ) {
+		return $GLOBALS['lafka_test_attr_terms'][ $taxonomy ] ?? array();
+	}
+}
+if ( ! function_exists( 'wc_attribute_label' ) ) {
+	function wc_attribute_label( $name, $product = '' ) {
+		if ( isset( $GLOBALS['lafka_test_attr_labels'][ $name ] ) ) {
+			return $GLOBALS['lafka_test_attr_labels'][ $name ];
+		}
+		return ucfirst( str_replace( array( 'pa_', '-', '_' ), array( '', ' ', ' ' ), (string) $name ) );
+	}
+}
+if ( ! function_exists( 'wc_get_price_to_display' ) ) {
+	function wc_get_price_to_display( $product, $args = array() ) {
+		return (float) ( $args['price'] ?? $product->get_price() );
+	}
+}
+if ( ! function_exists( 'wc_get_product' ) ) {
+	function wc_get_product( $product_id = false ) {
+		return $GLOBALS['lafka_test_products'][ (int) $product_id ] ?? null;
+	}
+}
+
+// ------------------------------------------- GX4: terms, catalogue, parts ----
+//
+// Stores (reset per test):
+//   lafka_test_terms           get_terms(): [ taxonomy => list<WP_Term> ] (sorted by ->order, then ->name)
+//   lafka_test_term_meta       get_term_meta(): [ term_id ][ key ] = value
+//   lafka_test_catalog         wc_get_products(): list<WC_Product> in menu order; a product's
+//                              data['cats'] lists its product_cat slugs
+//   lafka_test_parts_live      get_template_part() includes the real part when true
+//                              (default false = no-op, which older render tests rely on)
+
+if ( ! function_exists( 'taxonomy_exists' ) ) {
+	/** Registered taxonomies: $GLOBALS['lafka_test_taxonomies'] (default none). */
+	function taxonomy_exists( $taxonomy ) {
+		return in_array( $taxonomy, (array) ( $GLOBALS['lafka_test_taxonomies'] ?? array() ), true );
+	}
+}
+if ( ! function_exists( 'is_wp_error' ) ) {
+	function is_wp_error( $thing ) {
+		return class_exists( 'WP_Error' ) && $thing instanceof WP_Error;
+	}
+}
+if ( ! function_exists( 'get_terms' ) ) {
+	function get_terms( $args = array(), $deprecated = '' ) {
+		$args     = (array) $args;
+		$taxonomy = (string) ( $args['taxonomy'] ?? '' );
+		$terms    = array_values( $GLOBALS['lafka_test_terms'][ $taxonomy ] ?? array() );
+		$exclude  = array_map( 'intval', (array) ( $args['exclude'] ?? array() ) );
+		$terms    = array_values(
+			array_filter(
+				$terms,
+				static function ( $t ) use ( $args, $exclude ) {
+					if ( isset( $args['parent'] ) && (int) $t->parent !== (int) $args['parent'] ) {
+						return false;
+					}
+					if ( ! empty( $args['hide_empty'] ) && (int) $t->count < 1 ) {
+						return false;
+					}
+					return ! in_array( (int) $t->term_id, $exclude, true );
+				}
+			)
+		);
+		usort(
+			$terms,
+			static function ( $a, $b ) {
+				return array( (int) $a->order, (string) $a->name ) <=> array( (int) $b->order, (string) $b->name );
+			}
+		);
+		return $terms;
+	}
+}
+if ( ! function_exists( 'get_term_link' ) ) {
+	function get_term_link( $term, $taxonomy = '' ) {
+		$slug = is_object( $term ) ? (string) $term->slug : (string) $term;
+		return home_url( '/product-category/' . $slug . '/' );
+	}
+}
+if ( ! function_exists( 'get_term_meta' ) ) {
+	function get_term_meta( $term_id, $key = '', $single = false ) {
+		$value = $GLOBALS['lafka_test_term_meta'][ (int) $term_id ][ $key ] ?? '';
+		return $single ? $value : ( '' === $value ? array() : array( $value ) );
+	}
+}
+if ( ! function_exists( 'wc_get_products' ) ) {
+	function wc_get_products( $args = array() ) {
+		$args     = (array) $args;
+		$products = array_values( $GLOBALS['lafka_test_catalog'] ?? array() );
+		$cats     = (array) ( $args['category'] ?? array() );
+		$exclude  = array_map( 'intval', (array) ( $args['exclude'] ?? array() ) );
+		$include  = array_map( 'intval', (array) ( $args['include'] ?? array() ) );
+		$products = array_values(
+			array_filter(
+				$products,
+				static function ( $p ) use ( $args, $cats, $exclude, $include ) {
+					if ( $cats && ! array_intersect( $cats, (array) ( $p->data['cats'] ?? array() ) ) ) {
+						return false;
+					}
+					if ( isset( $args['featured'] ) && (bool) $args['featured'] !== $p->is_featured() ) {
+						return false;
+					}
+					if ( $include && ! in_array( (int) $p->get_id(), $include, true ) ) {
+						return false;
+					}
+					return ! in_array( (int) $p->get_id(), $exclude, true );
+				}
+			)
+		);
+		$total = count( $products );
+		$limit = (int) ( $args['limit'] ?? -1 );
+		if ( $limit >= 0 ) {
+			$products = array_slice( $products, 0, $limit );
+		}
+		if ( 'ids' === ( $args['return'] ?? '' ) ) {
+			$products = array_map( static fn( $p ) => (int) $p->get_id(), $products );
+		}
+		if ( ! empty( $args['paginate'] ) ) {
+			return (object) array(
+				'products'      => $products,
+				'total'         => $total,
+				'max_num_pages' => $limit > 0 ? (int) ceil( $total / $limit ) : 1,
+			);
+		}
+		return $products;
+	}
+}
+if ( ! function_exists( 'get_template_part' ) ) {
+	function get_template_part( $slug, $name = null, $args = array() ) {
+		if ( empty( $GLOBALS['lafka_test_parts_live'] ) ) {
+			return null;
+		}
+		$dir  = get_template_directory();
+		$file = ( null !== $name && '' !== $name && is_file( "{$dir}/{$slug}-{$name}.php" ) ) ? "{$dir}/{$slug}-{$name}.php" : "{$dir}/{$slug}.php";
+		if ( ! is_file( $file ) ) {
+			return false;
+		}
+		( static function ( $lafka_test_file, $args ) {
+			require $lafka_test_file;
+		} )( $file, (array) $args );
+		return null;
+	}
+}
+
+// ------------------------------------------------- GX4: chrome helpers ----
+//
+// Stores (reset per test):
+//   lafka_test_bloginfo        get_bloginfo(): [ show => value ] (name defaults to "Example Kitchen")
+//   lafka_test_nav_menus       has_nav_menu() / wp_nav_menu(): [ location => list<array{label,url}> ]
+
+if ( ! function_exists( 'get_bloginfo' ) ) {
+	function get_bloginfo( $show = '', $filter = 'raw' ) {
+		$info = ( $GLOBALS['lafka_test_bloginfo'] ?? array() ) + array( 'name' => 'Example Kitchen' );
+		return (string) ( $info[ '' === $show ? 'name' : $show ] ?? '' );
+	}
+}
+if ( ! function_exists( 'wp_unslash' ) ) {
+	function wp_unslash( $value ) {
+		return is_string( $value ) ? stripslashes( $value ) : $value;
+	}
+}
+if ( ! function_exists( 'checked' ) ) {
+	function checked( $checked, $current = true, $display = true ) {
+		$result = (string) $checked === (string) $current ? " checked='checked'" : '';
+		if ( $display ) {
+			echo $result; // phpcs:ignore
+		}
+		return $result;
+	}
+}
+if ( ! function_exists( 'has_nav_menu' ) ) {
+	function has_nav_menu( $location ) {
+		return ! empty( $GLOBALS['lafka_test_nav_menus'][ $location ] );
+	}
+}
+if ( ! function_exists( 'wp_nav_menu' ) ) {
+	function wp_nav_menu( $args = array() ) {
+		$items = $GLOBALS['lafka_test_nav_menus'][ $args['theme_location'] ?? '' ] ?? array();
+		$html  = '<ul class="' . ( $args['menu_class'] ?? 'menu' ) . '">';
+		foreach ( $items as $item ) {
+			$html .= '<li class="menu-item"><a href="' . $item['url'] . '">' . $item['label'] . '</a></li>';
+		}
+		$html .= '</ul>';
+		if ( ! empty( $args['echo'] ) || ! array_key_exists( 'echo', $args ) ) {
+			echo $html; // phpcs:ignore
+			return null;
+		}
+		return $html;
+	}
+}
+
+// ------------------------------------------------- GX4: loop context ----
+//
+// Stores (reset per test):
+//   lafka_test_post_terms      wp_get_post_terms(): [ post_id ][ taxonomy ] = list<string> (names / slugs alike)
+//   lafka_test_is_tax          is_tax() (false)
+//   lafka_test_title           get_the_title() / single_term_title()
+
+if ( ! function_exists( 'wp_get_post_terms' ) ) {
+	function wp_get_post_terms( $post_id, $taxonomy = 'post_tag', $args = array() ) {
+		return $GLOBALS['lafka_test_post_terms'][ (int) $post_id ][ $taxonomy ] ?? array();
+	}
+}
+if ( ! function_exists( 'is_tax' ) ) {
+	function is_tax( $taxonomy = '', $term = '' ) {
+		return (bool) ( $GLOBALS['lafka_test_is_tax'] ?? false );
+	}
+}
+if ( ! function_exists( 'single_term_title' ) ) {
+	function single_term_title( $prefix = '', $display = true ) {
+		return (string) ( $GLOBALS['lafka_test_title'] ?? '' );
+	}
+}
+if ( ! function_exists( 'get_the_title' ) ) {
+	function get_the_title( $post = 0 ) {
+		return (string) ( $GLOBALS['lafka_test_title'] ?? '' );
+	}
+}
+if ( ! function_exists( 'is_cart' ) ) {
+	function is_cart() {
+		return (bool) ( $GLOBALS['lafka_test_is_cart'] ?? false );
+	}
+}
+if ( ! function_exists( 'is_checkout' ) ) {
+	function is_checkout() {
+		return (bool) ( $GLOBALS['lafka_test_is_checkout'] ?? false );
+	}
+}
+if ( ! function_exists( 'is_product' ) ) {
+	function is_product() {
+		return (bool) ( $GLOBALS['lafka_test_is_product'] ?? false );
+	}
+}
+if ( ! function_exists( 'is_page' ) ) {
+	function is_page( $page = '' ) {
+		return false;
+	}
+}
+if ( ! function_exists( 'get_permalink' ) ) {
+	function get_permalink( $post = 0, $leavename = false ) {
+		return home_url( '/?p=' . (int) ( is_object( $post ) ? $post->ID : $post ) );
+	}
+}
+if ( ! function_exists( 'get_the_privacy_policy_link' ) ) {
+	/** $GLOBALS['lafka_test_privacy_link'] ('' = no policy page). */
+	function get_the_privacy_policy_link( $before = '', $after = '' ) {
+		$link = (string) ( $GLOBALS['lafka_test_privacy_link'] ?? '' );
+		return '' === $link ? '' : $before . $link . $after;
+	}
+}
+if ( ! function_exists( 'wp_trim_words' ) ) {
+	function wp_trim_words( $text, $num_words = 55, $more = null ) {
+		$words = preg_split( '/\s+/', trim( wp_strip_all_tags( (string) $text ) ) );
+		return count( $words ) > $num_words ? implode( ' ', array_slice( $words, 0, $num_words ) ) . '…' : implode( ' ', $words );
 	}
 }
 
@@ -427,11 +747,35 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_post_meta']          = array();
 		$GLOBALS['lafka_test_pdp_redesign']       = true;
 		$GLOBALS['lafka_test_free_delivery_threshold'] = 0;
+		$GLOBALS['lafka_test_variations']         = array();
+		$GLOBALS['lafka_test_attr_terms']         = array();
+		$GLOBALS['lafka_test_attr_labels']        = array();
+		$GLOBALS['lafka_test_products']           = array();
+		$GLOBALS['lafka_test_required_addons']    = array();
+		$GLOBALS['lafka_test_terms']              = array();
+		$GLOBALS['lafka_test_taxonomies']         = array();
+		$GLOBALS['lafka_test_term_meta']          = array();
+		$GLOBALS['lafka_test_catalog']            = array();
+		$GLOBALS['lafka_test_parts_live']         = false;
+		$GLOBALS['lafka_test_bloginfo']           = array();
+		$GLOBALS['lafka_test_nav_menus']          = array();
+		$GLOBALS['lafka_test_post_terms']         = array();
+		$GLOBALS['lafka_test_is_tax']             = false;
+		$GLOBALS['lafka_test_is_cart']            = false;
+		$GLOBALS['lafka_test_is_checkout']        = false;
+		$GLOBALS['lafka_test_is_product']         = false;
+		$GLOBALS['lafka_test_title']              = '';
+		$GLOBALS['lafka_test_privacy_link']       = '';
+		$GLOBALS['lafka_chooser_registry']        = array();
+		$GLOBALS['lafka_test_fulfilment_modes']   = array( 'pickup', 'delivery' );
+		$GLOBALS['lafka_test_fulfilment_pref']    = '';
 		if ( class_exists( 'Lafka_Order_Hours' ) ) {
 			Lafka_Order_Hours::$lafka_order_hours_options = array();
 			Lafka_Order_Hours::$shop_open                 = true;
 			Lafka_Order_Hours::$next_open_human           = '';
+			Lafka_Order_Hours::$lafka_order_hours_force_override_check = false;
 		}
+		$GLOBALS['lafka_test_order_hours_on'] = false;
 		unset( $GLOBALS['lafka_test_home_url'], $GLOBALS['lafka_test_tpl_dir'], $GLOBALS['lafka_test_tpl_uri'], $GLOBALS['lafka_test_restaurant_info'] );
 	}
 }

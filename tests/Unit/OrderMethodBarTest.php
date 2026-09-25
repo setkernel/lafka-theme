@@ -21,6 +21,7 @@ namespace Lafka\Tests\Unit {
 	final class OrderMethodBarTest extends TestCase {
 
 		protected function setUp(): void {
+			\lafka_test_use_classic_layouts(); // The counter header replaces this bar (GX4).
 			$GLOBALS['lafka_test_restaurant_info'] = array(
 				'address_short' => '1 Example St',
 				'city'          => 'Example City',

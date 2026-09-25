@@ -90,15 +90,16 @@ CI** — only the e2e `@smoke` job does.
 | `build` | Minify top-level `styles/*.css` + `js/*.js` to gitignored `.min` siblings (`scripts/build-assets.mjs`); served when `SCRIPT_DEBUG` is off; release.yml runs it before packaging. `js/lafka-dialog.min.js` is the one committed output (lafka-plugin registers it by path); CI fails if it drifts from the build. |
 | `build:theme-json` | Regenerate `theme.json` editor presets from the `--lafka-*` token SSOT. |
 | `i18n:pot` | Regenerate `languages/lafka.pot` with WP-CLI inside the theme's wp-env. |
-| `sync:fonts` | Re-copy the six pool families' woff2 + licences from the dev-only `@fontsource/*` packages into `assets/fonts/` (Rubik/Fraunces woff2 untouched). |
+| `sync:fonts` | Re-copy the eight pool families' woff2 + licences (incl. the variable Bricolage Grotesque from `@fontsource-variable/*`) from the dev-only `@fontsource/*` packages into `assets/fonts/` (Rubik/Fraunces woff2 untouched). |
 | `previews:presets` | Screenshot each preset's home page into `presets/<slug>/preview.jpg` (Customizer switcher thumbnails); restores the previously active preset. `-- --only=ember,koyo` to limit. |
 | `test:e2e` / `test:e2e:smoke` / `test:e2e:install` | Playwright e2e suite / `@smoke` subset / browser install (above). |
 | `test:visual` | Peppery full-page goldens at 375/768/1280 (NX1-02 parity + NX1-10a surfaces). `-- --update-snapshots` to (re)capture. |
+| `test:visual:counter` | GX4 counter-layout goldens at 375/768/1280: home, menu, a category archive, a variable PDP, the size chooser and the order drawer (layouts pinned via theme_mods). |
 | `test:visual:dark` | Midnight (dark preset) goldens on home, menu, PDP and cart — same local contract. |
 | `test:contrast` | Rendered text/CTA contrast for every registered preset on home, menu, PDP and cart (no goldens). |
 
 The three visual/contrast scripts are projects of one config,
-`playwright.visual.config.js` (`peppery`, `dark`, `contrast`).
+`playwright.visual.config.js` (`peppery`, `dark`, `contrast`, `counter`).
 | `sync-version` | Write the version from `package.json` into the `versionSync` targets. |
 | `check-version` | Fail if any `versionSync` target drifted from `package.json` (CI runs it). |
 | `version` | npm lifecycle hook used by `npm version`; not run directly. |

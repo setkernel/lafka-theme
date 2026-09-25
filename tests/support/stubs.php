@@ -50,6 +50,135 @@ if ( ! class_exists( 'WC_Product' ) ) {
 		public function get_variation_price( $min_or_max = 'min', $display = false ) {
 			return '8.00';
 		}
+		// GX4: the fields the counter rows / chooser read. Defaults keep every
+		// pre-GX4 test's product behaving exactly as before.
+		public function get_status() {
+			return $this->data['status'] ?? 'publish';
+		}
+		public function get_type() {
+			return $this->data['type'];
+		}
+		public function is_purchasable() {
+			return $this->data['purchasable'] ?? true;
+		}
+		public function is_in_stock() {
+			return $this->data['in_stock'] ?? true;
+		}
+		public function is_visible() {
+			return $this->data['visible'] ?? true;
+		}
+		public function is_featured() {
+			return $this->data['featured'] ?? false;
+		}
+		public function get_description() {
+			return $this->data['description'] ?? '';
+		}
+		public function get_price_html() {
+			return '<span class="amount">$' . $this->data['price'] . '</span>';
+		}
+		public function get_attributes() {
+			return $this->data['attributes'] ?? array();
+		}
+		public function get_default_attributes() {
+			return $this->data['default_attributes'] ?? array();
+		}
+		public function get_meta( $key, $single = true ) {
+			return $this->data['meta'][ $key ] ?? '';
+		}
+		public function get_category_ids() {
+			return $this->data['category_ids'] ?? array();
+		}
+		public function add_to_cart_url() {
+			return '?add-to-cart=' . $this->data['id'];
+		}
+	}
+}
+
+if ( ! class_exists( 'WC_Product_Variable' ) ) {
+	/**
+	 * Variable product. Variations are data rows:
+	 *   'variations' => [ vid => [ 'price' => 19.45, 'attributes' => [ 'attribute_pa_size' => 'medium', … ] ] ]
+	 *   'variation_attributes' => [ 'pa_size' => [ 'small', 'medium' ], … ]  (product attribute order)
+	 * wc_get_product_variation_attributes() (wp-shims) answers from the same rows
+	 * via $GLOBALS['lafka_test_variations'], which the constructor registers.
+	 */
+	class WC_Product_Variable extends WC_Product {
+		public function __construct( array $data = array() ) {
+			parent::__construct( $data + array( 'type' => 'variable' ) );
+			foreach ( (array) ( $this->data['variations'] ?? array() ) as $vid => $row ) {
+				$GLOBALS['lafka_test_variations'][ (int) $vid ] = (array) ( $row['attributes'] ?? array() );
+			}
+		}
+		public function get_children() {
+			return array_map( 'intval', array_keys( (array) ( $this->data['variations'] ?? array() ) ) );
+		}
+		public function get_variation_prices( $for_display = false ) {
+			$prices = array();
+			foreach ( (array) ( $this->data['variations'] ?? array() ) as $vid => $row ) {
+				if ( ! isset( $row['price'] ) || false === ( $row['visible'] ?? true ) ) {
+					continue;
+				}
+				$prices[ (int) $vid ] = (string) $row['price'];
+			}
+			asort( $prices, SORT_NUMERIC );
+			return array(
+				'price'         => $prices,
+				'regular_price' => $prices,
+				'sale_price'    => $prices,
+			);
+		}
+		public function get_variation_attributes() {
+			return $this->data['variation_attributes'] ?? array();
+		}
+	}
+}
+
+if ( ! class_exists( 'WC_Product_Attribute' ) ) {
+	/** A product's attribute row (custom attributes keep their option order). */
+	class WC_Product_Attribute {
+		/** @var array<string, mixed> */
+		private array $row;
+
+		public function __construct( array $row = array() ) {
+			$this->row = $row + array(
+				'name'      => '',
+				'options'   => array(),
+				'taxonomy'  => false,
+				'variation' => true,
+			);
+		}
+		public function get_name() {
+			return $this->row['name'];
+		}
+		public function get_options() {
+			return $this->row['options'];
+		}
+		public function is_taxonomy() {
+			return (bool) $this->row['taxonomy'];
+		}
+		public function get_variation() {
+			return (bool) $this->row['variation'];
+		}
+	}
+}
+
+if ( ! class_exists( 'WP_Term' ) ) {
+	/** Minimal term object (get_terms store rows). */
+	class WP_Term {
+		public $term_id     = 0;
+		public $name        = '';
+		public $slug        = '';
+		public $taxonomy    = 'product_cat';
+		public $parent      = 0;
+		public $count       = 0;
+		public $description = '';
+		public $order       = 0;
+
+		public function __construct( array $fields = array() ) {
+			foreach ( $fields as $key => $value ) {
+				$this->$key = $value;
+			}
+		}
 	}
 }
 
@@ -92,6 +221,8 @@ if ( ! class_exists( 'Lafka_Order_Hours' ) ) {
 		public static $shop_open                  = true;
 		public static $next_open_human            = '';
 		public static $can_order_ahead            = false;
+		// GX4: the plugin's force-override static (read by lafka_counter_open_status()).
+		public static $lafka_order_hours_force_override_check = false;
 
 		public static function is_shop_open() {
 			return self::$shop_open;

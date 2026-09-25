@@ -77,6 +77,12 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 		</div><!-- #container -->
 	</main><!-- #content -->
 
+	<?php
+	// GX4: the counter footer; wp_footer() and the search dialog stay below.
+	if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'footer', 'counter' ) ) :
+		get_template_part( 'partials/counter/footer' );
+	else :
+		?>
 	<footer id="footer" class="lafka-footer" role="contentinfo">
 		<div class="lafka-container lafka-footer__inner">
 
@@ -208,6 +214,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 			</div>
 		</div>
 	</footer>
+	<?php endif; ?>
 
 	<?php
 	// Header search overlay — opened by the [data-lafka-search-toggle] icon in

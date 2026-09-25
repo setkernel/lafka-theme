@@ -126,7 +126,9 @@ if ( ! function_exists( 'lafka_card_image_html' ) ) {
 		$attr = array(
 			'alt'      => lafka_card_image_alt( $product, $image_id ),
 			'decoding' => 'async',
-			'sizes'    => lafka_card_image_sizes(),
+			// GX4: a caller may pass its own `sizes` (e.g. the counter's fixed
+			// 104/140 px row thumbnails); the default stays the grid-card value.
+			'sizes'    => isset( $args['sizes'] ) && '' !== (string) $args['sizes'] ? (string) $args['sizes'] : lafka_card_image_sizes(),
 			'loading'  => 'lazy',
 		);
 		if ( '' !== (string) $args['class'] ) {

@@ -1209,7 +1209,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// suppressed anyway (the partial early-returns there too).
 		$lafka_sticky_cart_active = ! ( function_exists( 'is_cart' ) && is_cart() )
 			&& ! ( function_exists( 'is_checkout' ) && is_checkout() )
-			&& (bool) get_theme_mod( 'lafka_sticky_cart_enabled', true );
+			&& (bool) get_theme_mod( 'lafka_sticky_cart_enabled', true )
+			// GX4: the counter header's mobile bar replaces the sticky cart bar.
+			&& ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) );
 		if ( $lafka_sticky_cart_active ) {
 			wp_enqueue_style( 'lafka-sticky-cart', get_template_directory_uri() . '/styles/lafka-sticky-cart.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-sticky-cart.css' ) );
 			wp_enqueue_script(
@@ -1577,10 +1579,18 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			lafka_asset_version( '/styles/lafka-footer-chrome.css' )
 		);
 
+		// GX4: the counter layout's single stylesheet + small scripts, only while
+		// a surface uses it. The counter home replaces lafka-hero/lafka-home-v2
+		// (a swap, not growth — AssetBudgetTest).
+		$lafka_counter_home = is_front_page() && function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'home', 'counter' );
+		if ( function_exists( 'lafka_counter_enqueue_assets' ) ) {
+			lafka_counter_enqueue_assets();
+		}
+
 		// v5.59.0+: home page sections — handoff rebuild. Hero in its own
 		// file, sections 2–7 in lafka-home-v2.css. Only loads on the
 		// front page.
-		if ( is_front_page() ) {
+		if ( is_front_page() && ! $lafka_counter_home ) {
 			wp_enqueue_style(
 				'lafka-hero',
 				get_template_directory_uri() . '/styles/lafka-hero.css',

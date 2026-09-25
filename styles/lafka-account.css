@@ -350,7 +350,7 @@ p.woocommerce-LostPassword.lost_password {
 	color: var(--lafka-color-accent-contrast);
 	background: var(--lafka-color-accent-500);
 	border: 0;
-	border-radius: var(--lafka-radius-pill);
+	border-radius: var(--lafka-radius-button);
 	box-shadow: var(--lafka-shadow-1);
 	cursor: pointer;
 	transition: background 150ms ease, transform 80ms ease, box-shadow 150ms ease;

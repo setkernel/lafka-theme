@@ -453,7 +453,7 @@
 	background: var(--lafka-color-accent-500);
 	color: var(--lafka-color-text-inverse);
 	padding: var(--lafka-space-4) var(--lafka-space-6);
-	border-radius: var(--lafka-radius-pill);
+	border-radius: var(--lafka-radius-button);
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body-lg);
 	font-weight: var(--lafka-font-weight-semibold);

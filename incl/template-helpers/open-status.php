@@ -238,6 +238,7 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 							/* translators: %s — closing time (lowercased "h:mm am/pm") */
 							'label'     => sprintf( __( 'Open now · until %s', 'lafka' ), lafka_open_status_format_12h( $m[2] ) ),
 							'dot_color' => 'var(--lafka-color-success-500)',
+							'close'     => $m[2],
 						),
 						$now
 					);
@@ -258,6 +259,7 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 						'short'     => __( 'Open now', 'lafka' ),
 						'label'     => sprintf( __( 'Open now · until %s', 'lafka' ), lafka_open_status_format_12h( $m[2] ) ),
 						'dot_color' => 'var(--lafka-color-success-500)',
+						'close'     => $m[2],
 					),
 					$now
 				);
@@ -273,6 +275,8 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 						/* translators: %s — opening time today */
 						'label'     => sprintf( __( 'Closed · opens today at %s', 'lafka' ), lafka_open_status_format_12h( $m[1] ) ),
 						'dot_color' => 'var(--lafka-color-brand-500)',
+						'opens'     => $m[1],
+						'opens_day' => 0,
 					),
 					$now
 				);
@@ -295,6 +299,9 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 						/* translators: 1: day-of-week label ("tomorrow" or "Monday"); 2: opening time */
 						'label'     => sprintf( __( 'Closed · opens %1$s at %2$s', 'lafka' ), $when, lafka_open_status_format_12h( $m[1] ) ),
 						'dot_color' => 'var(--lafka-color-brand-500)',
+						'opens'     => $m[1],
+						'opens_day' => $offset,
+						'opens_on'  => $next_name,
 					),
 					$now
 				);

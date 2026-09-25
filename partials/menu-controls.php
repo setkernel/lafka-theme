@@ -78,9 +78,13 @@ $lafka_mc_threshold_label = function_exists( 'wc_price' )
 
 $lafka_mc_pickup_eta   = $lafka_mc_eta && ! empty( $lafka_mc_eta['pickup'] ) ? (string) $lafka_mc_eta['pickup'] : '';
 $lafka_mc_delivery_eta = $lafka_mc_eta && ! empty( $lafka_mc_eta['delivery'] ) ? (string) $lafka_mc_eta['delivery'] : '';
+// GX4: the counter header already carries the Pickup / Delivery choice (the
+// same preference, synced by js/lafka-fulfilment.js) — don't ask twice.
+$lafka_mc_show_tabs = ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) );
 ?>
 <div class="lafka-menu__controls" data-lafka-menu-controls>
 
+	<?php if ( $lafka_mc_show_tabs ) : ?>
 	<div class="lafka-menu__tabs" role="radiogroup" aria-label="<?php esc_attr_e( 'Fulfilment method', 'lafka' ); ?>">
 		<button
 			type="button"
@@ -130,6 +134,7 @@ $lafka_mc_delivery_eta = $lafka_mc_eta && ! empty( $lafka_mc_eta['delivery'] ) ?
 			</span>
 		</button>
 	</div>
+	<?php endif; ?>
 
 	<form class="lafka-menu__search" role="search" data-lafka-menu-search onsubmit="return false;">
 		<label class="lafka-menu__search-label" for="lafka-menu-search-input">

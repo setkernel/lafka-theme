@@ -1,0 +1,260 @@
+/*
+ * GX4: critical slice for the counter layout — inlined AFTER styles/critical.css
+ * (and the active preset's critical :root block) by lafka_inline_critical_css()
+ * ONLY while a counter header/home layout is active. var()-only: every value
+ * comes from --lafka-* tokens (lafka-tokens.css is render-blocking + the preset
+ * layer prints before first paint), so first paint already shows the preset's
+ * face, ink and surfaces, and the header/hero boxes are reserved (no CLS).
+ *
+ * Visibility rules carry the .lafka-counter-header ancestor so they out-rank
+ * the single-class component rules in lafka-counter.css.
+ * Keep it small: the whole inline bundle stays under 9 KB (CriticalPresetTokensTest).
+ */
+
+/* ── BODY (the legacy critical.css body rule is Rubik 13px grey) ── */
+body {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	line-height: var(--lafka-line-body);
+	color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-page);
+}
+
+@media (min-width: 768px) {
+
+	body {
+		font-size: var(--lafka-font-size-body-desk);
+	}
+}
+
+/* ── HEADER SKELETON ──
+ * <600: logo + name / status under it + Menu + Cart.
+ * 600–1023: + Order online.  ≥1024: one row with status, Pickup/Delivery,
+ * phone, Cart, Order online, and the slim nav row. */
+.lafka-counter-header .lafka-counter-header__bar {
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto;
+	align-items: center;
+	column-gap: 12px;
+	min-height: 64px;
+	padding-block: 8px;
+}
+
+.lafka-counter-header .lafka-counter-header__brand {
+	grid-column: 1;
+	grid-row: 1;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	min-width: 0;
+}
+
+.lafka-counter-header .lafka-counter-header__logo {
+	flex: none;
+	width: 44px;
+	height: 44px;
+	object-fit: contain;
+}
+
+.lafka-counter-header .lafka-counter-header__name {
+	font-size: 17px;
+}
+
+.lafka-counter-header .lafka-counter-status {
+	grid-column: 1;
+	grid-row: 2;
+	padding-left: 54px;
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.lafka-counter-header .lafka-counter-header__actions {
+	grid-column: 2;
+	grid-row: 1 / span 2;
+	display: flex;
+	align-items: center;
+	gap: 8px;
+}
+
+.lafka-counter-header .lafka-fulfilment--header,
+.lafka-counter-header .lafka-counter-header__phone,
+.lafka-counter-header .lafka-counter-header__order,
+.lafka-counter-header .lafka-counter-header__menu-label,
+.lafka-counter-header .lafka-counter-nav {
+	display: none;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-counter-header .lafka-counter-header__bar {
+		min-height: 76px;
+	}
+
+	.lafka-counter-header .lafka-counter-header__logo {
+		width: 52px;
+		height: 52px;
+	}
+
+	.lafka-counter-header .lafka-counter-header__name {
+		font-size: 21px;
+	}
+
+	.lafka-counter-header .lafka-counter-status {
+		padding-left: 62px;
+	}
+
+	.lafka-counter-header .lafka-counter-header__order,
+	.lafka-counter-header .lafka-counter-header__menu-label {
+		display: inline-flex;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-header .lafka-counter-header__bar {
+		display: flex;
+		gap: 24px;
+		min-height: 88px;
+		padding-block: 0;
+	}
+
+	.lafka-counter-header .lafka-counter-header__logo {
+		width: 64px;
+		height: 64px;
+	}
+
+	.lafka-counter-header .lafka-counter-header__name {
+		font-size: 26px;
+	}
+
+	.lafka-counter-header .lafka-counter-header__brand {
+		gap: 14px;
+		flex: none;
+	}
+
+	.lafka-counter-header .lafka-counter-status {
+		margin-right: auto;
+		padding-left: 0;
+		font-size: inherit;
+	}
+
+	.lafka-counter-header .lafka-fulfilment--header,
+	.lafka-counter-header .lafka-counter-header__phone {
+		display: flex;
+	}
+
+	.lafka-counter-header .lafka-counter-header__menu {
+		display: none;
+	}
+
+	.lafka-counter-header .lafka-counter-header__actions {
+		gap: 12px;
+	}
+
+	.lafka-counter-header .lafka-counter-nav {
+		display: block;
+		min-height: 44px;
+	}
+}
+
+/* ── HOME HERO SKELETON (dish boxes reserve their space) ── */
+.lafka-counter-hero__inner {
+	display: grid;
+	gap: 16px;
+	padding-block: 12px 32px;
+}
+
+.lafka-counter-hero__copy {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+}
+
+.lafka-counter-hero__art {
+	order: -1;
+	position: relative;
+	aspect-ratio: 39 / 24;
+}
+
+.lafka-counter-hero__dish {
+	position: absolute;
+	margin: 0;
+}
+
+.lafka-counter-hero__dish--front {
+	left: 0;
+	bottom: 0;
+	width: 62%;
+	z-index: 1;
+}
+
+.lafka-counter-hero__dish--back {
+	right: 0;
+	top: 0;
+	width: 52%;
+}
+
+.lafka-counter-hero__art--1 .lafka-counter-hero__dish--front {
+	left: 18%;
+	width: 64%;
+}
+
+.lafka-counter-hero__img {
+	display: block;
+	width: 100%;
+	height: auto;
+	aspect-ratio: 1;
+	object-fit: contain;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-counter-hero__art {
+		aspect-ratio: 16 / 7;
+	}
+
+	.lafka-counter-hero__dish--front {
+		left: 8%;
+		width: 44%;
+	}
+
+	.lafka-counter-hero__dish--back {
+		right: 10%;
+		width: 38%;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-hero__inner {
+		grid-template-columns: minmax(0, 612fr) minmax(0, 700fr);
+		gap: 20px;
+		min-height: 560px;
+		padding-block: 44px 0;
+	}
+
+	.lafka-counter-hero__copy {
+		gap: 24px;
+		padding-top: 22px;
+		padding-bottom: 40px;
+	}
+
+	.lafka-counter-hero__art {
+		order: 0;
+		aspect-ratio: auto;
+		min-height: 516px;
+	}
+
+	.lafka-counter-hero__dish--front {
+		left: -6%;
+		top: 44px;
+		bottom: auto;
+		width: 86%;
+	}
+
+	.lafka-counter-hero__dish--back {
+		left: 29%;
+		right: auto;
+		top: -34px;
+		width: 72%;
+	}
+}

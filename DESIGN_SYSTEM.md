@@ -116,8 +116,15 @@ the preset's chrome default and an operator accent override still wins.
 Every preset uses two families — body and display — all self-hosted WOFF2 under
 `assets/fonts/`.
 
-**Peppery (default)** uses the two *base* families with `font-display: optional` (avoids
-the swap-in layout shift):
+**Peppery (default, GX4 "counter")** uses two *pool* families with
+`font-display: optional` and preloads their first-view files (zero font layout shift):
+**Atkinson Hyperlegible Next** (body, 400/700 — the design's 500 maps to 400) and
+**Bricolage Grotesque** (display, one variable opsz + wght 200–800 file per subset).
+Body is 17 px on phones and 18 px from 768 px (`--lafka-font-size-body-desk`, counter
+layouts only); display weight 800; buttons use `--lafka-radius-button` (8 px).
+
+The base families below remain for the identity fixture and any preset that uses
+`source: "base"`:
 
 | Family    | Role        | Weights loaded   | License |
 |-----------|-------------|------------------|---------|
@@ -151,6 +158,8 @@ Line-heights: display 1.1, headings 1.15, body 1.5, small 1.4.
   done through **photography + color + Fraunces serif**, never via
   Pacifico/cursive lookalikes.
 - ❌ Font sizes outside the token table.
+- ❌ (counter layout) Italic accents in headings — the counter renders `<em>` upright; no
+  visible text below 14 px (the e2e suite measures it).
 
 ## Spacing
 
@@ -228,6 +237,29 @@ button-like UI reuses these rather than inventing another.
 Planned, not yet built: `.lafka-btn--secondary` / `--brand`, `.lafka-chip`,
 `.lafka-input` + `.lafka-label`, `.lafka-card` (`--raised` / `--sunken`).
 
+### Counter layout (GX4, `styles/lafka-counter.css`)
+
+Design direction C ("The counter") — Peppery's default; any preset opts in per surface
+(Customizer → Lafka Settings → Page layouts, `lafka_<surface>_layout`, or a preset's
+`variants`). Tokens only; loaded only while a surface uses it.
+
+- **Tokens added (no-op base values):** `--lafka-font-size-body-desk` (= body),
+  `--lafka-radius-button` (= pill; `.lafka-btn` and the primary CTAs read it),
+  `--lafka-motif-check-a/-b/-size/-h` (checkered band; `a` tracks the operator accent),
+  `--lafka-dish-shadow` (none).
+- **`.lafka-counter-btn`** (`--primary`, `--lg`, `--link`) — worded 48 px+ buttons.
+- **`.lafka-counter-head`** (`--ruled`) — section heading + tagline + "See all".
+- **`.lafka-row`** (`--photo`, `--compact`) + **`.lafka-prices`** — product row with
+  size-price columns (`lafka_price_columns()`), worded Add (button, never inside a link).
+- **`.lafka-chooser`** — the 2-tap size chooser (native `<dialog>`).
+- **`.lafka-deal`** (`--featured`, `--photo`, `--text`), `.lafka-counter-hero`,
+  `.lafka-jump`, `.lafka-counter-find`, `.lafka-counter-bar` (sticky mobile Call/Order,
+  above the consent banner), `.lafka-cart-drawer--counter`, `.lafka-footer--counter`.
+- **Motif:** `.lafka-motif-check`, drawn only under `body.lafka-motif-check`, hidden in
+  forced-colors mode.
+- Header + hero geometry lives in `styles/critical-counter.css` (inlined) so first
+  paint does not shift.
+
 ## WPBakery
 
 WPBakery is optional: default templates render without it; existing content keeps
@@ -241,7 +273,7 @@ Tokens are the contract; these are the key files that consume them.
 |------|------|
 | `styles/lafka-tokens.css` | The token SSOT — color/type/space/radii/motion, dark-mode block, accent-text derivation. |
 | `styles/dynamic-css.php` | Emits the operator's Customizer accent override into the cascade. Its 34 chrome defaults (29 `lafka_preset_default()` call sites) resolve through the active preset (operator theme_mods still win). |
-| `incl/presets/` + `presets/*/preset.json` | **Preset engine** — the "10 designs in one theme" system; file layout: see [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md) §2. Peppery is preset #1, the default and a provable no-op. |
+| `incl/presets/` + `presets/*/preset.json` | **Preset engine** — the "10 designs in one theme" system; file layout: see [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md) §2. Peppery is preset #1 and the default (the counter design since 7.2.0); the engine's no-op is the `__fixtures__/identity` preset. |
 | `styles/lafka-base.css` | **Parent baseline a11y / CLS** — structural rules the parent's own markup depends on (`.section-subtitle`, `.foodmenu-unit-info .ingredients`, `.screen-reader-text`, pre-mount `.lafka-owl-carousel` height reservation). Previously these lived only in lafka-child, leaving the OSS parent non-accessible on its own. |
 | `styles/lafka-search.css` | Header search overlay — native `<dialog>`; consumes tokens with neutral fallbacks. |
 | `styles/pdp-redesign.css` | Redesigned product page. |

@@ -1,0 +1,1787 @@
+/*
+ * GX4 "The counter" (design direction C) — every counter-layout component.
+ *
+ * Loaded only while at least one surface uses the counter layout
+ * (lafka_any_counter_layout()). Values are --lafka-* tokens only, so any preset
+ * (and the operator's accent) re-skins it; Peppery ships the tuned palette.
+ * Sections: base · buttons · motif · section head · header · status ·
+ * fulfilment · nav · hero · deals · rows · prices · chooser · jump index ·
+ * find-us · mobile bar · drawer · footer · menu page · archive.
+ *
+ * Fixed-bottom UI follows the consent banner: var(--lafka-consent-banner-h, 0px).
+ */
+
+/* ── Base ─────────────────────────────────────────────────────────────── */
+.lafka-counter-wrap {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: var(--lafka-container-max);
+	margin-inline: auto;
+	padding-inline: clamp(16px, 4.45vw, 64px);
+}
+
+body[class*="lafka-layout-"][class*="-counter"] {
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	line-height: var(--lafka-line-body);
+	color: var(--lafka-color-text-primary);
+	font-variant-numeric: tabular-nums;
+}
+
+@media (min-width: 768px) {
+
+	body[class*="lafka-layout-"][class*="-counter"] {
+		font-size: var(--lafka-font-size-body-desk);
+	}
+}
+
+.lafka-counter-display {
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: var(--lafka-line-heading);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-muted {
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-link {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 4px;
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 48px;
+}
+
+.lafka-counter-link:hover,
+.lafka-counter-link:focus-visible {
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-counter-dish {
+	filter: var(--lafka-dish-shadow);
+}
+
+/* ── Buttons ──────────────────────────────────────────────────────────── */
+.lafka-counter-btn {
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 10px;
+	min-height: 48px;
+	padding: 0 20px;
+	border: 2px solid var(--lafka-color-text-primary);
+	border-radius: var(--lafka-radius-button);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-bold);
+	line-height: 1.2;
+	text-decoration: none;
+	white-space: nowrap;
+	cursor: pointer;
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out), color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-counter-btn:hover {
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-btn--primary {
+	border-color: var(--lafka-color-accent-500);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
+}
+
+.lafka-counter-btn--primary:hover,
+.lafka-counter-btn--primary:focus-visible {
+	border-color: var(--lafka-color-accent-600);
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-on-accent);
+}
+
+.lafka-counter-btn--lg {
+	min-height: 60px;
+	padding: 0 28px;
+	font-size: var(--lafka-font-size-body-lg-desk);
+}
+
+.lafka-counter-btn:focus-visible,
+.lafka-counter-link:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-counter-btn.loading {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+/* ── Motif: the checkered band (only with body.lafka-motif-check) ───────── */
+.lafka-motif-check {
+	display: none;
+}
+
+body.lafka-motif-check .lafka-motif-check {
+	display: block;
+	height: var(--lafka-motif-check-h);
+	background: repeating-conic-gradient(var(--lafka-motif-check-a) 0 25%, var(--lafka-motif-check-b) 0 50%) 0 0 / var(--lafka-motif-check-size) var(--lafka-motif-check-size);
+}
+
+@media (forced-colors: active) {
+
+	body.lafka-motif-check .lafka-motif-check {
+		display: none;
+	}
+}
+
+/* ── Section head (h2 + tagline + "See all") ─────────────────────────── */
+.lafka-counter-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 4px 24px;
+	margin-bottom: 20px;
+}
+
+.lafka-counter-head--ruled {
+	padding-bottom: 14px;
+	margin-bottom: 0;
+	border-bottom: 2px solid var(--lafka-color-text-primary);
+}
+
+.lafka-counter-head__title {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: var(--lafka-font-size-h2);
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.1;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-head__lead {
+	margin: 4px 0 0;
+	color: var(--lafka-color-text-secondary);
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-head__title {
+		font-size: var(--lafka-font-size-h2-desk);
+	}
+}
+
+/* ── Header ───────────────────────────────────────────────────────────────
+ * Layout skeleton (bar grid, heights, what shows at each width) is inlined
+ * via styles/critical-counter.css so first paint does not shift. */
+body.lafka-layout-header-counter .lafka-header {
+	background: var(--lafka-color-surface-page);
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+	border-bottom: 0;
+	box-shadow: none;
+}
+
+.lafka-counter-header__brand {
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+}
+
+.lafka-counter-header__name {
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.1;
+}
+
+.lafka-counter-header__phone {
+	display: inline-flex;
+	align-items: center;
+	gap: 8px;
+	min-height: 48px;
+	padding: 0 6px;
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: none;
+	white-space: nowrap;
+}
+
+.lafka-counter-header__phone:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-counter-header__cart,
+.lafka-counter-header__menu {
+	box-sizing: border-box;
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	gap: 8px;
+	min-width: 48px;
+	min-height: 48px;
+	padding: 0 14px;
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font: inherit;
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: none;
+	cursor: pointer;
+}
+
+.lafka-counter-header__count {
+	min-width: 24px;
+	height: 24px;
+	padding: 0 6px;
+	box-sizing: border-box;
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-surface-page);
+	font-size: var(--lafka-font-size-caption);
+	line-height: 24px;
+	text-align: center;
+}
+
+.lafka-counter-header__count.is-empty {
+	display: none;
+}
+
+/* ── Open / closed status ─────────────────────────────────────────────── */
+.lafka-counter-status {
+	margin: 0;
+	display: flex;
+	align-items: center;
+	gap: 10px;
+	color: var(--lafka-color-text-primary);
+	white-space: nowrap;
+}
+
+.lafka-counter-status__dot {
+	flex: none;
+	width: 11px;
+	height: 11px;
+	border-radius: 50%;
+	background: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-status strong {
+	font-weight: var(--lafka-font-weight-bold);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-status.is-open .lafka-counter-status__dot {
+	background: var(--lafka-color-success-500);
+}
+
+.lafka-counter-status.is-open strong {
+	color: var(--lafka-color-success-500);
+}
+
+/* ── Pickup / Delivery (segmented radios; large cards in the drawer) ─── */
+.lafka-fulfilment {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	min-width: 0;
+}
+
+.lafka-fulfilment--header {
+	display: flex;
+	gap: 3px;
+	padding: 3px;
+	background: var(--lafka-color-surface-muted);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-button);
+}
+
+.lafka-fulfilment__option {
+	position: relative;
+	display: flex;
+	cursor: pointer;
+}
+
+.lafka-fulfilment__option input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+	margin: 0;
+}
+
+.lafka-fulfilment--header .lafka-fulfilment__label {
+	display: inline-flex;
+	align-items: center;
+	height: 42px;
+	padding: 0 16px;
+	border: 1.5px solid transparent;
+	border-radius: calc(var(--lafka-radius-button) - 2px);
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-body-lg);
+}
+
+.lafka-fulfilment--header input:checked + .lafka-fulfilment__label {
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-fulfilment input:focus-visible + .lafka-fulfilment__label {
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* ── Header nav (slim row; collapses into the mobile menu <1024) ──────── */
+.lafka-counter-nav {
+	display: none;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-counter-nav__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 28px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-counter-nav__list a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: none;
+}
+
+.lafka-counter-nav__list a:hover,
+.lafka-counter-nav__list .current-menu-item > a {
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 6px;
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-nav {
+		display: block;
+	}
+}
+
+/* ── Product rows ─────────────────────────────────────────────────────────
+ * photo:   [104|140 px dish] name / description / prices + Add
+ * compact: smaller thumb (optional), one-line description.
+ * <600 a row with 3+ price columns gives the prices the full width. */
+.lafka-rows {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-row {
+	display: grid;
+	grid-template-columns: 104px minmax(0, 1fr);
+	grid-template-areas:
+		"media name"
+		"media desc"
+		"media foot";
+	grid-template-rows: auto auto 1fr;
+	column-gap: 14px;
+	padding: 16px 0;
+	border-bottom: 1px solid var(--lafka-color-border-default);
+	list-style: none;
+}
+
+.lafka-row:last-child {
+	border-bottom: 0;
+}
+
+.lafka-row--no-img {
+	grid-template-columns: minmax(0, 1fr);
+	grid-template-areas:
+		"name"
+		"desc"
+		"foot";
+}
+
+.lafka-row__body {
+	display: contents;
+}
+
+.lafka-row__media {
+	grid-area: media;
+	display: block;
+	width: 104px;
+	height: 96px;
+}
+
+.lafka-row__img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+	transform: scale(1.14);
+}
+
+.lafka-row__name {
+	grid-area: name;
+	margin: 0;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-h3);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: 0;
+	line-height: 1.3;
+}
+
+.lafka-row__name a {
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+}
+
+.lafka-row__name a:hover,
+.lafka-row__name a:focus-visible {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-row__desc {
+	grid-area: desc;
+	margin: 2px 0 0;
+	color: var(--lafka-color-text-secondary);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+.lafka-row__foot {
+	grid-area: foot;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 10px 16px;
+	margin-top: 10px;
+}
+
+.lafka-row__price {
+	margin: 0;
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-row__add {
+	min-width: 88px;
+	margin-left: auto;
+}
+
+.lafka-row--compact {
+	grid-template-columns: 72px minmax(0, 1fr);
+	padding: 12px 0;
+}
+
+.lafka-row--compact.lafka-row--no-img {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.lafka-row--compact .lafka-row__media {
+	width: 72px;
+	height: 72px;
+}
+
+.lafka-row--compact .lafka-row__desc {
+	-webkit-line-clamp: 1;
+}
+
+@media (max-width: 599px) {
+
+	.lafka-row--wide-prices {
+		grid-template-areas:
+			"media name"
+			"media desc"
+			"foot foot";
+	}
+
+	.lafka-row--wide-prices.lafka-row--no-img {
+		grid-template-areas:
+			"name"
+			"desc"
+			"foot";
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-row--photo {
+		grid-template-columns: 140px minmax(0, 1fr);
+		column-gap: 18px;
+	}
+
+	.lafka-row--photo.lafka-row--no-img {
+		grid-template-columns: minmax(0, 1fr);
+	}
+
+	.lafka-row--photo .lafka-row__media {
+		width: 140px;
+		height: 110px;
+	}
+
+	.lafka-row__name {
+		font-size: var(--lafka-font-size-h3-desk);
+	}
+}
+
+/* ── Size-price columns ───────────────────────────────────────────────── */
+.lafka-prices {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 4px 20px;
+	margin: 0;
+}
+
+.lafka-prices__col {
+	display: flex;
+	flex-direction: column;
+}
+
+.lafka-prices dt {
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+	line-height: 1.4;
+}
+
+.lafka-prices dd {
+	margin: 0;
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-bold);
+	line-height: 1.3;
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-prices {
+		column-gap: 24px;
+	}
+
+	.lafka-prices dd {
+		font-size: var(--lafka-font-size-body-lg-desk);
+	}
+}
+
+/* ── 2-tap size chooser (native <dialog>) ─────────────────────────────── */
+.lafka-chooser {
+	box-sizing: border-box;
+	width: min(480px, calc(100vw - 24px));
+	max-height: min(92dvh, 720px);
+	margin: auto;
+	padding: 0;
+	border: 0;
+	border-radius: var(--lafka-radius-xl);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	box-shadow: var(--lafka-shadow-4);
+	overflow: auto;
+}
+
+.lafka-chooser::backdrop {
+	background: var(--lafka-color-surface-overlay);
+}
+
+.lafka-chooser__panel {
+	display: flex;
+	flex-direction: column;
+	gap: 18px;
+	padding: 20px;
+}
+
+.lafka-chooser__head {
+	display: flex;
+	align-items: flex-start;
+	justify-content: space-between;
+	gap: 16px;
+}
+
+.lafka-chooser__head form {
+	margin: 0;
+}
+
+.lafka-chooser__eyebrow {
+	margin: 0;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-chooser__title {
+	margin: 2px 0 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: var(--lafka-font-size-h3-desk);
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.15;
+}
+
+.lafka-chooser__close {
+	border-width: 1.5px;
+	border-color: var(--lafka-color-border-strong);
+	font-size: var(--lafka-font-size-body);
+}
+
+.lafka-chooser__group,
+.lafka-chooser__sizes {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	min-width: 0;
+}
+
+.lafka-chooser__legend {
+	padding: 0;
+	margin-bottom: 10px;
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-chooser__radios {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+}
+
+.lafka-chooser__radio {
+	position: relative;
+	display: flex;
+	cursor: pointer;
+}
+
+.lafka-chooser__radio input {
+	position: absolute;
+	opacity: 0;
+	width: 1px;
+	height: 1px;
+}
+
+.lafka-chooser__radio span {
+	display: inline-flex;
+	align-items: center;
+	min-height: 48px;
+	padding: 0 16px;
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+}
+
+.lafka-chooser__radio input:checked + span {
+	border: 2px solid var(--lafka-color-text-primary);
+	background: var(--lafka-color-surface-muted);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-chooser__radio input:focus-visible + span {
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-chooser__options {
+	display: flex;
+	flex-direction: column;
+	gap: 10px;
+}
+
+.lafka-chooser__option {
+	box-sizing: border-box;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) auto auto;
+	align-items: center;
+	gap: 14px;
+	width: 100%;
+	min-height: 56px;
+	padding: 8px 16px;
+	border: 2px solid var(--lafka-color-text-primary);
+	border-radius: var(--lafka-radius-button);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font: inherit;
+	text-align: left;
+	cursor: pointer;
+}
+
+.lafka-chooser__option:hover:not([disabled]) {
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-chooser__option:focus-visible {
+	outline: none;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+.lafka-chooser__option[disabled] {
+	border-style: dashed;
+	border-color: var(--lafka-color-border-strong);
+	color: var(--lafka-color-text-secondary);
+	cursor: not-allowed;
+}
+
+.lafka-chooser__option-name,
+.lafka-chooser__option-price {
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-chooser__option-cta {
+	color: var(--lafka-color-accent-text);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-chooser__option[disabled] .lafka-chooser__option-cta {
+	color: inherit;
+	font-weight: var(--lafka-font-weight-regular);
+}
+
+.lafka-chooser__option.loading {
+	opacity: 0.6;
+}
+
+.lafka-chooser__more {
+	margin: 0;
+}
+
+@media (max-width: 599px) {
+
+	.lafka-chooser {
+		width: 100vw;
+		max-width: 100vw;
+		margin: auto 0 0;
+		border-radius: var(--lafka-radius-xl) var(--lafka-radius-xl) 0 0;
+		padding-bottom: env(safe-area-inset-bottom);
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+	.lafka-chooser[open] {
+		animation: lafka-chooser-in var(--lafka-motion-duration-base) var(--lafka-motion-ease-out);
+	}
+}
+
+@keyframes lafka-chooser-in {
+
+	from {
+		opacity: 0;
+		transform: translateY(12px);
+	}
+}
+
+.lafka-counter-btn--link {
+	min-height: 48px;
+	padding: 0;
+	border: 0;
+	background: none;
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 4px;
+}
+
+.lafka-counter-btn--link:hover {
+	background: none;
+	color: var(--lafka-color-accent-text);
+}
+
+/* ── Hero (box geometry in critical-counter.css) ──────────────────────── */
+.lafka-counter-hero {
+	background: var(--lafka-color-surface-muted);
+	overflow: hidden;
+}
+
+.lafka-counter-hero__title {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: var(--lafka-font-size-h1);
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: var(--lafka-line-display);
+	color: var(--lafka-color-text-primary);
+	text-wrap: balance;
+}
+
+.lafka-counter-hero__title em {
+	font-style: normal;
+}
+
+.lafka-counter-hero__lead {
+	margin: 0;
+	max-width: 34em;
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-body-lg);
+}
+
+.lafka-counter-hero__ctas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.lafka-counter-hero__meta {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-hero__meta li {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.lafka-counter-hero__meta .lafka-icon {
+	flex: none;
+	margin-top: 3px;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-hero__meta strong {
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-hero__caption {
+	display: none;
+	line-height: 1.4;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-hero__caption strong {
+	display: block;
+	color: var(--lafka-color-text-primary);
+}
+
+@media (max-width: 599px) {
+
+	.lafka-counter-hero__ctas .lafka-counter-btn {
+		width: 100%;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-hero__lead {
+		font-size: var(--lafka-font-size-body-lg-desk);
+	}
+
+	.lafka-counter-hero__caption {
+		display: block;
+		position: absolute;
+		z-index: 2;
+	}
+
+	.lafka-counter-hero__dish--front .lafka-counter-hero__caption {
+		left: 0;
+		top: 26%;
+	}
+
+	.lafka-counter-hero__dish--back .lafka-counter-hero__caption {
+		right: -2%;
+		top: 96%;
+		text-align: right;
+		white-space: nowrap;
+	}
+}
+
+/* ── Deals ────────────────────────────────────────────────────────────── */
+.lafka-counter-deals {
+	padding-block: 40px;
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-counter-deals__grid,
+.lafka-counter-deals__photos {
+	display: grid;
+	gap: 16px;
+}
+
+.lafka-deal {
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.lafka-deal__name {
+	margin: 0;
+	font-size: var(--lafka-font-size-h4-desk);
+	font-weight: var(--lafka-font-weight-bold);
+	line-height: 1.3;
+}
+
+.lafka-deal__name a {
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+}
+
+.lafka-deal__name a:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-deal__line {
+	margin: 4px 0 0;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-deal__foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px 16px;
+	margin-top: auto;
+	padding-top: 10px;
+}
+
+.lafka-deal__price {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-weight: var(--lafka-font-weight-display);
+	line-height: 1;
+	font-size: 2rem;
+}
+
+.lafka-deal__media {
+	display: block;
+}
+
+.lafka-deal__img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.lafka-deal--featured {
+	overflow: hidden;
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-deal--featured .lafka-deal__media {
+	height: 190px;
+	padding: 8px 12px 0;
+}
+
+.lafka-deal--featured .lafka-deal__body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 8px 22px 22px;
+}
+
+.lafka-deal--featured .lafka-deal__name {
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: 1.625rem;
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.15;
+}
+
+.lafka-deal--featured .lafka-deal__price {
+	font-size: 2.5rem;
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-deal--photo {
+	display: grid;
+	grid-template-columns: 104px minmax(0, 1fr);
+	align-items: center;
+	gap: 14px;
+	padding: 14px 16px 14px 10px;
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-lg);
+	background: var(--lafka-color-surface-raised);
+}
+
+.lafka-deal--photo.lafka-deal--no-img {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.lafka-deal--photo .lafka-deal__media {
+	height: 96px;
+}
+
+.lafka-deal--photo .lafka-deal__img {
+	transform: scale(1.15);
+}
+
+.lafka-counter-deals__list {
+	display: flex;
+	flex-direction: column;
+	padding: 4px 20px;
+	border-radius: var(--lafka-radius-lg);
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-deal--text {
+	padding: 14px 0;
+	border-bottom: 1px solid var(--lafka-color-border-default);
+}
+
+.lafka-deal--text:last-child {
+	border-bottom: 0;
+}
+
+.lafka-deal--text .lafka-deal__price {
+	font-size: 1.625rem;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-counter-deals__photos {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.lafka-deal--featured {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+		align-items: center;
+	}
+
+	.lafka-deal--featured .lafka-motif-check {
+		grid-column: 1 / -1;
+	}
+
+	.lafka-deal--photo {
+		grid-template-columns: minmax(0, 1fr);
+		padding: 16px;
+	}
+
+	.lafka-deal--photo .lafka-deal__media {
+		height: 150px;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-deals {
+		padding-block: 42px 48px;
+	}
+
+	.lafka-counter-deals__grid {
+		grid-template-columns: minmax(0, 440fr) minmax(0, 590fr);
+		gap: 22px;
+	}
+
+	.lafka-counter-deals__grid.has-list {
+		grid-template-columns: minmax(0, 440fr) minmax(0, 590fr) minmax(0, 280fr);
+	}
+
+	.lafka-counter-deals__photos {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: repeat(2, minmax(0, 1fr));
+		gap: 22px;
+	}
+
+	.lafka-deal--featured {
+		display: flex;
+	}
+
+	.lafka-deal--featured .lafka-deal__media {
+		height: 178px;
+	}
+
+	.lafka-deal--featured .lafka-deal__name {
+		font-size: 1.75rem;
+	}
+
+	.lafka-deal--featured .lafka-deal__price {
+		font-size: 2.875rem;
+	}
+
+	.lafka-deal--photo {
+		grid-template-columns: 150px minmax(0, 1fr);
+		padding: 14px 22px 14px 12px;
+	}
+
+	.lafka-deal--photo .lafka-deal__media {
+		height: 120px;
+	}
+
+	.lafka-deal--text .lafka-deal__name {
+		font-size: var(--lafka-font-size-h3);
+	}
+}
+
+/* ── Co-star categories + section heads ───────────────────────────────── */
+.lafka-counter-costars {
+	padding-block: 32px 36px;
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-counter-costars__grid {
+	display: grid;
+	gap: 32px;
+}
+
+.lafka-counter-section .lafka-rows {
+	margin-top: 4px;
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-costars {
+		padding-block: 38px 40px;
+	}
+
+	.lafka-counter-costars__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 64px;
+	}
+}
+
+/* ── The rest of the menu + jump index ────────────────────────────────── */
+.lafka-counter-rest {
+	padding-block: 36px 44px;
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-jump__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 22px;
+	margin: 0 0 24px;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-jump__list a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--lafka-color-text-primary);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-jump__list a:hover {
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-counter-rest__grid {
+	display: grid;
+	gap: 36px;
+}
+
+.lafka-counter-rest .lafka-counter-section {
+	content-visibility: auto;
+	contain-intrinsic-size: auto 480px;
+	scroll-margin-top: 120px;
+}
+
+.lafka-counter-rest .lafka-counter-head__title {
+	font-size: var(--lafka-font-size-h3-desk);
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-rest__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-auto-flow: row dense;
+		align-items: start;
+		column-gap: 64px;
+	}
+
+	.lafka-counter-rest .lafka-counter-head__title {
+		font-size: var(--lafka-font-size-h2);
+	}
+}
+
+/* ── Find us ──────────────────────────────────────────────────────────── */
+.lafka-counter-find {
+	padding-block: 30px 36px;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-counter-find__grid {
+	display: grid;
+	gap: 20px;
+}
+
+.lafka-counter-find__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.lafka-counter-find__title {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: 1.875rem;
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.2;
+}
+
+.lafka-counter-find__label {
+	margin: 0 0 4px;
+	font-family: var(--lafka-font-family-body);
+	font-size: inherit;
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: 0;
+}
+
+.lafka-counter-find__text {
+	margin: 0;
+	font-style: normal;
+}
+
+.lafka-counter-find__hours {
+	display: grid;
+	gap: 2px;
+	margin: 0;
+}
+
+.lafka-counter-find__hours div {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 8px;
+}
+
+.lafka-counter-find__hours dd {
+	margin: 0;
+}
+
+.lafka-counter-find__phone {
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-body-lg-desk);
+	font-weight: var(--lafka-font-weight-bold);
+	text-underline-offset: 4px;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-counter-find__grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: 32px;
+	}
+
+	.lafka-counter-find__head {
+		grid-column: 1 / -1;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-find__grid {
+		grid-template-columns: 260px repeat(3, minmax(0, 1fr));
+		column-gap: 40px;
+	}
+
+	.lafka-counter-find__head {
+		grid-column: auto;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+/* ── Sticky mobile bar (<1024; above the consent banner) ──────────────── */
+.lafka-counter-bar {
+	position: fixed;
+	right: 0;
+	bottom: var(--lafka-consent-banner-h, 0px);
+	left: 0;
+	z-index: calc(var(--lafka-z-header) + 1);
+	box-sizing: border-box;
+	display: grid;
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+	gap: 12px;
+	padding: 12px 16px;
+	padding-bottom: max(12px, env(safe-area-inset-bottom));
+	border-top: 1px solid var(--lafka-color-border-default);
+	background: var(--lafka-color-surface-raised);
+	box-shadow: 0 -6px 16px rgba(60, 40, 20, 0.08);
+}
+
+.lafka-counter-bar--no-phone {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.lafka-counter-bar .lafka-counter-btn {
+	min-height: 52px;
+	padding: 0 12px;
+}
+
+.lafka-counter-bar__number {
+	display: none;
+}
+
+.lafka-counter-bar__count {
+	min-width: 26px;
+	height: 26px;
+	padding: 0 6px;
+	box-sizing: border-box;
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-text-on-accent);
+	color: var(--lafka-color-accent-text);
+	line-height: 26px;
+	text-align: center;
+}
+
+body.lafka-has-counter-bar {
+	padding-bottom: calc(80px + env(safe-area-inset-bottom));
+}
+
+@media (min-width: 600px) {
+
+	.lafka-counter-bar {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		padding-inline: clamp(16px, 4.45vw, 64px);
+	}
+
+	.lafka-counter-bar__number {
+		display: inline;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-bar {
+		display: none;
+	}
+
+	body.lafka-has-counter-bar {
+		padding-bottom: 0;
+	}
+}
+
+/* ── Order drawer (C-Mobile-Order). Shell + JS are the classic drawer's. ── */
+.lafka-cart-drawer--counter .lafka-cart-drawer__panel {
+	width: min(460px, 92vw);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-drawer__handle {
+	display: none;
+}
+
+.lafka-drawer__header {
+	align-items: flex-start;
+	gap: 16px;
+	padding: 16px 20px 12px;
+	border-bottom: 1px solid var(--lafka-color-border-default);
+}
+
+.lafka-drawer__title {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: 1.875rem;
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.15;
+}
+
+.lafka-drawer__sub {
+	display: flex;
+	gap: 6px;
+	margin: 0;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-cart-drawer--counter .lafka-drawer__close {
+	width: auto;
+	height: auto;
+	min-height: 48px;
+	padding: 0 14px;
+	border-width: 1.5px;
+	border-color: var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+	font-size: var(--lafka-font-size-body);
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__body {
+	padding: 0 20px 16px;
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__item {
+	padding-block: 18px;
+	border-bottom: 1px solid var(--lafka-color-border-default);
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__name {
+	font-size: var(--lafka-font-size-h3);
+	font-weight: var(--lafka-font-weight-bold);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__items [role="group"] {
+	display: inline-flex;
+	align-items: center;
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__items [role="group"] button {
+	width: 48px;
+	height: 48px;
+	border: 0;
+	background: none;
+	color: var(--lafka-color-text-primary);
+	font-size: 1.25rem;
+	cursor: pointer;
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__items [role="group"] output {
+	min-width: 32px;
+	font-weight: var(--lafka-font-weight-bold);
+	text-align: center;
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__remove {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-drawer__fulfilment {
+	margin-top: 22px;
+}
+
+.lafka-fulfilment--drawer {
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	gap: 10px;
+}
+
+.lafka-fulfilment__legend {
+	grid-column: 1 / -1;
+	float: left;
+	width: 100%;
+	margin-bottom: 10px;
+	padding: 0;
+	font-size: var(--lafka-font-size-body-lg-desk);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-fulfilment--drawer .lafka-fulfilment__label {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	gap: 12px;
+	width: 100%;
+	min-height: 56px;
+	padding: 10px 16px;
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-fulfilment--drawer .lafka-fulfilment__label::before {
+	content: "";
+	flex: none;
+	box-sizing: border-box;
+	width: 22px;
+	height: 22px;
+	border: 2px solid var(--lafka-color-text-primary);
+	border-radius: 50%;
+}
+
+.lafka-fulfilment--drawer input:checked + .lafka-fulfilment__label {
+	border: 2px solid var(--lafka-color-text-primary);
+}
+
+.lafka-fulfilment--drawer input:checked + .lafka-fulfilment__label::before {
+	box-shadow: inset 0 0 0 4px var(--lafka-color-surface-raised);
+	background: var(--lafka-color-text-primary);
+}
+
+.lafka-drawer__note {
+	display: flex;
+	gap: 8px;
+	margin: 8px 0 0;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-drawer__note[hidden] {
+	display: none;
+}
+
+.lafka-drawer__footer {
+	gap: 10px;
+	padding: 16px 20px 20px;
+	padding-bottom: max(20px, env(safe-area-inset-bottom));
+	border-top: 1px solid var(--lafka-color-border-default);
+	box-shadow: 0 -6px 16px rgba(60, 40, 20, 0.06);
+}
+
+.lafka-drawer__tax {
+	margin: 0;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__checkout {
+	flex: none;
+	width: 100%;
+	padding: 0 28px;
+	border-color: var(--lafka-color-accent-500);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
+	text-transform: none;
+	letter-spacing: 0;
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__checkout:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-on-accent);
+}
+
+.lafka-drawer__call {
+	margin: 0;
+	text-align: center;
+}
+
+.lafka-drawer__call a {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-underline-offset: 4px;
+}
+
+@media (max-width: 599px) {
+
+	.lafka-cart-drawer--counter .lafka-cart-drawer__panel {
+		top: auto;
+		right: 0;
+		bottom: var(--lafka-consent-banner-h, 0px);
+		left: 0;
+		width: 100%;
+		max-height: 92dvh;
+		border-radius: var(--lafka-radius-xl) var(--lafka-radius-xl) 0 0;
+		transform: translateY(100%);
+	}
+
+	.lafka-cart-drawer--counter[data-open="true"] .lafka-cart-drawer__panel {
+		transform: translateY(0);
+	}
+
+	.lafka-drawer__handle {
+		display: block;
+		width: 44px;
+		height: 5px;
+		margin: 10px auto 0;
+		border-radius: 3px;
+		background: var(--lafka-color-border-strong);
+	}
+}
+
+/* ── /menu/ + category archive under the counter menu layout ──────────────
+ * Scoped to body.lafka-layout-menu-counter; lafka-menu-archive.css is not
+ * edited. The counter header does not stick (the phone bar carries the cart),
+ * so the category tabs stick to the top of the viewport. */
+body.lafka-layout-header-counter .lafka-header {
+	position: relative;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__header {
+	padding-block: 28px 12px;
+	background: var(--lafka-color-surface-page);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__crumbs {
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__title {
+	font-size: var(--lafka-font-size-h2);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	font-optical-sizing: auto;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__lead,
+body.lafka-layout-menu-counter .lafka-menu__intro {
+	color: var(--lafka-color-text-secondary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cats {
+	top: 0;
+	background: var(--lafka-color-surface-page);
+	backdrop-filter: none;
+	-webkit-backdrop-filter: none;
+	border-bottom: 1px solid var(--lafka-color-border-default);
+	padding-block: 0;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cats-list {
+	gap: 4px 22px;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cat-chip {
+	min-height: 48px;
+	padding: 0;
+	border: 0;
+	border-bottom: 3px solid transparent;
+	border-radius: 0;
+	background: none;
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-body);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cat-chip:hover,
+body.lafka-layout-menu-counter .lafka-menu__cat-chip.is-active {
+	border-bottom-color: var(--lafka-color-accent-500);
+	background: none;
+	color: var(--lafka-color-text-primary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__cat-count {
+	display: none;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__chip,
+body.lafka-layout-menu-counter .lafka-menu__search-input {
+	border-radius: var(--lafka-radius-button);
+	font-size: var(--lafka-font-size-body);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group + .lafka-menu__group {
+	margin-top: 40px;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	justify-content: space-between;
+	gap: 4px 24px;
+	margin-bottom: 0;
+	padding-bottom: 14px;
+	border-bottom: 2px solid var(--lafka-color-text-primary);
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-title {
+	margin: 0;
+	font-size: var(--lafka-font-size-h2);
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	font-optical-sizing: auto;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-rule,
+body.lafka-layout-menu-counter .lafka-menu__group-count {
+	display: none;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-all {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__group-blurb {
+	flex-basis: 100%;
+	order: 2;
+	margin: 0;
+	color: var(--lafka-color-text-secondary);
+	display: -webkit-box;
+	-webkit-line-clamp: 2;
+	-webkit-box-orient: vertical;
+	overflow: hidden;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__grid {
+	display: block;
+	gap: 0;
+}
+
+body.lafka-layout-menu-counter .lafka-menu__faq {
+	color: var(--lafka-color-text-primary);
+}
+
+@media (min-width: 1024px) {
+
+	body.lafka-layout-menu-counter .lafka-menu__grid {
+		display: grid;
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 64px;
+	}
+
+	body.lafka-layout-menu-counter .lafka-menu__grid .lafka-row:nth-last-child(2):nth-child(odd) {
+		border-bottom: 0;
+	}
+
+	body.lafka-layout-menu-counter .lafka-menu__title,
+	body.lafka-layout-menu-counter .lafka-menu__group-title {
+		font-size: var(--lafka-font-size-h2-desk);
+	}
+}
+
+/* ── Quiet footer ─────────────────────────────────────────────────────── */
+.lafka-footer.lafka-footer--counter {
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+
+	/* The page surface, not --surface-footer (a dark band in most presets). */
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 28px;
+	min-height: 64px;
+	padding-block: 12px;
+}
+
+.lafka-counter-footer__line {
+	margin: 0;
+}
+
+.lafka-counter-footer__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 28px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-counter-footer__list a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--lafka-color-text-secondary);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-counter-footer__list a:hover {
+	color: var(--lafka-color-text-primary);
+}
