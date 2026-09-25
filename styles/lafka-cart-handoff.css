@@ -787,13 +787,15 @@ a.lafka-cart-empty__cta {
 	align-items: stretch;
 }
 
-.lafka-cart-empty-popular__item {
+/* `.lafka-page__content li + li` adds a top margin to every card but the
+ * first, which pushed cards 2-n 8px down (lafka-page.css). */
+.woocommerce-cart .lafka-cart-empty-popular__grid > .lafka-cart-empty-popular__item {
 	display: flex;
 	min-width: 0;
+	margin: 0;
 }
 
-.woocommerce-cart a.lafka-cart-empty-popular__link,
-.lafka-cart-empty-popular__link {
+.woocommerce-cart .lafka-cart-empty-popular a.lafka-cart-empty-popular__link {
 	flex: 1 1 auto;
 	text-decoration: none;
 	justify-content: flex-start;

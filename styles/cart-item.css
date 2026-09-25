@@ -141,7 +141,7 @@
 	white-space: nowrap;
 }
 
-/* O-09: one bordered 44px stepper box — − | qty | + — inside the card.
+/* O-09: one bordered 48px stepper box — − | qty | + — inside the card.
  * style.css still carries the legacy catalogue stepper
  * (`div.quantity{padding:0 30px;height:47px;background:#f5f5f5}` and absolutely
  * positioned `div.quantity input.lafka-qty-plus/minus`), so every property it
@@ -152,7 +152,7 @@
 	display: inline-flex;
 	align-items: stretch;
 	box-sizing: border-box;
-	height: 44px;
+	height: 48px; /* 48 - 2×1.5px border = 45px tall −/+ targets (T-21: ≥44×44) */
 	margin: 0;
 	padding: 0;
 	background: var(--lafka-color-surface-page);

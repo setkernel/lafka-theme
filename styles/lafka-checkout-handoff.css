@@ -469,6 +469,12 @@
 	display: none;
 }
 
+.woocommerce-checkout-payment .payment_box p {
+	margin: 0;
+	padding: 0;
+	text-align: left;
+}
+
 .woocommerce-checkout-payment .payment_box fieldset {
 	margin: 0;
 	padding: 0;
