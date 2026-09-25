@@ -150,7 +150,7 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 							'woocommerce_single',
 							false,
 							array(
-								'class'         => 'lafka-counter-hero__img lafka-counter-dish',
+								'class'         => 'lafka-counter-hero__img lafka-counter-dish lafka-counter-dish--' . ( function_exists( 'lafka_dish_kind' ) ? lafka_dish_kind( (int) $lafka_hero_dish->get_image_id() ) : 'cutout' ),
 								'alt'           => function_exists( 'lafka_card_image_alt' ) ? lafka_card_image_alt( $lafka_hero_dish, (int) $lafka_hero_dish->get_image_id() ) : $lafka_hero_dish->get_name(),
 								'loading'       => 'eager',
 								'decoding'      => 'async',

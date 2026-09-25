@@ -148,6 +148,7 @@ if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
 			'--lafka-motif-check-size',
 			'--lafka-motif-check-h',
 			'--lafka-dish-shadow',
+			'--lafka-dish-contact', // GX4 polish: contact-shadow colour under cut-out thumbnails.
 
 			// ---- Shadows / elevation ------------------------------------------
 			'--lafka-shadow-0',

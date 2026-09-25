@@ -27,6 +27,7 @@ namespace Lafka\Tests\Unit {
 			'--lafka-motif-check-size',
 			'--lafka-motif-check-h',
 			'--lafka-dish-shadow',
+			'--lafka-dish-contact',
 		);
 
 		/** @return array<string,string> the first :root{} block's declarations. */
@@ -55,6 +56,7 @@ namespace Lafka\Tests\Unit {
 			$this->assertSame( 'var(--lafka-radius-pill)', $tokens['--lafka-radius-button'], 'buttons keep the pill radius by default' );
 			$this->assertSame( 'var(--lafka-font-size-body)', $tokens['--lafka-font-size-body-desk'] );
 			$this->assertSame( 'none', $tokens['--lafka-dish-shadow'] );
+			$this->assertSame( 'transparent', $tokens['--lafka-dish-contact'] );
 			$this->assertSame( 'var(--lafka-color-surface-page)', $tokens['--lafka-motif-check-b'] );
 		}
 

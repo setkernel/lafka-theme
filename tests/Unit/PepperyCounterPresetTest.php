@@ -61,6 +61,7 @@ namespace Lafka\Tests\Unit {
 			$this->assertStringStartsWith( '"Atkinson Hyperlegible Next"', $tokens['--lafka-font-family-body'] );
 			$this->assertStringStartsWith( '"Bricolage Grotesque"', $tokens['--lafka-font-family-display'] );
 			$this->assertStringStartsWith( 'drop-shadow(', $tokens['--lafka-dish-shadow'] );
+			$this->assertStringStartsWith( 'rgba(', $tokens['--lafka-dish-contact'] );
 		}
 
 		public function test_chrome_covers_every_whitelisted_key(): void {

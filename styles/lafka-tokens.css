@@ -278,6 +278,10 @@
 	/* GX4: drop shadow under cut-out dish photos (a filter value). */
 	--lafka-dish-shadow: none;
 
+	/* GX4 polish: colour of the soft elliptical contact shadow seated under
+	 * cut-out thumbnails (rows, deals). transparent = none. */
+	--lafka-dish-contact: transparent;
+
 	/* ------- Shadows / elevation ---------------------------------------- */
 	--lafka-shadow-0: none;
 	--lafka-shadow-1: 0 1px 2px rgba(24, 24, 27, 0.04), 0 1px 1px rgba(24, 24, 27, 0.05);

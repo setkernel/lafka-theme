@@ -65,8 +65,39 @@ body[class*="lafka-layout-"][class*="-counter"] {
 	color: var(--lafka-color-accent-text);
 }
 
-.lafka-counter-dish {
+/* Dish imagery (dish-image.php decides cut-out vs opaque photo).
+ * Thumbnails: a cut-out sits on a soft elliptical contact shadow drawn by
+ * its frame (no filter: a blurred drop-shadow on a small dish read as a pale
+ * grey box); an opaque photo gets a subtle rounded crop and no shadow.
+ * The big hero cut-outs keep the preset's drop-shadow. */
+.lafka-dish-frame {
+	position: relative;
+	isolation: isolate;
+}
+
+.lafka-dish-frame--cutout::after {
+	content: "";
+	position: absolute;
+	z-index: -1;
+	left: 16%;
+	right: 16%;
+	bottom: 0;
+	height: 18%;
+	border-radius: 50%;
+	background: radial-gradient(closest-side, var(--lafka-dish-contact), transparent);
+	pointer-events: none;
+}
+
+.lafka-counter-hero__img.lafka-counter-dish--cutout {
 	filter: var(--lafka-dish-shadow);
+}
+
+.lafka-counter-dish--photo.lafka-row__img,
+.lafka-counter-dish--photo.lafka-deal__img,
+.lafka-counter-dish--photo.lafka-counter-hero__img {
+	object-fit: cover;
+	border-radius: var(--lafka-radius-md);
+	transform: none;
 }
 
 /* ── Buttons ──────────────────────────────────────────────────────────── */
