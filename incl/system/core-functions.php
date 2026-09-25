@@ -119,6 +119,10 @@ if ( ! function_exists( 'lafka_register_theme_features' ) ) {
 			add_theme_support( 'wc-product-gallery-zoom' );
 			add_theme_support( 'wc-product-gallery-lightbox' );
 			add_theme_support( 'wc-product-gallery-slider' );
+			// GX T-19: lafka-plugin renders each add-on group heading as
+			// <h3><button aria-expanded aria-controls> around a .lafka-addon-body
+			// region (js/pdp-addons.js + pdp-redesign.css adopt it).
+			add_theme_support( 'lafka-addon-group-toggle' );
 		}
 	}
 
@@ -2955,6 +2959,9 @@ require_once get_template_directory() . '/incl/system/lafka-asset-diet.php';
 
 // GX T-04: measured `sizes` for the counter image slots + srcset hygiene.
 require_once get_template_directory() . '/incl/template-helpers/image-sizes.php';
+
+// GX T-19: where the plugin's add-on disclosure button renders.
+require_once get_template_directory() . '/incl/woocommerce/lafka-addon-group-toggle.php';
 
 // Fix Wishlist issue (adding prettyPhoto): https://wordpress.org/support/topic/conflict-with-the-wpbakery-gallery/
 add_filter(

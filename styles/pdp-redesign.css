@@ -278,6 +278,37 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   top: 0;
 }
 
+/* GX T-19: the heading's text is a real disclosure <button>
+   (lafka-plugin, theme support lafka-addon-group-toggle). It looks exactly
+   like the heading text did; the focus ring moves to the button. */
+.product-addon .addon-name > .lafka-addon-toggle {
+  appearance: none;
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  text-align: inherit;
+  cursor: pointer;
+}
+
+.product-addon .addon-name > .lafka-addon-toggle:focus-visible {
+  outline: 2px solid var(--lafka-pdp-accent);
+  outline-offset: 4px;
+  border-radius: 3px;
+}
+
+/* The options wrapper the button controls must not become a grid cell of
+   the 2-column group grid below — its rows stay the cells. */
+.product-addon .lafka-addon-body {
+  display: contents;
+}
+
 .product-addon .addon-name .required {
   color: var(--lafka-pdp-accent);
   text-decoration: none;
