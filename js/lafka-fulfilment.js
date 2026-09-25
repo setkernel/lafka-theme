@@ -93,6 +93,17 @@
 		var method = read();
 		if ( method ) {
 			sync( method );
+			// The cookie is the preference of record: keep the controllers'
+			// localStorage mirror in step so no control starts out different.
+			try {
+				if ( window.localStorage.getItem( KEY ) !== method ) {
+					window.localStorage.setItem( KEY, method );
+					// Controllers that already rendered from the stale mirror re-sync.
+					document.dispatchEvent( new CustomEvent( 'lafka:fulfilment-change', { detail: { mode: method, source: 'lafka-fulfilment' }, bubbles: true } ) );
+				}
+			} catch {
+				// Storage blocked: nothing to mirror.
+			}
 		}
 	}
 

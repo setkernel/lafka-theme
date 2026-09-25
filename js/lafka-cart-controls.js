@@ -61,6 +61,19 @@
 			return;
 		}
 		var current = getFulfilment();
+		// GX4: the counter header / drawer radios (js/lafka-fulfilment.js)
+		// announce their choice — mirror it so the page never shows two answers.
+		document.addEventListener( 'lafka:fulfilment-change', function ( e ) {
+			var detail = e.detail || {};
+			if ( detail.source !== 'lafka-fulfilment' || ! detail.mode ) {
+				return;
+			}
+			tabs.forEach( function ( t ) {
+				var on = t.getAttribute( 'data-lafka-fulfilment' ) === detail.mode;
+				t.classList.toggle( 'is-active', on );
+				t.setAttribute( 'aria-selected', on ? 'true' : 'false' );
+			} );
+		} );
 		tabs.forEach( function ( tab ) {
 			var mode = tab.getAttribute( 'data-lafka-fulfilment' );
 			var on = mode === current;

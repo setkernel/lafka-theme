@@ -246,6 +246,38 @@ if ( ! function_exists( 'lafka_counter_render_nav' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
+	/**
+	 * Attach the brand-neutral fulfilment storage contract (window.lafkaCfg) to
+	 * a script handle. Always loaded here (GX4) so the counter's
+	 * js/lafka-fulfilment.js gets it on every page; the same guarded definition
+	 * in partials/menu-controls.php and woocommerce/cart/cart.php is then a
+	 * no-op. Filter: lafka_fulfilment_js_config.
+	 *
+	 * @param string $handle Registered script handle to localize.
+	 */
+	function lafka_localize_fulfilment_cfg( $handle ) {
+		static $done = array();
+		if ( isset( $done[ $handle ] ) || ! function_exists( 'wp_localize_script' ) ) {
+			return;
+		}
+		$done[ $handle ] = true;
+		wp_localize_script(
+			$handle,
+			'lafkaCfg',
+			apply_filters(
+				'lafka_fulfilment_js_config',
+				array(
+					'fulfilmentKey'       => 'lafka.fulfilment',
+					'fulfilmentDefault'   => 'pickup',
+					// Pre-rename key, read once for migration only (menu/cart controllers).
+					'fulfilmentLegacyKey' => 'peppery.fulfilment',
+				)
+			)
+		);
+	}
+}
+
 if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 	/**
 	 * Enqueue the counter stylesheet + scripts (called from
@@ -289,15 +321,15 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 					'pm'            => __( '%s pm', 'lafka' ),
 					'noon'          => __( 'noon', 'lafka' ),
 					'midnight'      => __( 'midnight', 'lafka' ),
+					// Store UTC offset in minutes, so the refresh reads the store's clock.
+					'offset'        => function_exists( 'wp_timezone' ) ? (int) ( wp_timezone()->getOffset( new DateTime( 'now', wp_timezone() ) ) / 60 ) : 0,
 					'days'          => array( __( 'Sunday', 'lafka' ), __( 'Monday', 'lafka' ), __( 'Tuesday', 'lafka' ), __( 'Wednesday', 'lafka' ), __( 'Thursday', 'lafka' ), __( 'Friday', 'lafka' ), __( 'Saturday', 'lafka' ) ),
 				)
 			);
 		}
 		if ( lafka_layout_is( 'header', 'counter' ) || lafka_layout_is( 'drawer', 'counter' ) ) {
 			wp_enqueue_script( 'lafka-fulfilment', get_template_directory_uri() . '/js/lafka-fulfilment.js', array(), lafka_asset_version( '/js/lafka-fulfilment.js' ), $defer );
-			if ( function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
-				lafka_localize_fulfilment_cfg( 'lafka-fulfilment' );
-			}
+			lafka_localize_fulfilment_cfg( 'lafka-fulfilment' );
 		}
 		if ( lafka_layout_is( 'home', 'counter' ) || lafka_layout_is( 'menu', 'counter' ) || lafka_layout_is( 'drawer', 'counter' ) ) {
 			// The single add path (window.lafkaQuickAdd.add) — same handle and

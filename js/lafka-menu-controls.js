@@ -103,6 +103,14 @@
 		// Mirror persisted state on load (no change event on first paint).
 		reflect( getFulfilment() );
 
+		// GX4: mirror the counter drawer / header radios (js/lafka-fulfilment.js).
+		document.addEventListener( 'lafka:fulfilment-change', function ( e ) {
+			var detail = e.detail || {};
+			if ( detail.source === 'lafka-fulfilment' && detail.mode ) {
+				reflect( detail.mode );
+			}
+		} );
+
 		tabs.forEach( function ( tab, idx ) {
 			var mode = tab.getAttribute( 'data-lafka-fulfilment' );
 
