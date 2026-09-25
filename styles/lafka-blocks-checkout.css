@@ -619,3 +619,17 @@
 		transition: none;
 	}
 }
+
+/* Delivery-quote notice (lafka-plugin, inside the shipping-packages slot):
+ * "Enter your street address to see the delivery cost." Muted info note. */
+.lafka-block-delivery-quote-notice {
+	margin: var(--lafka-space-2) 0 0;
+	padding: var(--lafka-space-2) var(--lafka-space-3);
+	border-left: 3px solid var(--lafka-color-info);
+	border-radius: var(--lafka-radius-sm);
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-caption);
+	line-height: 1.45;
+	overflow-wrap: anywhere;
+}
