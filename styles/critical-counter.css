@@ -186,7 +186,7 @@ body {
 
 	.lafka-counter-header .lafka-counter-nav {
 		display: block;
-		border-top: 1px solid var(--lafka-color-border-subtle);
+		min-height: 44px;
 	}
 
 	/* GX T-02: the nav row matches lafka-counter.css exactly (one flex row of

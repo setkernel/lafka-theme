@@ -15,12 +15,12 @@
  *    only look at post content a template actually renders: front-page.php
  *    never renders the front page's post_content, so shortcodes left in it no
  *    longer pull those sheets onto the home page.
- *  - wp-emoji is off on the front end (Customizer → General, default on).
+ *  - (wp-emoji on counter storefronts: lafka_counter_disable_emoji() in
+ *    incl/template-helpers/counter-chrome.php, Customizer → Layouts.)
  *
  * Filter surface:
  *   lafka_needs_legacy_libs( bool $needed, array $context )
  *   lafka_front_page_renders_content( bool $renders )
- *   lafka_disable_emoji( bool $disabled )
  *
  * @package Lafka
  * @since   7.3.0 (GX T-25)
@@ -133,36 +133,3 @@ if ( ! function_exists( 'lafka_rendered_post_content' ) ) {
 		return (string) $post->post_content;
 	}
 }
-
-if ( ! function_exists( 'lafka_emoji_disabled' ) ) {
-	/**
-	 * Whether WordPress's front-end emoji script + styles are removed.
-	 */
-	function lafka_emoji_disabled(): bool {
-		/**
-		 * Filter whether the wp-emoji front-end script is removed.
-		 *
-		 * @param bool $disabled Customizer → General (default true).
-		 */
-		return (bool) apply_filters( 'lafka_disable_emoji', (bool) get_theme_mod( 'lafka_disable_emoji', true ) );
-	}
-}
-
-if ( ! function_exists( 'lafka_disable_front_emoji' ) ) {
-	/**
-	 * Unhook wp-emoji from the front end (the admin keeps it).
-	 */
-	function lafka_disable_front_emoji(): void {
-		if ( is_admin() || ! lafka_emoji_disabled() ) {
-			return;
-		}
-		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
-		remove_action( 'wp_print_styles', 'print_emoji_styles' );
-		remove_action( 'wp_enqueue_scripts', 'wp_enqueue_emoji_styles' );
-		remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
-		remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
-		remove_filter( 'wp_mail', 'wp_staticize_emoji_for_email' );
-		add_filter( 'emoji_svg_url', '__return_false' );
-	}
-}
-add_action( 'init', 'lafka_disable_front_emoji' );

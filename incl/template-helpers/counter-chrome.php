@@ -802,15 +802,5 @@ if ( ! function_exists( 'lafka_counter_disable_emoji' ) ) {
 }
 add_action( 'template_redirect', 'lafka_counter_disable_emoji', 0 );
 
-if ( ! function_exists( 'lafka_preloader_enabled' ) ) {
-	/**
-	 * H-31: the legacy full-screen preloader (markup + stylesheet) — the
-	 * operator option, but never under the counter header, whose pages paint
-	 * their skeleton from critical CSS. Filter `lafka_preloader_enabled`.
-	 */
-	function lafka_preloader_enabled(): bool {
-		$on = (bool) get_theme_mod( 'lafka_show_preloader', true )
-			&& ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) );
-		return (bool) apply_filters( 'lafka_preloader_enabled', $on );
-	}
-}
+// H-31 / GX T-01: lafka_preloader_enabled() lives in incl/system/lafka-preloader.php
+// (off by default, never under any counter layout, filter `lafka_preloader_enabled`).

@@ -64,7 +64,7 @@ namespace Lafka\Tests\Unit {
 		public function test_filter_has_the_last_word(): void {
 			\lafka_test_use_classic_layouts();
 			$GLOBALS['lafka_test_theme_mods']['lafka_header_layout'] = 'counter';
-			\add_filter( 'lafka_show_preloader', '__return_true' );
+			\add_filter( 'lafka_preloader_enabled', '__return_true' );
 
 			$this->assertTrue( \lafka_preloader_enabled() );
 		}

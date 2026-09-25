@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 /**
  * GX T-25: the counter surfaces skip the legacy libraries (Font Awesome,
- * flexslider, owl + animate, nice-select, imagesloaded), content sniffing only
- * reads content a template renders, and wp-emoji is off on the front end.
+ * flexslider, owl + animate, nice-select, imagesloaded) and content sniffing
+ * only reads content a template renders.
  *
  * @package Lafka\Tests
  */
@@ -122,35 +122,6 @@ namespace Lafka\Tests\Unit {
 		public function test_nothing_to_sniff_off_singular_views(): void {
 			$GLOBALS['post'] = new \WP_Post( (object) array( 'ID' => 7, 'post_content' => '[lafka_typed]' ) );
 			$this->assertSame( '', \lafka_rendered_post_content() );
-		}
-
-		public function test_emoji_script_is_unhooked_by_default(): void {
-			\add_action( 'wp_head', 'print_emoji_detection_script', 7 );
-			\add_action( 'wp_print_styles', 'print_emoji_styles' );
-
-			\lafka_disable_front_emoji();
-
-			$this->assertFalse( \has_action( 'wp_head', 'print_emoji_detection_script' ) );
-			$this->assertFalse( \has_action( 'wp_print_styles', 'print_emoji_styles' ) );
-			$this->assertNotFalse( \has_filter( 'emoji_svg_url', '__return_false' ) );
-		}
-
-		public function test_operator_can_keep_emoji(): void {
-			$GLOBALS['lafka_test_theme_mods']['lafka_disable_emoji'] = 0;
-			\add_action( 'wp_head', 'print_emoji_detection_script', 7 );
-
-			\lafka_disable_front_emoji();
-
-			$this->assertNotFalse( \has_action( 'wp_head', 'print_emoji_detection_script' ) );
-		}
-
-		public function test_admin_keeps_emoji(): void {
-			$GLOBALS['lafka_test_is_admin'] = true;
-			\add_action( 'wp_head', 'print_emoji_detection_script', 7 );
-
-			\lafka_disable_front_emoji();
-
-			$this->assertNotFalse( \has_action( 'wp_head', 'print_emoji_detection_script' ) );
 		}
 	}
 }

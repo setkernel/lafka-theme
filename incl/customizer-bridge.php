@@ -677,18 +677,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				1,
 				'theme_mod'
 			);
-
-			// GX T-25: WordPress's emoji script + styles are dead weight on
-			// every modern browser (all render emoji natively).
-			self::add_checkbox(
-				$wp_customize,
-				'lafka_disable_emoji',
-				'lafka_settings_general',
-				__( 'Use native emoji (skip the WordPress emoji script)', 'lafka' ),
-				__( 'Removes the wp-emoji script and styles from the front end. Visitors see their device\'s own emoji.', 'lafka' ),
-				1,
-				'theme_mod'
-			);
 		}
 
 		// ====================================================================

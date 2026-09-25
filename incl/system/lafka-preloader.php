@@ -21,8 +21,8 @@
  * `theme_mod_lafka_show_preloader` filter below, so they all agree.
  *
  * Filter surface:
- *   lafka_show_preloader( bool $on ) — last word (e.g. force it back on under a
- *   counter layout).
+ *   lafka_preloader_enabled( bool $on ) — last word (e.g. force it back on
+ *   under a counter layout).
  *
  * @package Lafka
  * @since   7.3.0 (GX T-01)
@@ -48,7 +48,7 @@ if ( ! function_exists( 'lafka_preloader_enabled' ) ) {
 		 *
 		 * @param bool $on Stored choice (default off), forced off under a counter layout.
 		 */
-		return (bool) apply_filters( 'lafka_show_preloader', $on );
+		return (bool) apply_filters( 'lafka_preloader_enabled', $on );
 	}
 }
 
