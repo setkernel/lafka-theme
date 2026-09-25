@@ -40,7 +40,7 @@ jobs:
       # after `npm run build` runs here — the rsync below must copy them into
       # the zip (it excludes node_modules/vendor/tooling, never the .min files).
       # First-party actions only; mirrors ci.yml's Node setup.
-      - uses: actions/setup-node@v6
+      - uses: actions/setup-node@v7
         with:
           node-version: 24
           cache: npm
