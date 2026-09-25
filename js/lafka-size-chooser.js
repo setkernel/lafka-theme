@@ -266,3 +266,56 @@
 		}
 	}, true );
 }() );
+
+/*
+ * GX4 polish: jump links into "More from our menu" land exactly.
+ *
+ * Those sections use content-visibility: auto, so until they have rendered
+ * once their height is only an estimate (contain-intrinsic-size) and a jump
+ * into or past them (a menu section, "Find us") would land off by the
+ * difference. Before the browser scrolls to such a target (an in-page link
+ * click, or a #fragment URL on load) every section is rendered for real
+ * (.is-rendered); the `auto` intrinsic size then remembers the true heights.
+ */
+( function () {
+	'use strict';
+
+	var rest = document.querySelector( '.lafka-counter-rest' );
+	if ( ! rest ) {
+		return;
+	}
+
+	/* Render the sections when `id` is inside or after them; return the target. */
+	function prepare( id ) {
+		var target = null;
+		try {
+			target = id ? document.getElementById( decodeURIComponent( id ) ) : null;
+		} catch ( e ) { // eslint-disable-line no-unused-vars -- a malformed %-escape is just "no target".
+			target = null;
+		}
+		if ( ! target ) {
+			return null;
+		}
+		if ( rest.contains( target ) || ( rest.compareDocumentPosition( target ) & Node.DOCUMENT_POSITION_FOLLOWING ) ) {
+			rest.classList.add( 'is-rendered' );
+			return target;
+		}
+		return null;
+	}
+
+	// Capture phase: runs before the browser's own fragment scroll.
+	document.addEventListener( 'click', function ( e ) {
+		var link = e.target && e.target.closest ? e.target.closest( 'a[href*="#"]' ) : null;
+		if ( ! link || link.pathname !== window.location.pathname || link.host !== window.location.host ) {
+			return;
+		}
+		prepare( link.hash.slice( 1 ) );
+	}, true );
+
+	if ( window.location.hash.length > 1 ) {
+		var target = prepare( window.location.hash.slice( 1 ) );
+		if ( target ) {
+			target.scrollIntoView();
+		}
+	}
+}() );

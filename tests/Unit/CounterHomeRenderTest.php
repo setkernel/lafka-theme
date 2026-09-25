@@ -147,6 +147,14 @@ namespace Lafka\Tests\Unit {
 			$this->assertSame( array( 'wings', 'drinks' ), $jump[1], 'jump index follows the sections' );
 		}
 
+		public function test_sections_print_their_row_count_for_the_height_estimate(): void {
+			self::seed();
+			$GLOBALS['lafka_test_theme_mods']['lafka_counter_menu_limit'] = 1;
+			$html = self::render();
+			// content-visibility's intrinsic block size is estimated from the rows actually printed.
+			$this->assertMatchesRegularExpression( '#<section class="lafka-counter-section[^"]*" id="lafka-cat-wings" style="--lafka-rows: 1"#', $html );
+		}
+
 		public function test_see_all_only_when_truncated(): void {
 			self::seed();
 			$this->assertStringNotContainsString( '>See all 2<span class="screen-reader-text"> Wings', self::render() );

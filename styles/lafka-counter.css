@@ -1285,13 +1285,23 @@ body.lafka-layout-header-counter .lafka-header {
 
 .lafka-counter-rest__grid {
 	display: grid;
+	grid-template-columns: minmax(0, 1fr);
 	gap: 36px;
 }
 
+/* Off-screen sections skip rendering. Only the BLOCK size is estimated
+ * (head + --lafka-rows × an average row; menu-section.php prints the row
+ * count) and `auto` then remembers the real height; the inline size always
+ * comes from the grid track. Jump links render every section before
+ * scrolling (.is-rendered, js/lafka-size-chooser.js) so they land exactly. */
 .lafka-counter-rest .lafka-counter-section {
 	content-visibility: auto;
-	contain-intrinsic-size: auto 480px;
-	scroll-margin-top: 120px;
+	contain-intrinsic-block-size: auto calc(56px + var(--lafka-rows, 4) * 150px);
+	scroll-margin-top: 24px;
+}
+
+.lafka-counter-rest.is-rendered .lafka-counter-section {
+	content-visibility: visible;
 }
 
 .lafka-counter-rest .lafka-counter-head__title {
