@@ -1535,9 +1535,19 @@ body.lafka-has-counter-bar {
 }
 
 .lafka-cart-drawer--counter .lafka-cart-drawer__checkout {
+	flex: none;
 	width: 100%;
+	padding: 0 28px;
+	border-color: var(--lafka-color-accent-500);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
 	text-transform: none;
 	letter-spacing: 0;
+}
+
+.lafka-cart-drawer--counter .lafka-cart-drawer__checkout:hover {
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-on-accent);
 }
 
 .lafka-drawer__call {
@@ -1727,6 +1737,7 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 	margin: 0;
 	padding: 0;
 	border-top: 1px solid var(--lafka-color-border-subtle);
+
 	/* The page surface, not --surface-footer (a dark band in most presets). */
 	background: var(--lafka-color-surface-page);
 	color: var(--lafka-color-text-secondary);
