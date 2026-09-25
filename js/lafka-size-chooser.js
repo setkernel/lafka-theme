@@ -188,13 +188,63 @@
 		var more = dialog.querySelector( '[data-lafka-chooser-more]' );
 		more.hidden = ! product.has_addons;
 		dialog.querySelector( '[data-lafka-chooser-more-link]' ).setAttribute( 'href', product.url );
+		// The eyebrow names the actual choice: "Choose pieces", or "Choose your
+		// options" when a secondary attribute (e.g. crust) is also asked.
+		var eyebrow = dialog.querySelector( '[data-lafka-chooser-eyebrow]' );
+		if ( eyebrow ) {
+			eyebrow.textContent = product.attributes.length > 1
+				? t( 'chooseMany', 'Choose your options' )
+				: fill( t( 'chooseOne', 'Choose %s' ), String( primaryAttr( product ).label || '' ).toLowerCase() );
+		}
 		renderOptions( dialog );
 		dialog.showModal();
-		var first = dialog.querySelector( '.lafka-chooser__option:not([disabled])' );
+		// Focus starts at the first choice in reading order: the checked radio
+		// of the first secondary group (e.g. crust), else the first size.
+		var first = dialog.querySelector( '[data-lafka-chooser-groups] input:checked' ) || dialog.querySelector( '.lafka-chooser__option:not([disabled])' );
 		if ( first ) {
 			first.focus();
 		}
 	}
+
+	// Keep Tab inside the open dialog (a modal <dialog> otherwise lets focus
+	// escape to the browser chrome before it wraps).
+	function focusables( dialog ) {
+		return Array.prototype.filter.call(
+			dialog.querySelectorAll( 'button:not([disabled]), a[href], input:not([disabled])' ),
+			function ( el ) {
+				if ( el.type === 'radio' && ! el.checked ) {
+					var group = dialog.querySelectorAll( 'input[type="radio"][name="' + el.name + '"]:checked' );
+					if ( group.length ) {
+						return false; // A radio group is one tab stop: its checked radio.
+					}
+				}
+				return el.offsetParent !== null || el === document.activeElement;
+			}
+		);
+	}
+
+	document.addEventListener( 'keydown', function ( e ) {
+		if ( e.key !== 'Tab' ) {
+			return;
+		}
+		var dialog = document.getElementById( 'lafka-chooser' );
+		if ( ! dialog || ! dialog.open ) {
+			return;
+		}
+		var list = focusables( dialog );
+		if ( ! list.length ) {
+			return;
+		}
+		var firstEl = list[ 0 ];
+		var lastEl = list[ list.length - 1 ];
+		if ( e.shiftKey && ( document.activeElement === firstEl || ! dialog.contains( document.activeElement ) ) ) {
+			e.preventDefault();
+			lastEl.focus();
+		} else if ( ! e.shiftKey && ( document.activeElement === lastEl || ! dialog.contains( document.activeElement ) ) ) {
+			e.preventDefault();
+			firstEl.focus();
+		}
+	} );
 
 	function close() {
 		var dialog = document.getElementById( 'lafka-chooser' );

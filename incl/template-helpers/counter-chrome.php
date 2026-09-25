@@ -428,6 +428,9 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 						/* translators: 1: option (e.g. "Medium"), 2: price */
 						'option'      => __( '%1$s, %2$s, add to order', 'lafka' ),
 						'error'       => __( 'Could not add that. Opening the product page…', 'lafka' ),
+						/* translators: %s: attribute name in lower case, e.g. "size", "pieces". */
+						'chooseOne'   => __( 'Choose %s', 'lafka' ),
+						'chooseMany'  => __( 'Choose your options', 'lafka' ),
 					),
 				)
 			);
@@ -473,8 +476,11 @@ if ( ! function_exists( 'lafka_counter_add_action' ) ) {
 		$url  = (string) $product->get_permalink();
 		$mode = lafka_counter_add_mode( $product );
 		if ( '' !== $mode ) {
+			// A one-variation variable product adds that variation directly.
+			$payload = 'direct' === $mode ? lafka_chooser_payload( $product ) : array();
+			$add_id  = ! empty( $payload['variation_id'] ) ? (int) $payload['variation_id'] : (int) $product->get_id();
 			return '<button type="button" class="' . esc_attr( trim( 'lafka-counter-btn ' . $class ) ) . '"'
-				. ' data-lafka-add="' . esc_attr( (string) $product->get_id() ) . '"'
+				. ' data-lafka-add="' . esc_attr( (string) $add_id ) . '"'
 				. ' data-lafka-add-mode="' . esc_attr( $mode ) . '"'
 				. ' data-lafka-add-url="' . esc_url( $url ) . '">'
 				. esc_html( $label ) . '<span class="screen-reader-text"> ' . esc_html( $name ) . '</span></button>';

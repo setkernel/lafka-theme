@@ -18,7 +18,7 @@ defined( 'ABSPATH' ) || exit;
 	<div class="lafka-chooser__panel">
 		<div class="lafka-chooser__head">
 			<div>
-				<p class="lafka-chooser__eyebrow"><?php esc_html_e( 'Choose a size', 'lafka' ); ?></p>
+				<p class="lafka-chooser__eyebrow" data-lafka-chooser-eyebrow><?php esc_html_e( 'Choose your options', 'lafka' ); ?></p>
 				<h2 id="lafka-chooser-title" class="lafka-chooser__title" data-lafka-chooser-name></h2>
 			</div>
 			<form method="dialog">

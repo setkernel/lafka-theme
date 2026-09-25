@@ -11,6 +11,7 @@ declare(strict_types=1);
 
 namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/price-columns.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/pdp-selection.php';
 }
 
 namespace Lafka\Tests\Unit {
@@ -142,6 +143,32 @@ namespace Lafka\Tests\Unit {
 			$this->assertTrue( $payload['addable'] );
 			$this->assertSame( 'direct', $payload['mode'] );
 			$this->assertSame( array(), $payload['variations'] );
+		}
+
+		public function test_a_single_variation_is_a_direct_add_of_that_variation(): void {
+			$p = new \WC_Product_Variable(
+				array(
+					'id'                   => 31,
+					'name'                 => 'Platter',
+					'variation_attributes' => array( 'pa_size' => array( 'large' ) ),
+					'variations'           => array(
+						3101 => array(
+							'price'      => 13.99,
+							'attributes' => array( 'attribute_pa_size' => 'large' ),
+						),
+					),
+				)
+			);
+			$payload = \lafka_chooser_payload( $p );
+			$this->assertTrue( $payload['addable'] );
+			$this->assertSame( 'direct', $payload['mode'], 'one size is not a choice (H-20)' );
+			$this->assertSame( 3101, $payload['variation_id'] );
+		}
+
+		public function test_lowercase_attribute_labels_are_capitalised(): void {
+			$GLOBALS['lafka_test_attr_labels']['pa_size'] = 'size';
+			$payload = \lafka_chooser_payload( \Lafka_Test_Catalog::pizza() );
+			$this->assertSame( 'Size', self::attr( $payload, 'pa_size' )['label'] );
 		}
 
 		public function test_registered_payloads_print_as_one_json_island(): void {

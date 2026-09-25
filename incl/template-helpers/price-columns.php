@@ -337,7 +337,7 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 				$payload['attributes'][] = array(
 					'key'     => $key,
 					'name'    => $name,
-					'label'   => function_exists( 'wc_attribute_label' ) ? (string) wc_attribute_label( $name, $product ) : $name,
+					'label'   => lafka_chooser_attribute_label( $name, $product ),
 					'primary' => $name === $primary,
 					'default' => $default,
 					'options' => $options,
@@ -364,12 +364,33 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 			$payload['primary'] = $primary_key;
 		}
 
+		// GX H-20 / M-18: one buyable variation, every attribute fixed, is not
+		// a choice — the row adds that variation in one tap ("Add"), like a
+		// simple product.
+		if ( '' === $reason && $variable && 1 === count( $payload['variations'] ) ) {
+			$payload['mode']         = 'direct';
+			$payload['variation_id'] = (int) $payload['variations'][0]['id'];
+		}
+
 		if ( '' !== $reason ) {
 			$payload['addable'] = false;
 			$payload['reason']  = $reason;
 		}
 
 		return (array) apply_filters( 'lafka_chooser_payload', $payload, $product );
+	}
+}
+
+if ( ! function_exists( 'lafka_chooser_attribute_label' ) ) {
+	/**
+	 * An attribute's customer-facing label ("size" → "Size", H-17 / M-27).
+	 *
+	 * @param string     $name    Attribute name.
+	 * @param WC_Product $product Product.
+	 */
+	function lafka_chooser_attribute_label( string $name, $product ): string {
+		$label = function_exists( 'wc_attribute_label' ) ? (string) wc_attribute_label( $name, $product ) : $name;
+		return function_exists( 'lafka_attribute_display_label' ) ? lafka_attribute_display_label( $label ) : $label;
 	}
 }
 
