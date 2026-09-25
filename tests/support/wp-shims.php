@@ -813,6 +813,12 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_title']              = '';
 		$GLOBALS['lafka_test_privacy_link']       = '';
 		$GLOBALS['lafka_chooser_registry']        = array();
+		// The preset registry is a runtime singleton; a test that swaps the
+		// active preset or discovery dirs must not leak it into later tests
+		// (layouts, tokens and variants all resolve through it).
+		if ( class_exists( 'Lafka_Presets', false ) ) {
+			\Lafka_Presets::reset();
+		}
 		$GLOBALS['lafka_test_fulfilment_modes']   = array( 'pickup', 'delivery' );
 		$GLOBALS['lafka_test_fulfilment_pref']    = '';
 		if ( class_exists( 'Lafka_Order_Hours' ) ) {
