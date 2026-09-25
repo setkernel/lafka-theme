@@ -19,6 +19,14 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 
+// GX4: the counter homepage (design direction C). The classic markup below is
+// unchanged for every other layout choice.
+if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'home', 'counter' ) ) {
+	get_template_part( 'partials/counter/home' );
+	get_footer();
+	return;
+}
+
 // Body content wrapper: skip the legacy .lafka_title_holder + .inner
 // container that page.php uses. Our partials manage their own
 // containers + breakpoints via the design system.

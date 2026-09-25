@@ -315,6 +315,90 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_counter_add_mode' ) ) {
+	/**
+	 * How a product can be added from a listing: `chooser` (variable, 2-tap
+	 * size chooser), `direct` (one tap) or '' (link to the product page —
+	 * required add-ons, "any" attributes, unavailable, or quick-add turned off).
+	 * Registers the chooser payload when needed.
+	 *
+	 * @param WC_Product $product Product.
+	 */
+	function lafka_counter_add_mode( $product ): string {
+		$payload = lafka_chooser_payload( $product );
+		$quick   = (bool) apply_filters( 'lafka_archive_quickadd_enabled', (bool) get_theme_mod( 'lafka_archive_quickadd_enabled', true ), $product );
+		if ( ! $payload['addable'] || ! $quick ) {
+			return '';
+		}
+		if ( 'chooser' === $payload['mode'] ) {
+			lafka_chooser_register( $product );
+			return 'chooser';
+		}
+		return 'direct';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_add_action' ) ) {
+	/**
+	 * The worded add control of a listing: a real <button> for chooser / direct
+	 * adds, else a "Choose" link to the product page. The product name follows
+	 * the visible word for screen readers ("Add Loaded Fries").
+	 *
+	 * @param WC_Product $product Product.
+	 * @param string     $label   Visible word(s), e.g. "Add" / "Add to order".
+	 * @param string     $class   Extra classes.
+	 */
+	function lafka_counter_add_action( $product, string $label, string $class = '' ): string {
+		$name = wp_strip_all_tags( (string) $product->get_name() );
+		$url  = (string) $product->get_permalink();
+		$mode = lafka_counter_add_mode( $product );
+		if ( '' !== $mode ) {
+			return '<button type="button" class="' . esc_attr( trim( 'lafka-counter-btn ' . $class ) ) . '"'
+				. ' data-lafka-add="' . esc_attr( (string) $product->get_id() ) . '"'
+				. ' data-lafka-add-mode="' . esc_attr( $mode ) . '"'
+				. ' data-lafka-add-url="' . esc_url( $url ) . '">'
+				. esc_html( $label ) . '<span class="screen-reader-text"> ' . esc_html( $name ) . '</span></button>';
+		}
+		$choose = (string) apply_filters( 'lafka_counter_choose_label', __( 'Choose', 'lafka' ), $product );
+		return '<a class="' . esc_attr( trim( 'lafka-counter-btn lafka-counter-btn--choose ' . $class ) ) . '" href="' . esc_url( $url ) . '">'
+			. esc_html( $choose ) . '<span class="screen-reader-text"> '
+			/* translators: %s: product name */
+			. esc_html( sprintf( __( 'options for %s', 'lafka' ), $name ) ) . '</span></a>';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_price_text' ) ) {
+	/**
+	 * A product's short price line: "$8.50" or "from $10.99".
+	 *
+	 * @param WC_Product $product Product.
+	 */
+	function lafka_counter_price_text( $product ): string {
+		$prices = lafka_price_columns( $product );
+		$price  = lafka_price_plain( (float) $prices['price'] );
+		/* translators: %s: lowest price */
+		return 'single' === $prices['type'] ? $price : sprintf( __( 'from %s', 'lafka' ), $price );
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_lcp_image_url' ) ) {
+	/**
+	 * The counter home's LCP is the front hero dish — an eager
+	 * fetchpriority=high <img> with srcset the preload scanner finds on its own.
+	 * Suppress the classic hero preload so the browser never fetches a
+	 * different (unused) image first.
+	 *
+	 * @param string $url Preload URL.
+	 */
+	function lafka_counter_lcp_image_url( $url ) {
+		if ( function_exists( 'is_front_page' ) && is_front_page() && function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'home', 'counter' ) ) {
+			return '';
+		}
+		return $url;
+	}
+}
+add_filter( 'lafka_lcp_image_url', 'lafka_counter_lcp_image_url', 20 );
+
 if ( ! function_exists( 'lafka_counter_cart_count' ) ) {
 	/** Items in the cart (0 without WooCommerce). */
 	function lafka_counter_cart_count(): int {

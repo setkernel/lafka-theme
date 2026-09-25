@@ -344,6 +344,45 @@ unset( $lafka_counter_bust_hook );
 add_action( 'updated_term_meta', 'lafka_counter_bust_on_term_meta', 10, 3 );
 add_action( 'added_term_meta', 'lafka_counter_bust_on_term_meta', 10, 3 );
 
+if ( ! function_exists( 'lafka_counter_hero_products' ) ) {
+	/**
+	 * The two hero dishes: the Customizer picks, else — per co-star category —
+	 * its first product WITH a photo (featured products come first).
+	 *
+	 * @param array<string,mixed> $sections lafka_counter_sections().
+	 * @param array<string,mixed> $settings lafka_counter_settings().
+	 * @return list<WC_Product> Zero to two products, front dish first.
+	 */
+	function lafka_counter_hero_products( array $sections, array $settings ): array {
+		if ( ! function_exists( 'wc_get_product' ) ) {
+			return array();
+		}
+		$out  = array();
+		$used = array();
+		foreach ( array( 'hero_product_a', 'hero_product_b' ) as $slot => $key ) {
+			$product = null;
+			$pick    = (int) ( $settings[ $key ] ?? 0 );
+			if ( $pick ) {
+				$product = wc_get_product( $pick );
+			}
+			if ( ! $product && isset( $sections['costars'][ $slot ] ) ) {
+				foreach ( $sections['costars'][ $slot ]['ids'] as $id ) {
+					$candidate = wc_get_product( (int) $id );
+					if ( $candidate && (int) $candidate->get_image_id() && ! isset( $used[ (int) $id ] ) ) {
+						$product = $candidate;
+						break;
+					}
+				}
+			}
+			if ( $product && (int) $product->get_image_id() && ! isset( $used[ (int) $product->get_id() ] ) ) {
+				$out[]                                 = $product;
+				$used[ (int) $product->get_id() ] = true;
+			}
+		}
+		return $out;
+	}
+}
+
 if ( ! function_exists( 'lafka_category_tagline' ) ) {
 	/**
 	 * The short line under a category heading: term meta `lafka_tagline`

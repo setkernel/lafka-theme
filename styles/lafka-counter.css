@@ -775,3 +775,524 @@ body.lafka-layout-header-counter .lafka-header {
 		transform: translateY(12px);
 	}
 }
+
+.lafka-counter-btn--link {
+	min-height: 48px;
+	padding: 0;
+	border: 0;
+	background: none;
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 4px;
+}
+
+.lafka-counter-btn--link:hover {
+	background: none;
+	color: var(--lafka-color-accent-text);
+}
+
+/* ── Hero (box geometry in critical-counter.css) ──────────────────────── */
+.lafka-counter-hero {
+	background: var(--lafka-color-surface-muted);
+	overflow: hidden;
+}
+
+.lafka-counter-hero__title {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: var(--lafka-font-size-h1);
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: var(--lafka-line-display);
+	color: var(--lafka-color-text-primary);
+	text-wrap: balance;
+}
+
+.lafka-counter-hero__title em {
+	font-style: normal;
+}
+
+.lafka-counter-hero__lead {
+	margin: 0;
+	max-width: 34em;
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-body-lg);
+}
+
+.lafka-counter-hero__ctas {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 12px;
+}
+
+.lafka-counter-hero__meta {
+	display: flex;
+	flex-direction: column;
+	gap: 8px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-hero__meta li {
+	display: flex;
+	align-items: flex-start;
+	gap: 10px;
+}
+
+.lafka-counter-hero__meta .lafka-icon {
+	flex: none;
+	margin-top: 3px;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-hero__meta strong {
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-counter-hero__caption {
+	display: none;
+	line-height: 1.4;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-hero__caption strong {
+	display: block;
+	color: var(--lafka-color-text-primary);
+}
+
+@media (max-width: 599px) {
+
+	.lafka-counter-hero__ctas .lafka-counter-btn {
+		width: 100%;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-hero__lead {
+		font-size: var(--lafka-font-size-body-lg-desk);
+	}
+
+	.lafka-counter-hero__caption {
+		display: block;
+		position: absolute;
+		z-index: 2;
+	}
+
+	.lafka-counter-hero__dish--front .lafka-counter-hero__caption {
+		left: 0;
+		top: 26%;
+	}
+
+	.lafka-counter-hero__dish--back .lafka-counter-hero__caption {
+		right: -2%;
+		top: 96%;
+		text-align: right;
+		white-space: nowrap;
+	}
+}
+
+/* ── Deals ────────────────────────────────────────────────────────────── */
+.lafka-counter-deals {
+	padding-block: 40px;
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-counter-deals__grid,
+.lafka-counter-deals__photos {
+	display: grid;
+	gap: 16px;
+}
+
+.lafka-deal {
+	position: relative;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	min-width: 0;
+}
+
+.lafka-deal__name {
+	margin: 0;
+	font-size: var(--lafka-font-size-h4-desk);
+	font-weight: var(--lafka-font-weight-bold);
+	line-height: 1.3;
+}
+
+.lafka-deal__name a {
+	color: var(--lafka-color-text-primary);
+	text-decoration: none;
+}
+
+.lafka-deal__name a:hover {
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-deal__line {
+	margin: 4px 0 0;
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-deal__foot {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 10px 16px;
+	margin-top: auto;
+	padding-top: 10px;
+}
+
+.lafka-deal__price {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-weight: var(--lafka-font-weight-display);
+	line-height: 1;
+	font-size: 2rem;
+}
+
+.lafka-deal__media {
+	display: block;
+}
+
+.lafka-deal__img {
+	display: block;
+	width: 100%;
+	height: 100%;
+	object-fit: contain;
+}
+
+.lafka-deal--featured {
+	overflow: hidden;
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-deal--featured .lafka-deal__media {
+	height: 190px;
+	padding: 8px 12px 0;
+}
+
+.lafka-deal--featured .lafka-deal__body {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	padding: 8px 22px 22px;
+}
+
+.lafka-deal--featured .lafka-deal__name {
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: 1.625rem;
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.15;
+}
+
+.lafka-deal--featured .lafka-deal__price {
+	font-size: 2.5rem;
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-deal--photo {
+	display: grid;
+	grid-template-columns: 104px minmax(0, 1fr);
+	align-items: center;
+	gap: 14px;
+	padding: 14px 16px 14px 10px;
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-lg);
+	background: var(--lafka-color-surface-raised);
+}
+
+.lafka-deal--photo.lafka-deal--no-img {
+	grid-template-columns: minmax(0, 1fr);
+}
+
+.lafka-deal--photo .lafka-deal__media {
+	height: 96px;
+}
+
+.lafka-deal--photo .lafka-deal__img {
+	transform: scale(1.15);
+}
+
+.lafka-counter-deals__list {
+	display: flex;
+	flex-direction: column;
+	padding: 4px 20px;
+	border-radius: var(--lafka-radius-lg);
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-deal--text {
+	padding: 14px 0;
+	border-bottom: 1px solid var(--lafka-color-border-default);
+}
+
+.lafka-deal--text:last-child {
+	border-bottom: 0;
+}
+
+.lafka-deal--text .lafka-deal__price {
+	font-size: 1.625rem;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-counter-deals__photos {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+
+	.lafka-deal--featured {
+		display: grid;
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr);
+		align-items: center;
+	}
+
+	.lafka-deal--featured .lafka-motif-check {
+		grid-column: 1 / -1;
+	}
+
+	.lafka-deal--photo {
+		grid-template-columns: minmax(0, 1fr);
+		padding: 16px;
+	}
+
+	.lafka-deal--photo .lafka-deal__media {
+		height: 150px;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-deals {
+		padding-block: 42px 48px;
+	}
+
+	.lafka-counter-deals__grid {
+		grid-template-columns: minmax(0, 440fr) minmax(0, 590fr);
+		gap: 22px;
+	}
+
+	.lafka-counter-deals__grid.has-list {
+		grid-template-columns: minmax(0, 440fr) minmax(0, 590fr) minmax(0, 280fr);
+	}
+
+	.lafka-counter-deals__photos {
+		grid-template-columns: minmax(0, 1fr);
+		grid-template-rows: repeat(2, minmax(0, 1fr));
+		gap: 22px;
+	}
+
+	.lafka-deal--featured {
+		display: flex;
+	}
+
+	.lafka-deal--featured .lafka-deal__media {
+		height: 178px;
+	}
+
+	.lafka-deal--featured .lafka-deal__name {
+		font-size: 1.75rem;
+	}
+
+	.lafka-deal--featured .lafka-deal__price {
+		font-size: 2.875rem;
+	}
+
+	.lafka-deal--photo {
+		grid-template-columns: 150px minmax(0, 1fr);
+		padding: 14px 22px 14px 12px;
+	}
+
+	.lafka-deal--photo .lafka-deal__media {
+		height: 120px;
+	}
+
+	.lafka-deal--text .lafka-deal__name {
+		font-size: var(--lafka-font-size-h3);
+	}
+}
+
+/* ── Co-star categories + section heads ───────────────────────────────── */
+.lafka-counter-costars {
+	padding-block: 32px 36px;
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-counter-costars__grid {
+	display: grid;
+	gap: 32px;
+}
+
+.lafka-counter-section .lafka-rows {
+	margin-top: 4px;
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-costars {
+		padding-block: 38px 40px;
+	}
+
+	.lafka-counter-costars__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		column-gap: 64px;
+	}
+}
+
+/* ── The rest of the menu + jump index ────────────────────────────────── */
+.lafka-counter-rest {
+	padding-block: 36px 44px;
+	background: var(--lafka-color-surface-page);
+}
+
+.lafka-jump__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 22px;
+	margin: 0 0 24px;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-jump__list a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--lafka-color-text-primary);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-jump__list a:hover {
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-counter-rest__grid {
+	display: grid;
+	gap: 36px;
+}
+
+.lafka-counter-rest .lafka-counter-section {
+	content-visibility: auto;
+	contain-intrinsic-size: auto 480px;
+	scroll-margin-top: 120px;
+}
+
+.lafka-counter-rest .lafka-counter-head__title {
+	font-size: var(--lafka-font-size-h3-desk);
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-rest__grid {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+		grid-auto-flow: row dense;
+		align-items: start;
+		column-gap: 64px;
+	}
+
+	.lafka-counter-rest .lafka-counter-head__title {
+		font-size: var(--lafka-font-size-h2);
+	}
+}
+
+/* ── Find us ──────────────────────────────────────────────────────────── */
+.lafka-counter-find {
+	padding-block: 30px 36px;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	background: var(--lafka-color-surface-muted);
+}
+
+.lafka-counter-find__grid {
+	display: grid;
+	gap: 20px;
+}
+
+.lafka-counter-find__head {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 12px;
+}
+
+.lafka-counter-find__title {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-size: 1.875rem;
+	font-weight: var(--lafka-font-weight-display);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	line-height: 1.2;
+}
+
+.lafka-counter-find__label {
+	margin: 0 0 4px;
+	font-family: var(--lafka-font-family-body);
+	font-size: inherit;
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: 0;
+}
+
+.lafka-counter-find__text {
+	margin: 0;
+	font-style: normal;
+}
+
+.lafka-counter-find__hours {
+	display: grid;
+	gap: 2px;
+	margin: 0;
+}
+
+.lafka-counter-find__hours div {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 8px;
+}
+
+.lafka-counter-find__hours dd {
+	margin: 0;
+}
+
+.lafka-counter-find__phone {
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-body-lg-desk);
+	font-weight: var(--lafka-font-weight-bold);
+	text-underline-offset: 4px;
+}
+
+@media (min-width: 600px) {
+
+	.lafka-counter-find__grid {
+		grid-template-columns: repeat(3, minmax(0, 1fr));
+		column-gap: 32px;
+	}
+
+	.lafka-counter-find__head {
+		grid-column: 1 / -1;
+	}
+}
+
+@media (min-width: 1024px) {
+
+	.lafka-counter-find__grid {
+		grid-template-columns: 260px repeat(3, minmax(0, 1fr));
+		column-gap: 40px;
+	}
+
+	.lafka-counter-find__head {
+		grid-column: auto;
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}

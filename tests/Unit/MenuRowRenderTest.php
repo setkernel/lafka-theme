@@ -17,6 +17,11 @@ namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/product-card-image.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/price-columns.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/woocommerce/lafka-archive-quickadd.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/menu-url.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/open-status.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/hours-display.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/menu-data.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/counter-chrome.php';
 }
 
 namespace Lafka\Tests\Unit {
@@ -57,7 +62,7 @@ namespace Lafka\Tests\Unit {
 			$GLOBALS['lafka_test_required_addons'][7] = true;
 			$html = $this->row( \Lafka_Test_Catalog::pizza() );
 			$this->assertStringNotContainsString( '<button', $html );
-			$this->assertStringContainsString( 'class="lafka-row__add lafka-row__add--choose lafka-counter-btn" href="http://example.test/product/classic-combo/"', $html );
+			$this->assertStringContainsString( 'class="lafka-counter-btn lafka-counter-btn--choose lafka-row__add" href="http://example.test/product/classic-combo/"', $html );
 			$this->assertStringContainsString( 'options for Classic Combo', $html );
 		}
 

@@ -40,8 +40,7 @@ if ( '' === trim( $lafka_row_desc ) && method_exists( $lafka_row_p, 'get_descrip
 }
 $lafka_row_desc = trim( (string) preg_replace( '/\s+/', ' ', $lafka_row_desc ) );
 
-$lafka_row_prices  = lafka_price_columns( $lafka_row_p );
-$lafka_row_chooser = lafka_chooser_payload( $lafka_row_p );
+$lafka_row_prices = lafka_price_columns( $lafka_row_p );
 
 // Menu-controls filters (search / dietary chips) key off these, exactly as the
 // classic card li does.
@@ -67,15 +66,8 @@ if ( isset( $args['list'] ) ) {
 	$lafka_row_list = 'Menu';
 }
 
-// Action: chooser (variable), direct (simple, quick-add enabled), or Choose -> PDP.
-$lafka_row_quick = (bool) apply_filters( 'lafka_archive_quickadd_enabled', (bool) get_theme_mod( 'lafka_archive_quickadd_enabled', true ), $lafka_row_p );
-$lafka_row_mode  = '';
-if ( $lafka_row_chooser['addable'] && $lafka_row_quick ) {
-	$lafka_row_mode = 'chooser' === $lafka_row_chooser['mode'] ? 'chooser' : 'direct';
-}
-if ( 'chooser' === $lafka_row_mode ) {
-	lafka_chooser_register( $lafka_row_p );
-}
+// Action (lafka_counter_add_action()): chooser (variable), direct (simple,
+// quick-add on), or a "Choose" link to the product page.
 $lafka_row_add_label = (string) apply_filters( 'lafka_counter_add_label', __( 'Add', 'lafka' ), $lafka_row_p );
 
 $lafka_row_img = '';
@@ -135,19 +127,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 				<p class="lafka-row__price"><?php echo esc_html( lafka_price_plain( (float) $lafka_row_prices['price'] ) ); ?></p>
 			<?php endif; ?>
 
-			<?php if ( '' !== $lafka_row_mode ) : ?>
-				<button
-					type="button"
-					class="lafka-row__add lafka-counter-btn"
-					data-lafka-add="<?php echo esc_attr( (string) $lafka_row_id ); ?>"
-					data-lafka-add-mode="<?php echo esc_attr( $lafka_row_mode ); ?>"
-					data-lafka-add-url="<?php echo esc_url( $lafka_row_url ); ?>"
-				><?php echo esc_html( $lafka_row_add_label ); ?><span class="screen-reader-text"> <?php echo esc_html( $lafka_row_name ); ?></span></button>
-			<?php else : ?>
-				<a class="lafka-row__add lafka-row__add--choose lafka-counter-btn" href="<?php echo esc_url( $lafka_row_url ); ?>">
-					<?php echo esc_html( (string) apply_filters( 'lafka_counter_choose_label', __( 'Choose', 'lafka' ), $lafka_row_p ) ); ?><span class="screen-reader-text"> <?php echo esc_html( sprintf( /* translators: %s: product name */ __( 'options for %s', 'lafka' ), $lafka_row_name ) ); ?></span>
-				</a>
-			<?php endif; ?>
+			<?php echo lafka_counter_add_action( $lafka_row_p, $lafka_row_add_label, 'lafka-row__add' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_counter_add_action(). ?>
 		</div>
 	</div>
 </li>

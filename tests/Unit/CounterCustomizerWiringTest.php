@@ -82,6 +82,41 @@ namespace Lafka\Tests\Unit {
 			$this->assertSame( 'check', $manager->settings['lafka_motif']['default'] );
 		}
 
+		public function test_counter_home_settings(): void {
+			$manager  = $this->register();
+			$expected = array(
+				'lafka_counter_costar_a'       => array( 0, 'absint' ),
+				'lafka_counter_costar_b'       => array( 0, 'absint' ),
+				'lafka_counter_hero_product_a' => array( 0, 'absint' ),
+				'lafka_counter_hero_product_b' => array( 0, 'absint' ),
+				'lafka_counter_deals_cat'      => array( 0, 'absint' ),
+				'lafka_counter_featured_deal'  => array( 0, 'absint' ),
+				'lafka_counter_deals_heading'  => array( "Today's deals", 'sanitize_text_field' ),
+				'lafka_counter_deals_lead'     => array( '', 'sanitize_text_field' ),
+				'lafka_counter_deals_limit'    => array( 6, 'lafka_counter_sanitize_limit_12' ),
+				'lafka_counter_costar_limit'   => array( 3, 'lafka_counter_sanitize_limit_12' ),
+				'lafka_counter_menu_limit'     => array( 6, 'lafka_counter_sanitize_limit_24' ),
+				'lafka_counter_menu_style'     => array( 'compact', 'lafka_counter_sanitize_menu_style' ),
+				'lafka_counter_menu_thumbs'    => array( true, 'rest_sanitize_boolean' ),
+				'lafka_counter_menu_heading'   => array( 'More from our menu', 'sanitize_text_field' ),
+				'lafka_counter_jump_links'     => array( true, 'rest_sanitize_boolean' ),
+				'lafka_counter_show_find_us'   => array( true, 'rest_sanitize_boolean' ),
+			);
+			foreach ( $expected as $id => list( $default, $sanitize ) ) {
+				$this->assertSame( $default, $manager->settings[ $id ]['default'], $id );
+				$this->assertSame( $sanitize, $manager->settings[ $id ]['sanitize_callback'], $id );
+				$this->assertSame( 'lafka_home_counter', $manager->controls[ $id ]['section'], $id );
+			}
+			$this->assertSame( 'lafka_home', $manager->sections['lafka_home_counter']['panel'] );
+			$this->assertSame( 'lafka_counter_home_is_active', $manager->sections['lafka_home_counter']['active_callback'] );
+			$this->assertSame( 'Automatic', $manager->controls['lafka_counter_deals_cat']['choices'][0] );
+
+			$this->assertSame( 12, \lafka_counter_sanitize_limit_12( 12 ) );
+			$this->assertSame( 6, \lafka_counter_sanitize_limit_12( 99 ) );
+			$this->assertSame( 24, \lafka_counter_sanitize_limit_24( 24 ) );
+			$this->assertSame( 'compact', \lafka_counter_sanitize_menu_style( 'grid' ) );
+		}
+
 		public function test_sanitizer_uses_the_setting_default_as_fallback(): void {
 			$setting          = new \stdClass();
 			$setting->default = 'counter';
