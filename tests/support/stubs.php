@@ -91,9 +91,19 @@ if ( ! class_exists( 'Lafka_Order_Hours' ) ) {
 		public static $lafka_order_hours_options = array();
 		public static $shop_open                  = true;
 		public static $next_open_human            = '';
+		public static $can_order_ahead            = false;
 
 		public static function is_shop_open() {
 			return self::$shop_open;
+		}
+		public static function can_order_ahead() {
+			return self::$can_order_ahead;
+		}
+		// Mirrors the plugin: closed + opted in + no ordering ahead.
+		public static function is_add_to_cart_blocked() {
+			return ! self::$shop_open
+				&& ! empty( self::$lafka_order_hours_options['lafka_order_hours_disable_add_to_cart'] )
+				&& ! self::$can_order_ahead;
 		}
 		public static function get_next_opening_time() {
 			return null;

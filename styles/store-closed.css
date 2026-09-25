@@ -39,9 +39,11 @@
 
 /* Visually disable the PDP add-to-cart button when the store is closed
  * AND the operator has NOT enabled disable_add_to_cart. (When that
- * option is on, the button is removed server-side; this CSS no-ops.) */
-body.lafka-store-closed .single_add_to_cart_button,
-body.lafka-store-closed .quantity input[name="quantity"] {
+ * option is on, the button is removed server-side; this CSS no-ops.)
+ * Not while the plugin takes orders ahead (body.lafka-order-ahead): then
+ * customers add now and pick a time at checkout. */
+body.lafka-store-closed:not(.lafka-order-ahead) .single_add_to_cart_button,
+body.lafka-store-closed:not(.lafka-order-ahead) .quantity input[name="quantity"] {
 	opacity: 0.5;
 	pointer-events: none;
 	cursor: not-allowed;
