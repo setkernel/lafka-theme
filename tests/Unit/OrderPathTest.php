@@ -50,6 +50,20 @@ namespace Lafka\Tests\Unit {
 			$this->assertMatchesRegularExpression( '/^Delivery on orders over \\D*30(\\.00)?\\. Free delivery over \\D*50(\\.00)?\\. The delivery fee shows/', $note );
 		}
 
+		public function test_maps_hints_only_where_a_map_can_load(): void {
+			$GLOBALS['lafka_test_is_cart']     = false;
+			$GLOBALS['lafka_test_is_checkout'] = false;
+			$this->assertFalse( lafka_page_may_load_google_maps(), 'A content page (e.g. /contact-us/) with no map.' );
+
+			$GLOBALS['lafka_test_is_checkout'] = true;
+			$this->assertTrue( lafka_page_may_load_google_maps() );
+
+			$GLOBALS['lafka_test_is_checkout'] = false;
+			add_filter( 'lafka_page_may_load_google_maps', '__return_true' );
+			$this->assertTrue( lafka_page_may_load_google_maps(), 'Filterable (e.g. a page builder map).' );
+			unset( $GLOBALS['lafka_test_is_cart'], $GLOBALS['lafka_test_is_checkout'] );
+		}
+
 		public function test_the_counter_drawer_turns_the_cart_redirect_off_on_the_front_end(): void {
 			set_theme_mod( 'lafka_drawer_layout', 'counter' );
 

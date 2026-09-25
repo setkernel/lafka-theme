@@ -86,6 +86,39 @@ if ( ! function_exists( 'lafka_counter_drawer_delivery_note' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_page_may_load_google_maps' ) ) {
+	/**
+	 * O-27: whether this page can load Google Maps — the cart or checkout
+	 * (delivery address, zones), or any page that enqueued a Maps loader (a
+	 * map shortcode). The Maps preconnect/dns-prefetch hints are printed only
+	 * then, instead of on every page. Filter `lafka_page_may_load_google_maps`.
+	 *
+	 * @return bool
+	 */
+	function lafka_page_may_load_google_maps(): bool {
+		$may = ( function_exists( 'is_cart' ) && is_cart() ) || ( function_exists( 'is_checkout' ) && is_checkout() );
+		$scripts = ! $may && function_exists( 'wp_scripts' ) ? wp_scripts() : null;
+		if ( is_object( $scripts ) && isset( $scripts->queue, $scripts->registered ) ) {
+			foreach ( (array) $scripts->queue as $handle ) {
+				$src = isset( $scripts->registered[ $handle ] ) ? (string) $scripts->registered[ $handle ]->src : '';
+				$dep = isset( $scripts->registered[ $handle ] ) ? (array) $scripts->registered[ $handle ]->deps : array();
+				if ( false !== strpos( $src, 'maps.googleapis.com' ) || in_array( 'lafka-google-maps', $dep, true ) ) {
+					$may = true;
+					break;
+				}
+			}
+		}
+
+		/**
+		 * Filter whether this page may load Google Maps (resource hints).
+		 *
+		 * @since 7.3.0
+		 * @param bool $may Default decision.
+		 */
+		return (bool) apply_filters( 'lafka_page_may_load_google_maps', $may );
+	}
+}
+
 if ( ! function_exists( 'lafka_order_path_fulfilment_cfg' ) ) {
 	/**
 	 * lafka_fulfilment_js_config: add the pickup shipping method ids.
