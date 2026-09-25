@@ -61,6 +61,30 @@
 	max-width: 60ch;
 }
 
+/* GX3: category/tag landing copy (term description, wpautop'd). A single
+ * paragraph reads exactly like the lead above; longer copy gets paragraph
+ * rhythm without the invalid <p>-in-<p> the old lead wrapper produced. */
+.lafka-menu__intro {
+	font-size: var(--lafka-font-size-body-lg);
+	color: var(--lafka-color-text-muted);
+	line-height: var(--lafka-line-body);
+	max-width: 60ch;
+}
+
+.lafka-menu__intro > * {
+	margin: 0;
+}
+
+.lafka-menu__intro > * + * {
+	margin-top: var(--lafka-space-3);
+}
+
+.lafka-menu__intro a {
+	color: var(--lafka-color-accent-text);
+	text-decoration: underline;
+	text-underline-offset: 2px;
+}
+
 /* -------- Menu controls (fulfilment / search / filter chips) -----------
  * v5.68.0 — Phase A.1 functional additions per handoff "Menu page" spec. */
 .lafka-menu__controls {
@@ -474,6 +498,64 @@
 	.lafka-menu__grid {
 		grid-template-columns: repeat(4, 1fr);
 	}
+}
+
+/* -------- Category FAQ (GX3) ------------------------------------------- */
+.lafka-menu__faq {
+	margin-top: var(--lafka-space-12);
+	max-width: 72ch;
+}
+
+.lafka-menu__faq-title {
+	margin: 0 0 var(--lafka-space-4);
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-display);
+	font-size: clamp(1.5rem, 2.5vw + 0.5rem, 2.25rem);
+	line-height: 1.1;
+	letter-spacing: -0.015em;
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-menu__faq-list {
+	display: flex;
+	flex-direction: column;
+	gap: var(--lafka-space-2);
+}
+
+.lafka-menu__faq-item {
+	background: var(--lafka-color-surface-page);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
+}
+
+.lafka-menu__faq-item[open] {
+	border-color: var(--lafka-color-border-default);
+}
+
+.lafka-menu__faq-q {
+	padding: var(--lafka-space-4) var(--lafka-space-5);
+	cursor: pointer;
+	font-family: var(--lafka-font-family-display);
+	font-weight: var(--lafka-font-weight-semibold);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-menu__faq-q:hover {
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-menu__faq-a {
+	padding: 0 var(--lafka-space-5) var(--lafka-space-4);
+	color: var(--lafka-color-text-secondary);
+	line-height: var(--lafka-line-body);
+}
+
+.lafka-menu__faq-a > * {
+	margin: 0;
+}
+
+.lafka-menu__faq-a > * + * {
+	margin-top: var(--lafka-space-2);
 }
 
 /* -------- Empty state --------------------------------------------------- */

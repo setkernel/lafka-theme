@@ -26,6 +26,7 @@
  *   lafka_test_tpl_dir / _tpl_uri  template directory path / URI
  *   lafka_test_restaurant_info     lafka_get_restaurant_info()
  *   lafka_test_attachments         wp_get_attachment_image(): [ id => src ]
+ *   lafka_test_post_meta           get_post_meta(): [ post_id ][ key ] = value
  *   lafka_test_pdp_redesign        lafka_pdp_redesign_enabled() (default true)
  *   lafka_test_free_delivery_threshold  lafka_get_free_delivery_threshold()
  *
@@ -362,6 +363,19 @@ if ( ! function_exists( 'wp_get_attachment_image' ) ) {
 		return $html . '>';
 	}
 }
+if ( ! function_exists( 'get_post_meta' ) ) {
+	/** Reads $GLOBALS['lafka_test_post_meta'][ post_id ][ key ]. */
+	function get_post_meta( $post_id, $key = '', $single = false ) {
+		$meta = $GLOBALS['lafka_test_post_meta'][ (int) $post_id ] ?? array();
+		if ( '' === $key ) {
+			return $meta;
+		}
+		if ( ! array_key_exists( $key, $meta ) ) {
+			return $single ? '' : array();
+		}
+		return $single ? $meta[ $key ] : array( $meta[ $key ] );
+	}
+}
 if ( ! function_exists( 'get_locale' ) ) {
 	function get_locale() {
 		return 'en_US';
@@ -410,6 +424,7 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_is_preview']         = false;
 		$GLOBALS['lafka_test_is_admin']           = false;
 		$GLOBALS['lafka_test_attachments']        = array();
+		$GLOBALS['lafka_test_post_meta']          = array();
 		$GLOBALS['lafka_test_pdp_redesign']       = true;
 		$GLOBALS['lafka_test_free_delivery_threshold'] = 0;
 		if ( class_exists( 'Lafka_Order_Hours' ) ) {
