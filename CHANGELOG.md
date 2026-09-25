@@ -5,6 +5,19 @@ All notable changes to lafka-theme are documented here. The format follows
 semver (see the Releases section of CONTRIBUTING.md). Older history lives in
 git tags + GitHub Releases.
 
+## [Unreleased]
+
+### Added
+- **Diagnostics (GX1)**: `lafka_theme_log()` logs through the Lafka plugin's
+  `lafka_log` action (WooCommerce logs, source `lafka-theme`, scrubbed) with no
+  hard dependency on the plugin; without a listener it writes to the PHP error
+  log only when `WP_DEBUG` is on (filter `lafka_theme_log_fallback`).
+
+### Changed
+- The GitHub updater and the preset engine log through `lafka_theme_log()`
+  instead of `error_log()`; updater failures are warnings (listed on
+  Lafka → Diagnostics), routine updater lines are info.
+
 ## [7.1.0] — 2026-09-24
 
 Phase NX2 ("10 designs in one theme"), targeting 7.1.0.
