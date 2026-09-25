@@ -473,16 +473,8 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 }
 add_action( 'admin_enqueue_scripts', 'lafka_enqueue_admin_js' );
 
-add_action( 'enqueue_block_editor_assets', 'lafka_enqueue_gutenberg_styles' );
-if ( ! function_exists( 'lafka_enqueue_gutenberg_styles' ) ) {
-	/**
-	 * Enqueue the Gutenberg styles
-	 */
-	function lafka_enqueue_gutenberg_styles() {
-		wp_enqueue_style( 'lafka_block_editor_assets', get_template_directory_uri() . '/styles/lafka-gutenberg-styles.css', array(), lafka_asset_version( '/styles/lafka-gutenberg-styles.css' ) );
-		lafka_typography_enqueue_google_font();
-	}
-}
+// Block-editor content styles (iframed canvas, WP 7.1) — enqueue_block_assets, admin only.
+require_once __DIR__ . '/lafka-editor-styles.php';
 
 /**
  * Checks if post has 'lafka_video_bckgr_url' meta
