@@ -2162,7 +2162,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if ( ! empty( $lafka_maps_api_key ) ) {
 			wp_register_script(
 				'lafka-google-maps',
-				'https://maps.googleapis.com/maps/api/js?key=' . rawurlencode( $lafka_maps_api_key ) . '&sensor=false&callback=Function.prototype',
+				'https://maps.googleapis.com/maps/api/js?key=' . rawurlencode( $lafka_maps_api_key ) . '&callback=Function.prototype', // No obsolete `sensor` param (Maps warns on it).
 				array( 'jquery' ),
 				false,
 				true
@@ -2357,7 +2357,9 @@ if ( ! function_exists( 'lafka_add_resource_hints' ) ) {
 				);
 			}
 
-			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) ) {
+			// O-27: only where a map can load (cart/checkout, or a page that
+			// enqueued the Maps loader) — not on every page.
+			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) && ( ! function_exists( 'lafka_page_may_load_google_maps' ) || lafka_page_may_load_google_maps() ) ) {
 				$urls[] = array(
 					'href' => 'https://maps.googleapis.com',
 					'crossorigin',
@@ -2371,7 +2373,7 @@ if ( ! function_exists( 'lafka_add_resource_hints' ) ) {
 
 		// dns-prefetch is a cheaper hint for resources we may load lazily.
 		if ( 'dns-prefetch' === $relation_type ) {
-			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) ) {
+			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) && ( ! function_exists( 'lafka_page_may_load_google_maps' ) || lafka_page_may_load_google_maps() ) ) {
 				$urls[] = 'https://maps.googleapis.com';
 				$urls[] = 'https://maps.gstatic.com';
 			}
@@ -2902,6 +2904,9 @@ function lafka_strip_script_tag_from_js_block( $source ) {
 
 // P6-PERF-5: inline critical CSS + defer non-critical stylesheets.
 require_once get_template_directory() . '/incl/system/lafka-critical-css.php';
+
+// O-31: classic checkout inline field errors (js/lafka-checkout-fields.js).
+require_once get_template_directory() . '/incl/woocommerce/lafka-checkout-fields.php';
 
 // Fix Wishlist issue (adding prettyPhoto): https://wordpress.org/support/topic/conflict-with-the-wpbakery-gallery/
 add_filter(

@@ -164,6 +164,10 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-fix-category-ca
 // Version bridges for the woocommerce/ template overrides (media gallery, cart item name, meta ordering).
 require_once get_template_directory() . '/incl/woocommerce/lafka-wc-template-compat.php';
 
+// Order path: counter drawer adds never redirect to /cart/; pickup method ids
+// for the Pickup/Delivery ↔ shipping-rate sync.
+require_once get_template_directory() . '/incl/woocommerce/lafka-order-path.php';
+
 // No-op fallbacks for orphan 3rd-party shortcodes (v5.40.0).
 require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
 

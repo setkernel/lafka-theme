@@ -112,12 +112,22 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 
 <body <?php body_class(); ?>>
 	<?php
+	/*
+	 * H-13 / T-06: the skip link is the FIRST focusable element in <body> —
+	 * printed before wp_body_open(), so it precedes every bar and banner a
+	 * plugin prints there (the promotions banner and its close button among
+	 * them). No .screen-reader-text: its clip rules out-ranked the
+	 * .skip-link:focus reveal; .skip-link keeps it off-screen until focused
+	 * (styles/critical.css) and style.css shows it as a top-left pill.
+	 */
+	?>
+	<a class="skip-link" href="#content"><?php esc_html_e( 'Skip to content', 'lafka' ); ?></a>
+
+	<?php
 	wp_body_open();
 	// ↑ Fires the announce bar (v5.54.0) + promo bar (v5.51.0) + any other
 	//   wp_body_open hooks. Renders at the very top of <body>, above #header.
 	?>
-
-	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'lafka' ); ?></a>
 
 	<?php if ( get_theme_mod( 'lafka_show_preloader', true ) ) : ?>
 		<div class="mask" aria-hidden="true">

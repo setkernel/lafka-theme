@@ -99,6 +99,12 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 							</span>
 						</p>
 					<?php endif; ?>
+					<?php $lafka_drw_deliver = function_exists( 'lafka_counter_drawer_delivery_note' ) ? lafka_counter_drawer_delivery_note() : ''; ?>
+					<?php if ( '' !== $lafka_drw_deliver ) : ?>
+						<p class="lafka-drawer__note" data-lafka-fulfilment-note="delivery"<?php echo 'delivery' === $lafka_drw_current ? '' : ' hidden'; ?>>
+							<span><?php echo esc_html( $lafka_drw_deliver ); ?></span>
+						</p>
+					<?php endif; ?>
 				</div>
 			<?php endif; ?>
 		</div>

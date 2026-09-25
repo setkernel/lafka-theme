@@ -1,5 +1,6 @@
 /**
- * Cart page controls — pickup/delivery tabs + clear-order button.
+ * Cart page controls — pickup/delivery tabs + clear-order button + quantity
+ * auto-update.
  *
  * Pairs with woocommerce/cart/cart.php (v5.68.0 additions). Reuses the
  * lafka.fulfilment localStorage key set by menu-controls so the user's
@@ -113,9 +114,70 @@
 		} );
 	}
 
+	/*
+	 * O-16: a quantity change updates the cart by itself ~600 ms after the
+	 * last tap/keystroke, through WooCommerce's own "Update cart" button (its
+	 * cart.js turns that click into the AJAX update), so the disabled
+	 * full-width button can be hidden. Without JavaScript the class is never
+	 * added and the button stays. The theme's −/+ buttons change the value
+	 * through jQuery (.trigger('change')), which native listeners never see —
+	 * so listen through jQuery when it is present.
+	 */
+	var AUTOUPDATE_DELAY = 600;
+	var autoUpdateTimer = null;
+
+	function submitQuantityUpdate() {
+		autoUpdateTimer = null;
+		var updateBtn = document.querySelector( '.woocommerce-cart-form button[name="update_cart"]' );
+		if ( ! updateBtn ) {
+			return;
+		}
+		updateBtn.removeAttribute( 'disabled' );
+		updateBtn.removeAttribute( 'aria-disabled' );
+		updateBtn.click();
+	}
+
+	function scheduleQuantityUpdate( event ) {
+		var target = event && event.target;
+		if ( ! target || ! target.matches || ! target.matches( '.woocommerce-cart-form input.qty' ) ) {
+			return;
+		}
+		// Mid-typing an empty box is not a quantity yet.
+		if ( '' === String( target.value ).trim() ) {
+			return;
+		}
+		if ( autoUpdateTimer ) {
+			window.clearTimeout( autoUpdateTimer );
+		}
+		autoUpdateTimer = window.setTimeout( submitQuantityUpdate, AUTOUPDATE_DELAY );
+	}
+
+	function markAutoUpdate() {
+		// WooCommerce replaces the form after each update: re-mark every time.
+		$$( '.woocommerce-cart-form' ).forEach( function ( form ) {
+			form.classList.add( 'lafka-cart-autoupdate' );
+		} );
+	}
+
+	function initAutoUpdate() {
+		if ( ! document.querySelector( '.woocommerce-cart-form' ) ) {
+			return;
+		}
+		markAutoUpdate();
+		if ( window.jQuery ) {
+			window.jQuery( document.body )
+				.on( 'change input', '.woocommerce-cart-form input.qty', scheduleQuantityUpdate )
+				.on( 'updated_wc_div updated_cart_totals', markAutoUpdate );
+		} else {
+			document.addEventListener( 'change', scheduleQuantityUpdate );
+			document.addEventListener( 'input', scheduleQuantityUpdate );
+		}
+	}
+
 	function init() {
 		initTabs();
 		initClearOrder();
+		initAutoUpdate();
 	}
 
 	if ( document.readyState === 'loading' ) {

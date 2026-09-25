@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/payment-trust.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/woocommerce/lafka-order-path.php';
 }
 
 namespace Lafka\Tests\Unit {
@@ -99,6 +100,17 @@ namespace Lafka\Tests\Unit {
 			$classic = $this->render( array() );
 			$this->assertStringNotContainsString( 'lafka-cart-drawer--counter', $classic );
 			$this->assertStringContainsString( '<h2 id="lafka-cart-drawer-title" class="lafka-cart-drawer__title">', $classic );
+		}
+
+		public function test_the_delivery_choice_explains_minimum_free_threshold_and_fee(): void {
+			$GLOBALS['lafka_test_fulfilment_modes'] = array( 'pickup', 'delivery' );
+			$html = $this->render( array( 'a' => array( 'quantity' => 1 ) ) );
+
+			$this->assertMatchesRegularExpression( '#<p class="lafka-drawer__note" data-lafka-fulfilment-note="delivery"[^>]*>#', $html );
+			$this->assertStringContainsString( 'The delivery fee shows at checkout once you enter your address.', $html );
+
+			\add_filter( 'lafka_counter_drawer_delivery_note', static fn( $note, $min ) => 'min=' . $min . '|' . $note, 10, 3 );
+			$this->assertStringContainsString( 'min=0|The delivery fee', $this->render( array( 'a' => array( 'quantity' => 1 ) ) ), 'No minimum without the plugin: nothing invented.' );
 		}
 
 		public function test_drawer_fragments_and_upsell_wording(): void {

@@ -74,14 +74,11 @@ do_action( 'woocommerce_before_cart' );
 <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
 
 	<?php
-	/* v6.7.11: real <h2> heading replaces the v5.67.0 CSS ::before pseudo
-	 * (F02-a11y, HTML-MISORDER). Pseudo-elements aren't focusable or
-	 * announceable as headings; combined with `.lafka-cart-item__title`
-	 * being <h3>, the previous DOM was h1 → h3 → h2 — out of order. The
-	 * new sequence is h1 (page) → h2 (Your order) → p (item title styled
-	 * as a heading) → h2 (Cart totals from WC core). */
+	/* O-30: the page's own <h1> is the one heading above the items; the old
+	 * second "Your order" <h2> repeated it. The intro sentence stays. Heading
+	 * order: h1 (page) → p (item titles styled as headings) → h2 (Cart totals,
+	 * WC core). */
 	?>
-	<h2 class="lafka-cart-form__title"><?php esc_html_e( 'Your order', 'lafka' ); ?></h2>
 	<p class="lafka-cart-form__intro"><?php esc_html_e( 'Review your items, choose pickup or delivery, then check out.', 'lafka' ); ?></p>
 
 	<?php

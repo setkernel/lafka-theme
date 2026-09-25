@@ -167,6 +167,49 @@
 
   $(document.body).on('added_to_cart', open);
 
+  // ---------------------------------------------------------------------------
+  // Focus after Remove (O-18). WooCommerce's remove_from_cart_button swaps the
+  // item list for the refreshed fragment, deleting the focused Remove link, so
+  // focus fell to <body> and a keyboard / screen-reader user was thrown out of
+  // the open drawer. Remember which row was removed, then focus the Remove of
+  // the row now in its place (or the last row), or the empty state's "Browse
+  // the menu" when the order is empty.
+  // ---------------------------------------------------------------------------
+  var removedIndex = -1;
+
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('.remove_from_cart_button');
+    if (!btn || !drawer.contains(btn)) return;
+    var rows = Array.prototype.slice.call(drawer.querySelectorAll('.lafka-cart-drawer__items > li'));
+    removedIndex = rows.indexOf(btn.closest('li'));
+  }, true);
+
+  function focusAfterRemove(index) {
+    var active = document.activeElement;
+    if (active && active !== document.body && drawer.contains(active)) return;
+    var rows = drawer.querySelectorAll('.lafka-cart-drawer__items > .lafka-cart-drawer__item');
+    var target = null;
+    if (rows.length) {
+      var row = rows[Math.min(index, rows.length - 1)];
+      target = row.querySelector('.lafka-cart-drawer__remove') || row.querySelector('button:not([disabled]), a[href]');
+    } else {
+      target = drawer.querySelector('.lafka-cart-drawer__empty-cta');
+    }
+    if (!target) {
+      target = drawer.querySelector('#lafka-cart-drawer-title');
+      if (target && !target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    }
+    if (target && target.focus) target.focus();
+  }
+
+  $(document.body).on('removed_from_cart', function () {
+    var index = removedIndex;
+    removedIndex = -1;
+    if (index < 0 || drawer.dataset.open !== 'true') return;
+    // After WooCommerce's own handler has swapped the fragments in.
+    setTimeout(function () { focusAfterRemove(index); }, 0);
+  });
+
   document.addEventListener('click', function (e) {
     var trigger = e.target.closest && e.target.closest('[data-lafka-cart-open]');
     if (trigger) { e.preventDefault(); open(); }

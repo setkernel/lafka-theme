@@ -62,12 +62,58 @@
 		} );
 	}
 
+	// ── Classic cart / checkout shipping rates (O-07, O-39) ─────────────────
+	// A choice made in the header, drawer or cart tabs selects the matching
+	// WooCommerce shipping rate (WooCommerce's own change handler then updates
+	// the totals / order review), and a rate picked in the totals updates the
+	// choice everywhere else. Pickup rates are the plugin's pickup method ids
+	// (lafkaCfg.pickupMethods); every other rate — including the plugin's
+	// "Delivery" placeholder shown before an address — is delivery.
+	var PICKUP_METHODS = Array.isArray( cfg.pickupMethods ) ? cfg.pickupMethods : [ 'local_pickup', 'pickup_location' ];
+	var applyingRate = false;
+
+	function rateMode( value ) {
+		return PICKUP_METHODS.indexOf( String( value ).split( ':' )[ 0 ] ) === -1 ? 'delivery' : 'pickup';
+	}
+
+	function selectRate( method ) {
+		var groups = {};
+		Array.prototype.forEach.call( document.querySelectorAll( 'input[type="radio"][name^="shipping_method"]' ), function ( radio ) {
+			( groups[ radio.name ] = groups[ radio.name ] || [] ).push( radio );
+		} );
+		Object.keys( groups ).forEach( function ( name ) {
+			var radios = groups[ name ];
+			var current = radios.filter( function ( r ) {
+				return r.checked;
+			} )[ 0 ];
+			if ( current && rateMode( current.value ) === method ) {
+				return;
+			}
+			var match = radios.filter( function ( r ) {
+				return rateMode( r.value ) === method;
+			} )[ 0 ];
+			if ( ! match ) {
+				return;
+			}
+			match.checked = true;
+			applyingRate = true;
+			try {
+				match.dispatchEvent( new Event( 'change', { bubbles: true } ) );
+			} finally {
+				applyingRate = false;
+			}
+		} );
+	}
+
 	function choose( method, source ) {
 		if ( MODES.indexOf( method ) === -1 ) {
 			return;
 		}
 		write( method );
 		sync( method );
+		if ( source !== 'rate' ) {
+			selectRate( method );
+		}
 		document.dispatchEvent( new CustomEvent( 'lafka:fulfilment', { detail: { method: method } } ) );
 		if ( source !== 'controls' ) {
 			document.dispatchEvent( new CustomEvent( 'lafka:fulfilment-change', { detail: { mode: method, source: 'lafka-fulfilment' }, bubbles: true } ) );
@@ -78,6 +124,8 @@
 		var input = e.target;
 		if ( input && input.matches && input.matches( '[data-lafka-fulfilment-input]' ) && input.checked ) {
 			choose( input.value, 'radio' );
+		} else if ( ! applyingRate && input && input.matches && input.matches( 'input[type="radio"][name^="shipping_method"]' ) && input.checked ) {
+			choose( rateMode( input.value ), 'rate' );
 		}
 	} );
 

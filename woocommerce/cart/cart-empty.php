@@ -5,8 +5,10 @@
  * Overrides WC's stock "Your cart is currently empty / Return to shop"
  * dead-end with the handoff layout:
  *   - 🛒 centered emoji
- *   - "Your cart is empty." h2 in Fraunces 700
+ *   - "Your cart is empty" h2 in Fraunces 700
  *   - Muted helper line (max 360px)
+ *   - O-32: the same three strings as the cart drawer's empty state
+ *     (lafka-plugin lafka_cart_drawer_render_item()), so the two never differ
  *   - Primary "Browse the menu" pill CTA
  *   - Followed by the existing lafka-cart-empty-popular "Add a side?"
  *     section (hooked separately via woocommerce_cart_is_empty)
@@ -43,13 +45,13 @@ $lafka_cart_empty_menu_url = (string) apply_filters(
 		echo esc_html(
 			(string) apply_filters(
 				'wc_empty_cart_message',
-				esc_html__( 'Your cart is empty.', 'lafka' )
+				esc_html__( 'Your cart is empty', 'lafka' )
 			)
 		);
 		?>
 	</h2>
 	<p class="lafka-cart-empty__lead">
-		<?php esc_html_e( 'Build an order from the menu — made fresh and ready to go.', 'lafka' ); ?>
+		<?php esc_html_e( 'Add something delicious to get started.', 'lafka' ); ?>
 	</p>
 	<a class="lafka-cart-empty__cta" href="<?php echo esc_url( $lafka_cart_empty_menu_url ); ?>">
 		<?php
