@@ -1,6 +1,6 @@
 {
 	"name": "lafka-theme",
-	"version": "7.1.0",
+	"version": "7.2.0",
 	"private": true,
 	"description": "Lafka WordPress Theme",
 	"scripts": {
@@ -21,7 +21,7 @@
 		"test:visual": "playwright test --config playwright.visual.config.js --project=peppery",
 		"test:visual:dark": "playwright test --config playwright.visual.config.js --project=dark",
 		"test:visual:counter": "playwright test --config playwright.visual.config.js --project=counter",
-		"test:contrast":"playwright test --config playwright.visual.config.js --project=contrast",
+		"test:contrast": "playwright test --config playwright.visual.config.js --project=contrast",
 		"sync-version": "node scripts/sync-version.mjs",
 		"check-version": "node scripts/sync-version.mjs --check",
 		"version": "node scripts/sync-version.mjs --stage"
