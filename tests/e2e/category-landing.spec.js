@@ -14,6 +14,7 @@
  */
 const { test, expect } = require( '@playwright/test' );
 const { wpCli } = require( './support/wp-cli' );
+const { useLayouts, restoreLayouts } = require( './support/store' );
 
 const CAT_SLUG = 'pizzas';
 const INTRO =
@@ -26,6 +27,8 @@ test.describe.configure( { mode: 'serial' } );
 
 test.describe( 'Category landing content + card images', () => {
 	test.beforeAll( () => {
+		// The classic card grid (GX4: Peppery defaults to counter rows).
+		useLayouts( 'classic' );
 		originalDescription = wpCli( [
 			'term',
 			'get',
@@ -49,6 +52,7 @@ test.describe( 'Category landing content + card images', () => {
 	} );
 
 	test.afterAll( () => {
+		restoreLayouts();
 		wpCli( [
 			'term',
 			'update',

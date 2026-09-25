@@ -71,6 +71,17 @@ function discoverPresetSlugs() {
 
 const PRESET_SLUGS = discoverPresetSlugs();
 
+// GX4: presets whose preset.json variants default every surface to the
+// counter layout (read from disk so a future counter preset is picked up).
+const COUNTER_SLUGS = PRESET_SLUGS.filter( ( slug ) => {
+	try {
+		const json = JSON.parse( fs.readFileSync( path.join( __dirname, '..', '..', 'presets', slug, 'preset.json' ), 'utf8' ) );
+		return ( json.variants || {} ).home_layout === 'counter';
+	} catch {
+		return false;
+	}
+} );
+
 /**
  * In-page WCAG contrast probe. Returns, per selector, the computed text colour,
  * the alpha-composited effective background (first opaque ancestor over white),
@@ -212,35 +223,66 @@ for ( const slug of PRESET_SLUGS ) {
 		wpCli( [ 'eval', 'remove_theme_mod("lafka_active_preset");' ] );
 	} );
 
-	test( 'home', async ( { page } ) => {
-		await page.goto( '/' );
-		await expect( page.locator( '.lafka-announce-bar' ).first() ).toBeVisible();
-		await assertContrast( page, [
-			{ sel: '.lafka-announce-bar__status', min: T.text, label: 'announce status' },
-			{ sel: '.lafka-announce-bar__phone', min: T.text, label: 'announce phone' },
-			{ sel: '.lafka-direct__heading', min: T.text, label: 'direct heading' },
-			{ sel: '.lafka-direct__point', min: T.text, label: 'direct point' },
-			{ sel: '.lafka-visit__cta--primary', min: T.ui, label: 'visit CTA (primary)' },
-			{ sel: '.lafka-hero__headline', min: T.text, label: 'hero heading' },
-			// The header control glyph sits directly on the header chrome, so it
-			// guards the white-header regression (defect 7): if the header bg
-			// flips back to white, this near-white icon collapses to ~1:1. (The
-			// text logo is a WCAG-exempt logotype and renders in the brand accent,
-			// so it is intentionally NOT asserted here.)
-			{ sel: '.lafka-header__search', min: T.ui, label: 'header control' },
-			{ sel: '.lafka-footer__col-title', min: T.text, label: 'footer heading' },
-			{ sel: '.lafka-footer__copyright', min: T.text, label: 'footer copyright' },
-		] );
-	} );
+	// GX4: a preset whose layouts default to "counter" (Peppery) renders the
+	// counter header / home / menu — probe those surfaces instead.
+	if ( COUNTER_SLUGS.includes( slug ) ) {
+		test( 'home (counter)', async ( { page } ) => {
+			await page.goto( '/' );
+			await expect( page.locator( '.lafka-counter-hero' ).first() ).toBeVisible();
+			await assertContrast( page, [
+				{ sel: '.lafka-counter-status', min: T.text, label: 'header status' },
+				{ sel: '.lafka-counter-header__name', min: T.text, label: 'header name' },
+				{ sel: '.lafka-counter-hero__title', min: T.text, label: 'hero heading' },
+				{ sel: '.lafka-counter-hero__meta span', min: T.text, label: 'hero meta' },
+				{ sel: '.lafka-counter-hero .lafka-counter-btn--primary', min: T.ui, label: 'hero CTA (primary)' },
+				{ sel: '.lafka-counter-head__title', min: T.text, label: 'section heading' },
+				{ sel: '.lafka-row__name a', min: T.text, label: 'row name' },
+				{ sel: '.lafka-row__desc', min: T.text, label: 'row description' },
+				{ sel: '.lafka-counter-footer__line', min: T.text, label: 'footer line' },
+			] );
+		} );
 
-	test( 'menu', async ( { page } ) => {
-		await page.goto( '/menu/' );
-		await expect( page.locator( '.lafka-menu__tab.is-active' ).first() ).toBeVisible();
-		await assertContrast( page, [
-			{ sel: '.lafka-menu__tab.is-active .lafka-menu__tab-label', min: T.text, label: 'active tab label' },
-			{ sel: '.lafka-menu__tab.is-active .lafka-menu__tab-meta', min: T.text, label: 'active tab meta' },
-		] );
-	} );
+		test( 'menu (counter)', async ( { page } ) => {
+			await page.goto( '/menu/' );
+			await expect( page.locator( '.lafka-row' ).first() ).toBeVisible();
+			await assertContrast( page, [
+				{ sel: '.lafka-menu__cat-chip', min: T.text, label: 'category tab' },
+				{ sel: '.lafka-menu__group-title', min: T.text, label: 'group heading' },
+				{ sel: '.lafka-row__name a', min: T.text, label: 'row name' },
+				{ sel: '.lafka-row .lafka-counter-btn', min: T.ui, label: 'row Add' },
+			] );
+		} );
+	} else {
+		test( 'home', async ( { page } ) => {
+			await page.goto( '/' );
+			await expect( page.locator( '.lafka-announce-bar' ).first() ).toBeVisible();
+			await assertContrast( page, [
+				{ sel: '.lafka-announce-bar__status', min: T.text, label: 'announce status' },
+				{ sel: '.lafka-announce-bar__phone', min: T.text, label: 'announce phone' },
+				{ sel: '.lafka-direct__heading', min: T.text, label: 'direct heading' },
+				{ sel: '.lafka-direct__point', min: T.text, label: 'direct point' },
+				{ sel: '.lafka-visit__cta--primary', min: T.ui, label: 'visit CTA (primary)' },
+				{ sel: '.lafka-hero__headline', min: T.text, label: 'hero heading' },
+				// The header control glyph sits directly on the header chrome, so it
+				// guards the white-header regression (defect 7): if the header bg
+				// flips back to white, this near-white icon collapses to ~1:1. (The
+				// text logo is a WCAG-exempt logotype and renders in the brand accent,
+				// so it is intentionally NOT asserted here.)
+				{ sel: '.lafka-header__search', min: T.ui, label: 'header control' },
+				{ sel: '.lafka-footer__col-title', min: T.text, label: 'footer heading' },
+				{ sel: '.lafka-footer__copyright', min: T.text, label: 'footer copyright' },
+			] );
+		} );
+
+		test( 'menu', async ( { page } ) => {
+			await page.goto( '/menu/' );
+			await expect( page.locator( '.lafka-menu__tab.is-active' ).first() ).toBeVisible();
+			await assertContrast( page, [
+				{ sel: '.lafka-menu__tab.is-active .lafka-menu__tab-label', min: T.text, label: 'active tab label' },
+				{ sel: '.lafka-menu__tab.is-active .lafka-menu__tab-meta', min: T.text, label: 'active tab meta' },
+			] );
+		} );
+	}
 
 	test( 'pdp (margherita-pizza)', async ( { page } ) => {
 		await page.goto( `/product/${ SEED.pizzaSlug }/` );
