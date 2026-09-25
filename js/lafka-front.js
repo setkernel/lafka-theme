@@ -57,13 +57,13 @@
         }
     }
 
-    /* If preloader is enabled */
-    if (lafka_main_js_params.show_preloader) {
-        lafkaOnLoad(function() {
-            $("#loader").delay(100).fadeOut();
-            $(".mask").delay(300).fadeOut();
-        });
-    }
+    /*
+     * GX T-01: the preloader (off by default) is removed as soon as this
+     * deferred script runs — i.e. at DOMContentLoaded — never held until
+     * window.load plus a fade. The CSS fail-safe in lafka-preloader.css hides
+     * it anyway if this script never runs.
+     */
+    $('.mask').remove();
     lafkaOnLoad(function() {
         checkRevealFooter();
         checkProductGalleryCarousel();

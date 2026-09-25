@@ -1863,10 +1863,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		// Preloader style (never under the counter header — H-31).
-		if ( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ) {
-			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
-		}
+		// GX T-01: no preloader stylesheet — when the (default-off) preloader is
+		// on, its rules are inlined once in the critical bundle
+		// (lafka_preloader_css(), incl/system/lafka-preloader.php).
 
 		// NX2-01: register the Preset-Token Layer as an inline-only handle
 		// (src=false → no HTTP request) that depends on lafka-tokens, so the
@@ -2057,7 +2056,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'img_path'                => esc_js( LAFKA_IMAGES_PATH ),
 				'admin_url'               => esc_js( admin_url( 'admin-ajax.php' ) ),
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
-				'show_preloader'          => esc_js( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ),
+				'show_preloader'          => function_exists( 'lafka_preloader_enabled' ) && lafka_preloader_enabled() ? '1' : '',
 				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
 				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
 				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),
@@ -2925,6 +2924,8 @@ require_once get_template_directory() . '/incl/system/lafka-critical-css.php';
 // O-31: classic checkout inline field errors (js/lafka-checkout-fields.js).
 require_once get_template_directory() . '/incl/woocommerce/lafka-checkout-fields.php';
 
+// GX T-01: the preloader is off by default (never under a counter layout).
+require_once get_template_directory() . '/incl/system/lafka-preloader.php';
 // Fix Wishlist issue (adding prettyPhoto): https://wordpress.org/support/topic/conflict-with-the-wpbakery-gallery/
 add_filter(
 	'yith_wcwl_main_script_deps',

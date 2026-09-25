@@ -712,7 +712,8 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 			$checkbox_defaults = array(
 				'lafka_is_responsive'                  => 1,
-				'lafka_show_preloader'                 => 1,
+				// GX T-01: off by default (and forced off under a counter layout).
+				'lafka_show_preloader'                 => 0,
 				'lafka_fancy_title_font'               => 0,
 				'lafka_uppercase_page_titles'          => 1,
 				'lafka_show_my_account'                => 1,
