@@ -166,5 +166,12 @@ namespace Lafka\Tests\Unit {
 			\add_filter( 'lafka_counter_brand_short', static fn() => 'EK' );
 			$this->assertStringContainsString( 'aria-hidden="true">EK</span>', $this->render() );
 		}
+	
+		public function test_a_long_name_without_a_short_name_falls_back_to_its_first_part(): void {
+			$this->assertSame( 'Harbour Pizza', \lafka_counter_brand_short_auto( 'Harbour Pizza &amp; Poutine' ) );
+			$this->assertSame( 'Harbour Pizza', \lafka_counter_brand_short( 'Harbour Pizza and Poutine' ) );
+			$this->assertSame( '', \lafka_counter_brand_short( 'Example Kitchen' ), 'short names stay whole' );
+			$this->assertSame( '', \lafka_counter_brand_short_auto( 'The Very Long Kitchen Of Example' ), 'no joiner, nothing to cut at' );
+		}
 	}
 }

@@ -88,8 +88,31 @@ if ( ! function_exists( 'lafka_counter_brand_short' ) ) {
 	 * @return string '' when unset or identical to the full name.
 	 */
 	function lafka_counter_brand_short( string $full ): string {
-		$short = trim( wp_strip_all_tags( (string) apply_filters( 'lafka_counter_brand_short', (string) get_theme_mod( 'lafka_counter_brand_short', '' ), $full ) ) );
+		$short = trim( (string) get_theme_mod( 'lafka_counter_brand_short', '' ) );
+		if ( '' === $short ) {
+			$short = lafka_counter_brand_short_auto( $full );
+		}
+		$short = trim( wp_strip_all_tags( (string) apply_filters( 'lafka_counter_brand_short', $short, $full ) ) );
 		return $short === trim( $full ) ? '' : $short;
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_brand_short_auto' ) ) {
+	/**
+	 * H-01: a long name with no operator short name falls back to its first
+	 * part — "Harbour Pizza & Poutine" → "Harbour Pizza" — on narrow headers.
+	 * Names of 18 characters or fewer, or without a joiner, stay whole ('').
+	 *
+	 * @param string $full Full brand name.
+	 */
+	function lafka_counter_brand_short_auto( string $full ): string {
+		$full = trim( html_entity_decode( wp_strip_all_tags( $full ), ENT_QUOTES, 'UTF-8' ) );
+		if ( mb_strlen( $full ) <= 18 ) {
+			return '';
+		}
+		$parts = preg_split( '/\s+(?:&|\+|and|\||-|–|—)\s+/u', $full, 2 );
+		$first = is_array( $parts ) ? trim( (string) $parts[0] ) : '';
+		return ( '' !== $first && $first !== $full && mb_strlen( $first ) >= 3 ) ? $first : '';
 	}
 }
 
