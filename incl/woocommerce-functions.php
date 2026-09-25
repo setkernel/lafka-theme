@@ -1379,22 +1379,19 @@ if ( ! function_exists( 'lafka_custom_related_products_heading' ) ) {
 		global $product;
 		$lafka_chosen_category = lafka_get_chosen_category_for_related( $product );
 
-		$output = esc_html__( 'Other', 'lafka' );
-		if ( $lafka_chosen_category !== null && $lafka_chosen_category->slug !== 'uncategorized' ) {
-			ob_start();
-			?>
-			<a class="lafka-related-browse"
-				href="<?php echo esc_url( get_term_link( $lafka_chosen_category ) ); ?>"
-				title="<?php printf( esc_attr__( 'Browse more "%s"', 'lafka' ), esc_attr( $lafka_chosen_category->name ) ); ?>">
-				<?php echo esc_html( $lafka_chosen_category->name ); ?>
-			</a>
-			<?php
-			$output .= ob_get_clean();
+		// GX M-35: "More from Poutine" — one translatable sentence (the
+		// category name linked), not "Other" + name + "you'll love".
+		if ( null !== $lafka_chosen_category && 'uncategorized' !== $lafka_chosen_category->slug ) {
+			$link   = sprintf(
+				'<a class="lafka-related-browse" href="%1$s">%2$s</a>',
+				esc_url( get_term_link( $lafka_chosen_category ) ),
+				esc_html( $lafka_chosen_category->name )
+			);
+			/* translators: %s: the category name (linked), e.g. "Poutine". */
+			$output = sprintf( esc_html__( 'More from %s', 'lafka' ), $link );
 		} else {
-			$output .= esc_html__( 'Products', 'lafka' );
+			$output = esc_html__( 'You might also like', 'lafka' );
 		}
-
-		$output .= esc_html__( 'you\'ll love', 'lafka' );
 
 		return $output;
 	}
