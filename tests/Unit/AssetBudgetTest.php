@@ -122,6 +122,27 @@ final class AssetBudgetTest extends TestCase {
 	}
 
 	/**
+	 * GX4: the counter home SWAPS lafka-hero + lafka-home-v2 for the single
+	 * lafka-counter.css (core-functions.php skips the two home sheets on the
+	 * counter home), so the counter front page must fit the same budget.
+	 */
+	public function test_counter_front_page_is_a_swap_not_growth(): void {
+		$root  = dirname( __DIR__, 2 );
+		$files = array_diff( self::always_on_stylesheets(), array( 'styles/lafka-hero.css', 'styles/lafka-home-v2.css' ) );
+		$files[] = 'styles/lafka-counter.css';
+		$total   = 0;
+		foreach ( $files as $relative ) {
+			$this->assertFileExists( $root . '/' . $relative );
+			$total += (int) filesize( $root . '/' . $relative );
+		}
+		$this->assertLessThanOrEqual(
+			self::BUDGET_BYTES,
+			$total,
+			sprintf( 'The counter front page ships %d bytes of CSS, over the %d-byte budget.', $total, self::BUDGET_BYTES )
+		);
+	}
+
+	/**
 	 * The modular-only subtotal keeps its own tight ratchet, so growth in the
 	 * hand-authored modular sheets is caught even though the (much larger) shrunk
 	 * monolith now sits in the combined budget above.

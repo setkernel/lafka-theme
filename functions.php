@@ -210,6 +210,7 @@ require_once get_template_directory() . '/incl/template-helpers/price-columns.ph
 require_once get_template_directory() . '/incl/template-helpers/hours-display.php';
 require_once get_template_directory() . '/incl/template-helpers/deal-value.php';
 require_once get_template_directory() . '/incl/template-helpers/menu-data.php';
+require_once get_template_directory() . '/incl/template-helpers/counter-chrome.php';
 require_once get_template_directory() . '/incl/customizer-counter.php';
 
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
