@@ -17,7 +17,7 @@
 	width: 100%;
 	max-width: var(--lafka-container-max);
 	margin-inline: auto;
-	padding-inline: clamp(16px, 4.45vw, 64px);
+	padding-inline: max(clamp(16px, 4.45vw, 64px), env(safe-area-inset-left)); /* viewport-fit=cover (H-29) */
 }
 
 body[class*="lafka-layout-"][class*="-counter"] {

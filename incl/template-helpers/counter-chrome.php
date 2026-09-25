@@ -772,3 +772,45 @@ if ( ! function_exists( 'lafka_counter_upsell_button_label' ) ) {
 	}
 }
 add_filter( 'lafka_cart_drawer_upsell_add_label', 'lafka_counter_upsell_button_label' );
+
+if ( ! function_exists( 'lafka_counter_disable_emoji_enabled' ) ) {
+	/**
+	 * H-27: skip WordPress's emoji script + s.w.org images on counter
+	 * storefronts (Customizer → Layouts → "Use the visitor's own emoji",
+	 * default on). Filter `lafka_disable_wp_emoji`.
+	 */
+	function lafka_counter_disable_emoji_enabled(): bool {
+		$on = (bool) get_theme_mod( 'lafka_disable_wp_emoji', true )
+			&& function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' );
+		return (bool) apply_filters( 'lafka_disable_wp_emoji', $on );
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_disable_emoji' ) ) {
+	/** template_redirect: unhook the front-end emoji detection script + styles. */
+	function lafka_counter_disable_emoji(): void {
+		if ( is_admin() || ! lafka_counter_disable_emoji_enabled() ) {
+			return;
+		}
+		remove_action( 'wp_head', 'print_emoji_detection_script', 7 );
+		remove_action( 'wp_print_styles', 'print_emoji_styles' );
+		remove_action( 'wp_enqueue_scripts', 'wp_enqueue_emoji_styles' );
+		remove_filter( 'the_content_feed', 'wp_staticize_emoji' );
+		remove_filter( 'comment_text_rss', 'wp_staticize_emoji' );
+		add_filter( 'emoji_svg_url', '__return_false' );
+	}
+}
+add_action( 'template_redirect', 'lafka_counter_disable_emoji', 0 );
+
+if ( ! function_exists( 'lafka_preloader_enabled' ) ) {
+	/**
+	 * H-31: the legacy full-screen preloader (markup + stylesheet) — the
+	 * operator option, but never under the counter header, whose pages paint
+	 * their skeleton from critical CSS. Filter `lafka_preloader_enabled`.
+	 */
+	function lafka_preloader_enabled(): bool {
+		$on = (bool) get_theme_mod( 'lafka_show_preloader', true )
+			&& ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) );
+		return (bool) apply_filters( 'lafka_preloader_enabled', $on );
+	}
+}

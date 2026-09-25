@@ -1857,8 +1857,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		// Preloader style
-		if ( get_theme_mod( 'lafka_show_preloader', true ) ) {
+		// Preloader style (never under the counter header — H-31).
+		if ( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ) {
 			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
 		}
 
@@ -2051,7 +2051,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'img_path'                => esc_js( LAFKA_IMAGES_PATH ),
 				'admin_url'               => esc_js( admin_url( 'admin-ajax.php' ) ),
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
-				'show_preloader'          => esc_js( get_theme_mod( 'lafka_show_preloader', true ) ),
+				'show_preloader'          => esc_js( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ),
 				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
 				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
 				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),

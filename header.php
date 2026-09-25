@@ -56,7 +56,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 <html <?php language_attributes(); ?>>
 <head>
 	<meta http-equiv="Content-Type" content="<?php bloginfo( 'html_type' ); ?>; charset=<?php bloginfo( 'charset' ); ?>" />
-	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 	<link rel="profile" href="http://gmpg.org/xfn/11" />
 	<link rel="pingback" href="<?php echo esc_url( get_bloginfo( 'pingback_url' ) ); ?>" />
 	<?php
@@ -119,7 +119,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 
 	<a class="skip-link screen-reader-text" href="#content"><?php esc_html_e( 'Skip to content', 'lafka' ); ?></a>
 
-	<?php if ( get_theme_mod( 'lafka_show_preloader', true ) ) : ?>
+	<?php if ( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ) : ?>
 		<div class="mask" aria-hidden="true">
 			<div id="spinner">
 				<div class="double-bounce1"></div>

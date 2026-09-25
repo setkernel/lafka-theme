@@ -100,9 +100,28 @@ if ( ! function_exists( 'lafka_counter_customize_register_layouts' ) ) {
 			'lafka_counter_brand_short',
 			array(
 				'label'       => __( 'Short name on phones (counter header)', 'lafka' ),
-				'description' => __( 'Optional, e.g. the first word of your business name. Shown next to the logo below 600 px; empty keeps the full name, sized to fit one line.', 'lafka' ),
+				'description' => __( 'Optional, e.g. the first word of your business name. Shown next to the logo below 768 px; empty uses the part before "&" / "and" of a long name, else the full name.', 'lafka' ),
 				'section'     => 'lafka_layouts',
 				'type'        => 'text',
+			)
+		);
+
+		$wp_customize->add_setting(
+			'lafka_disable_wp_emoji',
+			array(
+				'default'           => true,
+				'type'              => 'theme_mod',
+				'sanitize_callback' => 'rest_sanitize_boolean',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			'lafka_disable_wp_emoji',
+			array(
+				'label'       => __( "Use the visitor's own emoji (counter layouts)", 'lafka' ),
+				'description' => __( 'Skips WordPress\'s emoji script and images on the storefront, so emoji render natively and no extra requests load.', 'lafka' ),
+				'section'     => 'lafka_layouts',
+				'type'        => 'checkbox',
 			)
 		);
 
