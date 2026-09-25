@@ -67,7 +67,8 @@ if ( empty( $lafka_feat_products ) ) {
             foreach ( $lafka_feat_products as $lafka_feat_product ) :
 				$lafka_feat_id    = $lafka_feat_product->get_id();
 				$lafka_feat_url   = get_permalink( $lafka_feat_id );
-				$lafka_feat_img   = get_the_post_thumbnail_url( $lafka_feat_id, 'medium_large' );
+				// Below the hero (the LCP), so every card stays lazy.
+				$lafka_feat_img   = function_exists( 'lafka_card_image_html' ) ? lafka_card_image_html( $lafka_feat_product ) : '';
 				$lafka_feat_name  = $lafka_feat_product->get_name();
 				$lafka_feat_short = $lafka_feat_product->get_short_description();
 				if ( '' === $lafka_feat_short ) {
@@ -80,7 +81,7 @@ if ( empty( $lafka_feat_products ) ) {
 					<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_feat_url ); ?>">
 						<div class="lafka-favs__media">
 							<?php if ( $lafka_feat_img ) : ?>
-								<img class="lafka-favs__img" src="<?php echo esc_url( $lafka_feat_img ); ?>" alt="" loading="lazy" decoding="async">
+								<?php echo $lafka_feat_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core. ?>
 							<?php else : ?>
 								<span class="lafka-favs__img-placeholder" aria-hidden="true">🍕</span>
 							<?php endif; ?>

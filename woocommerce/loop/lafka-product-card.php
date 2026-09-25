@@ -17,7 +17,13 @@ if ( ! isset( $lafka_arch_p ) || ! is_object( $lafka_arch_p ) ) {
 }
 
 $lafka_arch_url   = get_permalink( $lafka_arch_p->get_id() );
-$lafka_arch_img   = get_the_post_thumbnail_url( $lafka_arch_p->get_id(), 'medium_large' );
+// Responsive image (srcset/sizes/width/height, real alt). This card only
+// renders on the menu page + shop/category/tag archives, where the grid sits
+// near the top: the first row loads eagerly and the first card is the LCP
+// candidate (see lafka_card_image_html()).
+$lafka_arch_img   = function_exists( 'lafka_card_image_html' )
+	? lafka_card_image_html( $lafka_arch_p, array( 'lead_grid' => true ) )
+	: '';
 $lafka_arch_name  = $lafka_arch_p->get_name();
 $lafka_arch_short = $lafka_arch_p->get_short_description();
 if ( '' === $lafka_arch_short ) {
@@ -61,7 +67,7 @@ $lafka_arch_list      = ( function_exists( 'is_tax' ) && is_tax( 'product_cat' )
 		data-lafka-list-name="<?php echo esc_attr( $lafka_arch_list ); ?>">
 		<div class="lafka-favs__media">
 			<?php if ( $lafka_arch_img ) : ?>
-				<img class="lafka-favs__img" src="<?php echo esc_url( $lafka_arch_img ); ?>" alt="" loading="lazy" decoding="async">
+				<?php echo $lafka_arch_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core. ?>
 			<?php else : ?>
 				<span class="lafka-favs__img-placeholder" aria-hidden="true">🍕</span>
 			<?php endif; ?>

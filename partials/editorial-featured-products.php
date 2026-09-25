@@ -39,7 +39,7 @@ if ( empty( $products ) ) {
     <div class="products-grid">
         <?php
         foreach ( $products as $product ) :
-            $thumb_url = get_the_post_thumbnail_url( $product->get_id(), 'medium_large' );
+            $thumb_html = function_exists( 'lafka_card_image_html' ) ? lafka_card_image_html( $product, array( 'class' => '' ) ) : '';
             $price_html = $product->get_price_html();
             $name       = $product->get_name();
             $desc       = wp_strip_all_tags( $product->get_short_description() );
@@ -47,13 +47,10 @@ if ( empty( $products ) ) {
 			?>
         <article class="product-card">
             <a href="<?php echo esc_url( $url ); ?>" class="product-photo">
-                <?php if ( $thumb_url ) : ?>
-                <img
-                    src="<?php echo esc_url( $thumb_url ); ?>"
-                    alt="<?php echo esc_attr( $name ); ?>"
-                    loading="lazy"
-                >
-                <?php endif; ?>
+                <?php
+                // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core.
+                echo $thumb_html;
+                ?>
             </a>
             <h3><a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $name ); ?></a></h3>
             <?php if ( $desc ) : ?>
