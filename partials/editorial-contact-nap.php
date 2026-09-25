@@ -16,7 +16,7 @@ defined( 'ABSPATH' ) || exit;
 $info = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 
 $phone_e164    = ! empty( $info['phone_e164'] ) ? $info['phone_e164'] : '';
-$phone_display = ! empty( $info['phone_display'] ) ? $info['phone_display'] : $phone_e164;
+$phone_display = lafka_theme_phone_display( $info['phone_display'] ?? '', $phone_e164 );
 $email         = ! empty( $info['email'] ) ? $info['email'] : '';
 $address       = ! empty( $info['address_display'] ) ? $info['address_display'] : '';
 $hours         = ! empty( $info['hours'] ) ? $info['hours'] : array();

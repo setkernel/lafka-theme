@@ -16,7 +16,7 @@ $info = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_in
 
 $map_url       = get_theme_mod( 'lafka_editorial_home_map_embed_url', '' );
 $phone_e164    = ! empty( $info['phone_e164'] ) ? $info['phone_e164'] : '';
-$phone_display = ! empty( $info['phone_display'] ) ? $info['phone_display'] : $phone_e164;
+$phone_display = lafka_theme_phone_display( $info['phone_display'] ?? '', $phone_e164 );
 $address       = ! empty( $info['address_display'] ) ? $info['address_display'] : '';
 $hours         = ! empty( $info['hours'] ) ? $info['hours'] : array();
 $address_h2    = ! empty( $info['address_short'] ) ? $info['address_short'] : $address;
