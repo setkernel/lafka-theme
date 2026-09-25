@@ -162,7 +162,7 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 								'loading'       => 'eager',
 								'decoding'      => 'async',
 								'fetchpriority' => 'front' === $lafka_hero_slot ? 'high' : 'auto',
-								'sizes'         => 'front' === $lafka_hero_slot ? '(min-width: 1280px) 600px, (min-width: 768px) 380px, 250px' : '(min-width: 1280px) 500px, (min-width: 768px) 320px, 210px',
+								'sizes'         => function_exists( 'lafka_counter_image_sizes' ) ? lafka_counter_image_sizes( 'hero-' . $lafka_hero_slot ) : '',
 							)
 						);
 						?>

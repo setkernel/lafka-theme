@@ -2953,6 +2953,8 @@ require_once get_template_directory() . '/incl/system/lafka-preloader.php';
 // GX T-25: legacy-library / emoji asset diet on the counter surfaces.
 require_once get_template_directory() . '/incl/system/lafka-asset-diet.php';
 
+// GX T-04: measured `sizes` for the counter image slots + srcset hygiene.
+require_once get_template_directory() . '/incl/template-helpers/image-sizes.php';
 
 // Fix Wishlist issue (adding prettyPhoto): https://wordpress.org/support/topic/conflict-with-the-wpbakery-gallery/
 add_filter(
