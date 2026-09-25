@@ -142,6 +142,9 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-variable-price-
 // Block stray /product-category/{slug}/ → /wp-content/uploads/.../{slug}.png redirect (v6.7.1).
 require_once get_template_directory() . '/incl/woocommerce/lafka-fix-category-canonical-redirect.php';
 
+// Version bridges for the woocommerce/ template overrides (media gallery, cart item name, meta ordering).
+require_once get_template_directory() . '/incl/woocommerce/lafka-wc-template-compat.php';
+
 // No-op fallbacks for orphan 3rd-party shortcodes (v5.40.0).
 require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
 
