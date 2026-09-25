@@ -539,6 +539,9 @@ if ( ! function_exists( 'get_terms' ) ) {
 				return array( (int) $a->order, (string) $a->name ) <=> array( (int) $b->order, (string) $b->name );
 			}
 		);
+		if ( 'slugs' === ( $args['fields'] ?? '' ) ) {
+			return array_map( static fn( $t ) => (string) $t->slug, $terms );
+		}
 		return $terms;
 	}
 }
