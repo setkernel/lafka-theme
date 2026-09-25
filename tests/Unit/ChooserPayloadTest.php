@@ -77,6 +77,24 @@ namespace Lafka\Tests\Unit {
 			);
 		}
 
+		public function test_sold_out_size_is_not_offered(): void {
+			$p = \Lafka_Test_Catalog::pizza();
+			// Variation 702 = regular crust, medium; WC keeps it in the price cache.
+			$GLOBALS['lafka_test_products'][702] = new \WC_Product(
+				array(
+					'id'       => 702,
+					'in_stock' => false,
+				)
+			);
+			$payload = \lafka_chooser_payload( $p );
+			$size    = self::attr( $payload, 'pa_size' );
+			$avail   = array_combine( array_column( $size['options'], 'value' ), array_column( $size['options'], 'available' ) );
+			$this->assertFalse( $avail['medium'], 'a sold-out size is never offered as "Add to order"' );
+			$this->assertTrue( $avail['small'] );
+			$this->assertNotContains( 702, array_column( $payload['variations'], 'id' ) );
+			$this->assertSame( 'columns', \lafka_price_columns( $p )['type'], 'the price columns still list every size' );
+		}
+
 		public function test_any_attribute_is_not_addable(): void {
 			$p = new \WC_Product_Variable(
 				array(

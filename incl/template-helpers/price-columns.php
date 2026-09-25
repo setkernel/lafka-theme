@@ -96,20 +96,26 @@ if ( ! function_exists( 'lafka_price_columns_options' ) ) {
 
 if ( ! function_exists( 'lafka_price_columns_rows' ) ) {
 	/**
-	 * Visible, purchasable variation rows: vid => [ price, attributes ].
+	 * Visible variation rows: vid => [ price, attributes, purchasable ].
 	 * Prices come from get_variation_prices( true ) — WooCommerce's cached
-	 * DISPLAY prices, which already exclude hidden / unpurchasable variations.
+	 * DISPLAY prices (hidden / price-less variations excluded). Out-of-stock
+	 * variations stay in that cache unless "hide out of stock" is on, so each
+	 * row records whether it can be bought right now.
 	 *
 	 * @param WC_Product $product Variable product.
-	 * @return array<int,array{price:float,attributes:array<string,string>}>
+	 * @return array<int,array{price:float,attributes:array<string,string>,purchasable:bool}>
 	 */
 	function lafka_price_columns_rows( $product ): array {
 		$prices = (array) ( $product->get_variation_prices( true )['price'] ?? array() );
 		$rows   = array();
 		foreach ( $prices as $vid => $price ) {
+			// WC keeps out-of-stock variations in the price cache unless "hide out
+			// of stock" is on: record whether this one can be bought right now.
+			$variation = function_exists( 'wc_get_product' ) ? wc_get_product( (int) $vid ) : null;
 			$rows[ (int) $vid ] = array(
-				'price'      => (float) $price,
-				'attributes' => function_exists( 'wc_get_product_variation_attributes' ) ? (array) wc_get_product_variation_attributes( (int) $vid ) : array(),
+				'price'       => (float) $price,
+				'attributes'  => function_exists( 'wc_get_product_variation_attributes' ) ? (array) wc_get_product_variation_attributes( (int) $vid ) : array(),
+				'purchasable' => ! is_object( $variation ) || ( $variation->is_purchasable() && $variation->is_in_stock() ),
 			);
 		}
 		return $rows;
@@ -287,16 +293,21 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 			$primary = isset( $columns['attribute'] ) ? (string) $columns['attribute'] : ( $names ? (string) $names[0] : '' );
 			$defaults = (array) $product->get_default_attributes();
 
-			if ( ! $rows ) {
-				$reason = $reason ? $reason : 'no_variations';
-			}
-
-			foreach ( $rows as $vid => $row ) {
+			foreach ( $rows as $row ) {
 				foreach ( $names as $name ) {
 					if ( '' === (string) ( $row['attributes'][ lafka_price_columns_attribute_key( (string) $name ) ] ?? '' ) ) {
 						$reason = $reason ? $reason : 'any_attribute';
 					}
 				}
+			}
+			// Only sizes that can be bought now are offered (sold-out ones read
+			// "Not available"); the price columns above still list every size.
+			$rows = array_filter( $rows, static fn( $row ) => ! empty( $row['purchasable'] ) );
+			if ( ! $rows ) {
+				$reason = $reason ? $reason : 'no_variations';
+			}
+
+			foreach ( $rows as $vid => $row ) {
 				$payload['variations'][] = array(
 					'id'         => (int) $vid,
 					'price'      => $row['price'],
