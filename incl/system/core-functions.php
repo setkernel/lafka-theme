@@ -2903,6 +2903,9 @@ function lafka_strip_script_tag_from_js_block( $source ) {
 // P6-PERF-5: inline critical CSS + defer non-critical stylesheets.
 require_once get_template_directory() . '/incl/system/lafka-critical-css.php';
 
+// O-31: classic checkout inline field errors (js/lafka-checkout-fields.js).
+require_once get_template_directory() . '/incl/woocommerce/lafka-checkout-fields.php';
+
 // Fix Wishlist issue (adding prettyPhoto): https://wordpress.org/support/topic/conflict-with-the-wpbakery-gallery/
 add_filter(
 	'yith_wcwl_main_script_deps',
