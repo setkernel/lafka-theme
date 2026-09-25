@@ -26,6 +26,11 @@ foreach ( $variations as $v ) {
     $key = wp_json_encode( $v['attributes'] );
     $prices_by_attrs[ $key ] = wc_format_decimal( (string) $v['display_price'], 2 );
 }
+// GX M-10/M-18: single-option attributes (and operator defaults that resolve
+// to a real variation) arrive preselected; pdp-summary.php computed it.
+$lafka_pdp_initial = isset( $lafka_pdp_initial ) && is_array( $lafka_pdp_initial )
+    ? $lafka_pdp_initial
+    : ( function_exists( 'lafka_pdp_initial_selection' ) ? lafka_pdp_initial_selection( $product ) : array( 'selection' => array() ) );
 ?>
 <div class="lafka-pdp-pickers" data-prices='<?php echo esc_attr( wp_json_encode( $prices_by_attrs ) ); ?>'>
     <?php foreach ( $attributes as $attr_name => $options ) : ?>
@@ -44,7 +49,11 @@ foreach ( $variations as $v ) {
         // below indexes with "attribute_$attr_name".
         $taxonomy   = $attr_name;
         $label      = wc_attribute_label( $attr_name, $product );
+        $label      = function_exists( 'lafka_attribute_display_label' ) ? lafka_attribute_display_label( (string) $label ) : $label;
         $field_name = 'attribute_' . $attr_name;
+        $match_key  = 'attribute_' . sanitize_title( (string) $attr_name );
+        $preset     = (string) ( $lafka_pdp_initial['selection'][ $match_key ] ?? '' );
+        $choose     = function_exists( 'lafka_pdp_choose_label' ) ? lafka_pdp_choose_label( (string) $label, (string) $attr_name, $product ) : '';
         // get_variation_attributes() lists values in database order (e.g.
         // "Medium, Large, Small"); the plugin applies the operator's order,
         // else cheapest first.
@@ -52,28 +61,33 @@ foreach ( $variations as $v ) {
             $options = lafka_sort_variation_options( $product, (string) $attr_name, (array) $options );
         }
         ?>
-        <fieldset class="lafka-pdp-picker" data-attribute="<?php echo esc_attr( $field_name ); ?>" data-required="true">
+        <fieldset class="lafka-pdp-picker" data-attribute="<?php echo esc_attr( $field_name ); ?>" data-required="true" data-choose-label="<?php echo esc_attr( $choose ); ?>">
             <legend id="lafka-pdp-pick-<?php echo esc_attr( $attr_name ); ?>" class="lafka-pdp-picker__label"><?php echo esc_html( $label ); ?></legend>
             <div class="lafka-pdp-picker__chips" role="radiogroup" aria-labelledby="lafka-pdp-pick-<?php echo esc_attr( $attr_name ); ?>" aria-required="true">
                 <?php foreach ( $options as $opt ) : ?>
                     <?php
                     $term       = taxonomy_exists( $taxonomy ) ? get_term_by( 'slug', $opt, $taxonomy ) : null;
                     $opt_label  = $term ? $term->name : $opt;
-                    $option_price = '';
+                    // The lowest price this option can be had for (the script
+                    // re-prices each chip for the other choices made).
+                    $option_min = null;
                     foreach ( $variations as $v ) {
-                        if ( ( $v['attributes'][ $field_name ] ?? '' ) === $opt ) {
-                            $option_price = wc_price( $v['display_price'] );
-                            break;
+                        $v_attrs = array_change_key_case( (array) ( $v['attributes'] ?? array() ), CASE_LOWER );
+                        $v_value = (string) ( $v_attrs[ $match_key ] ?? '' );
+                        if ( '' === $v_value || $v_value === (string) $opt ) {
+                            $option_min = null === $option_min ? (float) $v['display_price'] : min( $option_min, (float) $v['display_price'] );
                         }
                     }
+                    $option_price = null !== $option_min ? wc_price( $option_min ) : '';
                     ?>
                     <label class="lafka-pdp-chip">
-                        <input type="radio" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $opt ); ?>">
+                        <input type="radio" name="<?php echo esc_attr( $field_name ); ?>" value="<?php echo esc_attr( $opt ); ?>"<?php echo (string) $opt === $preset ? ' checked' : ''; ?>>
                         <span class="lafka-pdp-chip__inner">
                             <span class="lafka-pdp-chip__name"><?php echo esc_html( $opt_label ); ?></span>
                             <?php if ( $option_price ) : ?>
-                                <span class="lafka-pdp-chip__price"><?php echo wp_kses_post( $option_price ); ?></span>
+                                <span class="lafka-pdp-chip__price" data-lafka-chip-price><?php echo wp_kses_post( $option_price ); ?></span>
                             <?php endif; ?>
+                            <span class="lafka-pdp-chip__na" data-lafka-chip-na hidden><?php esc_html_e( 'Not available', 'lafka' ); ?></span>
                         </span>
                     </label>
                 <?php endforeach; ?>

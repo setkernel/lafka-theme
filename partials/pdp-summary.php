@@ -73,26 +73,32 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
     }
     ?>
 
+    <?php
+    // GX M-10: before a choice the price line never shows a variation nobody
+    // picked — the resolved default (or single-option) variation's price,
+    // else "From $min". JS swaps in the chosen variation's price and restores
+    // this line when the selection is incomplete again.
+    $lafka_pdp_initial    = array(
+        'selection' => array(),
+        'variation' => null,
+    );
+    if ( $is_variable && function_exists( 'lafka_pdp_initial_selection' ) ) {
+        $lafka_pdp_initial = lafka_pdp_initial_selection( $product );
+    }
+    $lafka_pdp_price_html = $is_variable && function_exists( 'lafka_pdp_price_html' )
+        ? lafka_pdp_price_html( $product, $lafka_pdp_initial )
+        : wc_price( $product->get_price() );
+    ?>
     <div class="lafka-pdp-summary__price">
         <?php
         // Currency symbol/position MUST come from WC settings (wc_price()
-              // honours woocommerce_currency_pos + currency code). Hardcoding
-              // `$` leaks the operator's currency and breaks any non-USD shop.
-              // JS replaces this textContent on size change via the formatter
-              // localized in functions.php — same currency settings, same
-              // output shape. 
-		?>
-        <span data-lafka-live-price><?php echo wp_kses_post( wc_price( $product->get_price() ) ); ?></span>
-        <?php if ( $is_variable ) : ?>
-            <small>
-            <?php
-            printf(
-                esc_html__( 'starting at %s', 'lafka' ),
-                wp_kses_post( wc_price( $product->get_variation_price( 'min', true ) ) )
-            );
-			?>
-            </small>
-        <?php endif; ?>
+        // honours woocommerce_currency_pos + currency code). Hardcoding
+        // `$` leaks the operator's currency and breaks any non-USD shop.
+        // JS replaces this textContent on size change via the formatter
+        // localized in functions.php — same currency settings, same
+        // output shape.
+        ?>
+        <span data-lafka-live-price><?php echo wp_kses_post( $lafka_pdp_price_html ); ?></span>
     </div>
 
     <?php
@@ -127,6 +133,17 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 
     <?php elseif ( $is_variable ) : ?>
         <?php
+        // The add button's prompt until every attribute is chosen (the script
+        // keeps it current): "Choose size", from the first unchosen attribute.
+        $lafka_pdp_cta_prompt = __( 'Choose your options', 'lafka' );
+        foreach ( (array) $product->get_variation_attributes() as $lafka_pdp_attr_name => $lafka_pdp_attr_opts ) {
+            if ( '' === (string) ( $lafka_pdp_initial['selection'][ 'attribute_' . sanitize_title( (string) $lafka_pdp_attr_name ) ] ?? '' ) && function_exists( 'lafka_pdp_choose_label' ) ) {
+                $lafka_pdp_attr_label = function_exists( 'lafka_attribute_display_label' ) ? lafka_attribute_display_label( (string) wc_attribute_label( $lafka_pdp_attr_name, $product ) ) : (string) $lafka_pdp_attr_name;
+                $lafka_pdp_cta_prompt = lafka_pdp_choose_label( $lafka_pdp_attr_label, (string) $lafka_pdp_attr_name, $product );
+                break;
+            }
+        }
+
         // Fire BEFORE the form opens — this triggers the lafka-plugin addon
         // system's reposition_display_for_variable_product(), which moves
         // the addon display() callback from woocommerce_before_add_to_cart_button
@@ -166,7 +183,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
                             <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
                         </div>
                         <button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
-                            <span data-lafka-cta-label><?php esc_html_e( 'Pick a size to continue', 'lafka' ); ?></span>
+                            <span data-lafka-cta-label><?php echo esc_html( $lafka_pdp_cta_prompt ); ?></span>
                         </button>
                     </div>
 
@@ -177,7 +194,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
                             <button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka' ); ?>">+</button>
                         </div>
                         <button type="submit" class="lafka-pdp-mobile-cta__btn" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
-                            <span data-lafka-cta-label><?php esc_html_e( 'Pick a size', 'lafka' ); ?></span>
+                            <span data-lafka-cta-label><?php echo esc_html( $lafka_pdp_cta_prompt ); ?></span>
                         </button>
                     </div>
 
@@ -251,7 +268,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
                     <button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
                 </div>
                 <button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart>
-                    <span data-lafka-cta-label><?php esc_html_e( 'Add to Cart', 'lafka' ); ?></span>
+                    <span data-lafka-cta-label><?php esc_html_e( 'Add to order', 'lafka' ); ?></span>
                 </button>
             </div>
 
@@ -262,7 +279,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
                     <button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka' ); ?>">+</button>
                 </div>
                 <button type="submit" class="lafka-pdp-mobile-cta__btn" data-lafka-add-to-cart>
-                    <span data-lafka-cta-label><?php esc_html_e( 'Add to Cart', 'lafka' ); ?></span>
+                    <span data-lafka-cta-label><?php esc_html_e( 'Add to order', 'lafka' ); ?></span>
                 </button>
             </div>
 

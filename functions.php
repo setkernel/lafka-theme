@@ -214,6 +214,7 @@ require_once get_template_directory() . '/incl/template-helpers/contact-email.ph
 // untouched; every counter surface is reached through lafka_layout_is().
 require_once get_template_directory() . '/incl/template-helpers/layout.php';
 require_once get_template_directory() . '/incl/template-helpers/price-columns.php';
+require_once get_template_directory() . '/incl/template-helpers/pdp-selection.php';
 require_once get_template_directory() . '/incl/template-helpers/hours-display.php';
 require_once get_template_directory() . '/incl/template-helpers/deal-value.php';
 require_once get_template_directory() . '/incl/template-helpers/menu-data.php';
@@ -1696,6 +1697,18 @@ add_action(
 					'decimalSep'  => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
 					'decimals'    => function_exists( 'wc_get_price_decimals' ) ? (int) wc_get_price_decimals() : 2,
                 )
+			);
+
+			// GX M-11: the add button's words, translatable (pdp-pickers.js).
+			wp_localize_script(
+				'lafka-pdp-pickers',
+				'lafkaPdpI18n',
+				array(
+					/* translators: %s: order line total, e.g. "$23.25". */
+					'addToOrder'    => __( 'Add to order · %s', 'lafka' ),
+					'chooseOptions' => __( 'Choose your options', 'lafka' ),
+					'unavailable'   => __( 'Not available with this choice', 'lafka' ),
+				)
 			);
 
 			wp_enqueue_script(
