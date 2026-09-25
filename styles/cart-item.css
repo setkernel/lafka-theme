@@ -55,15 +55,19 @@
 	min-width: 0;
 }
 
+/* O-10: names wrap to two whole lines (never cut mid-line / mid-word). */
 .lafka-cart-item__title {
 	margin: 0;
-	font-size: 14px;
+	font-size: 15px;
 	font-weight: 700;
-	line-height: 1.2;
+	line-height: 1.3;
 	display: -webkit-box;
-	-webkit-line-clamp: 1;
+	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
 	overflow: hidden;
+	overflow-wrap: normal;
+	word-break: normal;
+	hyphens: manual;
 }
 
 .lafka-cart-item__title a {
@@ -71,24 +75,59 @@
 	text-decoration: none;
 }
 
+/* O-10: every option ("size: Large", "Promotion: …") is its own line of
+ * flowing text — label then value — so a long value wraps under itself
+ * instead of colliding with a fixed-width label column at 320. */
 .lafka-cart-item__meta {
-	font-size: 12px;
-	line-height: 1.3;
-	color: #6a6a6a;
-	display: -webkit-box;
-	-webkit-line-clamp: 2;
-	-webkit-box-orient: vertical;
-	overflow: hidden;
+	font-size: 13px;
+	line-height: 1.4;
+	color: var(--lafka-color-text-secondary);
+	hyphens: manual;
 }
 
 .lafka-cart-item__meta dl,
-.lafka-cart-item__meta p {
+.lafka-cart-item__meta dl.variation {
+	display: block;
 	margin: 0;
-	display: inline;
+	padding: 0;
 }
 
+.lafka-cart-item__meta dt,
+.lafka-cart-item__meta dd {
+	display: inline;
+	float: none;
+	width: auto;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	clear: none;
+}
+
+.lafka-cart-item__meta dt {
+	font-weight: 600;
+}
+
+/* A block-level pseudo before each label starts it on a fresh line. */
+.lafka-cart-item__meta dt::before {
+	content: "";
+	display: block;
+}
+
+.lafka-cart-item__meta dd {
+	margin-left: 0.25em;
+}
+
+.lafka-cart-item__meta p {
+	display: inline;
+	margin: 0;
+}
+
+/* Price, stepper and remove share a row when they fit and wrap (stepper +
+ * remove under the price) when the card is narrow, so nothing ever leaves the
+ * card at 320 (O-09). */
 .lafka-cart-item__bottom {
 	display: flex;
+	flex-wrap: wrap;
 	align-items: center;
 	justify-content: space-between;
 	gap: 8px;
@@ -102,22 +141,43 @@
 	white-space: nowrap;
 }
 
-.lafka-cart-item__qty .quantity {
+/* O-09: one bordered 44px stepper box — − | qty | + — inside the card.
+ * style.css still carries the legacy catalogue stepper
+ * (`div.quantity{padding:0 30px;height:47px;background:#f5f5f5}` and absolutely
+ * positioned `div.quantity input.lafka-qty-plus/minus`), so every property it
+ * sets is reset here at a higher specificity. The markup order is
+ * input, +, − (woocommerce/global/quantity-input.php); `order` shows − first. */
+.lafka-cart .lafka-cart-item__qty div.quantity {
+	position: static;
 	display: inline-flex;
-	align-items: center;
-	gap: 4px;
+	align-items: stretch;
+	box-sizing: border-box;
+	height: 44px;
+	margin: 0;
+	padding: 0;
+	background: var(--lafka-color-surface-page);
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+	overflow: hidden;
 }
 
-.lafka-cart-item__qty input.qty,
-.lafka-cart-item__qty .quantity input[type="number"] {
-	width: 48px;
-	height: 36px;
-	padding: 4px 6px;
-	font-size: 14px;
+.lafka-cart .lafka-cart-item__qty div.quantity input.qty,
+.lafka-cart .lafka-cart-item__qty div.quantity input[type="number"] {
+	order: 1;
+	box-sizing: border-box;
+	width: 40px;
+	max-width: none;
+	height: 100%;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	border-radius: 0;
+	background: none !important; /* legacy `div.quantity input[type=number]` uses !important */
+	color: var(--lafka-color-text-primary);
+	font-size: 16px; /* ≥16px: no iOS zoom on focus */
+	font-weight: 700;
 	text-align: center;
-	border: 1px solid var(--lafka-color-border-default, #e4e4e7);
-	border-radius: var(--lafka-radius-sm, 6px);
-	background: var(--lafka-color-surface-page, #fff);
 	font-variant-numeric: tabular-nums;
 	-moz-appearance: textfield;
 	appearance: textfield;
@@ -130,54 +190,57 @@
 	margin: 0;
 }
 
-/* Native input[type="button"] (lafka-qty-plus / lafka-qty-minus) emit
- * ugly browser-default chrome (the value="+"/"-" text gets clipped on
- * macOS Safari into a "·|·" glyph). Reset to a clean circular pill
- * with the +/− character rendered at correct size. */
-.lafka-cart-item__qty .lafka-qty-plus,
-.lafka-cart-item__qty .lafka-qty-minus,
-.lafka-cart-item__qty input.lafka-qty-plus,
-.lafka-cart-item__qty input.lafka-qty-minus {
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-plus,
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-minus {
+	position: static;
+	top: auto;
+	left: auto;
+	right: auto;
 	-webkit-appearance: none;
 	-moz-appearance: none;
 	appearance: none;
-	background-clip: padding-box;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 36px;
-	height: 36px;
-	min-width: 36px;
-	padding: 0;
+	display: block;
+	box-sizing: border-box;
+	width: 44px;
+	min-width: 44px;
+	height: 100%;
+	min-height: 0;
 	margin: 0;
-	border: 1px solid var(--lafka-color-border-default, #e4e4e7);
-	border-radius: 50%;
-	background: var(--lafka-color-surface-page, #fff);
-	color: var(--lafka-color-accent-text, var(--lafka-color-accent-500, #dc2626));
-	font-family: var(--lafka-font-family-body, system-ui, sans-serif);
-	font-size: 18px;
-	line-height: 1;
+	padding: 0;
+	border: 0 !important; /* legacy rule uses !important */
+	border-radius: 0;
+	background: none !important;
+	color: var(--lafka-color-text-primary);
+	font-family: var(--lafka-font-family-body);
+	font-size: 20px;
 	font-weight: 600;
+	line-height: 1;
 	text-align: center;
 	cursor: pointer;
 	box-shadow: none;
-	transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
 }
 
-.lafka-cart-item__qty .lafka-qty-plus:hover,
-.lafka-cart-item__qty .lafka-qty-minus:hover {
-	border-color: var(--lafka-color-accent-500, #dc2626);
-	background: var(--lafka-color-accent-50, #fef2f2);
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-minus {
+	order: 0;
 }
 
-.lafka-cart-item__qty .lafka-qty-plus:focus-visible,
-.lafka-cart-item__qty .lafka-qty-minus:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus, 0 0 0 3px rgba(220, 38, 38, 0.35));
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-plus {
+	order: 2;
 }
 
-.lafka-cart-item__qty .lafka-qty-plus:disabled,
-.lafka-cart-item__qty .lafka-qty-minus:disabled {
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-plus:hover,
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-minus:hover {
+	background: var(--lafka-color-surface-muted) !important;
+}
+
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-plus:focus-visible,
+.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-minus:focus-visible,
+.lafka-cart .lafka-cart-item__qty div.quantity input.qty:focus-visible {
+	outline: 2px solid var(--lafka-color-accent-700);
+	outline-offset: -3px;
+}
+
+.lafka-cart .lafka-cart-item__qty div.quantity input:disabled {
 	opacity: 0.4;
 	cursor: not-allowed;
 }

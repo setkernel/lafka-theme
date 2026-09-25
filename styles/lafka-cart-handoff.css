@@ -28,12 +28,19 @@
 	display: none;
 }
 
-/* -------- Page wrapper -------------------------------------------------- */
+/* -------- Page wrapper --------------------------------------------------
+ * O-30: #content (main) and #main (.lafka-page) each added 40px on top of the
+ * page header's own 40px — a ~120px empty band above the breadcrumb. The
+ * wrappers keep only their bottom padding; the header keeps a modest top. */
 .woocommerce-cart main#content,
 .woocommerce-cart #content,
 .woocommerce-cart #main {
 	background: var(--lafka-color-surface-page);
-	padding-block: var(--lafka-space-10);
+	padding-block: 0 var(--lafka-space-10);
+}
+
+.woocommerce-cart .lafka-page__header {
+	padding-block: var(--lafka-space-5) var(--lafka-space-4);
 }
 
 .woocommerce-cart .woocommerce {
@@ -172,11 +179,15 @@
 	box-shadow: var(--lafka-shadow-focus);
 }
 
-/* -------- Bottom actions row (+ Add more items / Clear order) ---------- */
+/* -------- Bottom actions row (+ Add more items / Clear order) ----------
+ * O-16: one row at every width (Clear order is the quieter action, pushed
+ * to the end). */
 .lafka-cart-bottom-actions {
 	display: flex;
-	gap: var(--lafka-space-4);
-	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: var(--lafka-space-2);
+	flex-wrap: nowrap;
 	margin-block: var(--lafka-space-4);
 }
 
@@ -195,6 +206,9 @@
 	font-weight: var(--lafka-font-weight-medium);
 	cursor: pointer;
 	text-decoration: none;
+	white-space: nowrap;
+	min-height: 44px;
+	box-sizing: border-box;
 	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
@@ -281,104 +295,9 @@
 	white-space: nowrap;
 }
 
-/* Qty stepper inside cart row (v6.5.0: stepper now uses inline-flex with
- * circular +/− buttons rendered separately. Removed the pill-wrapper border
- * since the buttons own their own border now and that pill was double-bordering
- * with cart-item.css.) */
-.woocommerce-cart .lafka-cart .quantity,
-.woocommerce-cart .lafka-cart .product-quantity {
-	display: inline-flex;
-	align-items: center;
-	gap: 4px;
-	height: 36px;
-}
-
-.woocommerce-cart .lafka-cart input.qty,
-.woocommerce-cart .lafka-cart .quantity input[type="number"] {
-	border: 1px solid var(--lafka-color-border-default);
-	border-radius: var(--lafka-radius-sm);
-	background: var(--lafka-color-surface-page);
-	width: 48px;
-	height: 36px;
-	text-align: center;
-	font-family: var(--lafka-font-family-display);
-	font-weight: var(--lafka-font-weight-semibold);
-	font-variant-numeric: tabular-nums;
-	-moz-appearance: textfield;
-	appearance: textfield;
-}
-
-.woocommerce-cart .lafka-cart input.qty::-webkit-outer-spin-button,
-.woocommerce-cart .lafka-cart input.qty::-webkit-inner-spin-button {
-	-webkit-appearance: none;
-	margin: 0;
-}
-
-/* +/− buttons: native input[type=button] glyphs are broken on macOS — reset
- * to circular pills with proper +/− characters at readable size.
- *
- * v6.7.11 (F08-tap): 44×44 on mobile (WCAG 2.5.5), 36×36 at ≥768 to keep
- * the dense cart row layout the operator approved at desktop. */
-.woocommerce-cart .lafka-cart .lafka-qty-plus,
-.woocommerce-cart .lafka-cart .lafka-qty-minus,
-.woocommerce-cart .lafka-cart input.lafka-qty-plus,
-.woocommerce-cart .lafka-cart input.lafka-qty-minus {
-	-webkit-appearance: none;
-	-moz-appearance: none;
-	appearance: none;
-	background-clip: padding-box;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 44px;
-	height: 44px;
-	min-width: 44px;
-	min-height: 44px;
-	padding: 0;
-	margin: 0;
-	border: 1px solid var(--lafka-color-border-default);
-	border-radius: 50%;
-	background: var(--lafka-color-surface-page);
-	color: var(--lafka-color-accent-text);
-	font-family: var(--lafka-font-family-body);
-	font-size: 18px;
-	line-height: 1;
-	font-weight: 600;
-	text-align: center;
-	cursor: pointer;
-	transition: background 120ms ease, border-color 120ms ease, color 120ms ease;
-}
-
-@media (min-width: 768px) {
-
-	.woocommerce-cart .lafka-cart .lafka-qty-plus,
-	.woocommerce-cart .lafka-cart .lafka-qty-minus,
-	.woocommerce-cart .lafka-cart input.lafka-qty-plus,
-	.woocommerce-cart .lafka-cart input.lafka-qty-minus {
-		width: 36px;
-		height: 36px;
-		min-width: 36px;
-		min-height: 36px;
-	}
-}
-
-.woocommerce-cart .lafka-cart .lafka-qty-plus:hover,
-.woocommerce-cart .lafka-cart .lafka-qty-minus:hover {
-	border-color: var(--lafka-color-accent-500);
-	background: var(--lafka-color-accent-50, #fef2f2);
-}
-
-.woocommerce-cart .lafka-cart .lafka-qty-plus:focus-visible,
-.woocommerce-cart .lafka-cart .lafka-qty-minus:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
-.woocommerce-cart .lafka-cart .lafka-qty-plus:disabled,
-.woocommerce-cart .lafka-cart .lafka-qty-minus:disabled {
-	opacity: 0.4;
-	cursor: not-allowed;
-}
+/* Qty stepper: one bordered 44px − | qty | + box, owned by cart-item.css
+ * (O-09). The v6.5.0 circular-pill rules that lived here out-ranked it and
+ * left the legacy absolutely-positioned glyphs outside the box. */
 
 /* Remove link */
 .woocommerce-cart .lafka-cart .product-remove a,
@@ -463,8 +382,8 @@
 		min-height: 44px !important;
 		max-height: 44px !important;
 		padding: 10px 14px !important;
-		width: 100%;
-		flex: 0 0 auto;
+		width: auto;
+		flex: 1 1 auto;
 	}
 }
 
@@ -516,7 +435,8 @@
 	box-shadow: var(--lafka-shadow-focus);
 }
 
-/* Mobile stacking */
+/* Mobile stacking — O-16: the coupon input and Apply stay on ONE row; only
+ * the (no-JS) Update cart button drops to its own full-width row. */
 @media (max-width: 600px) {
 
 	.woocommerce-cart .lafka-cart__actions {
@@ -525,13 +445,20 @@
 	}
 
 	.woocommerce-cart .lafka-cart__actions .coupon {
-		flex-direction: column;
+		flex-direction: row;
+		flex-wrap: nowrap;
 	}
 
-	.woocommerce-cart .lafka-cart__actions button[name="apply_coupon"],
 	.woocommerce-cart .lafka-cart__actions button[name="update_cart"] {
 		width: 100%;
 	}
+}
+
+/* O-16: with JavaScript the cart updates itself a moment after a quantity
+ * changes (js/lafka-cart-controls.js adds this class), so the disabled
+ * full-width "Update cart" button is noise. Without JS it stays. */
+.woocommerce-cart .lafka-cart-autoupdate button[name="update_cart"] {
+	display: none !important;
 }
 
 /* -------- Cart totals summary card -------------------------------------- */
@@ -824,7 +751,7 @@ a.lafka-cart-empty__cta:focus-visible {
 .woocommerce-cart .coupon button[name="apply_coupon"] {
 	flex: 0 0 auto;
 	width: auto;
-	min-width: 140px;
+	min-width: 96px;
 }
 
 /* Update cart button — match Apply Coupon visual weight + height. */
@@ -833,4 +760,53 @@ a.lafka-cart-empty__cta:focus-visible {
 	min-width: 140px;
 	padding-inline: var(--lafka-space-4, 16px);
 	border-radius: var(--lafka-radius-button, 9999px);
+}
+
+/* =========================================================================
+ * O-32 — empty cart matches the drawer's empty state, and the "Add a side?"
+ * cards line up: every card is the full row height, the image sits at the
+ * top, the name below it and the price pinned to the bottom edge.
+ * ========================================================================= */
+.lafka-cart-empty__lead {
+	color: var(--lafka-color-text-secondary);
+}
+
+a.lafka-cart-empty__cta {
+	text-transform: none;
+	letter-spacing: normal;
+}
+
+.lafka-cart-empty-popular__grid {
+	align-items: stretch;
+}
+
+.lafka-cart-empty-popular__item {
+	display: flex;
+	min-width: 0;
+}
+
+.woocommerce-cart a.lafka-cart-empty-popular__link,
+.lafka-cart-empty-popular__link {
+	flex: 1 1 auto;
+	text-decoration: none;
+	justify-content: flex-start;
+	min-width: 0;
+}
+
+.lafka-cart-empty-popular__media {
+	flex: none;
+	margin: 0;
+}
+
+.lafka-cart-empty-popular__name {
+	display: block;
+	text-decoration: none;
+	hyphens: manual;
+	overflow-wrap: normal;
+}
+
+.lafka-cart-empty-popular__price {
+	display: block;
+	margin-top: auto;
+	text-decoration: none;
 }
