@@ -901,3 +901,32 @@ body.lafka-layout-header-counter .lafka-menu .lafka-container {
 body:has(.lafka-menu__cats) {
 	overflow-x: clip;
 }
+
+/* Site search results on counter storefronts (partials/search-results.php). */
+.lafka-search-results__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-search-results__item {
+	padding-block: var(--lafka-space-4);
+	border-bottom: 1px solid var(--lafka-color-border-default);
+}
+
+.lafka-search-results__title {
+	margin: 0 0 4px;
+	font-size: var(--lafka-font-size-h4);
+}
+
+.lafka-search-results__title a {
+	color: var(--lafka-color-text-primary);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-search-results__excerpt {
+	margin: 0;
+	color: var(--lafka-color-text-secondary);
+	hyphens: manual;
+}

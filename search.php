@@ -2,6 +2,16 @@
 <?php
 // Search template
 
+// GX O-15 / T-27: counter storefronts get a light results page — the menu
+// search box, plain result links (no author links, no full-size images), a
+// count, numbered pagination and a useful empty state. Product searches never
+// reach this file there (lafka-product-search.php makes them menu searches);
+// the classic layout below is unchanged.
+if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) ) {
+	get_template_part( 'partials/search-results' );
+	return;
+}
+
 get_header();
 
 $lafka_sidebar_choice = apply_filters( 'lafka_has_sidebar', '' );

@@ -18,6 +18,7 @@ namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/price-columns.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/menu-data.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/counter-chrome.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/woocommerce/lafka-product-search.php';
 
 	// Page-state shims (same contract as Ga4ViewEventsRenderTest's).
 	foreach ( array( 'lafka_test_have_posts' => 0, 'lafka_test_is_shop' => false, 'lafka_test_is_cat' => false, 'lafka_test_is_tag' => false, 'lafka_test_is_search' => false, 'lafka_test_search_query' => '' ) as $lafka_k => $lafka_v ) {
@@ -146,6 +147,13 @@ namespace Lafka\Tests\Unit {
 			preg_match_all( '#class="lafka-menu__cat-chip[^"]*"\s+href="http://example.test/product-category/([a-z]+)/"#', $html, $m );
 			$this->assertSame( array_map( static fn( $t ) => $t->slug, \lafka_menu_top_categories() ), $m[1] );
 			$this->assertStringNotContainsString( 'is-active', $html, 'a search is not "All"' );
+		}
+
+		public function test_a_bare_site_search_becomes_a_menu_search_on_counter_storefronts(): void {
+			$this->assertSame( array( 's' => 'pizza', 'post_type' => 'product' ), \lafka_search_request_vars( array( 's' => 'pizza' ), true ) );
+			$this->assertSame( array( 's' => 'news', 'post_type' => 'post' ), \lafka_search_request_vars( array( 's' => 'news', 'post_type' => 'post' ), true ), 'an explicit post type is kept' );
+			$this->assertSame( array( 's' => 'pizza' ), \lafka_search_request_vars( array( 's' => 'pizza' ), false ) );
+			$this->assertSame( array( 'pagename' => 'menu' ), \lafka_search_request_vars( array( 'pagename' => 'menu' ), true ), 'not a search' );
 		}
 
 		public function test_shop_view_renders_the_grouped_menu(): void {

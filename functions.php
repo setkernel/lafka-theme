@@ -167,6 +167,9 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-wc-template-com
 // One menu URL: the WC shop page (and a stray /shop/) 301 to /menu/ (GX M-14).
 require_once get_template_directory() . '/incl/woocommerce/lafka-shop-to-menu.php';
 
+// A bare site search is a menu search on counter storefronts (GX M-04 / O-15).
+require_once get_template_directory() . '/incl/woocommerce/lafka-product-search.php';
+
 // No-op fallbacks for orphan 3rd-party shortcodes (v5.40.0).
 require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
 

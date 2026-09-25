@@ -1083,7 +1083,7 @@ if ( ! function_exists( 'lafka_is_legacy_blog_surface' ) ) {
 		return ( is_home() && ! is_front_page() )
 			|| is_category() || is_tag() || is_author() || is_date()
 			|| is_singular( 'post' )
-			|| is_search()
+			|| ( is_search() && 'product' !== get_query_var( 'post_type' ) && ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) ) ) // Product / counter searches use the menu sheet (GX M-04, O-15).
 			|| is_attachment();
 	}
 }
@@ -1102,6 +1102,11 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	function lafka_needs_legacy_shortcode_styles() {
 		if ( lafka_is_legacy_blog_surface() ) {
 			return true;
+		}
+		// page-menu.php ignores the page's own content (often an old WPBakery
+		// layout), so its shortcodes never render there (GX M-37).
+		if ( isset( $GLOBALS['template'] ) && 'page-menu.php' === basename( (string) $GLOBALS['template'] ) ) {
+			return false;
 		}
 		// The plugin registers the CPT as 'lafka-foodmenu' (hyphen); only the
 		// taxonomy uses underscores.
@@ -1626,6 +1631,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if (
 			( function_exists( 'is_woocommerce' ) && ( is_shop() || is_product_taxonomy() ) )
 			|| $lafka_is_menu_slug
+			|| ( is_search() && function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) )
 		) {
 			wp_enqueue_style(
 				'lafka-home-v2',
