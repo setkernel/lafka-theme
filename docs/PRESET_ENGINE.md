@@ -108,7 +108,10 @@ Public function surface (all `function_exists`-guarded, `lafka_` prefixed):
     "display": { "family": "Fraunces", "source": "base" }
   },
   "category_emoji": {},            // feeds lafka_category_emoji; empty = hardcoded default
-  "variants": {},                  // flat map reserved for body-class variants — inert (no consumer yet)
+  "variants": {},                  // GX4: live, keys/values in LAFKA_PRESET_VARIANT_WHITELIST —
+                                   // header/home/menu/footer/drawer_layout ∈ classic|counter,
+                                   // motif ∈ none|check. lafka_preset_variant() feeds the DEFAULT
+                                   // of the lafka_<surface>_layout Customizer selects (operator wins).
   "contrast_exceptions": []        // audited AA waivers, e.g. ["text-muted-on-surface"]
 }
 ```

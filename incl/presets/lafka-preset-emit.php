@@ -84,6 +84,24 @@ if ( ! function_exists( 'lafka_preset_default' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_preset_variant' ) ) {
+	/**
+	 * The active preset's whitelisted variant value for $key, else $fallback.
+	 * GX4: the default of each per-surface layout select (lafka_layout()), so
+	 * the resolution order is operator theme_mod > preset variant > fallback.
+	 *
+	 * @param string $key      A LAFKA_PRESET_VARIANT_WHITELIST key (e.g. `home_layout`).
+	 * @param string $fallback Returned when the preset leaves the key unset.
+	 */
+	function lafka_preset_variant( string $key, string $fallback ): string {
+		if ( ! function_exists( 'lafka_active_preset' ) ) {
+			return $fallback;
+		}
+		$value = lafka_active_preset()->variant( $key );
+		return null === $value ? $fallback : $value;
+	}
+}
+
 if ( ! function_exists( 'lafka_preset_sanitize_chrome_value' ) ) {
 	/**
 	 * Defence-in-depth sanitiser for a chrome (theme_mod-default) value — the

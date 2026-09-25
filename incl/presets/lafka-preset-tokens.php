@@ -219,6 +219,27 @@ if ( ! defined( 'LAFKA_PRESET_CHROME_WHITELIST' ) ) {
 }
 
 /**
+ * GX4: live per-surface layout variants. A preset's `variants{}` block may set
+ * any of these keys to one of the listed values; the value becomes the DEFAULT
+ * of the matching Customizer layout select (lafka_<surface>_layout), so the
+ * operator always wins. Anything outside this map fails Lafka_Preset::validate()
+ * and is ignored by lafka_preset_variant(). See docs/PRESET_ENGINE.md §3.
+ */
+if ( ! defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ) {
+	define(
+		'LAFKA_PRESET_VARIANT_WHITELIST',
+		array(
+			'header_layout' => array( 'classic', 'counter' ),
+			'home_layout'   => array( 'classic', 'counter' ),
+			'menu_layout'   => array( 'classic', 'counter' ),
+			'footer_layout' => array( 'classic', 'counter' ),
+			'drawer_layout' => array( 'classic', 'counter' ),
+			'motif'         => array( 'none', 'check' ),
+		)
+	);
+}
+
+/**
  * Above-fold subset of LAFKA_PRESET_TOKEN_WHITELIST. Inert this wave; the
  * NX2-04.1 critical.css preset-awareness will read it so first-paint on a
  * non-default preset reflects the preset's key surfaces/type. MUST stay a

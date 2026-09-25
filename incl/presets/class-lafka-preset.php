@@ -106,8 +106,8 @@ if ( ! class_exists( 'Lafka_Preset' ) ) {
 		}
 
 		/**
-		 * Flat variant map (inert this wave; later drives `lafka-variant--k-v`
-		 * body classes).
+		 * Flat variant map (GX4: live). Keys/values are constrained by
+		 * LAFKA_PRESET_VARIANT_WHITELIST; see lafka_preset_variant().
 		 *
 		 * @return array<string,mixed>
 		 */
@@ -115,6 +115,21 @@ if ( ! class_exists( 'Lafka_Preset' ) ) {
 			return isset( $this->data['variants'] ) && is_array( $this->data['variants'] )
 				? $this->data['variants']
 				: array();
+		}
+
+		/**
+		 * One whitelisted variant value, or null when the preset does not set it
+		 * (or sets a key/value outside LAFKA_PRESET_VARIANT_WHITELIST).
+		 *
+		 * @param string $key e.g. `home_layout`, `motif`.
+		 */
+		public function variant( string $key ): ?string {
+			$variants  = $this->variants();
+			$whitelist = defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ? LAFKA_PRESET_VARIANT_WHITELIST : array();
+			if ( ! isset( $variants[ $key ], $whitelist[ $key ] ) || ! is_string( $variants[ $key ] ) ) {
+				return null;
+			}
+			return in_array( $variants[ $key ], $whitelist[ $key ], true ) ? $variants[ $key ] : null;
 		}
 
 		/**
@@ -170,6 +185,15 @@ if ( ! class_exists( 'Lafka_Preset' ) ) {
 			foreach ( array_keys( $this->chrome() ) as $key ) {
 				if ( ! in_array( $key, $chrome_whitelist, true ) ) {
 					$errors[] = "chrome key '{$key}' is not in LAFKA_PRESET_CHROME_WHITELIST";
+				}
+			}
+
+			$variant_whitelist = defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ? LAFKA_PRESET_VARIANT_WHITELIST : array();
+			foreach ( $this->variants() as $key => $value ) {
+				if ( ! isset( $variant_whitelist[ $key ] ) ) {
+					$errors[] = "variant '{$key}' is not in LAFKA_PRESET_VARIANT_WHITELIST";
+				} elseif ( ! is_string( $value ) || ! in_array( $value, $variant_whitelist[ $key ], true ) ) {
+					$errors[] = "variant '{$key}' has a value outside LAFKA_PRESET_VARIANT_WHITELIST";
 				}
 			}
 
