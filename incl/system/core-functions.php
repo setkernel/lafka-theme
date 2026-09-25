@@ -97,6 +97,16 @@ if ( ! function_exists( 'lafka_register_theme_features' ) ) {
 
 		// Gutenberg
 		add_theme_support( 'align-wide' );
+		// Embed blocks keep their aspect ratio (`wp-embed-responsive` body class).
+		add_theme_support( 'responsive-embeds' );
+
+		// HTML5 markup where it cannot change the shipped look: the search form
+		// (searchform.php overrides it anyway), [gallery], and nav-menu widgets
+		// (wrapped in <nav>). Deliberately NOT 'comment-form' (turns the Website
+		// field into type="url", which the input styles don't cover) nor 'caption'
+		// (div.wp-caption -> figure, which the caption styles target), and not
+		// 'script'/'style' (deprecated and ignored since WordPress 7.0).
+		add_theme_support( 'html5', array( 'search-form', 'gallery', 'navigation-widgets' ) );
 
 		// Use the classic widget editor — theme widgets are WP_Widget-based.
 		// Filter is used instead of remove_theme_support because WP adds the
