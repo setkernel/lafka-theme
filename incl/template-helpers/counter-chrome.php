@@ -110,8 +110,17 @@ if ( ! function_exists( 'lafka_counter_brand_short_auto' ) ) {
 		if ( mb_strlen( $full ) <= 18 ) {
 			return '';
 		}
+		// Only "X Pizza & Poutine"-style names (with a joiner) are shortened,
+		// and to their distinctive first word ("Peppery"), not to the part
+		// before the joiner — that would keep one dish and drop the other.
 		$parts = preg_split( '/\s+(?:&|\+|and|\||-|–|—)\s+/u', $full, 2 );
-		$first = is_array( $parts ) ? trim( (string) $parts[0] ) : '';
+		if ( ! is_array( $parts ) || count( $parts ) < 2 ) {
+			return '';
+		}
+		$words = preg_split( '/\s+/u', trim( (string) $parts[0] ) );
+		$words = is_array( $words ) ? $words : array();
+		$take  = ( count( $words ) > 1 && preg_match( '/^(the|la|le|el|il|lo|a|an)$/iu', (string) $words[0] ) ) ? 2 : 1;
+		$first = trim( implode( ' ', array_slice( $words, 0, $take ) ) );
 		return ( '' !== $first && $first !== $full && mb_strlen( $first ) >= 3 ) ? $first : '';
 	}
 }

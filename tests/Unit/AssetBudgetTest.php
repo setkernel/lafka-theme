@@ -51,9 +51,12 @@ use PHPUnit\Framework\TestCase;
  * home fixes (masonry rest-of-menu, rim-label hero captions, row alignment,
  * landscape bar, one "Order online") — the counter front page measured
  * 400,892 B; page-specific fixes went to the menu / PDP sheets instead.
+ *
+ * 2026-09-25 (GX QA, lead): 402,000 → 402,500 for the sticky order bar on
+ * narrow phones (total never clipped at 320–399px) — measured 402,201 B.
  */
 final class AssetBudgetTest extends TestCase {
-	private const BUDGET_BYTES   = 402000;
+	private const BUDGET_BYTES   = 402500;
 	private const MODULAR_BUDGET = 175000;
 	private const STYLE_CEILING  = 232000;
 

@@ -167,9 +167,11 @@ namespace Lafka\Tests\Unit {
 			$this->assertStringContainsString( 'aria-hidden="true">EK</span>', $this->render() );
 		}
 	
-		public function test_a_long_name_without_a_short_name_falls_back_to_its_first_part(): void {
-			$this->assertSame( 'Harbour Pizza', \lafka_counter_brand_short_auto( 'Harbour Pizza &amp; Poutine' ) );
-			$this->assertSame( 'Harbour Pizza', \lafka_counter_brand_short( 'Harbour Pizza and Poutine' ) );
+		public function test_a_long_name_without_a_short_name_falls_back_to_its_distinctive_first_word(): void {
+			// Never "Harbour Pizza" — that keeps one dish and drops the other.
+			$this->assertSame( 'Harbour', \lafka_counter_brand_short_auto( 'Harbour Pizza &amp; Poutine' ) );
+			$this->assertSame( 'Harbour', \lafka_counter_brand_short( 'Harbour Pizza and Poutine' ) );
+			$this->assertSame( 'The Harbour', \lafka_counter_brand_short_auto( 'The Harbour Pizza & Poutine' ), 'a leading article stays with its word' );
 			$this->assertSame( '', \lafka_counter_brand_short( 'Example Kitchen' ), 'short names stay whole' );
 			$this->assertSame( '', \lafka_counter_brand_short_auto( 'The Very Long Kitchen Of Example' ), 'no joiner, nothing to cut at' );
 		}

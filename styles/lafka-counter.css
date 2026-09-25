@@ -1518,6 +1518,36 @@ body.lafka-layout-header-counter .lafka-header {
 	padding: 0 12px;
 }
 
+.lafka-counter-bar__order {
+	gap: 8px;
+	white-space: nowrap;
+}
+
+@media (max-width: 399px) {
+
+	.lafka-counter-bar {
+		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+		gap: 8px;
+	}
+
+	.lafka-counter-bar .lafka-counter-btn {
+		padding: 0 10px;
+		font-size: 16px;
+	}
+
+	.lafka-counter-bar__order {
+		gap: 6px;
+	}
+}
+
+/* Count stays in the aria-label. */
+@media (max-width: 359px) {
+
+	.lafka-counter-bar__order .lafka-counter-bar__count {
+		display: none;
+	}
+}
+
 .lafka-counter-bar__number {
 	display: none;
 }

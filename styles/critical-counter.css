@@ -224,19 +224,19 @@ body {
 		font-size: 24px;
 	}
 
-	/* The status keeps its full line; a too-long name gives way first. */
+	/* Never cut the name; the status wraps instead. */
 	.lafka-counter-header .lafka-counter-header__brand {
 		gap: 14px;
-		flex: 0 1 auto;
+		flex: none;
 	}
 
 	.lafka-counter-header .lafka-counter-status {
-		flex: none;
+		flex: 0 1 auto;
 		align-items: center;
 		margin-right: auto;
 		padding-left: 0;
 		font-size: inherit;
-		white-space: nowrap;
+		white-space: normal;
 	}
 
 	.lafka-counter-header .lafka-counter-status__dot {
