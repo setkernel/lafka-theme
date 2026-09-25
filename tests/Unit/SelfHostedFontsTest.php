@@ -59,7 +59,11 @@ namespace Lafka\Tests\Unit {
 				$dir = self::root() . '/assets/fonts/' . $entry['dir'] . '/';
 				$this->assertDirectoryExists( $dir, "assets/fonts/{$entry['dir']}/ is missing for '{$slug}'" );
 
-				$this->assertNotEmpty( $entry['weights'], "'{$slug}' declares no weights" );
+				// GX4: a variable entry ships one file per subset instead of weights.
+				$this->assertTrue( ! empty( $entry['weights'] ) || ! empty( $entry['variable']['files'] ), "'{$slug}' declares no weights and no variable files" );
+				foreach ( (array) ( $entry['variable']['files'] ?? array() ) as $subset => $file ) {
+					$this->assertFileExists( $dir . $file, "'{$slug}' variable {$subset} woff2 missing: {$entry['dir']}/{$file}" );
+				}
 				foreach ( $entry['weights'] as $weight => $files ) {
 					foreach ( $files as $subset => $file ) {
 						$this->assertFileExists(

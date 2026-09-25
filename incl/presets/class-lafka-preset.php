@@ -188,6 +188,12 @@ if ( ! class_exists( 'Lafka_Preset' ) ) {
 				}
 			}
 
+			foreach ( $this->fonts() as $role => $decl ) {
+				if ( is_array( $decl ) && isset( $decl['font_display'] ) && ! in_array( $decl['font_display'], array( 'swap', 'optional' ), true ) ) {
+					$errors[] = "fonts.{$role}.font_display must be 'swap' or 'optional'";
+				}
+			}
+
 			$variant_whitelist = defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ? LAFKA_PRESET_VARIANT_WHITELIST : array();
 			foreach ( $this->variants() as $key => $value ) {
 				if ( ! isset( $variant_whitelist[ $key ] ) ) {

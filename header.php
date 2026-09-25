@@ -92,20 +92,19 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 	// contributor on home (CLS 0.83 → 0.05 once font swap is eliminated).
 	// font-display: optional (v5.82) prevents FOUT but the font still
 	// needs to start downloading early enough to land within ~100ms.
-	?>
+	//
+	// NX2-03 + GX4: the preset engine decides the font preloads
+	// (lafka_preset_print_font_preloads()): the two static Fraunces links for a
+	// base-display (or legacy swap) preset, plus the active preset's pool display
+	// face, plus — for a font-display:optional preset — its body 400/700 files.
+	if ( function_exists( 'lafka_preset_print_font_preloads' ) ) {
+		lafka_preset_print_font_preloads();
+	} else {
+		?>
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-600.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
 	<link rel="preload" href="<?php echo esc_url( get_template_directory_uri() . '/assets/fonts/fraunces/Fraunces-800.woff2' ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
-	<?php
-	// NX2-03: when the active preset's DISPLAY face is a pool font (not the base
-	// Fraunces the two static links above preload), preload its heaviest weight so
-	// the heading face lands within the LCP window. Peppery / any base-display
-	// preset yields '' here, so no link is printed and the head stays byte-identical.
-	$lafka_pool_display_font = function_exists( 'lafka_preset_display_preload_href' ) ? lafka_preset_display_preload_href() : '';
-	if ( '' !== $lafka_pool_display_font ) :
-		?>
-	<link rel="preload" href="<?php echo esc_url( $lafka_pool_display_font ); ?>" as="font" type="font/woff2" crossorigin="anonymous">
 		<?php
-	endif;
+	}
 	?>
 
 	<?php wp_head(); ?>

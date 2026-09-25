@@ -3,7 +3,8 @@
  * NX2-03 — reproducible OFL font-pool sourcing.
  *
  * Copies the LATIN + LATIN-EXT woff2 subsets (weights 400/600/700, whatever each
- * family ships) plus the OFL LICENSE for the six *pool* families out of the
+ * family ships) plus the OFL LICENSE for the static *pool* families (and, GX4,
+ * one variable-font cut per VARIABLE family from @fontsource-variable/*) out of the
  * dev-only @fontsource/* packages into assets/fonts/<dir>/, renamed to the
  * repo's existing `<Prefix>-<weight>[.-ext].woff2` idiom (matches Rubik-400.woff2
  * / Fraunces-600.woff2). Also drops the LICENSE for the already-self-hosted base
@@ -33,6 +34,16 @@ const POOL = [
 	{ pkg: 'manrope', dir: 'manrope', prefix: 'Manrope', weights: [ 400, 600, 700 ], ext: true },
 	{ pkg: 'space-grotesk', dir: 'space-grotesk', prefix: 'SpaceGrotesk', weights: [ 400, 600, 700 ], ext: true },
 	{ pkg: 'dm-serif-display', dir: 'dm-serif-display', prefix: 'DMSerifDisplay', weights: [ 400 ], ext: true },
+	// GX4: the counter (Peppery) body face. The design's 500 maps to 400 (one file fewer).
+	{ pkg: 'atkinson-hyperlegible-next', dir: 'atkinson-hyperlegible-next', prefix: 'AtkinsonHyperlegibleNext', weights: [ 400, 700 ], ext: true },
+];
+
+// GX4: VARIABLE pool families from @fontsource-variable/*. One file per subset
+// carries the whole weight range; `axis` picks which fontsource cut (e.g.
+// `opsz` = optical size + weight). Renamed to `<Prefix>-<axis>[-ext].woff2`.
+const SRC_VARIABLE = join( ROOT, 'node_modules', '@fontsource-variable' );
+const VARIABLE = [
+	{ pkg: 'bricolage-grotesque', dir: 'bricolage-grotesque', prefix: 'BricolageGrotesque', axis: 'opsz', ext: true },
 ];
 
 let added = 0;
@@ -64,6 +75,24 @@ for ( const f of POOL ) {
 	}
 
 	copy( join( SRC, f.pkg, 'LICENSE' ), join( destDir, 'LICENSE' ) );
+}
+
+for ( const f of VARIABLE ) {
+	const destDir = join( DEST, f.dir );
+	mkdirSync( destDir, { recursive: true } );
+	const filesDir = join( SRC_VARIABLE, f.pkg, 'files' );
+	const latin = join( filesDir, `${ f.pkg }-latin-${ f.axis }-normal.woff2` );
+	if ( ! existsSync( latin ) ) {
+		throw new Error( `missing ${ latin } — run: npm i -D @fontsource-variable/${ f.pkg }` );
+	}
+	copy( latin, join( destDir, `${ f.prefix }-${ f.axis }.woff2` ) );
+	if ( f.ext ) {
+		const ext = join( filesDir, `${ f.pkg }-latin-ext-${ f.axis }-normal.woff2` );
+		if ( existsSync( ext ) ) {
+			copy( ext, join( destDir, `${ f.prefix }-${ f.axis }-ext.woff2` ) );
+		}
+	}
+	copy( join( SRC_VARIABLE, f.pkg, 'LICENSE' ), join( destDir, 'LICENSE' ) );
 }
 
 // Base family Rubik: licence only (woff2 already self-hosted, do NOT touch).
