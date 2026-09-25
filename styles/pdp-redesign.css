@@ -623,7 +623,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
  * CTA so it matches the site-wide primary CTAs (hero, cart Proceed, etc).
  * Was --lafka-pdp-radius-chip (~10px) which was a holdover from the older
  * PDP-cluster styling. */
-.lafka-cart-drawer__checkout { flex: 1; background: var(--lafka-pdp-accent); color: #fff; border: none; border-radius: var(--lafka-radius-pill); padding: 12px; text-align: center; font-weight: 600; text-decoration: none; }
+.lafka-cart-drawer__checkout { flex: 1; background: var(--lafka-pdp-accent); color: #fff; border: none; border-radius: var(--lafka-radius-button); padding: 12px; text-align: center; font-weight: 600; text-decoration: none; }
 
 .lafka-cart-drawer__checkout:hover { background: var(--lafka-pdp-accent-dark); color: #fff; }
 
@@ -866,7 +866,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
    * target, body-size text. Matches .lafka-hero__cta and the
    * .return-to-shop button so customers see a single button language. */
   background: var(--lafka-color-accent-500); color: var(--lafka-color-accent-contrast);
-  border: none; border-radius: var(--lafka-radius-pill);
+  border: none; border-radius: var(--lafka-radius-button);
   min-height: 48px;
   padding: 12px 24px; font: inherit; font-weight: 700;
   cursor: pointer;

@@ -262,7 +262,7 @@
 	background: var(--lafka-color-accent-500);
 	color: var(--lafka-color-accent-contrast);
 	border: 1px solid transparent;
-	border-radius: var(--lafka-radius-pill);
+	border-radius: var(--lafka-radius-button);
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
 	font-size: var(--lafka-font-size-body-lg);
