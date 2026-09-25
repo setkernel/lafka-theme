@@ -1721,3 +1721,49 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 		font-size: var(--lafka-font-size-h2-desk);
 	}
 }
+
+/* ── Quiet footer ─────────────────────────────────────────────────────── */
+.lafka-footer.lafka-footer--counter {
+	margin: 0;
+	padding: 0;
+	border-top: 1px solid var(--lafka-color-border-subtle);
+	/* The page surface, not --surface-footer (a dark band in most presets). */
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-counter-footer {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px 28px;
+	min-height: 64px;
+	padding-block: 12px;
+}
+
+.lafka-counter-footer__line {
+	margin: 0;
+}
+
+.lafka-counter-footer__list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 28px;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-counter-footer__list a {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	color: var(--lafka-color-text-secondary);
+	text-decoration: underline;
+	text-underline-offset: 4px;
+}
+
+.lafka-counter-footer__list a:hover {
+	color: var(--lafka-color-text-primary);
+}

@@ -702,6 +702,13 @@ if ( ! function_exists( 'get_permalink' ) ) {
 		return home_url( '/?p=' . (int) ( is_object( $post ) ? $post->ID : $post ) );
 	}
 }
+if ( ! function_exists( 'get_the_privacy_policy_link' ) ) {
+	/** $GLOBALS['lafka_test_privacy_link'] ('' = no policy page). */
+	function get_the_privacy_policy_link( $before = '', $after = '' ) {
+		$link = (string) ( $GLOBALS['lafka_test_privacy_link'] ?? '' );
+		return '' === $link ? '' : $before . $link . $after;
+	}
+}
 if ( ! function_exists( 'wp_trim_words' ) ) {
 	function wp_trim_words( $text, $num_words = 55, $more = null ) {
 		$words = preg_split( '/\s+/', trim( wp_strip_all_tags( (string) $text ) ) );
@@ -748,6 +755,7 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_is_checkout']        = false;
 		$GLOBALS['lafka_test_is_product']         = false;
 		$GLOBALS['lafka_test_title']              = '';
+		$GLOBALS['lafka_test_privacy_link']       = '';
 		$GLOBALS['lafka_chooser_registry']        = array();
 		$GLOBALS['lafka_test_fulfilment_modes']   = array( 'pickup', 'delivery' );
 		$GLOBALS['lafka_test_fulfilment_pref']    = '';

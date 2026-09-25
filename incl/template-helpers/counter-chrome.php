@@ -167,6 +167,21 @@ if ( ! function_exists( 'lafka_counter_register_nav_location' ) ) {
 }
 add_action( 'after_setup_theme', 'lafka_counter_register_nav_location', 20 );
 
+if ( ! function_exists( 'lafka_counter_deals_url' ) ) {
+	/** The deals category's archive URL, or '' when the store has none. */
+	function lafka_counter_deals_url(): string {
+		if ( ! function_exists( 'lafka_counter_resolve_sections' ) || ! function_exists( 'lafka_menu_top_categories' ) ) {
+			return '';
+		}
+		$sections = lafka_counter_resolve_sections( lafka_menu_top_categories(), lafka_counter_settings() );
+		if ( ! $sections['deals'] ) {
+			return '';
+		}
+		$link = get_term_link( $sections['deals'] );
+		return is_string( $link ) ? $link : '';
+	}
+}
+
 if ( ! function_exists( 'lafka_counter_nav_items' ) ) {
 	/**
 	 * Default header links when no menu is assigned to the location:
@@ -182,17 +197,12 @@ if ( ! function_exists( 'lafka_counter_nav_items' ) ) {
 				'url'   => lafka_theme_menu_url(),
 			),
 		);
-		if ( function_exists( 'lafka_counter_resolve_sections' ) && function_exists( 'lafka_menu_top_categories' ) ) {
-			$sections = lafka_counter_resolve_sections( lafka_menu_top_categories(), lafka_counter_settings() );
-			if ( $sections['deals'] ) {
-				$link = get_term_link( $sections['deals'] );
-				if ( is_string( $link ) ) {
-					$items[] = array(
-						'label' => __( 'Deals', 'lafka' ),
-						'url'   => $link,
-					);
-				}
-			}
+		$deals = lafka_counter_deals_url();
+		if ( '' !== $deals ) {
+			$items[] = array(
+				'label' => __( 'Deals', 'lafka' ),
+				'url'   => $deals,
+			);
 		}
 		if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'home', 'counter' ) && function_exists( 'lafka_counter_settings' ) && lafka_counter_settings()['show_find_us'] ) {
 			$items[] = array(
