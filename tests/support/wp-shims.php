@@ -674,9 +674,16 @@ if ( ! function_exists( 'has_nav_menu' ) ) {
 		return ! empty( $GLOBALS['lafka_test_nav_menus'][ $location ] );
 	}
 }
+if ( ! function_exists( 'register_nav_menu' ) ) {
+	/** Records into $GLOBALS['lafka_test_registered_menus'][ location ] = description. */
+	function register_nav_menu( $location, $description ) {
+		$GLOBALS['lafka_test_registered_menus'][ $location ] = $description;
+	}
+}
 if ( ! function_exists( 'wp_nav_menu' ) ) {
 	function wp_nav_menu( $args = array() ) {
 		$items = $GLOBALS['lafka_test_nav_menus'][ $args['theme_location'] ?? '' ] ?? array();
+		$items = (array) apply_filters( 'wp_nav_menu_objects', $items, (object) $args );
 		$html  = '<ul class="' . ( $args['menu_class'] ?? 'menu' ) . '">';
 		foreach ( $items as $item ) {
 			$html .= '<li class="menu-item"><a href="' . $item['url'] . '">' . $item['label'] . '</a></li>';
@@ -791,6 +798,7 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_parts_live']         = false;
 		$GLOBALS['lafka_test_bloginfo']           = array();
 		$GLOBALS['lafka_test_nav_menus']          = array();
+		$GLOBALS['lafka_test_registered_menus']   = array();
 		$GLOBALS['lafka_test_post_terms']         = array();
 		$GLOBALS['lafka_test_is_tax']             = false;
 		$GLOBALS['lafka_test_is_cart']            = false;

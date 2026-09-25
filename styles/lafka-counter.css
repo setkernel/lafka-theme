@@ -1899,6 +1899,13 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 	margin: 0;
 }
 
+/* An assigned menu's list and the privacy link share one row. */
+.lafka-counter-footer__nav {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 0 28px;
+}
+
 .lafka-counter-footer__list {
 	display: flex;
 	flex-wrap: wrap;

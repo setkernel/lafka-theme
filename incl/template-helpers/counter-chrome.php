@@ -174,15 +174,76 @@ if ( ! function_exists( 'lafka_counter_nav_location' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_counter_footer_location' ) ) {
+	/** The counter footer's own menu location (never the legacy tertiary one). */
+	function lafka_counter_footer_location(): string {
+		return 'lafka-counter-footer';
+	}
+}
+
 if ( ! function_exists( 'lafka_counter_register_nav_location' ) ) {
-	/** Register the counter header's WordPress menu location. */
+	/** Register the counter header's and footer's WordPress menu locations. */
 	function lafka_counter_register_nav_location(): void {
 		if ( function_exists( 'register_nav_menu' ) ) {
 			register_nav_menu( lafka_counter_nav_location(), __( 'Header menu (counter layout)', 'lafka' ) );
+			register_nav_menu( lafka_counter_footer_location(), __( 'Footer menu (counter layout)', 'lafka' ) );
 		}
 	}
 }
 add_action( 'after_setup_theme', 'lafka_counter_register_nav_location', 20 );
+
+if ( ! function_exists( 'lafka_counter_footer_items' ) ) {
+	/**
+	 * Default footer links when no menu is assigned to the counter footer
+	 * location: Menu · Deals · Find us (Deals / Find us only when they exist,
+	 * as in the header). The privacy link is printed separately, always.
+	 * Filter: lafka_counter_footer_links.
+	 *
+	 * @return list<array{label:string,url:string}>
+	 */
+	function lafka_counter_footer_items(): array {
+		$items = array(
+			array(
+				'label' => __( 'Menu', 'lafka' ),
+				'url'   => lafka_theme_menu_url(),
+			),
+		);
+		$deals = lafka_counter_deals_url();
+		if ( '' !== $deals ) {
+			$items[] = array(
+				'label' => __( 'Deals', 'lafka' ),
+				'url'   => $deals,
+			);
+		}
+		if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'home', 'counter' ) && function_exists( 'lafka_counter_settings' ) && lafka_counter_settings()['show_find_us'] ) {
+			$items[] = array(
+				'label' => __( 'Find us', 'lafka' ),
+				'url'   => home_url( '/#find-us' ),
+			);
+		}
+		return (array) apply_filters( 'lafka_counter_footer_links', $items );
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_footer_cap_links' ) ) {
+	/**
+	 * wp_nav_menu_objects: the quiet footer never becomes a link wall — an
+	 * assigned counter-footer menu shows its first N top-level items
+	 * (filter lafka_counter_footer_max_links, default 6).
+	 *
+	 * @param array  $items Menu items.
+	 * @param object $args  wp_nav_menu() args.
+	 * @return array
+	 */
+	function lafka_counter_footer_cap_links( $items, $args = null ) {
+		if ( ! is_array( $items ) || ! is_object( $args ) || ( $args->theme_location ?? '' ) !== lafka_counter_footer_location() ) {
+			return $items;
+		}
+		$max = max( 1, (int) apply_filters( 'lafka_counter_footer_max_links', 6 ) );
+		return array_slice( $items, 0, $max );
+	}
+}
+add_filter( 'wp_nav_menu_objects', 'lafka_counter_footer_cap_links', 10, 2 );
 
 if ( ! function_exists( 'lafka_counter_deals_url' ) ) {
 	/** The deals category's archive URL, or '' when the store has none. */
