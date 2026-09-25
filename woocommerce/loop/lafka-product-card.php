@@ -16,6 +16,21 @@ if ( ! isset( $lafka_arch_p ) || ! is_object( $lafka_arch_p ) ) {
 	return;
 }
 
+// GX4: under the counter menu layout, /menu/ and the category archive render
+// the counter product row instead (one hand-off here, so archive-product.php
+// and page-menu.php stay untouched).
+if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) ) {
+	get_template_part(
+		'partials/counter/menu-row',
+		null,
+		array(
+			'product' => $lafka_arch_p,
+			'style'   => 'photo',
+		)
+	);
+	return;
+}
+
 $lafka_arch_url   = get_permalink( $lafka_arch_p->get_id() );
 // Responsive image (srcset/sizes/width/height, real alt). This card only
 // renders on the menu page + shop/category/tag archives, where the grid sits

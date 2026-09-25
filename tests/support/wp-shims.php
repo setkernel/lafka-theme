@@ -644,6 +644,50 @@ if ( ! function_exists( 'wp_nav_menu' ) ) {
 	}
 }
 
+// ------------------------------------------------- GX4: loop context ----
+//
+// Stores (reset per test):
+//   lafka_test_post_terms      wp_get_post_terms(): [ post_id ][ taxonomy ] = list<string> (names / slugs alike)
+//   lafka_test_is_tax          is_tax() (false)
+//   lafka_test_title           get_the_title() / single_term_title()
+
+if ( ! function_exists( 'wp_get_post_terms' ) ) {
+	function wp_get_post_terms( $post_id, $taxonomy = 'post_tag', $args = array() ) {
+		return $GLOBALS['lafka_test_post_terms'][ (int) $post_id ][ $taxonomy ] ?? array();
+	}
+}
+if ( ! function_exists( 'is_tax' ) ) {
+	function is_tax( $taxonomy = '', $term = '' ) {
+		return (bool) ( $GLOBALS['lafka_test_is_tax'] ?? false );
+	}
+}
+if ( ! function_exists( 'single_term_title' ) ) {
+	function single_term_title( $prefix = '', $display = true ) {
+		return (string) ( $GLOBALS['lafka_test_title'] ?? '' );
+	}
+}
+if ( ! function_exists( 'get_the_title' ) ) {
+	function get_the_title( $post = 0 ) {
+		return (string) ( $GLOBALS['lafka_test_title'] ?? '' );
+	}
+}
+if ( ! function_exists( 'is_page' ) ) {
+	function is_page( $page = '' ) {
+		return false;
+	}
+}
+if ( ! function_exists( 'get_permalink' ) ) {
+	function get_permalink( $post = 0, $leavename = false ) {
+		return home_url( '/?p=' . (int) ( is_object( $post ) ? $post->ID : $post ) );
+	}
+}
+if ( ! function_exists( 'wp_trim_words' ) ) {
+	function wp_trim_words( $text, $num_words = 55, $more = null ) {
+		$words = preg_split( '/\s+/', trim( wp_strip_all_tags( (string) $text ) ) );
+		return count( $words ) > $num_words ? implode( ' ', array_slice( $words, 0, $num_words ) ) . '…' : implode( ' ', $words );
+	}
+}
+
 if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 	/**
 	 * Reset every per-test store. $filters is the load-time hook registry to
@@ -676,6 +720,10 @@ if ( ! function_exists( 'lafka_test_reset_wp' ) ) {
 		$GLOBALS['lafka_test_parts_live']         = false;
 		$GLOBALS['lafka_test_bloginfo']           = array();
 		$GLOBALS['lafka_test_nav_menus']          = array();
+		$GLOBALS['lafka_test_post_terms']         = array();
+		$GLOBALS['lafka_test_is_tax']             = false;
+		$GLOBALS['lafka_test_title']              = '';
+		$GLOBALS['lafka_chooser_registry']        = array();
 		$GLOBALS['lafka_test_fulfilment_modes']   = array( 'pickup', 'delivery' );
 		$GLOBALS['lafka_test_fulfilment_pref']    = '';
 		if ( class_exists( 'Lafka_Order_Hours' ) ) {
