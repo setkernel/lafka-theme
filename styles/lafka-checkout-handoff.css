@@ -1178,3 +1178,12 @@ div.woocommerce-info.lafka-delivery-min-notice .woocommerce-Price-amount {
 	border-radius: var(--lafka-radius-sm);
 	box-shadow: var(--lafka-shadow-focus);
 }
+
+/* -------- Counter header on the cart / checkout (O-39) --------------------
+ * "Order online" links back to the menu — noise while the customer is
+ * finishing the order. The header Pickup/Delivery toggle stays: it now
+ * selects the matching shipping rate (js/lafka-fulfilment.js). */
+body.woocommerce-cart .lafka-counter-header__order,
+body.woocommerce-checkout .lafka-counter-header__order {
+	display: none;
+}
