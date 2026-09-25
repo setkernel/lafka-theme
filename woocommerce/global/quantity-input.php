@@ -40,7 +40,13 @@ $label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 
 				class="<?php echo esc_attr( join( ' ', (array) $classes ) ); ?>"
 				name="<?php echo esc_attr( $input_name ); ?>"
 				value="<?php echo esc_attr( $input_value ); ?>"
-				aria-label="<?php esc_attr_e( 'Product quantity', 'lafka' ); ?>"
+				<?php
+				// O-43: with a product name the <label> above ("{product} quantity")
+				// names the input; a generic aria-label would override it.
+				if ( empty( $args['product_name'] ) ) :
+					?>
+					aria-label="<?php esc_attr_e( 'Product quantity', 'lafka' ); ?>"
+				<?php endif; ?>
 				<?php if ( in_array( $type, array( 'text', 'search', 'tel', 'url', 'email', 'password' ), true ) ) : ?>
 					size="4"
 				<?php endif; ?>
