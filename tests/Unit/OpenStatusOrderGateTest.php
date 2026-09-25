@@ -85,6 +85,7 @@ namespace Lafka\Tests\Unit {
 		public function test_the_announce_bar_tells_its_client_refresh_to_keep_a_locked_label(): void {
 			$this->hours( '11:00-23:00' );
 			\Lafka_Order_Hours::$shop_open = true;
+			\lafka_test_use_classic_layouts(); // The counter header replaces the announce bar (GX4).
 
 			ob_start();
 			require dirname( __DIR__, 2 ) . '/partials/announce-bar.php';

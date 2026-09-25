@@ -8,6 +8,48 @@
 
 declare(strict_types=1);
 
+if ( ! function_exists( 'lafka_test_use_classic_layouts' ) ) {
+	/**
+	 * Operator-select the classic layout on every surface (GX4: Peppery — the
+	 * default preset — now defaults to the counter layouts, so a test of a
+	 * classic surface says so explicitly).
+	 */
+	function lafka_test_use_classic_layouts(): void {
+		foreach ( array( 'header', 'home', 'menu', 'footer', 'drawer' ) as $surface ) {
+			$GLOBALS['lafka_test_theme_mods'][ 'lafka_' . $surface . '_layout' ] = 'classic';
+		}
+		$GLOBALS['lafka_test_theme_mods']['lafka_motif'] = 'none';
+	}
+}
+
+if ( ! function_exists( 'lafka_test_identity_preset' ) ) {
+	/** The engine no-op fixture (presets/__fixtures__/identity, the pre-GX4 Peppery). */
+	function lafka_test_identity_preset(): Lafka_Preset {
+		$data = json_decode( (string) file_get_contents( dirname( __DIR__, 2 ) . '/presets/__fixtures__/identity/preset.json' ), true );
+		return new Lafka_Preset( (array) $data );
+	}
+}
+
+if ( ! function_exists( 'lafka_test_activate_identity_preset' ) ) {
+	/**
+	 * Register the identity fixture (tests only — it lives under __fixtures__,
+	 * so discovery never finds it) and make it the active preset.
+	 */
+	function lafka_test_activate_identity_preset(): void {
+		add_filter(
+			'lafka_presets',
+			static function ( $presets ) {
+				$presets['identity'] = lafka_test_identity_preset();
+				return $presets;
+			}
+		);
+		$GLOBALS['lafka_test_theme_mods']['lafka_active_preset'] = 'identity';
+		if ( class_exists( 'Lafka_Presets' ) ) {
+			Lafka_Presets::reset();
+		}
+	}
+}
+
 if ( ! class_exists( 'Lafka_Test_Catalog' ) ) {
 	final class Lafka_Test_Catalog {
 

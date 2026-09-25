@@ -45,6 +45,11 @@ namespace Lafka\Tests\Unit {
 			return new \Lafka_Preset( (array) $data );
 		}
 
+		/** The base-font no-op preset (the pre-GX4 Peppery). */
+		private function identity(): \Lafka_Preset {
+			return \lafka_test_identity_preset();
+		}
+
 		public function test_style_css_uses_font_display_optional_for_rubik(): void {
 			$css = file_get_contents( self::root() . '/style.css' );
 			preg_match_all( '/@font-face[^}]*font-family:\s*[\'"]?Rubik[\'"]?[^}]*\}/s', $css, $matches );
@@ -92,23 +97,36 @@ namespace Lafka\Tests\Unit {
 
 		// ---- NX2-03 (b): only the ACTIVE preset's two families enqueue ---------
 
-		public function test_peppery_selects_rubik_and_fraunces_from_base(): void {
-			$sel = \lafka_preset_font_selection( $this->peppery() );
+		public function test_identity_selects_rubik_and_fraunces_from_base(): void {
+			$sel = \lafka_preset_font_selection( $this->identity() );
 			$this->assertSame( 'Rubik', $sel['body']['family'] );
 			$this->assertSame( 'base', $sel['body']['source'] );
 			$this->assertSame( 'Fraunces', $sel['display']['family'] );
 			$this->assertSame( 'base', $sel['display']['source'] );
 		}
 
-		public function test_peppery_emits_no_font_face_css(): void {
+		public function test_identity_emits_no_font_face_css(): void {
 			$this->assertSame(
 				'',
-				\lafka_preset_font_face_css( $this->peppery() ),
-				'Peppery uses base fonts (Rubik + Fraunces from the static CSS) — the engine must emit no @font-face.'
+				\lafka_preset_font_face_css( $this->identity() ),
+				'Base fonts (Rubik + Fraunces from the static CSS) — the engine must emit no @font-face.'
 			);
 		}
 
-		public function test_peppery_register_attaches_no_inline_font_css(): void {
+		/** GX4: Peppery self-hosts its two pool families with font-display:optional. */
+		public function test_peppery_loads_its_pool_pair_optional(): void {
+			$sel = \lafka_preset_font_selection( $this->peppery() );
+			$this->assertSame( 'atkinson-hyperlegible-next', $sel['body']['slug'] );
+			$this->assertSame( 'bricolage-grotesque', $sel['display']['slug'] );
+			$css = \lafka_preset_font_face_css( $this->peppery() );
+			$this->assertStringContainsString( 'font-family:"Bricolage Grotesque";', $css );
+			$this->assertStringContainsString( 'font-family:"Atkinson Hyperlegible Next";', $css );
+			$this->assertStringNotContainsString( 'font-display:swap', $css );
+			$this->assertStringNotContainsString( 'Rubik', $css );
+		}
+
+		public function test_identity_register_attaches_no_inline_font_css(): void {
+			\lafka_test_activate_identity_preset();
 			\lafka_preset_register_fonts();
 			$this->assertArrayHasKey(
 				'lafka-preset-fonts',
@@ -122,7 +140,7 @@ namespace Lafka\Tests\Unit {
 			$this->assertArrayNotHasKey(
 				'lafka-preset-fonts',
 				$GLOBALS['lafka_test_inline'],
-				'Peppery (base fonts) must attach NO @font-face inline — zero bytes for the default preset.'
+				'A base-font preset must attach NO @font-face inline — zero bytes.'
 			);
 		}
 
@@ -178,12 +196,21 @@ namespace Lafka\Tests\Unit {
 			$this->assertSame( '', \lafka_font_face_css_for_slug( 'not-a-family' ), 'unknown slug -> empty.' );
 		}
 
-		public function test_peppery_emits_no_display_preload_href(): void {
+		public function test_identity_emits_no_display_preload_href(): void {
+			\lafka_test_activate_identity_preset();
 			$this->assertSame(
 				'',
 				\lafka_preset_display_preload_href(),
-				'Peppery display font is base Fraunces (statically preloaded) — the engine must add no preload link, keeping the head byte-identical.'
+				'A base display font (statically preloaded Fraunces) adds no preload link — the head stays byte-identical.'
 			);
+		}
+
+		/** GX4: Peppery preloads exactly its three first-view files (zero font CLS with optional). */
+		public function test_peppery_preloads_its_three_files(): void {
+			$hrefs = \lafka_preset_font_preload_hrefs();
+			$this->assertCount( 3, $hrefs );
+			$this->assertStringEndsWith( 'BricolageGrotesque-opsz.woff2', $hrefs[0] );
+			$this->assertFalse( \lafka_preset_preloads_base_display(), 'no Fraunces download for Peppery' );
 		}
 	}
 }

@@ -54,6 +54,7 @@ namespace Lafka\Tests\Unit {
 
 		public function test_classic_menu_keeps_cards_and_the_full_description(): void {
 			CounterHomeRenderTest::seed();
+			\lafka_test_use_classic_layouts();
 			$html = $this->render();
 			$this->assertStringContainsString( 'lafka-favs__item', $html );
 			$this->assertStringContainsString( 'Hand-cut fries with gravy. Made fresh.', $html );
@@ -62,6 +63,7 @@ namespace Lafka\Tests\Unit {
 		public function test_counter_header_drops_the_duplicate_fulfilment_tabs(): void {
 			CounterHomeRenderTest::seed();
 			$GLOBALS['lafka_test_parts_live'] = true;
+			\lafka_test_use_classic_layouts();
 			ob_start();
 			\get_template_part( 'partials/menu-controls' );
 			$classic = (string) ob_get_clean();

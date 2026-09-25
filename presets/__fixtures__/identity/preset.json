@@ -1,0 +1,17 @@
+{
+	"slug": "identity",
+	"schema": 1,
+	"label": "Identity (test fixture)",
+	"description": "Engine no-op fixture: base tokens, base fonts, no chrome (the pre-GX4 Peppery).",
+	"dark": false,
+	"extends": null,
+	"tokens": {},
+	"chrome": {},
+	"fonts": {
+		"body": { "family": "Rubik", "source": "base" },
+		"display": { "family": "Fraunces", "source": "base" }
+	},
+	"category_emoji": {},
+	"variants": {},
+	"contrast_exceptions": ["text-muted-on-surface"]
+}

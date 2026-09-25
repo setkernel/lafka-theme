@@ -65,6 +65,7 @@ namespace Lafka\Tests\Unit {
 		}
 
 		public function test_classic_layout_inlines_the_unchanged_bundle(): void {
+			\lafka_test_use_classic_layouts();
 			$out = $this->inline();
 			$this->assertStringStartsWith( "\n<style id=\"lafka-critical-css\">", $out );
 			$this->assertStringNotContainsString( 'lafka-counter', $out );

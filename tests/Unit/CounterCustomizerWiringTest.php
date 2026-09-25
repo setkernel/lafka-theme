@@ -24,7 +24,7 @@ namespace Lafka\Tests\Unit {
 	final class CounterCustomizerWiringTest extends TestCase {
 
 		protected function setUp(): void {
-			\Lafka_Presets::reset();
+			\lafka_test_activate_identity_preset(); // No variants (GX4: Peppery is counter).
 		}
 
 		protected function tearDown(): void {

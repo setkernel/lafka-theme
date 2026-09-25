@@ -116,6 +116,7 @@ namespace Lafka\Tests\Unit {
 
 		public function test_card_hands_off_only_under_the_counter_menu(): void {
 			$lafka_arch_p = new \WC_Product();
+			\lafka_test_use_classic_layouts();
 
 			ob_start();
 			require dirname( __DIR__, 2 ) . '/woocommerce/loop/lafka-product-card.php';

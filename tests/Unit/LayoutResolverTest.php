@@ -44,7 +44,7 @@ namespace Lafka\Tests\Unit {
 
 		protected function setUp(): void {
 			$GLOBALS['lafka_test_theme_supports'] = array();
-			\Lafka_Presets::reset();
+			\lafka_test_activate_identity_preset(); // No variants (GX4: Peppery is counter).
 		}
 
 		protected function tearDown(): void {

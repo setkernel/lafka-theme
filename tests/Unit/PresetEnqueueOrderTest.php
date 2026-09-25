@@ -52,14 +52,24 @@ namespace Lafka\Tests\Unit {
 			);
 		}
 
-		/** Peppery (empty PTL) attaches NO inline CSS — zero bytes for the default. */
-		public function test_peppery_attaches_no_inline_style(): void {
+		/**
+		 * The engine no-op: a preset with an empty PTL (the identity fixture —
+		 * Peppery until GX4) attaches NO inline CSS, zero bytes.
+		 */
+		public function test_identity_preset_attaches_no_inline_style(): void {
+			\lafka_test_activate_identity_preset();
 			\lafka_preset_register_ptl();
 			$this->assertArrayNotHasKey(
 				'lafka-preset',
 				$GLOBALS['lafka_test_inline'],
-				'peppery emits an empty PTL, so no inline style may be attached'
+				'an empty PTL must attach no inline style'
 			);
+		}
+
+		/** GX4: Peppery now ships the counter palette, attached after the base tokens. */
+		public function test_peppery_attaches_its_counter_palette(): void {
+			\lafka_preset_register_ptl();
+			$this->assertStringContainsString( '--lafka-color-text-primary:#1F1B18;', implode( '', $GLOBALS['lafka_test_inline']['lafka-preset'] ?? array() ) );
 		}
 
 		/** lafka-style depends on lafka-preset (so the operator inline prints last). */
