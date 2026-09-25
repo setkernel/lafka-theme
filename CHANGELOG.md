@@ -7,6 +7,36 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+## [7.3.0] — 2026-09-25
+
+Live-site QA sharpening (2026-09-25); pairs with lafka-plugin 10.3.0.
+
+### Fixed
+- **No white preloader** on counter layouts (off by default for new installs) and
+  **no layout shift**: above-the-fold stylesheets are render-blocking again; only
+  off-screen modules load async (measured CLS 0 on home, menu, PDP, cart, checkout
+  at 375 and 1280). A CLS-budget e2e spec guards it.
+- **Leaner pages**: legacy libraries (Font Awesome, owl, animate, nice-select,
+  imagesLoaded, wp-util, flaticon, legacy shortcodes, comment-reply) and wp-emoji are
+  skipped on counter pages; image `sizes` match their slots (logo, hero, deals, rows).
+- **Menu**: sticky category tabs with scroll-spy; honest empty states for filters and
+  search; filter chips only when something matches; no silent per-category caps;
+  archives paginate; one category order everywhere; breadcrumbs "Home / Menu / …";
+  the shop page and stray /shop/ 301 to /menu/; real product search results.
+- **Product page**: gluten-free and other unavailable sizes are disabled and re-priced;
+  no phantom default price; "Choose size" → "Add to order · $total" with quantity;
+  gallery zoom button; age/ID note (optional, operator categories).
+- **Home and header**: the restaurant name is never cut (the status wraps); the short
+  name is the distinctive first word; rest-of-menu masonry; aligned price columns;
+  deal cards without gaps; hero captions on their own dish; accessible hamburger,
+  aria-current, skip link first and visible; landscape-phone bar slimmer; the phone
+  order bar never clips its total.
+- **Order path**: two-row drawer lines that read at 320px, 44px targets, a usable
+  drawer on short screens; cart page stepper, names and options; shipping options as
+  cards; inline checkout errors; neutral notices; add-to-cart never redirects to /cart/
+  under the counter drawer; Pickup/Delivery drives the shipping radio.
+- Legacy `/product-category/…` URLs 301 to the real category archive.
+
 ## [7.2.0] — 2026-09-25
 
 Phases GX0 ("stop losing orders"), GX1 (diagnostics) and GX4 ("The counter");
