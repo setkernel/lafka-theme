@@ -7,9 +7,12 @@
  * presentation only — every input keeps core's name/id/value/data-index, so
  * WooCommerce's cart.js / checkout.js shipping updates are untouched:
  *
- *  - The options render as full-width choice cards (`lafka-shipping-choices`,
- *    one `lafka-shipping-choice` per rate, `is-selected` on the chosen one);
- *    the cards are styled in styles/lafka-checkout-handoff.css (O-06).
+ *  - The row spans both columns of the totals table (one <td colspan="2">
+ *    headed by the package name, which labels the list), so the options get
+ *    the full width instead of a 60–140px value column, and they render as
+ *    choice cards (`lafka-shipping-choices`, one `lafka-shipping-choice` per
+ *    rate, `is-selected` on the chosen one); styled in
+ *    styles/lafka-checkout-handoff.css (O-06).
  *  - When the chosen rate is a customer pickup, the /cart/ "Shipping to
  *    {destination}." line and the shipping-calculator toggle are not printed:
  *    nothing is shipped to that address (O-16). Pickup = the plugin's
@@ -44,11 +47,11 @@ if ( $lafka_is_pickup ) {
 	$show_shipping_calculator = false;
 }
 ?>
-<tr class="woocommerce-shipping-totals shipping<?php echo $lafka_is_pickup ? ' lafka-shipping-totals--pickup' : ''; ?>">
-	<th><?php echo wp_kses_post( $package_name ); ?></th>
-	<td data-title="<?php echo esc_attr( $package_name ); ?>">
+<tr class="woocommerce-shipping-totals shipping lafka-shipping-totals<?php echo $lafka_is_pickup ? ' lafka-shipping-totals--pickup' : ''; ?>">
+	<td colspan="2" data-title="<?php echo esc_attr( wp_strip_all_tags( $package_name ) ); ?>">
+		<span class="lafka-shipping-totals__label" id="lafka-shipping-label-<?php echo absint( $index ); ?>"><?php echo wp_kses_post( $package_name ); ?></span>
 		<?php if ( ! empty( $available_methods ) && is_array( $available_methods ) ) : ?>
-			<ul id="shipping_method" class="woocommerce-shipping-methods lafka-shipping-choices">
+			<ul id="shipping_method" class="woocommerce-shipping-methods lafka-shipping-choices" aria-labelledby="lafka-shipping-label-<?php echo absint( $index ); ?>">
 				<?php foreach ( $available_methods as $method ) : ?>
 					<li class="lafka-shipping-choice<?php echo ( $method->id === $lafka_chosen_method ) ? ' is-selected' : ''; ?>">
 						<?php

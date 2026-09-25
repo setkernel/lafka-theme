@@ -43,34 +43,10 @@
 	display: none;
 }
 
-/* v5.67.0: Handoff uses "Your order" not "Your cart". Inject as ::before
- * on .woocommerce wrapper when empty, on .woocommerce-cart-form when full. */
-.woocommerce-cart .woocommerce::before {
-	content: "Your order";
-	display: block;
-	font-family: var(--lafka-font-family-display);
-	font-weight: var(--lafka-font-weight-display);
-	font-size: clamp(2rem, 4vw + 1rem, 3rem);
-	line-height: 1.05;
-	letter-spacing: -0.02em;
-	color: var(--lafka-color-text-primary);
-	margin: 0 0 var(--lafka-space-2) 0;
-}
-
-.woocommerce-cart .woocommerce::after {
-	content: "Review your items, choose pickup or delivery, then check out.";
-	display: block;
-	font-size: var(--lafka-font-size-body-lg);
-	color: var(--lafka-color-text-secondary);
-	margin: 0 0 var(--lafka-space-8) 0;
-	max-width: 60ch;
-}
-
-/* When the cart form IS present, hide the wrapper ::before (avoid double) */
-.woocommerce-cart .woocommerce:has(.woocommerce-cart-form)::before,
-.woocommerce-cart .woocommerce:has(.woocommerce-cart-form)::after {
-	display: none;
-}
+/* O-30: the v5.67.0 "Your order" / intro ::before + ::after injected on the
+ * cart wrapper doubled the page's own <h1> (and on the empty cart repeated
+ * the empty-state heading). Removed — the page heading + the cart form's
+ * intro sentence are the one heading and one line. */
 
 /* -------- Page wrapper -------------------------------------------------- */
 .woocommerce-checkout main#content,
@@ -80,7 +56,15 @@
 .woocommerce-order-received #content,
 .woocommerce-order-received #main {
 	background: var(--lafka-color-surface-page);
-	padding-block: var(--lafka-space-10);
+
+	/* O-30: no top padding — #content, #main and the page header each added
+	 * 40px, a ~120px empty band above the breadcrumb. */
+	padding-block: 0 var(--lafka-space-10);
+}
+
+.woocommerce-checkout .lafka-page__header,
+.woocommerce-order-received .lafka-page__header {
+	padding-block: var(--lafka-space-5) var(--lafka-space-4);
 }
 
 .woocommerce-checkout .woocommerce,
@@ -224,7 +208,6 @@
 .woocommerce-checkout #customer_details > .col-2 > h3,
 .woocommerce-checkout #customer_details h3,
 .woocommerce-checkout .woocommerce-billing-fields > h3,
-.woocommerce-checkout .woocommerce-shipping-fields > h3,
 .woocommerce-checkout .woocommerce-additional-fields > h3,
 .woocommerce-checkout #order_review_heading {
 	counter-increment: checkout-step;
@@ -242,7 +225,6 @@
 
 .woocommerce-checkout #customer_details h3::before,
 .woocommerce-checkout .woocommerce-billing-fields > h3::before,
-.woocommerce-checkout .woocommerce-shipping-fields > h3::before,
 .woocommerce-checkout .woocommerce-additional-fields > h3::before {
 	content: counter(checkout-step);
 	display: inline-flex;
@@ -407,11 +389,16 @@
 	background: transparent;
 }
 
+/* T-21 / O-28: each method is one card whose WHOLE label is the hit area
+ * (≥48px tall); the native radio sits inside the label's left padding,
+ * vertically centred on the first line, so radio and text always align. */
 .woocommerce-checkout-payment ul.payment_methods > li {
+	position: relative;
+	margin: 0;
 	background: var(--lafka-color-surface-sunken);
 	border: 1px solid var(--lafka-color-border-default);
 	border-radius: var(--lafka-radius-md);
-	padding: var(--lafka-space-3) var(--lafka-space-4);
+	padding: 0;
 	transition: border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
@@ -422,24 +409,70 @@
 	box-shadow: var(--lafka-shadow-1);
 }
 
-.woocommerce-checkout-payment ul.payment_methods > li label {
-	font-family: var(--lafka-font-family-body);
-	font-weight: var(--lafka-font-weight-semibold);
-	color: var(--lafka-color-text-primary);
-	display: inline-flex;
-	align-items: center;
-	gap: var(--lafka-space-2);
+.woocommerce-checkout-payment ul.payment_methods > li > input.input-radio {
+	position: absolute;
+	top: 24px;
+	left: var(--lafka-space-4);
+	width: 20px;
+	height: 20px;
 	margin: 0;
+	transform: translateY(-50%);
+	accent-color: var(--lafka-color-text-primary);
+	cursor: pointer;
 }
 
+.woocommerce-checkout-payment ul.payment_methods > li > label {
+	box-sizing: border-box;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: var(--lafka-space-2);
+	width: 100%;
+	min-height: 48px;
+	margin: 0;
+	padding: var(--lafka-space-2) var(--lafka-space-4) var(--lafka-space-2) calc(var(--lafka-space-4) + 32px);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body); /* the legacy 12px !important is lifted in style.css (@layer legacy) */
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: normal;
+	text-transform: none;
+	color: var(--lafka-color-text-primary);
+	cursor: pointer;
+}
+
+/* A lone gateway has no radio (WooCommerce hides it): no radio gutter. */
+.woocommerce-checkout-payment ul.payment_methods > li > input.input-radio[type="hidden"] + label,
+.woocommerce-checkout-payment ul.payment_methods > li:only-child > input.input-radio[style*="none"] + label {
+	padding-left: var(--lafka-space-4);
+}
+
+.woocommerce-checkout-payment ul.payment_methods > li > label .sv-wc-payment-gateway-card-icons {
+	display: inline-flex;
+	flex-wrap: wrap;
+	gap: 4px;
+}
+
+/* O-30: the method's details are part of its card — plain text under the
+ * label, not a third bordered box inside the card inside the order card. */
 .woocommerce-checkout-payment .payment_box {
-	margin-top: var(--lafka-space-3);
-	padding: var(--lafka-space-3);
-	background: var(--lafka-color-surface-page);
-	border-radius: var(--lafka-radius-sm);
-	border: 1px solid var(--lafka-color-border-subtle);
+	margin: 0;
+	padding: 0 var(--lafka-space-4) var(--lafka-space-4) calc(var(--lafka-space-4) + 32px);
+	background: transparent;
+	border: 0;
+	border-radius: 0;
+	box-shadow: none;
 	font-size: var(--lafka-font-size-body-sm);
 	color: var(--lafka-color-text-secondary);
+}
+
+.woocommerce-checkout-payment .payment_box::before {
+	display: none;
+}
+
+.woocommerce-checkout-payment .payment_box fieldset {
+	margin: 0;
+	padding: 0;
+	border: 0;
 }
 
 /* -------- Place order CTA --------------------------------------------- */
@@ -494,11 +527,103 @@
  * (cobalt outside, accent inside). */
 .woocommerce-checkout .woocommerce-form-login-toggle,
 .woocommerce-checkout .woocommerce-form-coupon-toggle {
+	display: block;
+	width: auto;
+	margin: 0 0 var(--lafka-space-4);
+	padding: 0;
 	background: transparent;
 	border-left: 0;
-	padding: 0;
 	border-radius: 0;
-	margin-bottom: var(--lafka-space-4);
+	text-align: left;
+}
+
+/* O-29: "Have a coupon? Click here to enter your code" is a quiet info line,
+ * not an error: one flowing sentence (block, not the notices' flex row that
+ * split it 2×2 at 1024), sentence case, neutral surface. */
+.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info,
+.woocommerce-checkout .woocommerce-form-login-toggle .woocommerce-info {
+	display: block;
+	margin: 0;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	background: var(--lafka-color-surface-muted);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-left: 4px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-md);
+	box-shadow: none;
+	color: var(--lafka-color-text-primary);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	font-weight: var(--lafka-font-weight-medium);
+	letter-spacing: normal;
+	text-transform: none;
+	text-align: left;
+}
+
+.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info::before,
+.woocommerce-checkout .woocommerce-form-login-toggle .woocommerce-info::before {
+	display: none;
+}
+
+.woocommerce-checkout .woocommerce-form-coupon-toggle .woocommerce-info a,
+.woocommerce-checkout .woocommerce-form-login-toggle .woocommerce-info a {
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-semibold);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	white-space: nowrap;
+}
+
+/* The coupon form: input + Apply on one row, Apply = the secondary button. */
+.woocommerce-checkout form.checkout_coupon {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: flex-end;
+	gap: var(--lafka-space-2);
+	margin: 0 0 var(--lafka-space-4);
+	padding: var(--lafka-space-4);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-md);
+}
+
+.woocommerce-checkout form.checkout_coupon > p:not(.form-row) {
+	flex: 1 1 100%;
+	margin: 0;
+}
+
+.woocommerce-checkout form.checkout_coupon .form-row {
+	float: none;
+	width: auto;
+	margin: 0;
+}
+
+.woocommerce-checkout form.checkout_coupon .form-row-first {
+	flex: 1 1 200px;
+}
+
+.woocommerce-checkout form.checkout_coupon button[name="apply_coupon"],
+.woocommerce-checkout form.checkout_coupon .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	min-height: 48px;
+	padding: 0 var(--lafka-space-5);
+	background: var(--lafka-color-surface-page) !important;
+	color: var(--lafka-color-text-primary) !important;
+	border: 1.5px solid var(--lafka-color-border-strong) !important;
+	border-radius: var(--lafka-radius-button);
+	box-shadow: none;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: normal;
+	text-transform: none;
+	cursor: pointer;
+}
+
+.woocommerce-checkout form.checkout_coupon button[name="apply_coupon"]:hover {
+	background: var(--lafka-color-surface-muted) !important;
+	border-color: var(--lafka-color-text-primary) !important;
 }
 
 .woocommerce-checkout .woocommerce-info {
@@ -704,17 +829,18 @@
 	margin-top: var(--lafka-space-3);
 }
 
-/* "Have a coupon?" / "Click here to login" info banners default to a
- * cobalt-blue notice colour from WC core. Re-skin to the Lafka accent
- * (pink/red 50/100) so the banner matches the rest of the brand. */
+/* Info notices on checkout are neutral notes (O-29 / O-12): the old accent
+ * (red) re-skin made "Have a coupon?" and the delivery-minimum note read as
+ * errors. */
 .woocommerce-checkout .woocommerce-info {
-	background: var(--lafka-color-accent-50, #fef2f2);
-	border-left-color: var(--lafka-color-accent-500, #ec1d24);
+	background: var(--lafka-color-surface-muted);
+	border-left-color: var(--lafka-color-border-strong);
 	color: var(--lafka-color-text-primary);
 }
 
 .woocommerce-checkout .woocommerce-info a {
-	color: var(--lafka-color-accent-600, #d40b14);
+	color: var(--lafka-color-text-primary);
+	text-decoration: underline;
 }
 
 /* -------- Delivery-quote notice (lafka-plugin markup) -------------------
@@ -737,4 +863,284 @@
 	line-height: 1.45;
 	text-align: left;
 	overflow-wrap: anywhere;
+}
+
+/* =========================================================================
+ * O-06 / T-21 — shipping options as full-width choice cards
+ * (cart totals + checkout order review). Markup: woocommerce/cart/
+ * cart-shipping.php — one <td colspan="2"> headed by the package label, then
+ * ul.lafka-shipping-choices > li.lafka-shipping-choice (input + label).
+ * The WHOLE label is the hit area (≥48px); the native radio sits in its left
+ * padding. A single option (WooCommerce prints a hidden input) is still a
+ * readable card, just without the radio gutter.
+ * ========================================================================= */
+.woocommerce-cart .cart_totals .shop_table tr.lafka-shipping-totals > td,
+.woocommerce-checkout #order_review .shop_table tr.lafka-shipping-totals > td,
+tr.lafka-shipping-totals > td {
+	padding-block: var(--lafka-space-3);
+	text-align: left;
+}
+
+.lafka-shipping-totals__label {
+	display: block;
+	margin: 0 0 var(--lafka-space-2);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: normal;
+	text-transform: none;
+	color: var(--lafka-color-text-primary);
+}
+
+ul.lafka-shipping-choices,
+.woocommerce ul#shipping_method.lafka-shipping-choices {
+	display: grid;
+	gap: var(--lafka-space-2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+ul.lafka-shipping-choices > li.lafka-shipping-choice {
+	position: relative;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	text-indent: 0;
+	background: var(--lafka-color-surface-page);
+	border: 1.5px solid var(--lafka-color-border-strong);
+	border-radius: var(--lafka-radius-button);
+}
+
+ul.lafka-shipping-choices > li.lafka-shipping-choice::before,
+ul.lafka-shipping-choices > li.lafka-shipping-choice::marker {
+	content: none;
+}
+
+ul.lafka-shipping-choices > li.lafka-shipping-choice > input[type="radio"] {
+	position: absolute;
+	top: 50%;
+	left: var(--lafka-space-4);
+	width: 20px;
+	height: 20px;
+	margin: 0;
+	transform: translateY(-50%);
+	accent-color: var(--lafka-color-text-primary);
+	cursor: pointer;
+}
+
+ul.lafka-shipping-choices > li.lafka-shipping-choice > label {
+	box-sizing: border-box;
+	display: flex;
+	flex-wrap: wrap;
+	align-items: center;
+	gap: 4px var(--lafka-space-2);
+	width: 100%;
+	min-height: 48px;
+	margin: 0;
+	padding: var(--lafka-space-2) var(--lafka-space-4) var(--lafka-space-2) calc(var(--lafka-space-4) + 32px);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body); /* the legacy 12px !important is lifted in style.css (@layer legacy) */
+	font-weight: var(--lafka-font-weight-semibold);
+	line-height: 1.35;
+	letter-spacing: normal;
+	text-transform: none;
+	text-align: left;
+	color: var(--lafka-color-text-primary);
+	white-space: normal;
+	hyphens: manual;
+	cursor: pointer;
+}
+
+ul.lafka-shipping-choices > li.lafka-shipping-choice > input[type="hidden"] + label {
+	padding-left: var(--lafka-space-4);
+	cursor: default;
+}
+
+/* Checked card: heavier ink border, like the cart tabs / drawer fulfilment
+ * cards. `is-selected` is the server's choice; :has() follows a live click. */
+ul.lafka-shipping-choices > li.lafka-shipping-choice.is-selected,
+ul.lafka-shipping-choices > li.lafka-shipping-choice:has(input:checked) {
+	border: 2px solid var(--lafka-color-text-primary);
+	box-shadow: var(--lafka-shadow-1);
+}
+
+ul.lafka-shipping-choices > li.lafka-shipping-choice:has(input:focus-visible) {
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+ul.lafka-shipping-choices > li.lafka-shipping-choice .woocommerce-Price-amount {
+	margin-left: auto;
+	font-variant-numeric: tabular-nums;
+}
+
+.lafka-shipping-totals .woocommerce-shipping-destination,
+.lafka-shipping-totals .woocommerce-shipping-calculator {
+	margin: var(--lafka-space-2) 0 0;
+	text-align: left;
+	font-size: var(--lafka-font-size-body-sm);
+	color: var(--lafka-color-text-secondary);
+}
+
+/* =========================================================================
+ * O-26 — checkout form polish
+ * ========================================================================= */
+
+/* Never auto-hyphenate cart/checkout copy ("(OPTION-AL)", "through-out",
+ * "de-scribed"): legacy style.css gives every <p> `hyphens: auto`. */
+.woocommerce-checkout .woocommerce,
+.woocommerce-checkout .woocommerce *,
+.woocommerce-checkout form.checkout input::placeholder,
+.woocommerce-checkout form.checkout textarea::placeholder,
+.woocommerce-cart .woocommerce,
+.woocommerce-cart .woocommerce * {
+	-webkit-hyphens: manual;
+	hyphens: manual;
+}
+
+/* "Ship to a different address?" is a checkbox, not a numbered step. */
+.woocommerce-checkout #customer_details h3#ship-to-different-address {
+	counter-increment: none;
+	margin-block: var(--lafka-space-6) var(--lafka-space-4);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	font-weight: var(--lafka-font-weight-semibold);
+	letter-spacing: normal;
+}
+
+.woocommerce-checkout #customer_details h3#ship-to-different-address::before {
+	content: none;
+	display: none;
+}
+
+.woocommerce-checkout #customer_details h3#ship-to-different-address label,
+.woocommerce-checkout #customer_details h3#ship-to-different-address span {
+	font-size: var(--lafka-font-size-body);
+	letter-spacing: normal;
+	text-transform: none;
+	color: var(--lafka-color-text-primary);
+}
+
+/* Third-party "Selected location" (address-field-autocomplete) row: the
+ * plugin prints an inline `margin:0`, so it sat flush against the next row. */
+.woocommerce-checkout form.checkout #billing_address_map_field,
+.woocommerce-checkout form.checkout #shipping_address_map_field {
+	margin: 0 0 var(--lafka-space-4) !important;
+	float: none;
+}
+
+.woocommerce-checkout form.checkout #billing_address_map_field input.search_input,
+.woocommerce-checkout form.checkout #shipping_address_map_field input.search_input {
+	box-sizing: border-box;
+	width: 100%;
+	max-width: none;
+	margin: 0;
+	background-repeat: no-repeat;
+	background-position: right var(--lafka-space-3) center;
+}
+
+/* Province select2 = the native Country select: same box, text and arrow. */
+.woocommerce-checkout form.checkout .select2-container {
+	width: 100% !important;
+}
+
+.woocommerce-checkout form.checkout .select2-container .select2-selection--single {
+	box-sizing: border-box;
+	display: flex;
+	align-items: center;
+	height: 48px;
+	min-height: 48px;
+	padding: 0 40px 0 var(--lafka-space-4);
+	background: var(--lafka-color-surface-sunken);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-md);
+}
+
+.woocommerce-checkout form.checkout .select2-container .select2-selection--single .select2-selection__rendered {
+	padding: 0;
+	line-height: 1.4;
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
+	color: var(--lafka-color-text-primary);
+}
+
+.woocommerce-checkout form.checkout .select2-container .select2-selection--single .select2-selection__arrow {
+	top: 0;
+	right: var(--lafka-space-3);
+	height: 100%;
+}
+
+.woocommerce-checkout form.checkout .select2-container--focus .select2-selection--single,
+.woocommerce-checkout form.checkout .select2-container--open .select2-selection--single {
+	border-color: var(--lafka-color-text-primary);
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* O-28: the card-brand icon sits at the right of the card-number box —
+ * keep the typed number and placeholder clear of it. */
+.woocommerce-checkout .form-row input.js-sv-wc-payment-gateway-credit-card-form-account-number {
+	padding-right: 64px;
+	background-position: right var(--lafka-space-3) center;
+}
+
+/* =========================================================================
+ * O-31 — inline field errors. WooCommerce 10.9 prints
+ * p.checkout-inline-error-message after a failed submit; js/lafka-checkout-
+ * fields.js prints the same element when a field is left invalid.
+ * ========================================================================= */
+.woocommerce-checkout .form-row .checkout-inline-error-message {
+	margin: var(--lafka-space-1) 0 0;
+	color: var(--lafka-color-error);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium);
+	line-height: 1.4;
+}
+
+/* O-12 / T-22 (cart + checkout, the only pages that print it): the
+ * delivery-minimum note (lafka-plugin
+ * .lafka-delivery-min-notice, text wrapped in one
+ * span.lafka-delivery-min-notice__text) is ONE paragraph and an info note —
+ * never the notices' flex column (which broke it into ~5 short lines on
+ * phones) and never error red. `div.` out-ranks the plugin's own
+ * single-class accent styling whatever the load order. */
+div.woocommerce-info.lafka-delivery-min-notice {
+	display: block;
+	padding: var(--lafka-space-3) var(--lafka-space-4);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-left: 4px solid var(--lafka-color-info);
+	background: var(--lafka-color-info-bg);
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-medium, 500);
+	line-height: 1.5;
+	box-shadow: none;
+}
+
+div.woocommerce-info.lafka-delivery-min-notice::before {
+	display: none;
+}
+
+div.woocommerce-info.lafka-delivery-min-notice .woocommerce-Price-amount {
+	font-weight: var(--lafka-font-weight-bold, 700);
+	white-space: nowrap;
+}
+
+/* The legacy `label { font-size: 12px !important }` and the catalogue
+ * stepper's `div.quantity input.lafka-qty-plus:hover { background: #fff
+ * !important }` live in style.css's @layer legacy, and a LAYERED !important
+ * beats every unlayered one — so the order-path controls that must read at
+ * body size are lifted inside the same layer, with higher specificity
+ * (O-06 / O-09 / O-28 / T-21). */
+@layer legacy {
+
+	ul.lafka-shipping-choices > li.lafka-shipping-choice > label,
+	.woocommerce-checkout-payment ul.payment_methods > li > label,
+	.woocommerce-checkout #customer_details h3#ship-to-different-address label {
+		font-size: var(--lafka-font-size-body) !important;
+	}
+
+	.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-plus:hover,
+	.lafka-cart .lafka-cart-item__qty div.quantity input.lafka-qty-minus:hover {
+		background: var(--lafka-color-surface-muted) !important;
+	}
 }

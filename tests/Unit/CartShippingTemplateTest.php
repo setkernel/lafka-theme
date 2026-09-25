@@ -79,7 +79,9 @@ namespace Lafka\Tests\Unit {
 		public function test_options_are_choice_cards_with_the_chosen_one_marked(): void {
 			$html = self::render( 'distance_rate:8', self::both() );
 
-			$this->assertStringContainsString( '<ul id="shipping_method" class="woocommerce-shipping-methods lafka-shipping-choices">', $html );
+			$this->assertStringContainsString( '<td colspan="2" data-title="Shipping">', $html, 'The options span the whole totals table.' );
+			$this->assertStringContainsString( '<span class="lafka-shipping-totals__label" id="lafka-shipping-label-0">Shipping</span>', $html );
+			$this->assertStringContainsString( '<ul id="shipping_method" class="woocommerce-shipping-methods lafka-shipping-choices" aria-labelledby="lafka-shipping-label-0">', $html );
 			$this->assertSame( 2, substr_count( $html, 'class="lafka-shipping-choice' ) );
 			$this->assertMatchesRegularExpression( '/<li class="lafka-shipping-choice is-selected">\s*<input type="radio" name="shipping_method\[0\]" data-index="0" id="shipping_method_0_[^"]+" value="distance_rate:8" class="shipping_method"\s+checked=\'checked\'/', $html );
 			$this->assertMatchesRegularExpression( '/<li class="lafka-shipping-choice">\s*<input type="radio" name="shipping_method\[0\]" data-index="0" id="shipping_method_0_[^"]+" value="local_pickup:9" class="shipping_method"\s+\/>/', $html );
