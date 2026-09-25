@@ -325,6 +325,12 @@ dark surface/border/text ramp under the scoped selector, `chrome` sets
   plus the var()-only `styles/critical-counter.css` slice (body face/size/ink, header + hero
   skeleton). Classic layouts inline the unchanged bundle; the legacy literals in
   `critical.css` (and the `#ffca3c`/`#fccc4c` drift) remain for a later pass.
+  GX T-02: stylesheets are now **render-blocking by default** — a preset's surface sheets
+  paint the first viewport, so they must not be deferred. Only off-screen modules
+  (drawers, dialogs, overlays, fixed bars, footer) and vendored libraries load async, listed
+  in `lafka_critical_css_async_handles()` (filter `lafka_critical_css_async_handles`). A new
+  off-screen sheet opts in there; its closed state belongs in `critical.css` so it cannot
+  flash. `tests/e2e/cls-budget.spec.js` holds CLS <= 0.02 on the order path.
 - **Dedicated `styles/presets/<slug>.css` + `build-presets.mjs` generator** → only if/when
   browser-caching 10 presets justifies it; the inline-only handle (§4) needs no generator and
   costs no request (only one preset is active at a time).

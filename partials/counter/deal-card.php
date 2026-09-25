@@ -47,7 +47,8 @@ if ( 'text' !== $lafka_deal_variant && (int) $lafka_deal->get_image_id() ) {
 			'alt'      => '',
 			'loading'  => 'lazy',
 			'decoding' => 'async',
-			'sizes'    => 'featured' === $lafka_deal_variant ? '(min-width: 1024px) 420px, 90vw' : '(min-width: 1024px) 170px, 150px',
+			// GX T-04: measured slot widths (the 90vw fallback pulled the original).
+			'sizes'    => function_exists( 'lafka_counter_image_sizes' ) ? lafka_counter_image_sizes( 'featured' === $lafka_deal_variant ? 'deal-featured' : 'deal-small' ) : '',
 		)
 	);
 }

@@ -141,10 +141,15 @@
 		if ( $heading.find( '.lafka-addon-summary' ).length === 0 ) {
 			$heading.append( '<span class="lafka-addon-summary" aria-live="polite"></span>' );
 		}
-		$heading
-			.attr( 'role', 'button' )
-			.attr( 'tabindex', '0' )
-			.attr( 'aria-expanded', $group.attr( 'data-collapsed' ) === 'true' ? 'false' : 'true' );
+		// GX T-19: the plugin renders a real <button> inside the heading
+		// (lafka-addon-group-toggle) and keeps aria-expanded + data-collapsed
+		// in sync itself. Only a plain heading (older plugin) is upgraded here.
+		if ( ! $heading.find( '.lafka-addon-toggle' ).length ) {
+			$heading
+				.attr( 'role', 'button' )
+				.attr( 'tabindex', '0' )
+				.attr( 'aria-expanded', $group.attr( 'data-collapsed' ) === 'true' ? 'false' : 'true' );
+		}
 
 		refreshSummary( $group, $form );
 	}
@@ -173,6 +178,16 @@
 
 		// Toggle group expand/collapse on heading click + keyboard.
 		$form.on( 'click keydown', '.product-addon .addon-name', function ( e ) {
+			var $toggle = $( this ).find( '.lafka-addon-toggle' );
+			if ( $toggle.length ) {
+				// GX T-19: the button toggles itself (lafka-plugin addons.js).
+				// A click on the rest of the heading bar (caret, summary) is
+				// forwarded to it so the whole bar stays one hit area.
+				if ( e.type === 'click' && ! $( e.target ).closest( '.lafka-addon-toggle' ).length ) {
+					$toggle.get( 0 ).click();
+				}
+				return;
+			}
 			if ( e.type === 'keydown' && e.key !== 'Enter' && e.key !== ' ' ) {
 				return;
 			}

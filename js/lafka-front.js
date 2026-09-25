@@ -57,13 +57,13 @@
         }
     }
 
-    /* If preloader is enabled */
-    if (lafka_main_js_params.show_preloader) {
-        lafkaOnLoad(function() {
-            $("#loader").delay(100).fadeOut();
-            $(".mask").delay(300).fadeOut();
-        });
-    }
+    /*
+     * GX T-01: the preloader (off by default) is removed as soon as this
+     * deferred script runs — i.e. at DOMContentLoaded — never held until
+     * window.load plus a fade. The CSS fail-safe in lafka-preloader.css hides
+     * it anyway if this script never runs.
+     */
+    $('.mask').remove();
     lafkaOnLoad(function() {
         checkRevealFooter();
         checkProductGalleryCarousel();
@@ -136,7 +136,8 @@
         $('p.demo_store').prependTo('#header');
 
         var $accountMenuSliderElement = $('body.woocommerce-account .content_holder #customer_login.col2-set, .content_holder .woocommerce #customer_login.u-columns.col2-set');
-        if ($accountMenuSliderElement.length) {
+        // GX T-25: owl only loads on legacy surfaces — guard the call.
+        if ($accountMenuSliderElement.length && typeof $.fn.owlCarousel === 'function') {
             $accountMenuSliderElement.addClass('owl-carousel');
             $accountMenuSliderElement.owlCarousel({
                 rtl: is_rtl,
@@ -808,6 +809,9 @@
         var current_window_width = $(window).width();
         var $singleProductImages = $(document.body).find('div.lafka-single-product .lafka-image-list-product-gallery .woocommerce-product-gallery__wrapper, .lafka_image_list_foodmenu .lafka_image_list');
 
+        if (typeof $.fn.owlCarousel !== 'function') {
+            return; // GX T-25: owl is not loaded on this surface.
+        }
         if (current_window_width < 769 && $singleProductImages.length) {
             $singleProductImages.addClass('owl-carousel');
             $singleProductImages.owlCarousel({
@@ -1128,12 +1132,18 @@
         }
 
 
-        // Do the necessary for the appending products
-        $newProducts.imagesLoaded(function() {
+        // Do the necessary for the appending products. GX T-25: imagesloaded
+        // is not loaded on the counter surfaces — mark them loaded directly.
+        var markLoaded = function() {
             $newProducts.each(function() {
                 $(this).addClass('lafka-infinite-loaded');
             });
-        });
+        };
+        if (typeof $.fn.imagesLoaded === 'function') {
+            $newProducts.imagesLoaded(markLoaded);
+        } else {
+            markLoaded();
+        }
 
         // Now add the new products to the list
         $products.append($newProducts);

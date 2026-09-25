@@ -84,7 +84,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 		array(
 			'size'  => 'woocommerce_thumbnail',
 			'class' => 'lafka-row__img lafka-counter-dish lafka-counter-dish--' . $lafka_row_kind,
-			'sizes' => (string) apply_filters( 'lafka_counter_row_image_sizes', 'compact' === $lafka_row_style ? '96px' : '(min-width: 1024px) 140px, 104px', $lafka_row_p ),
+			'sizes' => (string) apply_filters( 'lafka_counter_row_image_sizes', function_exists( 'lafka_counter_image_sizes' ) ? lafka_counter_image_sizes( 'compact' === $lafka_row_style ? 'row-compact' : 'row-photo' ) : '', $lafka_row_p ),
 		)
 	);
 }

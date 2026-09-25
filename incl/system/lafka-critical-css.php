@@ -1,31 +1,40 @@
 <?php
 /**
- * P6-PERF-5: critical CSS inline + non-critical stylesheet deferral.
+ * P6-PERF-5 / GX T-02: critical CSS inline + off-screen stylesheet deferral.
  *
  * Two hooks:
  *
  *  1. lafka_inline_critical_css()  — wp_head priority 1
- *     Reads styles/critical.css, strips comments + extra whitespace, and
- *     emits a <style id="lafka-critical-css"> as the very first thing in
- *     <head>.  This gives the browser layout-critical rules before any
- *     render-blocking network request fires.
+ *     Reads styles/critical.css (+ the counter slice and the preset's critical
+ *     tokens under a counter layout, + the preloader rules when that default-off
+ *     feature is on), strips comments + extra whitespace, and emits a
+ *     <style id="lafka-critical-css"> as the very first thing in <head>.
  *
  *  2. lafka_defer_non_critical_css()  — style_loader_tag priority 999
- *     Converts every "all"/"screen" stylesheet link tag to the loadCSS
- *     pattern:
+ *     GX T-02: stylesheets are render-blocking by default (WordPress's normal
+ *     behaviour), so every sheet that styles the first viewport — tokens, base,
+ *     components, header chrome, the counter sheet, style.css, and the active
+ *     template's menu / PDP / cart / checkout / page sheets — is applied before
+ *     first paint and nothing shifts when it arrives (the old "defer
+ *     everything" loader measured CLS ≈ 1.0 on desktop). ONLY the handles in
+ *     lafka_critical_css_async_handles() — off-screen modules (drawers,
+ *     dialogs, overlays, the footer) and vendored icon/carousel libraries —
+ *     use the loadCSS pattern:
  *       <link rel="stylesheet" href="…" media="print"
  *             onload="this.media='all'; this.onload=null;">
- *     The browser fetches the file (no blocking) and applies it on load.
- *     A <noscript> sibling keeps non-JS clients styled.
+ *     with a <noscript> sibling for non-JS clients. The critical bundle hides
+ *     those off-screen shells until their sheet lands (no FOUC).
  *
- * Stylesheets that must remain render-blocking (payment-form CSS, etc.) can
- * opt out via the 'lafka_critical_css_keep_blocking' filter.
+ * Filters:
+ *   lafka_critical_css_async_handles( string[] $handles ) — the deferred set.
+ *   lafka_critical_css_keep_blocking( bool $keep, string $handle ) — force a
+ *     handle render-blocking even when it is in the deferred set.
  *
  * ROLLBACK: remove the require_once for this file from core-functions.php to
  * disable the entire feature instantly.
  *
  * @package Lafka
- * @since   5.10.0 (W3-T4 P6-PERF-5)
+ * @since   5.10.0 (W3-T4 P6-PERF-5); 7.3.0 (GX T-02 blocking-by-default)
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -70,6 +79,14 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 			$slice_path = get_template_directory() . '/styles/critical-counter.css';
 			$slice      = file_exists( $slice_path ) ? (string) file_get_contents( $slice_path ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
 			$css       .= ' ' . $preset_block . ' ' . lafka_critical_css_minify( $slice );
+		}
+
+		// GX T-01: the (default-off) preloader's rules, printed once, here.
+		if ( function_exists( 'lafka_preloader_css' ) ) {
+			$preloader = lafka_preloader_css();
+			if ( '' !== $preloader ) {
+				$css .= ' ' . $preloader;
+			}
 		}
 
 		// Rewrite relative url() refs to absolute URLs.
@@ -143,22 +160,82 @@ if ( ! function_exists( 'lafka_critical_preset_css' ) ) {
 }
 
 /* ──────────────────────────────────────────────────────────────────────────
- * 2. DEFER NON-CRITICAL STYLESHEETS VIA media="print" onload PATTERN
+ * 2. DEFER ONLY OFF-SCREEN STYLESHEETS VIA media="print" onload PATTERN
  * ────────────────────────────────────────────────────────────────────────── */
+
+if ( ! function_exists( 'lafka_critical_css_async_handles' ) ) {
+	/**
+	 * GX T-02: the stylesheets that may load asynchronously — nothing they style
+	 * is in the first viewport, so applying them after first paint moves nothing.
+	 * Every other stylesheet stays render-blocking.
+	 *
+	 * @return string[] Style handles.
+	 */
+	function lafka_critical_css_async_handles(): array {
+		$is_cart_or_checkout = ( function_exists( 'is_cart' ) && is_cart() )
+			|| ( function_exists( 'is_checkout' ) && is_checkout() );
+
+		$handles = array(
+			// Off-screen / on-demand UI: fixed drawers, native dialogs and
+			// overlays hidden until opened, fixed bottom bars, the footer.
+			'lafka-mobile-nav',
+			'lafka-cart-drawer',
+			'lafka-dialog',
+			'lafka-search',
+			'lafka-exit-intent',
+			'lafka-review-banner',
+			'lafka-push-prompt',
+			'lafka-sticky-cart',
+			'lafka-pdp-cta',
+			'lafka-footer-chrome',
+			// Vendored icon fonts, carousels and lightboxes (loaded only where
+			// legacy markup uses them — see lafka_needs_legacy_libs()).
+			'font_awesome_6',
+			'font_awesome_6_v4shims',
+			'flaticon',
+			'et-line-font',
+			'lafka-flexslider',
+			'owl-carousel',
+			'owl-carousel-theme-default',
+			'owl-carousel-animate',
+			'cloud-zoom',
+			'photoswipe',
+			'photoswipe-default-skin',
+		);
+
+		// The free-delivery progress bar lives in the cart drawer everywhere
+		// except the cart/checkout pages, where it sits in the page itself.
+		if ( ! $is_cart_or_checkout ) {
+			$handles[] = 'lafka-free-delivery-progress';
+		}
+
+		// WooCommerce's block styles only paint the first viewport where a
+		// block cart/checkout renders.
+		if ( ! ( function_exists( 'lafka_is_block_cart_checkout_page' ) && lafka_is_block_cart_checkout_page() ) ) {
+			$handles[] = 'wc-blocks-style';
+		}
+
+		/**
+		 * Filter the stylesheet handles that load asynchronously (print-media
+		 * swap + <noscript> fallback). Everything else is render-blocking.
+		 *
+		 * @param string[] $handles Style handles.
+		 */
+		return array_values( array_unique( (array) apply_filters( 'lafka_critical_css_async_handles', $handles ) ) );
+	}
+}
 
 if ( ! function_exists( 'lafka_defer_non_critical_css' ) ) {
 	add_filter( 'style_loader_tag', 'lafka_defer_non_critical_css', 999, 4 );
 
 	/**
-	 * Convert render-blocking stylesheet links to the loadCSS async pattern.
+	 * Convert an off-screen stylesheet link to the loadCSS async pattern; leave
+	 * every other stylesheet render-blocking.
 	 *
 	 * The "print" media trick:
 	 *   - Browser fetches the file immediately (not render-blocking).
 	 *   - onload handler flips media to "all" so styles apply on load.
 	 *   - <noscript> sibling ensures non-JS users still get styles.
-	 *
-	 * Stylesheets may opt out of deferral by returning true from the
-	 * 'lafka_critical_css_keep_blocking' filter for their handle.
 	 *
 	 * @param string $html   The full <link …> tag HTML.
 	 * @param string $handle The WP style handle.
@@ -167,7 +244,13 @@ if ( ! function_exists( 'lafka_defer_non_critical_css' ) ) {
 	 * @return string Modified HTML (possibly with appended <noscript>).
 	 */
 	function lafka_defer_non_critical_css( $html, $handle, $href, $media ) {
+		unset( $href );
 		if ( is_admin() ) {
+			return $html;
+		}
+
+		// Above-the-fold (i.e. not listed as off-screen) ⇒ render-blocking.
+		if ( ! in_array( $handle, lafka_critical_css_async_handles(), true ) ) {
 			return $html;
 		}
 

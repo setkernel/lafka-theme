@@ -76,4 +76,10 @@ final class ThemeRegistrationsTest extends TestCase {
 			"html5 support must stay limited to markup the shipped CSS already covers (no 'comment-form' / 'caption')."
 		);
 	}
+
+	public function test_addon_group_toggle_support_is_declared(): void {
+		// GX T-19: opts into lafka-plugin's <h3><button aria-expanded> add-on
+		// group headings (js/pdp-addons.js + pdp-redesign.css adopt them).
+		self::assertMatchesRegularExpression( "/add_theme_support\(\s*'lafka-addon-group-toggle'\s*\)/", (string) file_get_contents( self::CORE_FUNCTIONS ) );
+	}
 }

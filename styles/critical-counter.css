@@ -188,6 +188,23 @@ body {
 		display: block;
 		min-height: 44px;
 	}
+
+	/* GX T-02: the nav row matches lafka-counter.css exactly (one flex row of
+	 * 44px links) — a stacked list here was the 93px → 45px desktop shift. */
+	.lafka-counter-header .lafka-counter-nav__list {
+		display: flex;
+		flex-wrap: wrap;
+		gap: 4px 28px;
+		margin: 0;
+		padding: 0;
+		list-style: none;
+	}
+
+	.lafka-counter-header .lafka-counter-nav__list a {
+		display: inline-flex;
+		align-items: center;
+		min-height: 44px;
+	}
 }
 
 @media (min-width: 1280px) {

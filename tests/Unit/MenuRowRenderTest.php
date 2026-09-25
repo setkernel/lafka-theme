@@ -23,6 +23,7 @@ namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/hours-display.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/menu-data.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/counter-chrome.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/image-sizes.php';
 }
 
 namespace Lafka\Tests\Unit {
@@ -101,7 +102,7 @@ namespace Lafka\Tests\Unit {
 			$html = $this->row( $p, array( 'list' => 'Home' ) );
 			$this->assertStringContainsString( 'class="lafka-row__media lafka-dish-frame lafka-dish-frame--photo" href="http://example.test/product/loaded-fries/" tabindex="-1" aria-hidden="true"', $html, 'no readable file → treated as an opaque photo' );
 			$this->assertStringContainsString( 'lafka-row__img lafka-counter-dish lafka-counter-dish--photo', $html );
-			$this->assertStringContainsString( 'sizes="(min-width: 1024px) 140px, 104px"', $html );
+			$this->assertStringContainsString( 'sizes="(min-width: 1024px) 160px, 120px"', $html, 'GX T-04: the measured photo-row slot (120px, 160px from 1024)' );
 			foreach ( array( 'data-lafka-item-id="9"', 'data-lafka-item-name="Loaded Fries"', 'data-lafka-item-category="Fries"', 'data-lafka-item-price="10.99"', 'data-lafka-list-name="Home"' ) as $attr ) {
 				$this->assertStringContainsString( $attr, $html );
 			}

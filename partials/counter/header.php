@@ -38,6 +38,8 @@ $lafka_ch_short  = lafka_counter_brand_short( $lafka_ch_nap['name'] );
 						'loading' => 'eager',
 						'width'   => '64',
 						'height'  => '64',
+						// GX T-04: the slot is 40–64px, not the 150px thumbnail.
+						'sizes'   => function_exists( 'lafka_counter_image_sizes' ) ? lafka_counter_image_sizes( 'logo' ) : '64px',
 					)
 				);
 			}

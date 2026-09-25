@@ -1,59 +1,71 @@
-/* PRELOADER GOES BEFORE ANYTHING ELSE----*/
+/*
+ * Preloader mask (GX T-01: off by default, never under a counter layout).
+ * Not enqueued as a stylesheet: lafka_preloader_css() inlines this file into
+ * the critical bundle only while the preloader is on, so it prints once.
+ * js/lafka-front.js removes the mask at DOMContentLoaded; the animation below
+ * is the fail-safe that uncovers the page after 2 s if that script never runs.
+ */
 .mask {
-    background-color: #FFF;
-    width: 100%;
-    height: 100%;
-    position: fixed;
-    top:0;
-    left:0;
-    z-index: 100000;
-  }
+	background-color: var(--lafka-color-surface-page, #fff);
+	width: 100%;
+	height: 100%;
+	position: fixed;
+	top: 0;
+	left: 0;
+	z-index: 100000;
+	animation: lafka-mask-out 0.2s ease-out 2s forwards;
+}
 
-  #spinner {
-    width: 60px;
-    height: 60px;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -40px 0 0 -40px;
-  }
-  
-  .double-bounce1, .double-bounce2 {
-    width: 100%;
-    height: 100%;
-    border-radius: 50%;
-    background-color: #fff;
-    opacity: 0.9;
-    position: absolute;
-    top: 0;
-    left: 0;
-    -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
-    animation: sk-bounce 2.0s infinite ease-in-out;
-  }
-  
-  .double-bounce2 {
-    -webkit-animation-delay: -1.0s;
-    animation-delay: -1.0s;
-  }
-  
-  @-webkit-keyframes sk-bounce {
+#spinner {
+	width: 60px;
+	height: 60px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -40px 0 0 -40px;
+}
 
-    0%, 100% { -webkit-transform: scale(0.0) }
+.double-bounce1,
+.double-bounce2 {
+	width: 100%;
+	height: 100%;
+	border-radius: 50%;
+	background-color: var(--lafka-color-border-subtle, #e5e5e5);
+	opacity: 0.9;
+	position: absolute;
+	top: 0;
+	left: 0;
+	animation: sk-bounce 2s infinite ease-in-out;
+}
 
-    50% { -webkit-transform: scale(1.0) }
-  }
-  
-  @keyframes sk-bounce {
+.double-bounce2 {
+	animation-delay: -1s;
+}
 
-    0%, 100% { 
-      transform: scale(0.0);
-      -webkit-transform: scale(0.0);
-    }
+@keyframes sk-bounce {
 
- 50% { 
-      transform: scale(1.0);
-      -webkit-transform: scale(1.0);
-    }
-  }
+	0%,
+	100% {
+		transform: scale(0);
+	}
 
-  /* END OF PRELOADER ----*/
+	50% {
+		transform: scale(1);
+	}
+}
+
+@keyframes lafka-mask-out {
+
+	to {
+		opacity: 0;
+		visibility: hidden;
+	}
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.double-bounce1,
+	.double-bounce2 {
+		animation: none;
+	}
+}

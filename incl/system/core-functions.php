@@ -119,6 +119,10 @@ if ( ! function_exists( 'lafka_register_theme_features' ) ) {
 			add_theme_support( 'wc-product-gallery-zoom' );
 			add_theme_support( 'wc-product-gallery-lightbox' );
 			add_theme_support( 'wc-product-gallery-slider' );
+			// GX T-19: lafka-plugin renders each add-on group heading as
+			// <h3><button aria-expanded aria-controls> around a .lafka-addon-body
+			// region (js/pdp-addons.js + pdp-redesign.css adopt it).
+			add_theme_support( 'lafka-addon-group-toggle' );
 		}
 	}
 
@@ -1094,8 +1098,8 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	 * / foodmenu-grid / post-slider markup whose CSS was extracted into
 	 * styles/legacy-shortcodes.css (NX1-10a). Loaded on: the blog surfaces (post
 	 * galleries/sliders), the legacy foodmenu CPT, and any singular content whose
-	 * post_content embeds a lafka_* shortcode or WPBakery row. The handoff routes
-	 * carry none of that markup, so they never download it.
+	 * post_content (as rendered by its template) embeds a lafka_* shortcode. The
+	 * handoff routes carry none of that markup, so they never download it.
 	 *
 	 * @return bool
 	 */
@@ -1115,15 +1119,13 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 			|| ( function_exists( 'is_tax' ) && is_tax( 'lafka_foodmenu_category' ) ) ) {
 			return true;
 		}
-		if ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) {
-			$content = (string) $GLOBALS['post']->post_content;
-			if ( false !== strpos( $content, '[lafka_' )
-				|| false !== strpos( $content, 'vc_row' )
-				|| false !== strpos( $content, '[vc_' ) ) {
-				return true;
-			}
-		}
-		return false;
+		// GX T-25: only content the template renders, and only lafka_*
+		// shortcodes — legacy-shortcodes.css has no WPBakery (vc_*) rules, so a
+		// bare [vc_row] wrapper (e.g. around [woocommerce_cart]) needs nothing.
+		$content = function_exists( 'lafka_rendered_post_content' )
+			? lafka_rendered_post_content()
+			: ( ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) ? (string) $GLOBALS['post']->post_content : '' );
+		return false !== strpos( $content, '[lafka_' );
 	}
 }
 
@@ -1863,10 +1865,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
-		// Preloader style (never under the counter header — H-31).
-		if ( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ) {
-			wp_enqueue_style( 'lafka-preloader', get_template_directory_uri() . '/styles/lafka-preloader.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-preloader.css' ) );
-		}
+		// GX T-01: no preloader stylesheet — when the (default-off) preloader is
+		// on, its rules are inlined once in the critical bundle
+		// (lafka_preloader_css(), incl/system/lafka-preloader.php).
 
 		// NX2-01: register the Preset-Token Layer as an inline-only handle
 		// (src=false → no HTTP request) that depends on lafka-tokens, so the
@@ -1935,16 +1936,25 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_style( 'lafka-responsive', get_template_directory_uri() . '/styles/lafka-responsive.css', array( 'lafka-style' ), lafka_asset_version( '/styles/lafka-responsive.css' ) );
 		}
 
-		wp_enqueue_style( 'font_awesome_6_v4shims', get_template_directory_uri() . '/styles/font-awesome/css/v4-shims.min.css', array(), lafka_asset_version( '/styles/font-awesome/css/v4-shims.min.css' ), 'print' );
-		wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . '/styles/font-awesome/css/all.min.css', array( 'font_awesome_6_v4shims' ), lafka_asset_version( '/styles/font-awesome/css/all.min.css' ), 'print' );
+		// GX T-25: the legacy libraries (Font Awesome, flexslider, owl, animate,
+		// nice-select, imagesloaded) only load where a template can render their
+		// markup — never on the counter surfaces (lafka_needs_legacy_libs()).
+		$lafka_legacy_libs = ! function_exists( 'lafka_needs_legacy_libs' ) || lafka_needs_legacy_libs();
+
+		if ( $lafka_legacy_libs ) {
+			wp_enqueue_style( 'font_awesome_6_v4shims', get_template_directory_uri() . '/styles/font-awesome/css/v4-shims.min.css', array(), lafka_asset_version( '/styles/font-awesome/css/v4-shims.min.css' ), 'print' );
+			wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . '/styles/font-awesome/css/all.min.css', array( 'font_awesome_6_v4shims' ), lafka_asset_version( '/styles/font-awesome/css/all.min.css' ), 'print' );
+		}
 
 		// P6-PERF-4 (W3-T2, 2026-04-28): et-line-font loaded conditionally — only
 		// enqueue when the current page content contains a VC/Lafka icon shortcode
 		// with type="etline". The font is ~80 KB; most pages have no etline icons.
 		// Admin enqueue (line ~433) is unaffected — the icon picker still needs it.
-		$current_post_content = ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post )
-			? (string) $GLOBALS['post']->post_content
-			: '';
+		// GX T-25: only content the template renders counts (the static front
+		// page's post_content is never output by front-page.php).
+		$current_post_content = function_exists( 'lafka_rendered_post_content' )
+			? lafka_rendered_post_content()
+			: ( ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) ? (string) $GLOBALS['post']->post_content : '' );
 		$has_etline  = false !== strpos( $current_post_content, 'type="etline"' )
 			|| false !== strpos( $current_post_content, "type='etline'" );
 		$has_flaticon = false !== strpos( $current_post_content, 'type="flaticon"' )
@@ -2057,7 +2067,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'img_path'                => esc_js( LAFKA_IMAGES_PATH ),
 				'admin_url'               => esc_js( admin_url( 'admin-ajax.php' ) ),
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
-				'show_preloader'          => esc_js( function_exists( 'lafka_preloader_enabled' ) ? lafka_preloader_enabled() : get_theme_mod( 'lafka_show_preloader', true ) ),
+				'show_preloader'          => function_exists( 'lafka_preloader_enabled' ) && lafka_preloader_enabled() ? '1' : '',
 				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
 				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
 				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),
@@ -2073,8 +2083,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			)
 		);
 
-		/* imagesloaded */
-		wp_enqueue_script( 'imagesloaded', '', array( 'jquery' ), false, true );
+		/* imagesloaded — legacy shop infinite-scroll only (GX T-25). */
+		if ( $lafka_legacy_libs ) {
+			wp_enqueue_script( 'imagesloaded', '', array( 'jquery' ), false, true );
+		}
 
 		// PERF-2/16/17/26: bias every optional library toward `wp_register_*`
 		// + a conditional `wp_enqueue_*`, and use the native WP 6.3 defer
@@ -2085,8 +2097,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			'strategy'  => 'defer',
 		);
 
-		global $post;
-		$post_content_for_lib_detect = ( is_singular() && $post instanceof WP_Post ) ? (string) $post->post_content : '';
+		$post_content_for_lib_detect = $current_post_content;
 
 		// flexslider — `lafka-libs-config.js` calls `$(...).flexslider()`
 		// unconditionally on `window.load`, so we keep it enqueued globally.
@@ -2098,19 +2109,28 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// generic `flexslider` handle is never claimed by the theme. Without it
 		// (no WooCommerce / WooCommerce < 10.3) the bundled copy loads under the
 		// theme's own `lafka-flexslider` handle (lafka_enqueue_flexslider()).
-		$lafka_flexslider_handle = lafka_enqueue_flexslider( $footer_defer );
-		wp_enqueue_style( 'lafka-flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
-		$flex_enqueue = true;
+		// GX T-25: kept on product pages (WooCommerce gallery slider) and
+		// wherever the legacy libraries load; dropped on the other counter
+		// surfaces, which render no slider markup.
+		$flex_enqueue            = $lafka_legacy_libs || ( function_exists( 'is_product' ) && is_product() );
+		$lafka_flexslider_handle = '';
+		if ( $flex_enqueue ) {
+			$lafka_flexslider_handle = lafka_enqueue_flexslider( $footer_defer );
+			wp_enqueue_style( 'lafka-flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
+		}
 
 		// owl-carousel — same story; `lafka-libs-config.js` runs
 		// `.owlCarousel()` on multiple selectors at `window.load`. Defer is the
 		// safe gain. PERF-2 narrowing here is deferred until the JS file is
 		// converted to a "if-element-exists, lazy-import" pattern (P3-05).
-		wp_enqueue_script( 'owl-carousel', get_template_directory_uri() . '/js/owl-carousel2-dist/owl.carousel.min.js', array( 'jquery' ), lafka_asset_version( '/js/owl-carousel2-dist/owl.carousel.min.js' ), $footer_defer );
-		wp_enqueue_style( 'owl-carousel', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.carousel.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.carousel.min.css' ) );
-		wp_enqueue_style( 'owl-carousel-theme-default', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css' ) );
-		wp_enqueue_style( 'owl-carousel-animate', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/animate.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/animate.css' ) );
-		$owl_enqueue = true;
+		// GX T-25: legacy surfaces only (lafka_needs_legacy_libs()).
+		$owl_enqueue = $lafka_legacy_libs;
+		if ( $owl_enqueue ) {
+			wp_enqueue_script( 'owl-carousel', get_template_directory_uri() . '/js/owl-carousel2-dist/owl.carousel.min.js', array( 'jquery' ), lafka_asset_version( '/js/owl-carousel2-dist/owl.carousel.min.js' ), $footer_defer );
+			wp_enqueue_style( 'owl-carousel', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.carousel.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.carousel.min.css' ) );
+			wp_enqueue_style( 'owl-carousel-theme-default', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css' ) );
+			wp_enqueue_style( 'owl-carousel-animate', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/animate.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/animate.css' ) );
+		}
 
 		// cloud-zoom — only where CloudZoom markup renders: a foodmenu single on
 		// the "cloud" gallery, or content embedding [lafka_cloudzoom_gallery].
@@ -2153,11 +2173,13 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_script( 'typed' );
 		}
 
-		// nice-select — `lafka-front.js` calls `$(...).niceSelect()`
-		// unconditionally on `document.ready` (now JS-guarded), so keep
-		// enqueued globally; defer strategy is the safe perf win.
-		wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), $footer_defer );
-		$nice_enqueue = true;
+		// nice-select — `lafka-front.js` calls `$(...).niceSelect()` (JS-guarded)
+		// on the classic shop sort / widget selects only. GX T-25: legacy
+		// surfaces only.
+		$nice_enqueue = $lafka_legacy_libs;
+		if ( $nice_enqueue ) {
+			wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), $footer_defer );
+		}
 
 		// is-in-viewport replaced by native getBoundingClientRect() check in
 		// lafka-front.js infinite-scroll handler (P3-05). No script to enqueue.
@@ -2189,13 +2211,17 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		/* JavaScript to pages with the comment form
 		 * to support sites with threaded comments (when in use).
 		 */
-		if ( is_singular() && get_option( 'thread_comments' ) ) {
+		// GX T-25: only where a comment form can render (the cart, checkout and
+		// /menu/ pages are singular pages with comments closed).
+		if ( is_singular() && comments_open() && get_option( 'thread_comments' ) ) {
 			wp_enqueue_script( 'comment-reply' );
 		}
 
 		/* Include js configs — conditionally loaded scripts removed from hard deps */
-		$lafka_libs_deps = array( 'jquery', 'wp-util' );
-		if ( $flex_enqueue ) {
+		// wp-util backs the legacy quick view's variation template only
+		// (WooCommerce's own variation script depends on it where needed).
+		$lafka_libs_deps = $lafka_legacy_libs ? array( 'jquery', 'wp-util' ) : array( 'jquery' );
+		if ( $flex_enqueue && '' !== $lafka_flexslider_handle ) {
 			$lafka_libs_deps[] = $lafka_flexslider_handle;
 		}
 		if ( $owl_enqueue ) {
@@ -2924,6 +2950,18 @@ require_once get_template_directory() . '/incl/system/lafka-critical-css.php';
 
 // O-31: classic checkout inline field errors (js/lafka-checkout-fields.js).
 require_once get_template_directory() . '/incl/woocommerce/lafka-checkout-fields.php';
+
+// GX T-01: the preloader is off by default (never under a counter layout).
+require_once get_template_directory() . '/incl/system/lafka-preloader.php';
+
+// GX T-25: legacy-library / emoji asset diet on the counter surfaces.
+require_once get_template_directory() . '/incl/system/lafka-asset-diet.php';
+
+// GX T-04: measured `sizes` for the counter image slots + srcset hygiene.
+require_once get_template_directory() . '/incl/template-helpers/image-sizes.php';
+
+// GX T-19: where the plugin's add-on disclosure button renders.
+require_once get_template_directory() . '/incl/woocommerce/lafka-addon-group-toggle.php';
 
 // Fix Wishlist issue (adding prettyPhoto): https://wordpress.org/support/topic/conflict-with-the-wpbakery-gallery/
 add_filter(
