@@ -848,31 +848,9 @@ if ( defined( 'YITH_WOOCOMPARE' ) ) {
 // Move woocommerce_template_loop_price to be below the title
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );
 
-// If related products are set to zero hide them
-if ( get_theme_mod( 'lafka_number_related_products', 6 ) == 0 ) {
-	remove_action( 'woocommerce_after_single_product_summary', 'woocommerce_output_related_products', 20 );
-}
-
-add_filter( 'woocommerce_output_related_products_args', 'lafka_related_products_args' );
-if ( ! function_exists( 'lafka_related_products_args' ) ) {
-
-	/**
-	 * WooCommerce Extra Feature
-	 * --------------------------
-	 *
-	 * Change number of related products on product page
-	 * Set your own value for 'posts_per_page'
-	 *
-	 */
-	function lafka_related_products_args( $args ) {
-
-		$args['posts_per_page'] = get_theme_mod( 'lafka_number_related_products', 6 ); // number_related_products theme option
-		$args['columns']        = 1; // arranged in 1 columns
-
-		return $args;
-	}
-
-}
+// Related products: count (int-coerced — WC logs an error on a string limit),
+// the 0 = hide switch, and the woocommerce_output_related_products_args filter.
+require_once get_template_directory() . '/incl/woocommerce/lafka-related-products.php';
 
 add_action( 'woocommerce_before_single_product_summary', 'lafka_add_this_share', 99 );
 if ( ! function_exists( 'lafka_add_this_share' ) ) {
