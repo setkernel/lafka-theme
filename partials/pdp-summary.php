@@ -34,9 +34,16 @@ $form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->g
 // woocommerce_single_product_summary, so the plugin's classic-template card
 // swap can't reach it — we gate the form here and render the plugin's card
 // inline instead (single source of truth for the closed-store markup).
-$lafka_pdp_cart_disabled = class_exists( 'Lafka_Order_Hours' )
-    && ! Lafka_Order_Hours::is_shop_open()
-    && ! empty( Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_disable_add_to_cart'] );
+// The plugin decides (is_add_to_cart_blocked(): closed + opted in + no
+// ordering ahead via date/time slots); older plugins lack it, so fall back to
+// the closed + opted-in rule.
+if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 'is_add_to_cart_blocked' ) ) {
+    $lafka_pdp_cart_disabled = Lafka_Order_Hours::is_add_to_cart_blocked();
+} else {
+    $lafka_pdp_cart_disabled = class_exists( 'Lafka_Order_Hours' )
+        && ! Lafka_Order_Hours::is_shop_open()
+        && ! empty( Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_disable_add_to_cart'] );
+}
 ?>
 <div class="lafka-pdp-summary">
 

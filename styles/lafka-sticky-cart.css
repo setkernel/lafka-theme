@@ -9,9 +9,12 @@
  * @since 5.26.0
  */
 
+/* Bottom edge follows lafka-plugin's cookie-consent banner: while it is open
+ * the plugin sets --lafka-consent-banner-h on <html> to its height, so the bar
+ * rides above it instead of being covered (0px = no banner / older plugin). */
 .lafka-sticky-cart {
 	position: fixed;
-	inset: auto 0 0 0;
+	inset: auto 0 var(--lafka-consent-banner-h, 0) 0;
 	z-index: var(--lafka-z-sticky-cta);
 	background: var(--lafka-color-surface-raised);
 	border-top: 1px solid var(--lafka-color-border-subtle);

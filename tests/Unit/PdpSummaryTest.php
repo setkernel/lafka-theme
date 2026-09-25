@@ -85,6 +85,28 @@ namespace Lafka\Tests\Unit {
 
 			$html = $this->render();
 
+			$this->assert_form( $expect_form, $html );
+		}
+
+		/**
+		 * Closed but taking orders ahead (date/time slots): the plugin keeps
+		 * add-to-cart open even when the operator opted into blocking it.
+		 */
+		public function test_order_ahead_keeps_the_form_while_closed(): void {
+			\Lafka_Order_Hours::$shop_open                 = false;
+			\Lafka_Order_Hours::$can_order_ahead           = true;
+			\Lafka_Order_Hours::$lafka_order_hours_options = array( 'lafka_order_hours_disable_add_to_cart' => 1 );
+
+			try {
+				$this->assert_form( true, $this->render() );
+			} finally {
+				\Lafka_Order_Hours::$can_order_ahead = false;
+				\Lafka_Order_Hours::$shop_open       = true;
+			}
+		}
+
+		private function assert_form( bool $expect_form, string $html ): void {
+
 			if ( $expect_form ) {
 				$this->assertStringContainsString( '<form class="cart"', $html );
 				$this->assertStringContainsString( 'lafka-pdp-summary__cta', $html );

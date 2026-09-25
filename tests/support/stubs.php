@@ -53,15 +53,57 @@ if ( ! class_exists( 'WC_Product' ) ) {
 	}
 }
 
+if ( ! class_exists( 'WP_Customize_Manager' ) ) {
+	/**
+	 * Records Customizer registrations so a *_customizer_register() callback
+	 * can be run and its panels / sections / settings / controls asserted.
+	 * Create a fresh instance per test.
+	 */
+	class WP_Customize_Manager {
+		/** @var array<string, array> */
+		public array $panels = array();
+		/** @var array<string, array> */
+		public array $sections = array();
+		/** @var array<string, array> */
+		public array $settings = array();
+		/** @var array<string, array> */
+		public array $controls = array();
+
+		public function add_panel( $id, $args = array() ) {
+			$this->panels[ $id ] = $args;
+		}
+		public function add_section( $id, $args = array() ) {
+			$this->sections[ $id ] = $args;
+		}
+		public function add_setting( $id, $args = array() ) {
+			$this->settings[ $id ] = $args;
+		}
+		public function add_control( $id, $args = array() ) {
+			$key                    = is_object( $id ) ? (string) ( $id->id ?? spl_object_id( $id ) ) : $id;
+			$this->controls[ $key ] = $args;
+		}
+	}
+}
+
 if ( ! class_exists( 'Lafka_Order_Hours' ) ) {
 	/** lafka-plugin's order-hours API, driven by statics. */
 	class Lafka_Order_Hours {
 		public static $lafka_order_hours_options = array();
 		public static $shop_open                  = true;
 		public static $next_open_human            = '';
+		public static $can_order_ahead            = false;
 
 		public static function is_shop_open() {
 			return self::$shop_open;
+		}
+		public static function can_order_ahead() {
+			return self::$can_order_ahead;
+		}
+		// Mirrors the plugin: closed + opted in + no ordering ahead.
+		public static function is_add_to_cart_blocked() {
+			return ! self::$shop_open
+				&& ! empty( self::$lafka_order_hours_options['lafka_order_hours_disable_add_to_cart'] )
+				&& ! self::$can_order_ahead;
 		}
 		public static function get_next_opening_time() {
 			return null;

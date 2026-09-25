@@ -7,16 +7,36 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+Phases GX0 ("stop losing orders") and GX1 (diagnostics); pairs with lafka-plugin.
+
 ### Added
 - **Diagnostics (GX1)**: `lafka_theme_log()` logs through the Lafka plugin's
   `lafka_log` action (WooCommerce logs, source `lafka-theme`, scrubbed) with no
   hard dependency on the plugin; without a listener it writes to the PHP error
   log only when `WP_DEBUG` is on (filter `lafka_theme_log_fallback`).
+- **Cart**: the payment trust line names only the enabled WooCommerce
+  gateways ("Secure checkout · Credit Card · Cash") in the cart drawer and on
+  the classic cart page — no more hard-coded "Apple Pay · Visa · Mastercard".
+  Customizer → Lafka — Order Flow → Payment trust line (toggle + text
+  override); filters `lafka_payment_trust_line`, `lafka_payment_trust_label_map`.
+- **Checkout**: muted styling for the plugin's "enter your street address to
+  see the delivery cost" notice (classic + block).
 
 ### Changed
 - The GitHub updater and the preset engine log through `lafka_theme_log()`
   instead of `error_log()`; updater failures are warnings (listed on
   Lafka → Diagnostics), routine updater lines are info.
+
+### Fixed
+- **Mobile**: fixed-bottom bars (sticky cart, PDP add-to-cart, toasts) sit
+  above the cookie-consent banner via `--lafka-consent-banner-h`.
+- **PDP**: size chips and menu variation rows follow the plugin's order (the
+  operator's term order, else cheapest first) instead of database order.
+- **PDP**: add-to-cart stays usable while a closed store takes orders ahead.
+- **NAP**: phone text is never a raw E.164 number (routed through the
+  plugin's formatter; tel: links unchanged).
+- **WooCommerce**: related-products args pass an int limit (no more
+  "Invalid limit type" log errors on every product page).
 
 ## [7.1.0] — 2026-09-24
 

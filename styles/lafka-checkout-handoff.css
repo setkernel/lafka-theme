@@ -716,3 +716,25 @@
 .woocommerce-checkout .woocommerce-info a {
 	color: var(--lafka-color-accent-600, #d40b14);
 }
+
+/* -------- Delivery-quote notice (lafka-plugin markup) -------------------
+ * "Enter your street address to see the delivery cost." — a row the plugin
+ * adds after the shipping row in the classic cart-totals and checkout
+ * review-order tables. Muted info note from preset-aware tokens. */
+.lafka-delivery-quote-notice td {
+	padding-top: 0;
+	border-top: 0;
+}
+
+.lafka-delivery-quote-notice__text {
+	margin: var(--lafka-space-2) 0 0;
+	padding: var(--lafka-space-2) var(--lafka-space-3);
+	border-left: 3px solid var(--lafka-color-info);
+	border-radius: var(--lafka-radius-sm);
+	background: var(--lafka-color-surface-muted);
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-caption);
+	line-height: 1.45;
+	text-align: left;
+	overflow-wrap: anywhere;
+}
