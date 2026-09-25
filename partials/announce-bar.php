@@ -72,6 +72,9 @@ $lafka_ann_threshold_label = function_exists( 'wc_price' )
 	aria-label="<?php esc_attr_e( 'Service status and contact', 'lafka' ); ?>"
 	data-lafka-announce-bar
 	data-lafka-hours="<?php echo esc_attr( wp_json_encode( $lafka_ann_hours_json ) ); ?>"
+	<?php if ( ! empty( $lafka_ann_status['locked'] ) ) : ?>
+		data-lafka-status-locked
+	<?php endif; ?>
 >
 	<div class="lafka-container lafka-announce-bar__inner">
 

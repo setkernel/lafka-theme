@@ -16,7 +16,9 @@
 	'use strict';
 
 	var bar = document.querySelector( '[data-lafka-announce-bar]' );
-	if ( ! bar ) {
+	// Locked: the server label comes from the order gate (force open/closed,
+	// holiday), which the weekly hours map below cannot reproduce.
+	if ( ! bar || bar.hasAttribute( 'data-lafka-status-locked' ) ) {
 		return;
 	}
 
