@@ -516,6 +516,7 @@ body.lafka-layout-header-counter .lafka-header {
 
 .lafka-row__desc {
 	grid-area: desc;
+	align-self: start; /* a stretched clamp box shows a sliver of line 3 */
 	margin: 2px 0 0;
 	color: var(--lafka-color-text-secondary);
 	display: -webkit-box;
@@ -601,11 +602,21 @@ body.lafka-layout-header-counter .lafka-header {
 	}
 }
 
-/* ── Size-price columns ───────────────────────────────────────────────── */
+/* ── Size-price columns ───────────────────────────────────────────────────
+ * The columns are ONE group: a single row of max-content columns that never
+ * breaks a label or a price ("X-Large", "6 Piece"). When the group and the
+ * Add button do not fit side by side, the button wraps under the group; when
+ * four columns do not fit the row at all, they become a 2×2 grid. */
+.lafka-row__foot {
+	container: lafka-row-foot / inline-size;
+}
+
 .lafka-prices {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 4px 20px;
+	display: grid;
+	grid-auto-flow: column;
+	grid-auto-columns: max-content;
+	gap: 2px 14px;
+	width: max-content;
 	margin: 0;
 }
 
@@ -618,6 +629,7 @@ body.lafka-layout-header-counter .lafka-header {
 	font-size: var(--lafka-font-size-body-sm);
 	color: var(--lafka-color-text-secondary);
 	line-height: 1.4;
+	white-space: nowrap;
 }
 
 .lafka-prices dd {
@@ -625,17 +637,41 @@ body.lafka-layout-header-counter .lafka-header {
 	font-size: var(--lafka-font-size-body-lg);
 	font-weight: var(--lafka-font-weight-bold);
 	line-height: 1.3;
+	white-space: nowrap;
+}
+
+@container lafka-row-foot (max-width: 279px) {
+
+	.lafka-prices--cols-4 {
+		grid-auto-flow: row;
+		grid-template-columns: repeat(2, max-content);
+		row-gap: 8px;
+	}
 }
 
 @media (min-width: 1024px) {
 
 	.lafka-prices {
-		column-gap: 24px;
+		column-gap: 15px;
 	}
+}
 
-	.lafka-prices dd {
-		font-size: var(--lafka-font-size-body-lg-desk);
-	}
+/* Numerals: prices and other big / bold figures use the display face's
+ * tabular figures (the body face draws a slashed zero). */
+.lafka-prices dd,
+.lafka-row__price,
+.lafka-deal__price,
+.lafka-chooser__option-price,
+.lafka-counter-hero__caption span,
+.lafka-counter-header__phone-number,
+.lafka-counter-header__count,
+.lafka-counter-bar__count,
+.lafka-counter-find__phone,
+.lafka-drawer__checkout-total,
+.lafka-cart-drawer--counter .woocommerce-Price-amount {
+	font-family: var(--lafka-font-family-display);
+	font-optical-sizing: auto;
+	font-variant-numeric: tabular-nums;
 }
 
 /* ── 2-tap size chooser (native <dialog>) ─────────────────────────────── */
