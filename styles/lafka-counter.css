@@ -517,6 +517,13 @@ body.lafka-layout-header-counter .lafka-header {
 			"media desc"
 			"foot foot";
 	}
+
+	.lafka-row--wide-prices.lafka-row--no-img {
+		grid-template-areas:
+			"name"
+			"desc"
+			"foot";
+	}
 }
 
 @media (min-width: 1024px) {

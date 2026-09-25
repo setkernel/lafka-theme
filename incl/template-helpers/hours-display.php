@@ -360,8 +360,14 @@ if ( ! function_exists( 'lafka_counter_open_status' ) ) {
 				/* translators: %s: opening time tomorrow */
 				$rest = sprintf( __( 'opens tomorrow at %s', 'lafka' ), $time );
 			} else {
+				// open-status.php reports the English day key; show the translated name
+				// (the same strings js/lafka-open-status.js refreshes with).
+				$days_en = array( 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' );
+				$days    = array( __( 'Sunday', 'lafka' ), __( 'Monday', 'lafka' ), __( 'Tuesday', 'lafka' ), __( 'Wednesday', 'lafka' ), __( 'Thursday', 'lafka' ), __( 'Friday', 'lafka' ), __( 'Saturday', 'lafka' ) );
+				$idx     = array_search( (string) ( $status['opens_on'] ?? '' ), $days_en, true );
+				$day     = false === $idx ? (string) ( $status['opens_on'] ?? '' ) : $days[ $idx ];
 				/* translators: 1: weekday, 2: opening time */
-				$rest = sprintf( __( 'opens %1$s at %2$s', 'lafka' ), (string) ( $status['opens_on'] ?? '' ), $time );
+				$rest = sprintf( __( 'opens %1$s at %2$s', 'lafka' ), $day, $time );
 			}
 		}
 		$strong = $open ? __( 'Open now', 'lafka' ) : __( 'Closed', 'lafka' );

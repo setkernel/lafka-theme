@@ -58,9 +58,21 @@
 	}
 
 	function compute( hours, now ) {
-		now = now || new Date();
-		var today = now.getDay();
-		var nowMin = now.getHours() * 60 + now.getMinutes();
+		var today;
+		var nowMin;
+		if ( now ) {
+			today = now.getDay();
+			nowMin = now.getHours() * 60 + now.getMinutes();
+		} else if ( typeof L.offset === 'number' ) {
+			// The STORE's wall clock (WP timezone offset), never the visitor's.
+			var store = new Date( Date.now() + L.offset * 60000 );
+			today = store.getUTCDay();
+			nowMin = store.getUTCHours() * 60 + store.getUTCMinutes();
+		} else {
+			var local = new Date();
+			today = local.getDay();
+			nowMin = local.getHours() * 60 + local.getMinutes();
+		}
 		var openNow = t( 'openNow', 'Open now' );
 		var closed = t( 'closed', 'Closed' );
 
