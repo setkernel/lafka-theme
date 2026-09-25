@@ -45,6 +45,12 @@ foreach ( $variations as $v ) {
         $taxonomy   = $attr_name;
         $label      = wc_attribute_label( $attr_name, $product );
         $field_name = 'attribute_' . $attr_name;
+        // get_variation_attributes() lists values in database order (e.g.
+        // "Medium, Large, Small"); the plugin applies the operator's order,
+        // else cheapest first.
+        if ( function_exists( 'lafka_sort_variation_options' ) ) {
+            $options = lafka_sort_variation_options( $product, (string) $attr_name, (array) $options );
+        }
         ?>
         <fieldset class="lafka-pdp-picker" data-attribute="<?php echo esc_attr( $field_name ); ?>" data-required="true">
             <legend id="lafka-pdp-pick-<?php echo esc_attr( $attr_name ); ?>" class="lafka-pdp-picker__label"><?php echo esc_html( $label ); ?></legend>

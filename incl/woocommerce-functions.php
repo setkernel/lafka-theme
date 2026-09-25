@@ -1147,6 +1147,11 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 			// PERF-C06: Batch-fetch all attribute terms for all variations at once,
 			// instead of calling get_term_by() per attribute per variation (N+1).
 			$available_variations    = $lafka_variable_product->get_available_variations();
+			// One row per size: the plugin lists them cheapest first unless the
+			// operator ordered the variations.
+			if ( function_exists( 'lafka_sort_variation_rows' ) ) {
+				$available_variations = lafka_sort_variation_rows( $lafka_variable_product, $available_variations );
+			}
 			$lafka_term_lookup       = array();
 			$lafka_slugs_by_taxonomy = array();
 			foreach ( $available_variations as $variation ) {
