@@ -1167,27 +1167,7 @@ textarea:focus-visible,
     outline-offset: 2px;
 }
 
-/* Skip-to-content link */
-.skip-link {
-    position: absolute;
-    top: -100%;
-    left: 50%;
-    transform: translateX(-50%);
-    z-index: 100000;
-    padding: 12px 24px;
-    background: var(--lafka-accent-color, #DD430E);
-    color: #fff;
-    font-weight: 600;
-    text-decoration: none;
-    border-radius: 0 0 4px 4px;
-    transition: top 0.2s ease;
-}
-
-.skip-link:focus {
-    top: 0;
-    outline: 3px solid var(--lafka-accent-color, #DD430E);
-    outline-offset: 2px;
-}
+/* Skip-to-content link: base rules in styles/critical.css, focus pill at the end of this file. */
 
 a.button {
     display: inline-block;
@@ -9677,4 +9657,24 @@ button.single_add_to_cart_button, .foodmenu_top .project-data .project-details a
     }
 }
 
+}
+
+/* H-13: skip link focus = top-left pill above every bar (unlayered, to beat
+ * the unlayered critical.css `.skip-link` rules). */
+.skip-link:focus,
+.skip-link:focus-visible {
+	top: 12px;
+	left: 12px;
+	z-index: 100001;
+	transform: none;
+	padding: 12px 20px;
+	border-radius: 999px;
+	background: var(--lafka-color-text-primary, #18181b);
+	color: var(--lafka-color-text-inverse, #fff);
+	font-weight: 700;
+	text-decoration: none;
+	box-shadow: var(--lafka-shadow-focus);
+	outline: 3px solid var(--lafka-color-surface-page, #fff);
+	outline-offset: 0;
+	white-space: nowrap;
 }
