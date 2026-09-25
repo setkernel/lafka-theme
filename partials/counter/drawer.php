@@ -99,27 +99,8 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 							</span>
 						</p>
 					<?php endif; ?>
-					<?php
-					// O-24: what Delivery means before checkout — the minimum order and
-					// free-delivery threshold the plugin enforces, and when the fee shows.
-					$lafka_drw_money   = static function ( float $amount ): string {
-						return function_exists( 'wc_price' ) ? wp_strip_all_tags( wc_price( $amount ) ) : number_format_i18n( $amount, 2 );
-					};
-					$lafka_drw_min     = function_exists( 'lafka_delivery_minimum' ) ? (float) lafka_delivery_minimum() : 0.0;
-					$lafka_drw_free    = function_exists( 'lafka_get_free_delivery_threshold' ) ? (float) lafka_get_free_delivery_threshold() : 0.0;
-					$lafka_drw_deliver = array();
-					if ( $lafka_drw_min > 0 ) {
-						/* translators: %s: minimum order amount for delivery */
-						$lafka_drw_deliver[] = sprintf( __( 'Delivery on orders over %s.', 'lafka' ), $lafka_drw_money( $lafka_drw_min ) );
-					}
-					if ( $lafka_drw_free > 0 ) {
-						/* translators: %s: order amount above which delivery is free */
-						$lafka_drw_deliver[] = sprintf( __( 'Free delivery over %s.', 'lafka' ), $lafka_drw_money( $lafka_drw_free ) );
-					}
-					$lafka_drw_deliver[] = __( 'The delivery fee shows at checkout once you enter your address.', 'lafka' );
-					$lafka_drw_deliver   = (string) apply_filters( 'lafka_counter_drawer_delivery_note', implode( ' ', $lafka_drw_deliver ), $lafka_drw_min, $lafka_drw_free );
-					if ( '' !== $lafka_drw_deliver ) :
-						?>
+					<?php $lafka_drw_deliver = function_exists( 'lafka_counter_drawer_delivery_note' ) ? lafka_counter_drawer_delivery_note() : ''; ?>
+					<?php if ( '' !== $lafka_drw_deliver ) : ?>
 						<p class="lafka-drawer__note" data-lafka-fulfilment-note="delivery"<?php echo 'delivery' === $lafka_drw_current ? '' : ' hidden'; ?>>
 							<span><?php echo esc_html( $lafka_drw_deliver ); ?></span>
 						</p>

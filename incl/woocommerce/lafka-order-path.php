@@ -48,6 +48,44 @@ if ( ! function_exists( 'lafka_counter_cart_redirect_after_add' ) ) {
 	add_filter( 'pre_option_woocommerce_cart_redirect_after_add', 'lafka_counter_cart_redirect_after_add' );
 }
 
+if ( ! function_exists( 'lafka_counter_drawer_delivery_note' ) ) {
+	/**
+	 * O-24: what Delivery means, shown under the drawer's Pickup/Delivery
+	 * cards while Delivery is chosen — the minimum order and free-delivery
+	 * threshold the plugin enforces (nothing when not configured) and when
+	 * the fee appears. Filter `lafka_counter_drawer_delivery_note`.
+	 *
+	 * @return string Plain text ('' = no note).
+	 */
+	function lafka_counter_drawer_delivery_note(): string {
+		$money = static function ( float $amount ): string {
+			return function_exists( 'wc_price' ) ? html_entity_decode( wp_strip_all_tags( wc_price( $amount ) ), ENT_QUOTES, 'UTF-8' ) : number_format_i18n( $amount, 2 );
+		};
+		$min   = function_exists( 'lafka_delivery_minimum' ) ? (float) lafka_delivery_minimum() : 0.0;
+		$free  = function_exists( 'lafka_get_free_delivery_threshold' ) ? (float) lafka_get_free_delivery_threshold() : 0.0;
+		$parts = array();
+		if ( $min > 0 ) {
+			/* translators: %s: minimum order amount for delivery */
+			$parts[] = sprintf( __( 'Delivery on orders over %s.', 'lafka' ), $money( $min ) );
+		}
+		if ( $free > 0 ) {
+			/* translators: %s: order amount above which delivery is free */
+			$parts[] = sprintf( __( 'Free delivery over %s.', 'lafka' ), $money( $free ) );
+		}
+		$parts[] = __( 'The delivery fee shows at checkout once you enter your address.', 'lafka' );
+
+		/**
+		 * Filter the drawer's Delivery note (plain text; '' hides it).
+		 *
+		 * @since 7.3.0
+		 * @param string $note    Note.
+		 * @param float  $minimum Delivery minimum (0 = none).
+		 * @param float  $free    Free-delivery threshold (0 = none).
+		 */
+		return (string) apply_filters( 'lafka_counter_drawer_delivery_note', implode( ' ', $parts ), $min, $free );
+	}
+}
+
 if ( ! function_exists( 'lafka_order_path_fulfilment_cfg' ) ) {
 	/**
 	 * lafka_fulfilment_js_config: add the pickup shipping method ids.

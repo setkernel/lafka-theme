@@ -15,6 +15,7 @@ declare(strict_types=1);
 
 namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/payment-trust.php';
+	require_once dirname( __DIR__, 2 ) . '/incl/woocommerce/lafka-order-path.php';
 }
 
 namespace Lafka\Tests\Unit {

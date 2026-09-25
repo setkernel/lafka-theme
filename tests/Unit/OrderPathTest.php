@@ -18,6 +18,12 @@ namespace {
 	require_once dirname( __DIR__, 2 ) . '/incl/presets/lafka-preset-emit.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/template-helpers/layout.php';
 	require_once dirname( __DIR__, 2 ) . '/incl/woocommerce/lafka-order-path.php';
+
+	if ( ! function_exists( 'lafka_delivery_minimum' ) ) {
+		function lafka_delivery_minimum() {
+			return $GLOBALS['lafka_test_delivery_minimum'] ?? 0;
+		}
+	}
 }
 
 namespace Lafka\Tests\Unit {
@@ -25,6 +31,24 @@ namespace Lafka\Tests\Unit {
 	use PHPUnit\Framework\TestCase;
 
 	final class OrderPathTest extends TestCase {
+
+		protected function setUp(): void {
+			$GLOBALS['lafka_test_delivery_minimum']        = 0;
+			$GLOBALS['lafka_test_free_delivery_threshold'] = 0;
+		}
+
+		protected function tearDown(): void {
+			unset( $GLOBALS['lafka_test_delivery_minimum'], $GLOBALS['lafka_test_free_delivery_threshold'] );
+		}
+
+		public function test_the_delivery_note_states_only_configured_rules(): void {
+			$this->assertSame( 'The delivery fee shows at checkout once you enter your address.', lafka_counter_drawer_delivery_note(), 'Nothing configured: nothing invented.' );
+
+			$GLOBALS['lafka_test_delivery_minimum']        = 30;
+			$GLOBALS['lafka_test_free_delivery_threshold'] = 50;
+			$note = lafka_counter_drawer_delivery_note();
+			$this->assertMatchesRegularExpression( '/^Delivery on orders over \\D*30(\\.00)?\\. Free delivery over \\D*50(\\.00)?\\. The delivery fee shows/', $note );
+		}
 
 		public function test_the_counter_drawer_turns_the_cart_redirect_off_on_the_front_end(): void {
 			set_theme_mod( 'lafka_drawer_layout', 'counter' );
