@@ -9,8 +9,9 @@
  *
  * Resolution order here:
  *   1. Operator-configured business email — lafka_get_restaurant_info()['email']
- *      (the plugin's canonical resolver) then the lafka_business_email theme_mod
- *      as a plugin-absent fallback.
+ *      (the plugin's canonical resolver) then the lafka_business_email option
+ *      as a plugin-absent fallback — the single business store since plugin
+ *      10.2.0 (GX3); legacy theme_mods are migrated into it and not read.
  *   2. A host-derived "info@<host>" address as a last resort.
  *
  * The host is always taken with wp_parse_url( home_url(), PHP_URL_HOST ) — HOST
@@ -41,9 +42,9 @@ if ( ! function_exists( 'lafka_theme_reach_email' ) ) {
 			}
 		}
 
-		// 1b. Theme_mod fallback when the plugin resolver isn't loaded.
-		if ( '' === $email && function_exists( 'get_theme_mod' ) ) {
-			$email = (string) get_theme_mod( 'lafka_business_email', '' );
+		// 1b. Single-store fallback when the plugin resolver isn't loaded.
+		if ( '' === $email && function_exists( 'get_option' ) ) {
+			$email = (string) get_option( 'lafka_business_email', '' );
 		}
 
 		// 2. Reject an empty OR port-leaking address (e.g. the admin_email

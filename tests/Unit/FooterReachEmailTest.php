@@ -32,10 +32,17 @@ namespace Lafka\Tests\Unit {
 			$this->assertSame( 'hello@realbrand.example', \lafka_theme_reach_email() );
 		}
 
-		public function test_theme_mod_email_used_when_resolver_email_empty(): void {
-			$GLOBALS['lafka_test_restaurant_info']       = array( 'email' => '' );
-			$GLOBALS['lafka_test_theme_mods'] = array( 'lafka_business_email' => 'team@brand.example' );
+		public function test_business_option_email_used_when_resolver_email_empty(): void {
+			$GLOBALS['lafka_test_restaurant_info'] = array( 'email' => '' );
+			$GLOBALS['lafka_test_options']         = array( 'lafka_business_email' => 'team@brand.example' );
 			$this->assertSame( 'team@brand.example', \lafka_theme_reach_email() );
+		}
+
+		public function test_a_legacy_theme_mod_email_is_not_read(): void {
+			// GX3: one business store (the option); the legacy theme_mod is migrated, never read.
+			$GLOBALS['lafka_test_restaurant_info'] = array( 'email' => '' );
+			$GLOBALS['lafka_test_theme_mods']      = array( 'lafka_business_email' => 'stale@brand.example' );
+			$this->assertSame( 'info@localhost', \lafka_theme_reach_email() );
 		}
 
 		public function test_fallback_derives_host_only_never_port(): void {
