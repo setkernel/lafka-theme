@@ -1029,9 +1029,9 @@ if ( ! function_exists( 'lafka_is_block_cart_checkout_page' ) ) {
 	 * class_exists guard so the theme still degrades to plain-WC block styling when
 	 * the plugin is absent, and NEVER treats a classic-mode page (where the shim
 	 * serves the shortcode checkout, or the pages are physically shortcodes) as a
-	 * block page. Used to gate both the block-checkout stylesheet and the
-	 * defer-suppression below — the WooCommerce Blocks runtime must not be
-	 * `defer`-reordered (see lafka_defer_non_critical_scripts).
+	 * block page. Used to gate the block-checkout stylesheet. (The WooCommerce
+	 * Blocks runtime is never `defer`-reordered: the theme only defers its own
+	 * allowlisted handles — incl/system/lafka-script-loading.php.)
 	 *
 	 * @return bool
 	 */
@@ -2300,39 +2300,9 @@ if ( ! function_exists( 'lafka_deregister_plugins_awesome_stylesheet' ) ) {
 	}
 }
 
-// Add defer to non-critical scripts for faster initial render
-add_filter( 'script_loader_tag', 'lafka_defer_non_critical_scripts', 10, 3 );
-if ( ! function_exists( 'lafka_defer_non_critical_scripts' ) ) {
-	function lafka_defer_non_critical_scripts( $tag, $handle, $src ) {
-		// Don't defer in admin or for critical scripts
-		if ( is_admin() ) {
-			return $tag;
-		}
-		// NX1-04b: never brute-force `defer` on a block Cart/Checkout page. The
-		// WooCommerce Blocks runtime is a graph of wp-*/wc-* scripts that carry
-		// inline `-before`/`-after` data (the wc-settings Store API preload +
-		// nonce, wp-date's moment settings, wp-url). Those inline blocks run
-		// synchronously in source order; deferring the EXTERNAL file makes the
-		// inline data execute first and throw (normalizePath / moment /
-		// setSettings undefined), which leaves the block cart & checkout wedged on
-		// their empty-cart fallback and silently blocks every block-mode order.
-		// WordPress already orders these correctly without defer, so we simply opt
-		// the whole page out (classic pages are unaffected — their cart/checkout
-		// are shortcodes, not blocks).
-		if ( function_exists( 'lafka_is_block_cart_checkout_page' ) && lafka_is_block_cart_checkout_page() ) {
-			return $tag;
-		}
-		$no_defer = array( 'jquery', 'jquery-core', 'jquery-migrate', 'wp-util', 'underscore', 'wp-i18n', 'wp-api-fetch', 'wp-hooks', 'wp-polyfill' );
-		if ( in_array( $handle, $no_defer, true ) ) {
-			return $tag;
-		}
-		// Skip if already has defer or async
-		if ( strpos( $tag, ' defer' ) !== false || strpos( $tag, ' async' ) !== false ) {
-			return $tag;
-		}
-		return str_replace( ' src=', ' defer src=', $tag );
-	}
-}
+// Defer the theme's own scripts via the WP script-strategy API (explicit
+// allowlist; WooCommerce / gateway / checkout scripts are never touched).
+require_once __DIR__ . '/lafka-script-loading.php';
 
 add_filter( 'wp_resource_hints', 'lafka_add_resource_hints', 20, 2 );
 if ( ! function_exists( 'lafka_add_resource_hints' ) ) {

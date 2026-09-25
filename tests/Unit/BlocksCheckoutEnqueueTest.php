@@ -8,9 +8,9 @@ use PHPUnit\Framework\TestCase;
 /**
  * NX1-04b: the block Cart/Checkout skin (styles/lafka-blocks-checkout.css) must
  * be enqueued ONLY on a real WooCommerce block cart/checkout page AND only in
- * Lafka blocks mode — never on the classic shortcode path — and the theme's
- * blanket script `defer` must be suppressed there so the WooCommerce Blocks
- * runtime (wp- / wc- scripts carrying inline data) is not reordered into a wedge.
+ * Lafka blocks mode — never on the classic shortcode path — and the WooCommerce
+ * Blocks runtime (wp- / wc- scripts carrying inline data) must never be
+ * `defer`-reordered into a wedge.
  *
  * These are source-scan assertions over incl/system/core-functions.php (the same
  * idiom as AssetEnqueueTest / CartItemCssTest) — the theme test harness runs
@@ -55,18 +55,17 @@ final class BlocksCheckoutEnqueueTest extends TestCase {
 	}
 
 	/**
-	 * The blanket-defer filter must bail (return the tag unchanged) on a block
-	 * cart/checkout page so the WooCommerce Blocks runtime keeps correct ordering.
+	 * The theme no longer string-injects `defer` into script tags at all (the
+	 * brute-force filter that had to be switched off on block pages): its own
+	 * handles use the WP strategy API instead (ScriptLoadingStrategyTest), so
+	 * the WooCommerce Blocks runtime is never reordered on any page.
 	 */
-	public function test_defer_filter_bails_on_block_cart_checkout(): void {
-		$start = strpos( $this->src, 'function lafka_defer_non_critical_scripts' );
-		$this->assertNotFalse( $start );
-		$body = substr( $this->src, $start, 1600 );
-
-		$this->assertMatchesRegularExpression(
-			'/lafka_is_block_cart_checkout_page\(\)\s*\)\s*\{\s*return\s+\$tag;/',
-			$body,
-			'lafka_defer_non_critical_scripts must return $tag unchanged on a block cart/checkout page.'
+	public function test_no_brute_force_defer_filter_remains(): void {
+		$this->assertStringNotContainsString( 'lafka_defer_non_critical_scripts', $this->src );
+		$this->assertDoesNotMatchRegularExpression(
+			"/add_filter\(\s*'script_loader_tag'/",
+			$this->src,
+			'core-functions.php must not rewrite script tags.'
 		);
 	}
 }
