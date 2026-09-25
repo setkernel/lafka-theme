@@ -26,6 +26,9 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' 
 		array(
 			'product' => $lafka_arch_p,
 			'style'   => 'photo',
+			// The template including this card sets the level for its outline
+			// (rows under a category h2 → h3; a flat archive under the h1 → h2).
+			'heading' => isset( $lafka_card_heading_level ) ? (int) $lafka_card_heading_level : 3,
 		)
 	);
 	return;

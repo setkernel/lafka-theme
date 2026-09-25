@@ -44,7 +44,7 @@ if ( ! function_exists( 'lafka_counter_settings' ) ) {
 			'deals_lead'     => (string) get_theme_mod( 'lafka_counter_deals_lead', '' ),
 			'deals_limit'    => $clamp( get_theme_mod( 'lafka_counter_deals_limit', 6 ), 1, 12, 6 ),
 			'costar_limit'   => $clamp( get_theme_mod( 'lafka_counter_costar_limit', 3 ), 1, 12, 3 ),
-			'menu_limit'     => $clamp( get_theme_mod( 'lafka_counter_menu_limit', 6 ), 1, 24, 6 ),
+			'menu_limit'     => $clamp( get_theme_mod( 'lafka_counter_menu_limit', 3 ), 1, 24, 3 ), // H-08: a compact taste; "See all" links the rest.
 			'menu_style'     => in_array( $style, array( 'compact', 'photo' ), true ) ? $style : 'compact',
 			'menu_thumbs'    => (bool) get_theme_mod( 'lafka_counter_menu_thumbs', true ),
 			'menu_heading'   => (string) get_theme_mod( 'lafka_counter_menu_heading', __( 'More from our menu', 'lafka' ) ),

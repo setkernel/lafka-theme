@@ -550,8 +550,17 @@ body.lafka-layout-header-counter .lafka-header {
 }
 
 .lafka-row__add {
-	min-width: 88px;
+	min-width: 72px;
 	margin-left: auto;
+}
+
+/* No description: name + prices sit together, centred on the photo (H-11). */
+.lafka-row:not(:has(.lafka-row__desc)) .lafka-row__name {
+	align-self: end;
+}
+
+.lafka-row:not(:has(.lafka-row__desc)) .lafka-row__foot {
+	align-self: start;
 }
 
 .lafka-row--compact {
@@ -622,7 +631,7 @@ body.lafka-layout-header-counter .lafka-header {
 .lafka-prices {
 	display: grid;
 	grid-auto-flow: column;
-	grid-auto-columns: max-content;
+	grid-auto-columns: minmax(3.5em, max-content); /* columns line up row to row */
 	gap: 2px 14px;
 	width: max-content;
 	margin: 0;
@@ -648,7 +657,7 @@ body.lafka-layout-header-counter .lafka-header {
 	white-space: nowrap;
 }
 
-@container lafka-row-foot (max-width: 279px) {
+@container lafka-row-foot (max-width: 259px) {
 
 	.lafka-prices--cols-4 {
 		grid-auto-flow: row;
@@ -983,28 +992,30 @@ body.lafka-layout-header-counter .lafka-header {
 		font-size: var(--lafka-font-size-body-lg-desk);
 	}
 
-	/* Captions live in the clear corners the composition leaves (critical-
-	 * counter.css): the front dish's ABOVE it on the left, the back dish's
-	 * BELOW it on the right. The max-widths keep each one inside its corner
-	 * (front: < the gap left of the back dish; back: right of the front dish). */
+	/* Each caption is a small label ON the rim of its own dish (H-16), so
+	 * it can never read as the neighbour's, however much the two overlap:
+	 * the front dish's on its lower right, the back dish's on its upper left. */
 	.lafka-counter-hero__caption {
 		display: block;
 		position: absolute;
 		z-index: 2;
+		max-width: min(62%, 260px);
+		padding: 8px 12px;
+		border: 1px solid var(--lafka-color-border-default);
+		border-radius: var(--lafka-radius-md);
+		background: var(--lafka-color-surface-raised);
+		box-shadow: var(--lafka-shadow-1);
 		text-wrap: balance;
 	}
 
 	.lafka-counter-hero__dish--front .lafka-counter-hero__caption {
-		left: 0;
-		bottom: calc(100% + 12px);
-		max-width: 56%;
+		right: 0;
+		bottom: 6%;
 	}
 
 	.lafka-counter-hero__dish--back .lafka-counter-hero__caption {
-		right: 0;
-		top: calc(100% + 12px);
-		max-width: 60%;
-		text-align: right;
+		left: 4%;
+		top: 4%;
 	}
 
 	.lafka-counter-hero__art--1 .lafka-counter-hero__caption {
@@ -1215,8 +1226,15 @@ body.lafka-layout-header-counter .lafka-header {
 		align-items: stretch;
 	}
 
+	/* H-10: the photo takes the spare height, not a gap above the price. */
 	.lafka-deal--featured .lafka-deal__media {
-		height: 178px;
+		flex: 1 1 178px;
+		height: auto;
+		min-height: 178px;
+	}
+
+	.lafka-deal--featured .lafka-deal__body {
+		flex: none;
 	}
 
 	.lafka-deal--featured .lafka-deal__name {
@@ -1323,11 +1341,18 @@ body.lafka-layout-header-counter .lafka-header {
 
 @media (min-width: 1024px) {
 
+	/* H-07: masonry columns (no blank band beside a long section); real
+	 * heights, as estimates would re-balance the columns while scrolling. */
 	.lafka-counter-rest__grid {
-		grid-template-columns: repeat(2, minmax(0, 1fr));
-		grid-auto-flow: row dense;
-		align-items: start;
+		display: block;
+		columns: 2;
 		column-gap: 64px;
+	}
+
+	.lafka-counter-rest .lafka-counter-section {
+		content-visibility: visible;
+		break-inside: avoid;
+		margin-bottom: 36px;
 	}
 
 	.lafka-counter-rest .lafka-counter-head__title {
@@ -1939,4 +1964,28 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 
 .lafka-counter-footer__list a:hover {
 	color: var(--lafka-color-text-primary);
+}
+
+/* One "Order online" per screen: the sticky bar has it below 1024. */
+@media (max-width: 1023px) {
+
+	body.lafka-has-counter-bar .lafka-counter-header .lafka-counter-header__order {
+		display: none;
+	}
+}
+
+/* Landscape phones: a slimmer sticky bar leaves room for the page. */
+@media (max-height: 480px) and (orientation: landscape) {
+
+	.lafka-counter-bar {
+		padding-block: 6px max(6px, env(safe-area-inset-bottom));
+	}
+
+	.lafka-counter-bar .lafka-counter-btn {
+		min-height: 44px;
+	}
+
+	body.lafka-has-counter-bar {
+		padding-bottom: calc(58px + env(safe-area-inset-bottom));
+	}
 }

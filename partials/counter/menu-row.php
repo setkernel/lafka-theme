@@ -17,6 +17,7 @@
  *   style    photo | compact           (default photo)
  *   thumbs   bool — compact rows with a small thumbnail (default true)
  *   list     GA4 list name             (default: archive / page title / Menu)
+ *   heading  int — the name's heading level (default 3; T-19)
  *
  * @package Lafka
  * @since   7.2.0 (GX4)
@@ -29,6 +30,7 @@ if ( ! is_object( $lafka_row_p ) || ! method_exists( $lafka_row_p, 'get_id' ) ) 
 	return;
 }
 $lafka_row_style  = isset( $args['style'] ) && 'compact' === $args['style'] ? 'compact' : 'photo';
+$lafka_row_level  = max( 2, min( 6, (int) ( $args['heading'] ?? 3 ) ) );
 $lafka_row_thumbs = 'photo' === $lafka_row_style || ! isset( $args['thumbs'] ) || (bool) $args['thumbs'];
 $lafka_row_id     = (int) $lafka_row_p->get_id();
 $lafka_row_name   = wp_strip_all_tags( (string) $lafka_row_p->get_name() );
@@ -97,7 +99,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 		</a>
 	<?php endif; ?>
 	<div class="lafka-row__body">
-		<h3 class="lafka-row__name">
+		<h<?php echo (int) $lafka_row_level; ?> class="lafka-row__name">
 			<a
 				href="<?php echo esc_url( $lafka_row_url ); ?>"
 				data-lafka-item-id="<?php echo esc_attr( (string) $lafka_row_id ); ?>"
@@ -106,7 +108,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 				data-lafka-item-price="<?php echo esc_attr( (string) $lafka_row_prices['price'] ); ?>"
 				data-lafka-list-name="<?php echo esc_attr( $lafka_row_list ); ?>"
 			><?php echo esc_html( $lafka_row_name ); ?></a>
-		</h3>
+		</h<?php echo (int) $lafka_row_level; ?>>
 		<?php if ( '' !== $lafka_row_desc ) : ?>
 			<p class="lafka-row__desc"><?php echo esc_html( $lafka_row_desc ); ?></p>
 		<?php endif; ?>

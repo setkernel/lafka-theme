@@ -278,7 +278,7 @@ if ( ! function_exists( 'lafka_counter_customize_register_home' ) ) {
 			'lafka_counter_deals_limit'    => array( 6, 'lafka_counter_sanitize_limit_12', 'number', __( 'Deals shown', 'lafka' ), array(), __( '1 to 12.', 'lafka' ) ),
 			'lafka_counter_costar_limit'   => array( 3, 'lafka_counter_sanitize_limit_12', 'number', __( 'Dishes per featured category', 'lafka' ), array(), __( '1 to 12.', 'lafka' ) ),
 			'lafka_counter_menu_heading'   => array( __( 'More from our menu', 'lafka' ), 'sanitize_text_field', 'text', __( 'Heading above the rest of the menu', 'lafka' ), array(), '' ),
-			'lafka_counter_menu_limit'     => array( 6, 'lafka_counter_sanitize_limit_24', 'number', __( 'Dishes per category (rest of the menu)', 'lafka' ), array(), __( '1 to 24. Longer categories get a "See all" link.', 'lafka' ) ),
+			'lafka_counter_menu_limit'     => array( 3, 'lafka_counter_sanitize_limit_24', 'number', __( 'Dishes per category (rest of the menu)', 'lafka' ), array(), __( '1 to 24. Longer categories get a "See all" link.', 'lafka' ) ),
 			'lafka_counter_menu_style'     => array(
 				'compact',
 				'lafka_counter_sanitize_menu_style',

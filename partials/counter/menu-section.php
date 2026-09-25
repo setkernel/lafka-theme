@@ -11,6 +11,8 @@
  *   thumbs      bool (compact)
  *   always_link bool — show "See all" even when nothing is truncated
  *   list        GA4 list name
+ *   heading_level int — the section heading's level (default 2; 3 inside
+ *               "More from our menu", whose own heading is the h2 — H-22)
  *
  * @package Lafka
  * @since   7.2.0 (GX4)
@@ -24,6 +26,7 @@ if ( ! is_object( $lafka_sec_term ) || ! $lafka_sec_ids || ! function_exists( 'w
 	return;
 }
 $lafka_sec_style   = 'compact' === ( $args['style'] ?? 'photo' ) ? 'compact' : 'photo';
+$lafka_sec_level   = max( 2, min( 5, (int) ( $args['heading_level'] ?? 2 ) ) );
 $lafka_sec_total   = (int) ( $args['total'] ?? count( $lafka_sec_ids ) );
 $lafka_sec_anchor  = 'lafka-cat-' . sanitize_title( (string) $lafka_sec_term->slug );
 $lafka_sec_tagline = lafka_category_tagline( $lafka_sec_term );
@@ -35,7 +38,7 @@ $lafka_sec_all = (string) apply_filters( 'lafka_counter_see_all_label', sprintf(
 <section class="lafka-counter-section lafka-counter-section--<?php echo esc_attr( $lafka_sec_style ); ?>" id="<?php echo esc_attr( $lafka_sec_anchor ); ?>" style="<?php echo esc_attr( '--lafka-rows: ' . count( $lafka_sec_ids ) ); ?>" aria-labelledby="<?php echo esc_attr( $lafka_sec_anchor . '-h' ); ?>">
 	<div class="lafka-counter-head lafka-counter-head--ruled">
 		<div>
-			<h2 id="<?php echo esc_attr( $lafka_sec_anchor . '-h' ); ?>" class="lafka-counter-head__title"><?php echo esc_html( $lafka_sec_term->name ); ?></h2>
+			<h<?php echo (int) $lafka_sec_level; ?> id="<?php echo esc_attr( $lafka_sec_anchor . '-h' ); ?>" class="lafka-counter-head__title"><?php echo esc_html( $lafka_sec_term->name ); ?></h<?php echo (int) $lafka_sec_level; ?>>
 			<?php if ( '' !== $lafka_sec_tagline ) : ?>
 				<p class="lafka-counter-head__lead"><?php echo esc_html( $lafka_sec_tagline ); ?></p>
 			<?php endif; ?>
@@ -59,6 +62,7 @@ $lafka_sec_all = (string) apply_filters( 'lafka_counter_see_all_label', sprintf(
 					'style'   => $lafka_sec_style,
 					'thumbs'  => $args['thumbs'] ?? true,
 					'list'    => (string) ( $args['list'] ?? $lafka_sec_term->name ),
+					'heading' => $lafka_sec_level + 1,
 				)
 			);
 		}

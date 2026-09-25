@@ -45,6 +45,7 @@ if ( ! $lafka_rest ) {
 						'style'  => $lafka_rest_settings['menu_style'],
 						'thumbs' => $lafka_rest_settings['menu_thumbs'],
 						'list'   => __( 'Home', 'lafka' ),
+						'heading_level' => 3,
 					)
 				);
 			}

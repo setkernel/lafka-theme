@@ -177,6 +177,7 @@ foreach ( $lafka_mg_terms as $lafka_mg_term ) :
 					</h3>
 			<?php endif; ?>
 			<ul class="lafka-menu__grid" role="list">
+				<?php $lafka_card_heading_level = null !== $lafka_mg_section['term'] ? 4 : 3; ?>
 				<?php foreach ( $lafka_mg_section['products'] as $lafka_arch_p ) : ?>
 					<?php require get_template_directory() . '/woocommerce/loop/lafka-product-card.php'; ?>
 				<?php endforeach; ?>

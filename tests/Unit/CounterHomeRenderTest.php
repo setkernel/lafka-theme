@@ -123,10 +123,12 @@ namespace Lafka\Tests\Unit {
 			$html = self::render();
 			$this->assertSame( 1, substr_count( $html, '<h1' ), 'exactly one h1' );
 			$this->assertStringContainsString( '>Fries and pizza</h1>', $html, 'neutral default headline from the co-star names' );
-			// deals + 2 co-stars + "more" + 2 rest categories + find us.
-			$this->assertSame( 7, substr_count( $html, '<h2' ) );
-			// 10 products as rows / deals, + 3 find-us labels.
-			$this->assertSame( 13, substr_count( $html, '<h3' ) );
+			// deals + 2 co-stars + "more" + find us (H-22: the rest's
+			// categories are h3 under "More from our menu", their rows h4).
+			$this->assertSame( 5, substr_count( $html, '<h2' ) );
+			// 6 deal / co-star rows + 2 rest category headings + 3 find-us labels.
+			$this->assertSame( 11, substr_count( $html, '<h3' ) );
+			$this->assertSame( 4, substr_count( $html, '<h4' ), 'rest rows sit under their h3 category' );
 		}
 
 		public function test_no_deals_term_hides_the_section(): void {
@@ -141,7 +143,7 @@ namespace Lafka\Tests\Unit {
 			$html = self::render();
 			$rest = substr( $html, (int) strpos( $html, 'lafka-counter-rest' ) );
 			$rest = substr( $rest, 0, (int) strpos( $rest, 'id="find-us"' ) );
-			preg_match_all( '#<h2 id="lafka-cat-([a-z]+)-h"#', $rest, $m );
+			preg_match_all( '#<h3 id="lafka-cat-([a-z]+)-h"#', $rest, $m );
 			$this->assertSame( array( 'wings', 'drinks' ), $m[1] );
 			preg_match_all( '#<li><a href="\#lafka-cat-([a-z]+)">#', $rest, $jump );
 			$this->assertSame( array( 'wings', 'drinks' ), $jump[1], 'jump index follows the sections' );

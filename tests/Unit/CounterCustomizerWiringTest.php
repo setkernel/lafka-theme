@@ -95,7 +95,7 @@ namespace Lafka\Tests\Unit {
 				'lafka_counter_deals_lead'     => array( '', 'sanitize_text_field' ),
 				'lafka_counter_deals_limit'    => array( 6, 'lafka_counter_sanitize_limit_12' ),
 				'lafka_counter_costar_limit'   => array( 3, 'lafka_counter_sanitize_limit_12' ),
-				'lafka_counter_menu_limit'     => array( 6, 'lafka_counter_sanitize_limit_24' ),
+				'lafka_counter_menu_limit'     => array( 3, 'lafka_counter_sanitize_limit_24' ),
 				'lafka_counter_menu_style'     => array( 'compact', 'lafka_counter_sanitize_menu_style' ),
 				'lafka_counter_menu_thumbs'    => array( true, 'rest_sanitize_boolean' ),
 				'lafka_counter_menu_heading'   => array( 'More from our menu', 'sanitize_text_field' ),

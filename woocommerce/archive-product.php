@@ -258,6 +258,7 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 				?>
 				<ul class="lafka-menu__grid" role="list">
 					<?php
+					$lafka_card_heading_level = 2; // Rows sit directly under the page h1 (T-19).
 					while ( have_posts() ) :
 						the_post();
 						global $product;
