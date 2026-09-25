@@ -1150,3 +1150,31 @@ div.woocommerce-info.lafka-delivery-min-notice .woocommerce-Price-amount {
 		background: var(--lafka-color-surface-muted) !important;
 	}
 }
+
+/* -------- "Want delivery? Add your address" (lafka-plugin pickup slim) ----
+ * The plugin's toggle is a plain <button>; on the checkout it reads as a
+ * text action in the accent colour with a 44px target, not a grey box. */
+.woocommerce-checkout .lafka-pickup-address-toggle__button {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	padding: 0;
+	border: 0;
+	background: none;
+	color: var(--lafka-color-accent-text, var(--lafka-color-accent-600));
+	font: inherit;
+	font-weight: var(--lafka-font-weight-semibold);
+	text-decoration: underline;
+	text-underline-offset: 3px;
+	cursor: pointer;
+}
+
+.woocommerce-checkout .lafka-pickup-address-toggle__button:hover {
+	text-decoration-thickness: 2px;
+}
+
+.woocommerce-checkout .lafka-pickup-address-toggle__button:focus-visible {
+	outline: none;
+	border-radius: var(--lafka-radius-sm);
+	box-shadow: var(--lafka-shadow-focus);
+}
