@@ -1431,12 +1431,20 @@ body.lafka-layout-header-counter .lafka-header {
 	white-space: nowrap;
 }
 
-.lafka-counter-find__phone {
+.lafka-counter-find__phone,
+.lafka-counter-footer__phone {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px; /* H-24 */
 	color: var(--lafka-color-text-primary);
-	font-size: var(--lafka-font-size-body-lg-desk);
-	font-weight: var(--lafka-font-weight-bold);
+	text-decoration: underline;
 	text-underline-offset: 4px;
 	white-space: nowrap;
+}
+
+.lafka-counter-find__phone {
+	font-size: var(--lafka-font-size-body-lg-desk);
+	font-weight: var(--lafka-font-weight-bold);
 }
 
 /* The hours column always gets the most room (two columns of day | time):

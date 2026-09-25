@@ -339,11 +339,31 @@ if ( ! function_exists( 'lafka_counter_render_nav' ) ) {
 		if ( ! $items ) {
 			return;
 		}
+		$request = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['REQUEST_URI'] ) ) : '';
 		echo '<ul class="' . esc_attr( $class ) . '">';
 		foreach ( $items as $item ) {
-			echo '<li class="menu-item"><a href="' . esc_url( $item['url'] ) . '">' . esc_html( $item['label'] ) . '</a></li>';
+			$current = lafka_counter_nav_is_current( (string) $item['url'], $request );
+			echo '<li class="menu-item' . ( $current ? ' current-menu-item' : '' ) . '"><a href="' . esc_url( $item['url'] ) . '"' . ( $current ? ' aria-current="page"' : '' ) . '>' . esc_html( $item['label'] ) . '</a></li>';
 		}
 		echo '</ul>';
+	}
+}
+
+if ( ! function_exists( 'lafka_counter_nav_is_current' ) ) {
+	/**
+	 * PURE: whether a nav link points at the page being viewed (H-23). In-page
+	 * anchors ("/#deals") are never "the current page".
+	 *
+	 * @param string $url     Link URL.
+	 * @param string $request Request URI (path + query).
+	 */
+	function lafka_counter_nav_is_current( string $url, string $request ): bool {
+		if ( '' === $url || false !== strpos( $url, '#' ) ) {
+			return false;
+		}
+		$link = (string) wp_parse_url( $url, PHP_URL_PATH );
+		$here = (string) wp_parse_url( $request, PHP_URL_PATH );
+		return '' !== $here && rtrim( $link, '/' ) === rtrim( $here, '/' ) && '' !== rtrim( $link, '/' );
 	}
 }
 

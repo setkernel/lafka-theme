@@ -176,7 +176,8 @@ namespace Lafka\Tests\Unit {
 			self::seed();
 			$GLOBALS['lafka_test_options']['start_of_week'] = 0;
 			$html = self::render();
-			$this->assertStringContainsString( 'Hours, every day', $html );
+			$this->assertStringNotContainsString( 'Hours, every day', $html, 'H-24: not above a split grid' );
+			$this->assertStringContainsString( '>Hours</h3>', $html );
 			$this->assertStringContainsString( '<dt>Sun–Thu</dt>', $html );
 			$this->assertStringContainsString( '<dd>11 am–midnight</dd>', $html );
 			$this->assertStringContainsString( '1 Example St<br>Exampletown', $html );

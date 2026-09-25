@@ -37,6 +37,7 @@ namespace Lafka\Tests\Unit {
 			$html = $this->render();
 			$this->assertStringContainsString( '<footer id="footer" class="lafka-footer lafka-footer--counter" role="contentinfo">', $html );
 			$this->assertStringContainsString( 'Example Kitchen · 1 Example St, Exampletown', $html );
+			$this->assertMatchesRegularExpression( '#· <a class="lafka-counter-footer__phone" href="tel:\+15550100"[^>]*>\(555\) 0100</a>#', $html, 'H-24: the phone is in the footer line' );
 			$this->assertSame( array( 'Menu', 'Deals', 'Find us', 'Privacy' ), self::labels( $html ) );
 			$this->assertStringContainsString( 'href="http://example.test/#find-us"', $html );
 			$this->assertStringNotContainsString( 'lafka-footer__signup', $html, 'no signup in the quiet footer' );

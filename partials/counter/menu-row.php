@@ -34,6 +34,8 @@ $lafka_row_level  = max( 2, min( 6, (int) ( $args['heading'] ?? 3 ) ) );
 $lafka_row_thumbs = 'photo' === $lafka_row_style || ! isset( $args['thumbs'] ) || (bool) $args['thumbs'];
 $lafka_row_id     = (int) $lafka_row_p->get_id();
 $lafka_row_name   = wp_strip_all_tags( (string) $lafka_row_p->get_name() );
+// H-30: a short parenthetical never breaks ("(3 pc)", not "(3 / pc)").
+$lafka_row_label  = (string) preg_replace_callback( '/\([^()]{1,12}\)/u', static fn( $m ) => str_replace( ' ', "\u{00A0}", $m[0] ), $lafka_row_name );
 $lafka_row_url    = (string) $lafka_row_p->get_permalink();
 
 $lafka_row_desc = wp_strip_all_tags( (string) $lafka_row_p->get_short_description() );
@@ -107,7 +109,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 				data-lafka-item-category="<?php echo esc_attr( $lafka_row_cat ); ?>"
 				data-lafka-item-price="<?php echo esc_attr( (string) $lafka_row_prices['price'] ); ?>"
 				data-lafka-list-name="<?php echo esc_attr( $lafka_row_list ); ?>"
-			><?php echo esc_html( $lafka_row_name ); ?></a>
+			><?php echo esc_html( $lafka_row_label ); ?></a>
 		</h<?php echo (int) $lafka_row_level; ?>>
 		<?php if ( '' !== $lafka_row_desc ) : ?>
 			<p class="lafka-row__desc"><?php echo esc_html( $lafka_row_desc ); ?></p>
