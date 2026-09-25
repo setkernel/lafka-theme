@@ -36,6 +36,12 @@ Configure the stores in `setUp()`; shim anything test-specific in the test file
 behind `function_exists()`. Prefer rendering a partial or calling the helper and
 asserting on the output over grepping source files.
 
+Tests must pass in any order: CI also runs the suite with `--order-by=reverse`
+and `--order-by=random` (the seed is printed — reproduce with
+`vendor/bin/phpunit --order-by=random --random-order-seed=<seed>`). State a
+test adds outside the shim stores (a new `$GLOBALS` key, a static) must be
+reset in `setUp()`, or added to `lafka_test_reset_wp()`.
+
 A pre-push hook that runs all four gates in parallel ships in `.githooks/` — install once per clone:
 
 ```bash
