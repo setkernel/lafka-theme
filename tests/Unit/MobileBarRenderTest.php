@@ -82,6 +82,8 @@ namespace Lafka\Tests\Unit {
 			$fragments                = \apply_filters( 'woocommerce_add_to_cart_fragments', array() );
 			$this->assertArrayHasKey( 'a.lafka-counter-bar__order', $fragments );
 			$this->assertStringContainsString( 'View order, 1 item, $8.50', $fragments['a.lafka-counter-bar__order'] );
+			$this->assertStringContainsString( 'aria-label="Cart, 1 item"', $fragments['a.lafka-counter-header__cart'], 'the header Cart name + badge refresh too' );
+			$this->assertStringNotContainsString( 'is-empty', $fragments['a.lafka-counter-header__cart'] );
 			$this->assertContains( 'lafka-has-counter-bar', \apply_filters( 'body_class', array() ) );
 		}
 	}

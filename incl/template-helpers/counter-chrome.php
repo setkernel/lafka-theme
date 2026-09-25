@@ -513,7 +513,8 @@ if ( ! function_exists( 'lafka_counter_cart_fragments' ) ) {
 		}
 		$fragments = (array) $fragments;
 		if ( lafka_layout_is( 'header', 'counter' ) ) {
-			$fragments['a.lafka-counter-bar__order'] = lafka_counter_bar_order_html();
+			$fragments['a.lafka-counter-bar__order']   = lafka_counter_bar_order_html();
+			$fragments['a.lafka-counter-header__cart'] = lafka_counter_header_cart_html();
 		}
 		if ( lafka_layout_is( 'drawer', 'counter' ) ) {
 			$fragments['span.lafka-drawer__checkout-total'] = lafka_counter_drawer_checkout_label();
@@ -523,6 +524,27 @@ if ( ! function_exists( 'lafka_counter_cart_fragments' ) ) {
 	}
 }
 add_filter( 'woocommerce_add_to_cart_fragments', 'lafka_counter_cart_fragments' );
+
+if ( ! function_exists( 'lafka_counter_header_cart_html' ) ) {
+	/**
+	 * The header's worded Cart link: "Cart" + a count badge (hidden at 0),
+	 * named "Cart, 3 items" for screen readers; opens the drawer. Also a cart
+	 * fragment, so the name, count and empty state stay current.
+	 */
+	function lafka_counter_header_cart_html(): string {
+		if ( ! function_exists( 'wc_get_cart_url' ) ) {
+			return '';
+		}
+		$count = lafka_counter_cart_count();
+		/* translators: %d: number of items in the cart */
+		$label = sprintf( _n( 'Cart, %d item', 'Cart, %d items', $count, 'lafka' ), $count );
+		return '<a class="lafka-counter-header__cart" href="' . esc_url( wc_get_cart_url() ) . '" aria-label="' . esc_attr( $label ) . '" data-lafka-cart-open>'
+			. lafka_counter_icon( 'bag' )
+			. '<span class="lafka-counter-header__cart-label">' . esc_html__( 'Cart', 'lafka' ) . '</span>'
+			. '<span class="lafka-counter-header__count' . ( 0 === $count ? ' is-empty' : '' ) . '" data-lafka-cart-count aria-hidden="true">' . esc_html( (string) $count ) . '</span>'
+			. '</a>';
+	}
+}
 
 if ( ! function_exists( 'lafka_counter_drawer_summary' ) ) {
 	/** "3 items" under the drawer title (also a cart fragment). */

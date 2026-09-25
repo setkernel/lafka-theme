@@ -19,12 +19,8 @@ defined( 'ABSPATH' ) || exit;
 $lafka_ch_nap    = lafka_counter_nap();
 $lafka_ch_status = function_exists( 'lafka_counter_open_status' ) ? lafka_counter_open_status() : null;
 $lafka_ch_logo   = function_exists( 'lafka_get_logo_id' ) ? (int) lafka_get_logo_id() : 0;
-$lafka_ch_count  = lafka_counter_cart_count();
 $lafka_ch_nav_on = (bool) get_theme_mod( 'lafka_counter_header_nav', true );
 $lafka_ch_hours  = function_exists( 'lafka_open_status_hours_for_client' ) ? lafka_open_status_hours_for_client() : array();
-$lafka_ch_cart   = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : '';
-/* translators: %d: number of items in the cart */
-$lafka_ch_cart_label = sprintf( _n( 'Cart, %d item', 'Cart, %d items', $lafka_ch_count, 'lafka' ), $lafka_ch_count );
 ?>
 <div class="lafka-counter-header">
 	<div class="lafka-counter-header__bar lafka-counter-wrap">
@@ -75,13 +71,7 @@ $lafka_ch_cart_label = sprintf( _n( 'Cart, %d item', 'Cart, %d items', $lafka_ch
 				<span class="lafka-counter-header__menu-label"><?php esc_html_e( 'Menu', 'lafka' ); ?></span>
 			</button>
 
-			<?php if ( '' !== $lafka_ch_cart ) : ?>
-				<a class="lafka-counter-header__cart" href="<?php echo esc_url( $lafka_ch_cart ); ?>" aria-label="<?php echo esc_attr( $lafka_ch_cart_label ); ?>" data-lafka-cart-open>
-					<?php echo lafka_counter_icon( 'bag' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
-					<span class="lafka-counter-header__cart-label"><?php esc_html_e( 'Cart', 'lafka' ); ?></span>
-					<span class="lafka-counter-header__count<?php echo 0 === $lafka_ch_count ? ' is-empty' : ''; ?>" data-lafka-cart-count aria-hidden="true"><?php echo esc_html( (string) $lafka_ch_count ); ?></span>
-				</a>
-			<?php endif; ?>
+			<?php echo lafka_counter_header_cart_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* (also a cart fragment, so the name + count stay current). ?>
 
 			<a class="lafka-counter-header__order lafka-counter-btn lafka-counter-btn--primary" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 				<?php echo esc_html( (string) apply_filters( 'lafka_header_cta_label', __( 'Order online', 'lafka' ) ) ); ?>
