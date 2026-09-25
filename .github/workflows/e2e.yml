@@ -64,10 +64,18 @@ concurrency:
 
 jobs:
   smoke:
-    name: Playwright smoke
+    name: Playwright smoke (WC ${{ matrix.wc }})
     runs-on: ubuntu-latest
-    # Non-blocking until a week of stability — see file header.
+    # Non-blocking until a week of stability — see file header. The beta leg
+    # (next WooCommerce pre-release) is an early-warning signal only and stays
+    # non-blocking even after the stable leg is promoted.
     continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        # Stable = the version the headers declare "WC tested up to"; beta =
+        # the next WooCommerce pre-release from downloads.wordpress.org.
+        wc: ['11.1.2', '11.2.0-beta.1']
     timeout-minutes: 25
     env:
       LAFKA_E2E_BASE_URL: http://localhost:8890
@@ -101,11 +109,11 @@ jobs:
         run: |
           cat > .wp-env.json <<'JSON'
           {
-            "core": "WordPress/WordPress#7.0",
+            "core": "WordPress/WordPress#7.1.2",
             "phpVersion": "8.4",
             "plugins": [
               "./lafka-plugin",
-              "https://downloads.wordpress.org/plugin/woocommerce.10.9.1.zip"
+              "https://downloads.wordpress.org/plugin/woocommerce.${{ matrix.wc }}.zip"
             ],
             "themes": [ "./lafka-theme" ],
             "config": {
@@ -153,7 +161,7 @@ jobs:
         if: ${{ failure() }}
         uses: actions/upload-artifact@v7
         with:
-          name: playwright-artifacts
+          name: playwright-artifacts-wc-${{ matrix.wc }}
           path: |
             lafka-theme/test-results/**
             lafka-theme/playwright-report/**

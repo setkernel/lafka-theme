@@ -16,7 +16,7 @@ npx @wordpress/env run cli wp theme activate lafka
 # Tests-WP runs at http://localhost:8891
 ```
 
-`@wordpress/env` requires Docker. `.wp-env.json` pulls WordPress 7.0 + PHP 8.4 + WooCommerce 10.9.1, mounts the sibling `../lafka-plugin`, and maps this checkout to `wp-content/themes/lafka` (the production slug, so a child theme with `Template: lafka` can activate against it).
+`@wordpress/env` requires Docker. `.wp-env.json` pulls WordPress 7.1.2 + PHP 8.4 + WooCommerce 11.1.2, mounts the sibling `../lafka-plugin`, and maps this checkout to `wp-content/themes/lafka` (the production slug, so a child theme with `Template: lafka` can activate against it).
 
 ## Before opening a PR
 
