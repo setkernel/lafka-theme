@@ -272,53 +272,59 @@ if ( ! function_exists( 'lafka_open_status_next_open_human' ) ) {
 
 if ( ! function_exists( 'lafka_gated_open_status' ) ) {
 	/**
-	 * lafka_open_status() reconciled with the order gate. Adds `gate`:
-	 * `schedule` (the schedule decides; the client may refresh it) or
-	 * `override` (the gate disagrees or a force override is on; never refresh).
-	 * Returns null when there are no hours AND no gate.
+	 * The schedule status (lafka_open_status_schedule()) reconciled with the
+	 * order gate — the same rule lafka_open_status() applies for "now" (GX0),
+	 * plus: only while the order-hours MODULE is on, and a force override
+	 * always counts as an override. Adds `gate`: `schedule` (the client may
+	 * refresh it) or `override` (never refresh). Passes the public
+	 * `lafka_open_status` filter. Null when there are no hours and nothing
+	 * overrides them.
 	 *
 	 * @param int|null $now Unix timestamp (tests); default now.
 	 * @return array<string,mixed>|null
 	 */
 	function lafka_gated_open_status( ?int $now = null ): ?array {
-		$status = function_exists( 'lafka_open_status' ) ? lafka_open_status( $now ) : null;
+		if ( function_exists( 'lafka_open_status_schedule' ) ) {
+			$status = lafka_open_status_schedule( $now );
+		} else {
+			$status = function_exists( 'lafka_open_status' ) ? lafka_open_status( $now ) : null;
+		}
 		$gate   = lafka_open_status_gate();
+		$forced = null !== $gate && lafka_open_status_forced();
 
-		if ( null === $gate ) {
-			return is_array( $status ) ? $status + array( 'gate' => 'schedule' ) : null;
-		}
-
-		$forced = lafka_open_status_forced();
-		if ( is_array( $status ) && ! $forced && (bool) $status['is_open'] === $gate ) {
-			return $status + array( 'gate' => 'schedule' );
-		}
-		if ( ! is_array( $status ) && ! $forced ) {
-			return null; // no hours configured and nothing overriding them: say nothing.
-		}
-
-		if ( $gate ) {
+		if ( null === $gate || ( is_array( $status ) && ! $forced && (bool) $status['is_open'] === $gate ) ) {
+			$result = is_array( $status ) ? $status + array( 'gate' => 'schedule' ) : null;
+		} elseif ( ! is_array( $status ) && ! $forced ) {
+			$result = null; // No hours configured and nothing overriding them: say nothing.
+		} elseif ( $gate ) {
 			$schedule_open = is_array( $status ) && ! empty( $status['is_open'] );
-			return array(
+			$result        = array(
 				'is_open'   => true,
 				'short'     => __( 'Open now', 'lafka' ),
 				// A force-open during scheduled hours still has a real closing time.
 				'label'     => $schedule_open ? $status['label'] : __( 'Open now', 'lafka' ),
 				'dot_color' => 'var(--lafka-color-success-500)',
 				'close'     => $schedule_open && isset( $status['close'] ) ? $status['close'] : '',
+				'locked'    => true,
+				'gate'      => 'override',
+			);
+		} else {
+			$next   = lafka_open_status_next_open_human();
+			$result = array(
+				'is_open'   => false,
+				'short'     => __( 'Closed', 'lafka' ),
+				/* translators: %s: next opening, e.g. "Saturday at 11:00 AM" */
+				'label'     => '' !== $next ? sprintf( __( 'Closed · opens %s', 'lafka' ), $next ) : __( 'Closed', 'lafka' ),
+				'dot_color' => 'var(--lafka-color-text-secondary)',
+				'next'      => $next,
+				'locked'    => true,
 				'gate'      => 'override',
 			);
 		}
 
-		$next = lafka_open_status_next_open_human();
-		return array(
-			'is_open'   => false,
-			'short'     => __( 'Closed', 'lafka' ),
-			/* translators: %s: next opening, e.g. "Saturday at 11:00 AM" */
-			'label'     => '' !== $next ? sprintf( __( 'Closed · opens %s', 'lafka' ), $next ) : __( 'Closed', 'lafka' ),
-			'dot_color' => 'var(--lafka-color-text-secondary)',
-			'next'      => $next,
-			'gate'      => 'override',
-		);
+		/** This filter is documented in incl/template-helpers/open-status.php */
+		$result = apply_filters( 'lafka_open_status', $result, $now );
+		return is_array( $result ) ? $result + array( 'gate' => 'schedule' ) : null;
 	}
 }
 
