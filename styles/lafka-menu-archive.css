@@ -55,6 +55,7 @@
 
 .lafka-menu__lead {
 	margin: 0;
+	hyphens: manual; /* style.css hyphenates every <p> ("catego-ry") */
 	font-size: var(--lafka-font-size-body-lg);
 	color: var(--lafka-color-text-muted); /* v5.74.0: muted per handoff (was secondary) */
 	line-height: var(--lafka-line-body);
@@ -685,8 +686,12 @@
  * cut-off is visually communicated. Pure CSS — no JS scroll handler —
  * so the fade is always-on (acceptable trade-off vs not signalling at
  * all; a JS-driven directional fade can be a follow-up).
+ *
+ * GX-M01: only the (non-sticky) JUMP TO strip needs a positioning context.
+ * .lafka-menu__cats is position: sticky above — itself a containing block for
+ * the absolutely-positioned fade — so it must not be reset to relative here
+ * (that override is what stopped the category strip sticking).
  * ========================================================================= */
-.lafka-menu__cats,
 .lafka-menu__toc {
 	position: relative;
 }
@@ -701,4 +706,158 @@
 	width: 48px;
 	background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--lafka-color-surface-page, #fff));
 	pointer-events: none;
+}
+
+/* =============================================================================
+ * GX sx2 — menu page fixes (M-01, M-02, M-03, M-04, M-20, M-32, T-21).
+ * ========================================================================= */
+
+/* [hidden] must win over the component display values. */
+.lafka-menu__search-clear[hidden],
+.lafka-menu__empty[hidden],
+.lafka-menu__group[hidden],
+.lafka-menu__sub[hidden] {
+	display: none;
+}
+
+/* Anchored sections land below the sticky category strip (the script
+ * measures the strip into --lafka-menu-cats-offset). */
+.lafka-menu__body,
+.lafka-menu__group,
+.lafka-menu__subhead {
+	scroll-margin-top: var(--lafka-menu-cats-offset, 80px);
+}
+
+/* Room for the chips' focus ring inside the overflow-clipped strip (M-20). */
+.lafka-menu__cats-list {
+	padding-block: 4px;
+	padding-inline: 2px;
+	scroll-padding-inline: 24px;
+}
+
+.lafka-menu__cat-chip {
+	min-height: 44px;
+	min-width: 44px;
+	justify-content: center;
+	box-sizing: border-box;
+}
+
+.lafka-menu__cat-chip:focus-visible {
+	outline: 3px solid var(--lafka-color-accent-700);
+	outline-offset: -3px;
+}
+
+/* Search clear: a 44 px hit area around the small visible disc (T-21). */
+.lafka-menu__search-clear {
+	width: 44px;
+	height: 44px;
+	margin-block: -10px;
+	margin-inline-end: -10px;
+	background: radial-gradient(circle, var(--lafka-color-surface-muted) 12px, transparent 13px);
+}
+
+.lafka-menu__search-clear:hover {
+	background: radial-gradient(circle, var(--lafka-color-text-primary) 12px, transparent 13px);
+}
+
+.lafka-menu__search-clear:focus-visible {
+	outline: 3px solid var(--lafka-color-accent-700);
+	outline-offset: -6px;
+}
+
+/* Empty state: a button reset as well as a link. */
+button.lafka-menu__empty-cta {
+	min-height: 44px;
+	font: inherit;
+	font-weight: var(--lafka-font-weight-semibold);
+	cursor: pointer;
+}
+
+/* Subcategory headings inside a category section (M-15). */
+.lafka-menu__sub {
+	margin-top: var(--lafka-space-6);
+}
+
+.lafka-menu__subhead {
+	margin: 0 0 var(--lafka-space-2);
+	font-family: var(--lafka-font-family-display);
+	font-size: var(--lafka-font-size-h4, 1.25rem);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-tight);
+	color: var(--lafka-color-text-primary);
+}
+
+/* A parent category archive links its subcategories (M-03). */
+.lafka-menu__subcats {
+	margin-bottom: var(--lafka-space-6);
+}
+
+.lafka-menu__subcats-list {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-menu__subcat {
+	display: inline-flex;
+	align-items: center;
+	min-height: 44px;
+	padding: 0 var(--lafka-space-4);
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-pill);
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-semibold);
+	text-decoration: none;
+}
+
+.lafka-menu__subcat:hover {
+	border-color: var(--lafka-color-text-primary);
+}
+
+/* Archive / search pagination (M-03). */
+.lafka-menu__pagination {
+	margin-top: var(--lafka-space-8);
+}
+
+.lafka-menu__pagination ul {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: center;
+	gap: var(--lafka-space-2);
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-menu__pagination .page-numbers {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-width: 44px;
+	min-height: 44px;
+	padding: 0 var(--lafka-space-3);
+	box-sizing: border-box;
+	border: 1px solid var(--lafka-color-border-default);
+	border-radius: var(--lafka-radius-button, var(--lafka-radius-md));
+	color: var(--lafka-color-text-primary);
+	font-weight: var(--lafka-font-weight-semibold);
+	font-variant-numeric: tabular-nums;
+	text-decoration: none;
+}
+
+.lafka-menu__pagination .page-numbers.current {
+	border-color: var(--lafka-color-text-primary);
+	background: var(--lafka-color-text-primary);
+	color: var(--lafka-color-text-inverse);
+}
+
+.lafka-menu__pagination .page-numbers.dots {
+	border-color: transparent;
+}
+
+.lafka-menu__pagination a.page-numbers:hover {
+	border-color: var(--lafka-color-text-primary);
 }

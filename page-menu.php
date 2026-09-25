@@ -115,7 +115,7 @@ while ( have_posts() ) :
 				<div class="lafka-container">
 					<ul class="lafka-menu__cats-list" role="list">
 						<li>
-							<a class="lafka-menu__cat-chip is-active" href="#all">
+							<a class="lafka-menu__cat-chip is-active" href="#lafka-menu-all" aria-current="true">
 								<?php esc_html_e( 'All', 'lafka' ); ?>
 							</a>
 						</li>
@@ -132,93 +132,21 @@ while ( have_posts() ) :
 			</nav>
 		<?php endif; ?>
 
-		<div class="lafka-menu__body">
+		<div class="lafka-menu__body" id="lafka-menu-all">
 			<div class="lafka-container">
 
 				<?php
-				if ( ! empty( $lafka_menu_terms ) ) :
-					// The per-group cap is operator-configurable (Customizer mod
-					// `lafka_menu_group_limit`, default 24) and filterable per
-					// category. The in-page chips only scroll to a section, so any
-					// items beyond the cap would otherwise be unreachable here —
-					// each truncated group header therefore links out to the full
-					// (paginated) category archive via the "See all" link. A
-					// paginated query exposes the true category total.
-					$lafka_menu_group_limit_default = (int) get_theme_mod( 'lafka_menu_group_limit', 24 );
-					foreach ( $lafka_menu_terms as $lafka_menu_group ) :
-						$lafka_menu_group_limit = (int) apply_filters( 'lafka_menu_group_limit', $lafka_menu_group_limit_default, $lafka_menu_group );
-						$lafka_menu_group_query = function_exists( 'wc_get_products' )
-							? wc_get_products(
-								array(
-									'status'   => 'publish',
-									'limit'    => $lafka_menu_group_limit,
-									'page'     => 1,
-									'paginate' => true,
-									'category' => array( $lafka_menu_group->slug ),
-									// Title breaks menu_order ties (WooCommerce's own default catalog
-									// order), so equal-order items never shuffle between requests.
-									'orderby'  => array(
-										'menu_order' => 'ASC',
-										'title'      => 'ASC',
-									),
-								)
-							)
-							: null;
-						$lafka_menu_group_products = ( is_object( $lafka_menu_group_query ) && isset( $lafka_menu_group_query->products ) ) ? $lafka_menu_group_query->products : array();
-						$lafka_menu_group_total    = ( is_object( $lafka_menu_group_query ) && isset( $lafka_menu_group_query->total ) ) ? (int) $lafka_menu_group_query->total : count( $lafka_menu_group_products );
-						if ( empty( $lafka_menu_group_products ) ) {
-							continue;
-						}
-						$lafka_menu_group_id = 'lafka-menu-cat-' . $lafka_menu_group->slug;
-						?>
-						<section class="lafka-menu__group" id="<?php echo esc_attr( $lafka_menu_group_id ); ?>" aria-labelledby="<?php echo esc_attr( $lafka_menu_group_id . '-h' ); ?>">
-							<header class="lafka-menu__group-head">
-								<h2 id="<?php echo esc_attr( $lafka_menu_group_id . '-h' ); ?>" class="lafka-menu__group-title">
-									<?php echo esc_html( $lafka_menu_group->name ); ?>
-								</h2>
-								<span class="lafka-menu__group-rule" aria-hidden="true"></span>
-								<span class="lafka-menu__group-count"><?php echo esc_html( (string) $lafka_menu_group->count ); ?></span>
-								<?php if ( $lafka_menu_group_total > count( $lafka_menu_group_products ) ) : ?>
-									<a class="lafka-menu__group-all" href="<?php echo esc_url( get_term_link( $lafka_menu_group ) ); ?>">
-										<?php
-										printf(
-											/* translators: %s: total number of items in this category. */
-											esc_html__( 'See all %s items', 'lafka' ),
-											esc_html( number_format_i18n( $lafka_menu_group_total ) )
-										);
-										?>
-									</a>
-								<?php endif; ?>
-								<?php if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' ) && function_exists( 'lafka_category_tagline' ) ) : ?>
-									<?php $lafka_menu_tagline = lafka_category_tagline( $lafka_menu_group ); // GX4: the short line, as on the counter home. ?>
-									<?php if ( '' !== $lafka_menu_tagline ) : ?>
-										<p class="lafka-menu__group-blurb"><?php echo esc_html( $lafka_menu_tagline ); ?></p>
-									<?php endif; ?>
-								<?php elseif ( '' !== $lafka_menu_group->description ) : ?>
-									<p class="lafka-menu__group-blurb"><?php echo wp_kses_post( $lafka_menu_group->description ); ?></p>
-								<?php endif; ?>
-							</header>
-
-							<ul class="lafka-menu__grid" role="list">
-								<?php foreach ( $lafka_menu_group_products as $lafka_arch_p ) : ?>
-									<?php require __DIR__ . '/woocommerce/loop/lafka-product-card.php'; ?>
-								<?php endforeach; ?>
-							</ul>
-						</section>
-						<?php
-					endforeach;
-				else :
-					?>
-					<div class="lafka-menu__empty" data-lafka-menu-empty>
-						<span class="lafka-menu__empty-icon" aria-hidden="true">🤔</span>
-						<h3 class="lafka-menu__empty-title"><?php esc_html_e( 'Nothing matches', 'lafka' ); ?></h3>
-						<p class="lafka-menu__empty-hint"><?php esc_html_e( 'Try clearing filters or searching for something else.', 'lafka' ); ?></p>
-						<a class="lafka-menu__empty-cta" href="<?php echo esc_url( $lafka_menu_shop_url ); ?>">
-							<?php esc_html_e( 'Back to all items', 'lafka' ); ?>
-						</a>
-					</div>
-					<?php
-				endif;
+				// The grouped menu (shared with the shop view of archive-product.php):
+				// one section per category, subheadings for subcategories, and the
+				// search / filter empty state.
+				get_template_part(
+					'partials/menu-groups',
+					null,
+					array(
+						'terms'     => $lafka_menu_terms,
+						'reset_url' => $lafka_menu_shop_url,
+					)
+				);
 				?>
 
 			</div>

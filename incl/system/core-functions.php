@@ -1647,6 +1647,17 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				lafka_asset_version( '/js/lafka-menu-controls.js' ),
 				true
 			);
+			// Result-count announcements for the live search / filter chips.
+			wp_localize_script(
+				'lafka-menu-controls',
+				'lafkaMenuI18n',
+				array(
+					'none' => __( 'No menu items match.', 'lafka' ),
+					'one'  => __( '1 item matches.', 'lafka' ),
+					/* translators: %d: number of matching menu items (kept literal for the script). */
+					'many' => __( '%d items match.', 'lafka' ),
+				)
+			);
 		}
 
 		// v5.62.0: PDP handoff polish — layered on top of pdp-redesign.css

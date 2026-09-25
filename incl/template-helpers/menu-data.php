@@ -432,3 +432,127 @@ if ( ! function_exists( 'lafka_category_tagline' ) ) {
 		return (string) apply_filters( 'lafka_category_tagline', $tagline, $term );
 	}
 }
+
+if ( ! function_exists( 'lafka_menu_filter_chip_defs' ) ) {
+	/**
+	 * The dietary / popularity filter chips the menu controls can offer, keyed
+	 * by product_tag slug. Filter `lafka_menu_filter_chips` adds, removes or
+	 * relabels chips (each value: label + optional icon).
+	 *
+	 * @return array<string, array{label:string, icon:string}>
+	 */
+	function lafka_menu_filter_chip_defs(): array {
+		$defs = (array) apply_filters(
+			'lafka_menu_filter_chips',
+			array(
+				'popular'    => array(
+					'label' => __( 'Popular', 'lafka' ),
+					'icon'  => '★',
+				),
+				'vegetarian' => array(
+					'label' => __( 'Vegetarian', 'lafka' ),
+					'icon'  => '🌱',
+				),
+				'vegan'      => array(
+					'label' => __( 'Vegan', 'lafka' ),
+					'icon'  => '🥬',
+				),
+				'spicy'      => array(
+					'label' => __( 'Spicy', 'lafka' ),
+					'icon'  => '🌶',
+				),
+			)
+		);
+		$out = array();
+		foreach ( $defs as $slug => $def ) {
+			$slug = sanitize_key( (string) $slug );
+			if ( '' === $slug || ! is_array( $def ) || empty( $def['label'] ) ) {
+				continue;
+			}
+			$out[ $slug ] = array(
+				'label' => (string) $def['label'],
+				'icon'  => isset( $def['icon'] ) ? (string) $def['icon'] : '',
+			);
+		}
+		return $out;
+	}
+}
+
+if ( ! function_exists( 'lafka_menu_filter_has_products' ) ) {
+	/**
+	 * Whether a filter chip would match at least one product: a product_tag
+	 * with that slug and a non-zero count, or — for "popular" — any featured
+	 * product (the rows tag featured products "popular").
+	 *
+	 * @param string $slug Chip / tag slug.
+	 */
+	function lafka_menu_filter_has_products( string $slug ): bool {
+		$term = function_exists( 'get_term_by' ) ? get_term_by( 'slug', $slug, 'product_tag' ) : false;
+		if ( is_object( $term ) && isset( $term->count ) && (int) $term->count > 0 ) {
+			return true;
+		}
+		if ( 'popular' === $slug && function_exists( 'wc_get_featured_product_ids' ) ) {
+			return ! empty( wc_get_featured_product_ids() );
+		}
+		return false;
+	}
+}
+
+if ( ! function_exists( 'lafka_menu_filter_chips' ) ) {
+	/**
+	 * The filter chips to render: only those with at least one matching product,
+	 * so no chip empties the menu (M-02). An install with no tagged or featured
+	 * products shows no filter row at all.
+	 *
+	 * @return array<string, array{label:string, icon:string}>
+	 */
+	function lafka_menu_filter_chips(): array {
+		return array_filter(
+			lafka_menu_filter_chip_defs(),
+			static fn( $def, $slug ) => lafka_menu_filter_has_products( (string) $slug ),
+			ARRAY_FILTER_USE_BOTH
+		);
+	}
+}
+
+if ( ! function_exists( 'lafka_menu_pagination_html' ) ) {
+	/**
+	 * Numbered pagination for a product archive / product search (the handoff
+	 * archive template runs its own loop, so WooCommerce's pagination hook never
+	 * fires). Empty when everything fits on one page.
+	 *
+	 * @param int|null $total   Total pages (default: the main query's).
+	 * @param int|null $current Current page (default: the `paged` query var).
+	 */
+	function lafka_menu_pagination_html( ?int $total = null, ?int $current = null ): string {
+		if ( null === $total ) {
+			$query = $GLOBALS['wp_query'] ?? null;
+			$total = is_object( $query ) && isset( $query->max_num_pages ) ? (int) $query->max_num_pages : 0;
+		}
+		if ( $total < 2 || ! function_exists( 'paginate_links' ) ) {
+			return '';
+		}
+		if ( null === $current ) {
+			$current = function_exists( 'get_query_var' ) ? (int) get_query_var( 'paged' ) : 1;
+		}
+		$links = paginate_links(
+			array(
+				'total'     => $total,
+				'current'   => max( 1, min( $total, $current ) ),
+				'type'      => 'array',
+				'mid_size'  => 1,
+				'end_size'  => 1,
+				'prev_text' => '<span aria-hidden="true">←</span> ' . esc_html__( 'Previous', 'lafka' ),
+				'next_text' => esc_html__( 'Next', 'lafka' ) . ' <span aria-hidden="true">→</span>',
+			)
+		);
+		if ( empty( $links ) || ! is_array( $links ) ) {
+			return '';
+		}
+		$items = '';
+		foreach ( $links as $link ) {
+			$items .= '<li>' . $link . '</li>';
+		}
+		return '<nav class="lafka-menu__pagination" aria-label="' . esc_attr__( 'More menu items', 'lafka' ) . '"><ul role="list">' . $items . '</ul></nav>';
+	}
+}

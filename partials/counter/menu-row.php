@@ -88,6 +88,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 <li
 	class="lafka-row lafka-row--<?php echo esc_attr( $lafka_row_style ); ?><?php echo '' === $lafka_row_img ? ' lafka-row--no-img' : ''; ?><?php echo 'columns' === $lafka_row_prices['type'] && count( $lafka_row_prices['columns'] ) > 2 ? ' lafka-row--wide-prices' : ''; ?>"
 	data-lafka-product-name="<?php echo esc_attr( $lafka_row_name ); ?>"
+	data-lafka-product-search="<?php echo esc_attr( trim( $lafka_row_name . ' ' . $lafka_row_desc ) ); ?>"
 	data-lafka-product-tags="<?php echo esc_attr( implode( ',', $lafka_row_tags ) ); ?>"
 >
 	<?php if ( '' !== $lafka_row_img ) : ?>

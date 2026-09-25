@@ -72,6 +72,7 @@ $lafka_arch_list      = ( function_exists( 'is_tax' ) && is_tax( 'product_cat' )
 <li
 	class="lafka-favs__item"
 	data-lafka-product-name="<?php echo esc_attr( $lafka_arch_name ); ?>"
+	data-lafka-product-search="<?php echo esc_attr( trim( $lafka_arch_name . ' ' . wp_strip_all_tags( (string) $lafka_arch_short ) ) ); ?>"
 	data-lafka-product-tags="<?php echo esc_attr( $lafka_arch_tags_attr ); ?>"
 >
 	<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_arch_url ); ?>"

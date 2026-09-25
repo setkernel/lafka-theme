@@ -81,6 +81,15 @@ $lafka_mc_delivery_eta = $lafka_mc_eta && ! empty( $lafka_mc_eta['delivery'] ) ?
 // GX4: the counter header already carries the Pickup / Delivery choice (the
 // same preference, synced by js/lafka-fulfilment.js) — don't ask twice.
 $lafka_mc_show_tabs = ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) );
+
+// Search: "live" filters the rows already on the page (and falls through to the
+// server search when nothing on the page matches); "server" is the product
+// search results page, where the box is a plain GET form, prefilled.
+$lafka_mc_search_query = isset( $args['search_query'] ) ? (string) $args['search_query'] : '';
+$lafka_mc_search_mode  = isset( $args['search_mode'] ) && 'server' === $args['search_mode'] ? 'server' : 'live';
+
+// Dietary chips: only those with at least one matching product (M-02).
+$lafka_mc_chips = function_exists( 'lafka_menu_filter_chips' ) ? lafka_menu_filter_chips() : array();
 ?>
 <div class="lafka-menu__controls" data-lafka-menu-controls>
 
@@ -136,7 +145,14 @@ $lafka_mc_show_tabs = ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_i
 	</div>
 	<?php endif; ?>
 
-	<form class="lafka-menu__search" role="search" data-lafka-menu-search onsubmit="return false;">
+	<form
+		class="lafka-menu__search"
+		role="search"
+		method="get"
+		action="<?php echo esc_url( home_url( '/' ) ); ?>"
+		data-lafka-menu-search
+		data-lafka-menu-search-mode="<?php echo esc_attr( $lafka_mc_search_mode ); ?>"
+	>
 		<label class="lafka-menu__search-label" for="lafka-menu-search-input">
 			<span class="screen-reader-text"><?php esc_html_e( 'Search the menu', 'lafka' ); ?></span>
 			<span class="lafka-menu__search-icon" aria-hidden="true">🔍</span>
@@ -144,34 +160,34 @@ $lafka_mc_show_tabs = ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_i
 				type="search"
 				id="lafka-menu-search-input"
 				class="lafka-menu__search-input"
+				name="s"
+				value="<?php echo esc_attr( $lafka_mc_search_query ); ?>"
 				placeholder="<?php esc_attr_e( 'Search the menu…', 'lafka' ); ?>"
 				autocomplete="off"
 				data-lafka-menu-search-input
 			>
+			<input type="hidden" name="post_type" value="product">
 			<button
 				type="button"
 				class="lafka-menu__search-clear"
 				aria-label="<?php esc_attr_e( 'Clear search', 'lafka' ); ?>"
 				data-lafka-menu-search-clear
-				hidden
+				<?php echo '' === $lafka_mc_search_query ? 'hidden' : ''; ?>
 			>×</button>
 		</label>
 	</form>
 
+	<?php if ( ! empty( $lafka_mc_chips ) && 'server' !== $lafka_mc_search_mode ) : ?>
 	<div class="lafka-menu__filters" data-lafka-menu-filters>
 		<span class="lafka-menu__filters-label"><?php esc_html_e( 'Filter', 'lafka' ); ?></span>
-		<button type="button" class="lafka-menu__chip" data-lafka-filter="popular" aria-pressed="false">
-			<span aria-hidden="true">★</span> <?php esc_html_e( 'Popular', 'lafka' ); ?>
-		</button>
-		<button type="button" class="lafka-menu__chip" data-lafka-filter="vegetarian" aria-pressed="false">
-			<span aria-hidden="true">🌱</span> <?php esc_html_e( 'Vegetarian', 'lafka' ); ?>
-		</button>
-		<button type="button" class="lafka-menu__chip" data-lafka-filter="vegan" aria-pressed="false">
-			<span aria-hidden="true">🥬</span> <?php esc_html_e( 'Vegan', 'lafka' ); ?>
-		</button>
-		<button type="button" class="lafka-menu__chip" data-lafka-filter="spicy" aria-pressed="false">
-			<span aria-hidden="true">🌶</span> <?php esc_html_e( 'Spicy', 'lafka' ); ?>
-		</button>
+		<?php foreach ( $lafka_mc_chips as $lafka_mc_slug => $lafka_mc_chip ) : ?>
+			<button type="button" class="lafka-menu__chip" data-lafka-filter="<?php echo esc_attr( $lafka_mc_slug ); ?>" aria-pressed="false">
+				<?php if ( '' !== $lafka_mc_chip['icon'] ) : ?>
+					<span aria-hidden="true"><?php echo esc_html( $lafka_mc_chip['icon'] ); ?></span>
+				<?php endif; ?>
+				<?php echo esc_html( $lafka_mc_chip['label'] ); ?>
+			</button>
+		<?php endforeach; ?>
 		<button
 			type="button"
 			class="lafka-menu__clear-filters"
@@ -181,5 +197,6 @@ $lafka_mc_show_tabs = ! ( function_exists( 'lafka_layout_is' ) && lafka_layout_i
 			<?php esc_html_e( 'Clear all', 'lafka' ); ?>
 		</button>
 	</div>
+	<?php endif; ?>
 
 </div>
