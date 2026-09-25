@@ -107,7 +107,7 @@ namespace Lafka\Tests\Unit {
 			$this->assertSame( '<span class="lafka-drawer__checkout-total">Go to checkout — $8.50</span>', $fragments['span.lafka-drawer__checkout-total'] );
 			$this->assertSame( '<span class="lafka-drawer__summary">1 item</span>', $fragments['span.lafka-drawer__summary'] );
 			$this->assertSame( 'Add a little extra?', \apply_filters( 'lafka_cart_drawer_upsell_heading', 'Complete your meal' ) );
-			$this->assertSame( 'Add', \apply_filters( 'lafka_cart_drawer_upsell_button_label', '+ Add' ) );
+			$this->assertSame( 'Add', \apply_filters( 'lafka_cart_drawer_upsell_add_label', '+ Add' ) );
 			$note = \apply_filters( 'lafka_cart_drawer_upsell_row_note', '', new \WC_Product( array( 'short_description' => 'Creamy garlic dipping sauce made fresh in house every day' ) ) );
 			$this->assertLessThanOrEqual( 41, mb_strlen( $note ) );
 			$this->assertStringEndsWith( '…', $note );

@@ -644,4 +644,4 @@ if ( ! function_exists( 'lafka_counter_upsell_button_label' ) ) {
 		return function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter' ) ? __( 'Add', 'lafka' ) : $label;
 	}
 }
-add_filter( 'lafka_cart_drawer_upsell_button_label', 'lafka_counter_upsell_button_label' );
+add_filter( 'lafka_cart_drawer_upsell_add_label', 'lafka_counter_upsell_button_label' );
