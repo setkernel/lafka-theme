@@ -1365,20 +1365,32 @@ body.lafka-layout-header-counter .lafka-header {
 	font-style: normal;
 }
 
+/* Days | hours as a two-column grid (the row <div>s are layout-transparent);
+ * neither side breaks mid-range ("11 am–midnight"). */
 .lafka-counter-find__hours {
 	display: grid;
-	gap: 2px;
+	grid-template-columns: max-content fit-content(100%);
+	justify-content: start;
+	gap: 2px 16px;
 	margin: 0;
 }
 
 .lafka-counter-find__hours div {
-	display: flex;
-	flex-wrap: wrap;
-	gap: 0 8px;
+	display: contents;
 }
 
+.lafka-counter-find__hours dt,
 .lafka-counter-find__hours dd {
+	float: none; /* the legacy theme floats and sizes dt/dd */
+	width: auto;
 	margin: 0;
+	padding: 0;
+	font-weight: inherit;
+	line-height: var(--lafka-line-body);
+}
+
+.lafka-counter-find__hours dt {
+	white-space: nowrap;
 }
 
 .lafka-counter-find__phone {
@@ -1386,12 +1398,16 @@ body.lafka-layout-header-counter .lafka-header {
 	font-size: var(--lafka-font-size-body-lg-desk);
 	font-weight: var(--lafka-font-weight-bold);
 	text-underline-offset: 4px;
+	white-space: nowrap;
 }
 
+/* The hours column always gets the most room (two columns of day | time):
+ * 600–839 address | hours with the phone under the address, 840–1199 three
+ * columns under the heading, ≥1200 the board's four columns. */
 @media (min-width: 600px) {
 
 	.lafka-counter-find__grid {
-		grid-template-columns: repeat(3, minmax(0, 1fr));
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.2fr);
 		column-gap: 32px;
 	}
 
@@ -1400,10 +1416,17 @@ body.lafka-layout-header-counter .lafka-header {
 	}
 }
 
-@media (min-width: 1024px) {
+@media (min-width: 840px) {
 
 	.lafka-counter-find__grid {
-		grid-template-columns: 260px repeat(3, minmax(0, 1fr));
+		grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
+	}
+}
+
+@media (min-width: 1200px) {
+
+	.lafka-counter-find__grid {
+		grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
 		column-gap: 40px;
 	}
 
@@ -1411,6 +1434,8 @@ body.lafka-layout-header-counter .lafka-header {
 		grid-column: auto;
 		flex-direction: column;
 		align-items: flex-start;
+		justify-content: flex-start;
+		gap: 16px;
 	}
 }
 
