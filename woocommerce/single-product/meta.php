@@ -10,9 +10,14 @@
  * happen. When this occurs the version of the template file will be bumped and
  * the readme will list any important changes.
  *
+ * Lafka: tag-cloud layout; reconciled with WooCommerce core 11.2.0 (category
+ * ordering via the woocommerce_product_meta_category_orderby filter, default
+ * 'breadcrumb' — see lafka_wc_product_meta_category_orderby(); WooCommerce
+ * before 11.2 ignores the ordering argument and keeps plain term order).
+ *
  * @see         https://woocommerce.com/document/template-structure/
  * @package     WooCommerce\Templates
- * @version     9.7.0
+ * @version     11.2.0
  */
 
 use Automattic\WooCommerce\Enums\ProductType;
@@ -26,17 +31,17 @@ global $product;
 <div class="tagcloud product_meta">
 	<?php do_action( 'woocommerce_product_meta_start' ); ?>
 	<?php
-		$categories      = wc_get_product_category_list( $product->get_id() );
+		$categories      = wc_get_product_category_list( $product->get_id(), ', ', '', '', lafka_wc_product_meta_category_orderby( $product ) );
 		$size_categories = count( $product->get_category_ids() );
 
 		$tags      = wc_get_product_tag_list( $product->get_id() );
 		$size_tags = count( $product->get_tag_ids() );
 
-	if ( $categories ) {
+	if ( is_string( $categories ) && '' !== $categories ) {
 		echo '<span class="posted_in">' . esc_html( _n( 'Category:', 'Categories:', $size_categories, 'lafka' ) ) . '</span>' . wp_kses_post( $categories );
 	}
 
-	if ( $tags ) {
+	if ( is_string( $tags ) && '' !== $tags ) {
 		echo '<span class="tagged_as">' . esc_html( _n( 'Tag:', 'Tags:', $size_tags, 'lafka' ) ) . '</span>' . wp_kses_post( $tags );
 	}
 	?>
