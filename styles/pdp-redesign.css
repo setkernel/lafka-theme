@@ -1156,3 +1156,45 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .lafka-pdp .upsells.products {
   grid-column: 1 / -1;
 }
+
+/* Half and half (plugin: add-on groups with "Half and half" on). The
+ * Left / Whole / Right choice appears once the option is ticked. */
+.lafka-addon-half {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lafka-space-2, 8px);
+  margin: var(--lafka-space-2, 8px) 0 var(--lafka-space-1, 4px) 28px;
+}
+
+.form-row:has(.addon-checkbox:not(:checked)) .lafka-addon-half {
+  display: none;
+}
+
+.product-addon .form-row .lafka-addon-half label {
+  display: inline-flex;
+  flex: 0 0 auto;
+  gap: 6px;
+  align-items: center;
+  width: auto;
+  min-height: 36px;
+  margin: 0;
+  padding: 4px 12px;
+  border: 1px solid var(--lafka-color-border-default);
+  border-radius: var(--lafka-radius-pill);
+  background: var(--lafka-color-surface-raised);
+  color: var(--lafka-color-text-primary);
+  font-size: var(--lafka-font-size-sm);
+  font-weight: 600;
+  text-transform: none;
+  cursor: pointer;
+}
+
+.product-addon .form-row .lafka-addon-half label:has(input:checked) {
+  border-color: var(--lafka-color-accent-500);
+  background: var(--lafka-color-surface-brand-soft);
+}
+
+.lafka-addon-half input {
+  margin: 0;
+  accent-color: var(--lafka-color-accent-500);
+}
