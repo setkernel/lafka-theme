@@ -32,7 +32,7 @@ See the "Where things live" table in [CONTRIBUTING.md](CONTRIBUTING.md#where-thi
 
 ## Development
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) for the local wp-env stack, the four quality gates (`composer phpcs`, `composer test`, `npm run lint`, e2e), the Playwright visual/e2e suites, and the pre-push hook.
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the local stack, the quality gates (`composer phpcs`, `npm run lint`, `npm run check-version`, `npm run build`), and the pre-push hook.
 
 ## License
 

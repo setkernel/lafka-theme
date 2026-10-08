@@ -342,7 +342,7 @@ if ( ! function_exists( 'lafka_font_face_css_for_slug' ) ) {
 
 		$dir_uri = function_exists( 'get_template_directory_uri' )
 			? get_template_directory_uri()
-			: '..'; // isolated unit tests: relative marker, structure is what's asserted.
+			: '..'; // No theme API (CLI): a relative marker keeps the structure intact.
 		$base    = $dir_uri . '/assets/fonts/' . ( isset( $entry['dir'] ) ? $entry['dir'] : $slug ) . '/';
 		$family  = isset( $entry['family'] ) ? (string) $entry['family'] : $slug;
 		$subsets = array(
@@ -392,7 +392,7 @@ if ( ! function_exists( 'lafka_preset_font_face_css' ) ) {
 	/**
 	 * @font-face CSS for the active preset's POOL body + display families
 	 * (deduped when both roles share a family). Peppery — both source:"base" —
-	 * yields '', so the engine emits nothing and the goldens stay byte-identical.
+	 * yields '', so the engine emits nothing.
 	 * Only the ACTIVE preset's (at most two) pool families are ever emitted:
 	 * conditional per-preset enqueue. NX2-03.
 	 *
@@ -567,7 +567,7 @@ if ( ! function_exists( 'lafka_preset_language_attributes' ) ) {
 	 *     preset-scoped CSS can target it (NX2-08 uses it to lift the fixed
 	 *     WooCommerce breadcrumb #767676 to the preset's muted ink on off-white
 	 *     light surfaces where it dips below AA). Peppery is the zero-state — it
-	 *     carries NO marker, so its markup + the 30 goldens stay identical (mirrors
+	 *     carries NO marker, so its markup stays identical (mirrors
 	 *     Peppery's empty PTL).
 	 *   - `data-theme="dark"` for a dark active preset, activating the
 	 *     `:root[data-theme="dark"]` scaffold + `color-scheme` and the dark PTL. §6.
@@ -607,7 +607,7 @@ if ( ! function_exists( 'lafka_preset_category_emoji' ) ) {
 	 * escaped text content downstream (esc_html) — a trusted preset literal.
 	 *
 	 * A preset with an EMPTY map (Peppery, Midnight) returns the incoming $emoji
-	 * untouched, so those presets' markup + the 30 goldens stay byte-identical.
+	 * untouched, so those presets' markup is unchanged.
 	 * Resolution mirrors the partial's own map (home-categories.php:96-100): an
 	 * exact slug hit wins, else a fuzzy fallback where the term slug CONTAINS a map
 	 * key or the term name contains it. An unmatched term keeps the passed glyph.
@@ -640,7 +640,7 @@ if ( ! function_exists( 'lafka_preset_category_emoji' ) ) {
 }
 
 // Include-time hook (matches dynamic-css.php's pattern); guarded so the isolated
-// preset unit tests that don't shim add_filter don't fatal.
+// contexts without the WP hook API don't fatal.
 if ( function_exists( 'add_filter' ) ) {
 	add_filter( 'language_attributes', 'lafka_preset_language_attributes' );
 	add_filter( 'lafka_category_emoji', 'lafka_preset_category_emoji', 10, 2 );

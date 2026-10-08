@@ -102,11 +102,6 @@
 	<!-- Exclude third-party / vendor directories -->
 	<exclude-pattern>/vendor/*</exclude-pattern>
 	<exclude-pattern>/node_modules/*</exclude-pattern>
-	<exclude-pattern>/test-results/*</exclude-pattern>
-	<exclude-pattern>/playwright-report/*</exclude-pattern>
-	<exclude-pattern>/.wp-env-uploads/*</exclude-pattern>
 	<exclude-pattern>/incl/tgm-plugin-activation/*</exclude-pattern>
 	<exclude-pattern>/incl/lafka-options-framework/*</exclude-pattern>
-	<!-- PHPUnit tests use their own PascalCase naming convention, not WP kebab-case. -->
-	<exclude-pattern>/tests/*</exclude-pattern>
 </ruleset>

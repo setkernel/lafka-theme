@@ -68,7 +68,7 @@ if ( ! class_exists( 'Lafka_Presets' ) ) {
 		 * Default discovery dirs: the parent theme's `presets/` first, then the
 		 * child's when a child theme is active. Falls back to the parent theme
 		 * dir relative to THIS file when no WordPress theme API is present
-		 * (isolated unit tests / CLI).
+		 * (CLI).
 		 *
 		 * @return array<int,string>
 		 */

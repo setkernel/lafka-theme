@@ -14,12 +14,10 @@ declared in `styles/lafka-tokens.css` have **no operator feed at all**. That spl
 whole design: a preset's output goes through two layers, each with a
 *trivial, independent* "operator always wins" proof.
 
-The engine's **provable no-op** is the identity fixture
-`presets/__fixtures__/identity/preset.json` (test-only; the pre-GX4 Peppery): it overrides
-nothing, so the engine emits nothing for it → byte-identical `dynamic-css`. Since GX4
-(7.2.0) Peppery, still preset #1 and the default, ships design direction C ("The counter")
-— its own palette, type, pool fonts, chrome and counter layout variants — and
-`OtherPresetsUnchangedTest` pins the other nine presets byte-for-byte.
+The engine's **provable no-op** is a preset that overrides nothing: the engine emits nothing for
+it → byte-identical `dynamic-css`. Since GX4 (7.2.0) Peppery, still preset #1 and the default,
+ships design direction C ("The counter") — its own palette, type, pool fonts, chrome and counter
+layout variants — and the other nine presets stay byte-stable.
 
 ## 1. Terminology (PIN THIS — the panel inverted "Channel 1/2"; do not reuse those labels)
 
@@ -50,7 +48,6 @@ lafka-theme/
     peppery/preview.jpg          # NX2-04 620×465 switcher thumbnail (one preview.jpg per preset dir)
     midnight/ ember/             # dark presets
     verde/ koyo/ terracotta/ azzurro/ brioche/ saffron/ fjord/  # light presets (10 total, NX2-05/08)
-    __fixtures__/lowcontrast/preset.json   # NX2-02: must FAIL the contrast gate
   incl/presets/
     class-lafka-preset.php            # value object: reads one preset.json, typed accessors
     class-lafka-presets.php           # registry: discovery, cache, lafka_presets filter, active()
@@ -125,10 +122,9 @@ Public function surface (all `function_exists`-guarded, `lafka_` prefixed):
 
 **Whitelists are pure-data PHP array constants** in `lafka-preset-tokens.php`, read by BOTH
 the emitter and the validator, mirroring the `lafka_legacy_migrate_map()` idiom. An
-out-of-whitelist key fails a unit test AND is dropped at emit time (never reaches CSS).
-`LAFKA_PRESET_CRITICAL_KEYS` names the above-fold subset (no per-preset `critical` field) —
-reserved for NX2-04.1; not yet consumed (only `PresetSchemaTest` checks it is a subset of
-the token whitelist).
+out-of-whitelist key fails validation AND is dropped at emit time (never reaches CSS).
+`LAFKA_PRESET_CRITICAL_KEYS` names the above-fold subset (no per-preset `critical` field); it
+must remain a subset of the token whitelist.
 
 ## 4. Emission — the three layers, dependency-enforced
 
@@ -141,7 +137,7 @@ the token whitelist).
    Add `'lafka-preset'` to `lafka-style`'s deps so the operator inline still prints last.
    - Light preset: `:root{ … }` (specificity 0,1,0) — beats base by source order.
    - Dark preset: `:root[data-theme="dark"]{ … }` (0,2,0) — supersedes the scaffold token-for-token.
-   - **The identity fixture emits an empty PTL** → nothing printed → byte-identical.
+   - **A preset with empty `tokens` emits an empty PTL** → nothing printed → byte-identical.
    - PTL string is built per request from the transient-cached registry (see
      `Lafka_Presets` discovery cache) — a cheap string-concat over ~10-40 already-parsed
      entries, so no dedicated PTL-string cache is kept.
@@ -175,10 +171,10 @@ postMessage transport; hero copy + announce bar use selective-refresh partials.
   `WP_Customize_Setting::_preview_filter` pins every registered flat theme_mod to the value
   captured with the *active* preset — so a forced-slug rebuild reads that preset's chrome for
   every key, collapsing all ten `dynamicCss` payloads into clones of the active one. Unit/CLI
-  builds have no customize manager, so no unit gate could see it; only the e2e caught it. The
+  builds have no customize manager, so only a live Customizer session shows it. The
   payload builder suspends those pins for the build (exception-safe repin in `finally`; posted
-  changeset values still win via a `post_value()` override). `tests/e2e/customizer-preset.spec.js`
-  is the regression gate.
+  changeset values still win via a `post_value()` override). Verify any change here by switching
+  presets in a live Customizer session and checking each preview payload differs.
 
 ## 5. theme_mod-default layer (29 call sites in dynamic-css.php)
 
@@ -190,12 +186,9 @@ get_theme_mod( 'lafka_x', function_exists( 'lafka_preset_default' )
     ? lafka_preset_default( 'lafka_x', <literal> ) : <literal> );
 ```
 - `lafka_preset_default` returns the active preset's `chrome['lafka_x']` if set, else the
-  literal. **Peppery.chrome is empty** → returns the literal → `DynamicCssParityTest`
-  (whose fixture overrides every key, so the default path never fires) stays byte-green,
-  AND `PresetDefaultsGoldenTest` (§9, all-unset render) proves the default path too.
-- The `function_exists` guard means the isolated PHPUnit process (no theme bootstrap) falls
-  back to the literal — the grep pattern `get_theme_mod('lafka_*'` at `DynamicCssParityTest`
-  is preserved (first arg stays a literal string).
+  literal.
+- The `function_exists` guard means a process without the theme bootstrap falls back to the
+  literal (the first `get_theme_mod` argument stays a literal string).
 - Untyped return routes composite typography arrays (`lafka_h1_font{}`), closing the
   dark-heading gap the minimal-integration blueprint had.
 
@@ -220,7 +213,7 @@ A `dark:true` preset (Midnight, Ember):
    `--lafka-color-accent-500` / `-600`: at (0,2,0) they would out-rank the operator's (0,1,0)
    `dynamic-css` accent, silently ignoring an operator override in dark mode. Dark accent
    comes from `chrome.lafka_accent_color` (TML, operator-overridable). Peppery never stamps
-   `data-theme`, so this is zero-impact on the 30 Peppery goldens.
+   `data-theme`, so this has no effect on Peppery.
 
 ## 7. Storage, switching, reset
 
@@ -258,51 +251,27 @@ token or chrome key fails `validate()` and is skipped (logged under `WP_DEBUG`);
 injected through the filter bypass that check, so the emitter also drops any non-whitelisted
 token (logged).
 
-## 9. Tests & gates
+## 9. Quality gates
 
-- **Iron gate (must stay green for Peppery):** the 30 visual goldens
-  (`npm run test:visual`, local/untracked) + `DynamicCssParityTest` — both
-  byte/pixel-identical because Peppery emits nothing.
-- **`PresetDefaultsGoldenTest`** — renders `dynamic-css` with **all theme_mods unset**, per
-  preset, byte-compared to `tests/fixtures/preset-defaults-<slug>.css`. Closes the
-  `DynamicCssParityTest` blind spot (its fixture overrides everything, so the default path
-  never fires).
-- **`PresetCascadeTest`** — DOM-free resolver proving `Base < PTL < Operator` and
-  operator-wins in code (not prose), for a light and a dark preset.
-- **`PresetSchemaTest`** — every shipped preset validates; every `tokens` key ∈ token
-  whitelist; every `chrome` key ∈ chrome whitelist; no structural/a11y/legacy-alias keys.
-- **`PresetContrastTest` (NX2-02)** — for every registered preset, resolves the effective
-  palette (base ⊕ PTL ⊕ chrome ⊕ derived accent-text) and computes WCAG ratios via
-  `Lafka_Color_Contrast` for the critical pairs (body-text/surface, accent-text/surface,
-  button-text/accent-500, focus-ring, badges), failing any pair < AA **except** audited
-  `contrast_exceptions`, which may never drop below the AA-large floor (3.0). The one shipped
-  waiver is Peppery's `text-muted-on-surface` (`#71717a` on `surface-muted` `#f4f4f5`,
-  4.40:1). The `__fixtures__/lowcontrast` preset **must fail** (proven via a data provider
-  that expects failure, so the suite stays green while proving the gate has teeth).
-- **Rendered contrast gate (NX2-07/08)** — `npm run test:contrast` measures real rendered
-  text/CTA contrast for every registered preset on home, menu, PDP and cart (local, not in
-  CI); `npm run test:visual:dark` holds the dark-preset goldens.
-- **`PresetEnqueueOrderTest`** — asserts the `lafka-preset` handle sits between
-  `lafka-tokens` and `lafka-style` in the dependency graph.
-- **Switcher** — `PresetSwitcherWiringTest`, `PresetPreviewPayloadTest`,
-  `PresetPreviewEnqueueTest` (unit) + `tests/e2e/customizer-preset.spec.js` (§4).
-- Standard gates each commit: `composer test`, `composer phpcs`, `npm run lint`.
+The unit, e2e and visual-golden suites were removed (2026-10) and will be reintroduced later; the
+gates a change must pass today are `composer phpcs`, `npm run lint`, `npm run check-version` and
+`npm run build`. The design constraints the old suites enforced still hold, and are worth
+re-asserting when tests return:
+
+- **Peppery is the default and must keep rendering the counter design**; the other nine presets
+  must stay byte-stable unless deliberately changed.
+- **Cascade order** is `Base < PTL < Operator`: an operator value always wins (proved in code by
+  the layering in §4, not by prose).
+- **Schema:** every shipped preset validates; every `tokens` key is in the token whitelist; every
+  `chrome` key is in the chrome whitelist; no structural/a11y/legacy-alias keys.
+- **Contrast:** for every registered preset the effective palette (base ⊕ PTL ⊕ chrome ⊕ derived
+  accent-text) is measured with `Lafka_Color_Contrast` over the critical pairs (body-text/surface,
+  accent-text/surface, button-text/accent-500, focus-ring, badges); every pair must reach AA
+  **except** audited `contrast_exceptions`, which may never drop below the AA-large floor (3.0).
+- **Enqueue order:** the `lafka-preset` handle sits between `lafka-tokens` and `lafka-style` in the
+  dependency graph.
 
 ## 10. Worked examples
-
-**`presets/__fixtures__/identity/preset.json` (identity — emits nothing; the pre-GX4 Peppery):**
-```json
-{ "slug": "identity", "schema": 1, "label": "Identity (test fixture)",
-  "description": "Engine no-op fixture …", "dark": false, "extends": null,
-  "tokens": {}, "chrome": {},
-  "fonts": { "body": {"family":"Rubik","source":"base"}, "display": {"family":"Fraunces","source":"base"} },
-  "category_emoji": {}, "variants": {}, "contrast_exceptions": ["text-muted-on-surface"] }
-```
-With the identity fixture active and no operator overrides: PTL empty, chrome defaults =
-literals, no `data-theme`, base fonts already enqueued → **byte-identical dynamic-css**. This
-is the acceptance proof for NX2-01 (`PresetCascadeTest`, `PresetEnqueueOrderTest`,
-`SelfHostedFontsTest`, `PresetContrastTest` register it through the `lafka_presets` filter;
-discovery never finds `__fixtures__`).
 
 **`presets/peppery/preset.json` (GX4, the counter design):** tokens for the warm-white
 palette, 17/18 px body, 8 px button radius and dish shadow; chrome for every whitelisted key
@@ -330,7 +299,7 @@ dark surface/border/text ramp under the scoped selector, `chrome` sets
   (drawers, dialogs, overlays, fixed bars, footer) and vendored libraries load async, listed
   in `lafka_critical_css_async_handles()` (filter `lafka_critical_css_async_handles`). A new
   off-screen sheet opts in there; its closed state belongs in `critical.css` so it cannot
-  flash. `tests/e2e/cls-budget.spec.js` holds CLS <= 0.02 on the order path.
+  flash. Keep CLS <= 0.02 on the order path.
 - **Dedicated `styles/presets/<slug>.css` + `build-presets.mjs` generator** → only if/when
   browser-caching 10 presets justifies it; the inline-only handle (§4) needs no generator and
   costs no request (only one preset is active at a time).

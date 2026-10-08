@@ -53,23 +53,6 @@ export default [
 			},
 		},
 	},
-	// Playwright configs + e2e/visual tests run under Node.js (CommonJS).
-	{
-		files: [
-			"playwright.config.js",
-			"playwright.visual.config.js",
-			"tests/e2e/**/*.js",
-			"tests/e2e/**/*.spec.js",
-			"tests/visual/**/*.js",
-			"tests/visual/**/*.spec.js",
-		],
-		languageOptions: {
-			sourceType: "commonjs",
-			globals: {
-				...globals.node,
-			},
-		},
-	},
 	// Node.js build scripts (ES modules) — e.g. scripts/sync-version.mjs.
 	// ecmaVersion 2022 for top-level await (nx2-04-preset-previews.mjs).
 	{

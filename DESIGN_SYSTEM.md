@@ -123,8 +123,7 @@ Every preset uses two families — body and display — all self-hosted WOFF2 un
 Body is 17 px on phones and 18 px from 768 px (`--lafka-font-size-body-desk`, counter
 layouts only); display weight 800; buttons use `--lafka-radius-button` (8 px).
 
-The base families below remain for the identity fixture and any preset that uses
-`source: "base"`:
+The base families below remain for any preset that uses `source: "base"`:
 
 | Family    | Role        | Weights loaded   | License |
 |-----------|-------------|------------------|---------|
@@ -159,7 +158,7 @@ Line-heights: display 1.1, headings 1.15, body 1.5, small 1.4.
   Pacifico/cursive lookalikes.
 - ❌ Font sizes outside the token table.
 - ❌ (counter layout) Italic accents in headings — the counter renders `<em>` upright; no
-  visible text below 14 px (the e2e suite measures it).
+  visible text below 14 px.
 
 ## Spacing
 
@@ -273,7 +272,7 @@ Tokens are the contract; these are the key files that consume them.
 |------|------|
 | `styles/lafka-tokens.css` | The token SSOT — color/type/space/radii/motion, dark-mode block, accent-text derivation. |
 | `styles/dynamic-css.php` | Emits the operator's Customizer accent override into the cascade. Its 34 chrome defaults (29 `lafka_preset_default()` call sites) resolve through the active preset (operator theme_mods still win). |
-| `incl/presets/` + `presets/*/preset.json` | **Preset engine** — the "10 designs in one theme" system; file layout: see [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md) §2. Peppery is preset #1 and the default (the counter design since 7.2.0); the engine's no-op is the `__fixtures__/identity` preset. |
+| `incl/presets/` + `presets/*/preset.json` | **Preset engine** — the "10 designs in one theme" system; file layout: see [`docs/PRESET_ENGINE.md`](docs/PRESET_ENGINE.md) §2. Peppery is preset #1 and the default (the counter design since 7.2.0) |
 | `styles/lafka-base.css` | **Parent baseline a11y / CLS** — structural rules the parent's own markup depends on (`.section-subtitle`, `.foodmenu-unit-info .ingredients`, `.screen-reader-text`, pre-mount `.lafka-owl-carousel` height reservation). Previously these lived only in lafka-child, leaving the OSS parent non-accessible on its own. |
 | `styles/lafka-search.css` | Header search overlay — native `<dialog>`; consumes tokens with neutral fallbacks. |
 | `styles/pdp-redesign.css` | Redesigned product page. |
@@ -300,7 +299,7 @@ change a setting:
   `incl/customizer-*.php` panel) writing a `theme_mod` named `lafka_<key>`, and
   read it with `get_theme_mod( 'lafka_<key>', <default> )` — never re-introduce a
   `lafka_get_option()` read for a theme setting (it is a deprecated back-compat
-  shim; `tests/Unit/LegacyOptionShimScanTest.php` fails the build if you do).
+  shim).
 - If the setting must survive an upgrade from the old panel, add its legacy key →
   `lafka_<key>` pair to `lafka_legacy_migrate_map()` in
   `incl/system/lafka-legacy-migrate.php` and bump `LAFKA_LEGACY_MIGRATION_VERSION`.

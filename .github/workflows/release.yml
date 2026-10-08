@@ -56,9 +56,8 @@ jobs:
           mkdir lafka
           # NX1-10d: dev-only files must never ship in the installable zip.
           # Excluded: VCS/CI metadata, dependencies, package manifests, lint +
-          # phpunit + playwright + wp-env tooling, the test suite, the build
-          # scripts (already run in the step above), and the contributor/design
-          # docs, and the contrast-gate fixture preset. Runtime assets STAY — the
+          # tooling, the build scripts (already run in the step above), and the
+          # contributor/design docs. Runtime assets STAY — the
           # freshly-built .min siblings, readme.txt, languages/, theme.json,
           # presets/, and every LICENSE (the root GPL
           # text and the per-family OFL font licences, which must travel with
@@ -68,7 +67,6 @@ jobs:
                    --exclude='.gitignore' \
                    --exclude='.githooks' \
                    --exclude='.npmrc' \
-                   --exclude='.wp-env*.json' \
                    --exclude='node_modules' \
                    --exclude='vendor' \
                    --exclude='package.json' \
@@ -78,11 +76,6 @@ jobs:
                    --exclude='.phpcs.xml.dist' \
                    --exclude='.stylelintrc.json' \
                    --exclude='eslint.config.mjs' \
-                   --exclude='phpunit.xml.dist' \
-                   --exclude='.phpunit.result.cache' \
-                   --exclude='playwright*.config.js' \
-                   --exclude='presets/__fixtures__' \
-                   --exclude='tests' \
                    --exclude='scripts' \
                    --exclude='CONTRIBUTING.md' \
                    --exclude='DESIGN_SYSTEM.md' \

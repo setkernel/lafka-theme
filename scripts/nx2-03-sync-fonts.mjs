@@ -12,7 +12,7 @@
  * an on-disk licence.
  *
  * Rubik + Fraunces woff2 are LEFT UNTOUCHED (they are `source:"base"`, already
- * self-hosted, and any byte change would break the Peppery goldens).
+ * self-hosted, and any byte change would alter Peppery's rendering).
  *
  * Idempotent: re-running overwrites the copied files with identical bytes.
  * Run:  node scripts/nx2-03-sync-fonts.mjs

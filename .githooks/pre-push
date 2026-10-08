@@ -2,14 +2,13 @@
 #
 # Pre-push hook for lafka-theme.
 #
-# Runs the same gates CI runs — PHPCS, PHPUnit, ESLint, Stylelint — in
-# parallel, and prints the output of any gate that fails.
+# Runs the repository's quality gates — PHPCS, ESLint, Stylelint and the
+# version-consistency check — in parallel, and prints the output of any gate
+# that fails. Every gate always runs; nothing is skipped.
 #
 # Install (one-time per clone):
 #     git config core.hooksPath .githooks
-#
-# Bypass for one push (use sparingly):
-#     git push --no-verify
+#     composer install && npm ci
 #
 
 set -uo pipefail
@@ -19,6 +18,18 @@ cd "$(git rev-parse --show-toplevel)"
 red()   { printf '\033[31m%s\033[0m\n' "$1"; }
 green() { printf '\033[32m%s\033[0m\n' "$1"; }
 blue()  { printf '\033[36m%s\033[0m\n' "$1"; }
+
+if [ ! -d node_modules ]; then
+	red "✖ pre-push: node_modules is missing, so ESLint, Stylelint and the version check cannot run."
+	red "   Run 'npm ci' (and 'composer install' for PHPCS), then push again."
+	exit 1
+fi
+
+if [ ! -x vendor/bin/phpcs ]; then
+	red "✖ pre-push: vendor/bin/phpcs is missing, so PHPCS cannot run."
+	red "   Run 'composer install', then push again."
+	exit 1
+fi
 
 logs="$(mktemp -d)"
 trap 'rm -rf "$logs"' EXIT
@@ -33,16 +44,11 @@ run() {
 	pids+=( $! )
 }
 
-blue "▸ pre-push: PHPCS, PHPUnit, ESLint and Stylelint (in parallel)"
+blue "▸ pre-push: PHPCS, ESLint, Stylelint and version check (in parallel)"
 run PHPCS composer phpcs
-run PHPUnit composer test
-if [ -d node_modules ]; then
-	run ESLint npm run lint:js --silent
-	run Stylelint npm run lint:css --silent
-else
-	red "⚠ pre-push: node_modules absent — skipping JS/CSS lint."
-	red "   run 'npm ci' to enable full local checks."
-fi
+run ESLint npm run lint:js --silent
+run Stylelint npm run lint:css --silent
+run Version npm run check-version --silent
 
 failed=0
 for i in "${!pids[@]}"; do
@@ -54,7 +60,7 @@ for i in "${!pids[@]}"; do
 done
 
 if [ "$failed" -ne 0 ]; then
-	red "   fix locally, or bypass with: git push --no-verify"
+	red "   fix the failures above, then push again."
 	exit 1
 fi
 

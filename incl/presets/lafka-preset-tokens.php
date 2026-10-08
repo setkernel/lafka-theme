@@ -5,7 +5,7 @@
  * The preset engine has two independent "operator always wins" layers, each
  * with its own allow-list. These constants are the SINGLE source both the
  * emitter (incl/presets/lafka-preset-emit.php) and the validator
- * (tests/Unit/PresetSchemaTest.php) read, mirroring the `lafka_legacy_migrate_map()`
+ * (Lafka_Preset::validate()) read, mirroring the `lafka_legacy_migrate_map()`
  * pure-data idiom. See docs/PRESET_ENGINE.md §3.
  *
  *  - LAFKA_PRESET_TOKEN_WHITELIST — the 88 `--lafka-*` design tokens that have

@@ -7,6 +7,22 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Removed
+- **All tests and test tooling** (to be reintroduced later): `tests/` (PHPUnit unit suite,
+  Playwright e2e and visual suites, fixtures, support), `phpunit.xml.dist`,
+  `playwright.config.js`, `playwright.visual.config.js`, the `presets/__fixtures__` fixture
+  presets, the one-shot NX1-10a cascade-parity scripts, `.wp-env.json` (wp-env stacks are
+  retired in favour of the single `../local-env` Docker stack), `phpunit/phpunit` from
+  Composer, the `test:*` npm scripts, and every doc/config reference to them.
+
+### Changed
+- `npm run i18n:pot` and `npm run previews:presets` now target the local stack
+  (`lafka-local-cli` container, `http://localhost:8080`; override with
+  `LAFKA_WPCLI_CONTAINER` / `LAFKA_BASE_URL`). The WP-CLI helper moved to
+  `scripts/lib/wp-cli.mjs`; the preview script uses the `playwright` library.
+- The pre-push hook runs PHPCS, ESLint, Stylelint and the version check, never skips a gate and
+  fails with an `npm ci` / `composer install` hint when dependencies are missing.
+
 ## [7.3.0] — 2026-09-25
 
 Live-site QA sharpening (2026-09-25); pairs with lafka-plugin 10.3.0.

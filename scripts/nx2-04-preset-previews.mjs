@@ -3,24 +3,21 @@
  * NX2-04 — generate presets/<slug>/preview.jpg for the Customizer switcher.
  *
  * For each discovered preset: point lafka_active_preset at it (wp-cli into
- * the umbrella wp-env), bust the dynamic-css cache, screenshot the home page
- * hero region at 1240×930 and save a 620-wide JPEG. Restores the previously
- * active preset (or leaves the theme_mod unset if it was unset) and busts the
- * cache when done — run against http://localhost:8890 only.
+ * the local stack, see scripts/lib/wp-cli.mjs), bust the dynamic-css cache,
+ * screenshot the home page hero region at 1240×930 and save a 620-wide JPEG.
+ * Restores the previously active preset (or leaves the theme_mod unset if it
+ * was unset) and busts the cache when done — run against the local stack only
+ * (LAFKA_BASE_URL, default http://localhost:8080).
  *
  * Usage: npm run previews:presets [-- --only=ember,koyo]
  */
-import { chromium } from '@playwright/test';
+import { chromium } from 'playwright';
 import { readdirSync, existsSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
-import { createRequire } from 'node:module';
-
-const require = createRequire( import.meta.url );
-const { wpCli, bustDynamicCss } = require( '../tests/e2e/support/wp-cli.js' );
+import { wpCli, bustDynamicCss, BASE_URL } from './lib/wp-cli.mjs';
 
 const ROOT = join( dirname( fileURLToPath( import.meta.url ) ), '..' );
-const BASE_URL = process.env.LAFKA_E2E_BASE_URL || 'http://localhost:8890';
 
 const onlyArg = process.argv.find( ( a ) => a.startsWith( '--only=' ) );
 const only = onlyArg ? onlyArg.slice( 7 ).split( ',' ) : null;

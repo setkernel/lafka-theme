@@ -375,8 +375,7 @@ if ( ! function_exists( 'lafka_legacy_migrate_maybe_run' ) ) {
 }
 
 // Run the one-time upgrade copy on the first request after an upgrade. Guarded so
-// the file can be required by unit tests (which stub get_option/set_theme_mod but
-// not add_action) without side effects at include time.
+// requiring the file outside WordPress has no side effects at include time.
 if ( function_exists( 'add_action' ) ) {
 	add_action( 'after_setup_theme', 'lafka_legacy_migrate_maybe_run', 99 );
 }

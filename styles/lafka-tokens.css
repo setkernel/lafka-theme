@@ -481,8 +481,8 @@
 	 * Dark accent now comes from the active preset's chrome.lafka_accent_color
 	 * (theme_mod-default layer, operator-overridable); accent-text is lightened
 	 * for dark surfaces by the preset emitter's dark @supports block. Peppery
-	 * never stamps data-theme, so this deletion is provably zero-impact on the 30
-	 * Peppery goldens. See docs/PRESET_ENGINE.md §6. */
+	 * never stamps data-theme, so this deletion is provably zero-impact on
+	 * Peppery. See docs/PRESET_ENGINE.md §6. */
 
 	--lafka-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
 	--lafka-shadow-2: 0 2px 6px rgba(0, 0, 0, 0.45);
@@ -549,7 +549,7 @@ html body {
  * Lift it to the preset's muted ink for every NON-default preset (marked with
  * data-lafka-preset on <html> by lafka_preset_language_attributes); Peppery
  * carries no marker — its page is pure #fff where #767676 clears AA at 4.54:1 —
- * so its dynamic-css bytes + the 30 goldens stay byte/pixel-identical. Dark
+ * so its dynamic-css bytes and rendering stay identical. Dark
  * presets are already handled by the rule above (this scope excludes them). */
 :root[data-lafka-preset]:not([data-theme="dark"]) .breadcrumb {
 	color: var(--lafka-color-text-muted);

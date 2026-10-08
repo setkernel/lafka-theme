@@ -5,8 +5,8 @@
  *
  * The preset engine's font layer mirrors the pure-data whitelist idiom of
  * incl/presets/lafka-preset-tokens.php: a single constant that BOTH the emitter
- * (lafka_preset_font_face_css() in lafka-preset-emit.php) and the disk/enqueue
- * test (tests/Unit/SelfHostedFontsTest.php) read.
+ * (lafka_preset_font_face_css() in lafka-preset-emit.php) and the
+ * pool-to-disk check read.
  *
  * A preset's `fonts{ body, display }` block names a `family` and a `source`:
  *   - source "base" — Rubik / Fraunces, already @font-face'd in the static CSS

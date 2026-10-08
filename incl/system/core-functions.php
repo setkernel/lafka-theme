@@ -1836,8 +1836,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// active preset's :root overrides print AFTER the base tokens. lafka-style
 		// then depends on lafka-preset so the operator's dynamic-css :root inline
 		// still prints LAST and always wins. Peppery emits an empty PTL, so this
-		// adds zero bytes for the default preset (byte-identical dynamic-css +
-		// pixel-identical goldens). See docs/PRESET_ENGINE.md §4.
+		// adds zero bytes for the default preset (byte-identical dynamic-css).
+		// See docs/PRESET_ENGINE.md §4.
 		$lafka_style_deps = array( 'lafka-tokens' );
 		if ( function_exists( 'lafka_preset_register_ptl' ) ) {
 			lafka_preset_register_ptl();
@@ -2429,8 +2429,8 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 	 *
 	 * The theme's legacy Options Framework is retired. Every FIRST-PARTY theme
 	 * reader of a migrated appearance key was re-pointed at its
-	 * `get_theme_mod( 'lafka_<key>', <default> )` home by the NX1-02 slices
-	 * (enforced by tests/Unit/LegacyOptionShimScanTest.php). This shim survives
+	 * `get_theme_mod( 'lafka_<key>', <default> )` home by the NX1-02 slices.
+	 * Do not add new first-party callers. This shim survives
 	 * only so third-party / child-theme code still calling the legacy helper for
 	 * a MAPPED key keeps resolving the value from its new theme_mod home for one
 	 * major cycle, with a WP_DEBUG deprecation notice pointing at the new API.
