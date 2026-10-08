@@ -1306,10 +1306,11 @@ add_action(
 			);
 		}
 
+		lafka_enqueue_fulfilment_script();
 		wp_enqueue_script(
 			'lafka-order-method',
 			$tpl_uri . '/js/order-method.js',
-			array(),
+			array( 'lafka-fulfilment' ),
 			$ver_for( 'js/order-method.js' ),
 			array(
 				'in_footer' => true,
@@ -1343,23 +1344,11 @@ add_action(
 			wp_enqueue_script(
 				'lafka-pdp-pickers',
 				$tpl_uri . '/js/pdp-pickers.js',
-				array(),
+				lafka_core_deps(),
 				$ver_for( 'js/pdp-pickers.js' ),
 				array(
 					'in_footer' => true,
 					'strategy'  => 'defer',
-				)
-			);
-
-			wp_localize_script(
-				'lafka-pdp-pickers',
-				'lafkaPdpCurrency',
-				array(
-					'symbol'      => function_exists( 'get_woocommerce_currency_symbol' ) ? html_entity_decode( get_woocommerce_currency_symbol() ) : '$',
-					'position'    => get_option( 'woocommerce_currency_pos', 'left' ),
-					'thousandSep' => function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : ',',
-					'decimalSep'  => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
-					'decimals'    => function_exists( 'wc_get_price_decimals' ) ? (int) wc_get_price_decimals() : 2,
 				)
 			);
 
@@ -1389,7 +1378,7 @@ add_action(
 			wp_enqueue_script(
 				'lafka-pdp-addons',
 				$tpl_uri . '/js/pdp-addons.js',
-				array( 'jquery' ),
+				lafka_core_deps( array( 'jquery' ) ),
 				$ver_for( 'js/pdp-addons.js' ),
 				array(
 					'in_footer' => true,

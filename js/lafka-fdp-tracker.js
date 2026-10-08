@@ -47,6 +47,10 @@
 (function () {
 	'use strict';
 
+	if (!window.lafka) {
+		return;
+	}
+
 	// Skip everything in environments without document (SSR / test runners).
 	if (typeof document === 'undefined') {
 		return;
@@ -76,28 +80,6 @@
 			pct: isNaN(pct) ? 0 : Math.max(0, Math.min(100, pct)),
 			state: state === 'reached' ? 'reached' : 'below'
 		};
-	}
-
-	/**
-	 * Push to the GTM dataLayer if it exists. No-op otherwise.
-	 * Mirrors the defensive wrapper pattern in lafka-custom-events.js.
-	 */
-	function pushEvent(eventName, params) {
-		if (!eventName || typeof window === 'undefined') {
-			return;
-		}
-		if (!window.dataLayer || typeof window.dataLayer.push !== 'function') {
-			return;
-		}
-		const payload = { event: eventName };
-		if (params && typeof params === 'object') {
-			for (const key in params) {
-				if (Object.prototype.hasOwnProperty.call(params, key)) {
-					payload[key] = params[key];
-				}
-			}
-		}
-		window.dataLayer.push(payload);
 	}
 
 	/**
@@ -161,7 +143,7 @@
 		if (fdpState.state === 'reached') {
 			if (!unlockedFired) {
 				unlockedFired = true;
-				pushEvent('free_delivery_unlocked', {
+				window.lafka.track('free_delivery_unlocked', {
 					threshold: fdpState.threshold,
 					value: fdpState.value
 				});
@@ -173,22 +155,8 @@
 		}
 	}
 
-	/**
-	 * Format a numeric value as currency for the client-rebuilt label.
-	 * Server-render uses wc_price() (currency-correct). Client refresh
-	 * falls back to a USD-style prefix '$' — good enough for the OSS
-	 * default. Sites with a non-USD currency can override
-	 * window.lafkaFdpFormatCurrency.
-	 */
 	function formatCurrency(value) {
-		if (typeof window !== 'undefined' && typeof window.lafkaFdpFormatCurrency === 'function') {
-			return window.lafkaFdpFormatCurrency(value);
-		}
-		let num = parseFloat(value);
-		if (isNaN(num)) {
-			num = 0;
-		}
-		return '$' + num.toFixed(2);
+		return window.lafka.money.format(value);
 	}
 
 	/**

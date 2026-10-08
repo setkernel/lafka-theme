@@ -32,9 +32,10 @@
 (function () {
 	'use strict';
 
+	if (!window.lafka) { return; }
+
 	const CONFIG = window.lafkaPdpCtaConfig || {};
 	const DEFAULT_STRATEGY = CONFIG.defaultStrategy || 'median';
-	const CURRENCY_SYMBOL = CONFIG.currencySymbol || '$';
 	const ADD_LABEL = CONFIG.addLabel || 'Add';
 	const PICK_LABEL = CONFIG.pickLabel || 'Select options';
 	const OUT_OF_STOCK_LABEL = CONFIG.outOfStockLabel || 'Out of stock';
@@ -221,7 +222,7 @@
 	}
 
 	function formatPrice(amount) {
-		return CURRENCY_SYMBOL + amount.toFixed(2);
+		return window.lafka.money.format(amount);
 	}
 
 	function setCtaState(state, total) {

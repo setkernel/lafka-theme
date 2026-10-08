@@ -86,6 +86,10 @@
 (function () {
 	'use strict';
 
+	if (!window.lafka) {
+		return;
+	}
+
 	if (typeof document === 'undefined' || typeof window === 'undefined') {
 		return;
 	}
@@ -158,27 +162,6 @@
 	}
 
 	// ─────────────────────────────────────────────────────────────────────
-	// dataLayer push wrapper — silently no-op when GTM isn't on the page.
-	// ─────────────────────────────────────────────────────────────────────
-	function pushEvent(eventName, params) {
-		if (!eventName) {
-			return;
-		}
-		if (!window.dataLayer || typeof window.dataLayer.push !== 'function') {
-			return;
-		}
-		const payload = { event: eventName };
-		if (params && typeof params === 'object') {
-			for (const key in params) {
-				if (Object.prototype.hasOwnProperty.call(params, key)) {
-					payload[key] = params[key];
-				}
-			}
-		}
-		window.dataLayer.push(payload);
-	}
-
-	// ─────────────────────────────────────────────────────────────────────
 	// Cart snapshot reader — lazy so we pick up FDP tracker's late writes.
 	// ─────────────────────────────────────────────────────────────────────
 	function readCartSnapshot() {
@@ -212,16 +195,7 @@
 	}
 
 	function formatCurrency(value) {
-		// Mirror lafka-fdp-tracker.js — use override hook when site overrides
-		// the format for non-USD currencies.
-		if (typeof window.lafkaFdpFormatCurrency === 'function') {
-			return window.lafkaFdpFormatCurrency(value);
-		}
-		let num = parseFloat(value);
-		if (isNaN(num)) {
-			num = 0;
-		}
-		return '$' + num.toFixed(2);
+		return window.lafka.money.format(value);
 	}
 
 	// ─────────────────────────────────────────────────────────────────────
@@ -319,7 +293,7 @@
 		}
 		// Trigger CSS exit animation.
 		toast.dataset.dismissing = 'true';
-		pushEvent('exit_intent_dismiss', { reason: reason || 'manual' });
+		window.lafka.track('exit_intent_dismiss', { reason: reason || 'manual' });
 		markShownThisSession();
 		// Remove after CSS transition completes. 200ms enter, 150ms exit
 		// per spec — add a 50ms safety pad for prefers-reduced-motion =
@@ -356,7 +330,7 @@
 		void parts.root.offsetWidth;
 		parts.root.dataset.visible = 'true';
 
-		pushEvent('exit_intent_shown', {
+		window.lafka.track('exit_intent_shown', {
 			items_count: snapshot.items_count,
 			value: snapshot.value,
 			state: parts.root.dataset.state
@@ -371,7 +345,7 @@
 			dismiss('maybe_later');
 		});
 		parts.primary.addEventListener('click', function () {
-			pushEvent('exit_intent_resume_click', {
+			window.lafka.track('exit_intent_resume_click', {
 				items_count: snapshot.items_count,
 				value: snapshot.value
 			});

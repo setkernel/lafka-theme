@@ -23,29 +23,20 @@
  * Default group state is expanded — first-time visitors see what's
  * available. Customer can collapse groups they don't need to see.
  *
- * Currency formatting honours lafkaPdpCurrency localized in
- * functions.php so non-USD shops render correctly.
+ * Currency formatting is lafka.money (lafka-core), which follows the
+ * WooCommerce currency settings, so non-USD shops render correctly.
  *
  * @since 5.16.0
  */
 ( function ( $ ) {
 	'use strict';
 
-	if ( ! $ || typeof $.fn !== 'object' ) {
+	if ( ! $ || typeof $.fn !== 'object' || ! window.lafka ) {
 		return;
 	}
 
 	function formatMoney( n ) {
-		const c = window.lafkaPdpCurrency || {};
-		const sym = c.symbol || '$';
-		const dec = c.decimalSep || '.';
-		const thou = c.thousandSep || ',';
-		const decimals = typeof c.decimals === 'number' ? c.decimals : 2;
-		const fixed = n.toFixed( decimals );
-		const parts = fixed.split( '.' );
-		const withSep = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, thou );
-		const num = decimals > 0 ? withSep + dec + parts[ 1 ] : withSep;
-		return c.position === 'right' ? num + sym : sym + num;
+		return window.lafka.money.format( n );
 	}
 
 	/**

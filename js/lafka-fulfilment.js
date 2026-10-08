@@ -2,7 +2,8 @@
  * GX4: the Pickup / Delivery preference.
  *
  * One preference, owned by lafka-plugin (cookie `lafka_order_method`, which
- * preselects the matching WooCommerce shipping rate at checkout). This file:
+ * preselects the matching WooCommerce shipping rate at checkout). This file is
+ * the cookie's only writer (window.lafka.fulfilment.set() for other scripts):
  *  - writes the cookie AND mirrors the menu/cart controllers' localStorage key
  *    (window.lafkaCfg.fulfilmentKey, default `lafka.fulfilment`);
  *  - keeps every `[data-lafka-fulfilment-input]` radio group on the page (header,
@@ -10,23 +11,25 @@
  *  - dispatches `lafka:fulfilment` ({ method }) for insights, plus the existing
  *    `lafka:fulfilment-change` ({ mode }) the menu/cart controllers listen to.
  *
+ * Depends on lafka-core (cookie). The pickup shipping method ids come only from
+ * window.lafkaCfg.pickupMethods (the plugin's list); there is no copy here.
+ *
  * @since 7.2.0 (GX4)
  */
 ( function () {
 	'use strict';
 
+	const lafka = window.lafka;
+	if ( ! lafka || ! lafka.cookie ) {
+		return;
+	}
 	const cfg = window.lafkaCfg || {};
 	const KEY = cfg.fulfilmentKey || 'lafka.fulfilment';
 	const COOKIE = 'lafka_order_method';
 	const MODES = [ 'pickup', 'delivery' ];
 
-	function readCookie() {
-		const m = new RegExp( '(?:^|;\\s*)' + COOKIE + '=([^;]+)' ).exec( document.cookie );
-		return m ? decodeURIComponent( m[ 1 ] ) : '';
-	}
-
 	function read() {
-		let value = readCookie();
+		let value = lafka.cookie.get( COOKIE );
 		if ( MODES.indexOf( value ) === -1 ) {
 			try {
 				value = window.localStorage.getItem( KEY ) || '';
@@ -38,8 +41,7 @@
 	}
 
 	function write( method ) {
-		const secure = window.location.protocol === 'https:' ? '; Secure' : '';
-		document.cookie = COOKIE + '=' + method + '; path=/; max-age=31536000; SameSite=Lax' + secure;
+		lafka.cookie.set( COOKIE, method, 365 );
 		try {
 			window.localStorage.setItem( KEY, method );
 		} catch {
@@ -55,10 +57,12 @@
 			note.hidden = note.getAttribute( 'data-lafka-fulfilment-note' ) !== method;
 		} );
 		Array.prototype.forEach.call( document.querySelectorAll( '[data-lafka-fulfilment-text]' ), function ( node ) {
-			const label = node.getAttribute( 'data-lafka-fulfilment-' + method );
-			if ( label ) {
-				node.textContent = label;
+			if ( node.hasAttribute( 'data-lafka-fulfilment-' + method ) ) {
+				node.textContent = node.getAttribute( 'data-lafka-fulfilment-' + method );
 			}
+		} );
+		Array.prototype.forEach.call( document.querySelectorAll( '[data-lafka-fulfilment-root]' ), function ( node ) {
+			node.setAttribute( 'data-method', method );
 		} );
 	}
 
@@ -69,7 +73,7 @@
 	// choice everywhere else. Pickup rates are the plugin's pickup method ids
 	// (lafkaCfg.pickupMethods); every other rate — including the plugin's
 	// "Delivery" placeholder shown before an address — is delivery.
-	const PICKUP_METHODS = Array.isArray( cfg.pickupMethods ) ? cfg.pickupMethods : [ 'local_pickup', 'pickup_location' ];
+	const PICKUP_METHODS = Array.isArray( cfg.pickupMethods ) ? cfg.pickupMethods : [];
 	let applyingRate = false;
 
 	function rateMode( value ) {
@@ -154,6 +158,14 @@
 			}
 		}
 	}
+
+	lafka.fulfilment = {
+		get: read,
+		/** Choose Pickup or Delivery: the cookie, every control, the shipping rate. */
+		set: function ( method ) {
+			choose( method, 'api' );
+		},
+	};
 
 	if ( document.readyState === 'loading' ) {
 		document.addEventListener( 'DOMContentLoaded', init );

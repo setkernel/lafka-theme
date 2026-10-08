@@ -67,6 +67,21 @@ if ( ! function_exists( 'lafka_deferred_script_handles' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_core_deps' ) ) {
+	/**
+	 * Script dependencies for a theme script that uses window.lafka (track,
+	 * cookie, money, debounce, api): the plugin's shared `lafka-core` script.
+	 * Empty without the plugin, so the script still loads; its code then finds no
+	 * window.lafka and skips the work that needs it.
+	 *
+	 * @param string[] $deps Other dependencies.
+	 * @return string[]
+	 */
+	function lafka_core_deps( array $deps = array() ): array {
+		return wp_script_is( 'lafka-core', 'registered' ) ? array_merge( array( 'lafka-core' ), $deps ) : $deps;
+	}
+}
+
 add_action( 'wp_enqueue_scripts', 'lafka_apply_script_defer_strategy', 1000 );
 add_action( 'wp_footer', 'lafka_apply_script_defer_strategy', 1 );
 if ( ! function_exists( 'lafka_apply_script_defer_strategy' ) ) {

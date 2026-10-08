@@ -12,38 +12,16 @@
 (function () {
   'use strict';
 
+  if (!window.lafka) return;
+
   const root = document.querySelector('.lafka-pdp-pickers');
   // Simple products have no pickers but share the quantity stepper below
   // (it used to be dead on them: this script returned before binding it).
   const summary = document.querySelector('.lafka-pdp-summary');
   if (!root && !summary) return;
 
-  // Currency formatter — reads symbol, position, separators, and decimal
-  // count from a localized var (wired in lafka-theme/functions.php from
-  // WC's settings). Falls back to a USD-style default if the localized
-  // data isn't present (e.g. third-party page builder that doesn't
-  // enqueue our script in the standard way).
-  const CURRENCY = (typeof window.lafkaPdpCurrency === 'object' && window.lafkaPdpCurrency)
-    ? window.lafkaPdpCurrency
-    : { symbol: '$', position: 'left', thousandSep: ',', decimalSep: '.', decimals: 2 };
-
-  function formatPrice(amount) {
-    let n = parseFloat(amount);
-    if (isNaN(n)) n = 0;
-    const dec = CURRENCY.decimals != null ? CURRENCY.decimals : 2;
-    const fixed = n.toFixed(dec);
-    const parts = fixed.split('.');
-    parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, CURRENCY.thousandSep || ',');
-    const formatted = (parts.length > 1 ? parts.join(CURRENCY.decimalSep || '.') : parts[0]);
-    const sym = CURRENCY.symbol || '$';
-    switch (CURRENCY.position) {
-      case 'right':       return formatted + sym;
-      case 'left_space':  return sym + ' ' + formatted;
-      case 'right_space': return formatted + ' ' + sym;
-      case 'left':
-      default:            return sym + formatted;
-    }
-  }
+  // Currency formatter: lafka.money (lafka-core), the WooCommerce currency settings.
+  const formatPrice = (amount) => window.lafka.money.format(amount);
 
   const priceEl   = document.querySelector('[data-lafka-live-price]');
   const ctas      = document.querySelectorAll('[data-lafka-add-to-cart]');

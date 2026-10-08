@@ -48,6 +48,9 @@
     if (typeof window === 'undefined' || typeof document === 'undefined') {
         return;
     }
+    if (!window.lafka) {
+        return;
+    }
     if (!('serviceWorker' in navigator) || !('PushManager' in window) || !('Notification' in window)) {
         return;
     }
@@ -58,28 +61,10 @@
     }
 
     const threshold = parseInt(settings.threshold || '2', 10) || 2;
-    const restRoot = (settings.restRoot || '/wp-json/').replace(/\/$/, '');
-    const restNonce = settings.restNonce || '';
     const swUrl = settings.swUrl || '/sw.js';
     const SUPPRESS_DAYS = 30;
     const STORAGE_KEY = 'lafka_push_dismissed_at';
     const SESSION_KEY = 'lafka_push_pageviews';
-
-    // ─────────────────────────────────────────────────────────────────────
-    // dataLayer wrapper.
-    // ─────────────────────────────────────────────────────────────────────
-    function pushEvent(eventName, params) {
-        if (!eventName || !window.dataLayer || typeof window.dataLayer.push !== 'function') {
-            return;
-        }
-        const payload = { event: eventName };
-        if (params && typeof params === 'object') {
-            Object.keys(params).forEach((k) => {
-                payload[k] = params[k];
-            });
-        }
-        window.dataLayer.push(payload);
-    }
 
     // ─────────────────────────────────────────────────────────────────────
     // Suppression window.
@@ -158,7 +143,7 @@
         return getSwRegistration().then((reg) => {
             return Notification.requestPermission().then((perm) => {
                 if (perm !== 'granted') {
-                    pushEvent('push_prompt_deny', { reason: perm === 'denied' ? 'browser_deny' : 'dismiss' });
+                    window.lafka.track('push_prompt_deny', { reason: perm === 'denied' ? 'browser_deny' : 'dismiss' });
                     suppress();
                     return null;
                 }
@@ -172,32 +157,19 @@
                 return null;
             }
             const body = subscription.toJSON();
-            return window.fetch(restRoot + '/lafka/v1/push/subscribe', {
-                method: 'POST',
-                credentials: 'same-origin',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-WP-Nonce': restNonce
-                },
-                body: JSON.stringify({
-                    endpoint: body.endpoint,
-                    keys: body.keys || {}
-                }),
-                keepalive: true
-            }).then((res) => {
-                if (res && res.ok) {
-                    pushEvent('push_prompt_accept', { granted: true });
-                } else {
-                    pushEvent('push_prompt_accept', { granted: false });
-                }
+            return window.lafka.api.post('lafka/v1/push/subscribe', {
+                endpoint: body.endpoint,
+                keys: body.keys || {}
+            }, { keepalive: true }).then(() => {
+                window.lafka.track('push_prompt_accept', { granted: true });
                 return subscription;
             }).catch(() => {
-                pushEvent('push_prompt_accept', { granted: false });
+                window.lafka.track('push_prompt_accept', { granted: false });
                 return subscription;
             });
         }).catch(() => {
             // Any error path — treat as a deny so we don't pester.
-            pushEvent('push_prompt_deny', { reason: 'browser_deny' });
+            window.lafka.track('push_prompt_deny', { reason: 'browser_deny' });
             suppress();
             return null;
         });
@@ -221,7 +193,7 @@
 
         function dismiss(reason) {
             promptEl.setAttribute('data-dismissing', 'true');
-            pushEvent('push_prompt_deny', { reason: reason || 'dismiss' });
+            window.lafka.track('push_prompt_deny', { reason: reason || 'dismiss' });
             suppress();
             teardown();
             window.setTimeout(() => {
@@ -266,7 +238,7 @@
         // Animate in — force a layout flush so the CSS transition runs.
         void promptEl.offsetWidth;
         promptEl.setAttribute('data-visible', 'true');
-        pushEvent('push_prompt_shown', { threshold: threshold });
+        window.lafka.track('push_prompt_shown', { threshold: threshold });
     }
 
     // ─────────────────────────────────────────────────────────────────────

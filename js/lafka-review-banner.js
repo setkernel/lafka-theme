@@ -34,8 +34,6 @@
  *   - .lafka-review-banner element pre-rendered by the partial.
  *   - window.lafkaReviewBannerSettings (wp_localize_script payload):
  *       {
- *         restRoot: string,          // wp-json URL base
- *         restNonce: string,          // X-WP-Nonce header value
  *         pageBlocklist: string[],   // path substrings — '/cart/' etc.
  *       }
  *
@@ -50,13 +48,11 @@
 (function () {
 	'use strict';
 
-	if (typeof document === 'undefined' || typeof window === 'undefined') {
+	if (typeof document === 'undefined' || typeof window === 'undefined' || !window.lafka) {
 		return;
 	}
 
 	const settings = window.lafkaReviewBannerSettings || {};
-	const restRoot = settings.restRoot || '/wp-json/';
-	const restNonce = settings.restNonce || '';
 	const blocklist = Array.isArray(settings.pageBlocklist) ? settings.pageBlocklist : [
 		'/cart/', '/checkout/', '/order-received/', '/my-account/'
 	];
@@ -72,45 +68,9 @@
 		}
 	}
 
-	// ─────────────────────────────────────────────────────────────────────
-	// Cookie reader — bail when the plugin hasn't set the show flag.
-	// ─────────────────────────────────────────────────────────────────────
-	function getCookieValue(name) {
-		const raw = document.cookie || '';
-		const pairs = raw.split(';');
-		for (let p = 0; p < pairs.length; p++) {
-			const parts = pairs[p].split('=');
-			const key = (parts[0] || '').trim();
-			if (key === name) {
-				return decodeURIComponent((parts[1] || '').trim());
-			}
-		}
-		return '';
-	}
-
-	if (getCookieValue('lafka_review_prompt_show') !== '1') {
+	// Bail when the plugin hasn't set the show flag.
+	if (window.lafka.cookie.get('lafka_review_prompt_show') !== '1') {
 		return;
-	}
-
-	// ─────────────────────────────────────────────────────────────────────
-	// dataLayer push wrapper — silently no-op when GTM isn't on the page.
-	// ─────────────────────────────────────────────────────────────────────
-	function pushEvent(eventName, params) {
-		if (!eventName) {
-			return;
-		}
-		if (!window.dataLayer || typeof window.dataLayer.push !== 'function') {
-			return;
-		}
-		const payload = { event: eventName };
-		if (params && typeof params === 'object') {
-			for (const key in params) {
-				if (Object.prototype.hasOwnProperty.call(params, key)) {
-					payload[key] = params[key];
-				}
-			}
-		}
-		window.dataLayer.push(payload);
 	}
 
 	// ─────────────────────────────────────────────────────────────────────
@@ -119,23 +79,10 @@
 	// the next page-load will re-evaluate the cookie regardless.
 	// ─────────────────────────────────────────────────────────────────────
 	function postBeacon(path) {
-		try {
-			const url = restRoot.replace(/\/$/, '') + path;
-			if (typeof window.fetch !== 'function') {
-				return;
-			}
-			window.fetch(url, {
-				method: 'POST',
-				credentials: 'same-origin',
-				headers: restNonce ? { 'X-WP-Nonce': restNonce } : {},
-				keepalive: true
-			}).catch(function () {
-				// swallow — the dismiss meta on the next request still gates
-				// re-render, and the shown beacon is best-effort.
-			});
-		} catch {
-			// no-op
-		}
+		window.lafka.api.post(path.replace(/^\//, ''), undefined, { keepalive: true }).catch(function () {
+			// swallow — the dismiss meta on the next request still gates
+			// re-render, and the shown beacon is best-effort.
+		});
 	}
 
 	// ─────────────────────────────────────────────────────────────────────
@@ -160,7 +107,7 @@
 		void banner.offsetWidth;
 		banner.setAttribute('data-visible', 'true');
 
-		pushEvent('review_banner_shown', {});
+		window.lafka.track('review_banner_shown', {});
 		postBeacon('/lafka/v1/review-banner-shown');
 
 		// Bind close button.
@@ -178,7 +125,7 @@
 		const cta = banner.querySelector('.lafka-review-banner__cta');
 		if (cta) {
 			cta.addEventListener('click', function () {
-				pushEvent('review_banner_click', {
+				window.lafka.track('review_banner_click', {
 					url: cta.getAttribute('href') || ''
 				});
 				// Mark as engaged-with — also flip the dismiss meta so the
@@ -204,7 +151,7 @@
 			return;
 		}
 		banner.setAttribute('data-dismissing', 'true');
-		pushEvent('review_banner_dismiss', {});
+		window.lafka.track('review_banner_dismiss', {});
 		postBeacon('/lafka/v1/review-banner-dismiss');
 
 		// Remove after CSS transition completes. 200ms enter, 150ms exit per

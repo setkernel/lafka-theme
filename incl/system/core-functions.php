@@ -920,7 +920,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_script(
 				'lafka-fdp-tracker',
 				get_template_directory_uri() . '/js/lafka-fdp-tracker.js',
-				array( 'jquery' ),
+				lafka_core_deps( array( 'jquery' ) ),
 				lafka_asset_version( '/js/lafka-fdp-tracker.js' ),
 				array(
 					'in_footer' => true,
@@ -1010,7 +1010,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				wp_enqueue_script(
 					'lafka-review-banner',
 					get_template_directory_uri() . '/js/lafka-review-banner.js',
-					array(),
+					lafka_core_deps(),
 					lafka_asset_version( '/js/lafka-review-banner.js' ),
 					array(
 						'in_footer' => true,
@@ -1021,8 +1021,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 					'lafka-review-banner',
 					'lafkaReviewBannerSettings',
 					array(
-						'restRoot'      => esc_url_raw( rest_url() ),
-						'restNonce'     => wp_create_nonce( 'wp_rest' ),
 						'pageBlocklist' => array(
 							'/cart/',
 							'/checkout/',
@@ -1060,7 +1058,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				wp_enqueue_script(
 					'lafka-push-subscribe',
 					get_template_directory_uri() . '/js/lafka-push-subscribe.js',
-					array(),
+					lafka_core_deps(),
 					lafka_asset_version( '/js/lafka-push-subscribe.js' ),
 					array(
 						'in_footer' => true,
@@ -1073,8 +1071,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 					array(
 						'enabled'              => true,
 						'applicationServerKey' => $lafka_push_vapid_pub,
-						'restRoot'             => esc_url_raw( rest_url() ),
-						'restNonce'            => wp_create_nonce( 'wp_rest' ),
 						'threshold'            => (int) lafka_setting( 'lafka_push_subscribe_prompt_threshold', 2 ),
 						'swUrl'                => esc_url_raw( lafka_service_worker_url() ),
 					)
@@ -1331,7 +1327,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_script(
 				'lafka-pdp-cta',
 				get_template_directory_uri() . '/js/lafka-pdp-cta.js',
-				array( 'jquery' ),
+				lafka_core_deps( array( 'jquery' ) ),
 				lafka_asset_version( '/js/lafka-pdp-cta.js' ),
 				array(
 					'in_footer' => true,
@@ -1367,7 +1363,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 					'defaultStrategy'    => $lafka_pdp_strategy,
 					'defaultVariationId' => $lafka_pdp_default_variation_id,
 					'wcDefaultAttrs'     => $lafka_pdp_wc_defaults,
-					'currencySymbol'     => function_exists( 'get_woocommerce_currency_symbol' ) ? html_entity_decode( get_woocommerce_currency_symbol() ) : '$',
 					'addLabel'           => __( 'Add', 'lafka' ),
 					'pickLabel'          => __( 'Select options', 'lafka' ),
 					'outOfStockLabel'    => __( 'Out of stock', 'lafka' ),

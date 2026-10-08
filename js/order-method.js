@@ -1,23 +1,17 @@
 /* lafka-theme/js/order-method.js
  * Method-switch modal — DOM construction via createElement to avoid innerHTML.
+ * The choice itself goes through lafka.fulfilment.set() (js/lafka-fulfilment.js),
+ * the one writer of the lafka_order_method cookie; it updates the bar in place.
  *
  * @since 5.16.0
  */
 (function () {
   'use strict';
 
-  const COOKIE = 'lafka_order_method';
-  const VALID = ['delivery', 'pickup'];
-
   function setMethod(method) {
-    if (VALID.indexOf(method) === -1) return;
-    const exp = new Date();
-    exp.setFullYear(exp.getFullYear() + 1);
-    document.cookie = COOKIE + '=' + method +
-      '; path=/; expires=' + exp.toUTCString() +
-      '; SameSite=Lax' +
-      (location.protocol === 'https:' ? '; Secure' : '');
-    location.reload();
+    if (window.lafka && window.lafka.fulfilment) {
+      window.lafka.fulfilment.set(method);
+    }
   }
 
   function el(tag, attrs, text) {

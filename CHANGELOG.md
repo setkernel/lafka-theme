@@ -7,6 +7,26 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### One source of truth: hours, money, fulfilment, the shared script
+- **Open/closed status is the plugin's.** `lafka_open_status()` and the counter header status read
+  `Lafka_Order_Hours::status()`; the theme's schedule maths, order-gate reconcile and the two duplicate
+  scripts (`lafka-announce-bar.js`, the old `lafka-open-status.js`) are gone. One
+  `lafka-open-status.js` reads the status printed once as `lafkaOpenStatus` and asks
+  `/lafka/v1/open-status` when the wording goes stale. The filter `lafka_open_status_schedule` and the
+  `lafka_open_status_*` helpers are removed; `lafka_open_status` and `lafka_counter_open_status` stay.
+  Without the plugin the strip does not render.
+- **One free-delivery accessor**: `lafka_free_delivery_threshold()` (the plugin's resolver; 0 without
+  it). The theme's own threshold Customizer setting (`lafka_announce_bar_delivery_threshold`) is
+  removed: set the amount under WooCommerce → Settings → Restaurant → Promotions.
+- **Prices** go through the plugin's `lafka_price_plain()` (the theme only falls back on it); scripts
+  format with `lafka.money` (the WooCommerce currency), so the `'$'` literals and `lafkaPdpCurrency` /
+  `currencySymbol` are gone. Scripts use `lafka.track`, `lafka.cookie` and `lafka.api` from the
+  plugin's `lafka-core` (the review banner and push prompt no longer receive `restRoot`/`restNonce`).
+- **Pickup/Delivery**: `lafka-fulfilment.js` is the only writer of the `lafka_order_method` cookie
+  (`lafka.fulfilment.set()`); the classic order-method modal uses it and updates the bar in place
+  instead of reloading. The pickup shipping method ids reach scripts only through
+  `lafkaCfg.pickupMethods`.
+
 ### Settings, data and wiring
 - **Footer social links render.** They come from the plugin's Social Profiles
   (`lafka_theme_social_links()`, recognised by host: Facebook, Instagram, TikTok, X, Pinterest,

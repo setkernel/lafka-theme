@@ -26,34 +26,28 @@ $lafka_info   = lafka_get_restaurant_info();
 $lafka_method = class_exists( 'Lafka_Fulfilment' ) && 'pickup' === Lafka_Fulfilment::current_mode() ? 'pickup' : 'delivery';
 $lafka_status = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
 ?>
-<div class="lafka-order-method-bar" data-method="<?php echo esc_attr( $lafka_method ); ?>">
+<div class="lafka-order-method-bar" data-method="<?php echo esc_attr( $lafka_method ); ?>" data-lafka-fulfilment-root>
 	<div class="lafka-order-method-bar__inner">
 		<button type="button" class="lafka-order-method-bar__method" data-lafka-method-toggle>
-			<span class="lafka-order-method-bar__icon" aria-hidden="true">
-				<?php echo 'pickup' === $lafka_method ? '🏪' : '🚚'; ?>
-			</span>
-			<span class="lafka-order-method-bar__method-label">
-				<?php
-				echo 'pickup' === $lafka_method
-					? esc_html__( 'Pickup at', 'lafka' )
-					: esc_html__( 'Delivery to', 'lafka' );
+			<?php
+			// Both modes' words are printed, so js/lafka-fulfilment.js can switch them in
+			// place. Operator values come from the resolver, never a literal.
+			$lafka_texts = array(
+				'icon'     => array( '🏪', '🚚' ),
+				'label'    => array( __( 'Pickup at', 'lafka' ), __( 'Delivery to', 'lafka' ) ),
+				'location' => array( (string) $lafka_info['address_short'], $lafka_info['city'] . ', ' . $lafka_info['region'] ),
+			);
+			foreach ( $lafka_texts as $lafka_part => $lafka_pair ) :
+				$lafka_class = 'icon' === $lafka_part ? 'icon' : ( 'label' === $lafka_part ? 'method-label' : 'location' );
 				?>
-			</span>
-			<span class="lafka-order-method-bar__location">
-				<?php
-				if ( 'pickup' === $lafka_method ) {
-					// Operator-specific value MUST come from the resolver
-					// (theme_mod → option → WP-core → empty). Never hardcode
-					// a literal address — the lafka-* repos are public OSS
-					// and operator data must not leak into them. If the
-					// resolver returns empty, render an empty span rather
-					// than fall back to a literal string.
-					echo esc_html( $lafka_info['address_short'] );
-				} else {
-					echo esc_html( $lafka_info['city'] . ', ' . $lafka_info['region'] );
-				}
-				?>
-			</span>
+				<span
+					class="lafka-order-method-bar__<?php echo esc_attr( $lafka_class ); ?>"
+					<?php echo 'icon' === $lafka_part ? 'aria-hidden="true"' : ''; ?>
+					data-lafka-fulfilment-text
+					data-lafka-fulfilment-pickup="<?php echo esc_attr( $lafka_pair[0] ); ?>"
+					data-lafka-fulfilment-delivery="<?php echo esc_attr( $lafka_pair[1] ); ?>"
+				><?php echo esc_html( 'pickup' === $lafka_method ? $lafka_pair[0] : $lafka_pair[1] ); ?></span>
+			<?php endforeach; ?>
 			<span class="lafka-order-method-bar__switch"><?php esc_html_e( 'Switch', 'lafka' ); ?></span>
 		</button>
 		<div class="lafka-order-method-bar__right">

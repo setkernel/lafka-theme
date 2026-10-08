@@ -389,6 +389,31 @@ if ( ! function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
 	}
 }
 
+if ( ! function_exists( 'lafka_enqueue_fulfilment_script' ) ) {
+	/**
+	 * Load the Pickup / Delivery script once (the one writer of the
+	 * lafka_order_method cookie) with its config.
+	 *
+	 * @return void
+	 */
+	function lafka_enqueue_fulfilment_script(): void {
+		if ( wp_script_is( 'lafka-fulfilment', 'enqueued' ) ) {
+			return;
+		}
+		wp_enqueue_script(
+			'lafka-fulfilment',
+			get_template_directory_uri() . '/js/lafka-fulfilment.js',
+			lafka_core_deps(),
+			lafka_asset_version( '/js/lafka-fulfilment.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
+		lafka_localize_fulfilment_cfg( 'lafka-fulfilment' );
+	}
+}
+
 if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 	/**
 	 * Enqueue the counter stylesheet + scripts (called from
@@ -414,8 +439,7 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 			lafka_enqueue_open_status_script();
 		}
 		if ( lafka_layout_is( 'header', 'counter' ) || lafka_layout_is( 'drawer', 'counter' ) ) {
-			wp_enqueue_script( 'lafka-fulfilment', get_template_directory_uri() . '/js/lafka-fulfilment.js', array(), lafka_asset_version( '/js/lafka-fulfilment.js' ), $defer );
-			lafka_localize_fulfilment_cfg( 'lafka-fulfilment' );
+			lafka_enqueue_fulfilment_script();
 		}
 		if ( lafka_layout_is( 'home', 'counter' ) || lafka_layout_is( 'menu', 'counter' ) || lafka_layout_is( 'drawer', 'counter' ) ) {
 			// The single add path (window.lafkaQuickAdd.add) — same handle and
