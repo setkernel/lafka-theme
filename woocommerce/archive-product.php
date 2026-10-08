@@ -17,39 +17,34 @@
  *     subcategories linked).
  *   - Tag archive (is_product_tag() — flat, paginated).
  *
- * Intentionally suppresses ALL of WC's `woocommerce_before_main_content`,
- * `woocommerce_after_main_content`, and product-loop hooks: the handoff
- * layout supplies its own wrapper, page header, loop/grid, and pagination,
- * so WC's default wrapper/breadcrumb/sidebar/loop callbacks are not run on
- * the shop/category/tag archives. None of these `do_action()` calls fire
- * here by design. (Third-party integrations that rely on those hooks will
- * therefore not run on these archives; re-introducing them would require
- * firing the actions after removing WC's default wrapper callbacks plus the
- * loop/structured-data hooks — out of scope of this template.) The one
- * core behaviour kept is the store notice output WooCommerce hangs on
- * woocommerce_before_shop_loop, printed at the top of the body below.
- *
- * Reviewed against WooCommerce core archive-product.php 8.6.0.
+ * The page fires the same actions as WooCommerce's own archive-product.php, in
+ * the same order, so extensions that hook them (product filters, SEO and
+ * structured data, analytics, notices) run here: woocommerce_before_main_content,
+ * woocommerce_shop_loop_header, woocommerce_before_shop_loop, the loop through
+ * woocommerce_product_loop_start() / wc_get_template_part( 'content', 'product' )
+ * / woocommerce_product_loop_end(), woocommerce_after_shop_loop,
+ * woocommerce_no_products_found, woocommerce_after_main_content and
+ * woocommerce_sidebar. The default callbacks that the handoff layout replaces
+ * (wrapper, header, ordering dropdown, pagination, sidebar, loop-item
+ * extras) are removed in lafka_archive_compose_hooks() — removed, not skipped.
  *
  * @package Lafka
  * @since   5.61.0
+ * @since   7.4.0  Fires WooCommerce's archive actions.
  * @version 8.6.0
  */
 
 defined( 'ABSPATH' ) || exit;
 
+if ( function_exists( 'lafka_archive_compose_hooks' ) ) {
+	lafka_archive_compose_hooks();
+}
+
 get_header( 'shop' );
 
-// GA4 view_item_list: this template deliberately suppresses
-// woocommerce_before_main_content (see the docblock above), which is the only
-// hook the plugin's priority-5 emit (lafka_dl_emit_view_item_list) listens on.
-// Without this call the event never fires on shop/category/tag archives. Call
-// the emit directly rather than re-firing the action so we don't re-introduce
-// the breadcrumb/sidebar callbacks the redesign intentionally dropped. The
-// emit self-guards on is_shop()/is_product_category()/is_product_tag().
-if ( function_exists( 'lafka_dl_emit_view_item_list' ) ) {
-	lafka_dl_emit_view_item_list();
-}
+// GA4 view_item_list (the plugin's priority-5 callback), the store notice and
+// WooCommerce's website structured data run from this action.
+do_action( 'woocommerce_before_main_content' );
 
 $lafka_arch_is_search = is_search();
 $lafka_arch_is_shop   = ! $lafka_arch_is_search && function_exists( 'is_shop' ) && is_shop();
@@ -167,6 +162,10 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 			if ( $lafka_arch_is_cat && function_exists( 'lafka_age_notice_html' ) && $lafka_arch_queried ) {
 				echo wp_kses( lafka_age_notice_html( array_merge( $lafka_arch_ancestors, array( $lafka_arch_queried ) ), 'menu' ), lafka_allowed_html() );
 			}
+
+			// WooCommerce's archive-header action. Its own title and description
+			// callback is removed because this header is the design's.
+			do_action( 'woocommerce_shop_loop_header' );
 			?>
 		</div>
 	</header>
@@ -226,9 +225,11 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 		<div class="lafka-container">
 
 			<?php
-			// Store notices (e.g. "added to cart" after a non-AJAX add) — core
-			// prints these from woocommerce_before_shop_loop, which never fires here.
-			woocommerce_output_all_notices();
+			// Core's callback here prints the store notices (e.g. "added to cart"
+			// after a non-AJAX add); extensions attach theirs to it too.
+			if ( woocommerce_product_loop() ) {
+				do_action( 'woocommerce_before_shop_loop' );
+			}
 
 			if ( ! empty( $lafka_arch_children ) ) :
 				?>
@@ -252,19 +253,20 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 						'reset_url' => $lafka_arch_shop_url,
 					)
 				);
+				do_action( 'woocommerce_after_shop_loop' );
 			elseif ( woocommerce_product_loop() && have_posts() ) :
+				// The loop runs on WooCommerce's own template part; content-product.php
+				// hands each item to the menu card while this flag is set (core
+				// resets the loop props at woocommerce_product_loop_end()).
+				wc_set_loop_prop( 'lafka_menu_card', true );
+				woocommerce_product_loop_start();
+				while ( have_posts() ) {
+					the_post();
+					do_action( 'woocommerce_shop_loop' );
+					wc_get_template_part( 'content', 'product' );
+				}
+				woocommerce_product_loop_end();
 				?>
-				<ul class="lafka-menu__grid" role="list">
-					<?php
-					$lafka_card_heading_level = 2; // Rows sit directly under the page h1 (T-19).
-					while ( have_posts() ) :
-						the_post();
-						global $product;
-						$lafka_arch_p = $product;
-						?>
-						<?php require __DIR__ . '/loop/lafka-product-card.php'; ?>
-					<?php endwhile; ?>
-				</ul>
 				<div class="lafka-menu__empty" data-lafka-menu-empty hidden>
 					<span class="lafka-menu__empty-icon" aria-hidden="true">🤔</span>
 					<h2 class="lafka-menu__empty-title"><?php esc_html_e( 'Nothing matches', 'lafka' ); ?></h2>
@@ -273,9 +275,8 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 				</div>
 				<p class="screen-reader-text" data-lafka-menu-status aria-live="polite"></p>
 				<?php
-				if ( function_exists( 'lafka_menu_pagination_html' ) ) {
-					echo wp_kses( lafka_menu_pagination_html(), lafka_allowed_html() );
-				}
+				// Pagination is a callback here (lafka_archive_pagination).
+				do_action( 'woocommerce_after_shop_loop' );
 				// GX3: optional per-category FAQ (lafka-plugin term meta; the
 				// plugin emits the FAQPage JSON-LD). Renders nothing when empty.
 				if ( $lafka_arch_is_cat && $lafka_arch_queried && isset( $lafka_arch_queried->term_id ) ) {
@@ -283,6 +284,7 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 				}
 				?>
 			<?php else : ?>
+				<?php do_action( 'woocommerce_no_products_found' ); ?>
 				<div class="lafka-menu__empty" data-lafka-menu-empty>
 					<span class="lafka-menu__empty-icon" aria-hidden="true">🤔</span>
 					<?php if ( $lafka_arch_is_search && '' !== $lafka_arch_query_s ) : ?>
@@ -311,4 +313,6 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 </div>
 
 <?php
+do_action( 'woocommerce_after_main_content' );
+do_action( 'woocommerce_sidebar' );
 get_footer( 'shop' );

@@ -3,6 +3,10 @@
  * Reusable product card — handoff spec (v5.61.0).
  *
  * Expects `$lafka_arch_p` (WC_Product) in scope when included from a loop.
+ * Inside the archive's WooCommerce loop (content-product.php hands over here with
+ * the `lafka_menu_card` loop flag set) it fires WooCommerce's loop-item actions and
+ * carries core's product classes, so extensions that hook them run; the menu page
+ * and the home grid, which include it outside that loop, stay as they were.
  * Renders a card identical to the home customer-favourites grid so the
  * design system stays consistent across pages.
  *
@@ -16,6 +20,9 @@ if ( ! isset( $lafka_arch_p ) || ! is_object( $lafka_arch_p ) ) {
 	return;
 }
 
+// True only inside the archive's WooCommerce loop (see the header).
+$lafka_card_wc = (bool) wc_get_loop_prop( 'lafka_menu_card' );
+
 // GX4: under the counter menu layout, /menu/ and the category archive render
 // the counter product row instead (one hand-off here, so archive-product.php
 // and page-menu.php stay untouched).
@@ -24,11 +31,12 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' 
 		'partials/counter/menu-row',
 		null,
 		array(
-			'product' => $lafka_arch_p,
-			'style'   => 'photo',
+			'product'  => $lafka_arch_p,
+			'style'    => 'photo',
 			// The template including this card sets the level for its outline
 			// (rows under a category h2 → h3; a flat archive under the h1 → h2).
-			'heading' => isset( $lafka_card_heading_level ) ? (int) $lafka_card_heading_level : 3,
+			'heading'  => isset( $lafka_card_heading_level ) ? (int) $lafka_card_heading_level : 3,
+			'wc_hooks' => $lafka_card_wc,
 		)
 	);
 	return;
@@ -73,11 +81,16 @@ $lafka_arch_cat       = ( ! is_wp_error( $lafka_arch_cat_names ) && ! empty( $la
 $lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title( '', false ) : ( is_page() ? (string) get_the_title() : 'Menu' );
 ?>
 <li
-	class="lafka-favs__item"
+	class="<?php echo esc_attr( implode( ' ', $lafka_card_wc ? lafka_wc_core_product_classes( 'lafka-favs__item', $lafka_arch_p ) : array( 'lafka-favs__item' ) ) ); ?>"
 	data-lafka-product-name="<?php echo esc_attr( $lafka_arch_name ); ?>"
 	data-lafka-product-search="<?php echo esc_attr( trim( $lafka_arch_name . ' ' . wp_strip_all_tags( (string) $lafka_arch_short ) ) ); ?>"
 	data-lafka-product-tags="<?php echo esc_attr( $lafka_arch_tags_attr ); ?>"
 >
+	<?php
+	if ( $lafka_card_wc ) {
+		do_action( 'woocommerce_before_shop_loop_item' );
+	}
+	?>
 	<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_arch_url ); ?>"
 		data-lafka-item-id="<?php echo esc_attr( (string) $lafka_arch_p->get_id() ); ?>"
 		data-lafka-item-name="<?php echo esc_attr( $lafka_arch_name ); ?>"
@@ -85,6 +98,11 @@ $lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title
 		data-lafka-item-price="<?php echo esc_attr( (string) wc_get_price_to_display( $lafka_arch_p ) ); ?>"
 		data-lafka-list-name="<?php echo esc_attr( $lafka_arch_list ); ?>">
 		<div class="lafka-favs__media">
+			<?php
+			if ( $lafka_card_wc ) {
+				do_action( 'woocommerce_before_shop_loop_item_title' );
+			}
+			?>
 			<?php if ( $lafka_arch_img ) : ?>
 				<?php echo wp_kses( $lafka_arch_img, lafka_allowed_html() ); ?>
 			<?php else : ?>
@@ -96,9 +114,19 @@ $lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title
 		</div>
 		<div class="lafka-favs__body">
 			<h3 class="lafka-favs__name"><?php echo esc_html( $lafka_arch_name ); ?></h3>
+			<?php
+			if ( $lafka_card_wc ) {
+				do_action( 'woocommerce_shop_loop_item_title' );
+			}
+			?>
 			<?php if ( '' !== $lafka_arch_short ) : ?>
 				<p class="lafka-favs__desc"><?php echo esc_html( wp_strip_all_tags( $lafka_arch_short ) ); ?></p>
 			<?php endif; ?>
+			<?php
+			if ( $lafka_card_wc ) {
+				do_action( 'woocommerce_after_shop_loop_item_title' );
+			}
+			?>
 			<div class="lafka-favs__foot">
 				<span class="lafka-favs__price"><?php echo wp_kses_post( $lafka_arch_price ); ?></span>
 				<?php
@@ -117,4 +145,9 @@ $lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title
 			</div>
 		</div>
 	</a>
+	<?php
+	if ( $lafka_card_wc ) {
+		do_action( 'woocommerce_after_shop_loop_item' );
+	}
+	?>
 </li>

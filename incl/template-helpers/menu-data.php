@@ -529,17 +529,21 @@ if ( ! function_exists( 'lafka_menu_pagination_html' ) ) {
 		if ( null === $current ) {
 			$current = (int) get_query_var( 'paged' );
 		}
-		$links = paginate_links(
+		// The same arguments filter core's pager runs, so an extension that adjusts
+		// pagination (labels, spacing) reaches this one; the output stays an array
+		// of links for the menu's own list markup.
+		$args  = (array) apply_filters(
+			'woocommerce_pagination_args',
 			array(
 				'total'     => $total,
 				'current'   => max( 1, min( $total, $current ) ),
-				'type'      => 'array',
 				'mid_size'  => 1,
 				'end_size'  => 1,
 				'prev_text' => '<span aria-hidden="true">←</span> ' . esc_html__( 'Previous', 'lafka' ),
 				'next_text' => esc_html__( 'Next', 'lafka' ) . ' <span aria-hidden="true">→</span>',
 			)
 		);
+		$links = paginate_links( array_merge( $args, array( 'type' => 'array' ) ) );
 		if ( empty( $links ) || ! is_array( $links ) ) {
 			return '';
 		}

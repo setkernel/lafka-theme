@@ -18,6 +18,8 @@
  *   thumbs   bool — compact rows with a small thumbnail (default true)
  *   list     GA4 list name             (default: archive / page title / Menu)
  *   heading  int — the name's heading level (default 3; T-19)
+ *   wc_hooks bool — fire WooCommerce's loop-item actions (the shop/category
+ *            archive sets it; the home/menu sections do not)
  *
  * @package Lafka
  * @since   7.2.0 (GX4)
@@ -45,6 +47,7 @@ if ( '' === trim( $lafka_row_desc ) && method_exists( $lafka_row_p, 'get_descrip
 $lafka_row_desc = trim( (string) preg_replace( '/\s+/', ' ', $lafka_row_desc ) );
 
 $lafka_row_prices = lafka_price_columns( $lafka_row_p );
+$lafka_row_wc     = ! empty( $args['wc_hooks'] );
 
 // Menu-controls filters (search / dietary chips) key off these, exactly as the
 // classic card li does.
@@ -95,6 +98,12 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 	data-lafka-product-search="<?php echo esc_attr( trim( $lafka_row_name . ' ' . $lafka_row_desc ) ); ?>"
 	data-lafka-product-tags="<?php echo esc_attr( implode( ',', $lafka_row_tags ) ); ?>"
 >
+	<?php
+	if ( $lafka_row_wc ) {
+		do_action( 'woocommerce_before_shop_loop_item' );
+		do_action( 'woocommerce_before_shop_loop_item_title' );
+	}
+	?>
 	<?php if ( '' !== $lafka_row_img ) : ?>
 		<a class="lafka-row__media lafka-dish-frame lafka-dish-frame--<?php echo esc_attr( $lafka_row_kind ); ?>" href="<?php echo esc_url( $lafka_row_url ); ?>" tabindex="-1" aria-hidden="true">
 			<?php echo wp_kses( $lafka_row_img, lafka_allowed_html() ); ?>
@@ -111,9 +120,19 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 				data-lafka-list-name="<?php echo esc_attr( $lafka_row_list ); ?>"
 			><?php echo esc_html( $lafka_row_label ); ?></a>
 		</h<?php echo (int) $lafka_row_level; ?>>
+		<?php
+		if ( $lafka_row_wc ) {
+			do_action( 'woocommerce_shop_loop_item_title' );
+		}
+		?>
 		<?php if ( '' !== $lafka_row_desc ) : ?>
 			<p class="lafka-row__desc"><?php echo esc_html( $lafka_row_desc ); ?></p>
 		<?php endif; ?>
+		<?php
+		if ( $lafka_row_wc ) {
+			do_action( 'woocommerce_after_shop_loop_item_title' );
+		}
+		?>
 		<div class="lafka-row__foot">
 			<?php if ( 'columns' === $lafka_row_prices['type'] ) : ?>
 				<dl class="lafka-prices lafka-prices--cols-<?php echo esc_attr( (string) min( 6, count( $lafka_row_prices['columns'] ) ) ); ?>">
@@ -138,4 +157,9 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 			<?php echo wp_kses( lafka_counter_add_action( $lafka_row_p, $lafka_row_add_label, 'lafka-row__add' ), lafka_allowed_html() ); ?>
 		</div>
 	</div>
+	<?php
+	if ( $lafka_row_wc ) {
+		do_action( 'woocommerce_after_shop_loop_item' );
+	}
+	?>
 </li>

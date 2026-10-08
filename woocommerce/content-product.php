@@ -31,6 +31,16 @@ global $product;
 if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 	return;
 }
+
+// The shop / category / tag / search archive (archive-product.php) runs its loop
+// through WooCommerce's own template part and asks for the menu card here, so
+// every core loop action fires around the card's design.
+if ( wc_get_loop_prop( 'lafka_menu_card' ) ) {
+	$lafka_arch_p             = $product;
+	$lafka_card_heading_level = 2; // Rows sit directly under the page h1 (T-19).
+	require __DIR__ . '/loop/lafka-product-card.php';
+	return;
+}
 ?>
 <li <?php wc_product_class( 'lafka-product-card', $product ); ?>>
 	<?php do_action( 'woocommerce_before_shop_loop_item' ); ?>

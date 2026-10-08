@@ -25,7 +25,7 @@ global $post, $product;
 <?php if ( $product->is_on_sale() ) : ?>
 	<?php if ( $product->is_type( 'grouped' ) ) : ?>
 		<?php
-		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' ) );
+		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>', $post, $product ) );
 		?>
 	<?php else : ?>
 		<?php
