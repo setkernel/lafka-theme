@@ -258,7 +258,9 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 	 *                       customer must pick it on the product page);
 	 *   - `required_addons` lafka_product_has_required_addons() (lafka-plugin);
 	 *   - `unavailable`     not purchasable or out of stock;
-	 *   - `no_variations`   a variable product with no visible variation.
+	 *   - `no_variations`   a variable product with no visible variation;
+	 *   - `product_page`    a non-variable type that does not support
+	 *                       ajax_add_to_cart (e.g. a Deal).
 	 *
 	 * @param WC_Product $product Product.
 	 * @return array<string, mixed>
@@ -286,6 +288,10 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 			$reason = 'required_addons';
 		} elseif ( lafka_chooser_deal_needs_choices( $product, $payload['has_addons'] ) ) {
 			$reason = 'deal_choices';
+		} elseif ( ! $variable && ! $product->supports( 'ajax_add_to_cart' ) ) {
+			// The product type says it cannot be added from a list (e.g. the
+			// plugin's Deal, built on its page).
+			$reason = 'product_page';
 		}
 
 		if ( $variable ) {
