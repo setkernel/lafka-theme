@@ -310,12 +310,8 @@ if ( ! function_exists( 'lafka_counter_prime' ) ) {
 		if ( ! $ids ) {
 			return;
 		}
-		if ( function_exists( '_prime_post_caches' ) ) {
-			_prime_post_caches( $ids, true, true );
-		}
-		if ( function_exists( 'update_object_term_cache' ) ) {
-			update_object_term_cache( $ids, 'product' );
-		}
+		_prime_post_caches( $ids, true, true );
+		update_object_term_cache( $ids, 'product' );
 	}
 }
 
@@ -571,9 +567,7 @@ if ( ! function_exists( 'lafka_counter_deals_term_id' ) ) {
 		if ( false !== $cached ) {
 			return (int) $cached;
 		}
-		if ( function_exists( 'wp_cache_add_non_persistent_groups' ) ) {
-			wp_cache_add_non_persistent_groups( array( 'lafka_counter' ) ); // Per request only.
-		}
+		wp_cache_add_non_persistent_groups( array( 'lafka_counter' ) ); // Per request only.
 		$resolved = lafka_counter_resolve_sections( lafka_menu_top_categories(), lafka_counter_settings() );
 		$id       = $resolved['deals'] ? (int) $resolved['deals']->term_id : 0;
 		wp_cache_set( 'deals_term_id', $id, 'lafka_counter' );

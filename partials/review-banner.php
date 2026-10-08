@@ -46,9 +46,6 @@
 defined( 'ABSPATH' ) || exit;
 
 // Customizer toggle gates the whole thing.
-if ( ! function_exists( 'get_theme_mod' ) ) {
-	return;
-}
 $lafka_review_banner_enabled = '1' === (string) get_theme_mod( 'lafka_review_banner_enabled', '0' );
 if ( ! $lafka_review_banner_enabled ) {
 	return;

@@ -479,9 +479,7 @@ if ( ! function_exists( 'lafka_chooser_print_data' ) ) {
 				'id'   => 'lafka-chooser-data',
 			)
 		);
-		if ( function_exists( 'get_template_part' ) ) {
-			get_template_part( 'partials/counter/chooser-template' );
-		}
+		get_template_part( 'partials/counter/chooser-template' );
 	}
 }
 add_action( 'wp_footer', 'lafka_chooser_print_data', 5 );

@@ -51,7 +51,7 @@ if ( function_exists( 'lafka_dl_emit_view_item_list' ) ) {
 	lafka_dl_emit_view_item_list();
 }
 
-$lafka_arch_is_search = function_exists( 'is_search' ) && is_search();
+$lafka_arch_is_search = is_search();
 $lafka_arch_is_shop   = ! $lafka_arch_is_search && function_exists( 'is_shop' ) && is_shop();
 $lafka_arch_is_cat    = function_exists( 'is_product_category' ) ? is_product_category() : false;
 $lafka_arch_is_tag    = function_exists( 'is_product_tag' ) ? is_product_tag() : false;

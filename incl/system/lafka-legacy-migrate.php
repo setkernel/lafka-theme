@@ -349,8 +349,8 @@ if ( ! function_exists( 'lafka_legacy_migrate_maybe_run' ) ) {
 			'lafka_legacy_migration_log',
 			array(
 				'migration_version' => LAFKA_LEGACY_MIGRATION_VERSION,
-				'ran_at_gmt'        => function_exists( 'current_time' ) ? current_time( 'mysql', true ) : gmdate( 'Y-m-d H:i:s' ),
-				'stylesheet'        => function_exists( 'get_stylesheet' ) ? get_stylesheet() : '',
+				'ran_at_gmt'        => current_time( 'mysql', true ),
+				'stylesheet'        => get_stylesheet(),
 				'copied_count'      => count( $report ),
 				'copied_theme_mods' => array_keys( $report ),
 			),
@@ -361,8 +361,5 @@ if ( ! function_exists( 'lafka_legacy_migrate_maybe_run' ) ) {
 	}
 }
 
-// Run the one-time upgrade copy on the first request after an upgrade. Guarded so
-// requiring the file outside WordPress has no side effects at include time.
-if ( function_exists( 'add_action' ) ) {
-	add_action( 'after_setup_theme', 'lafka_legacy_migrate_maybe_run', 99 );
-}
+// Run the one-time upgrade copy on the first request after an upgrade.
+add_action( 'after_setup_theme', 'lafka_legacy_migrate_maybe_run', 99 );

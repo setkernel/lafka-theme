@@ -77,9 +77,7 @@ if ( ! function_exists( 'lafka_get_default_values' ) ) {
 		 * @since 7.0.0
 		 * @param array<string,mixed> $defaults Default values keyed by `lafka` sub-key.
 		 */
-		if ( function_exists( 'apply_filters' ) ) {
-			$defaults = apply_filters( 'lafka_default_option_values', $defaults );
-		}
+		$defaults = apply_filters( 'lafka_default_option_values', $defaults );
 
 		// Register with the shared helper so Lafka_Options::get() falls back to
 		// these defaults exactly as it did against the retired registry.

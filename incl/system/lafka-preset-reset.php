@@ -166,12 +166,7 @@ if ( ! function_exists( 'lafka_preset_reset_customize_register' ) ) {
 	 * @param WP_Customize_Manager $wp_customize Manager.
 	 */
 	function lafka_preset_reset_customize_register( $wp_customize ): void {
-		if ( ! class_exists( 'WP_Customize_Control' ) ) {
-			return;
-		}
-		if ( ! class_exists( 'Lafka_Customize_Preset_Reset_Control' ) ) {
-			require_once __DIR__ . '/class-lafka-customize-preset-reset-control.php';
-		}
+		require_once __DIR__ . '/class-lafka-customize-preset-reset-control.php';
 		$wp_customize->add_control(
 			new Lafka_Customize_Preset_Reset_Control(
 				$wp_customize,

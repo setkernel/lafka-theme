@@ -42,7 +42,7 @@ if ( ! function_exists( 'lafka_theme_log' ) ) {
 			return true;
 		}
 
-		$fallback = (bool) apply_filters( 'lafka_theme_log_fallback', defined( 'WP_DEBUG' ) && WP_DEBUG, $level, $channel );
+		$fallback = (bool) apply_filters( 'lafka_theme_log_fallback', WP_DEBUG, $level, $channel );
 		if ( ! $fallback || ! function_exists( 'wc_get_logger' ) ) {
 			return false;
 		}

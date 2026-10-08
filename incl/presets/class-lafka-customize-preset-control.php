@@ -14,72 +14,63 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'WP_Customize_Control' ) ) {
-	return; // Only ever loaded from customize_register.
-}
+// Only ever loaded from customize_register, where WP_Customize_Control exists.
+class Lafka_Customize_Preset_Control extends WP_Customize_Control {
 
-if ( ! class_exists( 'Lafka_Customize_Preset_Control' ) ) {
+	/**
+	 * @var string
+	 */
+	public $type = 'lafka-preset';
 
-	class Lafka_Customize_Preset_Control extends WP_Customize_Control {
-
-		/**
-		 * @var string
-		 */
-		public $type = 'lafka-preset';
-
-		/**
-		 * Render the card grid.
-		 */
-		public function render_content() {
-			if ( ! function_exists( 'lafka_presets' ) ) {
-				return;
-			}
-			$current = (string) $this->value();
-			?>
-			<?php if ( ! empty( $this->label ) ) : ?>
-				<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
-			<?php endif; ?>
-			<?php if ( ! empty( $this->description ) ) : ?>
-				<span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
-			<?php endif; ?>
-			<div class="lafka-preset-grid">
-				<?php foreach ( lafka_presets()->all() as $slug => $preset ) : ?>
-					<?php
-					$input_id = 'lafka-preset-' . sanitize_key( $slug );
-					$img_rel  = 'presets/' . $slug . '/preview.jpg';
-					$has_img  = file_exists( get_template_directory() . '/' . $img_rel );
-					$raw      = $preset->raw();
-					$accent   = isset( $raw['chrome']['lafka_accent_color'] ) ? (string) $raw['chrome']['lafka_accent_color'] : '#dc2626';
-					$brand    = isset( $raw['chrome']['lafka_brand_color'] ) ? (string) $raw['chrome']['lafka_brand_color'] : '#f59e0b';
-					?>
-					<label class="lafka-preset-card<?php echo $preset->is_dark() ? ' lafka-preset-card--dark' : ''; ?>" for="<?php echo esc_attr( $input_id ); ?>">
-						<input
-							type="radio"
-							id="<?php echo esc_attr( $input_id ); ?>"
-							name="lafka_active_preset_radio"
-							value="<?php echo esc_attr( $slug ); ?>"
-							<?php $this->link(); ?>
-							<?php checked( $current, $slug ); ?>
+	/**
+	 * Render the card grid.
+	 */
+	public function render_content() {
+		$current = (string) $this->value();
+		?>
+		<?php if ( ! empty( $this->label ) ) : ?>
+			<span class="customize-control-title"><?php echo esc_html( $this->label ); ?></span>
+		<?php endif; ?>
+		<?php if ( ! empty( $this->description ) ) : ?>
+			<span class="description customize-control-description"><?php echo esc_html( $this->description ); ?></span>
+		<?php endif; ?>
+		<div class="lafka-preset-grid">
+			<?php foreach ( lafka_presets()->all() as $slug => $preset ) : ?>
+				<?php
+				$input_id = 'lafka-preset-' . sanitize_key( $slug );
+				$img_rel  = 'presets/' . $slug . '/preview.jpg';
+				$has_img  = file_exists( get_template_directory() . '/' . $img_rel );
+				$raw      = $preset->raw();
+				$accent   = isset( $raw['chrome']['lafka_accent_color'] ) ? (string) $raw['chrome']['lafka_accent_color'] : '#dc2626';
+				$brand    = isset( $raw['chrome']['lafka_brand_color'] ) ? (string) $raw['chrome']['lafka_brand_color'] : '#f59e0b';
+				?>
+				<label class="lafka-preset-card<?php echo $preset->is_dark() ? ' lafka-preset-card--dark' : ''; ?>" for="<?php echo esc_attr( $input_id ); ?>">
+					<input
+						type="radio"
+						id="<?php echo esc_attr( $input_id ); ?>"
+						name="lafka_active_preset_radio"
+						value="<?php echo esc_attr( $slug ); ?>"
+						<?php $this->link(); ?>
+						<?php checked( $current, $slug ); ?>
+					/>
+					<?php if ( $has_img ) : ?>
+						<img
+							class="lafka-preset-card__thumb"
+							src="<?php echo esc_url( get_template_directory_uri() . '/' . $img_rel ); ?>"
+							alt=""
+							loading="lazy"
 						/>
-						<?php if ( $has_img ) : ?>
-							<img
-								class="lafka-preset-card__thumb"
-								src="<?php echo esc_url( get_template_directory_uri() . '/' . $img_rel ); ?>"
-								alt=""
-								loading="lazy"
-							/>
-						<?php else : ?>
-							<span class="lafka-preset-card__swatch" aria-hidden="true">
-								<span style="<?php echo esc_attr( 'background:' . $accent ); ?>"></span>
-								<span style="<?php echo esc_attr( 'background:' . $brand ); ?>"></span>
-							</span>
-						<?php endif; ?>
-						<span class="lafka-preset-card__label"><?php echo esc_html( $preset->label() ); ?></span>
-						<span class="lafka-preset-card__desc"><?php echo esc_html( $preset->description() ); ?></span>
-					</label>
-				<?php endforeach; ?>
-			</div>
-			<?php
-		}
+					<?php else : ?>
+						<span class="lafka-preset-card__swatch" aria-hidden="true">
+							<span style="<?php echo esc_attr( 'background:' . $accent ); ?>"></span>
+							<span style="<?php echo esc_attr( 'background:' . $brand ); ?>"></span>
+						</span>
+					<?php endif; ?>
+					<span class="lafka-preset-card__label"><?php echo esc_html( $preset->label() ); ?></span>
+					<span class="lafka-preset-card__desc"><?php echo esc_html( $preset->description() ); ?></span>
+				</label>
+			<?php endforeach; ?>
+		</div>
+		<?php
 	}
 }

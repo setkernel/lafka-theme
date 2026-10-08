@@ -27,7 +27,7 @@ if ( ! function_exists( 'lafka_active_promo_fmt_pct' ) ) {
 if ( ! function_exists( 'lafka_active_promo_price' ) ) {
 	/** Plain-text money, e.g. "$45.00", using WC formatting when available. */
 	function lafka_active_promo_price( $amount ): string {
-		if ( function_exists( 'wc_price' ) && function_exists( 'wp_strip_all_tags' ) ) {
+		if ( function_exists( 'wc_price' ) ) {
 			return html_entity_decode( wp_strip_all_tags( wc_price( (float) $amount ) ), ENT_QUOTES );
 		}
 		return '$' . number_format( (float) $amount, 2 );
@@ -144,6 +144,4 @@ if ( ! function_exists( 'lafka_active_promos_enqueue' ) ) {
 	}
 }
 
-if ( function_exists( 'add_action' ) ) {
-	add_action( 'wp_enqueue_scripts', 'lafka_active_promos_enqueue', 21 );
-}
+add_action( 'wp_enqueue_scripts', 'lafka_active_promos_enqueue', 21 );

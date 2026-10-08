@@ -32,9 +32,6 @@ if ( ! function_exists( 'lafka_theme_menu_url' ) ) {
 		}
 
 		$menu_url = trailingslashit( home_url( '/menu/' ) );
-		if ( function_exists( 'apply_filters' ) ) {
-			$menu_url = (string) apply_filters( 'lafka_header_cta_url', $menu_url );
-		}
-		return $menu_url;
+		return (string) apply_filters( 'lafka_header_cta_url', $menu_url );
 	}
 }

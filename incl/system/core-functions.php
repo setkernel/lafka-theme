@@ -1443,7 +1443,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 					'lafkaReviewBannerSettings',
 					array(
 						'restRoot'      => esc_url_raw( rest_url() ),
-						'restNonce'     => function_exists( 'wp_create_nonce' ) ? wp_create_nonce( 'wp_rest' ) : '',
+						'restNonce'     => wp_create_nonce( 'wp_rest' ),
 						'pageBlocklist' => array(
 							'/cart/',
 							'/checkout/',
@@ -1491,7 +1491,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 						'enabled'              => true,
 						'applicationServerKey' => $lafka_push_vapid_pub,
 						'restRoot'             => esc_url_raw( rest_url() ),
-						'restNonce'            => function_exists( 'wp_create_nonce' ) ? wp_create_nonce( 'wp_rest' ) : '',
+						'restNonce'            => wp_create_nonce( 'wp_rest' ),
 						'threshold'            => (int) get_theme_mod( 'lafka_push_subscribe_prompt_threshold', 2 ),
 						'swUrl'                => esc_url_raw( get_template_directory_uri() . '/js/sw.js' ),
 					)
@@ -2343,7 +2343,7 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 		// 1. Mapped appearance key: its home is now a `lafka_<key>` theme_mod.
 		$lafka_option_map = function_exists( 'lafka_legacy_migrate_map' ) ? lafka_legacy_migrate_map() : array();
 		if ( isset( $lafka_option_map[ $name ] ) ) {
-			if ( defined( 'WP_DEBUG' ) && WP_DEBUG && function_exists( '_doing_it_wrong' ) ) {
+			if ( WP_DEBUG ) {
 				_doing_it_wrong(
 					__FUNCTION__,
 					esc_html(

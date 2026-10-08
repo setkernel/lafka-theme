@@ -38,195 +38,191 @@ defined( 'ABSPATH' ) || exit;
  * here. Keys map 1:1 to `--lafka-*` custom properties declared in
  * styles/lafka-tokens.css that have no operator feed.
  */
-if ( ! defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ) {
-	define(
-		'LAFKA_PRESET_TOKEN_WHITELIST',
-		array(
-			// ---- Colour: brand ramp (EXCLUDES -500 — operator-fed via chrome) --
-			'--lafka-color-brand-50',
-			'--lafka-color-brand-100',
-			'--lafka-color-brand-300',
-			'--lafka-color-brand-600',
-			'--lafka-color-brand-700',
-			'--lafka-color-brand-900',
+define(
+	'LAFKA_PRESET_TOKEN_WHITELIST',
+	array(
+		// ---- Colour: brand ramp (EXCLUDES -500 — operator-fed via chrome) --
+		'--lafka-color-brand-50',
+		'--lafka-color-brand-100',
+		'--lafka-color-brand-300',
+		'--lafka-color-brand-600',
+		'--lafka-color-brand-700',
+		'--lafka-color-brand-900',
 
-			// ---- Colour: accent ramp (EXCLUDES -500 operator-fed + -text derived)
-			'--lafka-color-accent-50',
-			'--lafka-color-accent-600',
-			'--lafka-color-accent-700',
-			'--lafka-color-accent-contrast',
+		// ---- Colour: accent ramp (EXCLUDES -500 operator-fed + -text derived)
+		'--lafka-color-accent-50',
+		'--lafka-color-accent-600',
+		'--lafka-color-accent-700',
+		'--lafka-color-accent-contrast',
 
-			// ---- Colour: text --------------------------------------------------
-			'--lafka-color-text-primary',
-			'--lafka-color-text-secondary',
-			'--lafka-color-text-muted',
-			'--lafka-color-text-inverse',
-			'--lafka-color-text-on-accent',
+		// ---- Colour: text --------------------------------------------------
+		'--lafka-color-text-primary',
+		'--lafka-color-text-secondary',
+		'--lafka-color-text-muted',
+		'--lafka-color-text-inverse',
+		'--lafka-color-text-on-accent',
 
-			// ---- Colour: surface ----------------------------------------------
-			'--lafka-color-surface-page',
-			'--lafka-color-surface-raised',
-			'--lafka-color-surface-sunken',
-			'--lafka-color-surface-muted',
-			'--lafka-color-surface-hover',
-			'--lafka-color-surface-active',
-			'--lafka-color-surface-overlay',
-			'--lafka-color-surface-glass',
-			'--lafka-color-surface-footer',
-			'--lafka-color-surface-announce',
-			'--lafka-color-surface-dark',
+		// ---- Colour: surface ----------------------------------------------
+		'--lafka-color-surface-page',
+		'--lafka-color-surface-raised',
+		'--lafka-color-surface-sunken',
+		'--lafka-color-surface-muted',
+		'--lafka-color-surface-hover',
+		'--lafka-color-surface-active',
+		'--lafka-color-surface-overlay',
+		'--lafka-color-surface-glass',
+		'--lafka-color-surface-footer',
+		'--lafka-color-surface-announce',
+		'--lafka-color-surface-dark',
 
-			// ---- Colour: border (EXCLUDES -focus — var() alias to accent-500) --
-			'--lafka-color-border-subtle',
-			'--lafka-color-border-default',
-			'--lafka-color-border-strong',
+		// ---- Colour: border (EXCLUDES -focus — var() alias to accent-500) --
+		'--lafka-color-border-subtle',
+		'--lafka-color-border-default',
+		'--lafka-color-border-strong',
 
-			// ---- Colour: semantic ---------------------------------------------
-			'--lafka-color-success-500',
-			'--lafka-color-success-50',
-			'--lafka-color-error-500',
-			'--lafka-color-error-50',
-			'--lafka-color-warning-500',
-			'--lafka-color-warning-50',
-			'--lafka-color-info-500',
-			'--lafka-color-info-50',
+		// ---- Colour: semantic ---------------------------------------------
+		'--lafka-color-success-500',
+		'--lafka-color-success-50',
+		'--lafka-color-error-500',
+		'--lafka-color-error-50',
+		'--lafka-color-warning-500',
+		'--lafka-color-warning-50',
+		'--lafka-color-info-500',
+		'--lafka-color-info-50',
 
-			// ---- Typography: families -----------------------------------------
-			'--lafka-font-family-body',
-			'--lafka-font-family-display',
-			'--lafka-font-family-mono',
+		// ---- Typography: families -----------------------------------------
+		'--lafka-font-family-body',
+		'--lafka-font-family-display',
+		'--lafka-font-family-mono',
 
-			// ---- Typography: size scale (mobile + desktop) --------------------
-			'--lafka-font-size-caption',
-			'--lafka-font-size-body-sm',
-			'--lafka-font-size-body',
-			'--lafka-font-size-body-lg',
-			'--lafka-font-size-h4',
-			'--lafka-font-size-h3',
-			'--lafka-font-size-h2',
-			'--lafka-font-size-h1',
-			'--lafka-font-size-display',
-			'--lafka-font-size-body-lg-desk',
-			'--lafka-font-size-h4-desk',
-			'--lafka-font-size-h3-desk',
-			'--lafka-font-size-h2-desk',
-			'--lafka-font-size-h1-desk',
-			'--lafka-font-size-display-desk',
-			'--lafka-font-size-body-desk', // GX4 (base = body; consumed by the counter layout only).
+		// ---- Typography: size scale (mobile + desktop) --------------------
+		'--lafka-font-size-caption',
+		'--lafka-font-size-body-sm',
+		'--lafka-font-size-body',
+		'--lafka-font-size-body-lg',
+		'--lafka-font-size-h4',
+		'--lafka-font-size-h3',
+		'--lafka-font-size-h2',
+		'--lafka-font-size-h1',
+		'--lafka-font-size-display',
+		'--lafka-font-size-body-lg-desk',
+		'--lafka-font-size-h4-desk',
+		'--lafka-font-size-h3-desk',
+		'--lafka-font-size-h2-desk',
+		'--lafka-font-size-h1-desk',
+		'--lafka-font-size-display-desk',
+		'--lafka-font-size-body-desk', // GX4 (base = body; consumed by the counter layout only).
 
-			// ---- Typography: weight -------------------------------------------
-			'--lafka-font-weight-regular',
-			'--lafka-font-weight-medium',
-			'--lafka-font-weight-semibold',
-			'--lafka-font-weight-bold',
-			'--lafka-font-weight-display',
+		// ---- Typography: weight -------------------------------------------
+		'--lafka-font-weight-regular',
+		'--lafka-font-weight-medium',
+		'--lafka-font-weight-semibold',
+		'--lafka-font-weight-bold',
+		'--lafka-font-weight-display',
 
-			// ---- Typography: line-height (handoff-native names) ---------------
-			'--lafka-line-display',
-			'--lafka-line-heading',
-			'--lafka-line-body',
-			'--lafka-line-small',
+		// ---- Typography: line-height (handoff-native names) ---------------
+		'--lafka-line-display',
+		'--lafka-line-heading',
+		'--lafka-line-body',
+		'--lafka-line-small',
 
-			// ---- Typography: letter-spacing -----------------------------------
-			'--lafka-letter-spacing-tight',
-			'--lafka-letter-spacing-snug',
-			'--lafka-letter-spacing-normal',
-			'--lafka-letter-spacing-wide',
+		// ---- Typography: letter-spacing -----------------------------------
+		'--lafka-letter-spacing-tight',
+		'--lafka-letter-spacing-snug',
+		'--lafka-letter-spacing-normal',
+		'--lafka-letter-spacing-wide',
 
-			// ---- Radii ---------------------------------------------------------
-			'--lafka-radius-xs',
-			'--lafka-radius-sm',
-			'--lafka-radius-md',
-			'--lafka-radius-lg',
-			'--lafka-radius-xl',
-			'--lafka-radius-pill',
-			'--lafka-radius-button', // GX4 (base = pill).
+		// ---- Radii ---------------------------------------------------------
+		'--lafka-radius-xs',
+		'--lafka-radius-sm',
+		'--lafka-radius-md',
+		'--lafka-radius-lg',
+		'--lafka-radius-xl',
+		'--lafka-radius-pill',
+		'--lafka-radius-button', // GX4 (base = pill).
 
-			// ---- GX4 motif + dish shadow (base values are no-ops) ------------
-			'--lafka-motif-check-a',
-			'--lafka-motif-check-b',
-			'--lafka-motif-check-size',
-			'--lafka-motif-check-h',
-			'--lafka-dish-shadow',
-			'--lafka-dish-contact', // GX4 polish: contact-shadow colour under cut-out thumbnails.
+		// ---- GX4 motif + dish shadow (base values are no-ops) ------------
+		'--lafka-motif-check-a',
+		'--lafka-motif-check-b',
+		'--lafka-motif-check-size',
+		'--lafka-motif-check-h',
+		'--lafka-dish-shadow',
+		'--lafka-dish-contact', // GX4 polish: contact-shadow colour under cut-out thumbnails.
 
-			// ---- Shadows / elevation ------------------------------------------
-			'--lafka-shadow-0',
-			'--lafka-shadow-1',
-			'--lafka-shadow-2',
-			'--lafka-shadow-3',
-			'--lafka-shadow-4',
-			'--lafka-shadow-focus',
+		// ---- Shadows / elevation ------------------------------------------
+		'--lafka-shadow-0',
+		'--lafka-shadow-1',
+		'--lafka-shadow-2',
+		'--lafka-shadow-3',
+		'--lafka-shadow-4',
+		'--lafka-shadow-focus',
 
-			// ---- Motion (literal tokens, not the var() aliases) ---------------
-			'--lafka-motion-duration-fast',
-			'--lafka-motion-duration-base',
-			'--lafka-motion-duration-slow',
-			'--lafka-motion-ease-out',
-			'--lafka-motion-ease-in-out',
-			'--lafka-duration-instant',
-			'--lafka-ease-in',
-			'--lafka-ease-spring',
-		)
-	);
-}
+		// ---- Motion (literal tokens, not the var() aliases) ---------------
+		'--lafka-motion-duration-fast',
+		'--lafka-motion-duration-base',
+		'--lafka-motion-duration-slow',
+		'--lafka-motion-ease-out',
+		'--lafka-motion-ease-in-out',
+		'--lafka-duration-instant',
+		'--lafka-ease-in',
+		'--lafka-ease-spring',
+	)
+);
 
 /**
  * TML chrome allow-list. Every key a preset lists under `chrome{}` MUST appear
  * here. These are exactly the `get_theme_mod( 'lafka_*' )` design-token reads in
  * styles/dynamic-css.php (the `lafka_legacy_migrate_map()` destinations).
  */
-if ( ! defined( 'LAFKA_PRESET_CHROME_WHITELIST' ) ) {
-	define(
-		'LAFKA_PRESET_CHROME_WHITELIST',
-		array(
-			// Brand + logo.
-			'lafka_accent_color',
-			'lafka_brand_color',
-			'lafka_logo_background_color',
+define(
+	'LAFKA_PRESET_CHROME_WHITELIST',
+	array(
+		// Brand + logo.
+		'lafka_accent_color',
+		'lafka_brand_color',
+		'lafka_logo_background_color',
 
-			// Content colours.
-			'lafka_links_color',
-			'lafka_links_hover_color',
-			'lafka_sidebar_titles_color',
-			'lafka_all_buttons_color',
-			'lafka_all_buttons_hover_color',
-			'lafka_new_label_color',
-			'lafka_sale_label_color',
-			'lafka_page_title_color',
-			'lafka_page_subtitle_color',
-			'lafka_custom_page_title_color',
-			'lafka_page_title_bckgr_color',
-			'lafka_page_title_border_color',
-			'lafka_add_to_cart_color',
-			'lafka_price_color_in_listings',
-			'lafka_price_background_color_in_listings',
-			'lafka_fancy_category_title_color',
+		// Content colours.
+		'lafka_links_color',
+		'lafka_links_hover_color',
+		'lafka_sidebar_titles_color',
+		'lafka_all_buttons_color',
+		'lafka_all_buttons_hover_color',
+		'lafka_new_label_color',
+		'lafka_sale_label_color',
+		'lafka_page_title_color',
+		'lafka_page_subtitle_color',
+		'lafka_custom_page_title_color',
+		'lafka_page_title_bckgr_color',
+		'lafka_page_title_border_color',
+		'lafka_add_to_cart_color',
+		'lafka_price_color_in_listings',
+		'lafka_price_background_color_in_listings',
+		'lafka_fancy_category_title_color',
 
-			// Header / top-bar / collapsible / main-menu / footer chrome.
-			'lafka_transparent_header_dark_menu_color',
-			'lafka_footer_titles_color',
-			'lafka_footer_title_border_color',
-			'lafka_footer_links_color',
-			'lafka_footer_text_color',
+		// Header / top-bar / collapsible / main-menu / footer chrome.
+		'lafka_transparent_header_dark_menu_color',
+		'lafka_footer_titles_color',
+		'lafka_footer_title_border_color',
+		'lafka_footer_links_color',
+		'lafka_footer_text_color',
 
-			// Composite typography arrays (routed by lafka_preset_default's
-			// untyped return — the shape matches dynamic-css.php's defaults).
-			'lafka_body_font',
-			'lafka_h1_font',
-			'lafka_h2_font',
-			'lafka_h3_font',
-			'lafka_h4_font',
-			'lafka_h5_font',
-			'lafka_h6_font',
+		// Composite typography arrays (routed by lafka_preset_default's
+		// untyped return — the shape matches dynamic-css.php's defaults).
+		'lafka_body_font',
+		'lafka_h1_font',
+		'lafka_h2_font',
+		'lafka_h3_font',
+		'lafka_h4_font',
+		'lafka_h5_font',
+		'lafka_h6_font',
 
-			// Composite background arrays + default title background image.
-			'lafka_header_background',
-			'lafka_footer_background',
-			'lafka_page_title_default_bckgr_image',
-		)
-	);
-}
+		// Composite background arrays + default title background image.
+		'lafka_header_background',
+		'lafka_footer_background',
+		'lafka_page_title_default_bckgr_image',
+	)
+);
 
 /**
  * GX4: live per-surface layout variants. A preset's `variants{}` block may set
@@ -235,19 +231,17 @@ if ( ! defined( 'LAFKA_PRESET_CHROME_WHITELIST' ) ) {
  * operator always wins. Anything outside this map fails Lafka_Preset::validate()
  * and is ignored by lafka_preset_variant(). See docs/PRESET_ENGINE.md §3.
  */
-if ( ! defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ) {
-	define(
-		'LAFKA_PRESET_VARIANT_WHITELIST',
-		array(
-			'header_layout' => array( 'classic', 'counter' ),
-			'home_layout'   => array( 'classic', 'counter' ),
-			'menu_layout'   => array( 'classic', 'counter' ),
-			'footer_layout' => array( 'classic', 'counter' ),
-			'drawer_layout' => array( 'classic', 'counter' ),
-			'motif'         => array( 'none', 'check' ),
-		)
-	);
-}
+define(
+	'LAFKA_PRESET_VARIANT_WHITELIST',
+	array(
+		'header_layout' => array( 'classic', 'counter' ),
+		'home_layout'   => array( 'classic', 'counter' ),
+		'menu_layout'   => array( 'classic', 'counter' ),
+		'footer_layout' => array( 'classic', 'counter' ),
+		'drawer_layout' => array( 'classic', 'counter' ),
+		'motif'         => array( 'none', 'check' ),
+	)
+);
 
 /**
  * Above-fold subset of LAFKA_PRESET_TOKEN_WHITELIST. Inert this wave; the
@@ -255,21 +249,19 @@ if ( ! defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ) {
  * non-default preset reflects the preset's key surfaces/type. MUST stay a
  * subset of LAFKA_PRESET_TOKEN_WHITELIST (asserted by PresetSchemaTest).
  */
-if ( ! defined( 'LAFKA_PRESET_CRITICAL_KEYS' ) ) {
-	define(
-		'LAFKA_PRESET_CRITICAL_KEYS',
-		array(
-			'--lafka-color-surface-page',
-			'--lafka-color-surface-raised',
-			'--lafka-color-surface-muted',  // GX4: the counter hero band.
-			'--lafka-color-text-primary',
-			'--lafka-color-text-secondary',
-			'--lafka-color-border-subtle',
-			'--lafka-color-accent-600',
-			'--lafka-color-accent-700',
-			'--lafka-color-success-500',    // GX4: the header "Open now" dot.
-			'--lafka-font-family-body',
-			'--lafka-font-family-display',
-		)
-	);
-}
+define(
+	'LAFKA_PRESET_CRITICAL_KEYS',
+	array(
+		'--lafka-color-surface-page',
+		'--lafka-color-surface-raised',
+		'--lafka-color-surface-muted',  // GX4: the counter hero band.
+		'--lafka-color-text-primary',
+		'--lafka-color-text-secondary',
+		'--lafka-color-border-subtle',
+		'--lafka-color-accent-600',
+		'--lafka-color-accent-700',
+		'--lafka-color-success-500',    // GX4: the header "Open now" dot.
+		'--lafka-font-family-body',
+		'--lafka-font-family-display',
+	)
+);

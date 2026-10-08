@@ -43,7 +43,7 @@ if ( ! function_exists( 'lafka_theme_reach_email' ) ) {
 		}
 
 		// 1b. Single-store fallback when the plugin resolver isn't loaded.
-		if ( '' === $email && function_exists( 'get_option' ) ) {
+		if ( '' === $email ) {
 			$email = (string) get_option( 'lafka_business_email', '' );
 		}
 

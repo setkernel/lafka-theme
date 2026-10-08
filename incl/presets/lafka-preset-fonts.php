@@ -37,18 +37,14 @@ defined( 'ABSPATH' ) || exit;
  * `latin-ext` adds the accented European glyphs (the pool is sold as an OSS
  * bundle to non-English restaurants, so latin-ext is shipped too).
  */
-if ( ! defined( 'LAFKA_FONT_RANGE_LATIN' ) ) {
-	define(
-		'LAFKA_FONT_RANGE_LATIN',
-		'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'
-	);
-}
-if ( ! defined( 'LAFKA_FONT_RANGE_LATIN_EXT' ) ) {
-	define(
-		'LAFKA_FONT_RANGE_LATIN_EXT',
-		'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF'
-	);
-}
+define(
+	'LAFKA_FONT_RANGE_LATIN',
+	'U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD'
+);
+define(
+	'LAFKA_FONT_RANGE_LATIN_EXT',
+	'U+0100-02BA,U+02BD-02C5,U+02C7-02CC,U+02CE-02D7,U+02DD-02FF,U+0304,U+0308,U+0329,U+1D00-1DBF,U+1E00-1E9F,U+1EF2-1EFF,U+2020,U+20A0-20AB,U+20AD-20C0,U+2113,U+2C60-2C7F,U+A720-A7FF'
+);
 
 /**
  * The curated font pool: slug => definition.
@@ -69,204 +65,202 @@ if ( ! defined( 'LAFKA_FONT_RANGE_LATIN_EXT' ) ) {
  * truth for "which families are on disk" (SelfHostedFontsTest reads this), even
  * though the emitter skips them.
  */
-if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
-	define(
-		'LAFKA_FONT_POOL',
-		array(
+define(
+	'LAFKA_FONT_POOL',
+	array(
 
-			// ---- BASE families (already self-hosted; engine emits nothing) -----
-			'rubik'                      => array(
-				'family'   => 'Rubik',
-				'source'   => 'base',
-				'dir'      => 'rubik',
-				'category' => 'sans',
-				'fallback' => '"Rubik", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array( 'latin' => 'Rubik-400.woff2' ),
-					600 => array( 'latin' => 'Rubik-600.woff2' ),
-					700 => array( 'latin' => 'Rubik-700.woff2' ),
-				),
+		// ---- BASE families (already self-hosted; engine emits nothing) -----
+		'rubik'                      => array(
+			'family'   => 'Rubik',
+			'source'   => 'base',
+			'dir'      => 'rubik',
+			'category' => 'sans',
+			'fallback' => '"Rubik", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array( 'latin' => 'Rubik-400.woff2' ),
+				600 => array( 'latin' => 'Rubik-600.woff2' ),
+				700 => array( 'latin' => 'Rubik-700.woff2' ),
 			),
-			'fraunces'                   => array(
-				'family'   => 'Fraunces',
-				'source'   => 'base',
-				'dir'      => 'fraunces',
-				'category' => 'serif',
-				'fallback' => '"Fraunces", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", palatino, georgia, serif',
-				'license'  => 'OFL.txt',
-				'weights'  => array(
-					400 => array( 'latin' => 'Fraunces-400.woff2' ),
-					600 => array( 'latin' => 'Fraunces-600.woff2' ),
-					800 => array( 'latin' => 'Fraunces-800.woff2' ),
-				),
+		),
+		'fraunces'                   => array(
+			'family'   => 'Fraunces',
+			'source'   => 'base',
+			'dir'      => 'fraunces',
+			'category' => 'serif',
+			'fallback' => '"Fraunces", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", palatino, georgia, serif',
+			'license'  => 'OFL.txt',
+			'weights'  => array(
+				400 => array( 'latin' => 'Fraunces-400.woff2' ),
+				600 => array( 'latin' => 'Fraunces-600.woff2' ),
+				800 => array( 'latin' => 'Fraunces-800.woff2' ),
 			),
+		),
 
-			// ---- POOL families (conditional per-preset @font-face) -------------
-			'inter'                      => array(
-				'family'   => 'Inter',
-				'source'   => 'pool',
-				'dir'      => 'inter',
-				'category' => 'sans',
-				'fallback' => '"Inter", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array(
-						'latin'     => 'Inter-400.woff2',
-						'latin-ext' => 'Inter-400-ext.woff2',
-					),
-					600 => array(
-						'latin'     => 'Inter-600.woff2',
-						'latin-ext' => 'Inter-600-ext.woff2',
-					),
-					700 => array(
-						'latin'     => 'Inter-700.woff2',
-						'latin-ext' => 'Inter-700-ext.woff2',
-					),
+		// ---- POOL families (conditional per-preset @font-face) -------------
+		'inter'                      => array(
+			'family'   => 'Inter',
+			'source'   => 'pool',
+			'dir'      => 'inter',
+			'category' => 'sans',
+			'fallback' => '"Inter", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array(
+					'latin'     => 'Inter-400.woff2',
+					'latin-ext' => 'Inter-400-ext.woff2',
+				),
+				600 => array(
+					'latin'     => 'Inter-600.woff2',
+					'latin-ext' => 'Inter-600-ext.woff2',
+				),
+				700 => array(
+					'latin'     => 'Inter-700.woff2',
+					'latin-ext' => 'Inter-700-ext.woff2',
 				),
 			),
-			'archivo'                    => array(
-				'family'   => 'Archivo',
-				'source'   => 'pool',
-				'dir'      => 'archivo',
-				'category' => 'sans',
-				'fallback' => '"Archivo", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array(
-						'latin'     => 'Archivo-400.woff2',
-						'latin-ext' => 'Archivo-400-ext.woff2',
-					),
-					600 => array(
-						'latin'     => 'Archivo-600.woff2',
-						'latin-ext' => 'Archivo-600-ext.woff2',
-					),
-					700 => array(
-						'latin'     => 'Archivo-700.woff2',
-						'latin-ext' => 'Archivo-700-ext.woff2',
-					),
+		),
+		'archivo'                    => array(
+			'family'   => 'Archivo',
+			'source'   => 'pool',
+			'dir'      => 'archivo',
+			'category' => 'sans',
+			'fallback' => '"Archivo", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array(
+					'latin'     => 'Archivo-400.woff2',
+					'latin-ext' => 'Archivo-400-ext.woff2',
+				),
+				600 => array(
+					'latin'     => 'Archivo-600.woff2',
+					'latin-ext' => 'Archivo-600-ext.woff2',
+				),
+				700 => array(
+					'latin'     => 'Archivo-700.woff2',
+					'latin-ext' => 'Archivo-700-ext.woff2',
 				),
 			),
-			'lora'                       => array(
-				'family'   => 'Lora',
-				'source'   => 'pool',
-				'dir'      => 'lora',
-				'category' => 'serif',
-				'fallback' => '"Lora", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", palatino, georgia, serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array(
-						'latin'     => 'Lora-400.woff2',
-						'latin-ext' => 'Lora-400-ext.woff2',
-					),
-					600 => array(
-						'latin'     => 'Lora-600.woff2',
-						'latin-ext' => 'Lora-600-ext.woff2',
-					),
-					700 => array(
-						'latin'     => 'Lora-700.woff2',
-						'latin-ext' => 'Lora-700-ext.woff2',
-					),
+		),
+		'lora'                       => array(
+			'family'   => 'Lora',
+			'source'   => 'pool',
+			'dir'      => 'lora',
+			'category' => 'serif',
+			'fallback' => '"Lora", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", palatino, georgia, serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array(
+					'latin'     => 'Lora-400.woff2',
+					'latin-ext' => 'Lora-400-ext.woff2',
+				),
+				600 => array(
+					'latin'     => 'Lora-600.woff2',
+					'latin-ext' => 'Lora-600-ext.woff2',
+				),
+				700 => array(
+					'latin'     => 'Lora-700.woff2',
+					'latin-ext' => 'Lora-700-ext.woff2',
 				),
 			),
-			'manrope'                    => array(
-				'family'   => 'Manrope',
-				'source'   => 'pool',
-				'dir'      => 'manrope',
-				'category' => 'sans',
-				'fallback' => '"Manrope", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array(
-						'latin'     => 'Manrope-400.woff2',
-						'latin-ext' => 'Manrope-400-ext.woff2',
-					),
-					600 => array(
-						'latin'     => 'Manrope-600.woff2',
-						'latin-ext' => 'Manrope-600-ext.woff2',
-					),
-					700 => array(
-						'latin'     => 'Manrope-700.woff2',
-						'latin-ext' => 'Manrope-700-ext.woff2',
-					),
+		),
+		'manrope'                    => array(
+			'family'   => 'Manrope',
+			'source'   => 'pool',
+			'dir'      => 'manrope',
+			'category' => 'sans',
+			'fallback' => '"Manrope", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array(
+					'latin'     => 'Manrope-400.woff2',
+					'latin-ext' => 'Manrope-400-ext.woff2',
+				),
+				600 => array(
+					'latin'     => 'Manrope-600.woff2',
+					'latin-ext' => 'Manrope-600-ext.woff2',
+				),
+				700 => array(
+					'latin'     => 'Manrope-700.woff2',
+					'latin-ext' => 'Manrope-700-ext.woff2',
 				),
 			),
-			'space-grotesk'              => array(
-				'family'   => 'Space Grotesk',
-				'source'   => 'pool',
-				'dir'      => 'space-grotesk',
-				'category' => 'sans',
-				'fallback' => '"Space Grotesk", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array(
-						'latin'     => 'SpaceGrotesk-400.woff2',
-						'latin-ext' => 'SpaceGrotesk-400-ext.woff2',
-					),
-					600 => array(
-						'latin'     => 'SpaceGrotesk-600.woff2',
-						'latin-ext' => 'SpaceGrotesk-600-ext.woff2',
-					),
-					700 => array(
-						'latin'     => 'SpaceGrotesk-700.woff2',
-						'latin-ext' => 'SpaceGrotesk-700-ext.woff2',
-					),
+		),
+		'space-grotesk'              => array(
+			'family'   => 'Space Grotesk',
+			'source'   => 'pool',
+			'dir'      => 'space-grotesk',
+			'category' => 'sans',
+			'fallback' => '"Space Grotesk", system-ui, -apple-system, "Segoe UI", roboto, "Helvetica Neue", arial, sans-serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array(
+					'latin'     => 'SpaceGrotesk-400.woff2',
+					'latin-ext' => 'SpaceGrotesk-400-ext.woff2',
+				),
+				600 => array(
+					'latin'     => 'SpaceGrotesk-600.woff2',
+					'latin-ext' => 'SpaceGrotesk-600-ext.woff2',
+				),
+				700 => array(
+					'latin'     => 'SpaceGrotesk-700.woff2',
+					'latin-ext' => 'SpaceGrotesk-700-ext.woff2',
 				),
 			),
-			'dm-serif-display'           => array(
-				'family'   => 'DM Serif Display',
-				'source'   => 'pool',
-				'dir'      => 'dm-serif-display',
-				'category' => 'serif',
-				'fallback' => '"DM Serif Display", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", palatino, georgia, serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array(
-						'latin'     => 'DMSerifDisplay-400.woff2',
-						'latin-ext' => 'DMSerifDisplay-400-ext.woff2',
-					),
+		),
+		'dm-serif-display'           => array(
+			'family'   => 'DM Serif Display',
+			'source'   => 'pool',
+			'dir'      => 'dm-serif-display',
+			'category' => 'serif',
+			'fallback' => '"DM Serif Display", "Iowan Old Style", "Palatino Linotype", "Book Antiqua", palatino, georgia, serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array(
+					'latin'     => 'DMSerifDisplay-400.woff2',
+					'latin-ext' => 'DMSerifDisplay-400-ext.woff2',
 				),
 			),
+		),
 
-			// ---- GX4 (counter / Peppery) ---------------------------------------
-			// Body: static 400/700 (the design's 500 maps to 400 — one file fewer).
-			'atkinson-hyperlegible-next' => array(
-				'family'   => 'Atkinson Hyperlegible Next',
-				'source'   => 'pool',
-				'dir'      => 'atkinson-hyperlegible-next',
-				'category' => 'sans',
-				'fallback' => '"Atkinson Hyperlegible Next", verdana, sans-serif',
-				'license'  => 'LICENSE',
-				'weights'  => array(
-					400 => array(
-						'latin'     => 'AtkinsonHyperlegibleNext-400.woff2',
-						'latin-ext' => 'AtkinsonHyperlegibleNext-400-ext.woff2',
-					),
-					700 => array(
-						'latin'     => 'AtkinsonHyperlegibleNext-700.woff2',
-						'latin-ext' => 'AtkinsonHyperlegibleNext-700-ext.woff2',
-					),
+		// ---- GX4 (counter / Peppery) ---------------------------------------
+		// Body: static 400/700 (the design's 500 maps to 400 — one file fewer).
+		'atkinson-hyperlegible-next' => array(
+			'family'   => 'Atkinson Hyperlegible Next',
+			'source'   => 'pool',
+			'dir'      => 'atkinson-hyperlegible-next',
+			'category' => 'sans',
+			'fallback' => '"Atkinson Hyperlegible Next", verdana, sans-serif',
+			'license'  => 'LICENSE',
+			'weights'  => array(
+				400 => array(
+					'latin'     => 'AtkinsonHyperlegibleNext-400.woff2',
+					'latin-ext' => 'AtkinsonHyperlegibleNext-400-ext.woff2',
+				),
+				700 => array(
+					'latin'     => 'AtkinsonHyperlegibleNext-700.woff2',
+					'latin-ext' => 'AtkinsonHyperlegibleNext-700-ext.woff2',
 				),
 			),
-			// Display: ONE variable file per subset (optical size + weight 200–800).
-			// `variable` entries carry `weight` (the font-weight range) + `files`
-			// (subset => file) instead of per-weight `weights`.
-			'bricolage-grotesque'        => array(
-				'family'   => 'Bricolage Grotesque',
-				'source'   => 'pool',
-				'dir'      => 'bricolage-grotesque',
-				'category' => 'sans',
-				'fallback' => '"Bricolage Grotesque", "Trebuchet MS", sans-serif',
-				'license'  => 'LICENSE',
-				'variable' => array(
-					'weight' => '200 800',
-					'files'  => array(
-						'latin'     => 'BricolageGrotesque-opsz.woff2',
-						'latin-ext' => 'BricolageGrotesque-opsz-ext.woff2',
-					),
+		),
+		// Display: ONE variable file per subset (optical size + weight 200–800).
+		// `variable` entries carry `weight` (the font-weight range) + `files`
+		// (subset => file) instead of per-weight `weights`.
+		'bricolage-grotesque'        => array(
+			'family'   => 'Bricolage Grotesque',
+			'source'   => 'pool',
+			'dir'      => 'bricolage-grotesque',
+			'category' => 'sans',
+			'fallback' => '"Bricolage Grotesque", "Trebuchet MS", sans-serif',
+			'license'  => 'LICENSE',
+			'variable' => array(
+				'weight' => '200 800',
+				'files'  => array(
+					'latin'     => 'BricolageGrotesque-opsz.woff2',
+					'latin-ext' => 'BricolageGrotesque-opsz-ext.woff2',
 				),
-				'weights'  => array(),
 			),
-		)
-	);
-}
+			'weights'  => array(),
+		),
+	)
+);

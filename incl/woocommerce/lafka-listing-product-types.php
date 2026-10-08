@@ -28,7 +28,7 @@ if ( ! function_exists( 'lafka_listing_extra_product_types' ) ) {
 	 */
 	function lafka_listing_extra_product_types(): array {
 		$extra = array();
-		if ( function_exists( 'wc_get_product_types' ) && function_exists( 'get_terms' ) ) {
+		if ( function_exists( 'wc_get_product_types' ) ) {
 			// get_terms() results are object-cached by WordPress.
 			$in_use = get_terms(
 				array(

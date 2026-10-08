@@ -34,7 +34,7 @@ if ( ! function_exists( 'lafka_card_image_alt' ) ) {
 	 */
 	function lafka_card_image_alt( $product, $attachment_id ) {
 		$alt = '';
-		if ( $attachment_id && function_exists( 'get_post_meta' ) ) {
+		if ( $attachment_id ) {
 			$alt = trim( wp_strip_all_tags( (string) get_post_meta( (int) $attachment_id, '_wp_attachment_image_alt', true ) ) );
 		}
 		if ( '' === $alt && is_object( $product ) && method_exists( $product, 'get_name' ) ) {

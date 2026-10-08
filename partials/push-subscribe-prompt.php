@@ -40,10 +40,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'get_theme_mod' ) ) {
-	return;
-}
-
 // Master toggle gates everything.
 if ( '1' !== (string) get_theme_mod( 'lafka_push_enabled', '0' ) ) {
 	return;

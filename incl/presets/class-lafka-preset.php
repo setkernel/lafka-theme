@@ -13,197 +13,195 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! class_exists( 'Lafka_Preset' ) ) {
+
+/**
+ * Immutable view over a single preset definition.
+ */
+class Lafka_Preset {
+
+	/** @var array<string,mixed> The decoded preset.json data. */
+	private $data;
 
 	/**
-	 * Immutable view over a single preset definition.
+	 * @param array<string,mixed> $data Decoded preset.json (already merged if it `extends`).
 	 */
-	class Lafka_Preset {
+	public function __construct( array $data ) {
+		$this->data = $data;
+	}
 
-		/** @var array<string,mixed> The decoded preset.json data. */
-		private $data;
+	/** Directory-name slug (== the preset folder). */
+	public function slug(): string {
+		return isset( $this->data['slug'] ) ? (string) $this->data['slug'] : '';
+	}
 
-		/**
-		 * @param array<string,mixed> $data Decoded preset.json (already merged if it `extends`).
-		 */
-		public function __construct( array $data ) {
-			$this->data = $data;
+	/** Human label for the switcher UI (falls back to the slug). */
+	public function label(): string {
+		return isset( $this->data['label'] ) && '' !== $this->data['label']
+			? (string) $this->data['label']
+			: $this->slug();
+	}
+
+	/** One-line description. */
+	public function description(): string {
+		return isset( $this->data['description'] ) ? (string) $this->data['description'] : '';
+	}
+
+	/** True when the preset activates the dark scaffold + emits a dark PTL. */
+	public function is_dark(): bool {
+		return ! empty( $this->data['dark'] );
+	}
+
+	/** Parent preset slug to deep-merge from, or null. */
+	public function extends_slug(): ?string {
+		if ( empty( $this->data['extends'] ) ) {
+			return null;
+		}
+		return (string) $this->data['extends'];
+	}
+
+	/**
+	 * PTL token overrides (`--lafka-*` => value). NOT yet whitelist-filtered —
+	 * the emitter drops out-of-whitelist keys at build time.
+	 *
+	 * @return array<string,string>
+	 */
+	public function tokens(): array {
+		return isset( $this->data['tokens'] ) && is_array( $this->data['tokens'] )
+			? $this->data['tokens']
+			: array();
+	}
+
+	/**
+	 * TML chrome defaults (`lafka_*` theme_mod key => default value).
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function chrome(): array {
+		return isset( $this->data['chrome'] ) && is_array( $this->data['chrome'] )
+			? $this->data['chrome']
+			: array();
+	}
+
+	/**
+	 * Font declarations (NX2-03 interface; engine wave uses source:"base").
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function fonts(): array {
+		return isset( $this->data['fonts'] ) && is_array( $this->data['fonts'] )
+			? $this->data['fonts']
+			: array();
+	}
+
+	/**
+	 * Category-emoji map fed into the `lafka_category_emoji` filter.
+	 *
+	 * @return array<string,string>
+	 */
+	public function category_emoji(): array {
+		return isset( $this->data['category_emoji'] ) && is_array( $this->data['category_emoji'] )
+			? $this->data['category_emoji']
+			: array();
+	}
+
+	/**
+	 * Flat variant map (GX4: live). Keys/values are constrained by
+	 * LAFKA_PRESET_VARIANT_WHITELIST; see lafka_preset_variant().
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function variants(): array {
+		return isset( $this->data['variants'] ) && is_array( $this->data['variants'] )
+			? $this->data['variants']
+			: array();
+	}
+
+	/**
+	 * One whitelisted variant value, or null when the preset does not set it
+	 * (or sets a key/value outside LAFKA_PRESET_VARIANT_WHITELIST).
+	 *
+	 * @param string $key e.g. `home_layout`, `motif`.
+	 */
+	public function variant( string $key ): ?string {
+		$variants  = $this->variants();
+		$whitelist = LAFKA_PRESET_VARIANT_WHITELIST;
+		if ( ! isset( $variants[ $key ], $whitelist[ $key ] ) || ! is_string( $variants[ $key ] ) ) {
+			return null;
+		}
+		return in_array( $variants[ $key ], $whitelist[ $key ], true ) ? $variants[ $key ] : null;
+	}
+
+	/**
+	 * Audited AA contrast waivers (NX2-02 gate reads these).
+	 *
+	 * @return array<int,string>
+	 */
+	public function contrast_exceptions(): array {
+		return isset( $this->data['contrast_exceptions'] ) && is_array( $this->data['contrast_exceptions'] )
+			? array_values( $this->data['contrast_exceptions'] )
+			: array();
+	}
+
+	/**
+	 * The raw decoded array (for the registry / tests).
+	 *
+	 * @return array<string,mixed>
+	 */
+	public function raw(): array {
+		return $this->data;
+	}
+
+	/**
+	 * Structural + whitelist validity. Returns a list of problems (empty =
+	 * valid). Used by Lafka_Presets discovery (WP_DEBUG log + skip) and by
+	 * PresetSchemaTest.
+	 *
+	 * @return array<int,string>
+	 */
+	public function validate(): array {
+		$errors = array();
+
+		$slug = $this->slug();
+		if ( '' === $slug ) {
+			$errors[] = 'missing slug';
+		} elseif ( sanitize_key( $slug ) !== $slug ) {
+			$errors[] = "slug '{$slug}' is not a sanitize_key() identity";
 		}
 
-		/** Directory-name slug (== the preset folder). */
-		public function slug(): string {
-			return isset( $this->data['slug'] ) ? (string) $this->data['slug'] : '';
+		$schema = isset( $this->data['schema'] ) ? (int) $this->data['schema'] : 0;
+		if ( 1 !== $schema ) {
+			$errors[] = "unsupported schema '{$schema}' (expected 1)";
 		}
 
-		/** Human label for the switcher UI (falls back to the slug). */
-		public function label(): string {
-			return isset( $this->data['label'] ) && '' !== $this->data['label']
-				? (string) $this->data['label']
-				: $this->slug();
-		}
-
-		/** One-line description. */
-		public function description(): string {
-			return isset( $this->data['description'] ) ? (string) $this->data['description'] : '';
-		}
-
-		/** True when the preset activates the dark scaffold + emits a dark PTL. */
-		public function is_dark(): bool {
-			return ! empty( $this->data['dark'] );
-		}
-
-		/** Parent preset slug to deep-merge from, or null. */
-		public function extends_slug(): ?string {
-			if ( empty( $this->data['extends'] ) ) {
-				return null;
+		$token_whitelist = LAFKA_PRESET_TOKEN_WHITELIST;
+		foreach ( array_keys( $this->tokens() ) as $key ) {
+			if ( ! in_array( $key, $token_whitelist, true ) ) {
+				$errors[] = "token '{$key}' is not in LAFKA_PRESET_TOKEN_WHITELIST";
 			}
-			return (string) $this->data['extends'];
 		}
 
-		/**
-		 * PTL token overrides (`--lafka-*` => value). NOT yet whitelist-filtered —
-		 * the emitter drops out-of-whitelist keys at build time.
-		 *
-		 * @return array<string,string>
-		 */
-		public function tokens(): array {
-			return isset( $this->data['tokens'] ) && is_array( $this->data['tokens'] )
-				? $this->data['tokens']
-				: array();
-		}
-
-		/**
-		 * TML chrome defaults (`lafka_*` theme_mod key => default value).
-		 *
-		 * @return array<string,mixed>
-		 */
-		public function chrome(): array {
-			return isset( $this->data['chrome'] ) && is_array( $this->data['chrome'] )
-				? $this->data['chrome']
-				: array();
-		}
-
-		/**
-		 * Font declarations (NX2-03 interface; engine wave uses source:"base").
-		 *
-		 * @return array<string,mixed>
-		 */
-		public function fonts(): array {
-			return isset( $this->data['fonts'] ) && is_array( $this->data['fonts'] )
-				? $this->data['fonts']
-				: array();
-		}
-
-		/**
-		 * Category-emoji map fed into the `lafka_category_emoji` filter.
-		 *
-		 * @return array<string,string>
-		 */
-		public function category_emoji(): array {
-			return isset( $this->data['category_emoji'] ) && is_array( $this->data['category_emoji'] )
-				? $this->data['category_emoji']
-				: array();
-		}
-
-		/**
-		 * Flat variant map (GX4: live). Keys/values are constrained by
-		 * LAFKA_PRESET_VARIANT_WHITELIST; see lafka_preset_variant().
-		 *
-		 * @return array<string,mixed>
-		 */
-		public function variants(): array {
-			return isset( $this->data['variants'] ) && is_array( $this->data['variants'] )
-				? $this->data['variants']
-				: array();
-		}
-
-		/**
-		 * One whitelisted variant value, or null when the preset does not set it
-		 * (or sets a key/value outside LAFKA_PRESET_VARIANT_WHITELIST).
-		 *
-		 * @param string $key e.g. `home_layout`, `motif`.
-		 */
-		public function variant( string $key ): ?string {
-			$variants  = $this->variants();
-			$whitelist = defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ? LAFKA_PRESET_VARIANT_WHITELIST : array();
-			if ( ! isset( $variants[ $key ], $whitelist[ $key ] ) || ! is_string( $variants[ $key ] ) ) {
-				return null;
+		$chrome_whitelist = LAFKA_PRESET_CHROME_WHITELIST;
+		foreach ( array_keys( $this->chrome() ) as $key ) {
+			if ( ! in_array( $key, $chrome_whitelist, true ) ) {
+				$errors[] = "chrome key '{$key}' is not in LAFKA_PRESET_CHROME_WHITELIST";
 			}
-			return in_array( $variants[ $key ], $whitelist[ $key ], true ) ? $variants[ $key ] : null;
 		}
 
-		/**
-		 * Audited AA contrast waivers (NX2-02 gate reads these).
-		 *
-		 * @return array<int,string>
-		 */
-		public function contrast_exceptions(): array {
-			return isset( $this->data['contrast_exceptions'] ) && is_array( $this->data['contrast_exceptions'] )
-				? array_values( $this->data['contrast_exceptions'] )
-				: array();
+		foreach ( $this->fonts() as $role => $decl ) {
+			if ( is_array( $decl ) && isset( $decl['font_display'] ) && ! in_array( $decl['font_display'], array( 'swap', 'optional' ), true ) ) {
+				$errors[] = "fonts.{$role}.font_display must be 'swap' or 'optional'";
+			}
 		}
 
-		/**
-		 * The raw decoded array (for the registry / tests).
-		 *
-		 * @return array<string,mixed>
-		 */
-		public function raw(): array {
-			return $this->data;
+		$variant_whitelist = LAFKA_PRESET_VARIANT_WHITELIST;
+		foreach ( $this->variants() as $key => $value ) {
+			if ( ! isset( $variant_whitelist[ $key ] ) ) {
+				$errors[] = "variant '{$key}' is not in LAFKA_PRESET_VARIANT_WHITELIST";
+			} elseif ( ! is_string( $value ) || ! in_array( $value, $variant_whitelist[ $key ], true ) ) {
+				$errors[] = "variant '{$key}' has a value outside LAFKA_PRESET_VARIANT_WHITELIST";
+			}
 		}
 
-		/**
-		 * Structural + whitelist validity. Returns a list of problems (empty =
-		 * valid). Used by Lafka_Presets discovery (WP_DEBUG log + skip) and by
-		 * PresetSchemaTest.
-		 *
-		 * @return array<int,string>
-		 */
-		public function validate(): array {
-			$errors = array();
-
-			$slug = $this->slug();
-			if ( '' === $slug ) {
-				$errors[] = 'missing slug';
-			} elseif ( function_exists( 'sanitize_key' ) && sanitize_key( $slug ) !== $slug ) {
-				$errors[] = "slug '{$slug}' is not a sanitize_key() identity";
-			}
-
-			$schema = isset( $this->data['schema'] ) ? (int) $this->data['schema'] : 0;
-			if ( 1 !== $schema ) {
-				$errors[] = "unsupported schema '{$schema}' (expected 1)";
-			}
-
-			$token_whitelist = defined( 'LAFKA_PRESET_TOKEN_WHITELIST' ) ? LAFKA_PRESET_TOKEN_WHITELIST : array();
-			foreach ( array_keys( $this->tokens() ) as $key ) {
-				if ( ! in_array( $key, $token_whitelist, true ) ) {
-					$errors[] = "token '{$key}' is not in LAFKA_PRESET_TOKEN_WHITELIST";
-				}
-			}
-
-			$chrome_whitelist = defined( 'LAFKA_PRESET_CHROME_WHITELIST' ) ? LAFKA_PRESET_CHROME_WHITELIST : array();
-			foreach ( array_keys( $this->chrome() ) as $key ) {
-				if ( ! in_array( $key, $chrome_whitelist, true ) ) {
-					$errors[] = "chrome key '{$key}' is not in LAFKA_PRESET_CHROME_WHITELIST";
-				}
-			}
-
-			foreach ( $this->fonts() as $role => $decl ) {
-				if ( is_array( $decl ) && isset( $decl['font_display'] ) && ! in_array( $decl['font_display'], array( 'swap', 'optional' ), true ) ) {
-					$errors[] = "fonts.{$role}.font_display must be 'swap' or 'optional'";
-				}
-			}
-
-			$variant_whitelist = defined( 'LAFKA_PRESET_VARIANT_WHITELIST' ) ? LAFKA_PRESET_VARIANT_WHITELIST : array();
-			foreach ( $this->variants() as $key => $value ) {
-				if ( ! isset( $variant_whitelist[ $key ] ) ) {
-					$errors[] = "variant '{$key}' is not in LAFKA_PRESET_VARIANT_WHITELIST";
-				} elseif ( ! is_string( $value ) || ! in_array( $value, $variant_whitelist[ $key ], true ) ) {
-					$errors[] = "variant '{$key}' has a value outside LAFKA_PRESET_VARIANT_WHITELIST";
-				}
-			}
-
-			return $errors;
-		}
+		return $errors;
 	}
 }

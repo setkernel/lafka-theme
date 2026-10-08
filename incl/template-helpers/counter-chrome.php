@@ -450,7 +450,7 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 					'noon'          => __( 'noon', 'lafka' ),
 					'midnight'      => __( 'midnight', 'lafka' ),
 					// Store UTC offset in minutes, so the refresh reads the store's clock.
-					'offset'        => function_exists( 'wp_timezone' ) ? (int) ( wp_timezone()->getOffset( new DateTime( 'now', wp_timezone() ) ) / 60 ) : 0,
+					'offset'        => (int) ( wp_timezone()->getOffset( new DateTime( 'now', wp_timezone() ) ) / 60 ),
 					'days'          => array( __( 'Sunday', 'lafka' ), __( 'Monday', 'lafka' ), __( 'Tuesday', 'lafka' ), __( 'Wednesday', 'lafka' ), __( 'Thursday', 'lafka' ), __( 'Friday', 'lafka' ), __( 'Saturday', 'lafka' ) ),
 				)
 			);
