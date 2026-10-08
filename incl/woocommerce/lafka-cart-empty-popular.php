@@ -77,7 +77,7 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 					if ( $product->is_type( 'variable' ) ) {
 						$min = $product->get_variation_price( 'min' );
 						if ( '' !== $min ) {
-							/* translators: %s: starting price */
+							/* translators: %s: lowest price. */
 							$price = sprintf( esc_html__( 'from %s', 'lafka' ), wc_price( $min ) );
 						}
 					} else {

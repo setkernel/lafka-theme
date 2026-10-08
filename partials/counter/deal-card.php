@@ -27,7 +27,7 @@ $lafka_deal_url     = (string) $lafka_deal->get_permalink();
 $lafka_deal_prices  = lafka_price_columns( $lafka_deal );
 $lafka_deal_price   = 'single' === $lafka_deal_prices['type']
 	? lafka_price_plain( (float) $lafka_deal_prices['price'] )
-	/* translators: %s: lowest price */
+	/* translators: %s: lowest price. */
 	: sprintf( __( 'from %s', 'lafka' ), lafka_price_plain( (float) $lafka_deal_prices['price'] ) );
 $lafka_deal_line = lafka_per_person_text( (float) $lafka_deal_prices['price'], lafka_serves_for( $lafka_deal ) );
 if ( '' === $lafka_deal_line && 'text' !== $lafka_deal_variant ) {

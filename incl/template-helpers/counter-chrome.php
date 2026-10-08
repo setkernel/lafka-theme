@@ -552,7 +552,7 @@ if ( ! function_exists( 'lafka_counter_price_text' ) ) {
 	function lafka_counter_price_text( $product ): string {
 		$prices = lafka_price_columns( $product );
 		$price  = lafka_price_plain( (float) $prices['price'] );
-		/* translators: %s: lowest price */
+		/* translators: %s: lowest price. */
 		return 'single' === $prices['type'] ? $price : sprintf( __( 'from %s', 'lafka' ), $price );
 	}
 }
@@ -716,7 +716,7 @@ if ( ! function_exists( 'lafka_counter_drawer_summary' ) ) {
 	/** "3 items" under the drawer title (also a cart fragment). */
 	function lafka_counter_drawer_summary(): string {
 		$count = lafka_counter_cart_count();
-		/* translators: %d: number of items in the order */
+		/* translators: %d: number of items. */
 		return '<span class="lafka-drawer__summary">' . esc_html( sprintf( _n( '%d item', '%d items', $count, 'lafka' ), $count ) ) . '</span>';
 	}
 }

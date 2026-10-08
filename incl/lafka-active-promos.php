@@ -92,7 +92,7 @@ if ( ! function_exists( 'lafka_active_promo_messages' ) ) {
 			if ( $t > 0 ) {
 				$out[] = array(
 					'key'  => 'free_delivery',
-					/* translators: %s = order subtotal threshold */
+					/* translators: %s: free-delivery threshold, e.g. "$30". */
 					'text' => sprintf( __( 'Free delivery over %s', 'lafka' ), lafka_active_promo_price( $t ) ),
 				);
 			}

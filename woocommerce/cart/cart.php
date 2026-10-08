@@ -108,7 +108,7 @@ do_action( 'woocommerce_before_cart' );
 			<span class="lafka-cart-tab__meta">
 				<?php
 				if ( '' !== $lafka_cart_pickup_eta ) {
-					/* translators: %s — pickup ETA, e.g. "~25 min" */
+					/* translators: %s: ready time, e.g. "20–30 min". */
 					printf( esc_html__( 'Ready in %s', 'lafka' ), esc_html( $lafka_cart_pickup_eta ) );
 					if ( '' !== $lafka_cart_addr_short ) {
 						echo ' · ' . esc_html( $lafka_cart_addr_short );
@@ -125,7 +125,7 @@ do_action( 'woocommerce_before_cart' );
 				<?php
 				if ( $lafka_cart_threshold > 0 ) {
 					printf(
-						/* translators: 1: free-delivery threshold; 2: city. */
+						/* translators: 1: free-delivery threshold, e.g. "$30"; 2: city. */
 						esc_html__( 'Free over %1$s%2$s', 'lafka' ),
 						esc_html( $lafka_cart_threshold_label ),
 						'' !== $lafka_cart_city ? ' · ' . esc_html( $lafka_cart_city ) : ''

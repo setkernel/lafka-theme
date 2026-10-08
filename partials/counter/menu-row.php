@@ -127,7 +127,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 			<?php elseif ( 'from' === $lafka_row_prices['type'] ) : ?>
 				<p class="lafka-row__price">
 					<?php
-					/* translators: %s: lowest price */
+					/* translators: %s: lowest price. */
 					echo esc_html( sprintf( __( 'from %s', 'lafka' ), lafka_price_plain( (float) $lafka_row_prices['price'] ) ) );
 					?>
 				</p>

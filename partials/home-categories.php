@@ -111,7 +111,7 @@ $lafka_cat_emoji_map = array(
 						<span class="lafka-cats__count">
 							<?php
 							printf(
-								/* translators: %d: number of items in the category. */
+								/* translators: %d: number of items. */
 								esc_html( _n( '%d item', '%d items', (int) $lafka_cat_term->count, 'lafka' ) ),
 								(int) $lafka_cat_term->count
 							);

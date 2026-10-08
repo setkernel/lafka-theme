@@ -315,8 +315,10 @@ if ( ! function_exists( 'lafka_gated_open_status' ) ) {
 			$result = array(
 				'is_open'   => false,
 				'short'     => __( 'Closed', 'lafka' ),
-				/* translators: %s: next opening, e.g. "Saturday at 11:00 AM" */
-				'label'     => '' !== $next ? sprintf( __( 'Closed · opens %s', 'lafka' ), $next ) : __( 'Closed', 'lafka' ),
+				'label'     => '' !== $next
+					/* translators: %s: next opening, e.g. "tomorrow at 11 am". */
+					? sprintf( __( 'Closed · opens %s', 'lafka' ), $next )
+					: __( 'Closed', 'lafka' ),
 				'dot_color' => 'var(--lafka-color-text-secondary)',
 				'next'      => $next,
 				'locked'    => true,

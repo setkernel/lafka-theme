@@ -119,7 +119,7 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 								<?php if ( '' !== $lafka_hero_eta ) : ?>
 									<strong>
 									<?php
-									/* translators: %s: operator's ready-time text, e.g. "about 25 minutes" */
+									/* translators: %s: ready time, e.g. "20–30 min". */
 									echo esc_html( sprintf( __( 'Ready in %s', 'lafka' ), $lafka_hero_eta ) );
 									?>
 									</strong><?php echo '' !== $lafka_hero_modes_text ? ' · ' : ''; ?>

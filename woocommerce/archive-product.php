@@ -64,7 +64,7 @@ $lafka_arch_lead  = '';
 $lafka_arch_intro = '';
 if ( $lafka_arch_is_search ) {
 	$lafka_arch_title = '' !== $lafka_arch_query_s
-		/* translators: %s: the customer's search words. */
+		/* translators: %s: the visitor's search words. */
 		? sprintf( __( 'Results for “%s”', 'lafka' ), $lafka_arch_query_s )
 		: __( 'Search the menu', 'lafka' );
 	$lafka_arch_lead = $lafka_arch_found > 0

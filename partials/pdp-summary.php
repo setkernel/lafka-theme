@@ -319,7 +319,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 			<span class="lafka-pdp-summary__assurance-icon" aria-hidden="true">🚚</span>
 			<span>
 			<?php
-				/* translators: %s — formatted delivery threshold, e.g. "$30" */
+				/* translators: %s: free-delivery threshold, e.g. "$30". */
 				printf( esc_html__( 'Free delivery over %s', 'lafka' ), esc_html( function_exists( 'wc_price' ) ? wp_strip_all_tags( wc_price( $lafka_pdp_threshold ) ) : sprintf( '$%s', number_format_i18n( $lafka_pdp_threshold, 0 ) ) ) );
 			?>
 			</span>

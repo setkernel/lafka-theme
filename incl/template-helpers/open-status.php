@@ -158,8 +158,10 @@ if ( ! function_exists( 'lafka_open_status_apply_order_gate' ) ) {
 		return array(
 			'is_open'   => false,
 			'short'     => __( 'Closed', 'lafka' ),
-			/* translators: %s — next opening, e.g. "Saturday at 11:00 AM" */
-			'label'     => '' !== $next ? sprintf( __( 'Closed · opens %s', 'lafka' ), $next ) : __( 'Closed', 'lafka' ),
+			'label'     => '' !== $next
+				/* translators: %s: next opening, e.g. "tomorrow at 11 am". */
+				? sprintf( __( 'Closed · opens %s', 'lafka' ), $next )
+				: __( 'Closed', 'lafka' ),
 			'dot_color' => 'var(--lafka-color-brand-500)',
 			'locked'    => true,
 		);
@@ -232,7 +234,7 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 						array(
 							'is_open'   => true,
 							'short'     => __( 'Open now', 'lafka' ),
-							/* translators: %s — closing time (lowercased "h:mm am/pm") */
+							/* translators: %s: closing time, e.g. "11 pm". */
 							'label'     => sprintf( __( 'Open now · until %s', 'lafka' ), lafka_open_status_format_12h( $m[2] ) ),
 							'dot_color' => 'var(--lafka-color-success-500)',
 							'close'     => $m[2],
@@ -254,7 +256,7 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 					array(
 						'is_open'   => true,
 						'short'     => __( 'Open now', 'lafka' ),
-						/* translators: %s: closing time (lowercased "h:mm am/pm"). */
+						/* translators: %s: closing time, e.g. "11 pm". */
 						'label'     => sprintf( __( 'Open now · until %s', 'lafka' ), lafka_open_status_format_12h( $m[2] ) ),
 						'dot_color' => 'var(--lafka-color-success-500)',
 						'close'     => $m[2],

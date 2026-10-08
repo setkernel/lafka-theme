@@ -107,7 +107,7 @@ $lafka_mc_chips = function_exists( 'lafka_menu_filter_chips' ) ? lafka_menu_filt
 			<?php if ( '' !== $lafka_mc_pickup_eta ) : ?>
 				<span class="lafka-menu__tab-meta">
 					<?php
-					/* translators: %s — pickup ETA, e.g. "~25 min" */
+					/* translators: %s: ready time, e.g. "20–30 min". */
 					printf( esc_html__( 'Ready in %s', 'lafka' ), esc_html( $lafka_mc_pickup_eta ) );
 					if ( '' !== $lafka_mc_addr_short ) {
 						echo ' · ' . esc_html( $lafka_mc_addr_short );
@@ -131,7 +131,7 @@ $lafka_mc_chips = function_exists( 'lafka_menu_filter_chips' ) ? lafka_menu_filt
 				<?php
 				if ( $lafka_mc_threshold > 0 ) {
 					printf(
-						/* translators: 1: free-delivery threshold (e.g. "$30"); 2: city. */
+						/* translators: 1: free-delivery threshold, e.g. "$30"; 2: city. */
 						esc_html__( 'Free over %1$s%2$s', 'lafka' ),
 						esc_html( $lafka_mc_threshold_label ),
 						'' !== $lafka_mc_city ? ' · ' . esc_html( $lafka_mc_city ) : ''
