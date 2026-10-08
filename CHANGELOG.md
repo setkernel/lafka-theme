@@ -8,6 +8,14 @@ git tags + GitHub Releases.
 ## [Unreleased]
 
 ### Changed
+- **The asset diet knows which templates render the page content.**
+  `lafka_templates_without_content()` (filterable, `lafka_templates_without_content`) lists
+  the templates that never output the page's post_content — `page-menu.php`,
+  `template-contact.php` and the editorial templates — and `lafka_template_renders_content()`
+  reads the template WordPress resolved. Those pages skip the legacy libraries
+  (imagesloaded, wp-util) whatever old page-builder content is stored on them, so
+  /contact-us/ and /menu/ no longer load them. `lafka_rendered_post_content()` is gone (its
+  only users, the icon-font and typed.js sniffs, are removed).
 - **JS/CSS lint rules switched back on** (no `null`/`"off"` overrides left except
   `no-descending-specificity`, deferred to the 1.0 CSS rewrite). `eslint.config.mjs` now
   runs `no-var`, `prefer-const`, `no-unused-vars` and `eqeqeq` as errors; every `var` in
