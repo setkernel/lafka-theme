@@ -138,3 +138,62 @@
 		animation: none;
 	}
 }
+
+/* Tips at checkout (plugin: Lafka_Tips) — classic order review and the
+ * block checkout's order summary share these rules. */
+.lafka-tips {
+  display: grid;
+  gap: var(--lafka-space-2, 8px);
+  margin: var(--lafka-space-3, 12px) 0;
+}
+
+.lafka-tips__title {
+  margin: 0;
+  font-weight: 700;
+}
+
+.lafka-tips__options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--lafka-space-2, 8px);
+}
+
+.lafka-tips__option,
+.lafka-tips__options label {
+  display: inline-flex;
+  gap: 6px;
+  align-items: center;
+  min-height: 44px;
+  margin: 0;
+  padding: 6px 14px;
+  border: 1px solid var(--lafka-color-border-default);
+  border-radius: var(--lafka-radius-pill);
+  background: var(--lafka-color-surface-raised);
+  color: var(--lafka-color-text-primary);
+  font: inherit;
+  font-weight: 600;
+  text-transform: none;
+  cursor: pointer;
+}
+
+.lafka-tips__option.is-selected,
+.lafka-tips__options label:has(input:checked) {
+  border-color: var(--lafka-color-accent-500);
+  background: var(--lafka-color-surface-brand-soft);
+}
+
+.lafka-tips__amount {
+  color: var(--lafka-color-text-secondary);
+  font-weight: 400;
+}
+
+.lafka-tips__custom {
+  display: flex;
+  gap: var(--lafka-space-2, 8px);
+  align-items: center;
+}
+
+.lafka-tips__custom input[type="number"] {
+  width: 7em;
+  min-height: 44px;
+}
