@@ -29,112 +29,65 @@ if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_e
 }
 
 /*
- * Re-home the summary integrations that rode woocommerce_single_product_summary.
- *
- * The redesigned PDP composes its own summary (partials/pdp-summary.php) and
- * never fires that WC hook: firing it would re-introduce WC's default
- * title/price/excerpt/add-to-cart buy box at their stock priorities — double-
- * rendering the buy box this redesign rebuilds — and re-emit WC's native
- * Product JSON-LD, which is already present in wp_head. pdp-summary.php instead
- * fires a dedicated lafka_pdp_summary action below the title/price; wire the
- * callbacks that were silently orphaned by the redesign onto it here, once per
- * request, preserving their original relative priority order. Each is guarded so
- * the theme degrades cleanly when the plugin is inactive (OSS bundle).
+ * The redesigned page composes its own layout on WooCommerce's hooks: the
+ * Lafka parts are callbacks on woocommerce_single_product_summary and
+ * woocommerce_after_single_product_summary (incl/woocommerce/lafka-pdp-summary.php),
+ * and every product-page action core fires fires here too, so extensions that
+ * hook them (express pay, gift cards, bookings, SEO, analytics) run on it.
  */
-if ( ! defined( 'LAFKA_PDP_SUMMARY_WIRED' ) ) {
-	define( 'LAFKA_PDP_SUMMARY_WIRED', true );
-
-	// Social-proof block (theme): rating + order-count under the title.
-	if ( function_exists( 'lafka_social_proof_render_pdp' ) ) {
-		add_action( 'lafka_pdp_summary', 'lafka_social_proof_render_pdp', 6 );
-	}
-
-	// Nutrition + weight (plugin): methods on the shared display singleton.
-	if ( isset( $GLOBALS['Lafka_Nutrition_Display'] ) && is_object( $GLOBALS['Lafka_Nutrition_Display'] ) ) {
-		add_action( 'lafka_pdp_summary', array( $GLOBALS['Lafka_Nutrition_Display'], 'display_weight' ), 7 );
-		add_action( 'lafka_pdp_summary', array( $GLOBALS['Lafka_Nutrition_Display'], 'display_nutrition' ), 8 );
-	}
-
-	// Sale countdown (theme).
-	if ( function_exists( 'lafka_product_sale_countdown' ) ) {
-		add_action( 'lafka_pdp_summary', 'lafka_product_sale_countdown', 9 );
-	}
-
-	// Promo info tooltips (plugin): one action per zone, from the plugin's
-	// single list of zones and priorities.
-	if ( function_exists( 'lafka_output_info_tooltips' ) && function_exists( 'lafka_promo_tooltip_zones' ) ) {
-		foreach ( lafka_promo_tooltip_zones() as $lafka_zone => $lafka_priority ) {
-			add_action(
-				'lafka_pdp_summary',
-				static function () use ( $lafka_zone ) {
-					lafka_output_info_tooltips( $lafka_zone );
-				},
-				$lafka_priority
-			);
-		}
-	}
-
-	// Custom product popup link (plugin).
-	if ( function_exists( 'lafka_show_custom_product_popup_link' ) ) {
-		add_action( 'lafka_pdp_summary', 'lafka_show_custom_product_popup_link', 12 );
-	}
+if ( function_exists( 'lafka_pdp_compose_summary' ) ) {
+	lafka_pdp_compose_summary();
 }
 
 get_header( 'shop' );
-?>
+do_action( 'woocommerce_before_main_content' );
+
+global $product;
+while ( have_posts() ) :
+	the_post();
+	?>
 <div class="lafka-pdp">
-	<div class="lafka-pdp__main">
+	<?php
+	// Core's per-product wrapper id and classes (type, stock, categories) for
+	// extensions' selectors — minus the bare `product` class (legacy `div.product` rules style the classic
+	// page, not this design) and the classic card's theme classes.
+	$lafka_pdp_classes = lafka_wc_core_product_classes( 'lafka-pdp__main', $product, array( 'product' ) );
+	?>
+	<div id="product-<?php the_ID(); ?>" class="<?php echo esc_attr( implode( ' ', $lafka_pdp_classes ) ); ?>">
 		<?php
-		while ( have_posts() ) :
-			the_post();
+		// Product notices (add-to-cart validation errors, the 'redirect to product
+		// after add' success notice) print from woocommerce_output_all_notices on
+		// this action. Kept inside the styled wrapper, above the breadcrumb.
+		do_action( 'woocommerce_before_single_product' );
+		?>
 
-			// GA4 view_item: the redesigned PDP never fires
-			// woocommerce_before_single_product_summary, so the plugin's
-			// priority-5 emit (lafka_dl_emit_view_item) would otherwise never
-			// run on a product page. Call the emit directly rather than firing
-			// the action — woocommerce_show_product_images is also attached to
-			// that hook (priority 20) and would duplicate the gallery output.
-			// The emit self-guards on is_product(), so this is a no-op off-PDP.
-			if ( function_exists( 'lafka_dl_emit_view_item' ) ) {
-				lafka_dl_emit_view_item();
-			}
+		<nav class="lafka-pdp__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>"><?php woocommerce_breadcrumb(); ?></nav>
 
-			// Fire woocommerce_before_single_product so WC core's
-			// woocommerce_output_all_notices (priority 10) prints PDP notices —
-			// add-to-cart validation errors ('Please choose product options',
-			// sold-individually / out-of-stock limits), coupon/login-required
-			// messages, and the 'redirect to product after add' success notice.
-			// The redesign otherwise never fires this hook and silently swallows
-			// every one. Kept inside .lafka-pdp__main (above the breadcrumb) so
-			// notices render within the styled wrapper, not unstyled above the
-			// layout. Side-effect-safe: WC core carries only
-			// woocommerce_output_all_notices here, and the plugin's gallery emit
-			// hooks the distinct woocommerce_before_single_product_summary.
-			do_action( 'woocommerce_before_single_product' );
-			?>
-
-			<nav class="lafka-pdp__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>"><?php woocommerce_breadcrumb(); ?></nav>
-
-			<div class="lafka-pdp__hero">
-				<div class="lafka-pdp__gallery">
-					<?php woocommerce_show_product_images(); ?>
-				</div>
-				<?php require get_template_directory() . '/partials/pdp-summary.php'; ?>
+		<div class="lafka-pdp__hero">
+			<div class="lafka-pdp__gallery">
+				<?php
+				// Core's gallery (priority 20) plus anything attached here, e.g. the
+				// GA4 view_item event (lafka-plugin, priority 5).
+				do_action( 'woocommerce_before_single_product_summary' );
+				?>
 			</div>
+			<?php require get_template_directory() . '/partials/pdp-summary.php'; ?>
+		</div>
 
-			<?php require get_template_directory() . '/partials/pdp-make-it-a-meal.php'; ?>
-			<?php // v5.91.0: ingredients + reviews 2-card grid (handoff). Replaces the WC tabs. ?>
-			<?php require get_template_directory() . '/partials/pdp-ingredients-reviews.php'; ?>
-
-			<?php woocommerce_output_related_products(); ?>
-
-		<?php endwhile; ?>
+		<?php
+		// "Make it a meal", the ingredients + reviews cards, upsells and related
+		// products — each a callback on this action.
+		do_action( 'woocommerce_after_single_product_summary' );
+		?>
 	</div>
 
 	<?php /* Cart drawer now renders globally via wp_footer — see functions.php (v5.57.0). */ ?>
 </div>
+<?php endwhile; ?>
 <?php
-// Fire woocommerce_after_single_product so third-party integrations hooked here
-// run on the redesigned PDP — the redesign otherwise never fires it.
+// Third-party integrations hooked on woocommerce_after_single_product, then
+// core's closing main-content actions.
 do_action( 'woocommerce_after_single_product' );
+do_action( 'woocommerce_after_main_content' );
+do_action( 'woocommerce_sidebar' );
 get_footer( 'shop' );
