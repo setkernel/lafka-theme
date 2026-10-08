@@ -1,7 +1,7 @@
 <?php
 /**
  * Counter layout: the order drawer (board C-Mobile-Order). Included by
- * partials/cart-drawer.php, so it inherits $lafka_cart_count / $lafka_cart_empty
+ * partials/cart-drawer.php, so it inherits $lafka_cart_count
  * and keeps the SAME shell: <aside class="lafka-cart-drawer" … data-lafka-cart-drawer>
  * (js/cart-drawer.js focus trap / inert / open-close are unchanged), the
  * plugin fragment targets (ul.lafka-cart-drawer__items, the upsell wrapper,
@@ -65,19 +65,15 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 		</header>
 
 		<div class="lafka-cart-drawer__body">
-			<ul class="lafka-cart-drawer__items">
-				<?php
-				if ( function_exists( 'lafka_cart_drawer_render_item' ) ) {
-					if ( $lafka_cart_empty ) {
-						lafka_cart_drawer_render_item();
-					} else {
-						foreach ( WC()->cart->get_cart() as $lafka_cart_item_key => $lafka_cart_item ) {
-							lafka_cart_drawer_render_item( (string) $lafka_cart_item_key, $lafka_cart_item );
-						}
-					}
-				}
-				?>
-			</ul>
+			<?php
+			do_action( 'woocommerce_before_mini_cart' );
+
+			// The <ul> and its rows (inside core's mini-cart item actions) come from
+			// the plugin's one renderer, the same one the AJAX fragment uses.
+			if ( function_exists( 'lafka_cart_drawer_render_items' ) ) {
+				lafka_cart_drawer_render_items();
+			}
+			?>
 
 			<?php
 			if ( function_exists( 'lafka_cart_drawer_render_upsell' ) ) {
@@ -116,9 +112,7 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 			}
 			?>
 			<p class="lafka-drawer__tax"><?php echo esc_html( (string) apply_filters( 'lafka_counter_drawer_tax_note', __( 'Taxes are added at checkout.', 'lafka' ) ) ); ?></p>
-			<a class="lafka-cart-drawer__checkout lafka-counter-btn lafka-counter-btn--primary lafka-counter-btn--lg" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">
-				<?php echo wp_kses( lafka_counter_drawer_checkout_label(), lafka_allowed_html() ); ?>
-			</a>
+			<?php lafka_cart_drawer_fire_buttons(); // The checkout button, on WooCommerce's mini-cart button actions. ?>
 			<?php if ( '' !== $lafka_drw_nap['phone'] ) : ?>
 				<p class="lafka-drawer__call">
 					<?php esc_html_e( 'Prefer to call?', 'lafka' ); ?>
@@ -129,6 +123,8 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 			if ( function_exists( 'lafka_payment_trust_render' ) ) {
 				lafka_payment_trust_render( 'lafka-cart-drawer__trust' );
 			}
+
+			do_action( 'woocommerce_after_mini_cart' );
 			?>
 		</footer>
 	</div>

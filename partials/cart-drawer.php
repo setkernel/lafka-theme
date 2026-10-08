@@ -31,7 +31,6 @@ if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
 }
 
 $lafka_cart_count = (int) WC()->cart->get_cart_contents_count();
-$lafka_cart_empty = 0 === $lafka_cart_count;
 
 // GX4: the counter drawer (C-Mobile-Order) keeps the same shell, fragment
 // targets and trust line; the classic drawer below is unchanged.
@@ -72,6 +71,8 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter
 
 		<div class="lafka-cart-drawer__body">
 
+			<?php do_action( 'woocommerce_before_mini_cart' ); ?>
+
 			<?php
 			/* ALWAYS render the items <ul> — it is the woocommerce_add_to_cart_
 			 * fragments target. v6.14.0: the empty state now lives INSIDE the <ul>
@@ -81,19 +82,13 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter
 			 * had no <ul> to replace) — the single most important add.
 			 */
 			?>
-			<ul class="lafka-cart-drawer__items">
-				<?php
-				if ( function_exists( 'lafka_cart_drawer_render_item' ) ) {
-					if ( $lafka_cart_empty ) {
-						lafka_cart_drawer_render_item();
-					} else {
-						foreach ( WC()->cart->get_cart() as $lafka_cart_item_key => $lafka_cart_item ) {
-							lafka_cart_drawer_render_item( (string) $lafka_cart_item_key, $lafka_cart_item );
-						}
-					}
-				}
-				?>
-			</ul>
+			<?php
+			// The <ul> and its rows (inside core's mini-cart item actions) come from
+			// the plugin's one renderer, the same one the AJAX fragment uses.
+			if ( function_exists( 'lafka_cart_drawer_render_items' ) ) {
+				lafka_cart_drawer_render_items();
+			}
+			?>
 
 		</div>
 
@@ -123,13 +118,7 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter
 			?>
 
 			<div class="lafka-cart-drawer__actions">
-				<a class="lafka-cart-drawer__checkout" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">
-					<?php esc_html_e( 'Checkout', 'lafka' ); ?>
-					<span class="lafka-cart-drawer__arrow" aria-hidden="true">→</span>
-				</a>
-				<a class="lafka-cart-drawer__view-cart" href="<?php echo esc_url( wc_get_cart_url() ); ?>">
-					<?php esc_html_e( 'View full cart', 'lafka' ); ?>
-				</a>
+				<?php lafka_cart_drawer_fire_buttons(); // Checkout + view-cart on WooCommerce's mini-cart button actions. ?>
 			</div>
 
 			<?php
@@ -139,6 +128,8 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter
 			if ( function_exists( 'lafka_payment_trust_render' ) ) {
 				lafka_payment_trust_render( 'lafka-cart-drawer__trust' );
 			}
+
+			do_action( 'woocommerce_after_mini_cart' );
 			?>
 		</footer>
 
