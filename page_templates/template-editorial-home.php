@@ -30,26 +30,26 @@ get_header();
 
 	<?php /* 2. Hero */ ?>
 	<?php
-	$hero_image = get_theme_mod( 'lafka_editorial_home_hero_image', '' );
-	$eyebrow    = get_theme_mod( 'lafka_editorial_home_hero_eyebrow', '' );
-	$h1_before  = get_theme_mod( 'lafka_editorial_home_hero_h1_before', '' );
-	$h1_accent  = get_theme_mod( 'lafka_editorial_home_hero_h1_accent', '' );
-	$h1_after   = get_theme_mod( 'lafka_editorial_home_hero_h1_after', '' );
-	$subtitle   = get_theme_mod( 'lafka_editorial_home_hero_subtitle', '' );
-	$cta1_label = get_theme_mod( 'lafka_editorial_home_cta1_label', '' );
-	$cta1_url   = get_theme_mod( 'lafka_editorial_home_cta1_url', '' );
-	$cta2_label = get_theme_mod( 'lafka_editorial_home_cta2_label', '' );
-	$cta2_url   = get_theme_mod( 'lafka_editorial_home_cta2_url', '' );
-	$cta3_label = get_theme_mod( 'lafka_editorial_home_cta3_label', '' );
-	$cta3_url   = get_theme_mod( 'lafka_editorial_home_cta3_url', '' );
+	$lafka_hero_image = get_theme_mod( 'lafka_editorial_home_hero_image', '' );
+	$lafka_eyebrow    = get_theme_mod( 'lafka_editorial_home_hero_eyebrow', '' );
+	$lafka_h1_before  = get_theme_mod( 'lafka_editorial_home_hero_h1_before', '' );
+	$lafka_h1_accent  = get_theme_mod( 'lafka_editorial_home_hero_h1_accent', '' );
+	$lafka_h1_after   = get_theme_mod( 'lafka_editorial_home_hero_h1_after', '' );
+	$lafka_subtitle   = get_theme_mod( 'lafka_editorial_home_hero_subtitle', '' );
+	$lafka_cta1_label = get_theme_mod( 'lafka_editorial_home_cta1_label', '' );
+	$lafka_cta1_url   = get_theme_mod( 'lafka_editorial_home_cta1_url', '' );
+	$lafka_cta2_label = get_theme_mod( 'lafka_editorial_home_cta2_label', '' );
+	$lafka_cta2_url   = get_theme_mod( 'lafka_editorial_home_cta2_url', '' );
+	$lafka_cta3_label = get_theme_mod( 'lafka_editorial_home_cta3_label', '' );
+	$lafka_cta3_url   = get_theme_mod( 'lafka_editorial_home_cta3_url', '' );
 	?>
 
-	<?php if ( $hero_image ) : ?>
+	<?php if ( $lafka_hero_image ) : ?>
 	<style>
 	.lafka-editorial-home .hero::before {
 		background-image:
 			linear-gradient(180deg, rgba(26,26,26,0.05) 0%, rgba(26,26,26,0.45) 60%, rgba(26,26,26,0.85) 100%),
-			url('<?php echo esc_url( $hero_image ); ?>');
+			url('<?php echo esc_url( $lafka_hero_image ); ?>');
 	}
 	</style>
 	<?php endif; ?>
@@ -57,41 +57,41 @@ get_header();
 	<section class="hero">
 		<div class="hero-content">
 
-			<?php if ( $eyebrow ) : ?>
-			<div class="hero-eyebrow"><?php echo esc_html( $eyebrow ); ?></div>
+			<?php if ( $lafka_eyebrow ) : ?>
+			<div class="hero-eyebrow"><?php echo esc_html( $lafka_eyebrow ); ?></div>
 			<?php endif; ?>
 
-			<?php if ( $h1_before || $h1_accent || $h1_after ) : ?>
+			<?php if ( $lafka_h1_before || $lafka_h1_accent || $lafka_h1_after ) : ?>
 			<h1>
-				<?php echo esc_html( $h1_before ); ?>
-				<?php if ( $h1_accent ) : ?>
-				<span class="accent"><?php echo esc_html( $h1_accent ); ?></span>
+				<?php echo esc_html( $lafka_h1_before ); ?>
+				<?php if ( $lafka_h1_accent ) : ?>
+				<span class="accent"><?php echo esc_html( $lafka_h1_accent ); ?></span>
 				<?php endif; ?>
-				<?php echo esc_html( $h1_after ); ?>
+				<?php echo esc_html( $lafka_h1_after ); ?>
 			</h1>
 			<?php endif; ?>
 
-			<?php if ( $subtitle ) : ?>
-			<p class="hero-sub"><?php echo esc_html( $subtitle ); ?></p>
+			<?php if ( $lafka_subtitle ) : ?>
+			<p class="hero-sub"><?php echo esc_html( $lafka_subtitle ); ?></p>
 			<?php endif; ?>
 
-			<?php if ( $cta1_label || $cta2_label || $cta3_label ) : ?>
+			<?php if ( $lafka_cta1_label || $lafka_cta2_label || $lafka_cta3_label ) : ?>
 			<div class="hero-cta-row">
-				<?php if ( $cta1_label && $cta1_url ) : ?>
-				<a href="<?php echo esc_url( $cta1_url ); ?>" class="btn btn-primary">
-					<?php echo esc_html( $cta1_label ); ?> <span class="arrow">&rarr;</span>
+				<?php if ( $lafka_cta1_label && $lafka_cta1_url ) : ?>
+				<a href="<?php echo esc_url( $lafka_cta1_url ); ?>" class="btn btn-primary">
+					<?php echo esc_html( $lafka_cta1_label ); ?> <span class="arrow">&rarr;</span>
 				</a>
 				<?php endif; ?>
 
-				<?php if ( $cta2_label && $cta2_url ) : ?>
-				<a href="<?php echo esc_url( $cta2_url ); ?>" class="btn btn-secondary">
-					<?php echo esc_html( $cta2_label ); ?>
+				<?php if ( $lafka_cta2_label && $lafka_cta2_url ) : ?>
+				<a href="<?php echo esc_url( $lafka_cta2_url ); ?>" class="btn btn-secondary">
+					<?php echo esc_html( $lafka_cta2_label ); ?>
 				</a>
 				<?php endif; ?>
 
-				<?php if ( $cta3_label && $cta3_url ) : ?>
-				<a href="<?php echo esc_url( $cta3_url ); ?>" class="btn btn-text">
-					<?php echo esc_html( $cta3_label ); ?> <span class="arrow">&rarr;</span>
+				<?php if ( $lafka_cta3_label && $lafka_cta3_url ) : ?>
+				<a href="<?php echo esc_url( $lafka_cta3_url ); ?>" class="btn btn-text">
+					<?php echo esc_html( $lafka_cta3_label ); ?> <span class="arrow">&rarr;</span>
 				</a>
 				<?php endif; ?>
 			</div>

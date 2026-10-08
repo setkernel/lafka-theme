@@ -23,8 +23,8 @@ if ( ! ( $product instanceof WC_Product ) ) {
 	return;
 }
 
-$is_variable = $product->is_type( 'variable' );
-$form_action = lafka_core_filter( 'woocommerce_add_to_cart_form_action', $product->get_permalink() );
+$lafka_is_variable = $product->is_type( 'variable' );
+$lafka_form_action = lafka_core_filter( 'woocommerce_add_to_cart_form_action', $product->get_permalink() );
 
 // Store-closed gate. When the store is closed AND the operator has opted into
 // lafka_order_hours_disable_add_to_cart, the add-to-cart form must be replaced
@@ -82,10 +82,10 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 		'selection' => array(),
 		'variation' => null,
 	);
-	if ( $is_variable && function_exists( 'lafka_pdp_initial_selection' ) ) {
+	if ( $lafka_is_variable && function_exists( 'lafka_pdp_initial_selection' ) ) {
 		$lafka_pdp_initial = lafka_pdp_initial_selection( $product );
 	}
-	$lafka_pdp_price_html = $is_variable && function_exists( 'lafka_pdp_price_html' )
+	$lafka_pdp_price_html = $lafka_is_variable && function_exists( 'lafka_pdp_price_html' )
 		? lafka_pdp_price_html( $product, $lafka_pdp_initial )
 		: wc_price( $product->get_price() );
 	?>
@@ -131,7 +131,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 		Lafka_Order_Hours::echo_closed_store_message();
 		?>
 
-	<?php elseif ( $is_variable ) : ?>
+	<?php elseif ( $lafka_is_variable ) : ?>
 		<?php
 		// The add button's prompt until every attribute is chosen (the script
 		// keeps it current): "Choose size", from the first unchosen attribute.
@@ -152,7 +152,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 		lafka_core_action( 'woocommerce_before_variations_form' );
 		?>
 		<form class="cart variations_form"
-				action="<?php echo esc_url( $form_action ); ?>"
+				action="<?php echo esc_url( $lafka_form_action ); ?>"
 				method="post"
 				enctype="multipart/form-data"
 				data-product_id="<?php echo absint( $product->get_id() ); ?>"
@@ -253,7 +253,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 	<?php else : /* simple / combo / etc. */ ?>
 
 		<form class="cart"
-				action="<?php echo esc_url( $form_action ); ?>"
+				action="<?php echo esc_url( $lafka_form_action ); ?>"
 				method="post"
 				enctype="multipart/form-data">
 

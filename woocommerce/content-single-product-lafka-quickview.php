@@ -6,27 +6,27 @@ if ( ! defined( 'ABSPATH' ) ) {
 /** @var  $product WC_Product $product is coming from the ajax call param */
 global $product;
 
-$attachment_ids = $product->get_gallery_image_ids();
+$lafka_attachment_ids = $product->get_gallery_image_ids();
 
-$schema = 'Product';
+$lafka_schema = 'Product';
 
 // Downloadable product schema handling
 if ( $product->is_downloadable() ) {
 	switch ( $product->get_type() ) {
 		case 'application':
-			$schema = 'SoftwareApplication';
+			$lafka_schema = 'SoftwareApplication';
 			break;
 		case 'music':
-			$schema = 'MusicAlbum';
+			$lafka_schema = 'MusicAlbum';
 			break;
 		default:
-			$schema = 'Product';
+			$lafka_schema = 'Product';
 			break;
 	}
 }
 ?>
 
-<div itemscope itemtype="<?php echo esc_url( 'http://schema.org/' . $schema ); ?>" id="product-<?php the_ID(); ?>" <?php post_class( 'box box-common fixed lafka-single-product' ); ?>>
+<div itemscope itemtype="<?php echo esc_url( 'http://schema.org/' . $lafka_schema ); ?>" id="product-<?php the_ID(); ?>" <?php post_class( 'box box-common fixed lafka-single-product' ); ?>>
 
 	<?php
 	remove_action( 'woocommerce_before_single_product_summary', 'woocommerce_show_product_images', 20 );
@@ -48,7 +48,7 @@ if ( $product->is_downloadable() ) {
 	?>
 	<div class="lafka-quickview-images images 
 	<?php
-	if ( count( $attachment_ids ) ) :
+	if ( count( $lafka_attachment_ids ) ) :
 		?>
 		owl-carousel lafka-owl-carousel<?php endif; ?>">
 
@@ -58,9 +58,9 @@ if ( $product->is_downloadable() ) {
 			<div class="woocommerce-product-gallery__image" >
 				<?php the_post_thumbnail( 'woocommerce_single' ); ?>
 			</div>
-			<?php foreach ( $attachment_ids as $img_att_id ) : ?>
+			<?php foreach ( $lafka_attachment_ids as $lafka_img_att_id ) : ?>
 				<div class="woocommerce-product-gallery__image" >
-					<?php echo wp_get_attachment_image( $img_att_id, 'woocommerce_single' ); ?>
+					<?php echo wp_get_attachment_image( $lafka_img_att_id, 'woocommerce_single' ); ?>
 				</div>
 			<?php endforeach; ?>
 			<?php
@@ -69,7 +69,7 @@ if ( $product->is_downloadable() ) {
 		}
 		?>
 	</div>
-	<?php if ( count( $attachment_ids ) ) : ?>
+	<?php if ( count( $lafka_attachment_ids ) ) : ?>
 		<script>
 			jQuery(".lafka-quickview-images").owlCarousel({
 				rtl: <?php echo is_rtl() ? 'true' : 'false'; ?>,

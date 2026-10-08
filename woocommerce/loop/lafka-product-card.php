@@ -64,7 +64,7 @@ if ( $lafka_arch_featured && ! in_array( 'popular', $lafka_arch_tag_slugs, true 
 $lafka_arch_tags_attr = implode( ',', $lafka_arch_tag_slugs );
 
 // v6.14.0: the quick-add render fn + GA4 select_item both key off global $product.
-$GLOBALS['product'] = $lafka_arch_p;
+wc_setup_product_data( $lafka_arch_p->get_id() );
 
 // select_item tracking contract (docs/TRACKING.md): lafka-dl-client.js reads
 // these on the card link to push GA4 select_item.

@@ -12,53 +12,53 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$label     = get_theme_mod( 'lafka_editorial_home_story_label', '' );
-$h2_before = get_theme_mod( 'lafka_editorial_home_story_h2_before', '' );
-$h2_em     = get_theme_mod( 'lafka_editorial_home_story_h2_em', '' );
-$h2_after  = get_theme_mod( 'lafka_editorial_home_story_h2_after', '' );
-$p1        = get_theme_mod( 'lafka_editorial_home_story_p1', '' );
-$pullquote = get_theme_mod( 'lafka_editorial_home_story_pullquote', '' );
-$p2        = get_theme_mod( 'lafka_editorial_home_story_p2', '' );
-$image     = get_theme_mod( 'lafka_editorial_home_story_image', '' );
+$lafka_label     = get_theme_mod( 'lafka_editorial_home_story_label', '' );
+$lafka_h2_before = get_theme_mod( 'lafka_editorial_home_story_h2_before', '' );
+$lafka_h2_em     = get_theme_mod( 'lafka_editorial_home_story_h2_em', '' );
+$lafka_h2_after  = get_theme_mod( 'lafka_editorial_home_story_h2_after', '' );
+$lafka_p1        = get_theme_mod( 'lafka_editorial_home_story_p1', '' );
+$lafka_pullquote = get_theme_mod( 'lafka_editorial_home_story_pullquote', '' );
+$lafka_p2        = get_theme_mod( 'lafka_editorial_home_story_p2', '' );
+$lafka_image     = get_theme_mod( 'lafka_editorial_home_story_image', '' );
 
-if ( ! $h2_before && ! $h2_em && ! $h2_after && ! $p1 && ! $p2 && ! $image ) {
+if ( ! $lafka_h2_before && ! $lafka_h2_em && ! $lafka_h2_after && ! $lafka_p1 && ! $lafka_p2 && ! $lafka_image ) {
 	return;
 }
 ?>
 <section class="story-section">
 	<div class="story-grid">
 
-		<?php if ( $image ) : ?>
+		<?php if ( $lafka_image ) : ?>
 		<div class="story-photo">
-			<img src="<?php echo esc_url( $image ); ?>" alt="" loading="lazy">
+			<img src="<?php echo esc_url( $lafka_image ); ?>" alt="" loading="lazy">
 		</div>
 		<?php endif; ?>
 
 		<div class="story-text">
-			<?php if ( $label ) : ?>
-			<div class="label"><?php echo esc_html( $label ); ?></div>
+			<?php if ( $lafka_label ) : ?>
+			<div class="label"><?php echo esc_html( $lafka_label ); ?></div>
 			<?php endif; ?>
 
-			<?php if ( $h2_before || $h2_em || $h2_after ) : ?>
+			<?php if ( $lafka_h2_before || $lafka_h2_em || $lafka_h2_after ) : ?>
 			<h2>
-				<?php echo esc_html( $h2_before ); ?>
-				<?php if ( $h2_em ) : ?>
-				<em><?php echo esc_html( $h2_em ); ?></em>
+				<?php echo esc_html( $lafka_h2_before ); ?>
+				<?php if ( $lafka_h2_em ) : ?>
+				<em><?php echo esc_html( $lafka_h2_em ); ?></em>
 				<?php endif; ?>
-				<?php echo esc_html( $h2_after ); ?>
+				<?php echo esc_html( $lafka_h2_after ); ?>
 			</h2>
 			<?php endif; ?>
 
-			<?php if ( $p1 ) : ?>
-			<p><?php echo esc_html( $p1 ); ?></p>
+			<?php if ( $lafka_p1 ) : ?>
+			<p><?php echo esc_html( $lafka_p1 ); ?></p>
 			<?php endif; ?>
 
-			<?php if ( $pullquote ) : ?>
-			<blockquote class="pullquote"><?php echo esc_html( $pullquote ); ?></blockquote>
+			<?php if ( $lafka_pullquote ) : ?>
+			<blockquote class="pullquote"><?php echo esc_html( $lafka_pullquote ); ?></blockquote>
 			<?php endif; ?>
 
-			<?php if ( $p2 ) : ?>
-			<p><?php echo esc_html( $p2 ); ?></p>
+			<?php if ( $lafka_p2 ) : ?>
+			<p><?php echo esc_html( $lafka_p2 ); ?></p>
 			<?php endif; ?>
 		</div>
 

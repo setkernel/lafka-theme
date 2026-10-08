@@ -27,17 +27,17 @@ if ( $related_products ) :
 	 * check for its existence before use.
 	 */
 	if ( function_exists( 'wp_increase_content_media_count' ) ) {
-		$content_media_count = wp_increase_content_media_count( 0 );
-		if ( $content_media_count < wp_omit_loading_attr_threshold() ) {
-			wp_increase_content_media_count( wp_omit_loading_attr_threshold() - $content_media_count );
+		$lafka_content_media_count = wp_increase_content_media_count( 0 );
+		if ( $lafka_content_media_count < wp_omit_loading_attr_threshold() ) {
+			wp_increase_content_media_count( wp_omit_loading_attr_threshold() - $lafka_content_media_count );
 		}
 	}
 	?>
 
 	<section class="related products">
-		<?php $heading = lafka_core_filter( 'woocommerce_product_related_products_heading', __( 'Related products', 'lafka' ) ); ?>
-		<?php if ( $heading ) : ?>
-			<h2><?php echo wp_kses_post( $heading ); ?></h2>
+		<?php $lafka_heading = lafka_core_filter( 'woocommerce_product_related_products_heading', __( 'Related products', 'lafka' ) ); ?>
+		<?php if ( $lafka_heading ) : ?>
+			<h2><?php echo wp_kses_post( $lafka_heading ); ?></h2>
 		<?php endif; ?>
 
 		<?php

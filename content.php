@@ -25,7 +25,7 @@ if ( ! has_post_thumbnail() ) {
 // Show or not the featured image in single post view
 if ( is_singular( array( 'post' ) ) ) {
 	$lafka_show_feat_image_in_post = 'yes';
-	if ( isset( $lafka_custom_options['lafka_show_feat_image_in_post'] ) && trim( $lafka_custom_options['lafka_show_feat_image_in_post'][0] ) != '' ) {
+	if ( isset( $lafka_custom_options['lafka_show_feat_image_in_post'] ) && '' !== trim( $lafka_custom_options['lafka_show_feat_image_in_post'][0] ) ) {
 		$lafka_show_feat_image_in_post = $lafka_custom_options['lafka_show_feat_image_in_post'][0];
 	}
 }

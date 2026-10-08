@@ -93,9 +93,9 @@ $lafka_cat_emoji_map = array(
 
 				// Pick emoji by fuzzy-matching name/slug to map.
 				$lafka_cat_emoji = '';
-				foreach ( $lafka_cat_emoji_map as $needle => $glyph ) {
-					if ( false !== strpos( $lafka_cat_slug, $needle ) || false !== stripos( $lafka_cat_term->name, $needle ) ) {
-						$lafka_cat_emoji = $glyph;
+				foreach ( $lafka_cat_emoji_map as $lafka_needle => $lafka_glyph ) {
+					if ( false !== strpos( $lafka_cat_slug, $lafka_needle ) || false !== stripos( $lafka_cat_term->name, $lafka_needle ) ) {
+						$lafka_cat_emoji = $lafka_glyph;
 						break;
 					}
 				}

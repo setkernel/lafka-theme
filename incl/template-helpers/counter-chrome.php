@@ -93,7 +93,7 @@ if ( ! function_exists( 'lafka_counter_brand_short' ) ) {
 			$short = lafka_counter_brand_short_auto( $full );
 		}
 		$short = trim( wp_strip_all_tags( (string) apply_filters( 'lafka_counter_brand_short', $short, $full ) ) );
-		return $short === trim( $full ) ? '' : $short;
+		return trim( $full ) === $short ? '' : $short;
 	}
 }
 
@@ -149,7 +149,7 @@ if ( ! function_exists( 'lafka_counter_fulfilment_current' ) ) {
 		if ( function_exists( 'lafka_fulfilment_preference' ) ) {
 			$pref = (string) lafka_fulfilment_preference();
 		} else {
-			$pref = isset( $_COOKIE['lafka_order_method'] ) ? sanitize_key( wp_unslash( $_COOKIE['lafka_order_method'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized,WordPress.Security.NonceVerification.Recommended -- read-only UI preference, sanitized with sanitize_key.
+			$pref = isset( $_COOKIE['lafka_order_method'] ) ? sanitize_key( wp_unslash( $_COOKIE['lafka_order_method'] ) ) : '';
 		}
 		if ( in_array( $pref, $modes, true ) ) {
 			return $pref;

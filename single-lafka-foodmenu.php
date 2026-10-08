@@ -13,24 +13,24 @@ $lafka_show_title_background  = 0;
 $lafka_title_background_image = '';
 $lafka_title_alignment        = 'left_title';
 
-if ( isset( $lafka_page_options['lafka_show_title_page'] ) && trim( $lafka_page_options['lafka_show_title_page'][0] ) != '' ) {
+if ( isset( $lafka_page_options['lafka_show_title_page'] ) && '' !== trim( $lafka_page_options['lafka_show_title_page'][0] ) ) {
 	$lafka_show_title_page = $lafka_page_options['lafka_show_title_page'][0];
 }
 
-if ( isset( $lafka_page_options['lafka_show_breadcrumb'] ) && trim( $lafka_page_options['lafka_show_breadcrumb'][0] ) != '' ) {
+if ( isset( $lafka_page_options['lafka_show_breadcrumb'] ) && '' !== trim( $lafka_page_options['lafka_show_breadcrumb'][0] ) ) {
 	$lafka_show_breadcrumb = $lafka_page_options['lafka_show_breadcrumb'][0];
 }
 
-if ( isset( $lafka_page_options['lafka_page_subtitle'] ) && trim( $lafka_page_options['lafka_page_subtitle'][0] ) != '' ) {
+if ( isset( $lafka_page_options['lafka_page_subtitle'] ) && '' !== trim( $lafka_page_options['lafka_page_subtitle'][0] ) ) {
 	$lafka_subtitle = $lafka_page_options['lafka_page_subtitle'][0];
 }
 
-if ( isset( $lafka_page_options['lafka_title_background_imgid'] ) && trim( $lafka_page_options['lafka_title_background_imgid'][0] ) != '' ) {
+if ( isset( $lafka_page_options['lafka_title_background_imgid'] ) && '' !== trim( $lafka_page_options['lafka_title_background_imgid'][0] ) ) {
 	$lafka_img                    = wp_get_attachment_image_src( $lafka_page_options['lafka_title_background_imgid'][0], 'full' );
 	$lafka_title_background_image = $lafka_img ? $lafka_img[0] : $lafka_img;
 }
 
-if ( isset( $lafka_page_options['lafka_title_alignment'] ) && trim( $lafka_page_options['lafka_title_alignment'][0] ) != '' ) {
+if ( isset( $lafka_page_options['lafka_title_alignment'] ) && '' !== trim( $lafka_page_options['lafka_title_alignment'][0] ) ) {
 	$lafka_title_alignment = $lafka_page_options['lafka_title_alignment'][0];
 }
 
@@ -38,14 +38,14 @@ $lafka_featured_flex_slider_imgs = lafka_get_more_featured_images( get_the_ID() 
 
 $lafka_sidebar_choice = apply_filters( 'lafka_has_sidebar', '' );
 
-if ( $lafka_sidebar_choice != 'none' ) {
+if ( 'none' !== $lafka_sidebar_choice ) {
 	$lafka_has_sidebar = is_active_sidebar( $lafka_sidebar_choice );
 } else {
 	$lafka_has_sidebar = false;
 }
 $lafka_offcanvas_sidebar_choice = apply_filters( 'lafka_has_offcanvas_sidebar', '' );
 
-if ( $lafka_offcanvas_sidebar_choice != 'none' ) {
+if ( 'none' !== $lafka_offcanvas_sidebar_choice ) {
 	$lafka_has_offcanvas_sidebar = is_active_sidebar( $lafka_offcanvas_sidebar_choice );
 } else {
 	$lafka_has_offcanvas_sidebar = false;
@@ -83,7 +83,7 @@ while ( have_posts() ) :
 			<?php
 		endif;
 		?>
-		<?php if ( $lafka_show_title_page == 'yes' || $lafka_show_breadcrumb == 'yes' ) : ?>
+		<?php if ( 'yes' === $lafka_show_title_page || 'yes' === $lafka_show_breadcrumb ) : ?>
 
 			<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( $lafka_title_alignment ); ?>
 			<?php
@@ -97,12 +97,12 @@ while ( have_posts() ) :
 				<div class="inner fixed">
 					<div class="lafka-title-text-container">
 						<!-- BREADCRUMB -->
-						<?php if ( $lafka_show_breadcrumb == 'yes' ) : ?>
+						<?php if ( 'yes' === $lafka_show_breadcrumb ) : ?>
 							<?php lafka_breadcrumb(); ?>
 						<?php endif; ?>
 						<!-- END OF BREADCRUMB -->
 						<!-- TITLE -->
-						<?php if ( $lafka_show_title_page == 'yes' ) : ?>
+						<?php if ( 'yes' === $lafka_show_title_page ) : ?>
 							<h1 class="heading-title"><?php the_title(); ?></h1>
 							<?php if ( $lafka_subtitle ) : ?>
 								<h6><?php echo esc_html( $lafka_subtitle ); ?></h6>
@@ -134,12 +134,12 @@ while ( have_posts() ) :
 					<?php if ( ! $lafka_use_custom_content ) : ?>
 						<div class="foodmenu_top
 						<?php
-						if ( $lafka_prtfl_gallery == 'list' ) :
+						if ( 'list' === $lafka_prtfl_gallery ) :
 							?>
 							lafka_image_list_foodmenu<?php endif; ?>" >
 							<?php if ( ! get_theme_mod( 'lafka_hide_foodmenu_images', false ) ) : ?>
 								<div class="two_third foodmenu-main-image-holder">
-									<?php if ( $lafka_prtfl_gallery == 'cloud' && has_post_thumbnail() ) : ?>
+									<?php if ( 'cloud' === $lafka_prtfl_gallery && has_post_thumbnail() ) : ?>
 										<!-- Cloud Zoom -->
 										<?php
 										$lafka_featured_image_id = get_post_thumbnail_id();
@@ -183,7 +183,7 @@ while ( have_posts() ) :
 												<?php endforeach; ?>
 											</ul>
 										<?php endif; ?>
-									<?php elseif ( $lafka_prtfl_gallery == 'flex' && ! empty( $lafka_featured_flex_slider_imgs ) ) : ?>
+									<?php elseif ( 'flex' === $lafka_prtfl_gallery && ! empty( $lafka_featured_flex_slider_imgs ) ) : ?>
 										<!-- FEATURED SLIDER/IMAGE -->
 										<div class="lafka_flexslider">
 											<ul class="slides">
@@ -200,7 +200,7 @@ while ( have_posts() ) :
 												<?php endforeach; ?>
 											</ul>
 										</div>
-									<?php elseif ( $lafka_prtfl_gallery == 'list' && has_post_thumbnail() ) : ?>
+									<?php elseif ( 'list' === $lafka_prtfl_gallery && has_post_thumbnail() ) : ?>
 										<!-- Image List -->
 										<div class="lafka_image_list">
 											<?php if ( has_post_thumbnail() ) : ?>
@@ -281,7 +281,7 @@ while ( have_posts() ) :
 															<?php foreach ( $lafka_nutrition_list as $lafka_nutrition_name => $lafka_nutrition_value ) : ?>
 																<li 
 																<?php
-																if ( $lafka_nutrition_name === 'lafka_nutrition_energy' ) :
+																if ( 'lafka_nutrition_energy' === $lafka_nutrition_name ) :
 																	?>
 																	class="lafka-nutrition-energy" <?php endif; ?> >
 																	<span class="lafka-nutrition-list-label"><?php echo esc_html( Lafka_Nutrition_Config::$nutrition_meta_fields[ $lafka_nutrition_name ]['frontend_label'] ); ?></span>
@@ -306,12 +306,12 @@ while ( have_posts() ) :
 													</li>
 												<?php endif; ?>
 
-												<?php for ( $i = 1; $i <= 3; $i++ ) : ?>
-													<?php if ( isset( $lafka_foodmenu_custom[ 'lafka_item_size' . $i ] ) && $lafka_foodmenu_custom[ 'lafka_item_size' . $i ][0] ) : ?>
+												<?php for ( $lafka_i = 1; $lafka_i <= 3; $lafka_i++ ) : ?>
+													<?php if ( isset( $lafka_foodmenu_custom[ 'lafka_item_size' . $lafka_i ] ) && $lafka_foodmenu_custom[ 'lafka_item_size' . $lafka_i ][0] ) : ?>
 														<li class="lafka-foodmenu-options-list">
-															<span class="lafka-foodmenu-option"><?php echo esc_html( $lafka_foodmenu_custom[ 'lafka_item_size' . $i ][0] ); ?></span>
-															<?php if ( isset( $lafka_foodmenu_custom[ 'lafka_item_price' . $i ] ) && $lafka_foodmenu_custom[ 'lafka_item_price' . $i ][0] ) : ?>
-																<?php $lafka_item_price = lafka_get_formatted_price( $lafka_foodmenu_custom[ 'lafka_item_price' . $i ][0] ); ?>
+															<span class="lafka-foodmenu-option"><?php echo esc_html( $lafka_foodmenu_custom[ 'lafka_item_size' . $lafka_i ][0] ); ?></span>
+															<?php if ( isset( $lafka_foodmenu_custom[ 'lafka_item_price' . $lafka_i ] ) && $lafka_foodmenu_custom[ 'lafka_item_price' . $lafka_i ][0] ) : ?>
+																<?php $lafka_item_price = lafka_get_formatted_price( $lafka_foodmenu_custom[ 'lafka_item_price' . $lafka_i ][0] ); ?>
 																<span class="lafka-foodmenu-price">
 																	<?php echo wp_kses_post( $lafka_item_price ); ?>
 																</span>
@@ -338,7 +338,7 @@ while ( have_posts() ) :
 						</div>
 					<?php endif; ?>
 
-					<?php if ( $post->post_content != '' ) : ?>
+					<?php if ( '' !== $post->post_content ) : ?>
 						<div class="full_width lafka-project-description
 						<?php
 						if ( $lafka_use_custom_content ) {
@@ -419,7 +419,7 @@ while ( have_posts() ) :
 							<div class="similar_projects full_width">
 								<h4>
 									<?php esc_html_e( 'Other', 'lafka' ); ?>
-									<?php if ( $lafka_foodmenu_first_category !== null ) : ?>
+									<?php if ( null !== $lafka_foodmenu_first_category ) : ?>
 										<a class="lafka-related-browse"
 											href="<?php echo esc_url( get_term_link( $lafka_foodmenu_first_category ) ); ?>"
 											title="<?php /* translators: %s: menu category name. */ printf( esc_attr__( 'Browse more "%s"', 'lafka' ), esc_attr( $lafka_foodmenu_first_category->name ) ); ?>">

@@ -17,7 +17,7 @@ add_action( 'updated_option', 'lafka_dynamic_css_bust_on_options_save', 10, 1 );
 add_action( 'added_option', 'lafka_dynamic_css_bust_on_options_save', 10, 1 );
 if ( ! function_exists( 'lafka_dynamic_css_bust_on_options_save' ) ) {
 	function lafka_dynamic_css_bust_on_options_save( $option_name ) {
-		if ( $option_name === 'lafka' || $option_name === 'theme_mods_' . get_option( 'stylesheet' ) ) {
+		if ( in_array( $option_name, array( 'lafka', 'theme_mods_' . get_option( 'stylesheet' ) ), true ) ) {
 			update_option( 'lafka_dynamic_css_version', (string) time(), false );
 		}
 	}
@@ -84,10 +84,10 @@ if ( ! function_exists( 'lafka_add_custom_css' ) ) {
 		}
 
 		$custom_css = wp_cache_get( $cache_key, 'lafka' );
-		if ( $custom_css === false ) {
+		if ( false === $custom_css ) {
 			$custom_css = get_transient( $cache_key );
 		}
-		if ( $custom_css === false ) {
+		if ( false === $custom_css ) {
 			$custom_css = lafka_dynamic_css_build();
 			wp_cache_set( $cache_key, $custom_css, 'lafka', DAY_IN_SECONDS );
 			set_transient( $cache_key, $custom_css, WEEK_IN_SECONDS );
@@ -267,7 +267,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 			$footer_bg_position   = esc_attr( $footer_backgr['position'] );
 			$footer_bg_repeat     = esc_attr( $footer_backgr['repeat'] );
 			$footer_bg_attachment = esc_attr( $footer_backgr['attachment'] );
-			if ( $footer_backgr['repeat'] === 'no-repeat' ) {
+			if ( 'no-repeat' === $footer_backgr['repeat'] ) {
 				$footer_bg_size = 'cover';
 			}
 		}

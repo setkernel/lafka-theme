@@ -243,7 +243,7 @@ if ( ! function_exists( 'lafka_pagination' ) ) {
 
 		$html = '';
 
-		if ( $pages == '' ) {
+		if ( '' === $pages ) {
 
 			if ( isset( $wp_query->max_num_pages ) ) {
 				$pages = $wp_query->max_num_pages;
@@ -254,7 +254,7 @@ if ( ! function_exists( 'lafka_pagination' ) ) {
 			}
 		}
 
-		if ( 1 != $pages ) {
+		if ( 1 !== (int) $pages ) {
 			$html .= "<div class='pagination'><div class='links'>";
 			if ( $paged > 2 ) {
 				$html .= "<a href='" . esc_url( get_pagenum_link( 1 ) ) . "'>&laquo;</a>";
@@ -264,8 +264,8 @@ if ( ! function_exists( 'lafka_pagination' ) ) {
 			}
 
 			for ( $i = 1; $i <= $pages; $i++ ) {
-				if ( 1 != $pages && ( ! ( $i >= $paged + $range + 1 || $i <= $paged - $range - 1 ) ) ) {
-					$class = ( $paged == $i ) ? " class='selected'" : '';
+				if ( 1 !== (int) $pages && ( ! ( $i >= $paged + $range + 1 || $i <= $paged - $range - 1 ) ) ) {
+					$class = ( (int) $paged === $i ) ? " class='selected'" : '';
 					$html .= "<a href='" . esc_url( get_pagenum_link( $i ) ) . "'$class >$i</a>";
 				}
 			}
@@ -314,35 +314,35 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 
 			global $post;
 			global $wp_query;
-			$homeLink = esc_url( lafka_wpml_get_home_url() );
+			$home_link = esc_url( lafka_wpml_get_home_url() );
 
 			if ( ! is_home() && ! is_front_page() ) {
-				$brdcrmb .= '<a class="home" href="' . esc_url( $homeLink ) . '">' . $home . '</a> ' . $delimiter . ' ';
+				$brdcrmb .= '<a class="home" href="' . esc_url( $home_link ) . '">' . $home . '</a> ' . $delimiter . ' ';
 			}
 
 			if ( is_category() ) {
-				$cat_obj   = $wp_query->get_queried_object();
-				$thisCat   = $cat_obj->term_id;
-				$thisCat   = get_category( $thisCat );
-				$parentCat = get_category( $thisCat->parent );
+				$cat_obj    = $wp_query->get_queried_object();
+				$this_cat   = $cat_obj->term_id;
+				$this_cat   = get_category( $this_cat );
+				$parent_cat = get_category( $this_cat->parent );
 
-				if ( $thisCat->parent != 0 ) {
-					$brdcrmb .= get_category_parents( $parentCat, true, ' ' . $delimiter . ' ' );
+				if ( 0 !== (int) $this_cat->parent ) {
+					$brdcrmb .= get_category_parents( $parent_cat, true, ' ' . $delimiter . ' ' );
 				}
 
 				$brdcrmb .= $before . single_cat_title( '', false ) . $after;
 			} elseif ( is_tax() ) {
-				$cat_obj   = $wp_query->get_queried_object();
-				$thisCat   = $cat_obj->term_id;
-				$thisCat   = get_term( $thisCat, $cat_obj->taxonomy );
-				$parentCat = get_term( $thisCat->parent, $cat_obj->taxonomy );
-				$tax_obj   = get_taxonomy( $cat_obj->taxonomy );
-				$brdcrmb  .= $tax_obj->labels->name . ': ';
+				$cat_obj    = $wp_query->get_queried_object();
+				$this_cat   = $cat_obj->term_id;
+				$this_cat   = get_term( $this_cat, $cat_obj->taxonomy );
+				$parent_cat = get_term( $this_cat->parent, $cat_obj->taxonomy );
+				$tax_obj    = get_taxonomy( $cat_obj->taxonomy );
+				$brdcrmb   .= $tax_obj->labels->name . ': ';
 
-				if ( $thisCat->parent != 0 ) {
-					$brdcrmb .= lafka_get_taxonomy_parents( $parentCat, $cat_obj->taxonomy, true, ' ' . $delimiter . ' ' );
+				if ( 0 !== (int) $this_cat->parent ) {
+					$brdcrmb .= lafka_get_taxonomy_parents( $parent_cat, $cat_obj->taxonomy, true, ' ' . $delimiter . ' ' );
 				}
-				$brdcrmb .= $before . $thisCat->name . $after;
+				$brdcrmb .= $before . $this_cat->name . $after;
 			} elseif ( is_day() ) {
 				$brdcrmb .= '<a class="no-link" href="' . esc_url( get_year_link( get_the_time( 'Y' ) ) ) . '">' . get_the_time( 'Y' ) . '</a> ' . $delimiter . ' ';
 				$brdcrmb .= '<a class="no-link" href="' . esc_url( get_month_link( get_the_time( 'Y' ), get_the_time( 'm' ) ) ) . '">' . get_the_time( 'F' ) . '</a> ' . $delimiter . ' ';
@@ -353,7 +353,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 			} elseif ( is_year() ) {
 				$brdcrmb .= $before . get_the_time( 'Y' ) . $after;
 			} elseif ( is_single() && ! is_attachment() ) {
-				if ( isset( $wp_query->post->ID ) && get_post_type( $wp_query->post->ID ) == 'lafka-foodmenu' ) {
+				if ( isset( $wp_query->post->ID ) && 'lafka-foodmenu' === get_post_type( $wp_query->post->ID ) ) {
 
 					$brdcrmb .= '<a class="no-link" href="' . esc_url( get_post_type_archive_link( 'lafka-foodmenu' ) ) . '">' . esc_html__( 'Menu', 'lafka' ) . '</a> ' . $delimiter . ' ';
 
@@ -373,11 +373,11 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 					}
 
 					$brdcrmb .= $before . get_the_title( $wp_query->post->ID ) . $after;
-				} elseif ( isset( $wp_query->post->ID ) && get_post_type( $wp_query->post->ID ) != 'post' ) {
+				} elseif ( isset( $wp_query->post->ID ) && 'post' !== get_post_type( $wp_query->post->ID ) ) {
 					$post_type = get_post_type_object( get_post_type( $wp_query->post->ID ) );
 					$slug      = $post_type->rewrite;
 					$real_slug = $slug['slug'];
-					$brdcrmb  .= '<a class="no-link" href="' . esc_url( $homeLink . '/' . $real_slug ) . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
+					$brdcrmb  .= '<a class="no-link" href="' . esc_url( $home_link . '/' . $real_slug ) . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 
 					$brdcrmb .= $before . get_the_title( $wp_query->post->ID ) . $after;
 				} else {
@@ -388,10 +388,10 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 						$brdcrmb .= $before . get_the_title( $wp_query->post->ID ) . $after;
 					}
 				}
-			} elseif ( ! is_single() && ! is_page() && ! is_404() && ! is_search() && isset( $wp_query->post->ID ) && get_post_type( $wp_query->post->ID ) != 'post' ) {
+			} elseif ( ! is_single() && ! is_page() && ! is_404() && ! is_search() && isset( $wp_query->post->ID ) && 'post' !== get_post_type( $wp_query->post->ID ) ) {
 				$post_type = get_post_type_object( get_post_type( $wp_query->post->ID ) );
 				if ( $post_type ) {
-					if ( $post_type->name === 'lafka-foodmenu' ) {
+					if ( 'lafka-foodmenu' === $post_type->name ) {
 						$brdcrmb .= $before . esc_html__( 'Menu', 'lafka' ) . $after;
 					} else {
 						$brdcrmb .= $before . $post_type->labels->singular_name . $after;
@@ -476,7 +476,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 if ( ! function_exists( 'lafka_comment' ) ) {
 
 	function lafka_comment( $comment, $args, $depth ) {
-		if ( $comment->comment_author !== 'ActionScheduler' ) {
+		if ( 'ActionScheduler' !== $comment->comment_author ) {
 			switch ( $comment->comment_type ) {
 				case 'pingback':
 				case 'trackback':
@@ -499,7 +499,7 @@ if ( ! function_exists( 'lafka_comment' ) ) {
 						);
 						?>
 						<?php edit_comment_link( esc_html__( 'Edit', 'lafka' ), '<span class="edit-link">', '</span>' ); ?>
-						<?php if ( $comment->comment_approved == '0' ) : ?>
+						<?php if ( '0' === $comment->comment_approved ) : ?>
 							<em class="comment-awaiting-moderation"><?php esc_html_e( 'Your comment is awaiting moderation.', 'lafka' ); ?></em>
 							<br/>
 						<?php endif; ?>
@@ -640,7 +640,7 @@ if ( ! function_exists( 'lafka_widget_class_append' ) ) {
 
 		$sidebar_id = $params[0]['id']; // Get the id for the current sidebar we're processing
 
-		if ( $sidebar_id != 'bottom_footer_sidebar' && $sidebar_id != 'pre_header_sidebar' && $sidebar_id != 'lafka_product_filters_sidebar' ) {
+		if ( 'bottom_footer_sidebar' !== $sidebar_id && 'pre_header_sidebar' !== $sidebar_id && 'lafka_product_filters_sidebar' !== $sidebar_id ) {
 			return $params;
 		}
 
@@ -935,7 +935,7 @@ if ( ! function_exists( 'lafka_get_google_subsets' ) ) {
 		$choosen = array();
 
 		foreach ( $selected_subsets as $subset => $is_selected ) {
-			if ( $is_selected != '0' ) {
+			if ( '0' !== $is_selected ) {
 				$choosen[] = $subset;
 			}
 		}
@@ -981,15 +981,15 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 			$_meta                 = get_post_meta( $wp_query->post->ID );
 			$_get                  = static fn( $k ) => isset( $_meta[ $k ][0] ) ? $_meta[ $k ][0] : '';
 			$_fstyle               = $_get( 'lafka_footer_style' );
-			$specific_footer_style = $_fstyle === '' ? 'default' : $_fstyle;
+			$specific_footer_style = '' === $_fstyle ? 'default' : $_fstyle;
 			$_layout               = $_get( 'lafka_layout' );
-			$specific_layout       = $_layout === '' ? 'default' : $_layout;
+			$specific_layout       = '' === $_layout ? 'default' : $_layout;
 		} else {
 			$specific_footer_style = 'default';
 			$specific_layout       = 'default';
 		}
 
-		if ( $specific_layout !== 'default' ) {
+		if ( 'default' !== $specific_layout ) {
 			$classes[] = sanitize_html_class( $specific_layout );
 		} else {
 			$classes[] = sanitize_html_class( $general_layout );
@@ -1033,9 +1033,9 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		}
 
 		// footer reveal
-		if ( get_theme_mod( 'lafka_footer_style', '' ) && $specific_footer_style === 'default' ) {
+		if ( get_theme_mod( 'lafka_footer_style', '' ) && 'default' === $specific_footer_style ) {
 			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_footer_style', '' ) );
-		} elseif ( $specific_footer_style !== 'standard' && $specific_footer_style !== 'default' ) {
+		} elseif ( 'standard' !== $specific_footer_style && 'default' !== $specific_footer_style ) {
 			$classes[] = sanitize_html_class( $specific_footer_style );
 		}
 
@@ -1100,7 +1100,7 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 				'attachment' => 'scroll',
 			)
 		);
-		if ( ! empty( $footer_backgr_body['image'] ) && $footer_backgr_body['repeat'] === 'no-repeat' ) {
+		if ( ! empty( $footer_backgr_body['image'] ) && 'no-repeat' === $footer_backgr_body['repeat'] ) {
 			$classes[] = 'lafka-footer-bg-norepeat';
 		}
 
@@ -1114,7 +1114,7 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 if ( ! function_exists( 'lafka_setup_nav_menu_item' ) ) {
 
 	function lafka_setup_nav_menu_item( $menu_item ) {
-		if ( $menu_item->db_id != 0 ) {
+		if ( 0 !== (int) $menu_item->db_id ) {
 			$menu_item->description = lafka_core_filter( 'nav_menu_description', $menu_item->post_content );
 		}
 
@@ -1189,7 +1189,7 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 			$output .= "    <span class='entry-info-wrap'>";
 			$output .= "        <span class='entry-info'>";
 			$tc1     = "            <span class='entry-title'><small>{$entry['key_label']}{$post_type_label}</small>{$the_title}</span>";
-			$output .= $key == $prev_translated_key ? $tc1 . $tc2 : $tc2 . $tc1;
+			$output .= $key === $prev_translated_key ? $tc1 . $tc2 : $tc2 . $tc1;
 			$output .= '        </span>';
 			$output .= '    </span>';
 			$output .= '</a>';
@@ -1228,7 +1228,7 @@ if ( ! function_exists( 'lafka_convert_to_timeago_date_format' ) ) {
 		global $post;
 		$post_unix_time = strtotime( $post->post_date );
 
-		if ( get_theme_mod( 'lafka_date_format', 'default' ) == 'lafka_format' && ! lafka_is_time_more_than_x_months_ago( 6, $post_unix_time ) ) {
+		if ( 'lafka_format' === get_theme_mod( 'lafka_date_format', 'default' ) && ! lafka_is_time_more_than_x_months_ago( 6, $post_unix_time ) ) {
 			return human_time_diff( $post_unix_time, time() ) . ' ' . __( 'ago', 'lafka' );
 		}
 
@@ -1295,7 +1295,7 @@ if ( ! function_exists( 'lafka_get_formatted_price' ) ) {
 
 		if ( LAFKA_IS_WOOCOMMERCE ) {
 			$formatted_price = wc_price( $price );
-			if ( $has_plus !== false ) {
+			if ( false !== $has_plus ) {
 				$formatted_price = '+' . $formatted_price;
 			}
 		} else {

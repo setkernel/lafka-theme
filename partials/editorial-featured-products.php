@@ -14,7 +14,7 @@ if ( ! function_exists( 'wc_get_products' ) ) {
 	return; // WooCommerce not active
 }
 
-$products = wc_get_products(
+$lafka_products = wc_get_products(
 	array(
 		'featured' => true,
 		'limit'    => 3,
@@ -24,7 +24,7 @@ $products = wc_get_products(
 	)
 );
 
-if ( empty( $products ) ) {
+if ( empty( $lafka_products ) ) {
 	return;
 }
 ?>
@@ -38,26 +38,26 @@ if ( empty( $products ) ) {
 
 	<div class="products-grid">
 		<?php
-		foreach ( $products as $product ) :
-			$thumb_html = function_exists( 'lafka_card_image_html' ) ? lafka_card_image_html( $product, array( 'class' => '' ) ) : '';
-			$price_html = $product->get_price_html();
-			$name       = $product->get_name();
-			$desc       = wp_strip_all_tags( $product->get_short_description() );
-			$url        = get_permalink( $product->get_id() );
+		foreach ( $lafka_products as $lafka_product ) :
+			$lafka_thumb_html = function_exists( 'lafka_card_image_html' ) ? lafka_card_image_html( $lafka_product, array( 'class' => '' ) ) : '';
+			$lafka_price_html = $lafka_product->get_price_html();
+			$lafka_name       = $lafka_product->get_name();
+			$lafka_desc       = wp_strip_all_tags( $lafka_product->get_short_description() );
+			$lafka_url        = get_permalink( $lafka_product->get_id() );
 			?>
 		<article class="product-card">
-			<a href="<?php echo esc_url( $url ); ?>" class="product-photo">
+			<a href="<?php echo esc_url( $lafka_url ); ?>" class="product-photo">
 				<?php
-				echo wp_kses( $thumb_html, lafka_allowed_html() );
+				echo wp_kses( $lafka_thumb_html, lafka_allowed_html() );
 				?>
 			</a>
-			<h3><a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $name ); ?></a></h3>
-			<?php if ( $desc ) : ?>
-			<p class="product-desc"><?php echo esc_html( $desc ); ?></p>
+			<h3><a href="<?php echo esc_url( $lafka_url ); ?>"><?php echo esc_html( $lafka_name ); ?></a></h3>
+			<?php if ( $lafka_desc ) : ?>
+			<p class="product-desc"><?php echo esc_html( $lafka_desc ); ?></p>
 			<?php endif; ?>
 			<div class="price-row">
-				<span class="product-price"><?php echo wp_kses_post( $price_html ); ?></span>
-				<a href="<?php echo esc_url( $url ); ?>" class="btn btn-primary" style="font-size:0.8rem;padding:0.6rem 1rem;">
+				<span class="product-price"><?php echo wp_kses_post( $lafka_price_html ); ?></span>
+				<a href="<?php echo esc_url( $lafka_url ); ?>" class="btn btn-primary" style="font-size:0.8rem;padding:0.6rem 1rem;">
 					<?php esc_html_e( 'View', 'lafka' ); ?>
 				</a>
 			</div>

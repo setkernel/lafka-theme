@@ -36,7 +36,7 @@ $lafka_product_classes = array( 'box', 'box-common', 'fixed', 'lafka-single-prod
 if ( lafka_is_product_eligible_for_variation_in_listings( $product ) ) {
 	$lafka_product_classes[] = 'lafka-variations-list-in-catalog';
 }
-if ( get_theme_mod( 'lafka_hide_product_price_on_zero', false ) && $product->get_price() == 0 ) {
+if ( get_theme_mod( 'lafka_hide_product_price_on_zero', false ) && is_numeric( $product->get_price() ) && 0.0 === (float) $product->get_price() ) {
 	$lafka_product_classes[] = 'lafka-hide-zero-price';
 }
 ?>

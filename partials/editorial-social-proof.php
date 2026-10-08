@@ -9,34 +9,34 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$quote = get_theme_mod( 'lafka_editorial_home_proof_quote', '' );
-$stars = (int) get_theme_mod( 'lafka_editorial_home_proof_stars', 0 );
-$stats = get_theme_mod( 'lafka_editorial_home_proof_stats', '' );
+$lafka_quote = get_theme_mod( 'lafka_editorial_home_proof_quote', '' );
+$lafka_stars = (int) get_theme_mod( 'lafka_editorial_home_proof_stars', 0 );
+$lafka_stats = get_theme_mod( 'lafka_editorial_home_proof_stats', '' );
 /**
  * Filter the editorial social-proof star rating ( 0 hides the stars row ).
  *
  * @param int $stars Star rating, 0-5.
  */
-$stars = (int) apply_filters( 'lafka_editorial_home_proof_stars', $stars );
-$stars = max( 0, min( 5, $stars ) );
+$lafka_stars = (int) apply_filters( 'lafka_editorial_home_proof_stars', $lafka_stars );
+$lafka_stars = max( 0, min( 5, $lafka_stars ) );
 
-if ( ! $quote && ! $stats ) {
+if ( ! $lafka_quote && ! $lafka_stats ) {
 	return; // nothing to show — render nothing
 }
 
-$star_str = '';
-if ( $stars > 0 ) {
-	$star_str = str_repeat( '&#9733; ', $stars );
+$lafka_star_str = '';
+if ( $lafka_stars > 0 ) {
+	$lafka_star_str = str_repeat( '&#9733; ', $lafka_stars );
 }
 ?>
 <div class="social-proof">
-	<?php if ( $stars > 0 ) : ?>
-	<div class="stars"><?php echo wp_kses( $star_str, lafka_allowed_html() ); ?></div>
+	<?php if ( $lafka_stars > 0 ) : ?>
+	<div class="stars"><?php echo wp_kses( $lafka_star_str, lafka_allowed_html() ); ?></div>
 	<?php endif; ?>
-	<?php if ( $quote ) : ?>
-	<div class="quote">&ldquo;<?php echo esc_html( $quote ); ?>&rdquo;</div>
+	<?php if ( $lafka_quote ) : ?>
+	<div class="quote">&ldquo;<?php echo esc_html( $lafka_quote ); ?>&rdquo;</div>
 	<?php endif; ?>
-	<?php if ( $stats ) : ?>
-	<div class="stats"><?php echo esc_html( $stats ); ?></div>
+	<?php if ( $lafka_stats ) : ?>
+	<div class="stats"><?php echo esc_html( $lafka_stats ); ?></div>
 	<?php endif; ?>
 </div>

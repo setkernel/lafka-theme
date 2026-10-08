@@ -37,15 +37,13 @@ if ( ! function_exists( 'WC' ) || ! WC()->cart ) {
  * which exposes them as $args at this scope on WP 5.5+. Stay defensive for
  * the (vanishingly rare) caller that includes this partial directly.
  */
-if ( ! isset( $args ) || ! is_array( $args ) ) {
-	$args = array();
-}
+$lafka_fdp_args = isset( $args ) && is_array( $args ) ? $args : array();
 
-$lafka_fdp_context = isset( $args['context'] ) ? (string) $args['context'] : 'drawer';
+$lafka_fdp_context = isset( $lafka_fdp_args['context'] ) ? (string) $lafka_fdp_args['context'] : 'drawer';
 $lafka_fdp_context = in_array( $lafka_fdp_context, array( 'drawer', 'cart' ), true ) ? $lafka_fdp_context : 'drawer';
 
-$lafka_fdp_total = isset( $args['cart_total'] )
-	? (float) $args['cart_total']
+$lafka_fdp_total = isset( $lafka_fdp_args['cart_total'] )
+	? (float) $lafka_fdp_args['cart_total']
 	: (float) WC()->cart->get_cart_contents_total();
 
 // SSOT: the meter must track the exact threshold the plugin's free-delivery
@@ -54,8 +52,8 @@ $lafka_fdp_total = isset( $args['cart_total'] )
 // resolver (operator option -> promotions knob -> Customizer theme_mods, with
 // the canonical 'lafka_free_delivery_threshold' filter applied); otherwise the
 // shared theme_mod (0 = off) only when the plugin isn't loaded.
-if ( isset( $args['threshold'] ) ) {
-	$lafka_fdp_threshold = (float) $args['threshold'];
+if ( isset( $lafka_fdp_args['threshold'] ) ) {
+	$lafka_fdp_threshold = (float) $lafka_fdp_args['threshold'];
 } else {
 	if ( function_exists( 'lafka_get_free_delivery_threshold' ) ) {
 		$lafka_fdp_threshold = (float) lafka_get_free_delivery_threshold();

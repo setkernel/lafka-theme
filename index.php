@@ -34,7 +34,7 @@ switch ( $lafka_general_blog_style ) {
 
 $lafka_sidebar_choice = apply_filters( 'lafka_has_sidebar', '' );
 
-if ( $lafka_sidebar_choice != 'none' ) {
+if ( 'none' !== $lafka_sidebar_choice ) {
 	$lafka_has_sidebar = is_active_sidebar( $lafka_sidebar_choice );
 } else {
 	$lafka_has_sidebar = false;
@@ -42,7 +42,7 @@ if ( $lafka_sidebar_choice != 'none' ) {
 
 $lafka_offcanvas_sidebar_choice = apply_filters( 'lafka_has_offcanvas_sidebar', '' );
 
-if ( $lafka_offcanvas_sidebar_choice != 'none' ) {
+if ( 'none' !== $lafka_offcanvas_sidebar_choice ) {
 	$lafka_has_offcanvas_sidebar = is_active_sidebar( $lafka_offcanvas_sidebar_choice );
 } else {
 	$lafka_has_offcanvas_sidebar = false;

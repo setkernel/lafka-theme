@@ -115,7 +115,7 @@ if ( empty( $lafka_pdp_reviews ) && $product instanceof WC_Product && $lafka_pdp
 			'status'   => 'approve',
 			'type'     => 'review',
 			'number'   => 3,
-			'meta_key' => 'rating', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key -- small per-PDP lookup.
+			'meta_key' => 'rating',
 		)
 	);
 	foreach ( (array) $lafka_pdp_wc_comments as $lafka_pdp_c ) {

@@ -14,20 +14,20 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$form_id = (int) get_theme_mod( 'lafka_editorial_contact_cf7_form_id', 0 );
-$info    = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
-$email   = ! empty( $info['email'] ) ? $info['email'] : '';
+$lafka_form_id = (int) get_theme_mod( 'lafka_editorial_contact_cf7_form_id', 0 );
+$lafka_info    = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
+$lafka_email   = ! empty( $lafka_info['email'] ) ? $lafka_info['email'] : '';
 ?>
 <div class="contact-form">
 	<h2><?php esc_html_e( 'Send us a message', 'lafka' ); ?></h2>
 
-	<?php if ( $form_id > 0 && function_exists( 'wpcf7_contact_form' ) ) : ?>
-		<?php echo do_shortcode( '[contact-form-7 id="' . absint( $form_id ) . '"]' ); ?>
+	<?php if ( $lafka_form_id > 0 && function_exists( 'wpcf7_contact_form' ) ) : ?>
+		<?php echo do_shortcode( '[contact-form-7 id="' . absint( $lafka_form_id ) . '"]' ); ?>
 
-	<?php elseif ( $email ) : ?>
+	<?php elseif ( $lafka_email ) : ?>
 		<p>
 			<?php esc_html_e( 'Email us directly:', 'lafka' ); ?>
-			<a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
+			<a href="mailto:<?php echo esc_attr( $lafka_email ); ?>"><?php echo esc_html( $lafka_email ); ?></a>
 		</p>
 
 	<?php else : ?>

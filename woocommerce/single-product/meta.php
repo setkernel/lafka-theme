@@ -31,18 +31,18 @@ global $product;
 <div class="tagcloud product_meta">
 	<?php lafka_core_action( 'woocommerce_product_meta_start' ); ?>
 	<?php
-		$categories      = wc_get_product_category_list( $product->get_id(), ', ', '', '', lafka_wc_product_meta_category_orderby( $product ) );
-		$size_categories = count( $product->get_category_ids() );
+		$lafka_categories      = wc_get_product_category_list( $product->get_id(), ', ', '', '', lafka_wc_product_meta_category_orderby( $product ) );
+		$lafka_size_categories = count( $product->get_category_ids() );
 
-		$tags      = wc_get_product_tag_list( $product->get_id() );
-		$size_tags = count( $product->get_tag_ids() );
+		$lafka_tags      = wc_get_product_tag_list( $product->get_id() );
+		$lafka_size_tags = count( $product->get_tag_ids() );
 
-	if ( is_string( $categories ) && '' !== $categories ) {
-		echo '<span class="posted_in">' . esc_html( _n( 'Category:', 'Categories:', $size_categories, 'lafka' ) ) . '</span>' . wp_kses_post( $categories );
+	if ( is_string( $lafka_categories ) && '' !== $lafka_categories ) {
+		echo '<span class="posted_in">' . esc_html( _n( 'Category:', 'Categories:', $lafka_size_categories, 'lafka' ) ) . '</span>' . wp_kses_post( $lafka_categories );
 	}
 
-	if ( is_string( $tags ) && '' !== $tags ) {
-		echo '<span class="tagged_as">' . esc_html( _n( 'Tag:', 'Tags:', $size_tags, 'lafka' ) ) . '</span>' . wp_kses_post( $tags );
+	if ( is_string( $lafka_tags ) && '' !== $lafka_tags ) {
+		echo '<span class="tagged_as">' . esc_html( _n( 'Tag:', 'Tags:', $lafka_size_tags, 'lafka' ) ) . '</span>' . wp_kses_post( $lafka_tags );
 	}
 	?>
 	<?php if ( wc_product_sku_enabled() && ( $product->get_sku() || $product->is_type( ProductType::VARIABLE ) ) ) : ?>

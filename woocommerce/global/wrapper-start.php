@@ -18,40 +18,40 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
 global $wp_query;
-$woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
+$lafka_woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
 
-$show_sidebar_class = '';
+$lafka_show_sidebar_class = '';
 
-if ( get_theme_mod( 'lafka_show_sidebar_shop', false ) && $woocommerce_sidebar && $woocommerce_sidebar != 'none' && ! is_product() ) {
-	$show_sidebar_class = 'has-sidebar';
-} elseif ( get_theme_mod( 'lafka_show_sidebar_product', false ) && $woocommerce_sidebar && $woocommerce_sidebar != 'none' && is_product() ) {
-	$show_sidebar_class = 'has-sidebar';
+if ( get_theme_mod( 'lafka_show_sidebar_shop', false ) && $lafka_woocommerce_sidebar && 'none' !== $lafka_woocommerce_sidebar && ! is_product() ) {
+	$lafka_show_sidebar_class = 'has-sidebar';
+} elseif ( get_theme_mod( 'lafka_show_sidebar_product', false ) && $lafka_woocommerce_sidebar && 'none' !== $lafka_woocommerce_sidebar && is_product() ) {
+	$lafka_show_sidebar_class = 'has-sidebar';
 }
 
 $lafka_offcanvas_sidebar_choice = apply_filters( 'lafka_has_offcanvas_sidebar', '' );
 
-if ( $lafka_offcanvas_sidebar_choice != 'none' ) {
+if ( 'none' !== $lafka_offcanvas_sidebar_choice ) {
 	$lafka_has_offcanvas_sidebar = is_active_sidebar( $lafka_offcanvas_sidebar_choice );
 } else {
 	$lafka_has_offcanvas_sidebar = false;
 }
 
-$sidebar_classes[] = $show_sidebar_class;
+$lafka_sidebar_classes[] = $lafka_show_sidebar_class;
 
 // Sidebar position
-$sidebar_classes[] = apply_filters( 'lafka_left_sidebar_position_class', '' );
+$lafka_sidebar_classes[] = apply_filters( 'lafka_left_sidebar_position_class', '' );
 
 if ( $lafka_has_offcanvas_sidebar ) {
-	$sidebar_classes[] = 'has-off-canvas-sidebar';
+	$lafka_sidebar_classes[] = 'has-off-canvas-sidebar';
 }
 
 // get Shop subtitle
-$shop_subtitle          = get_theme_mod( 'lafka_shop_subtitle', '' );
-$title_background_image = get_theme_mod( 'lafka_shop_title_background_imgid', '' );
+$lafka_shop_subtitle          = get_theme_mod( 'lafka_shop_subtitle', '' );
+$lafka_title_background_image = get_theme_mod( 'lafka_shop_title_background_imgid', '' );
 
-if ( $title_background_image ) {
-	$img                    = wp_get_attachment_image_src( $title_background_image, 'full' );
-	$title_background_image = $img[0];
+if ( $lafka_title_background_image ) {
+	$lafka_img                    = wp_get_attachment_image_src( $lafka_title_background_image, 'full' );
+	$lafka_title_background_image = $lafka_img[0];
 }
 
 // If it is product category or tag - check if it has header image
@@ -75,17 +75,17 @@ if ( is_product_category() || is_product_tag() ) {
 	<?php get_sidebar( 'offcanvas' ); ?>
 <?php endif; ?>
 
-<div id="content" class="content-area <?php echo esc_attr( implode( ' ', $sidebar_classes ) ); ?>">
+<div id="content" class="content-area <?php echo esc_attr( implode( ' ', $lafka_sidebar_classes ) ); ?>">
 
 	<?php if ( ! is_product() ) : // For single product don't show title div ?>
 		<?php if ( is_shop() ) : // For SHOP page ?>
 			<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( get_theme_mod( 'lafka_shop_title_alignment', 'centered_title' ) ); ?>
 			<?php
-			if ( $title_background_image ) :
+			if ( $lafka_title_background_image ) :
 				?>
 				title_has_image<?php endif; ?>">
-			<?php if ( $title_background_image ) : ?>
-				<div class="lafka-zoomable-background" style="background-image: url('<?php echo esc_url( $title_background_image ); ?>');"></div>
+			<?php if ( $lafka_title_background_image ) : ?>
+				<div class="lafka-zoomable-background" style="background-image: url('<?php echo esc_url( $lafka_title_background_image ); ?>');"></div>
 			<?php endif; ?>
 		<?php elseif ( is_product_category() || is_product_tag() ) :  // For Category page ?>
 			<div id="lafka_page_title" class="<?php echo implode( ' ', array( 'lafka_title_holder', esc_attr( $lafka_prod_category_header_alignment ) ) ); ?>
@@ -112,8 +112,8 @@ if ( is_product_category() || is_product_tag() ) {
 						<!-- TITLE -->
 						<?php if ( ! is_product() && lafka_core_filter( 'woocommerce_show_page_title', true ) ) : ?>
 							<h1 class="product_title entry-title heading-title"><?php woocommerce_page_title(); ?></h1>
-							<?php if ( is_shop() && $shop_subtitle ) : ?>
-								<p class="section-subtitle"><?php echo esc_html( $shop_subtitle ); ?></p>
+							<?php if ( is_shop() && $lafka_shop_subtitle ) : ?>
+								<p class="section-subtitle"><?php echo esc_html( $lafka_shop_subtitle ); ?></p>
 							<?php elseif ( ( is_product_category() || is_product_tag() ) && $lafka_prod_category_subtitle ) : ?>
 								<p class="section-subtitle"><?php echo esc_html( $lafka_prod_category_subtitle ); ?></p>
 							<?php endif; ?>

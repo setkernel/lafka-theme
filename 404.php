@@ -16,7 +16,6 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 
-// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- read-only display of the unmatched path; no state mutation.
 $lafka_404_path = isset( $_SERVER['REQUEST_URI'] ) ? wp_strip_all_tags( wp_unslash( (string) $_SERVER['REQUEST_URI'] ) ) : '';
 $lafka_404_path = strtok( $lafka_404_path, '?' );
 ?>

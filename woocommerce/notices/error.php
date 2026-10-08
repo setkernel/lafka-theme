@@ -25,15 +25,15 @@ if ( ! $notices ) {
 ?>
 <div class="lafka-notice-alert" role="alert">
 	<ul class="woocommerce-error">
-		<?php foreach ( $notices as $notice ) : ?>
+		<?php foreach ( $notices as $lafka_notice ) : ?>
 			<li
 			<?php
-			foreach ( (array) ( $notice['data'] ?? array() ) as $lafka_notice_key => $lafka_notice_value ) {
+			foreach ( (array) ( $lafka_notice['data'] ?? array() ) as $lafka_notice_key => $lafka_notice_value ) {
 				printf( ' data-%1$s="%2$s"', esc_attr( $lafka_notice_key ), esc_attr( $lafka_notice_value ) );
 			}
 			?>
 			>
-				<?php echo wp_kses( wc_kses_notice( $notice['notice'] ), lafka_allowed_html() ); ?>
+				<?php echo wp_kses( wc_kses_notice( $lafka_notice['notice'] ), lafka_allowed_html() ); ?>
 			</li>
 		<?php endforeach; ?>
 	</ul>

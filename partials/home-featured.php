@@ -44,7 +44,7 @@ if ( empty( $lafka_feat_products ) ) {
 			'status'   => 'publish',
 			'limit'    => $lafka_feat_limit,
 			'orderby'  => 'meta_value_num',
-			'meta_key' => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_key' => 'total_sales',
 			'order'    => 'DESC',
 		)
 	);

@@ -29,9 +29,9 @@ get_header();
 	<section class="contact-head">
 		<div class="contact-head-inner">
 			<h1><?php echo esc_html( get_theme_mod( 'lafka_editorial_contact_h1', __( 'Contact us', 'lafka' ) ) ); ?></h1>
-			<?php $intro = get_theme_mod( 'lafka_editorial_contact_intro', '' ); ?>
-			<?php if ( $intro ) : ?>
-			<p class="contact-intro"><?php echo esc_html( $intro ); ?></p>
+			<?php $lafka_intro = get_theme_mod( 'lafka_editorial_contact_intro', '' ); ?>
+			<?php if ( $lafka_intro ) : ?>
+			<p class="contact-intro"><?php echo esc_html( $lafka_intro ); ?></p>
 			<?php endif; ?>
 		</div>
 	</section>

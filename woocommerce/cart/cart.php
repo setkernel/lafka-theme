@@ -144,24 +144,24 @@ lafka_core_action( 'woocommerce_before_cart' );
 		<?php lafka_core_action( 'woocommerce_before_cart_contents' ); ?>
 
 		<?php
-		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-			$_product   = lafka_core_filter( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
-			$product_id = lafka_core_filter( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
+		foreach ( WC()->cart->get_cart() as $lafka_cart_item_key => $lafka_cart_item ) {
+			$lafka__product   = lafka_core_filter( 'woocommerce_cart_item_product', $lafka_cart_item['data'], $lafka_cart_item, $lafka_cart_item_key );
+			$lafka_product_id = lafka_core_filter( 'woocommerce_cart_item_product_id', $lafka_cart_item['product_id'], $lafka_cart_item, $lafka_cart_item_key );
 
-			if ( $_product instanceof WC_Product && $_product->exists() && $cart_item['quantity'] > 0 && lafka_core_filter( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
-				$product_permalink = lafka_core_filter( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
-				$cart_item_name    = lafka_wc_cart_item_product_name( $cart_item, $_product );
-				$product_name      = lafka_core_filter( 'woocommerce_cart_item_name', $cart_item_name, $cart_item, $cart_item_key );
+			if ( $lafka__product instanceof WC_Product && $lafka__product->exists() && $lafka_cart_item['quantity'] > 0 && lafka_core_filter( 'woocommerce_cart_item_visible', true, $lafka_cart_item, $lafka_cart_item_key ) ) {
+				$lafka_product_permalink = lafka_core_filter( 'woocommerce_cart_item_permalink', $lafka__product->is_visible() ? $lafka__product->get_permalink( $lafka_cart_item ) : '', $lafka_cart_item, $lafka_cart_item_key );
+				$lafka_cart_item_name    = lafka_wc_cart_item_product_name( $lafka_cart_item, $lafka__product );
+				$lafka_product_name      = lafka_core_filter( 'woocommerce_cart_item_name', $lafka_cart_item_name, $lafka_cart_item, $lafka_cart_item_key );
 				?>
-				<li class="lafka-cart-item <?php echo esc_attr( lafka_core_filter( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
+				<li class="lafka-cart-item <?php echo esc_attr( lafka_core_filter( 'woocommerce_cart_item_class', 'cart_item', $lafka_cart_item, $lafka_cart_item_key ) ); ?>">
 					<div class="lafka-cart-item__img-wrap">
 						<?php
-						$thumbnail = lafka_core_filter( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
+						$lafka_thumbnail = lafka_core_filter( 'woocommerce_cart_item_thumbnail', $lafka__product->get_image(), $lafka_cart_item, $lafka_cart_item_key );
 
-						if ( ! $product_permalink ) {
-							echo wp_kses( $thumbnail, lafka_allowed_html() );
+						if ( ! $lafka_product_permalink ) {
+							echo wp_kses( $lafka_thumbnail, lafka_allowed_html() );
 						} else {
-							printf( '<a href="%s">%s</a>', esc_url( $product_permalink ), wp_kses( $thumbnail, lafka_allowed_html() ) );
+							printf( '<a href="%s">%s</a>', esc_url( $lafka_product_permalink ), wp_kses( $lafka_thumbnail, lafka_allowed_html() ) );
 						}
 						?>
 					</div>
@@ -176,25 +176,25 @@ lafka_core_action( 'woocommerce_before_cart' );
 						?>
 						<p class="lafka-cart-item__title">
 							<?php
-							if ( ! $product_permalink ) {
-								echo wp_kses_post( $product_name . '&nbsp;' );
+							if ( ! $lafka_product_permalink ) {
+								echo wp_kses_post( $lafka_product_name . '&nbsp;' );
 							} else {
 								// Same filter WooCommerce core applies to the linked name.
-								echo wp_kses_post( lafka_core_filter( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $cart_item_name ), $cart_item, $cart_item_key ) );
+								echo wp_kses_post( lafka_core_filter( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $lafka_product_permalink ), $lafka_cart_item_name ), $lafka_cart_item, $lafka_cart_item_key ) );
 							}
 							?>
 						</p>
-						<?php lafka_core_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key ); ?>
+						<?php lafka_core_action( 'woocommerce_after_cart_item_name', $lafka_cart_item, $lafka_cart_item_key ); ?>
 
 						<?php
 						// WC 11.2+ reads the name to skip attributes it already shows; older WC ignores the argument.
-						$item_data = wc_get_formatted_cart_item_data( $cart_item, false, $cart_item_name );
-						if ( ! empty( $item_data ) ) :
+						$lafka_item_data = wc_get_formatted_cart_item_data( $lafka_cart_item, false, $lafka_cart_item_name );
+						if ( ! empty( $lafka_item_data ) ) :
 							?>
-							<div class="lafka-cart-item__meta"><?php echo wp_kses_post( $item_data ); ?></div>
+							<div class="lafka-cart-item__meta"><?php echo wp_kses_post( $lafka_item_data ); ?></div>
 						<?php endif; ?>
 
-						<?php if ( $cart_item['quantity'] > 1 ) : ?>
+						<?php if ( $lafka_cart_item['quantity'] > 1 ) : ?>
 							<div class="lafka-cart-item__unit-price">
 								<?php
 								// translators: %s: per-unit price
@@ -202,7 +202,7 @@ lafka_core_action( 'woocommerce_before_cart' );
 									sprintf(
 										/* translators: %s: unit price of the cart item. */
 										__( '%s each', 'lafka' ),
-										lafka_core_filter( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
+										lafka_core_filter( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $lafka__product ), $lafka_cart_item, $lafka_cart_item_key )
 									)
 								);
 								?>
@@ -210,39 +210,39 @@ lafka_core_action( 'woocommerce_before_cart' );
 						<?php endif; ?>
 
 						<?php
-						if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ) {
-							echo wp_kses_post( lafka_core_filter( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'lafka' ) . '</p>', $product_id ) );
+						if ( $lafka__product->backorders_require_notification() && $lafka__product->is_on_backorder( $lafka_cart_item['quantity'] ) ) {
+							echo wp_kses_post( lafka_core_filter( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'lafka' ) . '</p>', $lafka_product_id ) );
 						}
 						?>
 
 						<div class="lafka-cart-item__bottom">
 							<span class="lafka-cart-item__price">
-								<?php echo wp_kses( lafka_core_filter( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ), lafka_allowed_html() ); ?>
+								<?php echo wp_kses( lafka_core_filter( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $lafka__product, $lafka_cart_item['quantity'] ), $lafka_cart_item, $lafka_cart_item_key ), lafka_allowed_html() ); ?>
 							</span>
 
 							<div class="lafka-cart-item__qty">
 								<?php
-								if ( $_product->is_sold_individually() ) {
-									$min_quantity = 1;
-									$max_quantity = 1;
+								if ( $lafka__product->is_sold_individually() ) {
+									$lafka_min_quantity = 1;
+									$lafka_max_quantity = 1;
 								} else {
-									$min_quantity = 0;
-									$max_quantity = $_product->get_max_purchase_quantity();
+									$lafka_min_quantity = 0;
+									$lafka_max_quantity = $lafka__product->get_max_purchase_quantity();
 								}
 
-								$product_quantity = woocommerce_quantity_input(
+								$lafka_product_quantity = woocommerce_quantity_input(
 									array(
-										'input_name'   => "cart[{$cart_item_key}][qty]",
-										'input_value'  => $cart_item['quantity'],
-										'max_value'    => $max_quantity,
-										'min_value'    => $min_quantity,
-										'product_name' => $product_name,
+										'input_name'   => "cart[{$lafka_cart_item_key}][qty]",
+										'input_value'  => $lafka_cart_item['quantity'],
+										'max_value'    => $lafka_max_quantity,
+										'min_value'    => $lafka_min_quantity,
+										'product_name' => $lafka_product_name,
 									),
-									$_product,
+									$lafka__product,
 									false
 								);
 
-								echo wp_kses( lafka_core_filter( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ), lafka_allowed_html() );
+								echo wp_kses( lafka_core_filter( 'woocommerce_cart_item_quantity', $lafka_product_quantity, $lafka_cart_item_key, $lafka_cart_item ), lafka_allowed_html() );
 								?>
 							</div>
 
@@ -252,13 +252,13 @@ lafka_core_action( 'woocommerce_before_cart' );
 									'woocommerce_cart_item_remove_link',
 									sprintf(
 										'<a href="%s" class="lafka-cart-item__remove" role="button" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
-										esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
+										esc_url( wc_get_cart_remove_url( $lafka_cart_item_key ) ),
 										/* translators: %s: Product name */
-										esc_attr( sprintf( __( 'Remove %s from cart', 'lafka' ), wp_strip_all_tags( $product_name ) ) ),
-										esc_attr( $product_id ),
-										esc_attr( $_product->get_sku() )
+										esc_attr( sprintf( __( 'Remove %s from cart', 'lafka' ), wp_strip_all_tags( $lafka_product_name ) ) ),
+										esc_attr( $lafka_product_id ),
+										esc_attr( $lafka__product->get_sku() )
 									),
-									$cart_item_key
+									$lafka_cart_item_key
 								),
 								lafka_allowed_html()
 							);

@@ -21,7 +21,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /* translators: %s: Quantity. */
-$label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 'lafka' ), wp_strip_all_tags( $args['product_name'] ) ) : esc_html__( 'Quantity', 'lafka' );
+$lafka_label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 'lafka' ), wp_strip_all_tags( $args['product_name'] ) ) : esc_html__( 'Quantity', 'lafka' );
 ?>
 	<div class="quantity">
 		<?php
@@ -32,7 +32,7 @@ $label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 
 		 */
 		lafka_core_action( 'woocommerce_before_quantity_input_field' );
 		?>
-		<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_attr( $label ); ?></label>
+		<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_attr( $lafka_label ); ?></label>
 		<input
 				type="<?php echo esc_attr( $type ); ?>"
 				<?php echo $readonly ? 'readonly="readonly"' : ''; ?>

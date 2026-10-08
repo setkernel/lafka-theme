@@ -19,31 +19,31 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-$id_suffix = wp_unique_id();
+$lafka_id_suffix = wp_unique_id();
 
-$per_page_requets = esc_attr( (string) lafka_query_arg( 'per_page' ) );
+$lafka_per_page_requets = esc_attr( (string) lafka_query_arg( 'per_page' ) );
 
 ?>
 <form class="woocommerce-ordering" method="get">
 	<?php if ( get_theme_mod( 'lafka_show_products_limit', true ) ) : ?>
-		<?php $products_per_page_from_options = intval( get_theme_mod( 'lafka_products_per_page', 12 ) ); ?>
-		<?php if ( $products_per_page_from_options > 0 ) : ?>
+		<?php $lafka_products_per_page_from_options = intval( get_theme_mod( 'lafka_products_per_page', 12 ) ); ?>
+		<?php if ( $lafka_products_per_page_from_options > 0 ) : ?>
 			<div class="limit">
 				<b><?php esc_html_e( 'Show', 'lafka' ); ?>:</b>
 				<select class="per_page" name="per_page">
 					<?php
-					$per_page_options = array( $products_per_page_from_options => $products_per_page_from_options );
+					$lafka_per_page_options = array( $lafka_products_per_page_from_options => $lafka_products_per_page_from_options );
 
-					$temp = $products_per_page_from_options;
-					for ( $i = 1;$i <= 3;$i++ ) {
-						$temp                      = $temp * 2;
-						$per_page_options[ $temp ] = $temp;
+					$lafka_temp = $lafka_products_per_page_from_options;
+					for ( $lafka_i = 1;$lafka_i <= 3;$lafka_i++ ) {
+						$lafka_temp                            = $lafka_temp * 2;
+						$lafka_per_page_options[ $lafka_temp ] = $lafka_temp;
 					}
 
-					$per_page_options['-1'] = esc_html__( 'Show All', 'lafka' );
+					$lafka_per_page_options['-1'] = esc_html__( 'Show All', 'lafka' );
 
-					foreach ( $per_page_options as $id => $name ) {
-						echo '<option value="' . esc_attr( $id ) . '" ' . selected( $per_page_requets, $id, false ) . '>' . esc_attr( $name ) . '</option>';
+					foreach ( $lafka_per_page_options as $lafka_id => $lafka_name ) {
+						echo '<option value="' . esc_attr( $lafka_id ) . '" ' . selected( $lafka_per_page_requets, $lafka_id, false ) . '>' . esc_attr( $lafka_name ) . '</option>';
 					}
 					?>
 				</select>
@@ -52,7 +52,7 @@ $per_page_requets = esc_attr( (string) lafka_query_arg( 'per_page' ) );
 	<?php endif; ?>
 	<div class="sort">
 		<?php if ( ! empty( $use_label ) ) : ?>
-			<label for="woocommerce-orderby-<?php echo esc_attr( $id_suffix ); ?>"><?php esc_html_e( 'Sort By', 'lafka' ); ?></label>
+			<label for="woocommerce-orderby-<?php echo esc_attr( $lafka_id_suffix ); ?>"><?php esc_html_e( 'Sort By', 'lafka' ); ?></label>
 		<?php else : ?>
 			<b><?php esc_html_e( 'Sort By', 'lafka' ); ?>:</b>
 		<?php endif; ?>
@@ -60,13 +60,13 @@ $per_page_requets = esc_attr( (string) lafka_query_arg( 'per_page' ) );
 			name="orderby"
 			class="orderby"
 			<?php if ( ! empty( $use_label ) ) : ?>
-				id="woocommerce-orderby-<?php echo esc_attr( $id_suffix ); ?>"
+				id="woocommerce-orderby-<?php echo esc_attr( $lafka_id_suffix ); ?>"
 			<?php else : ?>
 				aria-label="<?php esc_attr_e( 'Shop order', 'lafka' ); ?>"
 			<?php endif; ?>
 		>
-			<?php foreach ( $catalog_orderby_options as $id => $name ) : ?>
-				<option value="<?php echo esc_attr( $id ); ?>" <?php selected( $orderby, $id ); ?>><?php echo esc_html( $name ); ?></option>
+			<?php foreach ( $catalog_orderby_options as $lafka_id => $lafka_name ) : ?>
+				<option value="<?php echo esc_attr( $lafka_id ); ?>" <?php selected( $orderby, $lafka_id ); ?>><?php echo esc_html( $lafka_name ); ?></option>
 			<?php endforeach; ?>
 		</select>
 		<input type="hidden" name="paged" value="1" />

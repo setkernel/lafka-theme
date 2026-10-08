@@ -37,7 +37,7 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 			'status'     => 'publish',
 			'limit'      => $count,
 			'orderby'    => 'meta_value_num',
-			'meta_key'   => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'meta_key'   => 'total_sales',
 			'order'      => 'DESC',
 			'visibility' => 'visible',
 		);

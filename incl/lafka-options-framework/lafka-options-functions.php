@@ -226,7 +226,7 @@ function lafka_typography_get_google_fonts() {
 	// Get actual google fonts list (cached for a week)
 	$google_faces_json = get_transient( 'lafka_google_fonts_list' );
 
-	if ( $google_faces_json === false ) {
+	if ( false === $google_faces_json ) {
 		// It wasn't there, so regenerate the data and save the transient
 
 		/** @var WP_Filesystem_Base $wp_filesystem */
@@ -243,7 +243,7 @@ function lafka_typography_get_google_fonts() {
 		}
 
 		// If successfully go the fonts list, save it in transient for a week
-		if ( $google_faces_json !== false && is_string( $google_faces_json ) && lafka_is_string_valid_json( $google_faces_json ) ) {
+		if ( false !== $google_faces_json && is_string( $google_faces_json ) && lafka_is_string_valid_json( $google_faces_json ) ) {
 			set_transient( 'lafka_google_fonts_list', $google_faces_json, WEEK_IN_SECONDS );
 		} else {
 			// Set it to string "use_default" transient so it doesn't on every request

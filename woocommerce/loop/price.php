@@ -20,15 +20,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 global $product;
-$product_excerpt = '';
+$lafka_product_excerpt = '';
 
 if ( lafka_is_product_listview() ) {
-	$product_excerpt = wp_trim_words( get_the_excerpt(), 30, ' ...' );
+	$lafka_product_excerpt = wp_trim_words( get_the_excerpt(), 30, ' ...' );
 }
 ?>
 <?php if ( lafka_is_product_listview() ) : ?>
 	<div class="lafka-product-excerpt">
-		<?php echo esc_html( $product_excerpt ); ?>
+		<?php echo esc_html( $lafka_product_excerpt ); ?>
 	</div>
 <?php endif; ?>
 

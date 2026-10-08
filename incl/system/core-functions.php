@@ -182,8 +182,8 @@ if ( ! function_exists( 'lafka_register_sidebars' ) ) {
 		$lafka_custom_sdbrs = substr( get_theme_mod( 'lafka_sidebar_ids', '' ), 0, -1 );
 
 		if ( $lafka_custom_sdbrs ) {
-			$sdbrsArr = explode( ';', $lafka_custom_sdbrs );
-			foreach ( $sdbrsArr as $sdbr ) {
+			$sdbrs_arr = explode( ';', $lafka_custom_sdbrs );
+			foreach ( $sdbrs_arr as $sdbr ) {
 				$sdbr_id = lafka_generate_slug( $sdbr, 45 );
 				register_sidebar(
 					array(
@@ -446,17 +446,17 @@ if ( ! function_exists( 'lafka_has_post_video_bckgr' ) ) {
  * Used mainly for custom sidebars
  *
  * @param String $phrase
- * @param Integer $maxLength
+ * @param Integer $max_length
  * @return String
  */
 if ( ! function_exists( 'lafka_generate_slug' ) ) {
 
-	function lafka_generate_slug( $phrase, $maxLength ) {
+	function lafka_generate_slug( $phrase, $max_length ) {
 		$result = strtolower( $phrase );
 
 		$result = preg_replace( '/[^a-z0-9\s-]/', '', $result );
 		$result = trim( preg_replace( '/[\s-]+/', ' ', $result ) );
-		$result = trim( substr( $result, 0, $maxLength ) );
+		$result = trim( substr( $result, 0, $max_length ) );
 		$result = preg_replace( '/\s/', '-', $result );
 
 		return $result;
@@ -482,7 +482,7 @@ if ( ! function_exists( 'lafka_get_taxonomy_parents' ) ) {
 			$name = $parent->name;
 		}
 
-		if ( $parent->parent && ( $parent->parent != $parent->term_id ) && ! in_array( $parent->parent, $visited, true ) ) {
+		if ( $parent->parent && ( (int) $parent->parent !== (int) $parent->term_id ) && ! in_array( $parent->parent, $visited, true ) ) {
 			$visited[] = $parent->parent;
 			$chain    .= lafka_get_taxonomy_parents( $parent->parent, $taxonomy, $link, $separator, $nicename, $visited );
 		}
@@ -1893,7 +1893,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		$cart_redirect_after_add = 'no';
 		$cart_url                = '';
-		if ( LAFKA_IS_WOOCOMMERCE && get_option( 'woocommerce_cart_redirect_after_add' ) == 'yes' ) {
+		if ( LAFKA_IS_WOOCOMMERCE && 'yes' === get_option( 'woocommerce_cart_redirect_after_add' ) ) {
 			$cart_redirect_after_add = 'yes';
 			$cart_url                = lafka_core_filter( 'woocommerce_add_to_cart_redirect', wc_get_cart_url(), null );
 		}
@@ -2290,7 +2290,7 @@ if ( ! function_exists( 'lafka_generate_excerpt' ) ) {
 
 		$breakpoint = strpos( $input, $break_at, $limit );
 
-		if ( $breakpoint != false ) {
+		if ( false !== $breakpoint && 0 !== $breakpoint ) {
 			if ( $breakpoint < strlen( $input ) - 1 ) {
 				if ( $safe_truncate || is_rtl() ) {
 					$input = mb_strimwidth( $input, 0, $breakpoint ) . $more;
@@ -2457,7 +2457,7 @@ if ( ! function_exists( 'lafka_set_menu_on_primary' ) ) {
 	 * @return Array
 	 */
 	function lafka_set_menu_on_primary( $args ) {
-		if ( $args['theme_location'] === 'primary' ) {
+		if ( 'primary' === $args['theme_location'] ) {
 			if ( lafka_is_blog() ) {
 				return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_blog_top_menu', 'default' ) );
 			}
@@ -2547,7 +2547,7 @@ if ( ! function_exists( 'lafka_check_for_sidebar' ) ) {
 		}
 
 		$show_sidebar_from_meta = 'yes';
-		if ( isset( $options['lafka_show_sidebar'] ) && trim( $options['lafka_show_sidebar'][0] ) != '' ) {
+		if ( isset( $options['lafka_show_sidebar'] ) && '' !== trim( $options['lafka_show_sidebar'][0] ) ) {
 			$show_sidebar_from_meta = $options['lafka_show_sidebar'][0];
 		}
 
@@ -2559,8 +2559,8 @@ if ( ! function_exists( 'lafka_check_for_sidebar' ) ) {
 			$sidebar_choice = $foodmenu_categoty_sidebar;
 		} elseif ( $is_cat_tag_tax_archive ) {
 			$sidebar_choice = $blog_categoty_sidebar;
-		} elseif ( isset( $options['lafka_custom_sidebar'] ) && $show_sidebar_from_meta == 'yes' ) {
-			if ( $options['lafka_custom_sidebar'][0] == 'default' ) {
+		} elseif ( isset( $options['lafka_custom_sidebar'] ) && 'yes' === $show_sidebar_from_meta ) {
+			if ( 'default' === $options['lafka_custom_sidebar'][0] ) {
 				$sidebar_choice = 'right_sidebar';
 			} else {
 				$sidebar_choice = $options['lafka_custom_sidebar'][0];
@@ -2591,7 +2591,7 @@ if ( ! function_exists( 'lafka_check_for_offcanvas_sidebar' ) ) {
 		}
 
 		$offcanvas_sidebar_choice = get_theme_mod( 'lafka_offcanvas_sidebar', 'none' );
-		if ( isset( $meta_options['lafka_custom_offcanvas_sidebar'] ) && $meta_options['lafka_custom_offcanvas_sidebar'][0] !== 'default' ) {
+		if ( isset( $meta_options['lafka_custom_offcanvas_sidebar'] ) && 'default' !== $meta_options['lafka_custom_offcanvas_sidebar'][0] ) {
 			$offcanvas_sidebar_choice = $meta_options['lafka_custom_offcanvas_sidebar'][0];
 		}
 
@@ -2615,7 +2615,7 @@ if ( ! function_exists( 'lafka_check_for_sidebar_position' ) ) {
 		}
 
 		$sidebar_position = get_theme_mod( 'lafka_sidebar_position', 'lafka-right-sidebar' );
-		if ( isset( $meta_options['lafka_sidebar_position'] ) && $meta_options['lafka_sidebar_position'][0] !== 'default' ) {
+		if ( isset( $meta_options['lafka_sidebar_position'] ) && 'default' !== $meta_options['lafka_sidebar_position'][0] ) {
 			$sidebar_position = $meta_options['lafka_sidebar_position'][0];
 		}
 

@@ -61,7 +61,7 @@ if ( ! function_exists( 'lafka_home_default_hero_bg' ) ) {
 				'status'   => 'publish',
 				'limit'    => 1,
 				'orderby'  => 'meta_value_num',
-				'meta_key' => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'meta_key' => 'total_sales',
 				'order'    => 'DESC',
 			)
 		);

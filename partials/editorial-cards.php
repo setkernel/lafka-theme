@@ -13,56 +13,56 @@
 defined( 'ABSPATH' ) || exit;
 
 // Build card data from theme mods.
-$cards = array();
-for ( $i = 1; $i <= 8; $i++ ) {
-	$cards[] = array(
-		'label'     => get_theme_mod( "lafka_editorial_home_card_{$i}_label", '' ),
-		'image'     => get_theme_mod( "lafka_editorial_home_card_{$i}_image", '' ),
-		'url'       => get_theme_mod( "lafka_editorial_home_card_{$i}_url", '' ),
-		'meta'      => get_theme_mod( "lafka_editorial_home_card_{$i}_meta", '' ),
-		'spotlight' => (bool) get_theme_mod( "lafka_editorial_home_card_{$i}_spotlight", false ),
+$lafka_cards = array();
+for ( $lafka_i = 1; $lafka_i <= 8; $lafka_i++ ) {
+	$lafka_cards[] = array(
+		'label'     => get_theme_mod( "lafka_editorial_home_card_{$lafka_i}_label", '' ),
+		'image'     => get_theme_mod( "lafka_editorial_home_card_{$lafka_i}_image", '' ),
+		'url'       => get_theme_mod( "lafka_editorial_home_card_{$lafka_i}_url", '' ),
+		'meta'      => get_theme_mod( "lafka_editorial_home_card_{$lafka_i}_meta", '' ),
+		'spotlight' => (bool) get_theme_mod( "lafka_editorial_home_card_{$lafka_i}_spotlight", false ),
 	);
 }
 
 // Only render when at least one card has content.
-$has_content = false;
-foreach ( $cards as $c ) {
-	if ( $c['label'] || $c['image'] ) {
-		$has_content = true;
+$lafka_has_content = false;
+foreach ( $lafka_cards as $lafka_c ) {
+	if ( $lafka_c['label'] || $lafka_c['image'] ) {
+		$lafka_has_content = true;
 		break;
 	}
 }
-if ( ! $has_content ) {
+if ( ! $lafka_has_content ) {
 	return;
 }
 ?>
 <section>
 	<div class="cards-wrap">
 		<?php
-		foreach ( $cards as $card ) :
-			if ( ! $card['label'] && ! $card['image'] ) {
+		foreach ( $lafka_cards as $lafka_card ) :
+			if ( ! $lafka_card['label'] && ! $lafka_card['image'] ) {
 				continue; // skip unconfigured slots
 			}
-			$class = $card['spotlight'] ? 'card spotlight' : 'card';
-			$tag   = $card['url'] ? 'a' : 'div';
+			$lafka_class = $lafka_card['spotlight'] ? 'card spotlight' : 'card';
+			$lafka_tag   = $lafka_card['url'] ? 'a' : 'div';
 			?>
-		<<?php echo esc_attr( $tag ); ?> class="<?php echo esc_attr( $class ); ?>"
+		<<?php echo esc_attr( $lafka_tag ); ?> class="<?php echo esc_attr( $lafka_class ); ?>"
 			<?php
-			if ( $card['url'] ) :
+			if ( $lafka_card['url'] ) :
 				?>
-			href="<?php echo esc_url( $card['url'] ); ?>"<?php endif; ?>>
-			<?php if ( $card['image'] ) : ?>
-			<div class="photo" style="background-image: url('<?php echo esc_url( $card['image'] ); ?>')"></div>
+			href="<?php echo esc_url( $lafka_card['url'] ); ?>"<?php endif; ?>>
+			<?php if ( $lafka_card['image'] ) : ?>
+			<div class="photo" style="background-image: url('<?php echo esc_url( $lafka_card['image'] ); ?>')"></div>
 			<?php endif; ?>
 			<div class="content">
-				<?php if ( $card['label'] ) : ?>
-				<div class="name"><?php echo esc_html( $card['label'] ); ?></div>
+				<?php if ( $lafka_card['label'] ) : ?>
+				<div class="name"><?php echo esc_html( $lafka_card['label'] ); ?></div>
 				<?php endif; ?>
-				<?php if ( $card['meta'] ) : ?>
-				<div class="meta"><?php echo esc_html( $card['meta'] ); ?></div>
+				<?php if ( $lafka_card['meta'] ) : ?>
+				<div class="meta"><?php echo esc_html( $lafka_card['meta'] ); ?></div>
 				<?php endif; ?>
 			</div>
-		</<?php echo esc_attr( $tag ); ?>>
+		</<?php echo esc_attr( $lafka_tag ); ?>>
 		<?php endforeach; ?>
 	</div>
 </section>

@@ -18,40 +18,40 @@ if ( is_page() ) {
 	$lafka_show_title_page = 'yes';
 	$lafka_show_breadcrumb = 'yes';
 
-	if ( isset( $lafka_page_options['lafka_show_title_page'] ) && trim( $lafka_page_options['lafka_show_title_page'][0] ) != '' ) {
+	if ( isset( $lafka_page_options['lafka_show_title_page'] ) && '' !== trim( $lafka_page_options['lafka_show_title_page'][0] ) ) {
 		$lafka_show_title_page = $lafka_page_options['lafka_show_title_page'][0];
 	}
 
-	if ( isset( $lafka_page_options['lafka_show_breadcrumb'] ) && trim( $lafka_page_options['lafka_show_breadcrumb'][0] ) != '' ) {
+	if ( isset( $lafka_page_options['lafka_show_breadcrumb'] ) && '' !== trim( $lafka_page_options['lafka_show_breadcrumb'][0] ) ) {
 		$lafka_show_breadcrumb = $lafka_page_options['lafka_show_breadcrumb'][0];
 	}
 
 	$lafka_featured_flex_slider_imgs = lafka_get_more_featured_images( get_the_ID() );
 
-	if ( isset( $lafka_page_options['lafka_page_subtitle'] ) && trim( $lafka_page_options['lafka_page_subtitle'][0] ) != '' ) {
+	if ( isset( $lafka_page_options['lafka_page_subtitle'] ) && '' !== trim( $lafka_page_options['lafka_page_subtitle'][0] ) ) {
 		$lafka_subtitle = $lafka_page_options['lafka_page_subtitle'][0];
 	}
 
-	if ( isset( $lafka_page_options['lafka_title_background_imgid'] ) && trim( $lafka_page_options['lafka_title_background_imgid'][0] ) != '' ) {
+	if ( isset( $lafka_page_options['lafka_title_background_imgid'] ) && '' !== trim( $lafka_page_options['lafka_title_background_imgid'][0] ) ) {
 		$lafka_img                    = wp_get_attachment_image_src( $lafka_page_options['lafka_title_background_imgid'][0], 'full' );
 		$lafka_title_background_image = $lafka_img ? $lafka_img[0] : $lafka_img;
 	}
 
-	if ( isset( $lafka_page_options['lafka_title_alignment'] ) && trim( $lafka_page_options['lafka_title_alignment'][0] ) != '' ) {
+	if ( isset( $lafka_page_options['lafka_title_alignment'] ) && '' !== trim( $lafka_page_options['lafka_title_alignment'][0] ) ) {
 		$lafka_title_alignment = $lafka_page_options['lafka_title_alignment'][0];
 	}
 }
 
 $lafka_sidebar_choice = apply_filters( 'lafka_has_sidebar', '' );
 
-if ( $lafka_sidebar_choice != 'none' ) {
+if ( 'none' !== $lafka_sidebar_choice ) {
 	$lafka_has_sidebar = is_active_sidebar( $lafka_sidebar_choice );
 } else {
 	$lafka_has_sidebar = false;
 }
 $lafka_offcanvas_sidebar_choice = apply_filters( 'lafka_has_offcanvas_sidebar', '' );
 
-if ( $lafka_offcanvas_sidebar_choice != 'none' ) {
+if ( 'none' !== $lafka_offcanvas_sidebar_choice ) {
 	$lafka_has_offcanvas_sidebar = is_active_sidebar( $lafka_offcanvas_sidebar_choice );
 } else {
 	$lafka_has_offcanvas_sidebar = false;
@@ -90,13 +90,13 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 		<div class="inner fixed">
 			<div class="lafka-title-text-container">
 				<!-- BREADCRUMB -->
-				<?php if ( ( is_page() && $lafka_show_breadcrumb == 'yes' ) || ! is_page() ) : ?>
+				<?php if ( ( is_page() && 'yes' === $lafka_show_breadcrumb ) || ! is_page() ) : ?>
 					<?php lafka_breadcrumb(); ?>
 				<?php endif; ?>
 				<!-- END OF BREADCRUMB -->
 				<?php if ( is_tax() ) : ?>
 					<h1 class="heading-title"><?php single_term_title(); ?></h1>
-				<?php elseif ( is_page() && $lafka_show_title_page == 'yes' ) : ?>
+				<?php elseif ( is_page() && 'yes' === $lafka_show_title_page ) : ?>
 					<h1 class="heading-title"><?php the_title(); ?></h1>
 					<?php if ( $lafka_subtitle ) : ?>
 						<p class="section-subtitle"><?php echo esc_html( $lafka_subtitle ); ?></p>
@@ -168,7 +168,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 								?>
 								<li><a 
 								<?php
-								if ( is_tax() && get_queried_object()->term_id == $lafka_category->term_id ) {
+								if ( is_tax() && get_queried_object_id() === (int) $lafka_category->term_id ) {
 									echo 'class="is-checked"';}
 								?>
 								data-filter=".<?php echo esc_attr( $lafka_category->slug ); ?>" href="#"><?php echo esc_html( $lafka_category->name ); ?></a></li>
@@ -293,13 +293,13 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 										<?php if ( lafka_has_foodmenu_options( $lafka_foodmenu ) ) : ?>
 											<?php $lafka_foodmenu_options_array = lafka_get_foodmenu_options( $lafka_foodmenu ); ?>
 											<ul>
-												<?php foreach ( $lafka_foodmenu_options_array as $option => $price ) : ?>
+												<?php foreach ( $lafka_foodmenu_options_array as $lafka_option => $lafka_price ) : ?>
 													<li>
-														<?php if ( $option ) : ?>
-															<span class="lafka-foodmenu-option"><?php echo esc_html( $option ); ?></span>
+														<?php if ( $lafka_option ) : ?>
+															<span class="lafka-foodmenu-option"><?php echo esc_html( $lafka_option ); ?></span>
 														<?php endif; ?>
-														<?php if ( $price ) : ?>
-															<span class="lafka-foodmenu-price"><?php echo wp_kses_post( $price ); ?></span>
+														<?php if ( $lafka_price ) : ?>
+															<span class="lafka-foodmenu-price"><?php echo wp_kses_post( $lafka_price ); ?></span>
 														<?php endif; ?>
 													</li>
 												<?php endforeach; ?>
