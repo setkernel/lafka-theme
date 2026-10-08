@@ -614,7 +614,6 @@
 .woocommerce-cart h2.cross-sells__heading {
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-display);
-	font-size: 1.5rem;
 	color: var(--lafka-color-text-primary);
 	margin-block: var(--lafka-space-12) var(--lafka-space-3);
 	position: relative;

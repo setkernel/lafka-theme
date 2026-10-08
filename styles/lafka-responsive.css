@@ -737,7 +737,6 @@ and (orientation: landscape) {
     .woocommerce table.shop_table.shop_table_responsive.my_account_orders tr td::before, .woocommerce-page table.shop_table.shop_table_responsive.my_account_orders tr td::before {
         display: block;
         width: 100%;
-        float: none;
         margin-bottom: 8px;
         float: none;
         text-align: left;
@@ -749,7 +748,6 @@ and (orientation: landscape) {
 
     .woocommerce table.shop_table_responsive tr td::before, .woocommerce-page table.shop_table_responsive tr td::before {
         content: attr(data-title) ": ";
-        font-weight: 700;
         float: left;
         vertical-align: middle;
         font-weight: 400;

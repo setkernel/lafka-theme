@@ -92,7 +92,7 @@
             }
             const ageMs = Date.now() - stamp;
             return ageMs < SUPPRESS_DAYS * 86400 * 1000;
-        } catch (_err) {
+        } catch {
             return false;
         }
     }
@@ -100,7 +100,7 @@
     function suppress() {
         try {
             window.localStorage.setItem(STORAGE_KEY, String(Date.now()));
-        } catch (_err) {
+        } catch {
             // Private-browsing — silently degrade.
         }
     }
@@ -114,7 +114,7 @@
             const next = current + 1;
             window.sessionStorage.setItem(SESSION_KEY, String(next));
             return next;
-        } catch (_err) {
+        } catch {
             return threshold; // Treat as immediately past threshold so the prompt still works.
         }
     }

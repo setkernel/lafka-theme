@@ -133,7 +133,7 @@
 				// swallow — the dismiss meta on the next request still gates
 				// re-render, and the shown beacon is best-effort.
 			});
-		} catch (_err) {
+		} catch {
 			// no-op
 		}
 	}

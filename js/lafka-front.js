@@ -107,7 +107,7 @@
         // Order hours counter to the next opening
         lafkaInitSmallCountdowns($(document.body).find('div.lafka-closed-store-message'));
 
-        $('.woocommerce-review-link').on('click', function(event) {
+        $('.woocommerce-review-link').on('click', function() {
             $('#tab-reviews').trigger('click');
             $('html, body').animate({
                 scrollTop: $(".woocommerce-tabs").offset().top - 105
@@ -358,8 +358,8 @@
 
                     for (var i = 0; i < aArray.length; i++) {
                         var theID = aArray[i];
-                        var theHash = '';
-                        try { theHash = new URL(theID).hash; } catch(e) { continue; }
+                        var theHash;
+                        try { theHash = new URL(theID).hash; } catch { continue; }
                         if (!theHash || !/^#[a-zA-Z0-9_-]+$/.test(theHash)) continue;
                         var theEl = document.getElementById(theHash.slice(1));
                         if (theEl) {
@@ -372,7 +372,7 @@
                         }
                     }
 
-                    if (windowPos + windowHeight == docHeight) {
+                    if (windowPos + windowHeight === docHeight) {
                         if (!$("li.menu-item:last-child").hasClass("current-menu-item")) {
                             var navActiveCurrent = $("li.current-menu-item a").prop("href");
                             $("li.menu-item a").filter(function() { return this.href === navActiveCurrent; }).parent().removeClass("current-menu-item");
@@ -468,7 +468,7 @@
                                     }
                                 }
                             },
-                            complete: function(jqXHR, status) {
+                            complete: function() {
                                 $thisbutton.removeClass('loading');
                                 $thisbutton.prop('disabled', false);
                             }
@@ -492,7 +492,7 @@
 
             // If enabled load more button
             if (lafka_main_js_params.use_load_more_on_shop === 'yes') {
-                $(document.body).on('click', 'div.lafka-shop-pager.lafka-infinite button.lafka-load-more', function(e) {
+                $(document.body).on('click', 'div.lafka-shop-pager.lafka-infinite button.lafka-load-more', function() {
                     $(this).hide();
                     $(document.body).find('div.lafka-shop-pager.lafka-infinite a.next_page').trigger("click");
                 });
@@ -605,7 +605,7 @@
                 e.preventDefault();
             });
 
-            $(document.body).on('price_slider_change', function(event, ui) {
+            $(document.body).on('price_slider_change', function() {
                 var form = $('.price_slider').closest('form').get(0);
                 var $form = $(form);
 
@@ -631,7 +631,7 @@
         }
 
         // Share links
-        $(document.body).on('click', 'div.lafka-share-links a', function(e) {
+        $(document.body).on('click', 'div.lafka-share-links a', function() {
             window.open(this.href, 'targetWindow', 'toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=300');
             return false;
         });
@@ -667,7 +667,7 @@
     });
 
     // Handle the products filtering
-    $(document.body).on('lafka_products_filter_ajax', function(e, url, element) {
+    $(document.body).on('lafka_products_filter_ajax', function(e, url) {
 
         var $products_wrapper = $('#products-wrapper');
         var $products = $products_wrapper.find('div.box-products.woocommerce');
@@ -863,7 +863,7 @@
             var contentWidth = $contentDiv.width();
             var contentOffset = -(contentWidth - parseFloat($('#content > .inner').css("width"))) / 2 - row_padding + 15;
 
-            $elements.each(function(index) {
+            $elements.each(function() {
                 $(this).css({
                     'position': 'relative',
                     'box-sizing': 'border-box',
@@ -1008,10 +1008,8 @@
             var show_reset_button = false;
 
             var lafka_reset_query = $reset_button.data('lafka_reset_query');
-            var right_side_of_the_url = '';
-
             if (window.location.href.indexOf('?') !== -1) {
-                right_side_of_the_url = window.location.href.substr(window.location.href.indexOf('?'));
+                var right_side_of_the_url = window.location.href.substr(window.location.href.indexOf('?'));
                 if (right_side_of_the_url !== lafka_reset_query) {
                     show_reset_button = true;
                 }

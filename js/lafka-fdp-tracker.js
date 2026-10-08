@@ -128,7 +128,7 @@
 			// Fallback when threshold is disabled and no .lafka-fdp exists.
 			var sub = document.querySelector('.lafka-cart-drawer__subtotal strong');
 			if (sub) {
-				var raw = (sub.textContent || '').replace(/[^\d.\-]/g, '');
+				var raw = (sub.textContent || '').replace(/[^\d.-]/g, '');
 				var parsedVal = parseFloat(raw);
 				if (!isNaN(parsedVal)) {
 					value = parsedVal;
@@ -312,7 +312,7 @@
 		var currentValue = 0;
 		if (subtotalStrong) {
 			// Strip currency symbols + commas, parse the float.
-			var subtotalText = (subtotalStrong.textContent || '').replace(/[^\d.\-]/g, '');
+			var subtotalText = (subtotalStrong.textContent || '').replace(/[^\d.-]/g, '');
 			var parsedVal = parseFloat(subtotalText);
 			if (!isNaN(parsedVal)) {
 				currentValue = parsedVal;

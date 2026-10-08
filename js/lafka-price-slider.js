@@ -60,7 +60,7 @@ jQuery( function( $ ) {
             max: max_price,
             step: step,
             values: [current_min_price, current_max_price],
-            create: function (event, ui) {
+            create: function () {
 
                 $price_slider_form.find("#min_price").val(current_min_price);
                 $price_slider_form.find("#max_price").val(current_max_price);
@@ -79,7 +79,7 @@ jQuery( function( $ ) {
                 $body.trigger('price_slider_change', [ui.values[0], ui.values[1]]);
 
             },
-            stop: function (event, ui) {
+            stop: function () {
                 $.lafka_show_loader();
 
                 setTimeout(function () {
@@ -94,7 +94,7 @@ jQuery( function( $ ) {
             e.preventDefault();
         });
 
-        $(document.body).on('price_slider_change', function (event, ui) {
+        $(document.body).on('price_slider_change', function () {
             var form = $('.price_slider').closest('form').get(0);
             var $form = $(form);
 

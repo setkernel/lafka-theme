@@ -136,7 +136,7 @@
 	function alreadyShownThisSession() {
 		try {
 			return window.sessionStorage && 'true' === window.sessionStorage.getItem('lafka_exit_intent_shown');
-		} catch (_err) {
+		} catch {
 			// Private mode / disabled storage — treat as not shown so the
 			// toast can still fire (best-effort UX).
 			return false;
@@ -148,7 +148,7 @@
 			if (window.sessionStorage) {
 				window.sessionStorage.setItem('lafka_exit_intent_shown', 'true');
 			}
-		} catch (_err) {
+		} catch {
 			// no-op
 		}
 	}
@@ -353,8 +353,7 @@
 
 		// Force a layout flush before flipping data-visible so the CSS
 		// transition runs from the initial off-screen state.
-		// eslint-disable-next-line no-unused-expressions
-		parts.root.offsetWidth;
+		void parts.root.offsetWidth;
 		parts.root.dataset.visible = 'true';
 
 		pushEvent('exit_intent_shown', {

@@ -267,8 +267,6 @@ body.lafka_transparent_header .lafka_title_holder::before {
     z-index: 1;
 }
 
-.lafka_title_holder.title_has_image .inner {}
-
 body.lafka_transparent_header .lafka_title_holder.title_has_image .inner {
     padding-top: 190px;
     padding-bottom: 190px;
@@ -1208,7 +1206,6 @@ body.single-post .has-sidebar .lafka_post_data_holder {
     width: 21px;
     height: 21px;
     display: inline-block;
-    position: relative;
     z-index: 1000;
     float: none;
     margin: 0 3px 0 0;
@@ -1233,7 +1230,6 @@ body.single-post .has-sidebar .lafka_post_data_holder {
 
 .lafka_blog_masonry .blog-post {
     width: 33.3%;
-    border: none;
     margin: 0;
     vertical-align: top;
     margin-bottom: 10px;
@@ -1786,7 +1782,7 @@ body.woocommerce-account .content_holder #customer_login.col2-set .owl-nav butto
 }
 
 .content_holder li.lafka-shipping-no-options {
-    background-color: red;
+    background-color: #f00;
     color: #fff;
     padding: 8px;
     border-radius: 4px;

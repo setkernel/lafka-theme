@@ -18,6 +18,7 @@ export default [
 				lafka_main_js_params: "readonly",
 				lafka_owl_carousel_cat: "readonly",
 				lafka_rtl: "readonly",
+				lafka_quickview: "readonly",
 				// Lafka helpers (functions defined in other files / window-scoped)
 				lafkaUpdateUrlParameters: "writable",
 				lafkaInitSmallCountdowns: "writable",
@@ -32,13 +33,8 @@ export default [
 			"eqeqeq": ["warn", "smart"],
 			"no-var": "off",
 			"prefer-const": "off",
-			"no-prototype-builtins": "off",
 			// Allow user code to declare locals that shadow our wp_localize_script globals.
 			"no-redeclare": ["error", { "builtinGlobals": false }],
-			// Codebase pre-dates these modern rules — re-evaluate after a separate cleanup pass.
-			"no-useless-assignment": "off",
-			"no-useless-escape": "off",
-			"no-shadow-restricted-names": "off",
 		},
 	},
 	// Service worker file has its own global scope
@@ -56,7 +52,7 @@ export default [
 	// Node.js build scripts (ES modules) — e.g. scripts/sync-version.mjs.
 	// ecmaVersion 2022 for top-level await (nx2-04-preset-previews.mjs).
 	{
-		files: ["scripts/**/*.mjs"],
+		files: ["scripts/**/*.mjs", "eslint.config.mjs"],
 		languageOptions: {
 			ecmaVersion: 2022,
 			sourceType: "module",
@@ -69,10 +65,11 @@ export default [
 		ignores: [
 			"vendor/**",
 			"node_modules/**",
-			"eslint.config.mjs",
 			// Minified files are build artifacts — lint the source, not the output.
 			"**/*.min.js",
-			// Vendor JS libraries
+			// Third-party libraries, kept unmodified: Cloud Zoom (R Cecco), jQuery Countdown
+			// (Keith Wood), FlexSlider (WooThemes), Isotope, Magnific Popup, Owl Carousel,
+			// Nice Select, Typed.js.
 			"js/cloud-zoom/**",
 			"js/count/**",
 			"js/flex/**",
@@ -81,9 +78,6 @@ export default [
 			"js/magnific/**",
 			"js/owl-carousel2-dist/**",
 			"js/typed.min.js",
-			// Vendor admin JS
-			"incl/lafka-options-framework/**",
-			"incl/tgm-plugin-activation/**",
 		],
 	},
 ];

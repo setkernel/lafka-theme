@@ -61,13 +61,13 @@
     try {
       var rawV = formEl.getAttribute('data-product_variations');
       if (rawV) wcVariations = JSON.parse(rawV) || [];
-    } catch (e) { wcVariations = []; }
+    } catch { wcVariations = []; }
   }
 
   // Legacy: data-prices was a custom price map. Kept as a fallback only.
   var variationPrices;
   try { variationPrices = JSON.parse((root && root.dataset.prices) || '{}'); }
-  catch (e) { variationPrices = {}; }
+  catch { variationPrices = {}; }
 
   function getSelectedAttrs() {
     var attrs = {};
@@ -157,7 +157,7 @@
     var keys = Object.keys(variationPrices);
     for (var i = 0; i < keys.length; i++) {
       var stored;
-      try { stored = JSON.parse(keys[i]); } catch (e) { continue; }
+      try { stored = JSON.parse(keys[i]); } catch { continue; }
       var ok = true;
       var attrKeys = Object.keys(attrs);
       for (var j = 0; j < attrKeys.length; j++) {
@@ -200,7 +200,7 @@
               price = parseFloat(attrPrices[taxonomyName][slug]);
             }
           });
-        } catch (e) { /* fall through to flat price */ }
+        } catch { /* fall through to flat price */ }
       }
       // Flat-price fallback (addon without per-attribute pricing).
       if (price === null) {

@@ -282,7 +282,6 @@ h6,
 i {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    font-smoothing: antialiased;
 }
 
 input[type='checkbox'],
@@ -319,15 +318,6 @@ input[type="number"]::-webkit-outer-spin-button {
 body.lafka_boxed {
     padding-top: 0 !important;
 }
-
-/*
-body.lafka_boxed #header {
-    position: relative !important;
-    top: auto !important;
-    left: auto;
-    right: auto;
-}
-*/
 
 body.lafka_boxed #header {
     width: 100%;
@@ -453,7 +443,6 @@ code {
 ul,
 ul ul,
 ol ul {
-    list-style-type: disc;
     list-style: outside none disc;
     margin-left: 15px;
 }
@@ -1322,7 +1311,6 @@ label,
 table {
     border-collapse: separate;
     border-spacing: 0;
-    border-top-width: 5px;
     margin-bottom: 35px;
     border: 1px solid #efefef;
     width: 100%;
@@ -2147,7 +2135,6 @@ div.product-category.product a {
 #products-wrapper div.product-category.product a h2 {
     padding: 15px 20px;
     color: #333;
-    font-weight: 400;
     position: absolute;
     bottom: 20px;
     border-radius: 0 4px 4px 0;
@@ -2159,7 +2146,6 @@ div.product-category.product a {
 #products-wrapper div.product-category.product a h2.lafka-has-fancy {
     background: none !important;
     color: #fff;
-    left: 10px;
     font-size: 18px;
     display: block;
     text-transform: none;
@@ -3073,7 +3059,6 @@ button.single_add_to_cart_button:disabled:hover {
 }
 
 .prod_hold .lafka-variations-in-catalog.cart>span.lafka-list-variation-price {
-    padding-top: 3px;
     font-size: 14px;
     padding: 2px 7px;
 }
@@ -3128,7 +3113,6 @@ div.product div.images ol.flex-control-nav,
 }
 
 ul.additional-images li {
-    padding: 0;
     list-style: none;
     padding: 1px;
     margin: 0;
@@ -5032,7 +5016,6 @@ table.woocommerce-checkout-review-order-table td {
 
 .woocommerce-shipping-calculator select {
     width: 100%;
-    max-width: 100%;
     border: none !Important;
     border-radius: 2px;
     max-width: 100%;
@@ -6678,7 +6661,7 @@ a.btn.button.show-title-form i {
 
 .lafka-author-content .description {
     font-size: 17px;
-    font-weight: lighter; /* stylelint-disable-line font-weight-notation -- relative to the parent weight, no numeric equivalent */
+    font-weight: 300;
     line-height: 1.4;
     color: #666;
 }
@@ -7000,7 +6983,6 @@ p.stock {
     border-radius: 2em;
     display: inline-block;
     text-align: left;
-    clear: left;
     height: 34px;
     line-height: 34px;
     vertical-align: top;
@@ -8129,10 +8111,6 @@ div.product .cart div.lafka-wcs-swatches {
     height: 10px;
     display: block;
     border: solid #fff;
-    border-top-width: 2px;
-    border-right-width: 2px;
-    border-bottom-width: 2px;
-    border-left-width: 2px;
     border-width: 0 2px 2px 0;
     position: absolute;
     top: 9px;

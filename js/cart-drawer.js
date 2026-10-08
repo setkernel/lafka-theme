@@ -188,7 +188,7 @@
     var active = document.activeElement;
     if (active && active !== document.body && drawer.contains(active)) return;
     var rows = drawer.querySelectorAll('.lafka-cart-drawer__items > .lafka-cart-drawer__item');
-    var target = null;
+    var target;
     if (rows.length) {
       var row = rows[Math.min(index, rows.length - 1)];
       target = row.querySelector('.lafka-cart-drawer__remove') || row.querySelector('button:not([disabled]), a[href]');

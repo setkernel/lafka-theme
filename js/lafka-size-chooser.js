@@ -337,10 +337,11 @@
 
 	/* Render the sections when `id` is inside or after them; return the target. */
 	function prepare( id ) {
-		var target = null;
+		var target;
 		try {
 			target = id ? document.getElementById( decodeURIComponent( id ) ) : null;
-		} catch ( e ) { // eslint-disable-line no-unused-vars -- a malformed %-escape is just "no target".
+		} catch {
+			// A malformed %-escape is just "no target".
 			target = null;
 		}
 		if ( ! target ) {

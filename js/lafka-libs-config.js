@@ -59,7 +59,7 @@
 		 *********************************/
 		if (typeof lafka_ajax_search !== 'undefined') {
 			var touch = $('html.touch');
-			if (touch.length == 0) {
+			if (touch.length === 0) {
 				new $.LafkaAjaxSearch();
 			}
 		}
@@ -259,14 +259,14 @@
 						{
 							clearTimeout(this.timer);
 							//if the field is empty - clear the results
-							if (e.currentTarget.value.trim().length == '') {
+							if (e.currentTarget.value.trim().length === 0) {
 								var result = $('.ajax_search_result');
 								if (result)
 									result.remove();
 							}
 
 							//only execute search if chars are at least "minChars" and search differs from last one
-							if (e.currentTarget.value.length >= this.options.minChars && this.lastVal != e.currentTarget.value.trim())
+							if (e.currentTarget.value.length >= this.options.minChars && this.lastVal !== e.currentTarget.value.trim())
 							{
 								//wait at least "delay" miliseconds to execute ajax. if user types again during that time dont execute
 								this.timer = setTimeout(this.execute_search.bind(this, e), this.options.delay);
@@ -274,8 +274,7 @@
 						},
 						execute_search: function (e)
 						{
-							var obj = this,
-											currentField = $(e.currentTarget).attr("autocomplete", "off"),
+							var currentField = $(e.currentTarget).attr("autocomplete", "off"),
 											form = currentField.parents('form:eq(0)'),
 											results = form.find('.ajax_search_result'),
 											loading = $('<div class="ajax_loading"><span class="ajax_loading_inner"></span></div>'),
@@ -283,7 +282,7 @@
 											values = form.serialize();
 							values += '&action=lafka_ajax_search&security=' + encodeURIComponent(lafka_main_js_params.nonce);
 							//check if the form got get parameters applied and also apply them
-							if (action.indexOf('?') != -1)
+							if (action.indexOf('?') !== -1)
 							{
 								action = action.split('?');
 								values += "&" + action[1];
@@ -292,7 +291,7 @@
 							if (!results.length)
 								results = $('<div class="ajax_search_result"></div>').appendTo(form);
 							//return if we already hit a no result and user is still typing
-							if (results.find('.ajax_not_found').length && e.currentTarget.value.indexOf(this.lastVal) != -1) {
+							if (results.find('.ajax_not_found').length && e.currentTarget.value.indexOf(this.lastVal) !== -1) {
 								return;
 							}
 							this.lastVal = e.currentTarget.value;
@@ -308,7 +307,7 @@
 								},
 								success: function (response)
 								{
-									if (response == 0)
+									if (Number(response) === 0)
 										response = "";
 									results.html(response);
 								},
@@ -329,8 +328,7 @@
  * "lafka-quickview"
  *********************/
 if (typeof lafka_quickview !== 'undefined') {
-    /*global lafka_quickview, wc_cart_fragments_params */
-    ;(function ($, window, document, undefined) {
+    ;(function ($, window, document) {
         /**
          * LafkaVariationForm class which handles variation forms and attributes.
          */
@@ -535,9 +533,8 @@ if (typeof lafka_quickview !== 'undefined') {
                 $dimensions = form.$product.find('.product_dimensions, .woocommerce-product-attributes-item--dimensions .woocommerce-product-attributes-item__value'),
                 $qty = form.$singleVariationWrap.find('.quantity'),
                 purchasable = true,
-                variation_id = '',
-                template = false,
-                $template_html = '';
+                template,
+                $template_html;
 
             if (variation.sku) {
                 $sku.wc_set_content(variation.sku);
@@ -564,7 +561,6 @@ if (typeof lafka_quickview !== 'undefined') {
                 template = wp.template('unavailable-variation-template');
             } else {
                 template = wp.template('variation-template');
-                variation_id = variation.variation_id;
             }
 
             $template_html = template({
@@ -637,7 +633,7 @@ if (typeof lafka_quickview !== 'undefined') {
                     current_attr_name = current_attr_select.data('attribute_name') || current_attr_select.attr('name'),
                     show_option_none = $(el).data('show_option_none'),
                     option_gt_filter = ':gt(0)',
-                    attached_options_count = 0,
+                    attached_options_count,
                     new_attr_select = $('<select/>'),
                     selected_attr_val = current_attr_select.val() || '',
                     selected_attr_val_valid = true;
@@ -668,7 +664,7 @@ if (typeof lafka_quickview !== 'undefined') {
                         var variationAttributes = variations[num].attributes;
 
                         for (var attr_name in variationAttributes) {
-                            if (variationAttributes.hasOwnProperty(attr_name)) {
+                            if (Object.prototype.hasOwnProperty.call(variationAttributes, attr_name)) {
                                 var attr_val = variationAttributes[attr_name],
                                     variation_active = '';
 
@@ -810,7 +806,7 @@ if (typeof lafka_quickview !== 'undefined') {
         LafkaVariationForm.prototype.isMatch = function (variation_attributes, attributes) {
             var match = true;
             for (var attr_name in variation_attributes) {
-                if (variation_attributes.hasOwnProperty(attr_name)) {
+                if (Object.prototype.hasOwnProperty.call(variation_attributes, attr_name)) {
                     var val1 = variation_attributes[attr_name];
                     var val2 = attributes[attr_name];
                     if (val1 !== undefined && val2 !== undefined && val1.length !== 0 && val2.length !== 0 && val1 !== val2) {
@@ -1024,7 +1020,7 @@ if (typeof lafka_quickview !== 'undefined') {
             variations_match: function (attrs1, attrs2) {
                 var match = true;
                 for (var attr_name in attrs1) {
-                    if (attrs1.hasOwnProperty(attr_name)) {
+                    if (Object.prototype.hasOwnProperty.call(attrs1, attr_name)) {
                         var val1 = attrs1[attr_name];
                         var val2 = attrs2[attr_name];
                         if (val1 !== undefined && val2 !== undefined && val1.length !== 0 && val2.length !== 0 && val1 !== val2) {

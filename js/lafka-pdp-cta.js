@@ -45,7 +45,7 @@
 	function readVariations(form) {
 		try {
 			return JSON.parse(form.dataset.product_variations || '[]');
-		} catch (_e) {
+		} catch {
 			return [];
 		}
 	}
@@ -137,7 +137,7 @@
 		if (!raw) { return null; }
 		try {
 			return JSON.parse(raw);
-		} catch (_e) {
+		} catch {
 			return null;
 		}
 	}

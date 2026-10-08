@@ -151,7 +151,7 @@
 
 .lafka-review-banner__cta:hover,
 .lafka-review-banner__cta:focus-visible {
-	background: var(--lafka-color-success-600, color-mix(in srgb, var(--lafka-color-success-500) 85%, black));
+	background: var(--lafka-color-success-600, color-mix(in srgb, var(--lafka-color-success-500) 85%, #000));
 	color: #fff;
 	text-decoration: none;
 }

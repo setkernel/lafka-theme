@@ -121,7 +121,6 @@ body {
 /* ── SCREEN-READER-ONLY HELPER ── */
 .screen-reader-text {
     border: 0;
-    clip: rect(1px, 1px, 1px, 1px); /* stylelint-disable-line property-no-deprecated -- legacy fallback for clip-path (WP core pattern) */
     -webkit-clip-path: inset(50%);
     clip-path: inset(50%);
     height: 1px;

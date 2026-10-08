@@ -104,14 +104,14 @@ self.addEventListener('push', (event) => {
     if (!event || !event.data) {
         return;
     }
-    let payload = {};
+    let payload;
     try {
         payload = event.data.json();
-    } catch (_err) {
+    } catch {
         // Older sender or malformed payload — fall back to text.
         try {
             payload = { title: 'Update', body: event.data.text() };
-        } catch (_err2) {
+        } catch {
             payload = { title: 'Update', body: '' };
         }
     }
