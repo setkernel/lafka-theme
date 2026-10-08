@@ -5,15 +5,12 @@ if ( ! defined( 'LAFKA_IMAGES_PATH' ) ) {
 	define( 'LAFKA_IMAGES_PATH', get_template_directory_uri() . '/image/' );
 }
 
-// Check if WooCommerce is active (supports regular plugins and MU-plugins)
+// Whether WooCommerce is loaded. The theme loads after every plugin, so the
+// class is the source of truth; the active-plugins list is not, because
+// requests that skip plugins (wp-activate.php sets WP_INSTALLING) still list
+// it and then fatal on the first WooCommerce call.
 if ( ! defined( 'LAFKA_IS_WOOCOMMERCE' ) ) {
-	if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true )
-		|| ( is_multisite() && array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins', array() ) ) )
-		|| class_exists( 'WooCommerce' ) ) {
-		define( 'LAFKA_IS_WOOCOMMERCE', true );
-	} else {
-		define( 'LAFKA_IS_WOOCOMMERCE', false );
-	}
+	define( 'LAFKA_IS_WOOCOMMERCE', class_exists( 'WooCommerce' ) );
 }
 if ( LAFKA_IS_WOOCOMMERCE ) {
 	require_once get_template_directory() . '/incl/woocommerce-functions.php';
