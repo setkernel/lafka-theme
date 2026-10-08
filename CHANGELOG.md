@@ -7,6 +7,43 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Settings, data and wiring
+- **Footer social links render.** They come from the plugin's Social Profiles
+  (`lafka_theme_social_links()`, recognised by host: Facebook, Instagram, TikTok, X, Pinterest,
+  LinkedIn) in both the classic and the counter footer; the three theme_mods nothing set are gone.
+- **Real reviews only.** The home reviews band shows the store's real approved WooCommerce product
+  reviews (`lafka_get_store_reviews()`, 4 stars and up) and is hidden until there are some; its rating
+  line is the Social Proof provider rating or the average of the store's own reviews. The hand-typed
+  review and rating Customizer fields are removed. The product page's reviews card reads only the
+  product's own reviews, with each review's real star count.
+- **Copy you could not edit now has Customizer fields**: footer about text, contact-page hours note
+  and photo, the three "How it works" steps, the visit-card photo (Lafka — Site text, Home Page).
+  Step 3's default no longer claims "about 25 minutes". The contact-page FAQ is read from the plugin
+  (WooCommerce → Settings → Restaurant → Contact FAQ); the standard questions still show until the
+  operator writes their own.
+- Plugin settings (push, review banner, prep time) are read with `lafka_setting()`. The deals
+  category (`lafka_counter_deals_cat` Customizer field) is the plugin's `lafka_get_deals_category_id()`;
+  the `lafka_counter_deals_slugs` filter is now the plugin's `lafka_deals_category_slugs`.
+- `tel:` links use `phone_tel` from the restaurant info instead of rebuilding the number eight times;
+  the phone display reuses the plugin's bare-number test.
+- The page edit-screen options (layout, header style, subtitle, top menu, sidebars, product video,
+  gallery type) moved here from the plugin (`incl/admin/lafka-metaboxes.php`, keys unchanged). The
+  header-style key typo `lafka_header_syle` is read as a fallback and rewritten to
+  `lafka_header_style` on save.
+- The home hero image answers the plugin's `lafka_home_hero_image_id` filter, so the LCP preload has
+  one source.
+- Push: the service worker is served from `/?lafka_sw=1` (`incl/system/lafka-service-worker.php`), the
+  site root, so registering it with scope `/` no longer fails; the subscribe prompt reads the VAPID
+  config from the plugin.
+- The store-closed countdown restarts on `.lafka-store-closed-card` (the selector nothing emitted is
+  gone, with its CSS).
+
+### Removed
+- Styles and defaults of the promo tooltips and product pop-up (the features left the plugin), the
+  `lafka_counter_deals_cat` field, the unused `Lafka_Color_Contrast` helper (preset contrast checks
+  return with the test suite), `lafka_preset_display_preload_href()`, the Magnific-era gallery click
+  handler, and the `deliveryLabel` script parameter.
+
 ### Added
 - Order tracker styling (`styles/lafka-order-tracker.css`) for the plugin's Order tracking
   stepper: large type and dots, vertical on phones and in a row from 640 px; "Order this
