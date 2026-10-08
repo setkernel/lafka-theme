@@ -621,3 +621,17 @@
 	line-height: 1.45;
 	overflow-wrap: anywhere;
 }
+
+/* "We can't deliver that far" (no delivery rate on offer): the reason the classic
+ * cart shows, in WooCommerce's place. Warm edge, primary text. */
+.lafka-block-delivery-unavailable {
+	border-left-color: var(--lafka-color-warning-500);
+	color: var(--lafka-color-text-primary);
+}
+
+/* WooCommerce's generic "No shipping options are available" banner gives way to
+ * the specific reason above (the classic cart does the same through
+ * woocommerce_no_shipping_available_html). */
+.wc-block-components-shipping-rates-control:has(.lafka-block-delivery-unavailable) .wc-block-components-shipping-rates-control__no-results-notice {
+	display: none;
+}
