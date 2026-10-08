@@ -43,7 +43,7 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 	// visible text. The default computed accessible name is correct.
 	?>
 	<?php
-	// v6.14.0: select_item tracking contract (docs/TRACKING.md). lafka-dl-client.js
+	// v6.14.0: select_item tracking contract (lafka-plugin docs/OPERATOR_GUIDE.md). lafka-dl-client.js
 	// reads these data-attrs on the card link to push the GA4 select_item event.
 	$lafka_card_cats = wp_get_post_terms( $product->get_id(), 'product_cat', array( 'fields' => 'names' ) );
 	$lafka_card_cat  = ( ! is_wp_error( $lafka_card_cats ) && ! empty( $lafka_card_cats ) ) ? (string) $lafka_card_cats[0] : '';

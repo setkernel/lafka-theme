@@ -7,7 +7,7 @@
  * customers the website is the cheaper, direct way to order, in three contexts
  * (home value-strip, menu badge, cart/checkout reassurance line). The CTAs carry
  * the data-lafka-order-channel="direct" contract so order_channel_click fires
- * (see lafka-plugin/docs/TRACKING.md).
+ * (see lafka-plugin/docs/OPERATOR_GUIDE.md, Tracking).
  *
  * All copy is honest + operator-tunable; filter `lafka_direct_value_data`.
  *

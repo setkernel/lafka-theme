@@ -57,7 +57,7 @@ if ( $lafka_row_p->is_featured() && ! in_array( 'popular', $lafka_row_tags, true
 	$lafka_row_tags[] = 'popular';
 }
 
-// GA4 select_item contract (docs/TRACKING.md), on the name link.
+// GA4 select_item contract (lafka-plugin docs/OPERATOR_GUIDE.md), on the name link.
 $lafka_row_cats = wp_get_post_terms( $lafka_row_id, 'product_cat', array( 'fields' => 'names' ) );
 $lafka_row_cat  = is_array( $lafka_row_cats ) && $lafka_row_cats ? (string) $lafka_row_cats[0] : '';
 if ( isset( $args['list'] ) ) {

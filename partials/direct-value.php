@@ -5,7 +5,7 @@
  * Rendered via lafka_render_direct_value( $context ) which sets
  * $GLOBALS['lafka_direct_value_context'] to: home | menu | cart | checkout.
  * Data + Customizer in incl/customizer-direct-value.php. The CTA carries the
- * data-lafka-order-channel="direct" contract (docs/TRACKING.md).
+ * data-lafka-order-channel="direct" contract (lafka-plugin docs/OPERATOR_GUIDE.md).
  *
  * @package Lafka
  * @since   6.14.0

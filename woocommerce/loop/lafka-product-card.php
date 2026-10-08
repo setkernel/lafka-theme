@@ -66,7 +66,7 @@ $lafka_arch_tags_attr = implode( ',', $lafka_arch_tag_slugs );
 // v6.14.0: the quick-add render fn + GA4 select_item both key off global $product.
 wc_setup_product_data( $lafka_arch_p->get_id() );
 
-// select_item tracking contract (docs/TRACKING.md): lafka-dl-client.js reads
+// select_item tracking contract (lafka-plugin docs/OPERATOR_GUIDE.md): lafka-dl-client.js reads
 // these on the card link to push GA4 select_item.
 $lafka_arch_cat_names = wp_get_post_terms( $lafka_arch_p->get_id(), 'product_cat', array( 'fields' => 'names' ) );
 $lafka_arch_cat       = ( ! is_wp_error( $lafka_arch_cat_names ) && ! empty( $lafka_arch_cat_names ) ) ? (string) $lafka_arch_cat_names[0] : '';
