@@ -67,8 +67,6 @@ export default [
 			"node_modules/**",
 			// Minified files are build artifacts — lint the source, not the output.
 			"**/*.min.js",
-			// Third-party library, kept unmodified: Magnific Popup.
-			"js/magnific/**",
 		],
 	},
 ];

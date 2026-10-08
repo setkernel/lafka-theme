@@ -1539,11 +1539,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			lafka_enqueue_countdown();
 		}
 
-		// P3-04: magnific replaced by lafka-dialog (native <dialog>). The
-		// vendor magnific.js + css are still registered (plugin side) so
-		// the branch-locations modal — which is a critical-path ordering
-		// flow and ships as a pre-minified vendor file — can still depend
-		// on it. Everywhere else uses window.lafkaDialog.
+		// Popups use lafka-dialog (native <dialog>).
 		wp_enqueue_script( 'lafka-dialog', get_template_directory_uri() . '/js/lafka-dialog.js', array(), lafka_asset_version( '/js/lafka-dialog.js' ), $footer_defer );
 		wp_enqueue_style( 'lafka-dialog', get_template_directory_uri() . '/styles/lafka-dialog.css', array(), lafka_asset_version( '/styles/lafka-dialog.css' ) );
 

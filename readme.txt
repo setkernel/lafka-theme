@@ -141,7 +141,6 @@ Scripts and styles (verified from the bundled file headers):
 
 * Icons — drawn for Lafka as inline SVG (`incl/template-helpers/icons.php`),
   GPLv2 or later with the theme. No icon font is bundled.
-* Magnific Popup v1.1.0 — MIT — Copyright 2016 Dmitry Semenov (`js/magnific/`).
 
 Other vendored libraries not enumerated above (for example the remaining helper
 scripts under `js/`) are pending the same NX5-01 GPL audit.

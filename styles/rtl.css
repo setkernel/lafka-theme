@@ -19,7 +19,7 @@ RTL Specific Styles For lafka Theme by Althemist
 	right: -7px;
 }
 
-caption, th, td, .mfp-content, .lafka-change-branch {
+caption, th, td, .lafka-change-branch {
     text-align: right;
 }
 

@@ -19,22 +19,10 @@
  * @since lafka-theme 6.21.0 (NX1-04b)
  * ========================================================================= */
 
-/* -------- Dormant Magnific popup source (root-cause hide) -------------- *
- * The classic shipping-areas branch modal is inline popup source kept hidden by
- * Magnific Popup's `.mfp-hide { display:none }` rule — which lives in the
- * magnific stylesheet the theme only enqueues on pages that open a popup. On a
- * block cart/checkout page that sheet isn't loaded, so the dormant branch form
- * (delivery/pickup bar + submit) leaks in below the footer. Restore the hide
- * here (this sheet only loads on block cart/checkout). Magnific strips
- * `.mfp-hide` when it actually opens a popup, so an opened popup is unaffected. */
-.mfp-hide {
-	display: none !important;
-}
-
 /* In blocks mode the block checkout's own order_type / branch selects
  * (Additional Checkout Fields API) are the canonical fulfilment controls, so
- * the classic branch-selection modal is redundant regardless — belt-and-braces
- * hide in case a host renders it outside an .mfp-hide wrapper. */
+ * the classic branch-selection popup is redundant (it is a <dialog>, hidden
+ * until opened; this also hides its branch picker if a host prints it). */
 .lafka-branch-selection {
 	display: none !important;
 }
