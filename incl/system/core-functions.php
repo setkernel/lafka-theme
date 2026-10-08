@@ -1638,12 +1638,18 @@ if ( ! function_exists( 'lafka_dequeue_irrelevant_plugin_assets' ) ) {
 		// Authorize.net CIM gateway assets are only needed on checkout
 		// (card form) + account (saved cards). On every other page they
 		// add ~30KB of render-blocking CSS for nothing.
+		// The SkyVerge framework puts its version in the handle
+		// (sv-wc-payment-gateway-payment-form-v6_2_4), so the handles are matched
+		// by pattern on what is enqueued, never by one pinned version.
 		if ( ! $is_checkout_or_account ) {
-			wp_dequeue_style( 'sv-wc-payment-gateway-payment-form' );
-			wp_dequeue_style( 'wc-authorize-net-cim-checkout-block' );
-			wp_dequeue_style( 'wc-authorize-net-cim-credit-card' );
-			wp_dequeue_script( 'sv-wc-payment-gateway-payment-form-v5_15_4' );
-			wp_dequeue_script( 'wc-authorize-net-cim' );
+			$lafka_gateway_handle = '/^(wc-authorize-net-cim|sv-wc-payment-gateway-payment-form)(-|$)/';
+			foreach ( array( wp_styles(), wp_scripts() ) as $lafka_assets ) {
+				foreach ( $lafka_assets->queue as $lafka_handle ) {
+					if ( 1 === preg_match( $lafka_gateway_handle, (string) $lafka_handle ) ) {
+						$lafka_assets->dequeue( $lafka_handle );
+					}
+				}
+			}
 		}
 	}
 }
