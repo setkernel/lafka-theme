@@ -449,7 +449,7 @@ while ( have_posts() ) :
 														</a>
 													<?php endif; ?>
 												<?php else : ?>
-													<img src="<?php echo esc_attr( LAFKA_IMAGES_PATH . 'cat_not_found-small.png' ); ?>" alt="<?php esc_html_e( 'No image available', 'lafka' ); ?>" />
+													<img src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cat_not_found-small.png' ); ?>" alt="<?php esc_attr_e( 'No image available', 'lafka' ); ?>" />
 												<?php endif; ?>
 											<?php endif; ?>
 											<div class="foodmenu-unit-info">
