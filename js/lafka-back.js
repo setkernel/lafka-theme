@@ -4,18 +4,6 @@
 (function ($) {
 	"use strict";
 	$(document).ready(function () {
-		// Proper position featured images metaboxes
-		const featured_img_meta = $('#postimagediv');
-		const featured_imgs_arr = new Array();
-		if (featured_img_meta.length) {
-			for (let i = 6; i >= 2; i--) {
-				featured_imgs_arr[i] = $('#lafka_featured_' + i);
-				if (featured_imgs_arr[i].length) {
-					featured_imgs_arr[i].detach().insertAfter(featured_img_meta);
-				}
-			}
-		}
-
         // Proper position Product Gallery Type Options metabox
         const product_gallery_options_meta = $('#lafka_product_gallery_type');
 		const product_gallery_meta = $('#woocommerce-product-images');

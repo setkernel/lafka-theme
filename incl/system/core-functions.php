@@ -383,9 +383,6 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 		}
 
 		if ( $needs_editor || $needs_options ) {
-			wp_register_script( 'lafka-medialibrary-uploader', get_template_directory_uri() . '/js/lafka-medialibrary-uploader.js', array( 'jquery-ui-accordion', 'media-upload' ), lafka_asset_version( '/js/lafka-medialibrary-uploader.js' ), true );
-			wp_enqueue_script( 'lafka-medialibrary-uploader' );
-
 			// wp-color-picker
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );
@@ -407,32 +404,6 @@ add_action( 'admin_enqueue_scripts', 'lafka_enqueue_admin_js' );
 
 // Block-editor content styles (iframed canvas, WP 7.1) — enqueue_block_assets, admin only.
 require_once __DIR__ . '/lafka-editor-styles.php';
-
-/**
- * Checks if post has 'lafka_video_bckgr_url' meta
- * and return the custom fields.
- * If not - returns false
- *
- * @return boolean
- */
-if ( ! function_exists( 'lafka_has_post_video_bckgr' ) ) {
-
-	function lafka_has_post_video_bckgr() {
-
-		$custom = false;
-
-		if ( is_singular() ) {
-			$custom = get_post_custom();
-		}
-
-		if ( $custom && array_key_exists( 'lafka_video_bckgr_url', $custom ) && $custom['lafka_video_bckgr_url'][0] ) {
-			return $custom;
-		}
-
-		return false;
-	}
-
-}
 
 /**
  * Used to generate slugs
@@ -487,29 +458,6 @@ if ( ! function_exists( 'lafka_get_taxonomy_parents' ) ) {
 			$chain .= $name . $separator;
 		}
 		return $chain;
-	}
-
-}
-
-if ( ! function_exists( 'lafka_get_more_featured_images' ) ) {
-
-	/**
-	 * Get custom featured images by post_id
-	 *
-	 * @param int $post_id
-	 * @return array of custom featured images. If not - empty array
-	 */
-	function lafka_get_more_featured_images( $post_id ) {
-		$featured_imgs = array();
-		$post_meta     = get_post_meta( $post_id );
-
-		for ( $i = 2; $i <= 6; $i++ ) {
-			if ( isset( $post_meta[ 'lafka_featured_imgid_' . $i ][0] ) && $post_meta[ 'lafka_featured_imgid_' . $i ][0] ) {
-				$featured_imgs[ 'lafka_featured_imgid_' . $i ] = $post_meta[ 'lafka_featured_imgid_' . $i ][0];
-			}
-		}
-
-		return $featured_imgs;
 	}
 
 }
@@ -1871,41 +1819,6 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 		}
 
 		return isset( $all_defaults[ $name ] ) ? $all_defaults[ $name ] : false;
-	}
-
-}
-
-if ( ! function_exists( 'lafka_has_to_include_backgr_video' ) ) {
-
-	/**
-	 * Checks if video background js plugin has to be included
-	 * and returns the places that is should appear, or
-	 * false if not.
-	 *
-	 * @global type $post
-	 * @param type $is_compare
-	 * @return string|boolean
-	 */
-	function lafka_has_to_include_backgr_video( $is_compare = false ) {
-
-		// The post has video background
-		if ( lafka_has_post_video_bckgr() ) {
-			return 'postmeta';
-			// If is blog page and video background is set
-		} elseif ( lafka_is_blog() && get_theme_mod( 'lafka_show_blog_video_bckgr', false ) && get_theme_mod( 'lafka_blog_video_bckgr_url', '' ) ) {
-			return 'blog';
-			// If is shopwide
-		} elseif ( ! $is_compare && LAFKA_IS_WOOCOMMERCE && is_woocommerce() && get_theme_mod( 'lafka_show_shop_video_bckgr', false ) && get_theme_mod( 'lafka_shopwide_video_bckgr', '0' ) && get_theme_mod( 'lafka_shop_video_bckgr_url', '' ) ) {
-			return 'shopwide';
-			// If is shop page and video background is set
-		} elseif ( ! $is_compare && LAFKA_IS_WOOCOMMERCE && is_shop() && get_theme_mod( 'lafka_show_shop_video_bckgr', false ) && get_theme_mod( 'lafka_shop_video_bckgr_url', '' ) ) {
-			return 'shop';
-			// If Global video background is set
-		} elseif ( ! $is_compare && get_theme_mod( 'lafka_show_video_bckgr', false ) && get_theme_mod( 'lafka_video_bckgr_url', '' ) ) {
-			return 'global';
-		}
-
-		return false;
 	}
 
 }

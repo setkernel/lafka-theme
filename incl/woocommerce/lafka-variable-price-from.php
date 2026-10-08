@@ -52,4 +52,3 @@ if ( ! function_exists( 'lafka_variable_price_from' ) ) {
 	}
 }
 add_filter( 'woocommerce_variable_price_html', 'lafka_variable_price_from', 10, 2 );
-add_filter( 'woocommerce_variable_sale_price_html', 'lafka_variable_price_from', 10, 2 );

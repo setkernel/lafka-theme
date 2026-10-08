@@ -1339,7 +1339,7 @@ if ( ! function_exists( 'lafka_quantity_input_on_listing' ) ) {
 			global $product;
 			$lafka_listing_product = $product && is_a( $product, 'WC_Product' ) ? $product : wc_get_product( get_the_ID() );
 
-			if ( ! empty( $lafka_listing_product ) && $lafka_listing_product->is_purchasable() && ! $lafka_listing_product->is_sold_individually() && $lafka_listing_product->is_in_stock() && 'variable' !== $lafka_listing_product->get_type() && 'bundle' !== $lafka_listing_product->get_type() && 'combo' !== $lafka_listing_product->get_type() ) {
+			if ( ! empty( $lafka_listing_product ) && $lafka_listing_product->is_purchasable() && ! $lafka_listing_product->is_sold_individually() && $lafka_listing_product->is_in_stock() && 'variable' !== $lafka_listing_product->get_type() && 'bundle' !== $lafka_listing_product->get_type() ) {
 				woocommerce_quantity_input(
 					array(
 						'min_value' => 1,

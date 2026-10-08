@@ -52,7 +52,7 @@ echo wp_kses(
 <?php endif; ?>
 <?php
 // Do not show quickview link for composite products as it is too complex for the user
-if ( get_theme_mod( 'lafka_use_quickview', true ) && ! in_array( $product->get_type(), array( 'composite', 'bundle', 'combo' ), true ) ) {
+if ( get_theme_mod( 'lafka_use_quickview', true ) && ! in_array( $product->get_type(), array( 'composite', 'bundle' ), true ) ) {
 	$lafka_classes = array( 'lafka-quick-view-link' );
 
 	if ( lafka_is_product_eligible_for_variation_in_listings( $product ) ) {

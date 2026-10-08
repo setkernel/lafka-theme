@@ -164,6 +164,19 @@ git tags + GitHub Releases.
   mail / phone, the old contact-form messages, the `#toggle_switch` slider and its script)
   are gone.
 
+- **Readers of retired meta and settings**: `lafka_get_more_featured_images()`,
+  `lafka_has_post_video_bckgr()`, `lafka_has_to_include_backgr_video()` and the
+  `lafka-page-has-video-background` body class (no style used it),
+  `js/lafka-medialibrary-uploader.js` (its only buttons were the removed image pickers) and
+  the featured-image meta-box positioning in `lafka-back.js`. 43 settings that nothing reads
+  leave the legacy-option migration map (and the 12 of them registered in the Customizer
+  bridge): the top-bar, collapsible, main-menu and footer-bar colours, the main / top menu
+  and text-logo typography, header / footer width, sticky header, cart-on-add, the
+  food-menu settings and the seven video-background settings.
+- Dead `combo` product-type branches (`woocommerce/loop/sale-flash.php`,
+  `woocommerce/loop/add-to-cart.php`, the listing quantity check) and the
+  `woocommerce_variable_sale_price_html` filter, which WooCommerce 11 never applies.
+
 ## [7.3.0] — 2026-09-25
 
 Live-site QA sharpening (2026-09-25); pairs with lafka-plugin 10.3.0.

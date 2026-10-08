@@ -687,9 +687,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 * Register the layout/behaviour theme_mod SETTINGS this slice migrated off
 		 * the legacy Options Framework: the site-wide selects + checkboxes that
 		 * drive body classes (functions.php), the enqueue/localize + sidebar /
-		 * menu / video-background resolvers (core-functions.php), the WooCommerce
-		 * shop layout (woocommerce-functions.php), and the shop / product /
-		 * foodmenu / blog / sidebar templates.
+		 * menu resolvers (core-functions.php), the WooCommerce shop layout
+		 * (woocommerce-functions.php), and the shop / product / blog / sidebar
+		 * templates.
 		 *
 		 * Each is a first-class `lafka_<key>` theme_mod carrying the SAME
 		 * Options-Framework `std` default and a shape-appropriate sanitizer, so a
@@ -730,16 +730,9 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_enable_shop_cat_carousel'   => 1,
 				'lafka_show_pricefilter'           => 1,
 				'lafka_show_products_limit'        => 1,
-				'lafka_show_shop_video_bckgr'      => 0,
-				'lafka_show_related_menu_entries'  => 1,
-				'lafka_show_light_menu_entries'    => 1,
-				'lafka_hide_foodmenu_images'       => 0,
-				'lafka_foodmenu_simple_menu'       => 0,
-				'lafka_show_video_bckgr'           => 0,
 				'lafka_show_blog_title'            => 1,
 				'lafka_show_author_info'           => 1,
 				'lafka_show_author_avatar'         => 1,
-				'lafka_show_blog_video_bckgr'      => 0,
 				'lafka_show_sidebar_shop'          => 0,
 				'lafka_show_sidebar_product'       => 0,
 				'lafka_github_updates_enabled'     => 1,
@@ -778,9 +771,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_use_countdown'                   => 'enabled',
 				'lafka_category_columns_num'            => '3',
 				'lafka_shop_default_product_columns'    => 'columns-3',
-				'lafka_shopwide_video_bckgr'            => '0',
-				'lafka_shop_video_bckgr_url'            => '',
-				'lafka_video_bckgr_url'                 => '',
 				'lafka_general_blog_style'              => '',
 				'lafka_blog_top_menu'                   => 'default',
 				'lafka_blog_header_style'               => '',
@@ -788,12 +778,10 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_blog_subtitle'                   => '',
 				'lafka_blog_title_alignment'            => 'centered_title',
 				'lafka_blog_pages_width'                => 'lafka-fullwidth-blog-pages',
-				'lafka_blog_video_bckgr_url'            => '',
 				'lafka_sidebar_position'                => 'lafka-right-sidebar',
 				'lafka_sidebar_ids'                     => '',
 				'lafka_blog_categoty_sidebar'           => 'right_sidebar',
 				'lafka_blog_sidebar_position'           => 'default',
-				'lafka_foodmenu_categoty_sidebar'       => 'none',
 				'lafka_shop_sidebar_position'           => 'default',
 				'lafka_product_sidebar_position'        => 'default',
 				'lafka_offcanvas_sidebar'               => 'none',

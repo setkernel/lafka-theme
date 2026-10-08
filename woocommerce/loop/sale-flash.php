@@ -27,10 +27,6 @@ global $post, $product;
 		<?php
 		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' ) );
 		?>
-	<?php elseif ( $product->is_type( 'combo' ) ) : ?>
-		<?php
-		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' ) );
-		?>
 	<?php else : ?>
 		<?php
 		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale"> -' . (int) lafka_get_product_saving( $product ) . '%</span>', $post, $product ) );

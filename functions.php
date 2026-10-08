@@ -82,8 +82,6 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
  *     slim successor to the registry defaults (plugin-owned flags + shared keys).
  *   - incl/system/lafka-google-fonts.php -> lafka_typography_get_google_fonts(),
  *     read by the front-end Google-font enqueuer (incl/system/core-functions.php).
- * The admin media-picker JS (js/lafka-medialibrary-uploader.js, used by plugin
- * metaboxes) is registered in incl/system/core-functions.php.
  */
 require_once get_template_directory() . '/incl/system/lafka-option-defaults.php';
 require_once get_template_directory() . '/incl/system/lafka-google-fonts.php';
@@ -974,11 +972,6 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 			$classes[] = sanitize_html_class( get_theme_mod( 'lafka_footer_style', '' ) );
 		} elseif ( 'standard' !== $specific_footer_style && 'default' !== $specific_footer_style ) {
 			$classes[] = sanitize_html_class( $specific_footer_style );
-		}
-
-		// If using video background
-		if ( lafka_has_to_include_backgr_video() ) {
-			$classes[] = 'lafka-page-has-video-background';
 		}
 
 		// Shop and Category Pages Width

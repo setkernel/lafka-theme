@@ -71,7 +71,6 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'brand_color'                        => 'lafka_brand_color',
 			'logo_background_color'              => 'lafka_logo_background_color',
 			'mobile_theme_logo'                  => 'lafka_mobile_theme_logo',
-			'disable_logo_point_down'            => 'lafka_disable_logo_point_down',
 			'theme_logo'                         => 'lafka_theme_logo',
 
 			// NX1-02.dyncss-chrome-colors — header / top-bar / collapsible /
@@ -81,29 +80,11 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			// Options-Framework fields (no UI ever wrote them), so their entries
 			// here are copy no-ops on any real install — kept for a complete
 			// record of the slice's migrated readers.
-			'header_top_bar_color'               => 'lafka_header_top_bar_color',
-			'header_top_bar_border_color'        => 'lafka_header_top_bar_border_color',
-			'top_bar_message_color'              => 'lafka_top_bar_message_color',
-			'header_services_color'              => 'lafka_header_services_color',
-			'top_bar_menu_links_color'           => 'lafka_top_bar_menu_links_color',
-			'top_bar_menu_links_hover_color'     => 'lafka_top_bar_menu_links_hover_color',
 			'transparent_header_dark_menu_color' => 'lafka_transparent_header_dark_menu_color',
-			'collapsible_bckgr_color'            => 'lafka_collapsible_bckgr_color',
-			'collapsible_titles_color'           => 'lafka_collapsible_titles_color',
-			'collapsible_titles_border_color'    => 'lafka_collapsible_titles_border_color',
-			'collapsible_links_color'            => 'lafka_collapsible_links_color',
-			'main_menu_background_color'         => 'lafka_main_menu_background_color',
-			'main_menu_links_color'              => 'lafka_main_menu_links_color',
-			'main_menu_links_hover_color'        => 'lafka_main_menu_links_hover_color',
-			'main_menu_links_bckgr_hover_color'  => 'lafka_main_menu_links_bckgr_hover_color',
-			'main_menu_icons_color'              => 'lafka_main_menu_icons_color',
 			'footer_titles_color'                => 'lafka_footer_titles_color',
 			'footer_title_border_color'          => 'lafka_footer_title_border_color',
-			'footer_copyright_bar_text_color'    => 'lafka_footer_copyright_bar_text_color',
-			'footer_menu_links_color'            => 'lafka_footer_menu_links_color',
 			'footer_links_color'                 => 'lafka_footer_links_color',
 			'footer_text_color'                  => 'lafka_footer_text_color',
-			'footer_copyright_bar_bckgr_color'   => 'lafka_footer_copyright_bar_bckgr_color',
 
 			// NX1-02.dyncss-content-colors — content color tokens
 			// (page-title / buttons / links / labels / product-listing) that
@@ -138,10 +119,7 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			// `headings_font` is inert in dynamic-css.php (headings resolve to
 			// --lafka-font-display) but is still read by the editor CSS + the font
 			// enqueuer, so it migrates here with the rest of the typography.
-			'main_menu_typography'               => 'lafka_main_menu_typography',
-			'top_menu_typography'                => 'lafka_top_menu_typography',
 			'body_font'                          => 'lafka_body_font',
-			'text_logo_typography'               => 'lafka_text_logo_typography',
 			'headings_font'                      => 'lafka_headings_font',
 			'use_google_face_for'                => 'lafka_use_google_face_for',
 			'google_subsets'                     => 'lafka_google_subsets',
@@ -159,7 +137,7 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			// layout/behaviour selects + checkboxes that drive body classes
 			// (functions.php), the enqueue/localize + sidebar/menu/video-bg
 			// resolvers (core-functions.php), the WooCommerce shop layout
-			// (woocommerce-functions.php), and the shop / product / foodmenu /
+			// (woocommerce-functions.php), and the shop / product /
 			// blog / sidebar templates. Each destination keeps
 			// the Options-Framework `std` as its theme_mod default at every
 			// reader so a fresh install renders identically and an upgraded
@@ -176,22 +154,13 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'is_responsive'                      => 'lafka_is_responsive',
 			'show_preloader'                     => 'lafka_show_preloader',
 			'general_layout'                     => 'lafka_general_layout',
-			'sticky_header'                      => 'lafka_sticky_header',
-			'header_width'                       => 'lafka_header_width',
-			'enable_top_header'                  => 'lafka_enable_top_header',
-			'header_top_mobile_visibility'       => 'lafka_header_top_mobile_visibility',
-			'main_menu_transf_to_uppercase'      => 'lafka_main_menu_transf_to_uppercase',
-			'submenu_color_scheme'               => 'lafka_submenu_color_scheme',
 			'footer_style'                       => 'lafka_footer_style',
-			'footer_width'                       => 'lafka_footer_width',
 			'all_buttons_style'                  => 'lafka_all_buttons_style',
 			'fancy_title_font'                   => 'lafka_fancy_title_font',
 			'uppercase_page_titles'              => 'lafka_uppercase_page_titles',
 			'date_format'                        => 'lafka_date_format',
 			'search_options'                     => 'lafka_search_options',
 			'show_my_account'                    => 'lafka_show_my_account',
-			'show_shopping_cart'                 => 'lafka_show_shopping_cart',
-			'shopping_cart_on_add'               => 'lafka_shopping_cart_on_add',
 			'show_breadcrumb'                    => 'lafka_show_breadcrumb',
 			'show_prev_next'                     => 'lafka_show_prev_next',
 			'enable_smooth_scroll'               => 'lafka_enable_smooth_scroll',
@@ -226,15 +195,6 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'price_filter_widget_step'           => 'lafka_price_filter_widget_step',
 			'show_products_limit'                => 'lafka_show_products_limit',
 			'new_label_period'                   => 'lafka_new_label_period',
-			'show_shop_video_bckgr'              => 'lafka_show_shop_video_bckgr',
-			'shopwide_video_bckgr'               => 'lafka_shopwide_video_bckgr',
-			'shop_video_bckgr_url'               => 'lafka_shop_video_bckgr_url',
-			'show_related_menu_entries'          => 'lafka_show_related_menu_entries',
-			'show_light_menu_entries'            => 'lafka_show_light_menu_entries',
-			'hide_foodmenu_images'               => 'lafka_hide_foodmenu_images',
-			'foodmenu_simple_menu'               => 'lafka_foodmenu_simple_menu',
-			'show_video_bckgr'                   => 'lafka_show_video_bckgr',
-			'video_bckgr_url'                    => 'lafka_video_bckgr_url',
 			'general_blog_style'                 => 'lafka_general_blog_style',
 			'blog_top_menu'                      => 'lafka_blog_top_menu',
 			'blog_header_style'                  => 'lafka_blog_header_style',
@@ -246,13 +206,10 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'blog_pages_width'                   => 'lafka_blog_pages_width',
 			'show_author_info'                   => 'lafka_show_author_info',
 			'show_author_avatar'                 => 'lafka_show_author_avatar',
-			'show_blog_video_bckgr'              => 'lafka_show_blog_video_bckgr',
-			'blog_video_bckgr_url'               => 'lafka_blog_video_bckgr_url',
 			'sidebar_position'                   => 'lafka_sidebar_position',
 			'sidebar_ids'                        => 'lafka_sidebar_ids',
 			'blog_categoty_sidebar'              => 'lafka_blog_categoty_sidebar',
 			'blog_sidebar_position'              => 'lafka_blog_sidebar_position',
-			'foodmenu_categoty_sidebar'          => 'lafka_foodmenu_categoty_sidebar',
 			'woocommerce_sidebar'                => 'lafka_woocommerce_sidebar',
 			'show_sidebar_shop'                  => 'lafka_show_sidebar_shop',
 			'shop_sidebar_position'              => 'lafka_shop_sidebar_position',
