@@ -1,0 +1,154 @@
+/*
+ * Order tracker (lafka-plugin: Order tracking).
+ *
+ * The plugin ships the structure; this is the look: large type and dots, a
+ * calm green for what is done and the accent for where the order is now, and
+ * 44px+ tap targets for the phone link and the reorder button.
+ */
+.lafka-tracker {
+	--lafka-tracker-dot: 2.25rem;
+	--lafka-tracker-line: 6px;
+
+	margin: var(--lafka-space-6) 0;
+	padding: var(--lafka-space-5);
+	border: 1px solid var(--lafka-color-border-subtle);
+	border-radius: var(--lafka-radius-lg);
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	font-size: var(--lafka-font-size-h4);
+	line-height: var(--lafka-line-height-normal);
+}
+
+.lafka-tracker .lafka-tracker__title {
+	margin: 0 0 var(--lafka-space-2);
+	color: var(--lafka-color-text-muted);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+}
+
+.lafka-tracker .lafka-tracker__headline {
+	margin: 0 0 var(--lafka-space-5);
+	font-family: var(--lafka-font-family-display);
+	font-size: var(--lafka-font-size-h2);
+	font-weight: var(--lafka-font-weight-display);
+	line-height: var(--lafka-line-height-snug);
+}
+
+.lafka-tracker__label {
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-medium);
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-tracker__step.is-done .lafka-tracker__label,
+.lafka-tracker__step.is-current .lafka-tracker__label {
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-tracker__step.is-current .lafka-tracker__label {
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-tracker__step.is-done .lafka-tracker__dot::after {
+	content: "✓";
+	position: absolute;
+	inset: 0;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: var(--lafka-color-text-inverse);
+	font-size: 1.125rem;
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-tracker__step.is-current .lafka-tracker__dot {
+	border-color: var(--lafka-color-accent-600);
+	background: var(--lafka-color-accent-50);
+	box-shadow: 0 0 0 5px var(--lafka-color-accent-50);
+}
+
+.lafka-tracker__step.is-current::before {
+	background: var(--lafka-color-success-500);
+}
+
+.lafka-tracker__eta {
+	display: inline-block;
+	margin: 0 0 var(--lafka-space-5);
+	padding: var(--lafka-space-2) var(--lafka-space-4);
+	border-radius: var(--lafka-radius-pill);
+	background: var(--lafka-color-brand-50);
+	color: var(--lafka-color-brand-900);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-tracker__eta[hidden] {
+	display: none;
+}
+
+.lafka-tracker__where {
+	gap: var(--lafka-space-4);
+	margin: 0 0 var(--lafka-space-4);
+	padding-top: var(--lafka-space-4);
+	border-top: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-tracker__where dt,
+.lafka-tracker__where dd {
+	float: none;
+	width: auto;
+	margin: 0;
+	padding: 0;
+}
+
+.lafka-tracker__where dt {
+	color: var(--lafka-color-text-muted);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+}
+
+.lafka-tracker__where a {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--lafka-tap-target);
+	color: var(--lafka-color-accent-700);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+@media (min-width: 640px) {
+
+	.lafka-tracker__where {
+		grid-template-columns: repeat(2, minmax(0, 1fr));
+	}
+}
+
+@media (prefers-reduced-motion: no-preference) {
+
+	.lafka-tracker__dot {
+		transition: background-color var(--lafka-motion-duration-base) ease, border-color var(--lafka-motion-duration-base) ease;
+	}
+}
+
+/* Order again and Track, in My Account → Orders and on the order page: the
+ * legacy link colour must not paint the label the same red as the button. */
+.woocommerce-orders-table .button.lafka_track,
+.woocommerce-orders-table .button.lafka_reorder,
+.woocommerce-order-details .order-again .button,
+.lafka-tracker__reorder .button {
+	min-height: var(--lafka-tap-target);
+	background: var(--lafka-color-accent-600);
+	color: var(--lafka-color-text-on-accent);
+	text-decoration: none;
+}
+
+.woocommerce-orders-table .button.lafka_track:hover,
+.woocommerce-orders-table .button.lafka_reorder:hover,
+.woocommerce-order-details .order-again .button:hover,
+.lafka-tracker__reorder .button:hover {
+	background: var(--lafka-color-accent-700);
+	color: var(--lafka-color-text-on-accent);
+}

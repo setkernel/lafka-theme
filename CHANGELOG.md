@@ -8,6 +8,9 @@ git tags + GitHub Releases.
 ## [Unreleased]
 
 ### Added
+- Order tracker styling (`styles/lafka-order-tracker.css`) for the plugin's Order tracking
+  stepper: large type and dots, vertical on phones and in a row from 640 px; "Order this
+  again" label on WooCommerce's order-again button.
 - All ten presets use the modern counter layout on every surface (header, home,
   menu, footer, cart drawer); only Peppery adds the checkered motif. Verified on
   the production clone at 375 and 1280 px: home, menu and a product page per preset.
@@ -16,6 +19,8 @@ git tags + GitHub Releases.
   Left / Whole / Right choice and the tips picker (classic and block checkout).
 
 ### Fixed
+- Order confirmation: the legacy feather icons no longer overlap the order overview, and
+  the page header and overview are no longer pushed 15 px off the content column.
 - "WooCommerce is active" is decided by whether WooCommerce is loaded, not by the
   active-plugins list: requests that skip plugins (`/wp-activate.php`) no longer fatal.
 - Lists offer "Choose" instead of a quick Add for product types that cannot be added

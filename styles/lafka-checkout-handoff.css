@@ -722,6 +722,32 @@
 	text-transform: none;
 }
 
+/* The legacy sheet draws a feather icon at each overview item and nudges the
+ * block 15px left; the handoff card has no room for either. */
+#content .woocommerce-order-received ul.woocommerce-order-overview.order_details > li::before,
+.woocommerce-order-received ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li::before {
+	content: none;
+}
+
+.woocommerce-order-received ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li {
+	padding: 0;
+	border: 0;
+	font-size: var(--lafka-font-size-caption);
+}
+
+.woocommerce-order-received #content:not(.has-sidebar) p.woocommerce-thankyou-order-received,
+.woocommerce-order-received #content:not(.has-sidebar) ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details {
+	box-sizing: border-box;
+	max-width: 100%;
+	margin-left: 0;
+}
+
+.woocommerce-order-received ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details {
+	display: grid;
+	text-align: left;
+	padding: var(--lafka-space-5);
+}
+
 /* Order receipt table */
 .woocommerce-order-received table.woocommerce-table--order-details,
 .woocommerce-order-received table.shop_table {

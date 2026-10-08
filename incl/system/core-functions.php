@@ -1215,6 +1215,17 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// Order tracking (lafka-plugin): the stepper's look, wherever it renders —
+		// the order confirmation and My Account → view order.
+		if ( function_exists( 'is_wc_endpoint_url' ) && ( is_wc_endpoint_url( 'order-received' ) || is_wc_endpoint_url( 'view-order' ) ) ) {
+			wp_enqueue_style(
+				'lafka-order-tracker-theme',
+				get_template_directory_uri() . '/styles/lafka-order-tracker.css',
+				wp_style_is( 'lafka-order-tracker', 'enqueued' ) ? array( 'lafka-tokens', 'lafka-order-tracker' ) : array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-order-tracker.css' )
+			);
+		}
+
 		// NX1-04b: block Cart/Checkout skin. Applies the handoff visual language
 		// to WooCommerce's block cart + checkout and to the plugin's lafka- block
 		// components (order_type/branch fields, timeslot picker, free-delivery
