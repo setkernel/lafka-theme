@@ -77,17 +77,16 @@ Tags: e-commerce, food-and-drink, full-width-template, custom-menu, custom-logo,
 4. Images styling / img
 5. Quotes/captions styles
 6. Widgets specific styles / .widget
-7. bbPress specific styles / .bbp
-8. Headings styles / h1, h2, h3, h4, h5, h6
-9. Buttons / .button
-10. Breadcrumbs / .breadcrumb
-11. Forms styling / form
-12. Columns styling
-13. Menu styling / #menu
-14. Footer styling / #footer
-15. Content area / #content
-16. Shortcodes styling
-17. Third-party plugins styling
+7. Headings styles / h1, h2, h3, h4, h5, h6
+8. Buttons / .button
+9. Breadcrumbs / .breadcrumb
+10. Forms styling / form
+11. Columns styling
+12. Menu styling / #menu
+13. Footer styling / #footer
+14. Content area / #content
+15. Shortcodes styling
+16. Third-party plugins styling
 
 -------------------------------------------------------------------*/
 
@@ -1126,8 +1125,7 @@ a.button-inline,
 #submit,
 .wpcf7-submit,
 form.mc4wp-form input[type="submit"],
-input[type="submit"],
-.woocommerce .wishlist_table td.product-add-to-cart a.button {
+input[type="submit"] {
     cursor: pointer;
     font-size: 13px;
     color: #fff;
@@ -2402,8 +2400,7 @@ form.woocommerce-ordering {
     position: relative;
 }
 
-.pagination .links .selected,
-.bbp-pagination-links span.current {
+.pagination .links .selected {
     display: inline-block;
     width: 30px;
     height: 30px;
@@ -2417,8 +2414,7 @@ form.woocommerce-ordering {
 }
 
 .pagination .links .selected::before,
-.pagination .links a:hover::before,
-.bbp-pagination-links span.current::before {
+.pagination .links a:hover::before {
     display: block;
     content: "";
     position: absolute;
@@ -2430,8 +2426,7 @@ form.woocommerce-ordering {
     border-radius: 50%;
 }
 
-.pagination .links .selected:hover,
-.bbp-pagination-links span.current:hover {
+.pagination .links .selected:hover {
     color: #fff !important;
 }
 
@@ -3041,11 +3036,6 @@ div.product a.single_add_to_cart_button {
     line-height: normal;
     vertical-align: top;
     padding: 12px 40px;
-}
-
-.woocommerce .wishlist_table td.product-add-to-cart span.dateadded {
-    text-align: center;
-    margin-bottom: 6px;
 }
 
 button.single_add_to_cart_button:disabled,
@@ -4084,16 +4074,6 @@ div.product-category>a {
     margin-left: 75px;
 }
 
-.lafka-products-list-view .prod_hold .image a.add_to_wishlist.button,
-.lafka-products-list-view .prod_hold .image a.add_to_wishlist {
-    display: inline-block;
-    width: 30px;
-    height: 30px;
-    font-size: 18px;
-    vertical-align: middle;
-    line-height: 30px !important;
-}
-
 .lafka-products-list-view.lafka-is-shortcode .prod_hold .lafka-list-prod-summary {
     display: inline-block;
     width: calc(100% - 120px);
@@ -4322,19 +4302,13 @@ html.touch .similar_projects .owl-nav .owl-next {
     line-height: 28px;
 }
 
-a.lafka-quick-view-link i,
-.links a.compare i.fa {
+a.lafka-quick-view-link i {
     font-family: feather !important;
 }
 
 a.lafka-quick-view-link i::before {
     content: "\e86a" !important;
     font-size: 21px;
-}
-
-.links a.compare i::before {
-    content: "\f142" !important;
-    font-size: 24px;
 }
 
 a.lafka-quick-view-link:hover {
@@ -4418,131 +4392,12 @@ a.lafka-quick-view-link:hover {
     opacity: 1;
 }
 
-.wishlist_table .links a.button.add_to_cart_button.loading::before {
-    opacity: 1;
-    display: inline-block;
-}
-
 .links a.button.add_to_cart_button i.fa {
     font-size: 16px;
 }
 
-.prod_hold .image a.add_to_wishlist,
-.links a.compare {
-    margin: 0 !important;
-    display: inline-block;
-    border: none !important;
-    border-radius: 0 !Important;
-    overflow: hidden;
-    z-index: 200;
-    text-decoration: none;
-    background: none !important;
-}
-
-.links a.compare.button,
-.prod_hold .image a.add_to_wishlist.button,
-.prod_hold .image a.add_to_wishlist {
-    display: inline-block;
-    width: 40px;
-    height: 40px;
-    padding: 0;
-    font-size: 21px;
-    vertical-align: middle;
-    line-height: 40px !important;
-    color: #333;
-    border-radius: 50% !important;
-    background: #fff !important;
-}
-
-.prod_hold .image a.add_to_wishlist.button {
-    background: none !important;
-    box-shadow: none;
-}
-
-.links a.compare.button:hover,
-.prod_hold .image a.add_to_wishlist.button:hover::before,
-.prod_hold .image a.add_to_wishlist:hover::before {
-    color: #333;
-}
-
-.prod_hold .image a.add_to_wishlist.button:hover,
-.prod_hold .image a.add_to_wishlist:hover,
-.links a.compare.button:hover {
-    color: #333;
-}
-
-.links a.compare i.fa,
-.prod_hold .image a.add_to_wishlist.button i.fa,
-.prod_hold .image a.add_to_wishlist i.fa {
-    line-height: 25px !important;
-}
-
-.prod_hold .image a.add_to_wishlist.button,
-.prod_hold .image a.add_to_wishlist,
-.links a.compare.button:hover {
-    overflow: hidden;
-}
-
-.prod_hold .image .yith-wcwl-add-to-wishlist #add-items-ajax-loading {
-    display: none !important;
-}
-
-.prod_hold .image a.add_to_wishlist.button::before,
-.prod_hold .image a.add_to_wishlist::before {
-    font-family: feather !important;
-    content: "\e879";
-}
-
-.prod_hold .image a.add_to_wishlist.button:hover::before,
-.prod_hold .image a.add_to_wishlist:hover::before {
-    color: #e4584b !important;
-}
-
-.links a.compare.added {
-    font-size: 0 !important;
-    width: 32px !important;
-    height: 32px !important;
-}
-
-.links a.compare.added::before {
-    font-size: 19px !important;
-    content: "\e90a" !important;
-    font-family: feather !important;
-}
-
-.prod_hold a.compare.added {
-    text-transform: none;
-    width: auto;
-    padding: 0 4px;
-    font-size: 11px;
-}
-
 .summary.entry-summary>div.clear {
     display: none;
-}
-
-.summary.entry-summary .compare {
-    display: block;
-    margin: 0;
-    padding: 0;
-    background: none;
-    width: 48% !important;
-    text-align: right;
-    line-height: 1;
-    vertical-align: middle;
-    text-transform: none !important;
-    color: #333;
-    text-decoration: none;
-    background: none !important;
-    box-shadow: none !important;
-    vertical-align: middle;
-    font-size: 13px;
-    position: relative;
-}
-
-.summary.entry-summary .compare a {
-    color: #333;
-    padding-right: 5px;
 }
 
 .upsells.products {
@@ -4596,8 +4451,7 @@ div.woocommerce.box-products:empty {
 .related.products h2,
 .upsells.products h2,
 .similar_projects>h4,
-.lafka-related-blog-posts>h4,
-.tribe-events-related-events-title {
+.lafka-related-blog-posts>h4 {
     margin-bottom: 80px;
     width: 100%;
     text-transform: capitalize;
@@ -4980,15 +4834,6 @@ div.summary .is-countdown {
 
 /* SLIDERS ----*/
 
-.slideshow {
-    clear: both;
-    position: relative;
-}
-
-.lafka-intro.slideshow {
-    z-index: 22000;
-}
-
 .lafka_flex-pauseplay span {
     text-transform: capitalize;
 }
@@ -5269,15 +5114,6 @@ div.woocommerce .woocommerce-shipping-fields h3,
     border-bottom: 1px solid var(--lafka-border-default, #e8e8e8);
 }
 
-.woocommerce table.wishlist_table tr td.product-remove {
-    vertical-align: middle;
-    text-align: center;
-}
-
-.woocommerce table.wishlist_table tr td.product-remove {
-    width: 30px !important;
-}
-
 .cart-info dl.variation,
 table.woocommerce-checkout-review-order-table dl.variation {
     margin: 5px 0;
@@ -5375,17 +5211,6 @@ table.woocommerce-checkout-review-order-table dl.variation dt {
     margin-left: auto;
     margin-right: auto;
 }
-
-/* WISHLIST */
-
-.yith-wcwl-add-to-wishlist .ajax-loading,
-.yith-wcwl-add-button .ajax-loading {
-    display: none !Important;
-    position: absolute !important;
-    left: -9999px !important;
-}
-
-/* COMPARE */
 
 div.lafka-contacts-holder {
     position: relative;
@@ -5993,10 +5818,6 @@ a.sidebar-trigger::before {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
-
-/* P6-A11Y-2: WPBakery btn-custom must qualify as large text for AA contrast.
-   The orange #e4584b on white text is 3.62:1 — passes 3:1 for large/bold text.
-   !important overrides WPBakery inline styles. */
 
 img.added-product-image {
     width: auto;
@@ -6817,13 +6638,6 @@ a.ajax_search_unit {
     font-size: 12px;
 }
 
-.lafka-align-center .wishlist_table {
-    width: auto;
-    margin: 0 auto 35px auto;
-    min-width: 65%;
-    max-width: 100%;
-}
-
 a.btn.button.show-title-form {
     font-size: 0;
     padding: 0;
@@ -6845,31 +6659,6 @@ a.btn.button.show-title-form i {
     text-align: center;
     margin: 0;
     margin-bottom: 0;
-}
-
-#yith-wcwl-form .hidden-title-form {
-    display: none;
-}
-
-.woocommerce .wishlist_table td.product-add-to-cart span.dateadded {
-    display: block;
-    margin-bottom: 16px;
-    text-align: center;
-    font-size: 13px;
-}
-
-.woocommerce .wishlist_table td.product-add-to-cart a.compare,
-.woocommerce .wishlist_table td.product-add-to-cart a.lafka-quick-view-link {
-    display: none !important;
-}
-
-.wishlist_table .lafka-variations-in-catalog {
-    display: block;
-    width: 100%;
-}
-
-.wishlist_table tr td .links .lafka-variations-in-catalog {
-    margin-top: 1px;
 }
 
 .ui-state-active,
@@ -7513,10 +7302,6 @@ div.product .summary.entry-summary p.price+p.stock {
     background-color: #fff;
 }
 
-/* BBPRESS STYLES */
-
-/* END OF BBPRESS STYLES */
-
 .lafka-social ul li {
     display: inline-block;
     margin: 0;
@@ -8146,7 +7931,6 @@ html.no-touch .lafka-fade {
 }
 
 .lafka_woo_recent_viewed .prod_hold .links a.lafka-quick-view-link,
-.lafka_woo_recent_viewed .prod_hold .links .yith-wcwl-add-to-wishlist,
 .lafka_woo_recent_viewed .prod_hold .lafka-variations-in-catalog.cart,
 .lafka_woo_recent_viewed .prod_hold .lafka-product-list-description {
     display: none !important;
@@ -8156,25 +7940,6 @@ html.no-touch .lafka-fade {
     font-size: 18px;
     font-weight: 400;
     margin-bottom: 30px;
-}
-
-/* EVENTS CALENDAR */
-
-.lafka-event-countdown {
-    background: #fafafa;
-    padding: 15px;
-    border: 1px solid var(--lafka-border-light, #f1f1f1);
-    margin-top: 30px;
-}
-
-.lafka-event-countdown .count_info,
-.lafka-event-countdown .is-countdown {
-    display: inline-block;
-}
-
-.lafka-event-countdown .is-countdown {
-    font-size: 18px;
-    color: #3a3a3a;
 }
 
 .lafka-vertical-section-title {
@@ -8773,18 +8538,6 @@ body.single-product .pswp__bg {
     width: 100%;
 }
 
-/* MULTI VENDOR PLUGINS STYLES */
-
-.woocommerce .wcmp_social_profile img {
-    border-radius: 50%;
-    width: 25px !important;
-    height: 25px !important;
-}
-
-.woocommerce .wcmp_vendor_rating .star-rating {
-    margin-left: 0 !important;
-}
-
 .woocommerce-MyAccount-content .myaccount_user>a:last-of-type {
     float: none;
     display: inline-block;
@@ -8795,15 +8548,6 @@ body.single-product .pswp__bg {
     margin: 50px auto 0 auto;
     text-align: center;
     width: 100%;
-}
-
-.has-sidebar .wcmp_sorted_vendors {
-    width: 30.5%;
-    margin: 0 4% 35px 0 !important;
-}
-
-.has-sidebar .wcmp_vendor_list_wrap .wcmp_sorted_vendors:nth-child(3n+3) {
-    margin-right: 0 !important;
 }
 
 body.single-product #products-wrapper>h1:first-of-type {
@@ -8819,41 +8563,6 @@ body.single-product #products-wrapper>h1:first-of-type {
 .select2-container .select2-choice {
     height: auto !important;
 }
-
-.wcv-navigation ul.menu.horizontal li {
-    display: inline-block;
-    float: none;
-    background: none !important;
-    margin: 0 5px 15px 0;
-    padding: 0;
-}
-
-.wcv-navigation ul.menu.horizontal li a {
-    cursor: pointer;
-    font-size: 14px !important;
-    line-height: normal;
-    font-weight: 400 !important;
-    padding: 9px 12px !important;
-    text-decoration: none;
-    background: #333 !important;
-    -webkit-transition: all 0.5s ease 0s;
-    transition: all 0.5s ease 0s;
-    border-radius: 2px;
-}
-
-.wcv-shade.visible {
-    z-index: 100000;
-    top: 60px;
-    height: calc(100% - 60px) !important;
-}
-
-.wcv-modal>.modal-body {
-    padding: 30px !important;
-}
-
-/* DOKAN STYLES */
-
-/* END OF MULTI VENDORS */
 
 div.woocommerce>form.woocommerce-form-login.login input[type='text'],
 div.woocommerce>form.woocommerce-form-login.login input[type='password'] {
@@ -9217,7 +8926,7 @@ body.lafka-store-closed>div.widget.woocommerce.widget_shopping_cart .widget_shop
 /* All selectors below use CSS custom properties set via :root{} in dynamic-css.php */
 
 /* Site main accent color */
-.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate i, .lafka-delivery-time-toggle::before, a.lafka-branch-delivery::before, a.lafka-branch-pickup::before, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev, div.widget_categories ul li.current-cat > a::before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li::before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title::before, button.single_add_to_cart_button::before, .links a.button.add_to_cart_button::after, .commentlist ul.children::before, .infinite-scroll-request::before, .prod_hold .name sup, .prod_hold .name sub, #content div.product div.summary h1.product_title sup, #content div.product div.summary h1.product_title sub, .lafka-spec-dot, .count_holder .count_info::before, .lafka-pricing-table-shortcode .title-icon-holder, .widget_product_categories ul li.current-cat > a, .lafka-event-countdown .is-countdown, div.widget_categories ul li > a:hover::before {
+.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate i, .lafka-delivery-time-toggle::before, a.lafka-branch-delivery::before, a.lafka-branch-pickup::before, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev, div.widget_categories ul li.current-cat > a::before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li::before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title::before, button.single_add_to_cart_button::before, .links a.button.add_to_cart_button::after, .commentlist ul.children::before, .infinite-scroll-request::before, .prod_hold .name sup, .prod_hold .name sub, #content div.product div.summary h1.product_title sup, #content div.product div.summary h1.product_title sub, .lafka-spec-dot, .count_holder .count_info::before, .lafka-pricing-table-shortcode .title-icon-holder, .widget_product_categories ul li.current-cat > a, div.widget_categories ul li > a:hover::before {
     color: var(--lafka-accent-color);
 }
 
@@ -9233,7 +8942,7 @@ body.lafka-store-closed>div.widget.woocommerce.widget_shopping_cart .widget_shop
     border-color: transparent transparent var(--lafka-logo-bg-color) var(--lafka-logo-bg-color);
 }
 
-a.lafka-change-branch-button::before, .lafka-change-branch-button-select::before, .woocommerce form.checkout h3.lafka-address-not-found, .woocommerce form.checkout h3.lafka-address-not-found::after, .lafka-author-info .title h2::after, .widget > h3:first-child::before, .double-bounce2, .foodmenu-unit-info a.foodmenu-lightbox-link, blockquote, q, .wp-block-pullquote:not(.is-style-solid-color), .lafka-product-slider .owl-nav .owl-next, .lafka-product-slider .owl-nav .owl-prev, .lafka_image_list .owl-nav .owl-prev, .lafka_image_list .owl-nav .owl-next, .woocommerce-product-gallery__wrapper .owl-nav .owl-prev, .woocommerce-product-gallery__wrapper .owl-nav .owl-next, .lafka_content_slider .owl-nav .owl-next, .lafka_content_slider .owl-nav .owl-prev, .woocommerce.owl-carousel .owl-nav .owl-next, .woocommerce.owl-carousel .owl-nav .owl-prev, .related.products .owl-nav .owl-prev, .related.products .owl-nav .owl-next, .similar_projects .owl-nav .owl-prev, .similar_projects .owl-nav .owl-next, .lafka-foodmenu-shortcode .owl-nav .owl-prev, .lafka-foodmenu-shortcode .owl-nav .owl-next, .lafka_shortcode_latest_posts .owl-nav .owl-prev, .lafka_shortcode_latest_posts .owl-nav .owl-next, .lafka-quickview-images .owl-nav .owl-prev, .lafka-quickview-images .owl-nav .owl-next, .widget_shopping_cart_content p.buttons .button.checkout, .lafka-wcs-swatches .swatch.swatch-label.selected, .lafka-wcs-swatches .swatch.swatch-label:hover, .is-lafka-video .mfp-iframe-holder .mfp-content .mfp-close, blockquote::before, q::before, a.lafka-post-nav .entry-info-wrap::after, .lafka-author-info .title a::after, #comments h3.heading-title span.lafka_comments_count, div.lafka_whole_banner_wrapper::after, .blog-post:hover > .lafka_post_data_holder h2.heading-title a::after, .blog-post-meta.post-meta-top .count_comments a, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder::before, .tribe-events-schedule .tribe-events-cost, .woocommerce form.track_order input.button, .woocommerce-shipping-fields input[type="checkbox"]:checked + span::before, .widget_product_categories ul li.current-cat > .count, .lafka-iconbox h5::after, .lafka-pricing-heading h5::after, .lafka_title_holder.centered_title .inner h1.heading-title::before, a.sidebar-trigger, .pagination .links a:hover, .lafka_content_slider .owl-dot.active span, .product-category.product h2 mark::after, .blog-post-meta span.sticky_post, .widget > h3:first-child::after, .lafka-foodmenu-categories ul li a:hover::before, .lafka-foodmenu-categories ul li a.is-checked::before, .lafka-foodmenu-categories ul li a:hover::after, .lafka-foodmenu-categories ul li a.is-checked::after, ul.status-closed li.bbp-topic-title .bbp-topic-permalink::before, ul.sticky li.bbp-topic-title .bbp-topic-permalink::before, ul.super-sticky li.bbp-topic-title .bbp-topic-permalink::before {
+a.lafka-change-branch-button::before, .lafka-change-branch-button-select::before, .woocommerce form.checkout h3.lafka-address-not-found, .woocommerce form.checkout h3.lafka-address-not-found::after, .lafka-author-info .title h2::after, .widget > h3:first-child::before, .double-bounce2, .foodmenu-unit-info a.foodmenu-lightbox-link, blockquote, q, .wp-block-pullquote:not(.is-style-solid-color), .lafka-product-slider .owl-nav .owl-next, .lafka-product-slider .owl-nav .owl-prev, .lafka_image_list .owl-nav .owl-prev, .lafka_image_list .owl-nav .owl-next, .woocommerce-product-gallery__wrapper .owl-nav .owl-prev, .woocommerce-product-gallery__wrapper .owl-nav .owl-next, .lafka_content_slider .owl-nav .owl-next, .lafka_content_slider .owl-nav .owl-prev, .woocommerce.owl-carousel .owl-nav .owl-next, .woocommerce.owl-carousel .owl-nav .owl-prev, .related.products .owl-nav .owl-prev, .related.products .owl-nav .owl-next, .similar_projects .owl-nav .owl-prev, .similar_projects .owl-nav .owl-next, .lafka-foodmenu-shortcode .owl-nav .owl-prev, .lafka-foodmenu-shortcode .owl-nav .owl-next, .lafka_shortcode_latest_posts .owl-nav .owl-prev, .lafka_shortcode_latest_posts .owl-nav .owl-next, .lafka-quickview-images .owl-nav .owl-prev, .lafka-quickview-images .owl-nav .owl-next, .widget_shopping_cart_content p.buttons .button.checkout, .lafka-wcs-swatches .swatch.swatch-label.selected, .lafka-wcs-swatches .swatch.swatch-label:hover, .is-lafka-video .mfp-iframe-holder .mfp-content .mfp-close, blockquote::before, q::before, a.lafka-post-nav .entry-info-wrap::after, .lafka-author-info .title a::after, #comments h3.heading-title span.lafka_comments_count, div.lafka_whole_banner_wrapper::after, .blog-post:hover > .lafka_post_data_holder h2.heading-title a::after, .blog-post-meta.post-meta-top .count_comments a, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder::before, .woocommerce form.track_order input.button, .woocommerce-shipping-fields input[type="checkbox"]:checked + span::before, .widget_product_categories ul li.current-cat > .count, .lafka-iconbox h5::after, .lafka-pricing-heading h5::after, .lafka_title_holder.centered_title .inner h1.heading-title::before, a.sidebar-trigger, .pagination .links a:hover, .lafka_content_slider .owl-dot.active span, .product-category.product h2 mark::after, .blog-post-meta span.sticky_post, .widget > h3:first-child::after, .lafka-foodmenu-categories ul li a:hover::before, .lafka-foodmenu-categories ul li a.is-checked::before, .lafka-foodmenu-categories ul li a:hover::after, .lafka-foodmenu-categories ul li a.is-checked::after {
     background-color: var(--lafka-accent-color);
 }
 
@@ -9241,13 +8950,13 @@ a.lafka-change-branch-button::before, .lafka-change-branch-button-select::before
     background-color: var(--lafka-accent-color);
 }
 
-li.product-category.product h2 mark, div.product-category.product h2 mark, .bbp-topics-front ul.super-sticky:hover, .bbp-topics ul.super-sticky:hover, .bbp-topics ul.sticky:hover, .bbp-forum-content ul.sticky:hover {
+li.product-category.product h2 mark, div.product-category.product h2 mark {
     background-color: var(--lafka-accent-color) !important;
 }
 
 ul.commentlist > li.pingback { border-left-color: var(--lafka-accent-color) !Important; }
 
-span.lafka-branch-select-image.lafka-branch-selected-image, .similar_projects > h4 a::after, .related.products h2 a::after, .lafka-foodmenu-shortcode, .lafka_content_slider .owl-dot.active span::after, .lafka-product-slider .count_holder, .owl-next::before, .owl-prev::before, .lafka_title_holder .inner .lafka-title-text-container::before, #spinner::before, blockquote, q, .sidebar.off-canvas-sidebar, body > div.widget.woocommerce.widget_shopping_cart, .commentlist li .comment-body:hover::before, .commentlist li .comment-body:hover::after, .is-lafka-video .mfp-iframe-holder .mfp-content, .lafka-quick-view-lightbox .mfp-content, .lafka-icon-teaser-lightbox .mfp-content, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder, div.product div.images ol.flex-control-nav li img.flex-active, div.product div.images ol.flex-control-nav li:hover img, .bbp-topics-front ul.super-sticky, .widget_product_categories ul li.current-cat > .count, .error404 div.blog-post-excerpt, .lafka-none-overlay.lafka-10px-gap .foodmenu-unit-holder:hover, .foodmenu-unit-info a.foodmenu-lightbox-link:hover, .bbp-topics ul.super-sticky, .bbp-topics ul.sticky, .bbp-forum-content ul.sticky {
+span.lafka-branch-select-image.lafka-branch-selected-image, .similar_projects > h4 a::after, .related.products h2 a::after, .lafka-foodmenu-shortcode, .lafka_content_slider .owl-dot.active span::after, .lafka-product-slider .count_holder, .owl-next::before, .owl-prev::before, .lafka_title_holder .inner .lafka-title-text-container::before, #spinner::before, blockquote, q, .sidebar.off-canvas-sidebar, body > div.widget.woocommerce.widget_shopping_cart, .commentlist li .comment-body:hover::before, .commentlist li .comment-body:hover::after, .is-lafka-video .mfp-iframe-holder .mfp-content, .lafka-quick-view-lightbox .mfp-content, .lafka-icon-teaser-lightbox .mfp-content, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder, div.product div.images ol.flex-control-nav li img.flex-active, div.product div.images ol.flex-control-nav li:hover img, .widget_product_categories ul li.current-cat > .count, .error404 div.blog-post-excerpt, .lafka-none-overlay.lafka-10px-gap .foodmenu-unit-holder:hover, .foodmenu-unit-info a.foodmenu-lightbox-link:hover {
     border-color: var(--lafka-accent-color) !Important;
 }
 
@@ -9272,12 +8981,12 @@ a:hover {
 /* Widgets Title Color */
 
 /* Buttons Default style */
-.lafka-banner-dark .lafka_banner_buton, a.button, .r_more_blog, input.button, .wcv-navigation ul.menu.horizontal li a, .woocommerce .wishlist_table td.product-add-to-cart a.button, button.button, a.button-inline, #submit_btn, #submit, .wpcf7-submit, form.mc4wp-form input[type="submit"], input[type="submit"] {
+.lafka-banner-dark .lafka_banner_buton, a.button, .r_more_blog, input.button, button.button, a.button-inline, #submit_btn, #submit, .wpcf7-submit, form.mc4wp-form input[type="submit"], input[type="submit"] {
     background-color: var(--lafka-button-color);
 }
 
 /* Buttons Hover Color */
-a.button:hover, .r_more_blog:hover, .widget_shopping_cart_content p.buttons .button:hover, input.button:hover, .wcv-navigation ul.menu.horizontal li a:hover, .wcv-navigation ul.menu.horizontal li.active a, button.button:hover, .woocommerce .wishlist_table td.product-add-to-cart a.button:hover, a.button-inline:hover, #submit_btn:hover, #submit:hover, .wpcf7-submit:hover, button.single_add_to_cart_button:hover, .lafka-product-slide-cart .button.add_to_cart_button:hover, form.mc4wp-form input[type="submit"]:hover {
+a.button:hover, .r_more_blog:hover, .widget_shopping_cart_content p.buttons .button:hover, input.button:hover, button.button:hover, a.button-inline:hover, #submit_btn:hover, #submit:hover, .wpcf7-submit:hover, button.single_add_to_cart_button:hover, .lafka-product-slide-cart .button.add_to_cart_button:hover, form.mc4wp-form input[type="submit"]:hover {
     background-color: var(--lafka-button-hover-color) !important;
 }
 
@@ -9355,12 +9064,12 @@ body {
 }
 
 /* Headings font */
-h1, h2, h3, h4, h5, h6, .foodmenu_top .project-data .project-details .lafka-foodmenu-main-price, p.wp-block-cover-text, .lafka-product-summary-wrapper div.lafka-share-links span, #comments .nav-next a, #comments .nav-previous a, .woocommerce-form-coupon-toggle .woocommerce-info, .woocommerce-form-login-toggle .woocommerce-info, .r_more_blog, p.woocommerce-thankyou-order-received, nav.woocommerce-MyAccount-navigation ul li a, .lafka-header-user-data small, a.lafka-post-nav .entry-info span.entry-title, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .lafka-product-popup-link > a, .tribe-events-schedule .tribe-events-cost, .lafka-page-load-status, section.woocommerce-order-details, ul.woocommerce-error, table.woocommerce-checkout-review-order-table, body.woocommerce-cart .cart-collaterals, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li, .countdown_time_tiny, blockquote, q, .lafka-pagination-numbers .owl-dot::before, .lafka-wcs-swatches .swatch.swatch-label, .foodmenu-unit-info small, div.widget_nav_menu ul li a, .comment-body span, span.edit-link a, #reviews .commentlist li .meta, div.widget_categories ul li a, div.widget_archive ul li a, .woocommerce p.cart-empty, div.woocommerce-MyAccount-content .myaccount_user, label, .lafka-pricing-table-content, p.product.woocommerce.add_to_cart_inline, .product-filter .limit b, .product-filter .sort b, .product-filter .price_label, .contact-form .content span, .lafka-event-countdown .is-countdown, .lafka-foodmenu-categories ul li a, .prod_hold .name, .lafka-counter-h1, .lafka-typed-h1, .lafka-typed-h2, .lafka-typed-h3, .lafka-typed-h4, .lafka-typed-h5, .lafka-typed-h6, .lafka-counter-h2, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .lafka-counter-h3, .error404 div.blog-post-excerpt::before, div.added-product-text strong, .lafka-product-slide-price, .lafka-counter-h4, .lafka-counter-h5, .lafka-counter-h6, div.product .price span, p.logged-in-as, .lafka-pricing-table-price, .breadcrumb, .offer_title, ul.tabs a, .lafka-products-list-view .prod_hold .name, .lafka_shortcode_count_holder .countdown-amount, .blog-post-meta a, .widget_shopping_cart_content p.total, .foodmenu_top .project-data .project-details .simple-list-underlined li {
+h1, h2, h3, h4, h5, h6, .foodmenu_top .project-data .project-details .lafka-foodmenu-main-price, p.wp-block-cover-text, .lafka-product-summary-wrapper div.lafka-share-links span, #comments .nav-next a, #comments .nav-previous a, .woocommerce-form-coupon-toggle .woocommerce-info, .woocommerce-form-login-toggle .woocommerce-info, .r_more_blog, p.woocommerce-thankyou-order-received, nav.woocommerce-MyAccount-navigation ul li a, .lafka-header-user-data small, a.lafka-post-nav .entry-info span.entry-title, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .lafka-product-popup-link > a, .lafka-page-load-status, section.woocommerce-order-details, ul.woocommerce-error, table.woocommerce-checkout-review-order-table, body.woocommerce-cart .cart-collaterals, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li, .countdown_time_tiny, blockquote, q, .lafka-pagination-numbers .owl-dot::before, .lafka-wcs-swatches .swatch.swatch-label, .foodmenu-unit-info small, div.widget_nav_menu ul li a, .comment-body span, span.edit-link a, #reviews .commentlist li .meta, div.widget_categories ul li a, div.widget_archive ul li a, .woocommerce p.cart-empty, div.woocommerce-MyAccount-content .myaccount_user, label, .lafka-pricing-table-content, p.product.woocommerce.add_to_cart_inline, .product-filter .limit b, .product-filter .sort b, .product-filter .price_label, .contact-form .content span, .lafka-foodmenu-categories ul li a, .prod_hold .name, .lafka-counter-h1, .lafka-typed-h1, .lafka-typed-h2, .lafka-typed-h3, .lafka-typed-h4, .lafka-typed-h5, .lafka-typed-h6, .lafka-counter-h2, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .lafka-counter-h3, .error404 div.blog-post-excerpt::before, div.added-product-text strong, .lafka-product-slide-price, .lafka-counter-h4, .lafka-counter-h5, .lafka-counter-h6, div.product .price span, p.logged-in-as, .lafka-pricing-table-price, .breadcrumb, .offer_title, ul.tabs a, .lafka-products-list-view .prod_hold .name, .lafka_shortcode_count_holder .countdown-amount, .blog-post-meta a, .widget_shopping_cart_content p.total, .foodmenu_top .project-data .project-details .simple-list-underlined li {
     font-family: var(--lafka-headings-font-family);
 }
 
 /* Headings font for buttons */
-.lafka-headings-for-buttons a.button, .lafka-headings-for-buttons input.button, .lafka-headings-for-buttons .lafka-filter-widgets-triger, .lafka-headings-for-buttons .lafka-reset-filters, .lafka-headings-for-buttons .wcv-navigation ul.menu.horizontal li a, .lafka-headings-for-buttons .wcv-pro-dashboard input[type="submit"], .lafka-headings-for-buttons button.button, .lafka-headings-for-buttons input[type="submit"], .lafka-headings-for-buttons a.button-inline, .lafka-headings-for-buttons .lafka_banner_buton, .lafka-headings-for-buttons #submit_btn, .lafka-headings-for-buttons #submit, .lafka-headings-for-buttons .wpcf7-submit, .lafka-headings-for-buttons .col2-set.addresses header a.edit, .lafka-headings-for-buttons div.product input.qty, .lafka-headings-for-buttons .lafka-pricing-table-button a {
+.lafka-headings-for-buttons a.button, .lafka-headings-for-buttons input.button, .lafka-headings-for-buttons .lafka-filter-widgets-triger, .lafka-headings-for-buttons .lafka-reset-filters, .lafka-headings-for-buttons button.button, .lafka-headings-for-buttons input[type="submit"], .lafka-headings-for-buttons a.button-inline, .lafka-headings-for-buttons .lafka_banner_buton, .lafka-headings-for-buttons #submit_btn, .lafka-headings-for-buttons #submit, .lafka-headings-for-buttons .wpcf7-submit, .lafka-headings-for-buttons .col2-set.addresses header a.edit, .lafka-headings-for-buttons div.product input.qty, .lafka-headings-for-buttons .lafka-pricing-table-button a {
     font-family: var(--lafka-headings-font-family);
 }
 
@@ -9373,7 +9082,7 @@ h1, .lafka-counter-h1, .lafka-typed-h1, .lafka-dropcap p::first-letter, .lafka-d
 }
 
 /* H2 */
-h2, .lafka-counter-h2, p.wp-block-cover-text, .lafka-typed-h2, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .icon_teaser h3:first-child, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .related.products h2, .similar_projects > h4 a, .related.products h2 a, .upsells.products h2, .similar_projects > h4, .lafka-related-blog-posts > h4, .tribe-events-related-events-title {
+h2, .lafka-counter-h2, p.wp-block-cover-text, .lafka-typed-h2, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .icon_teaser h3:first-child, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .related.products h2, .similar_projects > h4 a, .related.products h2 a, .upsells.products h2, .similar_projects > h4, .lafka-related-blog-posts > h4 {
     color: var(--lafka-h2-color);
     font-size: var(--lafka-h2-size);
     font-weight: var(--lafka-h2-weight);
@@ -9452,7 +9161,7 @@ button.single_add_to_cart_button, .foodmenu_top .project-data .project-details a
     border-radius: 5em 5em 5em 5em;
 }
 
-.lafka-round-buttons .prod_hold .lafka-variations-in-catalog.cart > span, .lafka-round-buttons .prod_hold .links a.lafka-quick-view-link, .lafka-round-buttons div:not(.sidebar) div.widget_search input[type="text"], .lafka-round-buttons div:not(.sidebar) div.widget_product_search input[type="text"], .lafka-round-buttons a.button, .lafka-round-buttons .r_more_blog, .lafka-round-buttons .wishlist_table .links a.button.add_to_cart_button, .lafka-round-buttons .wcv-navigation ul.menu.horizontal li a, .lafka-round-buttons form .vendor_sort select, .lafka-round-buttons .wcv-pro-dashboard input[type="submit"], .lafka-round-buttons .lafka-pricing-table-button a, .lafka-round-buttons .widget_display_search input#bbp_search, .lafka-round-buttons #bbpress-forums > #subscription-toggle a.subscription-toggle, .lafka-round-buttons .bbp-topic-title span.bbp-st-topic-support, .lafka-round-buttons div.quantity, .lafka-round-buttons .lafka_banner_buton, .lafka-round-buttons .woocommerce .wishlist_table td.product-add-to-cart a.button, .lafka-round-buttons .widget_shopping_cart_content p.buttons .button, .lafka-round-buttons input.button, .lafka-round-buttons button.button, .lafka-round-buttons a.button-inline, .lafka-round-buttons #submit_btn, .lafka-round-buttons #submit, .lafka-round-buttons .wpcf7-submit, .lafka-round-buttons #bbpress-forums #bbp-search-form #bbp_search, .lafka-round-buttons input[type="submit"], .lafka-round-buttons form.mc4wp-form input[type="submit"], .lafka-round-buttons form.mc4wp-form input[type="email"] {
+.lafka-round-buttons .prod_hold .lafka-variations-in-catalog.cart > span, .lafka-round-buttons .prod_hold .links a.lafka-quick-view-link, .lafka-round-buttons div:not(.sidebar) div.widget_search input[type="text"], .lafka-round-buttons div:not(.sidebar) div.widget_product_search input[type="text"], .lafka-round-buttons a.button, .lafka-round-buttons .r_more_blog, .lafka-round-buttons form .vendor_sort select, .lafka-round-buttons .lafka-pricing-table-button a, .lafka-round-buttons div.quantity, .lafka-round-buttons .lafka_banner_buton, .lafka-round-buttons .widget_shopping_cart_content p.buttons .button, .lafka-round-buttons input.button, .lafka-round-buttons button.button, .lafka-round-buttons a.button-inline, .lafka-round-buttons #submit_btn, .lafka-round-buttons #submit, .lafka-round-buttons .wpcf7-submit, .lafka-round-buttons input[type="submit"], .lafka-round-buttons form.mc4wp-form input[type="submit"], .lafka-round-buttons form.mc4wp-form input[type="email"] {
     border-radius: 300px !important;
 }
 
@@ -9609,7 +9318,7 @@ button.single_add_to_cart_button, .foodmenu_top .project-data .project-details a
         opacity: 1;
     }
 
-    .lafka-mobile-2col .prod_hold a.button, .lafka-mobile-2col .links a.button.add_to_cart_button, .lafka-mobile-2col .links a.button.add_to_cart_button.ajax_add_to_cart, .lafka-mobile-2col .links .yith-wcwl-add-to-wishlist, .lafka-mobile-2col .links a.lafka-quick-view-link {
+    .lafka-mobile-2col .prod_hold a.button, .lafka-mobile-2col .links a.button.add_to_cart_button, .lafka-mobile-2col .links a.button.add_to_cart_button.ajax_add_to_cart, .lafka-mobile-2col .links a.lafka-quick-view-link {
         margin-right: 0 !important;
     }
 

@@ -62,9 +62,5 @@ if ( get_theme_mod( 'lafka_use_quickview', true ) && ! in_array( $product->get_t
 
 	echo '<a href="#" class="' . esc_attr( implode( ' ', $classes ) ) . '" data-id="' . esc_attr( $product->get_id() ) . '" title="' . esc_attr( $lafka_quickview_link_label ) . '">' . esc_html( $lafka_quickview_link_label ) . '</a>';
 }
-// show compare link
-if ( defined( 'YITH_WOOCOMPARE' ) ) {
-	lafka_add_compare_link();
-}
 
 echo '</div>';

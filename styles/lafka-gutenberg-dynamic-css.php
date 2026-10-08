@@ -106,7 +106,7 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 					$use_google_face_for = array(); }
 				?>
 				<?php if ( ! empty( $use_google_face_for['buttons'] ) ) : ?>
-				a.button, input.button, .wcv-navigation ul.menu.horizontal li a, .wcv-pro-dashboard input[type="submit"], button.button, input[type="submit"], a.button-inline, .lafka_banner_buton, #submit_btn, #submit, .wpcf7-submit, .col2-set.addresses header a.edit, div.product input.qty, .lafka-pricing-table-button a, .vc_btn3, nav.woocommerce-MyAccount-navigation ul li a {
+				a.button, input.button, button.button, input[type="submit"], a.button-inline, .lafka_banner_buton, #submit_btn, #submit, .wpcf7-submit, .col2-set.addresses header a.edit, div.product input.qty, .lafka-pricing-table-button a, .vc_btn3, nav.woocommerce-MyAccount-navigation ul li a {
 					font-family:<?php echo esc_attr( $headings_font['face'] ); ?>;
 				}
 				<?php endif; ?>
@@ -138,7 +138,7 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 			);
 			$h2_css_style = $lafka_safe_style( $h2_font );
 			?>
-			h2, .editor-block-list__block-edit .wp-block-heading h2, .wp-block-freeform.block-library-rich-text__tinymce h2, body.gutenberg-editor-page .edit-post-visual-editor p.wp-block-cover-image-text, .lafka-counter-h2, .lafka-typed-h2, .icon_teaser h3:first-child, body.woocommerce-account #customer_login.col2-set .owl-nav, .woocommerce #customer_login.u-columns.col2-set .owl-nav, .related.products h2, .upsells.products h2, .similar_projects > h4, .lafka-related-blog-posts > h4, .tribe-events-related-events-title {color:<?php echo esc_attr( $h2_font['color'] ); ?>;font-size:<?php echo esc_attr( $h2_font['size'] ); ?>;<?php echo esc_attr( $h2_css_style ); ?>}
+			h2, .editor-block-list__block-edit .wp-block-heading h2, .wp-block-freeform.block-library-rich-text__tinymce h2, body.gutenberg-editor-page .edit-post-visual-editor p.wp-block-cover-image-text, .lafka-counter-h2, .lafka-typed-h2, .icon_teaser h3:first-child, body.woocommerce-account #customer_login.col2-set .owl-nav, .woocommerce #customer_login.u-columns.col2-set .owl-nav, .related.products h2, .upsells.products h2, .similar_projects > h4, .lafka-related-blog-posts > h4 {color:<?php echo esc_attr( $h2_font['color'] ); ?>;font-size:<?php echo esc_attr( $h2_font['size'] ); ?>;<?php echo esc_attr( $h2_css_style ); ?>}
 			.wp-block-cover p.wp-block-cover-text {
 				font-size: <?php echo esc_attr( $h2_font['size'] ); ?> !important;
 				<?php echo esc_attr( $h2_css_style ); ?>

@@ -12,7 +12,6 @@
 		"styles/magnific/**",
 		"styles/owl-carousel2-dist/**",
 		"styles/fonts/**",
-		"woocommerce/compare.css",
 		"incl/lafka-options-framework/**"
 	],
 	"rules": {

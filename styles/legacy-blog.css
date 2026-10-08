@@ -1151,11 +1151,6 @@ body.single-post .content_holder>.post .lafka-post-avatar+.blog-post-meta+.post-
     left: 65px !important;
 }
 
-.blog-post .slideshow,
-.blog-post .slideshow .flexslider {
-    margin: 0 0 25px 0;
-}
-
 .lafka_post_data_holder {
     position: relative;
     padding: 30px 10px 10px 10px;

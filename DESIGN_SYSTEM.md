@@ -259,11 +259,6 @@ Design direction C ("The counter") — Peppery's default; any preset opts in per
 - Header + hero geometry lives in `styles/critical-counter.css` (inlined) so first
   paint does not shift.
 
-## WPBakery
-
-WPBakery is optional: default templates render without it; existing content keeps
-working.
-
 ## Stylesheet entry points
 
 Tokens are the contract; these are the key files that consume them.

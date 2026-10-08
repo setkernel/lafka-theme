@@ -175,10 +175,6 @@
             });
         }
 
-        $(".prod_hold a.add_to_wishlist").prop("title", function() {
-            return $(this).data("title");
-        });
-
         // -------------------------------------------------------------------------------------------------------
         // SLIDING ELEMENTS
         // -------------------------------------------------------------------------------------------------------
@@ -638,32 +634,6 @@
         $(document.body).on('click', 'div.lafka-share-links a', function(e) {
             window.open(this.href, 'targetWindow', 'toolbar=no,location=0,status=no,menubar=no,scrollbars=yes,resizable=yes,width=600,height=300');
             return false;
-        });
-
-        /*
-         * Listen for added_to_wishlist to increase number in header
-         */
-        $(document.body).on("added_to_wishlist", function() {
-            var wishNumberSpan = $("span.lafka-wish-number");
-            if (wishNumberSpan.length) {
-                var wishNum = parseInt(wishNumberSpan.html(), 10);
-                if (!isNaN(wishNum)) {
-                    wishNumberSpan.html(wishNum + 1);
-                }
-            }
-        });
-
-        /*
-         * Listen for removed_from_wishlist to decrease number in header
-         */
-        $(document.body).on("removed_from_wishlist", function() {
-            var wishNumberSpan = $("span.lafka-wish-number");
-            if (wishNumberSpan.length) {
-                var wishNum = parseInt(wishNumberSpan.html(), 10);
-                if (!isNaN(wishNum) && wishNum > 0) {
-                    wishNumberSpan.html(wishNum - 1);
-                }
-            }
         });
 
         // Show reset button if there are active filters

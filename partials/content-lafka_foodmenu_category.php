@@ -15,10 +15,8 @@ if ( is_page() ) {
 	// Get the lafka custom options
 	$lafka_page_options = get_post_custom( get_the_ID() );
 
-	$lafka_show_title_page          = 'yes';
-	$lafka_show_breadcrumb          = 'yes';
-	$lafka_featured_slider          = 'none';
-	$lafka_rev_slider_before_header = 0;
+	$lafka_show_title_page = 'yes';
+	$lafka_show_breadcrumb = 'yes';
 
 	if ( isset( $lafka_page_options['lafka_show_title_page'] ) && trim( $lafka_page_options['lafka_show_title_page'][0] ) != '' ) {
 		$lafka_show_title_page = $lafka_page_options['lafka_show_title_page'][0];
@@ -26,14 +24,6 @@ if ( is_page() ) {
 
 	if ( isset( $lafka_page_options['lafka_show_breadcrumb'] ) && trim( $lafka_page_options['lafka_show_breadcrumb'][0] ) != '' ) {
 		$lafka_show_breadcrumb = $lafka_page_options['lafka_show_breadcrumb'][0];
-	}
-
-	if ( isset( $lafka_page_options['lafka_rev_slider'] ) && trim( $lafka_page_options['lafka_rev_slider'][0] ) != '' ) {
-		$lafka_featured_slider = $lafka_page_options['lafka_rev_slider'][0];
-	}
-
-	if ( isset( $lafka_page_options['lafka_rev_slider_before_header'] ) && trim( $lafka_page_options['lafka_rev_slider_before_header'][0] ) != '' ) {
-		$lafka_rev_slider_before_header = $lafka_page_options['lafka_rev_slider_before_header'][0];
 	}
 
 	$lafka_featured_flex_slider_imgs = lafka_get_more_featured_images( get_the_ID() );
@@ -137,12 +127,6 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 							<?php endforeach; ?>
 						</ul>
 					</div>
-				<?php elseif ( is_page() && $lafka_featured_slider != 'none' && function_exists( 'putRevSlider' ) && ! $lafka_rev_slider_before_header ) : ?>
-					<!-- FEATURED REVOLUTION SLIDER -->
-					<div class="slideshow">
-						<?php putRevSlider( $lafka_featured_slider ); ?>
-					</div>
-					<!-- END OF FEATURED REVOLUTION SLIDER -->
 				<?php elseif ( is_page() && has_post_thumbnail() ) : ?>
 					<?php the_post_thumbnail( 'lafka-foodmenu-single-thumb' ); ?>
 				<?php endif; ?>

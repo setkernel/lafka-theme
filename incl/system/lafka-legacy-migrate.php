@@ -160,12 +160,11 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			// (functions.php), the enqueue/localize + sidebar/menu/video-bg
 			// resolvers (core-functions.php), the WooCommerce shop layout
 			// (woocommerce-functions.php), and the shop / product / foodmenu /
-			// blog / forum / events / sidebar templates. Each destination keeps
+			// blog / sidebar templates. Each destination keeps
 			// the Options-Framework `std` as its theme_mod default at every
 			// reader so a fresh install renders identically and an upgraded
-			// install's copied value takes over here. The two dynamic-default
-			// sidebar keys (woocommerce_sidebar / bbpress_sidebar /
-			// events_sidebar) resolve their default at read time via
+			// install's copied value takes over here. The dynamic-default
+			// sidebar key (woocommerce_sidebar) resolves its default at read time via
 			// lafka_registered_sidebar_default(); the copy below is value-verbatim.
 			//
 			// NOT in this map (deliberately): `lafka_github_token` is a SECRET —
@@ -193,7 +192,6 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'show_my_account'                 => 'lafka_show_my_account',
 			'show_shopping_cart'              => 'lafka_show_shopping_cart',
 			'shopping_cart_on_add'            => 'lafka_shopping_cart_on_add',
-			'show_wish_in_header'             => 'lafka_show_wish_in_header',
 			'show_breadcrumb'                 => 'lafka_show_breadcrumb',
 			'show_prev_next'                  => 'lafka_show_prev_next',
 			'enable_smooth_scroll'            => 'lafka_enable_smooth_scroll',
@@ -250,15 +248,6 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'show_author_avatar'              => 'lafka_show_author_avatar',
 			'show_blog_video_bckgr'           => 'lafka_show_blog_video_bckgr',
 			'blog_video_bckgr_url'            => 'lafka_blog_video_bckgr_url',
-			'forum_header_style'              => 'lafka_forum_header_style',
-			'forum_top_menu'                  => 'lafka_forum_top_menu',
-			'forum_subtitle'                  => 'lafka_forum_subtitle',
-			'forum_title_background_imgid'    => 'lafka_forum_title_background_imgid',
-			'forum_title_alignment'           => 'lafka_forum_title_alignment',
-			'events_top_menu'                 => 'lafka_events_top_menu',
-			'events_header_style'             => 'lafka_events_header_style',
-			'events_title'                    => 'lafka_events_title',
-			'event_use_countdown'             => 'lafka_event_use_countdown',
 			'sidebar_position'                => 'lafka_sidebar_position',
 			'sidebar_ids'                     => 'lafka_sidebar_ids',
 			'blog_categoty_sidebar'           => 'lafka_blog_categoty_sidebar',
@@ -269,8 +258,6 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			'shop_sidebar_position'           => 'lafka_shop_sidebar_position',
 			'show_sidebar_product'            => 'lafka_show_sidebar_product',
 			'product_sidebar_position'        => 'lafka_product_sidebar_position',
-			'bbpress_sidebar'                 => 'lafka_bbpress_sidebar',
-			'events_sidebar'                  => 'lafka_events_sidebar',
 			'offcanvas_sidebar'               => 'lafka_offcanvas_sidebar',
 			'lafka_github_updates_enabled'    => 'lafka_github_updates_enabled',
 

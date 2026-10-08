@@ -284,7 +284,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		$custom_css  = ':root{';
 		$custom_css .= '--lafka-accent-color:' . $accent_color . ';';
 		// v5.96.0: SSOT — Customizer accent_color drives BOTH the legacy
-		// `--lafka-accent-color` (consumed by WPBakery surfaces + dynamic
+		// `--lafka-accent-color` (consumed by the dynamic
 		// rules below) AND the handoff token `--lafka-color-accent-500`
 		// (consumed by every rebuilt page since v5.59.0). Without this
 		// alias, operators who set their brand color in Customizer
@@ -346,9 +346,6 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 
 		// Breadcrumb base color (WCAG AA compliant)
 		$custom_css .= '.breadcrumb{color:#767676}';
-
-		// Compare table — always hide quickview/compare on compare page
-		$custom_css .= 'table.compare-list .add-to-cart td a.lafka-quick-view-link,table.compare-list .add-to-cart td a.compare.button{display:none !important}';
 
 		return $custom_css;
 	}

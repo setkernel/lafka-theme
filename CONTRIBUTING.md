@@ -66,7 +66,6 @@ Every npm script, one line each.
 | Design presets (10 built-in) | `presets/` + `incl/presets/` ([docs/PRESET_ENGINE.md](docs/PRESET_ENGINE.md)) |
 | Per-template partials | `partials/` |
 | WooCommerce overrides | `woocommerce/` |
-| Tribe Events overrides | `tribe-events/` |
 | Custom page templates | `page_templates/` |
 | Frontend JS | `js/` |
 | Frontend CSS | `style.css` (root) + `styles/` (design tokens + variants) |

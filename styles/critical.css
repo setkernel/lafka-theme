@@ -10,7 +10,7 @@
  *   - Main container / .inner width constraint + #header shell
  *   - Skip-link / screen-reader-text
  *   - Hero slider container aspect-ratio placeholder (kills CLS on first paint)
- *   - Primary CTA button base styles (.vc_btn3-style-custom, a.button)
+ *   - Primary CTA button base styles (a.button)
  *
  * GX T-02: every stylesheet that paints the first viewport is render-blocking;
  * only off-screen modules (drawers, dialogs, footer) and vendored icon /
@@ -183,21 +183,8 @@ body {
     }
 }
 
-/* ── WPBAKERY ROW WRAPPERS (prevent horizontal scroll flash) ── */
-.vc_row.wpb_row {
-    margin-left: 0;
-    margin-right: 0;
-}
-
-.wpb_column.vc_column_container {
-    padding-left: 0;
-    padding-right: 0;
-}
-
 /* ── PRIMARY CTA BUTTON ── */
-a.button,
-.vc_btn3-style-custom,
-.vc_general.vc_btn3 {
+a.button {
     display: inline-block;
     text-decoration: none;
     position: relative;

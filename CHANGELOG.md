@@ -15,7 +15,34 @@ git tags + GitHub Releases.
   retired in favour of the single `../local-env` Docker stack), `phpunit/phpunit` from
   Composer, the `test:*` npm scripts, and every doc/config reference to them.
 
+- **Legacy third-party integrations**, completely (templates, CSS, JS, constants,
+  Customizer settings and defaults, TGM entries, docs):
+  - WPBakery / Visual Composer: `incl/wpbakery-strip.php` (the plugin keeps the one
+    `[vc_*]` content fallback), the `vc_before_init` / `init` hooks in
+    `incl/system/config.php`, the js_composer dequeues and shop custom-CSS output, and
+    every `vc_` / `wpb_` style rule (the theme's own `.wpb_lafka_banner` markup stays).
+  - Slider Revolution: the `putRevSlider` / `lafka_rev_slider` branches in `content.php`,
+    `single-lafka-foodmenu.php` and `partials/content-lafka_foodmenu_category.php`, and
+    the `.slideshow` rules.
+  - bbPress: `forum.php`, `styles/legacy-forum.css`, `LAFKA_IS_BBPRESS`, the Forum Sidebar,
+    the bbPress breadcrumb / sidebar / header-style / top-menu branches and the
+    `lafka_forum_*` / `lafka_bbpress_sidebar` settings and defaults.
+  - The Events Calendar: `tribe-events/`, `styles/legacy-events.css`, `LAFKA_IS_EVENTS`,
+    `lafka_is_events_part()`, the events title / sidebar / top-menu / header-style
+    branches, the skeleton-styles activation hook and the `lafka_events_*` /
+    `lafka_event_use_countdown` settings and defaults.
+  - YITH Wishlist / Compare: `lafka_add_compare_link()`, the wishlist button hooks and
+    filters, the header wishlist counter JS, `woocommerce/compare.css`, the dynamic-css
+    compare rule and the `lafka_show_wish_in_header` migration entry.
+  - WC Marketplace / WC Vendors / Dokan style rules.
+  - The no-op orphan-shortcode fallbacks (`incl/lafka-shortcode-fallbacks.php`, MC4WP /
+    Contact Form 7 tags) and the dead `wptf_*` multi-currency AJAX actions.
+  - Removed settings are also dropped from the legacy-option migration map and
+    `wpml-config.xml`.
+
 ### Changed
+- TGM Plugin Activation now registers only the Lafka plugin and WooCommerce, both
+  required (no more optional YITH Wishlist, Revolution Slider or WPBakery entries).
 - `npm run i18n:pot` and `npm run previews:presets` now target the local stack
   (`lafka-local-cli` container, `http://localhost:8080`; override with
   `LAFKA_WPCLI_CONTAINER` / `LAFKA_BASE_URL`). The WP-CLI helper moved to

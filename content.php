@@ -4,16 +4,6 @@
 
 $lafka_custom_options = get_post_custom( get_the_ID() );
 
-$lafka_featured_slider = 'none';
-
-if ( isset( $lafka_custom_options['lafka_rev_slider'] ) && trim( $lafka_custom_options['lafka_rev_slider'][0] ) != '' && function_exists( 'putRevSlider' ) ) {
-	$lafka_featured_slider = $lafka_custom_options['lafka_rev_slider'][0];
-}
-$lafka_rev_slider_before_header = 0;
-if ( isset( $lafka_custom_options['lafka_rev_slider_before_header'] ) && trim( $lafka_custom_options['lafka_rev_slider_before_header'][0] ) != '' ) {
-	$lafka_rev_slider_before_header = $lafka_custom_options['lafka_rev_slider_before_header'][0];
-}
-
 $lafka_featured_flex_slider_imgs = lafka_get_more_featured_images( get_the_ID() );
 
 // Blog style
@@ -62,10 +52,6 @@ if ( is_singular( array( 'post' ) ) ) {
 					<a class="go_to_page go_to_page_blog" title="<?php esc_attr_e( 'View', 'lafka' ); ?>" href="<?php echo esc_url( get_permalink() ); ?>"><?php the_title(); ?></a>
 				</div>
 			<?php endif; ?>
-		</div>
-	<?php elseif ( ! $lafka_rev_slider_before_header && $lafka_featured_slider != 'none' && function_exists( 'putRevSlider' ) ) : ?>
-		<div class="slideshow">
-			<?php putRevSlider( $lafka_featured_slider ); ?>
 		</div>
 	<?php elseif ( has_post_thumbnail() && ( ! is_single() || is_singular( array( 'post' ) ) && $lafka_show_feat_image_in_post == 'yes' ) ) : ?>
 		<div class="post-unit-holder">

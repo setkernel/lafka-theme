@@ -180,21 +180,6 @@ if ( ! function_exists( 'lafka_register_sidebars' ) ) {
 				);
 			}
 
-			if ( LAFKA_IS_BBPRESS ) {
-				// Define shop sidebar if BBpress is active
-				register_sidebar(
-					array(
-						'name'          => 'Forum Sidebar',
-						'id'            => 'lafka_forum',
-						'description'   => esc_html__( 'Default Forum sidebar', 'lafka' ),
-						'before_widget' => '<div id="%1$s" class="widget box %2$s">',
-						'after_widget'  => '</div>',
-						'before_title'  => '<h3>',
-						'after_title'   => '</h3>',
-					)
-				);
-			}
-
 			// Register the custom sidbars
 			$lafka_custom_sdbrs = substr( get_theme_mod( 'lafka_sidebar_ids', '' ), 0, -1 );
 
@@ -258,26 +243,7 @@ if ( ! function_exists( 'lafka_register_required_plugins' ) ) {
 			array(
 				'name'     => esc_html__( 'WooCommerce', 'lafka' ),
 				'slug'     => 'woocommerce',
-				'required' => false,
-			),
-			array(
-				'name'     => esc_html__( 'YITH WooCommerce Wishlist', 'lafka' ),
-				'slug'     => 'yith-woocommerce-wishlist',
-				'required' => false,
-			),
-			// Commercial plugins — must be purchased and installed separately.
-			// If you have a zip, place it in the theme's plugins/ directory and uncomment the 'source' line.
-			array(
-				'name'     => esc_html__( 'Revolution Slider (optional, commercial)', 'lafka' ),
-				'slug'     => 'revslider',
-				// 'source'=> get_template_directory() . '/plugins/revslider.zip',
-				'required' => false,
-			),
-			array(
-				'name'     => esc_html__( 'WPBakery Page Builder (optional, commercial)', 'lafka' ),
-				'slug'     => 'js_composer',
-				// 'source'=> get_template_directory() . '/plugins/js_composer.zip',
-				'required' => false,
+				'required' => true,
 			),
 		);
 
@@ -1056,7 +1022,7 @@ if ( ! function_exists( 'lafka_is_legacy_blog_surface' ) ) {
 
 if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	/**
-	 * Whether the current request may render legacy lafka_* shortcode / WPBakery
+	 * Whether the current request may render legacy lafka_* shortcode
 	 * / foodmenu-grid / post-slider markup whose CSS was extracted into
 	 * styles/legacy-shortcodes.css (NX1-10a). Loaded on: the blog surfaces (post
 	 * galleries/sliders), the legacy foodmenu CPT, and any singular content whose
@@ -1069,7 +1035,7 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 		if ( lafka_is_legacy_blog_surface() ) {
 			return true;
 		}
-		// page-menu.php ignores the page's own content (often an old WPBakery
+		// page-menu.php ignores the page's own content (often an old page-builder
 		// layout), so its shortcodes never render there (GX M-37).
 		if ( isset( $GLOBALS['template'] ) && 'page-menu.php' === basename( (string) $GLOBALS['template'] ) ) {
 			return false;
@@ -1082,8 +1048,7 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 			return true;
 		}
 		// GX T-25: only content the template renders, and only lafka_*
-		// shortcodes — legacy-shortcodes.css has no WPBakery (vc_*) rules, so a
-		// bare [vc_row] wrapper (e.g. around [woocommerce_cart]) needs nothing.
+		// shortcodes.
 		$content = function_exists( 'lafka_rendered_post_content' )
 			? lafka_rendered_post_content()
 			: ( ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) ? (string) $GLOBALS['post']->post_content : '' );
@@ -1872,12 +1837,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if ( lafka_needs_legacy_shortcode_styles() ) {
 			wp_enqueue_style( 'lafka-legacy-shortcodes', get_template_directory_uri() . '/styles/legacy-shortcodes.css', array( 'lafka-style' ), $lafka_legacy_ver );
 		}
-		if ( function_exists( 'is_bbpress' ) ) {
-			wp_enqueue_style( 'lafka-legacy-forum', get_template_directory_uri() . '/styles/legacy-forum.css', array( 'lafka-style' ), $lafka_legacy_ver );
-		}
-		if ( class_exists( 'Tribe__Events__Main' ) ) {
-			wp_enqueue_style( 'lafka-legacy-events', get_template_directory_uri() . '/styles/legacy-events.css', array( 'lafka-style' ), $lafka_legacy_ver );
-		}
 
 		// v5.40.0: tokenized WC notices (success / error / info). Loads
 		// site-wide after lafka-style so source order wins over the legacy
@@ -1987,10 +1946,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// weight — WP no longer needs to enqueue ~40 KB of jQuery UI Tabs
 		// CSS + JS on every page render. Confirmed by grep: no .tabs( call
 		// remains in lafka-front.js or anywhere else in the theme.
-		// v6.14.0 (perf): the old hard dependency on wpb_composer_front_js forced
-		// WPBakery's front JS onto EVERY page (lafka-front is global) and undid the
-		// native-page dequeue. Dropped. v6.18.0: the last dead .vc_* jQuery
-		// selectors were also removed from lafka-front.js (theme is WPBakery-free).
 		$lafka_front_deps = array( 'jquery', 'lafka-dialog' );
 
 		// PERF-26: WP 6.3 native defer strategy. Inline `wp_localize_script`
@@ -2225,14 +2180,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				)
 			);
 		}
-
-		// Output WP Bakery Page Builder shortcodes custom styles on shop page
-		if ( function_exists( 'is_shop' ) ) {
-			$shortcodes_custom_css = get_post_meta( wc_get_page_id( 'shop' ), '_wpb_shortcodes_custom_css', true );
-			if ( is_shop() && ! empty( $shortcodes_custom_css ) ) {
-				wp_add_inline_style( 'lafka-style', esc_html( $shortcodes_custom_css ) );
-			}
-		}
 	}
 
 }
@@ -2264,54 +2211,6 @@ if ( ! function_exists( 'lafka_dequeue_irrelevant_plugin_assets' ) ) {
 			wp_dequeue_style( 'wc-authorize-net-cim-credit-card' );
 			wp_dequeue_script( 'sv-wc-payment-gateway-payment-form-v5_15_4' );
 			wp_dequeue_script( 'wc-authorize-net-cim' );
-		}
-
-		// WPBakery (js_composer) frontend assets are only needed on pages
-		// that actually use the visual composer. The handoff rebuild
-		// emits native partials — PDP / cart / checkout / menu / cart
-		// / shop / account / 404 / contact / WC endpoints don't need it.
-		$wpbakery_unused_here = is_front_page() // native front-page.php — never renders vc content
-			|| ( function_exists( 'is_product' ) && is_product() )
-			|| ( function_exists( 'is_cart' ) && is_cart() )
-			|| ( function_exists( 'is_checkout' ) && is_checkout() )
-			|| ( function_exists( 'is_shop' ) && is_shop() )
-			|| ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() )
-			|| ( function_exists( 'is_account_page' ) && is_account_page() )
-			|| is_404();
-		// v6.14.0 (perf): also drop WPBakery on any singular page/post whose
-		// content carries no [vc_ shortcode — those render from native markup, so
-		// the 455KB js_composer CSS + JS is pure waste. Pages still built in
-		// WPBakery keep it until migrated to native templates.
-		if ( ! $wpbakery_unused_here && is_singular() ) {
-			$lafka_cur_post = get_post();
-			if ( $lafka_cur_post && false === strpos( (string) $lafka_cur_post->post_content, '[vc_' ) ) {
-				$wpbakery_unused_here = true;
-			}
-		}
-		if ( $wpbakery_unused_here ) {
-			wp_dequeue_style( 'js_composer_front' );
-			wp_dequeue_style( 'js_composer_custom_css' );
-			wp_dequeue_script( 'wpb_composer_front_js' );
-			wp_dequeue_script( 'vc_woocommerce-add-to-cart-js' );
-			// Visual Composer's own UI libs that ship even when not used:
-			wp_dequeue_script( 'isotope' );
-			wp_dequeue_script( 'jquery-waypoints' );
-		}
-	}
-}
-
-// Deregister additional font awesome registration. We always register our own.
-add_action( 'wp_enqueue_scripts', 'lafka_deregister_plugins_awesome_stylesheet', 20 );
-if ( ! function_exists( 'lafka_deregister_plugins_awesome_stylesheet' ) ) {
-	function lafka_deregister_plugins_awesome_stylesheet() {
-		if ( class_exists( 'Vc_Manager' ) ) {
-			wp_deregister_style( 'vc_font_awesome_5_shims' );
-			wp_deregister_style( 'vc_font_awesome_5' );
-			wp_deregister_style( 'vc_font_awesome_6' );
-		}
-		if ( function_exists( 'yith_wishlist_install' ) ) {
-			wp_dequeue_style( 'yith-wcwl-font-awesome' );
-			wp_dequeue_style( 'yith-wcwl-main' );
 		}
 	}
 }
@@ -2572,16 +2471,6 @@ if ( ! function_exists( 'lafka_set_menu_on_primary' ) ) {
 			if ( LAFKA_IS_WOOCOMMERCE && is_shop() ) {
 				return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_shop_top_menu', 'default' ) );
 			}
-			if ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() ) {
-				return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_forum_top_menu', 'default' ) );
-			}
-			if ( LAFKA_IS_EVENTS ) {
-				$mode_and_title = lafka_get_current_events_display_mode_and_title();
-				$events_mode    = $mode_and_title['display_mode'];
-				if ( in_array( $events_mode, array( 'MAIN_CALENDAR', 'CALENDAR_CATEGORY', 'MAIN_EVENTS', 'CATEGORY_EVENTS', 'SINGLE_EVENT_DAYS' ), true ) ) {
-					return lafka_set_menu_on_primary_helper( $args, get_theme_mod( 'lafka_events_top_menu', 'default' ) );
-				}
-			}
 
 			$chosen_menu = get_post_meta( get_the_ID(), 'lafka_top_menu', true );
 			return lafka_set_menu_on_primary_helper( $args, $chosen_menu );
@@ -2618,16 +2507,16 @@ if ( ! function_exists( 'lafka_registered_sidebar_default' ) ) {
 
 	/**
 	 * Resolve the default sidebar for a section, mirroring the retired Options
-	 * Framework's dynamic `std` for the WooCommerce / bbPress / Events sidebar
-	 * selects (NX1-02.layout-behaviour-toggles).
+	 * Framework's dynamic `std` for the WooCommerce sidebar
+	 * select (NX1-02.layout-behaviour-toggles).
 	 *
-	 * The framework defaulted those selects to a preferred sidebar id when that
+	 * The framework defaulted that select to a preferred sidebar id when that
 	 * sidebar was actually registered, else to 'none'. Reproducing that at the
 	 * `get_theme_mod()` read default keeps a fresh install byte-identical while
 	 * still degrading to 'none' on installs where the preferred sidebar is
 	 * absent (e.g. WooCommerce inactive).
 	 *
-	 * @param string $preferred Preferred registered-sidebar id (shop / lafka_forum / right_sidebar).
+	 * @param string $preferred Preferred registered-sidebar id (shop).
 	 * @return string The preferred id when registered, otherwise 'none'.
 	 */
 	function lafka_registered_sidebar_default( $preferred ) {
@@ -2660,14 +2549,6 @@ if ( ! function_exists( 'lafka_check_for_sidebar' ) ) {
 			$woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
 		}
 
-		if ( LAFKA_IS_BBPRESS ) {
-			$bbpress_sidebar = get_theme_mod( 'lafka_bbpress_sidebar', lafka_registered_sidebar_default( 'lafka_forum' ) );
-		}
-
-		if ( LAFKA_IS_EVENTS ) {
-			$events_sidebar = get_theme_mod( 'lafka_events_sidebar', lafka_registered_sidebar_default( 'right_sidebar' ) );
-		}
-
 		if ( is_single() || is_page() ) {
 			$options = get_post_custom( get_queried_object_id() );
 		}
@@ -2681,10 +2562,6 @@ if ( ! function_exists( 'lafka_check_for_sidebar' ) ) {
 
 		if ( LAFKA_IS_WOOCOMMERCE && function_exists( 'is_woocommerce' ) && is_woocommerce() && isset( $woocommerce_sidebar ) ) {
 			$sidebar_choice = $woocommerce_sidebar;
-		} elseif ( LAFKA_IS_BBPRESS && is_bbpress() && isset( $bbpress_sidebar ) && ( empty( $options ) || ( isset( $options['lafka_custom_sidebar'] ) && $options['lafka_custom_sidebar'][0] == 'default' && $show_sidebar_from_meta == 'yes' ) ) ) {
-			$sidebar_choice = $bbpress_sidebar;
-		} elseif ( LAFKA_IS_EVENTS && lafka_is_events_part() && isset( $events_sidebar ) && ( empty( $options ) || ( isset( $options['lafka_custom_sidebar'] ) && $options['lafka_custom_sidebar'][0] == 'default' && $show_sidebar_from_meta == 'yes' ) ) ) {
-			$sidebar_choice = $events_sidebar;
 		} elseif ( is_tax( 'lafka_foodmenu_category' ) || is_post_type_archive( 'lafka-foodmenu' ) ) {
 			$sidebar_choice = $foodmenu_categoty_sidebar;
 		} elseif ( $is_cat_tag_tax_archive ) {
@@ -2788,98 +2665,6 @@ if ( ! function_exists( 'lafka_get_choose_menu_options' ) ) {
 
 }
 
-// Disable BBPress breadcrumb
-add_filter( 'bbp_no_breadcrumb', '__return_true' );
-
-if ( ! function_exists( 'lafka_get_current_events_display_mode_and_title' ) ) {
-
-	/**
-	 * Returns current events display mode and page title specific for the Events Calendar Plugin
-	 *
-	 * @param $id int  post/page id
-	 *
-	 * @return array Array[display_mode, title]
-	 */
-	function lafka_get_current_events_display_mode_and_title( $id = 0 ) {
-
-		if ( $id == 0 ) {
-			global $wp_query;
-
-			if ( isset( $wp_query->post ) ) {
-				$id = $wp_query->post->ID;
-			}
-		}
-
-		$return_arr = array(
-			'display_mode' => '',
-			'title'        => '',
-		);
-
-		// If Event calendar is active follow the procedure to display the title
-		if ( function_exists( 'tribe_is_month' ) ) {
-			if ( tribe_is_month() && ! is_tax( '', $id ) ) { // The Main Calendar Page
-				if ( get_theme_mod( 'lafka_events_title', '' ) ) {
-					$title = get_theme_mod( 'lafka_events_title', '' );
-				} else {
-					$title = esc_html__( 'The Main Calendar', 'lafka' );
-				}
-				$mode = 'MAIN_CALENDAR';
-			} elseif ( tribe_is_month() && is_tax( '', $id ) ) { // Calendar Category Pages
-				$title = esc_html__( 'Calendar Category', 'lafka' ) . ': ' . tribe_meta_event_category_name();
-				$mode  = 'CALENDAR_CATEGORY';
-			} elseif ( tribe_is_event( $id ) && ! tribe_is_day() && ! is_singular() && ! is_tax( '', $id ) ) { // The Main Events List
-				if ( get_theme_mod( 'lafka_events_title', '' ) ) {
-					$title = get_theme_mod( 'lafka_events_title', '' );
-				} else {
-					$title = esc_html__( 'Events List', 'lafka' );
-				}
-				$mode = 'MAIN_EVENTS';
-			} elseif ( tribe_is_event( $id ) && ! tribe_is_day() && ! is_singular() && is_tax( '', $id ) ) { // Category Events List
-				$title = esc_html__( 'Events List', 'lafka' ) . ': ' . tribe_meta_event_category_name();
-				$mode  = 'CATEGORY_EVENTS';
-			} elseif ( tribe_is_event( $id ) && is_singular() ) { // Single Events
-				$title = get_the_title( $id );
-				$mode  = 'SINGLE_EVENTS';
-			} elseif ( tribe_is_day() ) { // Single Event Days
-				$title = esc_html__( 'Events on', 'lafka' ) . ': ' . date( 'F j, Y', strtotime( get_query_var( 'eventDate' ) ) );
-				$mode  = 'SINGLE_EVENT_DAYS';
-			} elseif ( tribe_is_venue( $id ) ) { // Single Venues
-				$title = get_the_title( $id );
-				$mode  = 'VENUE';
-			} else {
-				$title = get_the_title( $id );
-				$mode  = '';
-			}
-		} else {
-			$title = get_the_title( $id );
-			$mode  = '';
-		}
-
-		$return_arr['title']        = $title;
-		$return_arr['display_mode'] = $mode;
-
-		return $return_arr;
-	}
-}
-
-if ( ! function_exists( 'lafka_is_events_part' ) ) {
-
-	/**
-	 * Detect if we are on an Events Calendar page
-	 *
-	 * @return bool
-	 */
-	function lafka_is_events_part() {
-
-		if ( LAFKA_IS_EVENTS && function_exists( 'tribe_is_event' ) && ( tribe_is_month() || tribe_is_event() || tribe_is_event_category() || tribe_is_in_main_loop() || tribe_is_view() || 'tribe_events' == get_post_type() || is_singular( 'tribe_events' ) ) ) {
-			return true;
-		}
-
-		return false;
-	}
-}
-
-
 /**
  * Strip the "script" tag from given string
  * Used for inline js code given to wp_add_inline_script
@@ -2909,15 +2694,3 @@ require_once get_template_directory() . '/incl/template-helpers/image-sizes.php'
 
 // GX T-19: where the plugin's add-on disclosure button renders.
 require_once get_template_directory() . '/incl/woocommerce/lafka-addon-group-toggle.php';
-
-// Fix Wishlist issue (adding prettyPhoto): https://wordpress.org/support/topic/conflict-with-the-wpbakery-gallery/
-add_filter(
-	'yith_wcwl_main_script_deps',
-	function ( $deps ) {
-		if ( isset( $deps[2] ) ) {
-			unset( $deps[2] ); // remove lightbox.
-		}
-
-		return $deps;
-	}
-);

@@ -170,9 +170,6 @@ require_once get_template_directory() . '/incl/woocommerce/lafka-shop-to-menu.ph
 // A bare site search is a menu search on counter storefronts (GX M-04 / O-15).
 require_once get_template_directory() . '/incl/woocommerce/lafka-product-search.php';
 
-// No-op fallbacks for orphan 3rd-party shortcodes (v5.40.0).
-require_once get_template_directory() . '/incl/lafka-shortcode-fallbacks.php';
-
 // Customizer panel for the native home page (v5.46.0 — Phase B).
 require_once get_template_directory() . '/incl/customizer-home.php';
 
@@ -228,9 +225,6 @@ require_once get_template_directory() . '/incl/system/lafka-preset-reset.php';
 
 // Auto-apply Lafka Contact template to contact/contact-us pages (v5.66.2).
 require_once get_template_directory() . '/incl/contact-template-loader.php';
-
-// Strip WPBakery shortcodes from rendered content (v5.66.3).
-require_once get_template_directory() . '/incl/wpbakery-strip.php';
 
 /**
  * Echo the pagination
@@ -335,8 +329,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 				}
 
 				$brdcrmb .= $before . single_cat_title( '', false ) . $after;
-				/* If is taxonomy or BBPress topic tag */
-			} elseif ( is_tax() || get_query_var( 'bbp_topic_tag' ) ) {
+			} elseif ( is_tax() ) {
 				$cat_obj   = $wp_query->get_queried_object();
 				$thisCat   = $cat_obj->term_id;
 				$thisCat   = get_term( $thisCat, $cat_obj->taxonomy );
@@ -382,65 +375,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 					$post_type = get_post_type_object( get_post_type( $wp_query->post->ID ) );
 					$slug      = $post_type->rewrite;
 					$real_slug = $slug['slug'];
-					if ( $slug['slug'] == 'forums/forum' ) {
-						$real_slug = 'forums';
-					}
-					if ( function_exists( 'bbp_is_single_topic' ) && bbp_is_single_topic() ) { // If is Topic
-						if ( is_singular() ) {
-							$ancestors = array_reverse( (array) get_post_ancestors( $wp_query->post->ID ) );
-							// Ancestors exist
-							if ( ! empty( $ancestors ) ) {
-								// Loop through parents
-								foreach ( (array) $ancestors as $parent_id ) {
-									// Parents
-									$parent = get_post( $parent_id );
-									// Skip parent if empty or error
-									if ( empty( $parent ) || is_wp_error( $parent ) ) {
-										continue;
-									}
-									// Switch through post_type to ensure correct filters are applied
-									switch ( $parent->post_type ) {
-										// Forum
-										case bbp_get_forum_post_type():
-											$crumbs[] = '<a href="' . esc_url( bbp_get_forum_permalink( $parent->ID ) ) . '" >' . bbp_get_forum_title( $parent->ID ) . '</a>';
-											break;
-										// Topic
-										case bbp_get_topic_post_type():
-											$crumbs[] = '<a href="' . esc_url( bbp_get_topic_permalink( $parent->ID ) ) . '" >' . bbp_get_topic_title( $parent->ID ) . '</a>';
-											break;
-										// Reply (Note: not in most themes)
-										case bbp_get_reply_post_type():
-											$crumbs[] = '<a href="' . esc_url( bbp_get_reply_permalink( $parent->ID ) ) . '" >' . bbp_get_reply_title( $parent->ID ) . '</a>';
-											break;
-										// WordPress Post/Page/Other
-										default:
-											$crumbs[] = '<a href="' . esc_url( get_permalink( $parent->ID ) ) . '" >' . get_the_title( $parent->ID ) . '</a>';
-											break;
-									}
-								}
-
-								// Edit topic tag
-							}
-						}
-
-						$page = bbp_get_page_by_path( bbp_get_root_slug() );
-						if ( ! empty( $page ) ) {
-							$root_url = get_permalink( $page->ID );
-
-							// Use the root slug
-						} else {
-							$root_url = get_post_type_archive_link( bbp_get_forum_post_type() );
-						}
-
-						$brdcrmb .= '<a class="no-link" href="' . esc_url( $root_url ) . '">' . esc_html__( 'Forums', 'lafka' ) . '</a> ' . $delimiter . ' ';
-						foreach ( $crumbs as $crumb ) {
-							$brdcrmb .= $crumb . ' ' . $delimiter;
-						}
-					} elseif ( ! in_array( $post_type->name, array( 'tribe_venue', 'tribe_organizer' ), true ) ) {
-						$brdcrmb .= '<a class="no-link" href="' . esc_url( $homeLink . '/' . $real_slug ) . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
-					} else {
-						$brdcrmb .= '<span>' . $post_type->labels->name . '</span> ' . $delimiter . ' ';
-					}
+					$brdcrmb .= '<a class="no-link" href="' . esc_url( $homeLink . '/' . $real_slug ) . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 
 					$brdcrmb .= $before . get_the_title( $wp_query->post->ID ) . $after;
 				} else {
@@ -1034,8 +969,8 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		// the layout class
 		$general_layout = get_theme_mod( 'lafka_general_layout', 'lafka_fullwidth' );
 
-		// check is singular and not Blog/Shop/Forum so we get the real post_meta
-		if ( ! ( LAFKA_IS_WOOCOMMERCE && is_shop() ) && ! lafka_is_blog() && ! ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() ) && is_singular() ) {
+		// check is singular and not Blog/Shop so we get the real post_meta
+		if ( ! ( LAFKA_IS_WOOCOMMERCE && is_shop() ) && ! lafka_is_blog() && is_singular() ) {
 			// Pull the full meta array once instead of two separate single-key
 			// reads (which all hit `get_metadata_raw()` independently). The
 			// returned array is already in WP's meta cache, so individual key
@@ -1065,10 +1000,8 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 		} else {
 			$is_header_style_meta = '';
 		}
-		$is_header_style_blog   = get_theme_mod( 'lafka_blog_header_style', '' );
-		$is_header_style_shop   = get_theme_mod( 'lafka_shop_header_style', '' );
-		$is_header_style_forum  = get_theme_mod( 'lafka_forum_header_style', '' );
-		$is_header_style_events = get_theme_mod( 'lafka_events_header_style', '' );
+		$is_header_style_blog = get_theme_mod( 'lafka_blog_header_style', '' );
+		$is_header_style_shop = get_theme_mod( 'lafka_shop_header_style', '' );
 
 		if ( LAFKA_IS_WOOCOMMERCE && ( is_product_category() || is_product_tag() ) ) {
 			$is_header_style_shop_category = get_term_meta( $wp_query->queried_object_id, 'lafka_term_header_style', true );
@@ -1085,10 +1018,6 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 			$header_style_class = $is_header_style_shop;
 		} elseif ( LAFKA_IS_WOOCOMMERCE && ( is_product_category() || is_product_tag() ) && $is_header_style_shop_category ) {
 			$header_style_class = $is_header_style_shop_category;
-		} elseif ( LAFKA_IS_BBPRESS && bbp_is_forum_archive() && $is_header_style_forum ) {
-			$header_style_class = $is_header_style_forum;
-		} elseif ( LAFKA_IS_EVENTS && lafka_is_events_part() && ! is_singular( 'tribe_events' ) ) {
-			$header_style_class = $is_header_style_events;
 		} elseif ( is_singular() ) {
 			$header_style_class = $is_header_style_meta;
 		}
@@ -1279,38 +1208,6 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 		return $output;
 	}
 
-}
-
-	// Disable autoptimize for bbPress pages
-	add_filter( 'autoptimize_filter_noptimize', 'lafka_bbpress_noptimize', 10, 0 );
-if ( ! function_exists( 'lafka_bbpress_noptimize' ) ) {
-
-	function lafka_bbpress_noptimize() {
-		global $post;
-		if ( function_exists( 'is_bbpress' ) && is_bbpress() || ( is_a( $post, 'WP_Post' ) && has_shortcode( $post->post_content, 'bbp-forum-index' ) ) ) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-}
-
-add_action( 'activate_the-events-calendar/the-events-calendar.php', 'lafka_set_skeleton_styles_events' );
-
-if ( ! function_exists( 'lafka_set_skeleton_styles_events' ) ) {
-
-	/**
-	 * Set skeleton styles option upon The Events Calendar plugin activation
-	 */
-	function lafka_set_skeleton_styles_events() {
-		$events_options = get_option( 'tribe_events_calendar_options' );
-		if ( is_array( $events_options ) ) {
-			$events_options['stylesheetOption'] = 'skeleton';
-
-			update_option( 'tribe_events_calendar_options', $events_options );
-		}
-	}
 }
 
 // Remove &nbsp from titles
@@ -1512,34 +1409,10 @@ if ( ! function_exists( 'lafka_add_action_to_multi_currency_ajax' ) ) {
 	 */
 	function lafka_add_action_to_multi_currency_ajax( $ajax_actions ) {
 
-		$ajax_actions[] = 'wptf_fragment_refresh'; // Add a AJAX action to the array
-		$ajax_actions[] = 'wptf_ajax_add_to_cart';
-
-		// Lafka actions below
 		$ajax_actions[] = 'lafka_quickview';
 		$ajax_actions[] = 'lafka_wc_add_cart';
 
 		return $ajax_actions;
-	}
-}
-
-add_filter( 'yith_wcwl_localize_script', 'lafka_add_wishlist_settings', 99 );
-if ( ! function_exists( 'lafka_add_wishlist_settings' ) ) {
-	/**
-	 * We need this to enable notifications for Wishlist.
-	 * This setting is included in their pro version.
-	 * Below function enables notices only if the setting is not already defined.
-	 *
-	 * @param $wishlist_settings_array
-	 *
-	 * @return array
-	 */
-	function lafka_add_wishlist_settings( $wishlist_settings_array ) {
-		if ( is_array( $wishlist_settings_array ) && ! array_key_exists( 'enable_notices', $wishlist_settings_array ) ) {
-			$wishlist_settings_array['enable_notices'] = true;
-		}
-
-		return $wishlist_settings_array;
 	}
 }
 
@@ -1849,11 +1722,10 @@ add_action(
 	function () {
 		// v5.35.0: Enqueue unconditionally. The .lafka-product-card markup
 		// rendered by content-product.php can appear on ANY page via
-		// WPBakery product-listing shortcodes, widgets, or related-product
-		// surfaces — not just WC archive/PDP. The previous archive-only
-		// gate caused the home page (which uses VC shortcodes to showcase
-		// categories) to collapse cards to ~50 px on mobile because WC's
-		// 20%-wide `.columns-5 li.product` rule applied unopposed.
+		// shortcodes, widgets, or related-product surfaces — not just WC
+		// archive/PDP. The previous archive-only gate caused cards to
+		// collapse to ~50 px on mobile because WC's 20%-wide
+		// `.columns-5 li.product` rule applied unopposed.
 		// Stylesheet is small (~4 KB); always-on cost is negligible.
 		wp_enqueue_style(
 			'lafka-product-card',

@@ -66,14 +66,6 @@ div.prod_hold .links {
 	margin-left: 7px;
 }
 
-.summary.entry-summary .yith-wcwl-add-to-wishlist {
-	text-align: right;
-}
-
-.summary.entry-summary .compare {
-	text-align: left;
-}
-
 .woocommerce-tabs ul.tabs li.description_tab a::before, .woocommerce-tabs ul.tabs li.reviews_tab a::before, .woocommerce-tabs ul.tabs li.additional_information_tab a::before {
 	margin-right: 0;
 	margin-left: 8px;
@@ -87,12 +79,12 @@ div.prod_hold .links {
 	float: none !important;
 }
 
-.lafka_blog_small_image .blog-post .post-unit-holder, .single-tribe_events .tribe-events-single-event-description, .lafka_blog_small_image .blog-post .lafka_flexslider.post_slide, .lafka_blog_small_image .blog-post .slideshow {
+.lafka_blog_small_image .blog-post .post-unit-holder, .lafka_blog_small_image .blog-post .lafka_flexslider.post_slide {
 	margin-right: 0;
 	margin-left: 30px;
 }
 
-.lafka_post_data_holder, .woocommerce-billing-fields, body.single-tribe_venue #tribe-events, body.single-tribe_organizer #tribe-events, #tribe-events-content, div.woocommerce-MyAccount-content, .woocommerce-shipping-fields, body.woocommerce-cart .cart-collaterals, form.checkout.woocommerce-checkout #order_review, .foodmenu-unit.list-unit .foodmenu-unit-info h4, .foodmenu-unit.list-unit .foodmenu-unit-info small, .breadcrumb, .lafka_title_holder .inner h1.heading-title, .lafka_title_holder .inner h6, .sidebar, .widget, .foodmenu-unit-info h6, .foodmenu-unit.list-unit .foodmenu-unit-info {
+.lafka_post_data_holder, .woocommerce-billing-fields, div.woocommerce-MyAccount-content, .woocommerce-shipping-fields, body.woocommerce-cart .cart-collaterals, form.checkout.woocommerce-checkout #order_review, .foodmenu-unit.list-unit .foodmenu-unit-info h4, .foodmenu-unit.list-unit .foodmenu-unit-info small, .breadcrumb, .lafka_title_holder .inner h1.heading-title, .lafka_title_holder .inner h6, .sidebar, .widget, .foodmenu-unit-info h6, .foodmenu-unit.list-unit .foodmenu-unit-info {
 	text-align: right;
 }
 
@@ -106,7 +98,7 @@ div.post .post-date, div.product.type-product .post-date, div.page.type-page .po
 	right: 30px;
 }
 
-.tribe-events-countdown-widget .tribe-countdown-text::before, .foodmenu-unit-info h6::before, div.widget_categories ul li > a::before, .tribe-venue-widget-list h4 a::before, div.widget_recent_comments ul li::before, div.widget_archive ul li a::before, div.widget_nav_menu ul li a::before, div.widget_meta ul li a::before, div.widget_recent_entries ul li a::before, div.widget_display_forums ul li a::before, .widget_display_views ul li a::before {
+.foodmenu-unit-info h6::before, div.widget_categories ul li > a::before, div.widget_recent_comments ul li::before, div.widget_archive ul li a::before, div.widget_nav_menu ul li a::before, div.widget_meta ul li a::before, div.widget_recent_entries ul li a::before, .widget_display_views ul li a::before {
 	margin-right: 0;
 	margin-left: 6px;
 }
@@ -141,91 +133,8 @@ ul.post-list li {
 	margin-left: 8px;
 }
 
-.bbp_widget_login .bbp-logged-in img.avatar {
-	margin: 0 0 10px 10px;
-}
-
-.bbp_widget_login .bbp-logged-in a.button.logout-link::before {
-	margin-left: 4px;
-}
-
-#bbpress-forums .bbp-body div.bbp-forum-author, #bbpress-forums .bbp-body div.bbp-topic-author, #bbpress-forums .bbp-body div.bbp-reply-author {
-	float: right;
-}
-
-#bbpress-forums .bbp-body div.bbp-reply-content::before, #bbpress-forums #bbp-user-body::before {
-	right: -8px;
-	left: auto;
-	transform: rotate(135deg);
-	-ms-transform: rotate(135deg); /* IE 9 */
-	-moz-transform: rotate(135deg); /* Firefox */
-	-webkit-transform: rotate(135deg); /* Safari and Chrome */
-	-o-transform: rotate(135deg); /* Opera */
-}
-
-#bbpress-forums #bbp-user-body::before {
-	right: 40px;
-	left: auto;
-	transform: rotate(45deg);
-}
-
-.single-tribe_events .tribe-events-event-meta.secondary .tribe-events-meta-group {
-	margin-right: 0;
-	margin-left: 2%;
-}
-
 dt {
 	float: right;
-}
-
-dd.tribe-venue, dd.tribe-organizer {
-	clear: both;
-	width: 100%;
-	display: block;
-}
-
-.tribe-events-list div.type-tribe_events .tribe-events-list-event-title, #tribe-geo-options h2, #tribe-geo-results h2 {
-	padding-right: 0;
-	padding-left: 170px;
-}
-
-.tribe-events-list div.type-tribe_events .tribe-events-event-cost {
-	right: auto;
-	left: 20px;
-}
-
-.vc_toggle_title > h4 {
-	display: block;
-	text-align: right;
-}
-
-.vc_toggle_default .vc_toggle_content .vc_toggle_icon, .vc_toggle_default .vc_toggle_title .vc_toggle_icon, .vc_toggle_round .vc_toggle_content .vc_toggle_icon, .vc_toggle_round .vc_toggle_title .vc_toggle_icon, .vc_toggle_rounded .vc_toggle_content .vc_toggle_icon, .vc_toggle_rounded .vc_toggle_title .vc_toggle_icon, .vc_toggle_simple .vc_toggle_content .vc_toggle_icon, .vc_toggle_simple .vc_toggle_title .vc_toggle_icon, .vc_toggle_square .vc_toggle_content .vc_toggle_icon, .vc_toggle_square .vc_toggle_title .vc_toggle_icon {
-	left: auto;
-	right: 0;
-}
-
-.vc_toggle_size_md.vc_toggle_default .vc_toggle_content, .vc_toggle_size_md.vc_toggle_default .vc_toggle_title {
-	padding-left: 0 !important;
-	padding-right: 24.2px !important;
-}
-
-.vc_toggle_size_lg.vc_toggle_default .vc_toggle_content, .vc_toggle_size_lg.vc_toggle_default .vc_toggle_title, .vc_toggle_size_lg.vc_toggle_round .vc_toggle_content, .vc_toggle_size_lg.vc_toggle_round .vc_toggle_title, .vc_toggle_size_lg.vc_toggle_rounded .vc_toggle_content, .vc_toggle_size_lg.vc_toggle_rounded .vc_toggle_title, .vc_toggle_size_lg.vc_toggle_simple .vc_toggle_content, .vc_toggle_size_lg.vc_toggle_simple .vc_toggle_title, .vc_toggle_size_lg.vc_toggle_square .vc_toggle_content, .vc_toggle_size_lg.vc_toggle_square .vc_toggle_title {
-	padding-left: 0 !important;
-	padding-right: 42px !important;
-}
-
-.vc_toggle_size_md.vc_toggle_default .vc_toggle_content, .vc_toggle_size_md.vc_toggle_default .vc_toggle_title, .vc_toggle_size_md.vc_toggle_round .vc_toggle_content, .vc_toggle_size_md.vc_toggle_round .vc_toggle_title, .vc_toggle_size_md.vc_toggle_rounded .vc_toggle_content, .vc_toggle_size_md.vc_toggle_rounded .vc_toggle_title, .vc_toggle_size_md.vc_toggle_simple .vc_toggle_content, .vc_toggle_size_md.vc_toggle_simple .vc_toggle_title, .vc_toggle_size_md.vc_toggle_square .vc_toggle_content, .vc_toggle_size_md.vc_toggle_square .vc_toggle_title {
-	padding-left: 0 !important;
-	padding-right: 33px !important;
-}
-
-.vc_toggle_size_sm.vc_toggle_default .vc_toggle_content, .vc_toggle_size_sm.vc_toggle_default .vc_toggle_title, .vc_toggle_size_sm.vc_toggle_round .vc_toggle_content, .vc_toggle_size_sm.vc_toggle_round .vc_toggle_title, .vc_toggle_size_sm.vc_toggle_rounded .vc_toggle_content, .vc_toggle_size_sm.vc_toggle_rounded .vc_toggle_title, .vc_toggle_size_sm.vc_toggle_simple .vc_toggle_content, .vc_toggle_size_sm.vc_toggle_simple .vc_toggle_title, .vc_toggle_size_sm.vc_toggle_square .vc_toggle_content, .vc_toggle_size_sm.vc_toggle_square .vc_toggle_title {
-	padding-left: 0 !important;
-	padding-right: 24px !important;
-}
-
-.vc_tta.vc_general .vc_tta-panel-body, .vc_toggle_content {
-	text-align: right;
 }
 
 div:not(.sidebar) .widget.widget_search::before {
@@ -246,7 +155,7 @@ dl.product-addon-totals dd {
     float: right;
 }
 
-div.widget_categories ul li a, div.widget_archive ul li a, div.widget_nav_menu ul li a, div.widget_recent_comments ul li a, div.widget_pages ul li a, div.widget_links ul li a, div.widget_recent_entries ul a, div.widget_meta ul li a, div.widget_display_forums ul li a, .widget_display_replies ul li a, .widget_display_topics li > a.bbp-forum-title, .widget_display_stats dt, .widget_display_stats dd, div.widget_display_views ul li a, .widget_display_topics .bbp-author-name {
+div.widget_categories ul li a, div.widget_archive ul li a, div.widget_nav_menu ul li a, div.widget_recent_comments ul li a, div.widget_pages ul li a, div.widget_links ul li a, div.widget_recent_entries ul a, div.widget_meta ul li a, .widget_display_replies ul li a, .widget_display_stats dt, .widget_display_stats dd, div.widget_display_views ul li a {
 	text-align: right;
 }
 
@@ -334,7 +243,7 @@ div.product input.qty, .star-rating span {
     width: 25px;
 }
 
-.inner, .dokan-dashboard #container > .dokan-dashboard-wrap {
+.inner {
     text-align: right;
 }
 

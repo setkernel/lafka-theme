@@ -436,15 +436,6 @@ body.woocommerce-page.woocommerce-account {
 	padding-bottom: var(--lafka-space-16);
 }
 
-/* Hide unrendered legacy shortcodes that surface as literal text.
- * v5.39.0: catch [mc4wp_form id="..."] when the MC4WP plugin is absent.
- * Operators can install the plugin to restore the embed; in the meantime
- * the bare bracket fragment shouldn't leak through.
- */
-.lafka-shortcode-fallback {
-	display: none;
-}
-
 /* v6.5.0 — Legacy lafka_icon_box callout on my-account page.
  * The demo content stored a [lafka_icon_box ... icon-left] shortcode below
  * the login form for the "Love burgers? Like deals?" newsletter copy. By
@@ -539,9 +530,7 @@ body.woocommerce-page.woocommerce-account {
 	display: none !important;
 }
 
-/* Newsletter signup band below the form — when MC4WP is missing, the
- * shortcode emits a `.lafka-shortcode-fallback` span which we hide via
- * the rule above. The iconbox alone gives the user the visual cue. */
+/* Newsletter signup band below the form. */
 .woocommerce-account .newsletter-section {
 	max-width: 480px;
 	margin: 0 auto;

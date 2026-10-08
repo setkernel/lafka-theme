@@ -4,13 +4,11 @@
 		     so register both the parent and the bundled child theme. -->
 		<key name="theme_mods_lafka">
 			<key name="lafka_shop_subtitle" />
-			<key name="lafka_forum_subtitle" />
 			<key name="lafka_blog_title" />
 			<key name="lafka_blog_subtitle" />
 		</key>
 		<key name="theme_mods_lafka-child">
 			<key name="lafka_shop_subtitle" />
-			<key name="lafka_forum_subtitle" />
 			<key name="lafka_blog_title" />
 			<key name="lafka_blog_subtitle" />
 		</key>

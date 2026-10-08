@@ -689,7 +689,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 * drive body classes (functions.php), the enqueue/localize + sidebar /
 		 * menu / video-background resolvers (core-functions.php), the WooCommerce
 		 * shop layout (woocommerce-functions.php), and the shop / product /
-		 * foodmenu / blog / forum / events / sidebar templates.
+		 * foodmenu / blog / sidebar templates.
 		 *
 		 * Each is a first-class `lafka_<key>` theme_mod carrying the SAME
 		 * Options-Framework `std` default and a shape-appropriate sanitizer, so a
@@ -740,7 +740,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_show_author_info'               => 1,
 				'lafka_show_author_avatar'             => 1,
 				'lafka_show_blog_video_bckgr'          => 0,
-				'lafka_event_use_countdown'            => 1,
 				'lafka_show_sidebar_shop'              => 0,
 				'lafka_show_sidebar_product'           => 0,
 				'lafka_github_updates_enabled'         => 1,
@@ -790,13 +789,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_blog_title_alignment'             => 'centered_title',
 				'lafka_blog_pages_width'                 => 'lafka-fullwidth-blog-pages',
 				'lafka_blog_video_bckgr_url'             => '',
-				'lafka_forum_header_style'               => '',
-				'lafka_forum_top_menu'                   => 'default',
-				'lafka_forum_subtitle'                   => '',
-				'lafka_forum_title_alignment'            => 'none',
-				'lafka_events_top_menu'                  => 'default',
-				'lafka_events_header_style'              => '',
-				'lafka_events_title'                     => '',
 				'lafka_sidebar_position'                 => 'lafka-right-sidebar',
 				'lafka_sidebar_ids'                      => '',
 				'lafka_blog_categoty_sidebar'            => 'right_sidebar',
@@ -839,9 +831,8 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			}
 
 			$image_id_defaults = array(
-				'lafka_shop_title_background_imgid'   => '',
-				'lafka_blog_title_background_imgid'   => '',
-				'lafka_forum_title_background_imgid'  => '',
+				'lafka_shop_title_background_imgid' => '',
+				'lafka_blog_title_background_imgid' => '',
 			);
 			foreach ( $image_id_defaults as $id => $default ) {
 				$wp_customize->add_setting(
@@ -858,8 +849,6 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 
 			$dyn_sidebar_defaults = array(
 				'lafka_woocommerce_sidebar'  => lafka_registered_sidebar_default( 'shop' ),
-				'lafka_bbpress_sidebar'      => lafka_registered_sidebar_default( 'lafka_forum' ),
-				'lafka_events_sidebar'       => lafka_registered_sidebar_default( 'right_sidebar' ),
 			);
 			foreach ( $dyn_sidebar_defaults as $id => $default ) {
 				$wp_customize->add_setting(

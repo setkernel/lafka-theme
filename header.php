@@ -15,13 +15,10 @@
  *  - wp_body_open() — fires the v5.54.0 announce bar + promo bar
  *  - <main id="content"> + <div id="container"> open (closed by footer.php)
  *
- * What we dropped (deliberate, per 2026-05-15 WPBakery-rip + handoff rebuild):
+ * What we dropped (deliberate, per the 2026-05 handoff rebuild):
  *  - "Top header" (#header_top) with language selector + secondary menus
  *  - .lafka-top-bar-message strip
- *  - RevSlider before-header rendering
- *  - YITH wishlist counter in header
  *  - Account dropdown (account icon links straight to /my-account/)
- *  - WCMP / WC-Vendors header dashboard buttons
  *  - $lafka_is_blank toggle (irrelevant for the ordering flow)
  *  - LafkaMobileMenuWalker (mobile drawer uses default markup + CSS)
  *

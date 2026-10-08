@@ -2,9 +2,8 @@
 /**
  * Static page template — handoff-spec rebuild (v5.75.0).
  *
- * Drops legacy Revolution Slider, FlexSlider, Tribe Events branches, and
- * the optional sidebar holster — none of which appear in the handoff
- * spec. Pages now render as a single-column reading layout with optional
+ * Drops the legacy slider branches and the optional sidebar holster —
+ * none of which appear in the handoff spec. Pages now render as a single-column reading layout with optional
  * hero (featured image), tight breadcrumb, h1, subtitle, and a 65ch
  * prose body that picks up Gutenberg block styling from the theme.
  *

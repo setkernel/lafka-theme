@@ -129,16 +129,6 @@
     background-color: #0eafcc;
 }
 
-.wpb_lafka_content_slider > .vc_controls {
-    opacity: 1 !important;
-    visibility: visible;
-    position: relative;
-    height: 23px;
-    margin: 18px 0 2px;
-    border: 1px dotted #e6e6e6;
-    border-bottom-width: 0
-}
-
 .section .controls {
     position: relative;
 }

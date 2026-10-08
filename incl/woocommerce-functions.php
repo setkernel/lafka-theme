@@ -83,10 +83,6 @@ if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
 			<?php endif; ?>
 		</a>
 		<?php
-		// Append Add to wishlist shortcode if it exists
-		if ( shortcode_exists( 'yith_wcwl_add_to_wishlist' ) ) {
-			echo do_shortcode( '[yith_wcwl_add_to_wishlist]' );
-		}
 		echo '</div>';
 	}
 
@@ -803,50 +799,6 @@ function lafka_product_archive_description() {
 	}
 }
 
-// Override Woocommerce Compare add link
-// if Woocompare is activated
-if ( defined( 'YITH_WOOCOMPARE' ) ) {
-	global $yith_woocompare;
-
-	$woocompareFrontEnd = $yith_woocompare->obj;
-	remove_action( 'woocommerce_after_shop_loop_item', array( $woocompareFrontEnd, 'add_compare_link' ), 20 );
-
-	if ( ! function_exists( 'lafka_add_compare_link' ) ) {
-
-		function lafka_add_compare_link( $product_id = false, $args = array() ) {
-			global $yith_woocompare;
-			$woocompareFrontEnd = $yith_woocompare->obj;
-
-			if ( ! method_exists( $woocompareFrontEnd, 'add_product_url' ) ) {
-				return false;
-			}
-
-			if ( ! $product_id ) {
-				global $product;
-				$product_id = ( $product->get_id() ) && $product->exists() ? $product->get_id() : 0;
-			}
-
-			// return if product doesn't exist
-			if ( empty( $product_id ) ) {
-				return;
-			}
-
-			$button_or_link = isset( $args['button_or_link'] ) ? $args['button_or_link'] : '';
-			$button_text    = isset( $args['button_text'] ) ? $args['button_text'] : '';
-
-			$is_button = ! $button_or_link ? get_option( 'yith_woocompare_is_button' ) : $button_or_link;
-
-			if ( ! $button_text || $button_text == 'default' ) {
-				$button_text = get_option( 'yith_woocompare_button_text', esc_html__( 'Compare', 'lafka' ) );
-				$button_text = function_exists( 'icl_translate' ) ? icl_translate( 'Plugins', 'plugin_yit_compare_button_text', $button_text ) : $button_text;
-			}
-
-			printf( '<a href="%s" class="%s" data-product_id="%d" title="%s"><i class="fa fa-tasks"></i></a>', esc_url( $woocompareFrontEnd->add_product_url( $product_id ) ), 'compare' . ( $is_button == 'button' ? ' button' : '' ), esc_attr( $product_id ), esc_attr( $button_text ) );
-		}
-
-	}
-}
-
 // Move woocommerce_template_loop_price to be below the title
 remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_loop_price', 10 );
 
@@ -888,11 +840,6 @@ if ( ! function_exists( 'lafka_quickview' ) ) {
 		}
 		if ( class_exists( 'Lafka_WC_Variation_Swatches_Frontend' ) ) {
 			Lafka_WC_Variation_Swatches_Frontend::instance();
-		}
-
-		if ( function_exists( 'YITH_WCWL_Frontend' ) ) {
-			$wishlist = YITH_WCWL_Frontend();
-			$wishlist->add_button();
 		}
 
 		// We also need the wp.template for this script :)
@@ -1060,19 +1007,6 @@ add_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_r
 // lafka_normalize_price_html stripped <sup> from public price HTML
 // already; with the source filter gone, no downstream stripping is
 // needed and addon templates render clean prices ($3.00) inline.
-
-add_filter( 'yith_wcwl_positions', 'lafka_redefine_wishlist_link_position', 10 );
-if ( ! function_exists( 'lafka_redefine_wishlist_link_position' ) ) {
-	function lafka_redefine_wishlist_link_position( $positions ) {
-
-		$positions['add-to-cart'] = array(
-			'hook'     => 'woocommerce_after_add_to_cart_button',
-			'priority' => 98,
-		);
-
-		return $positions;
-	}
-}
 
 if ( ! function_exists( 'lafka_get_chosen_category_for_related' ) ) {
 	/**

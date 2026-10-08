@@ -2,7 +2,7 @@
 /**
  * Single post template — handoff-spec rebuild (v5.76.0).
  *
- * Drops the legacy Revolution Slider, FlexSlider, sidebar holster, and
+ * Drops the legacy slider branches, sidebar holster, and
  * featured-image zoomable-background block. Single posts now render as
  * a reading layout aligned with page.php but with post meta (author,
  * date, category badge) and a clean prev/next nav.
