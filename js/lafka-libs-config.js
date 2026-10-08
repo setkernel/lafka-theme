@@ -80,12 +80,6 @@
 				const startIndex = $links.index(this);
 				window.lafkaDialog.gallery(items, startIndex);
 			});
-
-			/* for foodmenu list */
-			$(document).on('click', 'a.foodmenu-lightbox-link', function (e) {
-				e.preventDefault();
-				window.lafkaDialog.image(this.href, { alt: $(this).find('img').attr('alt') || '' });
-			});
 		}
 
 		/*****************************

@@ -350,27 +350,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 			} elseif ( is_year() ) {
 				$brdcrmb .= $before . get_the_time( 'Y' ) . $after;
 			} elseif ( is_single() && ! is_attachment() ) {
-				if ( isset( $wp_query->post->ID ) && 'lafka-foodmenu' === get_post_type( $wp_query->post->ID ) ) {
-
-					$brdcrmb .= '<a class="no-link" href="' . esc_url( get_post_type_archive_link( 'lafka-foodmenu' ) ) . '">' . esc_html__( 'Menu', 'lafka' ) . '</a> ' . $delimiter . ' ';
-
-					$terms = get_the_terms( $post->ID, 'lafka_foodmenu_category' );
-
-					if ( $terms ) {
-						$first_cat       = reset( $terms );
-						$parent_term_ids = lafka_get_lafka_foodmenu_category_parents( $first_cat->term_id );
-
-						$term_links = '';
-						foreach ( $parent_term_ids as $term_id ) {
-							$term        = get_term( $term_id, 'lafka_foodmenu_category' );
-							$term_links .= '<a href="' . esc_url( get_term_link( $term_id ) ) . '">' . $term->name . '</a>' . $delimiter;
-						}
-
-						$brdcrmb .= $term_links;
-					}
-
-					$brdcrmb .= $before . get_the_title( $wp_query->post->ID ) . $after;
-				} elseif ( isset( $wp_query->post->ID ) && 'post' !== get_post_type( $wp_query->post->ID ) ) {
+				if ( isset( $wp_query->post->ID ) && 'post' !== get_post_type( $wp_query->post->ID ) ) {
 					$post_type = get_post_type_object( get_post_type( $wp_query->post->ID ) );
 					$slug      = $post_type->rewrite;
 					$real_slug = $slug['slug'];
@@ -388,11 +368,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 			} elseif ( ! is_single() && ! is_page() && ! is_404() && ! is_search() && isset( $wp_query->post->ID ) && 'post' !== get_post_type( $wp_query->post->ID ) ) {
 				$post_type = get_post_type_object( get_post_type( $wp_query->post->ID ) );
 				if ( $post_type ) {
-					if ( 'lafka-foodmenu' === $post_type->name ) {
-						$brdcrmb .= $before . esc_html__( 'Menu', 'lafka' ) . $after;
-					} else {
-						$brdcrmb .= $before . $post_type->labels->singular_name . $after;
-					}
+					$brdcrmb .= $before . $post_type->labels->singular_name . $after;
 				}
 			} elseif ( is_attachment() ) {
 				$parent = get_post( $post->post_parent );
@@ -528,7 +504,7 @@ if ( ! function_exists( 'lafka_comment' ) ) {
 	/*
 	 * Add custom image sizes for the lafka theme blog part
 	 */
-add_image_size( 'lafka-foodmenu-single-thumb', 1440 ); // Not cropped.
+add_image_size( 'lafka-content-wide', 1440 ); // Not cropped. Blog post featured images.
 add_image_size( 'lafka-640x640', 640, 640, true ); // Cropped.
 add_image_size( 'lafka-general-small-size', 100, 100, true ); // Cropped.
 add_image_size( 'lafka-general-small-size-nocrop', 100 ); // Not cropped.
@@ -671,43 +647,6 @@ if ( ! function_exists( 'lafka_widget_class_append' ) ) {
 }
 	add_filter( 'dynamic_sidebar_params', 'lafka_widget_class_append' );
 
-if ( ! function_exists( 'lafka_get_lafka_foodmenu_category_parents' ) ) {
-
-	/**
-	 * Get list of all parent lafka_foodmenu_category-s
-	 *
-	 * @param int $term_id
-	 * @return Array with term ids
-	 */
-	function lafka_get_lafka_foodmenu_category_parents( $term_id ) {
-		// Same call site is hit twice on a typical food-menu page (once from the
-		// breadcrumb, once from the category-loop partial). Memoize per
-		// `$term_id` so the second call is free, and fan ancestor lookups
-		// through `get_ancestors()` + `get_term()` (object-cache backed) instead
-		// of `get_term_by('id', ...)` (which goes to DB on miss).
-		static $cache = array();
-		$term_id      = (int) $term_id;
-		if ( isset( $cache[ $term_id ] ) ) {
-			return $cache[ $term_id ];
-		}
-
-		$ancestors = array_reverse( get_ancestors( $term_id, 'lafka_foodmenu_category', 'taxonomy' ) );
-		$ids       = array_merge( $ancestors, array( $term_id ) );
-		$parents   = array();
-		foreach ( $ids as $id ) {
-			$term = get_term( (int) $id, 'lafka_foodmenu_category' );
-			if ( $term && ! is_wp_error( $term ) ) {
-				$parents[] = $term;
-			}
-		}
-
-		$cache[ $term_id ] = $parents;
-
-		return $parents;
-	}
-
-}
-
 	add_action( 'wp_ajax_lafka_ajax_search', 'lafka_ajax_search' );
 	add_action( 'wp_ajax_nopriv_lafka_ajax_search', 'lafka_ajax_search' );
 
@@ -728,7 +667,7 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 		// (orders, addons, combos, etc.) which was both slow and a leak risk.
 		$allowed_post_types = apply_filters(
 			'lafka_ajax_search_allowed_post_types',
-			array( 'post', 'product', 'lafka-foodmenu' )
+			array( 'post', 'product' )
 		);
 		$post_type          = $allowed_post_types;
 		if ( isset( $_REQUEST['post_type'] ) ) {
@@ -900,7 +839,7 @@ if ( ! function_exists( 'lafka_bust_ajax_search_cache_on_save' ) ) {
 		}
 		$allowed = apply_filters(
 			'lafka_ajax_search_allowed_post_types',
-			array( 'post', 'product', 'lafka-foodmenu' )
+			array( 'post', 'product' )
 		);
 		if ( ! in_array( $post->post_type, $allowed, true ) ) {
 			return;
@@ -1123,7 +1062,7 @@ if ( ! function_exists( 'lafka_setup_nav_menu_item' ) ) {
 if ( ! function_exists( 'lafka_post_nav' ) ) {
 
 	/**
-	 * Returns output for the prev / next links on posts and foodmenus
+	 * Returns output for the prev / next links on posts and products
 	 *
 	 * @param bool|type $same_category
 	 * @param string|type $taxonomy
@@ -1140,9 +1079,6 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 				break;
 			case 'product':
 				$post_type_label = ' ' . esc_html__( 'product', 'lafka' );
-				break;
-			case 'lafka-foodmenu':
-				$post_type_label = ' ' . esc_html__( 'menu item', 'lafka' );
 				break;
 			default:
 				$post_type_label = '';
@@ -1257,66 +1193,6 @@ if ( ! function_exists( 'lafka_is_time_more_than_x_months_ago' ) ) {
 if ( ! function_exists( 'lafka_should_show_account_icon' ) ) {
 	function lafka_should_show_account_icon() {
 		return ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_show_my_account', true ) && get_option( 'woocommerce_myaccount_page_id' ) );
-	}
-}
-
-if ( ! function_exists( 'lafka_has_foodmenu_options' ) ) {
-	function lafka_has_foodmenu_options( $foodmenu ) {
-		for ( $i = 1; $i <= 3; $i++ ) {
-			if ( $foodmenu->{'lafka_item_size' . $i} ) {
-				return true;
-			}
-		}
-
-		return false;
-	}
-}
-
-if ( ! function_exists( 'lafka_get_foodmenu_options' ) ) {
-	function lafka_get_foodmenu_options( $foodmenu ) {
-		$foodmenu_options_array = array();
-
-		for ( $i = 1; $i <= 3; $i++ ) {
-			if ( $foodmenu->{'lafka_item_size' . $i} ) {
-				$foodmenu_options_array[ $foodmenu->{'lafka_item_size' . $i} ] = lafka_get_formatted_price( $foodmenu->{'lafka_item_price' . $i} );
-			}
-		}
-
-		return $foodmenu_options_array;
-	}
-}
-
-if ( ! function_exists( 'lafka_get_formatted_price' ) ) {
-	function lafka_get_formatted_price( $price ) {
-		$has_plus = strpos( $price, '+' );
-
-		if ( LAFKA_IS_WOOCOMMERCE ) {
-			$formatted_price = wc_price( $price );
-			if ( false !== $has_plus ) {
-				$formatted_price = '+' . $formatted_price;
-			}
-		} else {
-			// Without WooCommerce there is no store currency: show the price as entered.
-			$formatted_price = esc_html( $price );
-		}
-
-		return $formatted_price;
-	}
-}
-
-if ( ! function_exists( 'lafka_get_nutrition_list_for_foodmenu_entry' ) ) {
-	function lafka_get_nutrition_list_for_foodmenu_entry( $lafka_foodmenu_custom ) {
-
-		$nutrition_list = array();
-		if ( class_exists( 'Lafka_Nutrition_Config' ) ) {
-			foreach ( Lafka_Nutrition_Config::$nutrition_meta_fields as $field_name => $data ) {
-				if ( isset( $lafka_foodmenu_custom[ $field_name ] ) && is_numeric( $lafka_foodmenu_custom[ $field_name ][0] ) ) {
-					$nutrition_list[ $field_name ] = $lafka_foodmenu_custom[ $field_name ][0];
-				}
-			}
-		}
-
-		return $nutrition_list;
 	}
 }
 

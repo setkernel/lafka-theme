@@ -1017,9 +1017,9 @@ if ( ! function_exists( 'lafka_is_legacy_blog_surface' ) ) {
 if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	/**
 	 * Whether the current request may render legacy lafka_* shortcode
-	 * / foodmenu-grid / post-slider markup whose CSS was extracted into
+	 * / post-slider markup whose CSS was extracted into
 	 * styles/legacy-shortcodes.css (NX1-10a). Loaded on: the blog surfaces (post
-	 * galleries/sliders), the legacy foodmenu CPT, and any singular content whose
+	 * galleries/sliders) and any singular content whose
 	 * post_content (as rendered by its template) embeds a lafka_* shortcode. The
 	 * handoff routes carry none of that markup, so they never download it.
 	 *
@@ -1034,13 +1034,6 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 		if ( isset( $GLOBALS['template'] ) && 'page-menu.php' === basename( (string) $GLOBALS['template'] ) ) {
 			return false;
 		}
-		// The plugin registers the CPT as 'lafka-foodmenu' (hyphen); only the
-		// taxonomy uses underscores.
-		if ( is_post_type_archive( 'lafka-foodmenu' )
-			|| is_singular( 'lafka-foodmenu' )
-			|| is_tax( 'lafka_foodmenu_category' ) ) {
-			return true;
-		}
 		// GX T-25: only content the template renders, and only lafka_*
 		// shortcodes.
 		$content = function_exists( 'lafka_rendered_post_content' )
@@ -1052,18 +1045,14 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 
 if ( ! function_exists( 'lafka_needs_cloud_zoom' ) ) {
 	/**
-	 * Whether the current request renders CloudZoom markup: a foodmenu single
-	 * whose gallery type is "cloud", or singular content that embeds the
-	 * plugin's [lafka_cloudzoom_gallery] shortcode.
+	 * Whether the current request renders CloudZoom markup: singular content
+	 * that embeds the plugin's [lafka_cloudzoom_gallery] shortcode.
 	 *
 	 * @return bool
 	 */
 	function lafka_needs_cloud_zoom() {
 		if ( ! is_singular() ) {
 			return false;
-		}
-		if ( is_singular( 'lafka-foodmenu' ) && 'cloud' === get_post_meta( get_queried_object_id(), 'lafka_prtfl_gallery', true ) ) {
-			return true;
 		}
 		$post = get_post();
 		return $post instanceof WP_Post && false !== strpos( (string) $post->post_content, '[lafka_cloudzoom_gallery' );
@@ -2023,8 +2012,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_style( 'owl-carousel-animate', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/animate.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/animate.css' ) );
 		}
 
-		// cloud-zoom — only where CloudZoom markup renders: a foodmenu single on
-		// the "cloud" gallery, or content embedding [lafka_cloudzoom_gallery].
+		// cloud-zoom — only where CloudZoom markup renders: content embedding
+		// [lafka_cloudzoom_gallery].
 		// The redesigned PDP has no zoom gallery, so product pages skip it.
 		wp_register_script( 'cloud-zoom', get_template_directory_uri() . '/js/cloud-zoom/cloud-zoom.1.0.2.min.js', array( 'jquery' ), lafka_asset_version( '/js/cloud-zoom/cloud-zoom.1.0.2.min.js' ), $footer_defer );
 		wp_register_style( 'cloud-zoom', get_template_directory_uri() . '/styles/cloud-zoom/cloud-zoom.css', array(), lafka_asset_version( '/styles/cloud-zoom/cloud-zoom.css' ) );
@@ -2077,7 +2066,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// register Isotope
 		wp_register_script( 'isotope', get_template_directory_uri() . '/js/isotope/dist/isotope.pkgd.min.js', array( 'jquery', 'imagesloaded' ), lafka_asset_version( '/js/isotope/dist/isotope.pkgd.min.js' ), true );
-		if ( is_post_type_archive( 'lafka-foodmenu' ) || is_tax( 'lafka_foodmenu_category' ) || ( get_theme_mod( 'lafka_general_blog_style', '' ) === 'lafka_blog_masonry' && ( is_archive() || is_category() || lafka_is_blog() ) ) ) {
+		if ( get_theme_mod( 'lafka_general_blog_style', '' ) === 'lafka_blog_masonry' && ( is_archive() || is_category() || lafka_is_blog() ) ) {
 			// load Isotope
 			wp_enqueue_script( 'isotope' );
 		}
@@ -2518,8 +2507,7 @@ if ( ! function_exists( 'lafka_check_for_sidebar' ) ) {
 			$is_cat_tag_tax_archive = true;
 		}
 
-		$blog_categoty_sidebar     = get_theme_mod( 'lafka_blog_categoty_sidebar', 'right_sidebar' );
-		$foodmenu_categoty_sidebar = get_theme_mod( 'lafka_foodmenu_categoty_sidebar', 'none' );
+		$blog_categoty_sidebar = get_theme_mod( 'lafka_blog_categoty_sidebar', 'right_sidebar' );
 
 		if ( LAFKA_IS_WOOCOMMERCE ) {
 			$woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
@@ -2538,8 +2526,6 @@ if ( ! function_exists( 'lafka_check_for_sidebar' ) ) {
 
 		if ( LAFKA_IS_WOOCOMMERCE && function_exists( 'is_woocommerce' ) && is_woocommerce() && isset( $woocommerce_sidebar ) ) {
 			$sidebar_choice = $woocommerce_sidebar;
-		} elseif ( is_tax( 'lafka_foodmenu_category' ) || is_post_type_archive( 'lafka-foodmenu' ) ) {
-			$sidebar_choice = $foodmenu_categoty_sidebar;
 		} elseif ( $is_cat_tag_tax_archive ) {
 			$sidebar_choice = $blog_categoty_sidebar;
 		} elseif ( isset( $options['lafka_custom_sidebar'] ) && 'yes' === $show_sidebar_from_meta ) {

@@ -25,7 +25,7 @@
 	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
 
 	<!-- This is a theme: template-hierarchy file names such as
-	     taxonomy-lafka_foodmenu_category.php follow WordPress's naming. -->
+	     taxonomy-{taxonomy}.php follow WordPress's naming. -->
 	<rule ref="WordPress.Files.FileName">
 		<properties>
 			<property name="is_theme" value="true"/>

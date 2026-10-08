@@ -83,13 +83,13 @@
     padding: 8px 0;
 }
 
-.blog-post img.attachment-lafka-foodmenu-single-thumb.wp-post-image {
+.blog-post img.attachment-lafka-content-wide.wp-post-image {
     margin-bottom: 25px;
     max-width: 100%;
     height: auto;
 }
 
-.post-unit-holder img.attachment-lafka-foodmenu-single-thumb.wp-post-image,
+.post-unit-holder img.attachment-lafka-content-wide.wp-post-image,
 .lafka-related-blog-posts .post-unit-holder img.size-lafka-related-posts.wp-post-image {
     max-height: 980px;
     width: auto;
@@ -100,7 +100,7 @@
     border-radius: 8px;
 }
 
-body.single-post .post-unit-holder:first-of-type img.attachment-lafka-foodmenu-single-thumb.wp-post-image {
+body.single-post .post-unit-holder:first-of-type img.attachment-lafka-content-wide.wp-post-image {
     max-height: none;
 }
 
@@ -764,10 +764,6 @@ body.lafka_transparent_header .term-description+.content_holder div.lafka_woo_ca
     border-color: rgba(0, 0, 0, 0.2);
 }
 
-.lafka-foodmenu-light .foodmenu-unit-info h4::after {
-    border-color: rgba(255, 255, 255, 0.2);
-}
-
 .foodmenu-unit-info h6 {
     width: auto !important;
     margin: 0 0 8px 0 !important;
@@ -893,10 +889,6 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
     background-color: rgba(0, 0, 0, 0.03);
 }
 
-.lafka-foodmenu-light .foodmenu-unit-info ul li {
-    background-color: rgba(0, 0, 0, 0.17);
-}
-
 .foodmenu-unit-info h4>span {
     float: right;
     font-size: 23px;
@@ -916,11 +908,6 @@ a.lafka-foodmenu-image-link+.foodmenu-unit-info a.foodmenu-link,
     padding: 3px 6px;
     border-radius: 4px;
     vertical-align: text-bottom;
-}
-
-.lafka-foodmenu-light .foodmenu-unit-info h4>span.lafka-item-weight-list {
-    background-color: rgba(0, 0, 0, 0.17);
-    color: inherit; /* Light scheme = white titles on a dark section; #5e5e5e was ~4.4:1 even over white. */
 }
 
 .similar_projects .foodmenu-unit-info h4>span.lafka-item-weight-list {
@@ -1171,7 +1158,7 @@ body.single-post #content:not(.has-sidebar) .content_holder>.post>.lafka_post_da
     margin-right: auto;
 }
 
-body.single-post .content_holder>.post>.post-unit-holder img.attachment-lafka-foodmenu-single-thumb.wp-post-image {
+body.single-post .content_holder>.post>.post-unit-holder img.attachment-lafka-content-wide.wp-post-image {
     margin-bottom: 60px;
     -webkit-filter: none;
     filter: none;

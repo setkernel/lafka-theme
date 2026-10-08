@@ -10,7 +10,7 @@ $lafka_featured_flex_slider_imgs = lafka_get_more_featured_images( get_the_ID() 
 $lafka_general_blog_style = get_theme_mod( 'lafka_general_blog_style', '' );
 
 // Featured image size
-$lafka_featured_image_size = 'lafka-foodmenu-single-thumb';
+$lafka_featured_image_size = 'lafka-content-wide';
 
 // If is latest posts
 if ( isset( $lafka_is_latest_posts ) && $lafka_is_latest_posts ) { // If is latest post shortcode

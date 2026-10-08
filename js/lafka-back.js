@@ -16,12 +16,6 @@
 			}
 		}
 
-		// Proper position Foodmenu Gallery Options metabox
-		const prtfl_gallery_options_meta = $('#lafka_foodmenu_cz');
-		if (prtfl_gallery_options_meta.length && featured_img_meta.length) {
-			prtfl_gallery_options_meta.detach().insertBefore(featured_img_meta);
-		}
-
         // Proper position Product Gallery Type Options metabox
         const product_gallery_options_meta = $('#lafka_product_gallery_type');
 		const product_gallery_meta = $('#woocommerce-product-images');

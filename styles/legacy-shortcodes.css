@@ -13,11 +13,6 @@
 
 @layer legacy {
 
-.project-details ul {
-    margin: 0;
-    padding: 0;
-}
-
 .lafka_flexslider .slides li {
     margin: auto;
     padding: 0;
@@ -35,33 +30,11 @@
     transition: all .3s cubic-bezier(0.77, 0, 0.175, 1);
 }
 
-.project-details .lafka-nutrition-di-legend {
-    margin-bottom: 0;
-}
-
-.foodmenus,
 .lafka-foodmenu-shortcode-container {
     min-width: 100%;
     width: 100%;
     overflow: hidden;
     min-height: 150px;
-}
-
-.foodmenu-main-image-holder ul.additional-images li a {
-    position: absolute;
-    top: 0;
-    left: 0;
-    -webkit-transition: all 0.4s ease;
-    transition: all 0.4s ease;
-}
-
-.foodmenu-main-image-holder ul.additional-images li a:hover {
-    position: absolute;
-    top: 0;
-    left: 0;
-    -webkit-transform: scale(1.12);
-    transform: scale(1.12);
-    box-shadow: 0 5px 5px 0 rgba(0, 0, 0, 0.1);
 }
 
 .lafka_content_slider .owl-nav .owl-next.disabled,
@@ -124,11 +97,6 @@
     height: auto;
 }
 
-.foodmenu-main-image-holder .lafka_flexslider .slides img {
-    width: 100%;
-    height: auto;
-}
-
 .lafka_flexslider.post_slide {
     margin-bottom: 35px;
     position: relative;
@@ -185,10 +153,6 @@
     margin: 0 0 35px 0;
     padding: 0 0 35px 0;
     border-bottom: 1px solid #eaeaea;
-}
-
-.lafka-foodmenu-light .foodmenu-unit {
-    border-color: #494949;
 }
 
 .lafka-foodmenu-shortcode-container .foodmenu-unit:last-of-type {
@@ -291,7 +255,6 @@ a.lafka-foodmenu-image-link,
     border-radius: 0;
 }
 
-.lafka-foodmenu-light .foodmenu-unit .lafka-foodmenu-image-link img,
 .foodmenu-unit-holder>img {
     border: none;
 }
@@ -306,14 +269,6 @@ a.lafka-foodmenu-image-link,
 
 .lafka-none-overlay.lafka-10px-gap .foodmenu-unit-holder {
     background: none;
-}
-
-.lafka-foodmenu-light .foodmenu-unit-info h4,
-.lafka-foodmenu-light .lafka-foodmenu-categories ul li a,
-.lafka-foodmenu-light .lafka-foodmenu-price,
-.lafka-foodmenu-light .foodmenu-unit-info a,
-.lafka-foodmenu-light .foodmenu-unit-info ul li a {
-    color: #fff;
 }
 
 a.foodmenu-link {
@@ -345,114 +300,6 @@ a.foodmenu-link {
     text-decoration: none;
 }
 
-.foodmenu_top {
-    padding-bottom: 80px;
-    position: relative;
-    max-width: 100vw;
-}
-
-.foodmenu_top div.two_third.foodmenu-main-image-holder {
-    display: inline-block;
-    width: 50%;
-    vertical-align: top;
-    position: relative;
-    float: left;
-    margin-right: 0;
-}
-
-.foodmenu_top div.one_third.last.project-data {
-    display: inline-block;
-    vertical-align: top;
-    width: 50%;
-    padding-left: 80px;
-    position: relative;
-    z-index: 3;
-    float: left;
-}
-
-.foodmenu_top.lafka_image_list_foodmenu div.one_third.last.project-data {
-    padding-right: 80px;
-}
-
-.foodmenu_top .project-data .more-details {
-    font-size: 15px;
-    margin-bottom: 20px;
-}
-
-.foodmenu_top .project-data .more-details .lafka-more-details-text {
-    font-size: 17px;
-    color: #333;
-    position: relative;
-    display: block;
-    padding: 20px 0 22px 0;
-    margin-bottom: 25px;
-    border-bottom: 1px solid #e9e9e9;
-}
-
-.foodmenu_top .project-data h4 {
-    font-size: 15px;
-    margin-bottom: 10px;
-    margin-top: 10px;
-    text-transform: uppercase;
-    vertical-align: middle;
-}
-
-.foodmenu_top .project-data h4::before {
-    display: inline-block;
-    content: "";
-    width: 10px;
-    height: 2px;
-    background-color: #cecece;
-    vertical-align: middle;
-    margin-right: 7px;
-    position: relative;
-    top: -1px;
-}
-
-.foodmenu_top .project-data ul li strong {
-    font-size: 13px;
-    font-weight: 500;
-    text-transform: uppercase;
-    color: #333;
-    text-align: left;
-    clear: both;
-    display: block;
-    margin-bottom: 5px;
-}
-
-.foodmenu_top .project-data .project-details .simple-list-underlined li {
-    border: none !important;
-    padding: 0;
-    font-size: 14px;
-}
-
-.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-ingredients,
-.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-nutrition-allergens {
-    padding: 0;
-    margin-bottom: 20px;
-}
-
-.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-nutrition-allergens {
-    margin-bottom: 35px;
-}
-
-.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-nutrition-list,
-.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-nutrition-list ul {
-    padding-top: 0;
-}
-
-.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-nutrition-list {
-    margin-bottom: 20px;
-}
-
-.foodmenu_top .project-data .project-details .lafka-foodmenu-main-price {
-    font-size: 30px;
-    font-weight: 500;
-    color: #333;
-    margin-bottom: 5px;
-    display: block;
-}
-
 .lafka-foodmenu-option {
     display: inline-block;
     vertical-align: bottom;
@@ -465,49 +312,6 @@ a.foodmenu-link {
     color: #333;
     display: inline-block;
     vertical-align: bottom;
-}
-
-.foodmenu_top .project-data .project-details .simple-list-underlined li.lafka-foodmenu-options-list {
-    padding: 0;
-    margin: 0 2px 4px 0;
-    font-size: 12px;
-}
-
-.lafka-foodmenu-options-list .lafka-foodmenu-option,
-.lafka-foodmenu-options-list .lafka-foodmenu-price {
-    width: auto;
-}
-
-.lafka-foodmenu-options-list .woocommerce-Price-currencySymbol {
-    font-size: 90%;
-    bottom: 0;
-    vertical-align: baseline;
-}
-
-.foodmenu_top .project-data .project-details a.button {
-    margin: 30px 8px 0 0;
-    padding: 0 40px;
-    height: 46px;
-    line-height: 46px;
-}
-
-.foodmenu_top .project-data .project-details a.button:not(.lafka-secondary-button) {
-    background-color: #333;
-}
-
-.foodmenu-main-image-holder #wrap {
-    margin-left: 100px;
-}
-
-.foodmenu-main-image-holder ul.additional-images {
-    padding: 0;
-    margin: 0;
-    list-style: none;
-    text-align: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 80px;
 }
 
 .lafka_icon_element-color-juicy_pink {

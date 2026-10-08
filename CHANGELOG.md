@@ -110,6 +110,17 @@ git tags + GitHub Releases.
   `wc_esc_json`, `woocommerce_output_all_notices`, and similar). Guards for plugin
   presence, PHP extensions and core-mirrored template checks stay.
 
+- **The "Restaurant Menu" templates**: `single-lafka-foodmenu.php`,
+  `archive-lafka-foodmenu.php`, `taxonomy-lafka_foodmenu_category.php`,
+  `partials/content-lafka-foodmenu-category.php`, the food-menu breadcrumb branches,
+  `lafka_get_lafka_foodmenu_category_parents()`, `lafka_has_foodmenu_options()`,
+  `lafka_get_foodmenu_options()`, `lafka_get_formatted_price()`,
+  `lafka_get_nutrition_list_for_foodmenu_entry()`, the food-menu sidebar, isotope and
+  sticky-summary branches, the food-menu grid / lightbox JS and the style rules only those
+  templates used. The `lafka-foodmenu-single-thumb` image size (blog featured images) is
+  now `lafka-content-wide`, same 1440 px uncropped; until thumbnails are regenerated
+  WordPress serves the closest existing size.
+
 ## [7.3.0] — 2026-09-25
 
 Live-site QA sharpening (2026-09-25); pairs with lafka-plugin 10.3.0.

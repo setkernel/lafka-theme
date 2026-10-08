@@ -128,7 +128,6 @@
         checkSummaryHeight();
         checkSidebarHeight();
         checkCommentsHeight();
-        checkFoodmenuHeight();
 
         const customTitleHeight = $('body.lafka_transparent_header #header').height();
         $('body.lafka_transparent_header .lafka_title_holder .inner').css({ "padding-top": customTitleHeight + 160, "padding-bottom": customTitleHeight - 60 });
@@ -548,38 +547,6 @@
             });
         }
 
-        if (typeof lafka_foodmenu_js_params !== 'undefined') {
-
-            const $container = $('div.foodmenus', '#main');
-
-            const $isotopedGrid = $container.isotope({
-                itemSelector: 'div.foodmenu-unit',
-                layoutMode: 'masonry',
-                transitionDuration: '0.5s'
-            });
-
-            // layout Isotope after each image loads
-            $isotopedGrid.imagesLoaded().progress(function() {
-                $isotopedGrid.isotope('layout');
-            });
-
-            // bind filter button click
-            $('.lafka-foodmenu-categories').on('click', 'a', function() {
-                const filterValue = $(this).prop('data-filter');
-                // use filterFn if matches value
-                $isotopedGrid.isotope({ filter: filterValue });
-            });
-
-            // change is-checked class on buttons
-            $('div.lafka-foodmenu-categories', '#main').each(function(i, buttonGroup) {
-                const $buttonGroup = $(buttonGroup);
-                $buttonGroup.on('click', 'a', function() {
-                    $buttonGroup.find('.is-checked').removeClass('is-checked');
-                    $(this).addClass('is-checked');
-                });
-            });
-        }
-
         // AJAXIFY products listing filters, widgets, etc
         if (lafka_main_js_params.use_product_filter_ajax === 'yes') {
             // products ordering and per page
@@ -710,7 +677,6 @@
                 checkSummaryHeight();
                 checkSidebarHeight();
                 checkCommentsHeight();
-                checkFoodmenuHeight();
                 lafka_fullwidth_elements();
                 resizeTicking = false;
             });
@@ -776,7 +742,7 @@
 
     function checkProductGalleryCarousel() {
         const current_window_width = $(window).width();
-        const $singleProductImages = $(document.body).find('div.lafka-single-product .lafka-image-list-product-gallery .woocommerce-product-gallery__wrapper, .lafka_image_list_foodmenu .lafka_image_list');
+        const $singleProductImages = $(document.body).find('div.lafka-single-product .lafka-image-list-product-gallery .woocommerce-product-gallery__wrapper');
 
         if (typeof $.fn.owlCarousel !== 'function') {
             return; // GX T-25: owl is not loaded on this surface.
@@ -833,18 +799,6 @@
             $body_summary.addClass("lafka-sticky-comments");
         } else {
             $body_summary.removeClass("lafka-sticky-comments");
-        }
-    }
-
-    function checkFoodmenuHeight() {
-        const $lafkaFoodmenuHeight = $('.foodmenu_top div.one_third.last.project-data').height();
-        const $lafkaPortVisibleHeight = $(window).height();
-        const current_window_width = $(window).width();
-        const $body_PortSummary = $("body, .foodmenu_top div.one_third.last.project-data");
-        if ($lafkaFoodmenuHeight < $lafkaPortVisibleHeight - 250 && current_window_width > 768) {
-            $body_PortSummary.addClass("lafka-sticky-summary");
-        } else {
-            $body_PortSummary.removeClass("lafka-sticky-summary");
         }
     }
 

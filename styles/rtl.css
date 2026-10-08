@@ -252,14 +252,6 @@ div.product input.qty, .star-rating span {
 	margin-left: 5px;
 }
 
-.foodmenu_top .project-data ul li strong {
-	text-align: right;
-}
-
-.foodmenu_top .project-data .project-details a.button {
-    margin: 30px 0 0 8px;
-}
-
 a.lafka-post-nav.lafka-post-prev {
     text-align: right;
 }
@@ -280,7 +272,7 @@ a.lafka-post-nav.lafka-post-next .entry-info::after {
 	right: auto;
 }
 
-.foodmenu_top div.two_third.foodmenu-main-image-holder, .foodmenu_top div.one_third.last.project-data, .cart-collaterals .prod_hold {
+.cart-collaterals .prod_hold {
 	float: right;
 }
 
