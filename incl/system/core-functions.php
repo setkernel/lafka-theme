@@ -1747,6 +1747,44 @@ if ( ! function_exists( 'lafka_generate_excerpt' ) ) {
 
 }
 
+/*
+ * One resolver for appearance keys that moved to theme_mods, used by both
+ * getters: the theme's standalone lafka_get_option() below and, through the
+ * `lafka_pre_get_option` filter, the plugin's (which wins when both load).
+ */
+if ( ! function_exists( 'lafka_resolve_mapped_option' ) ) {
+	/**
+	 * Resolve a legacy option key that moved to a `lafka_<key>` theme_mod.
+	 *
+	 * @param mixed  $value         Value so far (null = not resolved).
+	 * @param string $name          Legacy option key.
+	 * @param mixed  $default_value Caller's default.
+	 * @return mixed The theme_mod value for a mapped key, else $value.
+	 */
+	function lafka_resolve_mapped_option( $value, $name, $default_value = false ) {
+		$lafka_option_map = function_exists( 'lafka_legacy_migrate_map' ) ? lafka_legacy_migrate_map() : array();
+		if ( ! isset( $lafka_option_map[ $name ] ) ) {
+			return $value;
+		}
+		if ( WP_DEBUG ) {
+			_doing_it_wrong(
+				'lafka_get_option',
+				esc_html(
+					sprintf(
+						/* translators: 1: legacy option key, 2: replacement theme_mod key. */
+						__( 'The "%1$s" theme setting moved to the Customizer theme_mod "%2$s". Read it with get_theme_mod() — lafka_get_option() for this key is deprecated and will be removed in a future major version.', 'lafka' ),
+						$name,
+						$lafka_option_map[ $name ]
+					)
+				),
+				'7.0.0'
+			);
+		}
+		return get_theme_mod( $lafka_option_map[ $name ], $default_value );
+	}
+}
+add_filter( 'lafka_pre_get_option', 'lafka_resolve_mapped_option', 10, 3 );
+
 if ( ! function_exists( 'lafka_get_option' ) ) {
 
 	/**
@@ -1774,23 +1812,9 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 	 */
 	function lafka_get_option( $name, $default_value = false ) {
 		// 1. Mapped appearance key: its home is now a `lafka_<key>` theme_mod.
-		$lafka_option_map = function_exists( 'lafka_legacy_migrate_map' ) ? lafka_legacy_migrate_map() : array();
-		if ( isset( $lafka_option_map[ $name ] ) ) {
-			if ( WP_DEBUG ) {
-				_doing_it_wrong(
-					__FUNCTION__,
-					esc_html(
-						sprintf(
-							/* translators: 1: legacy option key, 2: replacement theme_mod key. */
-							__( 'The "%1$s" theme setting moved to the Customizer theme_mod "%2$s". Read it with get_theme_mod() — lafka_get_option() for this key is deprecated and will be removed in a future major version.', 'lafka' ),
-							$name,
-							$lafka_option_map[ $name ]
-						)
-					),
-					'7.0.0'
-				);
-			}
-			return get_theme_mod( $lafka_option_map[ $name ], $default_value );
+		$mapped = lafka_resolve_mapped_option( null, $name, $default_value );
+		if ( null !== $mapped ) {
+			return $mapped;
 		}
 
 		// 2. Unmapped / plugin-owned key. If the shared helper is available
