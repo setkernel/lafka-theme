@@ -83,8 +83,7 @@ Every npm script, one line each.
   Fix the cause. Only `vendor/`, `node_modules/`, the unmodified
   `incl/tgm-plugin-activation/` and vendored front-end libraries are excluded.
 - Escape late: print markup with `wp_kses( $html, lafka_allowed_html() )` (or the `esc_` family);
-  fire WordPress / WooCommerce hooks from template overrides with `lafka_core_action()` /
-  `lafka_core_filter()`; read public query-string arguments with `lafka_query_arg()`.
+  read public query-string arguments with `lafka_query_arg()`.
 - Stylelint keeps `selector-class-pattern`, `selector-id-pattern`, `no-descending-specificity`,
   `no-duplicate-selectors`, `font-family-no-missing-generic-family-keyword` and
   `declaration-property-unit-allowed-list` off: they would rename public class names or reorder the

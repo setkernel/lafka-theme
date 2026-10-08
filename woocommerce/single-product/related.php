@@ -35,7 +35,7 @@ if ( $related_products ) :
 	?>
 
 	<section class="related products">
-		<?php $lafka_heading = lafka_core_filter( 'woocommerce_product_related_products_heading', __( 'Related products', 'lafka' ) ); ?>
+		<?php $lafka_heading = apply_filters( 'woocommerce_product_related_products_heading', __( 'Related products', 'lafka' ) ); ?>
 		<?php if ( $lafka_heading ) : ?>
 			<h2><?php echo wp_kses_post( $lafka_heading ); ?></h2>
 		<?php endif; ?>

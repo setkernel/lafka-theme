@@ -74,8 +74,7 @@ git tags + GitHub Releases.
   arguments are read through `lafka_query_arg()`, the price-filter bounds use a real query
   plus a prepared statement, WordPress globals are no longer assigned, template variables
   carry the `lafka_` prefix, comparisons are strict and Yoda, dates use `gmdate()`, and
-  translator comments are in place. WordPress / WooCommerce hooks fired from template
-  overrides go through `lafka_core_action()` / `lafka_core_filter()`. ESLint and Stylelint
+  translator comments are in place. ESLint and Stylelint
   run with `--max-warnings=0`, and the rules that were switched off are on again except the
   structural Stylelint ones (see CONTRIBUTING).
 - `incl/lafka-options-framework/` is retired: the Google-font list helper is now

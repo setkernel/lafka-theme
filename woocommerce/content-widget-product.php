@@ -28,7 +28,7 @@ if ( ! is_a( $product, 'WC_Product' ) ) {
 ?>
 
 <li>
-	<?php lafka_core_action( 'woocommerce_widget_product_item_start', $args ); ?>
+	<?php do_action( 'woocommerce_widget_product_item_start', $args ); ?>
 
 	<a href="<?php echo esc_url( $product->get_permalink() ); ?>" >
 		<?php echo wp_kses( $product->get_image( 'lafka-general-small-size-nocrop' ), lafka_allowed_html() ); ?>
@@ -41,5 +41,5 @@ if ( ! is_a( $product, 'WC_Product' ) ) {
 
 	<?php echo wp_kses( $product->get_price_html(), lafka_allowed_html() ); ?>
 
-	<?php lafka_core_action( 'woocommerce_widget_product_item_end', $args ); ?>
+	<?php do_action( 'woocommerce_widget_product_item_end', $args ); ?>
 </li>

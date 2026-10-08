@@ -162,7 +162,7 @@ if ( ! function_exists( 'lafka_wc_product_meta_category_orderby' ) ) {
 	 * @return string
 	 */
 	function lafka_wc_product_meta_category_orderby( $product ) {
-		$orderby = lafka_core_filter( 'woocommerce_product_meta_category_orderby', 'breadcrumb', $product );
+		$orderby = apply_filters( 'woocommerce_product_meta_category_orderby', 'breadcrumb', $product );
 
 		return is_string( $orderby ) && in_array( $orderby, array( 'name', 'breadcrumb', '' ), true ) ? $orderby : '';
 	}

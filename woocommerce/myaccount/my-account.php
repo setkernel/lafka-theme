@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
  *
  * @since 2.6.0
  */
-lafka_core_action( 'woocommerce_account_navigation' );
+do_action( 'woocommerce_account_navigation' );
 ?>
 
 <div class="woocommerce-MyAccount-content">
@@ -37,7 +37,7 @@ lafka_core_action( 'woocommerce_account_navigation' );
 		 *
 		 * @since 2.6.0
 		 */
-		lafka_core_action( 'woocommerce_account_content' );
+		do_action( 'woocommerce_account_content' );
 		?>
 	</div>
 </div>

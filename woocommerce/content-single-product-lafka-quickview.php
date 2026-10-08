@@ -44,7 +44,7 @@ if ( $product->is_downloadable() ) {
 	 * @hooked woocommerce_show_product_sale_flash - 10
 	 * @hooked woocommerce_show_product_images - 20 - removed for the quickview
 	 */
-	lafka_core_action( 'woocommerce_before_single_product_summary' );
+	do_action( 'woocommerce_before_single_product_summary' );
 	?>
 	<div class="lafka-quickview-images images 
 	<?php
@@ -65,7 +65,7 @@ if ( $product->is_downloadable() ) {
 			<?php endforeach; ?>
 			<?php
 		} else {
-			echo wp_kses( lafka_core_filter( 'woocommerce_single_product_image_html', sprintf( '<img src="%s" alt="%s" />', esc_url( wc_placeholder_img_src() ), esc_attr__( 'Placeholder', 'lafka' ) ), $product->get_id() ), lafka_allowed_html() );
+			echo wp_kses( apply_filters( 'woocommerce_single_product_image_html', sprintf( '<img src="%s" alt="%s" />', esc_url( wc_placeholder_img_src() ), esc_attr__( 'Placeholder', 'lafka' ) ), $product->get_id() ), lafka_allowed_html() );
 		}
 		?>
 	</div>
@@ -98,7 +98,7 @@ if ( $product->is_downloadable() ) {
 		 * @hooked woocommerce_template_single_meta - 40
 		 * @hooked woocommerce_template_single_sharing - 50
 		 */
-		lafka_core_action( 'woocommerce_single_product_summary' );
+		do_action( 'woocommerce_single_product_summary' );
 		?>
 
 	</div><!-- .summary -->

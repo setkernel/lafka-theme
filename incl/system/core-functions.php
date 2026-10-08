@@ -1895,7 +1895,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		$cart_url                = '';
 		if ( LAFKA_IS_WOOCOMMERCE && 'yes' === get_option( 'woocommerce_cart_redirect_after_add' ) ) {
 			$cart_redirect_after_add = 'yes';
-			$cart_url                = lafka_core_filter( 'woocommerce_add_to_cart_redirect', wc_get_cart_url(), null );
+			$cart_url                = apply_filters( 'woocommerce_add_to_cart_redirect', wc_get_cart_url(), null );
 		}
 
 		$enable_ajax_add_to_cart = 'no';

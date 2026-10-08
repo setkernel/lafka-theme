@@ -1,13 +1,10 @@
 <?php
 /**
- * Output and hook helpers shared by every template.
+ * Output helpers shared by every template.
  *
  * - lafka_allowed_html() is the allowlist handed to wp_kses() wherever a
  *   template prints markup that a helper or a third-party filter built (icons,
  *   worded buttons, cart rows, images). Escaping happens at the point of output.
- * - lafka_core_action() / lafka_core_filter() fire hooks that WordPress or
- *   WooCommerce own, from the templates that override theirs. The theme does not
- *   own those names, so they are passed through rather than prefixed.
  *
  * @package Lafka
  */
@@ -248,28 +245,6 @@ function lafka_allowed_html(): array {
 	$allowed = (array) apply_filters( 'lafka_allowed_html', $allowed );
 
 	return $allowed;
-}
-
-/**
- * Fire a hook that WordPress or WooCommerce own.
- *
- * @param string $hook_name Hook name.
- * @param mixed  ...$args   Hook arguments.
- */
-function lafka_core_action( string $hook_name, ...$args ): void {
-	call_user_func_array( 'do_action', array_merge( array( $hook_name ), $args ) );
-}
-
-/**
- * Apply a filter that WordPress or WooCommerce own.
- *
- * @param string $hook_name Filter name.
- * @param mixed  $value     Value to filter.
- * @param mixed  ...$args   Extra filter arguments.
- * @return mixed The filtered value.
- */
-function lafka_core_filter( string $hook_name, $value, ...$args ) {
-	return call_user_func_array( 'apply_filters', array_merge( array( $hook_name, $value ), $args ) );
 }
 
 /**

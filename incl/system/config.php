@@ -7,7 +7,7 @@ if ( ! defined( 'LAFKA_IMAGES_PATH' ) ) {
 
 // Check if WooCommerce is active (supports regular plugins and MU-plugins)
 if ( ! defined( 'LAFKA_IS_WOOCOMMERCE' ) ) {
-	if ( in_array( 'woocommerce/woocommerce.php', lafka_core_filter( 'active_plugins', get_option( 'active_plugins' ) ), true )
+	if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ), true )
 		|| ( is_multisite() && array_key_exists( 'woocommerce/woocommerce.php', get_site_option( 'active_sitewide_plugins', array() ) ) )
 		|| class_exists( 'WooCommerce' ) ) {
 		define( 'LAFKA_IS_WOOCOMMERCE', true );

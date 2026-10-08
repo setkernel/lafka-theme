@@ -722,7 +722,7 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 			wp_die();
 		}
 
-		$search_term = lafka_core_filter( 'get_search_query', $search_term );
+		$search_term = apply_filters( 'get_search_query', $search_term );
 
 		// Allowlist post types — `post_type=any` previously hit every CPT
 		// (orders, addons, combos, etc.) which was both slow and a leak risk.
@@ -1112,7 +1112,7 @@ if ( ! function_exists( 'lafka_setup_nav_menu_item' ) ) {
 
 	function lafka_setup_nav_menu_item( $menu_item ) {
 		if ( 0 !== (int) $menu_item->db_id ) {
-			$menu_item->description = lafka_core_filter( 'nav_menu_description', $menu_item->post_content );
+			$menu_item->description = apply_filters( 'nav_menu_description', $menu_item->post_content );
 		}
 
 		return $menu_item;

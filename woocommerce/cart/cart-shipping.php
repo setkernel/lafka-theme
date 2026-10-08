@@ -62,7 +62,7 @@ if ( $lafka_is_pickup ) {
 							printf( '<input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" />', absint( $index ), esc_attr( sanitize_title( $lafka_method->id ) ), esc_attr( $lafka_method->id ) );
 						}
 						printf( '<label for="shipping_method_%1$d_%2$s">%3$s</label>', absint( $index ), esc_attr( sanitize_title( $lafka_method->id ) ), wp_kses_post( wc_cart_totals_shipping_method_label( $lafka_method ) ) );
-						lafka_core_action( 'woocommerce_after_shipping_rate', $lafka_method, $index );
+						do_action( 'woocommerce_after_shipping_rate', $lafka_method, $index );
 						?>
 					</li>
 				<?php endforeach; ?>
@@ -75,7 +75,7 @@ if ( $lafka_is_pickup ) {
 						printf( esc_html__( 'Shipping to %s.', 'lafka' ) . ' ', '<strong>' . esc_html( $lafka_formatted_destination ) . '</strong>' );
 						$lafka_calculator_text = esc_html__( 'Change address', 'lafka' );
 					} else {
-						echo wp_kses_post( lafka_core_filter( 'woocommerce_shipping_estimate_html', __( 'Shipping options will be updated during checkout.', 'lafka' ) ) );
+						echo wp_kses_post( apply_filters( 'woocommerce_shipping_estimate_html', __( 'Shipping options will be updated during checkout.', 'lafka' ) ) );
 					}
 					?>
 				</p>
@@ -83,12 +83,12 @@ if ( $lafka_is_pickup ) {
 			<?php
 		elseif ( ! $lafka_has_calculated_shipping || ! $lafka_formatted_destination ) :
 			if ( is_cart() && 'no' === get_option( 'woocommerce_enable_shipping_calc' ) ) {
-				echo wp_kses_post( lafka_core_filter( 'woocommerce_shipping_not_enabled_on_cart_html', __( 'Shipping costs are calculated during checkout.', 'lafka' ) ) );
+				echo wp_kses_post( apply_filters( 'woocommerce_shipping_not_enabled_on_cart_html', __( 'Shipping costs are calculated during checkout.', 'lafka' ) ) );
 			} else {
-				echo wp_kses_post( lafka_core_filter( 'woocommerce_shipping_may_be_available_html', __( 'Enter your address to view shipping options.', 'lafka' ) ) );
+				echo wp_kses_post( apply_filters( 'woocommerce_shipping_may_be_available_html', __( 'Enter your address to view shipping options.', 'lafka' ) ) );
 			}
 		elseif ( ! is_cart() ) :
-			echo wp_kses_post( lafka_core_filter( 'woocommerce_no_shipping_available_html', __( 'There are no shipping options available. Please ensure that your address has been entered correctly, or contact us if you need any help.', 'lafka' ) ) );
+			echo wp_kses_post( apply_filters( 'woocommerce_no_shipping_available_html', __( 'There are no shipping options available. Please ensure that your address has been entered correctly, or contact us if you need any help.', 'lafka' ) ) );
 		else :
 			echo wp_kses_post(
 				/**
@@ -99,7 +99,7 @@ if ( $lafka_is_pickup ) {
 				 * @param string $html                  HTML message.
 				 * @param string $formatted_destination The formatted shipping destination.
 				 */
-				lafka_core_filter(
+				apply_filters(
 					'woocommerce_cart_no_shipping_available_html',
 					// Translators: $s shipping destination.
 					sprintf( esc_html__( 'No shipping options were found for %s.', 'lafka' ) . ' ', '<strong>' . esc_html( $lafka_formatted_destination ) . '</strong>' ),

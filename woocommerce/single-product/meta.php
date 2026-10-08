@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product;
 ?>
 <div class="tagcloud product_meta">
-	<?php lafka_core_action( 'woocommerce_product_meta_start' ); ?>
+	<?php do_action( 'woocommerce_product_meta_start' ); ?>
 	<?php
 		$lafka_categories      = wc_get_product_category_list( $product->get_id(), ', ', '', '', lafka_wc_product_meta_category_orderby( $product ) );
 		$lafka_size_categories = count( $product->get_category_ids() );
@@ -61,5 +61,5 @@ global $product;
 		</span>
 
 	<?php endif; ?>
-	<?php lafka_core_action( 'woocommerce_product_meta_end' ); ?>
+	<?php do_action( 'woocommerce_product_meta_end' ); ?>
 </div>

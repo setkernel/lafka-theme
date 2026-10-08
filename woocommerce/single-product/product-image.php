@@ -35,7 +35,7 @@ if ( ! function_exists( 'wc_get_gallery_image_html' ) ) {
 
 global $product;
 
-$lafka_columns           = lafka_core_filter( 'woocommerce_product_thumbnails_columns', 4 );
+$lafka_columns           = apply_filters( 'woocommerce_product_thumbnails_columns', 4 );
 $lafka_post_thumbnail_id = $product->get_image_id();
 $lafka_media_items       = lafka_wc_product_media_items( $product );
 // The helper returns the full gallery order; product-thumbnails.php renders the remaining items.
@@ -43,7 +43,7 @@ $lafka_first_media_item = $lafka_media_items[0] ?? array();
 $lafka_first_media_id   = isset( $lafka_first_media_item['id'] ) ? absint( $lafka_first_media_item['id'] ) : $lafka_post_thumbnail_id;
 $lafka_has_media        = ! empty( $lafka_first_media_item ) && 'placeholder' !== ( $lafka_first_media_item['source_type'] ?? '' );
 $lafka_is_video         = $lafka_has_media && 'video' === ( $lafka_first_media_item['media_type'] ?? '' ) && lafka_wc_has_product_media_gallery();
-$lafka_wrapper_classes  = lafka_core_filter(
+$lafka_wrapper_classes  = apply_filters(
 	'woocommerce_single_product_image_gallery_classes',
 	array(
 		'woocommerce-product-gallery',
@@ -80,12 +80,12 @@ $lafka_product_video_url = lafka_product_video_trigger_url( $product, $lafka_med
 		}
 
 		if ( $lafka_is_video ) {
-			echo wp_kses( lafka_core_filter( 'woocommerce_single_product_video_thumbnail_html', $lafka_html, $lafka_first_media_id, $lafka_first_media_item ), lafka_allowed_html() );
+			echo wp_kses( apply_filters( 'woocommerce_single_product_video_thumbnail_html', $lafka_html, $lafka_first_media_id, $lafka_first_media_item ), lafka_allowed_html() );
 		} else {
-			echo wp_kses( lafka_core_filter( 'woocommerce_single_product_image_thumbnail_html', $lafka_html, $lafka_first_media_id ), lafka_allowed_html() );
+			echo wp_kses( apply_filters( 'woocommerce_single_product_image_thumbnail_html', $lafka_html, $lafka_first_media_id ), lafka_allowed_html() );
 		}
 
-		lafka_core_action( 'woocommerce_product_thumbnails' );
+		do_action( 'woocommerce_product_thumbnails' );
 		?>
 	</div>
 </div>
