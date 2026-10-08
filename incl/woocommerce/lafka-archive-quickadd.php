@@ -55,7 +55,7 @@ if ( ! function_exists( 'lafka_archive_quickadd_render' ) ) {
 		}
 
 		$is_variable    = $product->is_type( 'variable' );
-		$is_purchasable = $product->is_purchasable();
+		$is_purchasable = $product->is_purchasable() && ! lafka_add_to_cart_blocked();
 		$is_in_stock    = $product->is_in_stock();
 		$can_quick_add  = ! $is_variable && $is_purchasable && $is_in_stock;
 		$label          = $can_quick_add ? __( 'Add', 'lafka' ) : __( 'Choose', 'lafka' );

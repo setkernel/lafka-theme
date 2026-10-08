@@ -282,7 +282,7 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 		);
 
 		$reason = '';
-		if ( ! $product->is_purchasable() || ! $product->is_in_stock() ) {
+		if ( ! $product->is_purchasable() || ! $product->is_in_stock() || lafka_add_to_cart_blocked() ) {
 			$reason = 'unavailable';
 		} elseif ( function_exists( 'lafka_product_has_required_addons' ) && lafka_product_has_required_addons( $id ) ) {
 			$reason = 'required_addons';

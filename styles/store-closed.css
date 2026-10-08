@@ -48,3 +48,17 @@ body.lafka-store-closed:not(.lafka-order-ahead) .quantity input[name="quantity"]
 	pointer-events: none;
 	cursor: not-allowed;
 }
+
+/* Closed and not taking orders ahead: WooCommerce's own cart, mini-cart and
+ * checkout buttons stay in the page (express-pay and other extensions hang on
+ * them) but look unavailable; the server refuses the order either way. */
+body.lafka-store-closed:not(.lafka-order-ahead) .checkout-button,
+body.lafka-store-closed:not(.lafka-order-ahead) .wc-proceed-to-checkout .button,
+body.lafka-store-closed:not(.lafka-order-ahead) .lafka-cart-drawer__checkout,
+body.lafka-store-closed:not(.lafka-order-ahead) #place_order,
+body.lafka-store-closed:not(.lafka-order-ahead) .wc-block-cart__submit-button,
+body.lafka-store-closed:not(.lafka-order-ahead) .wc-block-components-checkout-place-order-button {
+	opacity: 0.5;
+	pointer-events: none;
+	cursor: not-allowed;
+}
