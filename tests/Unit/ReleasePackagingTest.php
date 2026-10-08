@@ -51,9 +51,6 @@ final class ReleasePackagingTest extends TestCase {
 	public function test_dev_only_files_excluded_from_zip(): void {
 		$excludes = $this->release_excludes();
 
-		// `readme.md` is the GitHub project readme; it needs the lowercase
-		// exclude because `README.md` does not match it on the case-sensitive
-		// Linux runner.
 		$dev = array(
 			'.git',
 			'.github',
@@ -80,7 +77,6 @@ final class ReleasePackagingTest extends TestCase {
 			'DESIGN_SYSTEM.md',
 			'docs',
 			'README.md',
-			'readme.md',
 		);
 
 		foreach ( $dev as $needle ) {

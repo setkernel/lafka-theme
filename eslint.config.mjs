@@ -12,28 +12,18 @@ export default [
 				...globals.jquery,
 				// Core WP / WC
 				wp: "readonly",
-				ajaxurl: "readonly",
 				wc_add_to_cart_params: "readonly",
 				wc_cart_fragments_params: "readonly",
-				wc_single_product_params: "readonly",
 				// Lafka wp_localize_script payloads
-				lafka_ajax_object: "readonly",
-				lafka_options: "readonly",
 				lafka_main_js_params: "readonly",
-				lafka_back_js_params: "readonly",
-				lafka_map_config: "readonly",
-				lafka_mega_menu_js_params: "readonly",
 				lafka_owl_carousel_cat: "readonly",
 				lafka_rtl: "readonly",
 				// Lafka helpers (functions defined in other files / window-scoped)
 				lafkaUpdateUrlParameters: "writable",
-				lafkaStickyHeaderInit: "writable",
 				lafkaInitSmallCountdowns: "writable",
 				lafkaOrderHoursCountdown: "writable",
 				// Third-party APIs / libs loaded via <script>
 				google: "readonly",
-				Typed: "readonly",
-				Modernizr: "readonly",
 			},
 		},
 		rules: {

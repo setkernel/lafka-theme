@@ -27,7 +27,7 @@ FAQ. The theme works on its own and degrades gracefully when the plugin is not
 installed.
 
 WooCommerce support is deep: WooCommerce 9.5 or newer is recommended (tested up
-to 10.9), with custom shop and archive layouts, an AJAX cart drawer, and a
+to 11.1), with custom shop and archive layouts, an AJAX cart drawer, and a
 rebuilt single-product page.
 
 **Highlights**
@@ -86,7 +86,7 @@ plugin's own Modules screen.
 = Does it work with WooCommerce? =
 
 Yes — the theme is built around WooCommerce. WooCommerce 9.5 or newer is
-recommended (tested up to 10.9). Shop, archive, product, and cart surfaces all
+recommended (tested up to 11.1). Shop, archive, product, and cart surfaces all
 ship theme templates and styling.
 
 = Is the theme translation-ready? =
@@ -130,8 +130,9 @@ Fonts (self-hosted, `assets/fonts/`):
   — license: `assets/fonts/rubik/LICENSE`.
 * Fraunces — SIL Open Font License 1.1 — Copyright 2018 The Fraunces Project
   Authors — license: `assets/fonts/fraunces/OFL.txt`.
-* Inter, Archivo, Lora, Manrope, Space Grotesk, DM Serif Display (design-preset
-  font pool) — SIL Open Font License 1.1 — sourced via @fontsource — license:
+* Inter, Archivo, Lora, Manrope, Space Grotesk, DM Serif Display, Atkinson
+  Hyperlegible Next, Bricolage Grotesque (design-preset font pool) — SIL Open
+  Font License 1.1 — sourced via @fontsource — license:
   `assets/fonts/<family>/LICENSE`.
 
 Scripts and styles (verified from the bundled file headers):

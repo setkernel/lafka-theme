@@ -33,43 +33,6 @@ if ( class_exists( 'Tribe__Events__Main' ) ) {
 	define( 'LAFKA_IS_EVENTS', false );
 }
 
-if ( class_exists( 'YITH_WCWL' ) ) {
-	define( 'LAFKA_IS_WISHLIST', true );
-} else {
-	define( 'LAFKA_IS_WISHLIST', false );
-}
-
-if ( ! defined( 'LAFKA_IS_REVOLUTION' ) ) {
-	if ( class_exists( 'RevSliderBase' ) ) {
-		define( 'LAFKA_IS_REVOLUTION', true );
-	} else {
-		define( 'LAFKA_IS_REVOLUTION', false );
-	}
-}
-
-// Check if WC Marketplace is active
-if ( ! defined( 'LAFKA_IS_WC_MARKETPLACE' ) ) {
-	if ( class_exists( 'WCMp' ) || function_exists( 'wcmp_plugin_init' ) ) {
-		define( 'LAFKA_IS_WC_MARKETPLACE', true );
-	} else {
-		define( 'LAFKA_IS_WC_MARKETPLACE', false );
-	}
-}
-
-// Check if WC Vendors is active
-if ( class_exists( 'WC_Vendors' ) || function_exists( 'wcvendors_activate' ) ) {
-	define( 'LAFKA_IS_WC_VENDORS', true );
-} else {
-	define( 'LAFKA_IS_WC_VENDORS', false );
-}
-
-// Check if WC Vendors Pro is active
-if ( class_exists( 'WCVendors_Pro' ) || function_exists( 'activate_wcvendors_pro' ) ) {
-	define( 'LAFKA_IS_WC_VENDORS_PRO', true );
-} else {
-	define( 'LAFKA_IS_WC_VENDORS_PRO', false );
-}
-
 /**
  * Force Visual Composer to initialize as "built into the theme". This will hide certain tabs under the Settings->Visual Composer page
  */

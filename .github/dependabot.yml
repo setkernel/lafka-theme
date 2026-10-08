@@ -48,11 +48,6 @@ updates:
     labels:
       - dependencies
       - javascript
-    # stylelint 17 is blocked: @wordpress/stylelint-config peers on
-    # stylelint ^16. Skip its major-bump PRs until that config supports 17.
-    ignore:
-      - dependency-name: stylelint
-        update-types: ['version-update:semver-major']
     groups:
       npm-minor-and-patch:
         patterns: ['*']

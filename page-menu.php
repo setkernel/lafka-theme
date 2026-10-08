@@ -3,10 +3,8 @@
  * page-menu.php — full menu listing template for the /menu/ slug (v5.86.0).
  *
  * WP template hierarchy: any Page with slug "menu" is automatically rendered
- * by this file. Was previously a content-filter that injected just a
- * category-tile grid; that legacy mode is preserved in page-menu-helpers.php
- * for operators with a custom Customizer config but doesn't ship by default
- * anymore.
+ * by this file (it replaced an older content-filter that injected only a
+ * category-tile grid).
  *
  * Emits the full handoff `/#/menu` layout:
  *   1. Page-head — crumbs + h1 + lead

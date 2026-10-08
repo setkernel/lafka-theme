@@ -63,9 +63,6 @@ jobs:
           # presets/, and every LICENSE (the root GPL
           # text and the per-family OFL font licences, which must travel with
           # the fonts — an unanchored LICENSE exclude used to strip them).
-          # `readme.md` is the GitHub project readme (dev-only); the lowercase
-          # exclude is required because `README.md` does not match it on the
-          # case-sensitive Linux runner.
           rsync -a --exclude='.git' \
                    --exclude='.github' \
                    --exclude='.gitignore' \
@@ -91,7 +88,6 @@ jobs:
                    --exclude='DESIGN_SYSTEM.md' \
                    --exclude='docs' \
                    --exclude='README.md' \
-                   --exclude='readme.md' \
                    ./ lafka/
           zip -r lafka.zip lafka/
 

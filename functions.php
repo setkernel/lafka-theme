@@ -75,24 +75,20 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
 /*
  * NX1-02 (theme 7.0): the legacy Options Framework admin panel is RETIRED — the
  * "Appearance -> Theme Options" menu, its Settings-API save/validate rebuild
- * hazard, and the field registry are gone. Two genuinely-used helpers survive
- * and are loaded here, plus the slim plugin-owned option defaults:
+ * hazard, and the field registry are gone. One genuinely-used helper survives
+ * and is loaded here, plus the slim plugin-owned option defaults:
  *   - incl/system/lafka-option-defaults.php -> lafka_get_default_values(), the
  *     slim successor to the registry defaults (plugin-owned flags + shared keys).
  *   - lafka-options-functions.php -> lafka_typography_get_google_fonts(), read
  *     by the front-end Google-font enqueuer (incl/system/core-functions.php).
- *   - lafka-options-medialibrary-uploader.php -> lafka_medialibrary_uploader(),
- *     markup helper for the admin media picker (its JS handler is
- *     js/lafka-medialibrary-uploader.js, also used by plugin metaboxes).
+ * The admin media-picker JS (js/lafka-medialibrary-uploader.js, used by plugin
+ * metaboxes) is registered from LAFKA_OPTIONS_FRAMEWORK_DIRECTORY.
  */
 if ( ! defined( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY' ) ) {
 	define( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/incl/lafka-options-framework/' );
 }
 require_once get_template_directory() . '/incl/system/lafka-option-defaults.php';
 require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-functions.php';
-if ( is_admin() ) {
-	require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-medialibrary-uploader.php';
-}
 
 /* Load configuration */
 require_once get_template_directory() . '/incl/system/config.php';
@@ -1381,27 +1377,6 @@ if ( ! function_exists( 'lafka_should_show_account_icon' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_should_show_wishlist_icon' ) ) {
-	function lafka_should_show_wishlist_icon() {
-		return ( LAFKA_IS_WOOCOMMERCE && LAFKA_IS_WISHLIST && get_theme_mod( 'lafka_show_wish_in_header', true ) );
-	}
-}
-
-if ( ! function_exists( 'lafka_build_mobile_menu_items_wrap' ) ) {
-	/**
-	 * Markup for the pre-handoff mobile menu drawer (#menu_mobile).
-	 *
-	 * @deprecated 7.1.0 Nothing renders the old drawer; the mobile nav is
-	 *             partials/mobile-nav.php. Returns an empty string.
-	 *
-	 * @return string
-	 */
-	function lafka_build_mobile_menu_items_wrap() {
-		_deprecated_function( __FUNCTION__, '7.1.0' );
-		return '';
-	}
-}
-
 if ( ! function_exists( 'lafka_has_foodmenu_options' ) ) {
 	function lafka_has_foodmenu_options( $foodmenu ) {
 		for ( $i = 1; $i <= 3; $i++ ) {
@@ -1456,25 +1431,6 @@ if ( ! function_exists( 'lafka_get_formatted_price' ) ) {
 		}
 
 		return $formatted_price;
-	}
-}
-
-if ( ! function_exists( 'lafka_is_text_logo' ) ) {
-	/**
-	 * @deprecated 7.1.0 Only the removed legacy logo partial used this; the
-	 *             header resolves its logo through lafka_get_logo_id().
-	 *
-	 * @param mixed $lafka_theme_logo_img Logo image, if any.
-	 * @return bool
-	 */
-	function lafka_is_text_logo( $lafka_theme_logo_img ) {
-		_deprecated_function( __FUNCTION__, '7.1.0', 'lafka_get_logo_id()' );
-		$to_return = false;
-
-		if ( ! $lafka_theme_logo_img && ( get_bloginfo( 'name' ) || get_bloginfo( 'description' ) ) ) {
-			$to_return = true;
-		}
-		return $to_return;
 	}
 }
 

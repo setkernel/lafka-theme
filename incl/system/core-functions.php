@@ -1,44 +1,6 @@
 <?php
 defined( 'ABSPATH' ) || exit;
 
-/**
- * Replacement for deprecated get_page_by_title() (deprecated since WP 6.2).
- * Uses WP_Query to find a page by its title.
- *
- * @param string $title   Page title.
- * @param string $output  Optional. The required return type. OBJECT, ARRAY_A, or ARRAY_N. Default OBJECT.
- * @param string $post_type Optional. Post type. Default 'page'.
- * @return WP_Post|array|null WP_Post on success, or null on failure.
- */
-if ( ! function_exists( 'lafka_get_page_by_title' ) ) {
-	function lafka_get_page_by_title( $title, $output = OBJECT, $post_type = 'page' ) {
-		$query = new WP_Query(
-			array(
-				'post_type'              => $post_type,
-				'title'                  => $title,
-				'post_status'            => 'all',
-				'posts_per_page'         => 1,
-				'no_found_rows'          => true,
-				'ignore_sticky_posts'    => true,
-				'update_post_term_cache' => false,
-				'update_post_meta_cache' => false,
-			)
-		);
-
-		if ( ! empty( $query->post ) ) {
-			$page = $query->post;
-			if ( ARRAY_A === $output ) {
-				return get_object_vars( $page );
-			} elseif ( ARRAY_N === $output ) {
-				return array_values( get_object_vars( $page ) );
-			}
-			return $page;
-		}
-
-		return null;
-	}
-}
-
 /* Register Theme Features */
 
 /* Hook into the 'after_setup_theme' action */
@@ -1975,21 +1937,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if ( $has_flaticon ) {
 			wp_enqueue_style( 'flaticon', get_template_directory_uri() . '/styles/flaticon/font/flaticon.css', false, lafka_asset_version( '/styles/flaticon/font/flaticon.css' ), 'print' );
 		}
-
-		// `tiza.woff` (159 KB) and `feather.woff` (29 KB) used to be enqueued as
-		// stylesheets — Chrome treated them as render-blocking CSS, charged them
-		// to the CSS budget, and logged "preload but not used" warnings on every
-		// page. The actual @font-face declarations live in et-line-font/style.css
-		// + flaticon/font/flaticon.css above. Removed in P5-Sec/Perf audit
-		// (Session 4) — saves 188 KB of render-blocking weight per page.
-
-		// Modernizr removed — custom build only exposed `window.Modernizr.touch`, which no
-		// theme/plugin code actually reads. Modern browsers all support pointer events natively.
-		//
-		// NiceScroll removed — modern browsers ship native momentum scrolling on iOS/Android,
-		// and on desktop the OS scrollbar is the right thing. lafka-front.js calls .niceScroll()
-		// in two places; those calls are guarded by a `typeof $.fn.niceScroll === 'function'`
-		// check so they no-op safely when the lib is absent.
 
 		/* loading jquery-ui-slider only for price filter */
 		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_show_pricefilter', true ) && is_woocommerce() && ! is_product() ) {

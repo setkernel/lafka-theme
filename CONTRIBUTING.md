@@ -97,12 +97,12 @@ CI** — only the e2e `@smoke` job does.
 | `test:visual:counter` | GX4 counter-layout goldens at 375/768/1280: home, menu, a category archive, a variable PDP, the size chooser and the order drawer (layouts pinned via theme_mods). |
 | `test:visual:dark` | Midnight (dark preset) goldens on home, menu, PDP and cart — same local contract. |
 | `test:contrast` | Rendered text/CTA contrast for every registered preset on home, menu, PDP and cart (no goldens). |
-
-The three visual/contrast scripts are projects of one config,
-`playwright.visual.config.js` (`peppery`, `dark`, `contrast`, `counter`).
 | `sync-version` | Write the version from `package.json` into the `versionSync` targets. |
 | `check-version` | Fail if any `versionSync` target drifted from `package.json` (CI runs it). |
 | `version` | npm lifecycle hook used by `npm version`; not run directly. |
+
+The three visual/contrast scripts are projects of one config,
+`playwright.visual.config.js` (`peppery`, `dark`, `contrast`, `counter`).
 
 `scripts/nx1-10a-cascade-parity.mjs` (run with `node`) re-proves the legacy-sheet
 cascade against the pre-split monolith; `CascadeParityTest` is its CI-visible lock.

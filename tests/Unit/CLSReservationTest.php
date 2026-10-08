@@ -11,15 +11,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class CLSReservationTest extends TestCase {
 
-    /** Read the sibling child stylesheet, or skip if it isn't checked out. */
-    private function child_css(): string {
-        $child_css = dirname( __DIR__, 3 ) . '/lafka-child/style.css';
-        if ( ! file_exists( $child_css ) ) {
-            $this->markTestSkipped( 'Sibling lafka-child repo not checked out (isolated CI); local dev only.' );
-        }
-        return file_get_contents( $child_css );
-    }
-
     public function test_owl_carousel_aspect_ratio_reserved_in_parent(): void {
         // Audit 2026-06-27 #6: the .lafka-owl-carousel reservation moved from
         // lafka-child into the PARENT (styles/lafka-base.css) — the parent emits
