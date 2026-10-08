@@ -22,5 +22,5 @@ if ( ! defined( 'ABSPATH' ) ) {
 $lafka_woocommerce_sidebar = get_theme_mod( 'lafka_woocommerce_sidebar', lafka_registered_sidebar_default( 'shop' ) );
 
 if ( $lafka_woocommerce_sidebar && 'none' !== $lafka_woocommerce_sidebar ) {
-	get_sidebar();
+	get_sidebar( 'shop' );
 }

@@ -33,7 +33,7 @@ if ( ! $notices ) {
 			}
 			?>
 			>
-				<?php echo wp_kses( wc_kses_notice( $lafka_notice['notice'] ), lafka_allowed_html() ); ?>
+				<?php echo wp_kses_post( wc_kses_notice( $lafka_notice['notice'] ) ); ?>
 			</li>
 		<?php endforeach; ?>
 	</ul>

@@ -90,14 +90,12 @@ do_action( 'woocommerce_before_cart' );
 	$lafka_cart_city       = isset( $lafka_cart_info['city'] ) ? (string) $lafka_cart_info['city'] : '';
 	$lafka_cart_eta        = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
 	$lafka_cart_pickup_eta = $lafka_cart_eta && ! empty( $lafka_cart_eta['pickup'] ) ? (string) $lafka_cart_eta['pickup'] : '';
-	/* SSOT: read the same threshold the plugin's free-delivery rule enforces,
-	 * so the displayed promise can never diverge from what's charged. When the
-	 * plugin isn't loaded, fall back to the single shared theme_mod (0 = off).
-	 * 0 means "no free-delivery promise" — matching enforcement on a fresh
-	 * (unconfigured) install. */
+	/* SSOT: the plugin's one free-delivery accessor, so the displayed promise can
+	 * never diverge from what's charged. Without the plugin there is no promise
+	 * (0). 0 also matches an unconfigured install. */
 	$lafka_cart_threshold       = function_exists( 'lafka_get_free_delivery_threshold' )
 		? (float) lafka_get_free_delivery_threshold()
-		: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
+		: 0.0;
 	$lafka_cart_threshold_label = function_exists( 'wc_price' )
 		? wp_strip_all_tags( wc_price( $lafka_cart_threshold ) )
 		: sprintf( '$%s', number_format_i18n( $lafka_cart_threshold, 0 ) );
