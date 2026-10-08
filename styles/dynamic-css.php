@@ -181,7 +181,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// Headings font.
 		// v5.44.0: the legacy theme-options "Headings Font" picker is now
 		// inert — design system defines h1/h2 typography via
-		// --lafka-font-display (Fraunces, see DESIGN_SYSTEM.md). Operators
+		// --lafka-font-display (Fraunces, see docs/DESIGN_SYSTEM.md). Operators
 		// wanting custom heading typography override --lafka-font-display
 		// in a child-theme stylesheet. The legacy CSS variable name
 		// `--lafka-headings-font-family` is kept (style.css:21214 still

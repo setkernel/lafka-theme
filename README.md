@@ -8,7 +8,7 @@ Originally developed by [theAlThemist](https://www.althemist.com) and sold on Th
 
 - WordPress 7.0+ · WooCommerce 11.0+ · PHP 8.3+
 
-These match the floors declared in `style.css`. The [Lafka Plugin](https://github.com/setkernel/lafka-plugin) (restaurant menus, product addons, delivery zones, order hours, KDS) is **recommended** — the theme runs standalone, but the full ordering experience needs it.
+The floors are declared in the `style.css` header. The [Lafka Plugin](https://github.com/setkernel/lafka-plugin) (restaurant menus, product addons, delivery zones, order hours, KDS) is **recommended** — the theme runs standalone, but the full ordering experience needs it.
 
 ## Installation
 
@@ -17,8 +17,8 @@ These match the floors declared in `style.css`. The [Lafka Plugin](https://githu
 
 ## Highlights
 
-- **Design-token system** — single visual source of truth in `styles/lafka-tokens.css` (color/type/space/radii/motion); see [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md)
-- **10 built-in design presets** — pure-data `presets/<slug>/preset.json`, WCAG-AA contrast-checked, including two dark presets; see [docs/PRESET_ENGINE.md](docs/PRESET_ENGINE.md)
+- **Design-token system** — single visual source of truth in `styles/lafka-tokens.css` (color/type/space/radii/motion); see [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)
+- **10 built-in design presets** — pure-data `presets/<slug>/preset.json`, built for WCAG AA contrast, including two dark presets; see [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md#presets)
 - **Customizer-first configuration** — every knob has a sane default, a Customizer control, and a filter hook
 - **Redesigned ordering surfaces** — token-driven single product page with topping/size pickers and sticky add-to-cart, list-card menu archive with inline quick-add, ajax cart drawer
 - **Deep WooCommerce integration** — classic and block Cart/Checkout, quick view

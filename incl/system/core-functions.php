@@ -1791,7 +1791,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// then depends on lafka-preset so the operator's dynamic-css :root inline
 		// still prints LAST and always wins. Peppery emits an empty PTL, so this
 		// adds zero bytes for the default preset (byte-identical dynamic-css).
-		// See docs/PRESET_ENGINE.md §4.
+		// See docs/DESIGN_SYSTEM.md (Presets, Emission).
 		$lafka_style_deps = array( 'lafka-tokens' );
 		if ( function_exists( 'lafka_preset_register_ptl' ) ) {
 			lafka_preset_register_ptl();
@@ -1803,7 +1803,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// browser fetches ONLY the two woff2 families the preset references. Peppery
 		// (Rubik + Fraunces, source:"base") attaches nothing — those faces already
 		// live in the static CSS — so this is zero-cost for the default preset. See
-		// docs/PRESET_ENGINE.md §11 (NX2-03) + incl/presets/lafka-preset-fonts.php.
+		// docs/DESIGN_SYSTEM.md (Typography) + incl/presets/lafka-preset-fonts.php.
 		if ( function_exists( 'lafka_preset_register_fonts' ) ) {
 			lafka_preset_register_fonts();
 			$lafka_style_deps[] = 'lafka-preset-fonts';

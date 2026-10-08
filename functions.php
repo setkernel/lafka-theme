@@ -23,7 +23,7 @@ require_once get_template_directory() . '/incl/system/lafka-legacy-migrate.php';
  * Lafka_Presets registry, and the public surface + emission wiring
  * (lafka_presets/lafka_active_preset/lafka_preset_default + the PTL enqueue and
  * dark data-theme filter). Peppery is preset #1, the default and a provable
- * no-op. See docs/PRESET_ENGINE.md.
+ * no-op. See docs/DESIGN_SYSTEM.md.
  */
 require_once get_template_directory() . '/incl/presets/lafka-preset-tokens.php';
 require_once get_template_directory() . '/incl/presets/lafka-preset-fonts.php';

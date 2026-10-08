@@ -31,11 +31,6 @@
 			"pattern": "^Version:\\s*(\\d+\\.\\d+\\.\\d+[^\\s]*)",
 			"flags": "m",
 			"required": true
-		},
-		{
-			"file": "DESIGN_SYSTEM.md",
-			"pattern": "current theme v(\\d+\\.\\d+\\.\\d+)",
-			"required": false
 		}
 	],
 	"devDependencies": {

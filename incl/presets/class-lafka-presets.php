@@ -5,7 +5,7 @@
  * Discovers `presets/*​/preset.json` under the parent (+ child) theme, resolves
  * `extends` deep-merges, skips malformed definitions, applies the `lafka_presets`
  * filter (child / 3rd-party registration) and caches the file-discovered set in a
- * transient keyed by a directory-mtime fingerprint. See docs/PRESET_ENGINE.md §8.
+ * transient keyed by a directory-mtime fingerprint. See docs/DESIGN_SYSTEM.md (Storage, caches and reset).
  *
  * Preset FILES always resolve from the parent theme (the NX1-02 child-active
  * trap): prod runs the child theme, but the shipped presets live in the parent.

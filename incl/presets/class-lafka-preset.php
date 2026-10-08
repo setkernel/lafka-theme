@@ -5,7 +5,7 @@
  * A thin, pure (WordPress-free) wrapper over one decoded `preset.json`. It
  * only exposes typed accessors + a whitelist-aware validity check; discovery,
  * caching and the `lafka_presets` filter live in Lafka_Presets. See
- * docs/PRESET_ENGINE.md §2-3.
+ * docs/DESIGN_SYSTEM.md (Presets).
  *
  * @package Lafka
  * @since   7.1.0 (NX2-01)

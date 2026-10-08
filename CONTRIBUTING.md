@@ -11,24 +11,27 @@ composer install
 git config core.hooksPath .githooks   # pre-push quality gates (below)
 ```
 
-The theme is developed against the one local Docker stack in the sibling `../local-env` repository
-(bring it up with `../local-env/up.sh`). It bind-mounts this checkout at
+The theme is developed against the local Docker stacks in the umbrella repo's `local-env/` directory
+(see its README; start with `../local-env/lafka up`). They bind-mount this checkout at
 `/var/www/html/wp-content/themes/lafka` (the production slug, so a child theme with `Template: lafka`
-can activate against it), serves the site at <http://localhost:8080> and runs WP-CLI in the
-`lafka-local-cli` container. Edits are live; there is no build step for PHP/CSS/JS source.
+can activate against it): the production clone at <http://localhost:8080> and the demo store at
+<http://localhost:8090>. WP-CLI runs in the `lafka-local-cli` container (`../local-env/lafka wp ...`).
+Edits are live; there is no build step for PHP/CSS/JS source.
 
 ## Before opening a PR
 
 ```bash
-npm run lint        # ESLint + Stylelint (content-hash caches: .eslintcache, .stylelintcache)
-composer phpcs      # WordPress coding standards (security sniffs enforced; parallel, cached in .phpcs.cache)
-composer phpcbf     # auto-fix what PHPCS can fix
 npm run check-version
+composer lint:php   # PHP syntax at the 8.3 floor
+composer phpcs      # full WordPress-Extra (parallel, cached in .phpcs.cache)
+composer phpcbf     # auto-fix what PHPCS can fix
+npm run lint        # ESLint + Stylelint (content-hash caches: .eslintcache, .stylelintcache)
 npm run build       # minified assets must build cleanly
 ```
 
-A pre-push hook that runs PHPCS, ESLint, Stylelint and the version check in parallel ships in
-`.githooks/`. It never skips a gate: if `node_modules` or `vendor` is missing it fails and tells you
+There are no test suites. The `.githooks/pre-push` hook and CI run the same scripts. The hook runs
+the version check, PHP syntax, PHPCS, ESLint, Stylelint and the build-freshness check, the independent
+ones in parallel. It never skips a gate: if `node_modules` or `vendor` is missing it fails and tells you
 to run `npm ci` / `composer install`.
 
 ### npm scripts
@@ -41,9 +44,9 @@ Every npm script, one line each.
 | `lint:js`, `lint:js:fix`, `lint:css`, `lint:css:fix` | The two linters individually. |
 | `build` | Minify top-level `styles/*.css` + `js/*.js` to gitignored `.min` siblings (`scripts/build-assets.mjs`); served when `SCRIPT_DEBUG` is off; release.yml runs it before packaging. `js/lafka-dialog.min.js` is the one committed output (lafka-plugin registers it by path); CI fails if it drifts from the build. |
 | `build:theme-json` | Regenerate `theme.json` editor presets from the `--lafka-*` token SSOT. |
-| `i18n:pot` | Regenerate `languages/lafka.pot` with WP-CLI inside the local stack's `lafka-local-cli` container. |
-| `sync:fonts` | Re-copy the eight pool families' woff2 + licences (incl. the variable Bricolage Grotesque from the dev-only Fontsource variable package) from the dev-only `@fontsource/*` packages into `assets/fonts/` (Rubik/Fraunces woff2 untouched). |
-| `previews:presets` | Screenshot each preset's home page into `presets/<slug>/preview.jpg` (Customizer switcher thumbnails) against the local stack (`LAFKA_BASE_URL`, default `http://localhost:8080`; `LAFKA_WPCLI_CONTAINER`, default `lafka-local-cli`); restores the previously active preset. Needs Docker and `npx playwright install chromium` once. `-- --only=ember,koyo` to limit. |
+| `i18n:pot` | Regenerate `languages/lafka.pot` with WP-CLI through `../local-env/lafka wp`. |
+| `sync:fonts` | Re-copy the pool families' woff2 + licences (incl. the variable Bricolage Grotesque from the dev-only Fontsource variable package) from the dev-only `@fontsource/*` packages into `assets/fonts/` (Rubik/Fraunces woff2 untouched). |
+| `previews:presets` | Screenshot each preset's home page into `presets/<slug>/preview.jpg` (Customizer switcher thumbnails) against the local prod-clone stack (`LAFKA_BASE_URL`, default `http://localhost:8080`; `LAFKA_WPCLI_CONTAINER`, default `lafka-local-cli`); restores the previously active preset. Needs Docker and `npx playwright install chromium` once. `-- --only=ember,koyo` to limit. |
 | `sync-version` | Write the version from `package.json` into the `versionSync` targets. |
 | `check-version` | Fail if any `versionSync` target drifted from `package.json` (CI runs it). |
 | `version` | npm lifecycle hook used by `npm version`; not run directly. |
@@ -63,15 +66,15 @@ Every npm script, one line each.
 | Theme functions / hooks | `functions.php` |
 | Reusable theme classes | `incl/` |
 | Legacy options shim (deprecated `lafka_get_option()`) | `incl/system/core-functions.php` |
-| Design presets (10 built-in) | `presets/` + `incl/presets/` ([docs/PRESET_ENGINE.md](docs/PRESET_ENGINE.md)) |
+| Design presets (10 built-in) | `presets/` + `incl/presets/` ([docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md)) |
 | Per-template partials | `partials/` |
 | WooCommerce overrides | `woocommerce/` |
 | Custom page templates | `page_templates/` |
 | Frontend JS | `js/` |
 | Frontend CSS | `style.css` (root) + `styles/` (design tokens + variants) |
-| Design tokens / visual SSOT | `styles/lafka-tokens.css` + [DESIGN_SYSTEM.md](DESIGN_SYSTEM.md) |
+| Design tokens / visual SSOT | `styles/lafka-tokens.css` + [docs/DESIGN_SYSTEM.md](docs/DESIGN_SYSTEM.md) |
 | Self-hosted fonts (preset pool) | `assets/fonts/` |
-| Demo content | none in the theme — the deterministic demo store comes from the plugin's `wp lafka seed-demo` (demo packs v2 planned, NX3-02) |
+| Demo content | none in the theme; the demo store comes from the plugin's `wp lafka seed-demo` |
 | Translations | `languages/` |
 | Dev scripts | `scripts/` |
 
@@ -87,7 +90,7 @@ Every npm script, one line each.
 - ESLint and Stylelint run the shared configs with their rules on (`no-var`, `prefer-const`,
   `no-unused-vars` and `eqeqeq` are errors; warnings fail the build). The single rule left off is
   Stylelint's `no-descending-specificity`: satisfying it means reordering the cascade across
-  about 1,050 selectors, which is deferred to the 1.0 CSS rewrite.
+  about 1,050 selectors, which waits for the CSS rewrite in plan phase P6.
 - CSS naming (`selector-class-pattern`, `selector-id-pattern`; the regexes live in
   `.stylelintrc.json`). Class names and IDs are public contracts with the PHP templates, the JS,
   the plugin's markup and WordPress/WooCommerce core, so they are never renamed to satisfy a lint
@@ -118,22 +121,17 @@ Every npm script, one line each.
 - Min PHP 8.3, min WP 7.0, min WooCommerce 11.0.
 - Text domain: `lafka`.
 
-## Compatibility matrix
-
-See [COMPATIBILITY.md](https://github.com/setkernel/lafka-plugin/blob/main/COMPATIBILITY.md) in the plugin repo (support floors + CI matrix).
-
 ## Releases
 
 1. `npm version <patch|minor|major>` — `package.json` is the canonical version. npm bumps
    `package.json` + `package-lock.json`, then the `version` hook runs
    `scripts/sync-version.mjs` to rewrite and stage the `versionSync` targets
-   (`style.css` `Version:`, `readme.txt` `Version:`, and the "current theme vX.Y.Z" line in
-   `DESIGN_SYSTEM.md`), and npm makes the release commit + `vX.Y.Z` tag.
+   (`style.css` `Version:` and `readme.txt` `Version:`), and npm makes the release commit + `vX.Y.Z` tag.
    `npm run check-version` verifies nothing drifted.
-2. Push the branch and the tag (`git push --follow-tags`).
-3. The `v*` tag triggers `.github/workflows/release.yml`, which runs `npm run build`,
-   packages an installable `lafka.zip` (dev files excluded) + SHA256, and creates or
-   updates the GitHub Release for that tag.
+2. Push the branch, then push the tag in its own push.
+3. A version tag triggers `.github/workflows/release.yml`. It calls `ci.yml` (every gate must pass),
+   runs `npm run build`, copies the tree with `rsync --exclude-from=.distignore` into an installable
+   `lafka.zip` plus SHA256, and creates the GitHub Release. Never build or create releases by hand.
 
 ## Security
 

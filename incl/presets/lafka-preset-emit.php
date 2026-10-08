@@ -8,7 +8,7 @@
  *   - lafka_get_active_preset_slug()-> stored slug (theme_mod, default peppery).
  *   - lafka_preset_default($k,$fb)  -> active preset's chrome default for $k, else $fb.
  *
- * See docs/PRESET_ENGINE.md §2, §4, §5, §6.
+ * See docs/DESIGN_SYSTEM.md (Presets).
  *
  * @package Lafka
  * @since   7.1.0 (NX2-01)
@@ -163,7 +163,7 @@ function lafka_preset_ptl_css( Lafka_Preset $preset ): string {
 		// emitter supplies the dark value. Static fallback = the raw accent
 		// (readable on a dark surface) for browsers without color-mix; the base
 		// derivation DARKENS accent-text, wrong on dark, so the @supports block
-		// below LIGHTENS it toward white. See PRESET_ENGINE.md §6.
+		// below LIGHTENS it toward white. See docs/DESIGN_SYSTEM.md (Dark mode).
 		$decls .= '--lafka-color-accent-text:var(--lafka-color-accent-500);';
 	}
 
@@ -188,7 +188,7 @@ function lafka_preset_ptl_css( Lafka_Preset $preset ): string {
  * is a dependency EDGE (not print-order luck) forcing the PTL to print AFTER
  * the base tokens. Called from lafka_enqueue_scripts_and_styles() right before
  * lafka-style is enqueued (lafka-style then depends on lafka-preset so the
- * operator's dynamic-css inline still prints last). See PRESET_ENGINE.md §4.
+ * operator's dynamic-css inline still prints last). See docs/DESIGN_SYSTEM.md (Emission).
  */
 function lafka_preset_register_ptl(): void {
 	$ver = wp_get_theme( get_template() )->get( 'Version' );

@@ -7,7 +7,7 @@
  * contrast locks (ColorContrastTest, ContrastFixesTest, FocusRingContrastTest) only
  * assert literal hex values in CSS, they never COMPUTE a ratio. The preset engine
  * needs a real ratio so `PresetContrastTest` can gate every preset's EFFECTIVE
- * palette (base tokens (+) PTL (+) chrome) against WCAG AA. See docs/PRESET_ENGINE.md §9.
+ * palette (base tokens (+) PTL (+) chrome) against WCAG AA. See docs/DESIGN_SYSTEM.md (Authoring a preset).
  *
  * Reference: https://www.w3.org/TR/WCAG21/#dfn-relative-luminance and #dfn-contrast-ratio.
  * Verified against a known pair: #767676 on #fff resolves to ~4.54:1 (the WCAG AA

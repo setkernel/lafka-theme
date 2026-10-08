@@ -1,6 +1,6 @@
 <?php
 /**
- * GX4 (PRESET_ENGINE §7): "Reset appearance to preset".
+ * GX4 (see docs/DESIGN_SYSTEM.md, Storage, caches and reset): "Reset appearance to preset".
  *
  * Operator theme_mods always beat a preset's defaults, so a site that carries
  * old appearance overrides (legacy accent, fonts, footer colours migrated from

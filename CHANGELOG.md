@@ -7,7 +7,7 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
-### Changed (lint)
+### Changed
 - **JS/CSS lint rules switched back on** (no `null`/`"off"` overrides left except
   `no-descending-specificity`, deferred to the 1.0 CSS rewrite). `eslint.config.mjs` now
   runs `no-var`, `prefer-const`, `no-unused-vars` and `eqeqeq` as errors; every `var` in
@@ -25,6 +25,49 @@ git tags + GitHub Releases.
   cannot be merged without reordering the cascade (the hover colour for links) is written as
   the equivalent `a:is(:hover)` and keeps its place.
 - Dropped the dead `#commentsForm` selector from `styles/rtl.css` (no markup uses that ID).
+
+- **New platform floors**: WordPress 7.0 (tested up to 7.1), WooCommerce 11.0 (tested up
+  to 11.2), PHP 8.3 (style.css, readme.txt, composer.json, `.phpcs.xml.dist`, docs).
+  `theme.json` already uses the newest schema (version 3, `schemas.wp.org/wp/7.1`).
+- The GitHub updater reports the 7.0 / 7.1 WordPress requirement and tested versions
+  from named constants instead of stale literals (`5.0` / `6.7`).
+- WooCommerce template overrides synced to 11.2.0: `cart/cart-shipping.php`
+  8.8.0 -> 11.2.0 (package index normalised with `%d` in every printf, as core does);
+  every other override already matched its 11.2.0 core `@version`.
+- TGM Plugin Activation now registers only the Lafka plugin and WooCommerce, both
+  required (no more optional YITH Wishlist, Revolution Slider or WPBakery entries).
+- `npm run i18n:pot` and `npm run previews:presets` now target the local stack
+  (`lafka-local-cli` container, `http://localhost:8080`; override with
+  `LAFKA_WPCLI_CONTAINER` / `LAFKA_BASE_URL`). The WP-CLI helper moved to
+  `scripts/lib/wp-cli.mjs`; the preview script uses the `playwright` library.
+- The pre-push hook runs PHPCS, ESLint, Stylelint and the version check, never skips a gate and
+  fails with an `npm ci` / `composer install` hint when dependencies are missing.
+- **Zero-suppression lint policy**: PHPCS runs the full `WordPress-Extra` standard with no
+  `<exclude>` rules, warnings fail the run and `PrefixAllGlobals` enforces the `lafka`
+  prefix. The only excluded paths are `vendor/`, `node_modules/` and the unmodified upstream
+  `incl/tgm-plugin-activation/`. Every inline PHPCS, ESLint and Stylelint
+  suppression comment is gone and each cause is fixed: output is escaped late
+  (new `lafka_allowed_html()` kses allowlist in `incl/system/lafka-output.php`), public query
+  arguments are read through `lafka_query_arg()`, the price-filter bounds use a real query
+  plus a prepared statement, WordPress globals are no longer assigned, template variables
+  carry the `lafka_` prefix, comparisons are strict and Yoda, dates use `gmdate()`, and
+  translator comments are in place. ESLint and Stylelint
+  run with `--max-warnings=0`, and the rules that were switched off are on again except the
+  structural Stylelint ones (see CONTRIBUTING).
+- `incl/lafka-options-framework/` is retired: the Google-font list helper is now
+  `incl/system/lafka-google-fonts.php` and the media-picker script `js/lafka-medialibrary-uploader.js`
+  (its dead Theme Options sidebar and accordion code is gone). Class files follow the
+  `class-*.php` convention (`class-lafka-customizer-bridge.php`, `class-lafka-maintenance-page.php`),
+  the food-menu partial uses a hyphenated name, and dead test-seam guards in
+  `incl/presets/` are removed.
+- The log fallback (plugin inactive, `WP_DEBUG` or the `lafka_theme_log_fallback` filter) now
+  writes to the WooCommerce log, source `lafka-theme`, instead of the PHP error log. The
+  critical CSS is printed through core's style API (`<style id="lafka-critical-inline-css">`).
+  The WooCommerce `woocommerce_price_filter_sql` filter is no longer applied to the
+  theme's own price-filter query.
+- **Documentation consolidated**: `DESIGN_SYSTEM.md` and `docs/PRESET_ENGINE.md` are now one
+  `docs/DESIGN_SYSTEM.md`, refreshed against the code (Peppery counter palette, ten presets,
+  layout resolver, cache keys). The `versionSync` entry for the old file is gone.
 
 ### Removed
 - **All tests and test tooling** (to be reintroduced later): `tests/` (PHPUnit unit suite,
@@ -66,47 +109,6 @@ git tags + GitHub Releases.
   `has_block`, `woocommerce_get_loop_display_mode`, `woocommerce_products_will_display`,
   `wc_esc_json`, `woocommerce_output_all_notices`, and similar). Guards for plugin
   presence, PHP extensions and core-mirrored template checks stay.
-
-### Changed
-- **New platform floors**: WordPress 7.0 (tested up to 7.1), WooCommerce 11.0 (tested up
-  to 11.2), PHP 8.3 (style.css, readme.txt, composer.json, `.phpcs.xml.dist`, docs).
-  `theme.json` already uses the newest schema (version 3, `schemas.wp.org/wp/7.1`).
-- The GitHub updater reports the 7.0 / 7.1 WordPress requirement and tested versions
-  from named constants instead of stale literals (`5.0` / `6.7`).
-- WooCommerce template overrides synced to 11.2.0: `cart/cart-shipping.php`
-  8.8.0 -> 11.2.0 (package index normalised with `%d` in every printf, as core does);
-  every other override already matched its 11.2.0 core `@version`.
-- TGM Plugin Activation now registers only the Lafka plugin and WooCommerce, both
-  required (no more optional YITH Wishlist, Revolution Slider or WPBakery entries).
-- `npm run i18n:pot` and `npm run previews:presets` now target the local stack
-  (`lafka-local-cli` container, `http://localhost:8080`; override with
-  `LAFKA_WPCLI_CONTAINER` / `LAFKA_BASE_URL`). The WP-CLI helper moved to
-  `scripts/lib/wp-cli.mjs`; the preview script uses the `playwright` library.
-- The pre-push hook runs PHPCS, ESLint, Stylelint and the version check, never skips a gate and
-  fails with an `npm ci` / `composer install` hint when dependencies are missing.
-- **Zero-suppression lint policy**: PHPCS runs the full `WordPress-Extra` standard with no
-  `<exclude>` rules, warnings fail the run and `PrefixAllGlobals` enforces the `lafka`
-  prefix. The only excluded paths are `vendor/`, `node_modules/` and the unmodified upstream
-  `incl/tgm-plugin-activation/`. Every inline PHPCS, ESLint and Stylelint
-  suppression comment is gone and each cause is fixed: output is escaped late
-  (new `lafka_allowed_html()` kses allowlist in `incl/system/lafka-output.php`), public query
-  arguments are read through `lafka_query_arg()`, the price-filter bounds use a real query
-  plus a prepared statement, WordPress globals are no longer assigned, template variables
-  carry the `lafka_` prefix, comparisons are strict and Yoda, dates use `gmdate()`, and
-  translator comments are in place. ESLint and Stylelint
-  run with `--max-warnings=0`, and the rules that were switched off are on again except the
-  structural Stylelint ones (see CONTRIBUTING).
-- `incl/lafka-options-framework/` is retired: the Google-font list helper is now
-  `incl/system/lafka-google-fonts.php` and the media-picker script `js/lafka-medialibrary-uploader.js`
-  (its dead Theme Options sidebar and accordion code is gone). Class files follow the
-  `class-*.php` convention (`class-lafka-customizer-bridge.php`, `class-lafka-maintenance-page.php`),
-  the food-menu partial uses a hyphenated name, and dead test-seam guards in
-  `incl/presets/` are removed.
-- The log fallback (plugin inactive, `WP_DEBUG` or the `lafka_theme_log_fallback` filter) now
-  writes to the WooCommerce log, source `lafka-theme`, instead of the PHP error log. The
-  critical CSS is printed through core's style API (`<style id="lafka-critical-inline-css">`).
-  The WooCommerce `woocommerce_price_filter_sql` filter is no longer applied to the
-  theme's own price-filter query.
 
 ## [7.3.0] — 2026-09-25
 

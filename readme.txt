@@ -17,7 +17,7 @@ Mobile-first restaurant-ordering theme for WordPress and WooCommerce, built on a
 
 Lafka is a mobile-first WordPress theme for restaurants, cafes, and food
 businesses selling with WooCommerce. Its appearance is driven end-to-end by a
-single token system (over 200 `--lafka-*` CSS custom properties), so colour,
+single token system (`--lafka-*` CSS custom properties), so colour,
 type, spacing, radius, and motion all trace back to one source of truth — no
 scattered hex literals. Every layout is verified at the 375 / 768 / 1280
 breakpoints.
@@ -35,7 +35,7 @@ rebuilt single-product page.
 **Highlights**
 
 * Mobile-first, responsive layouts verified at 375 / 768 / 1280.
-* Token-driven design system — one visual source of truth (https://github.com/setkernel/lafka-theme/blob/main/DESIGN_SYSTEM.md).
+* Token-driven design system — one visual source of truth (https://github.com/setkernel/lafka-theme/blob/main/docs/DESIGN_SYSTEM.md).
 * Deep WooCommerce integration: custom shop/archive layouts, AJAX cart drawer, inline quick-add.
 * Redesigned single-product page with topping/size pickers and a sticky add-to-cart bar.
 * List-card menu archive: image-left / body-right product rows.
@@ -99,8 +99,8 @@ included.
 
 = Where is the design documentation? =
 
-The token system is documented in `DESIGN_SYSTEM.md` in the source repository
-(https://github.com/setkernel/lafka-theme/blob/main/DESIGN_SYSTEM.md) and is the single visual source of truth for the theme.
+The token system is documented in `docs/DESIGN_SYSTEM.md` in the source repository
+(https://github.com/setkernel/lafka-theme/blob/main/docs/DESIGN_SYSTEM.md) and is the single visual source of truth for the theme.
 
 == Changelog ==
 

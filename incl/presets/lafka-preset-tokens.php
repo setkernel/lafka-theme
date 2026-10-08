@@ -6,7 +6,7 @@
  * with its own allow-list. These constants are the SINGLE source both the
  * emitter (incl/presets/lafka-preset-emit.php) and the validator
  * (Lafka_Preset::validate()) read, mirroring the `lafka_legacy_migrate_map()`
- * pure-data idiom. See docs/PRESET_ENGINE.md §3.
+ * pure-data idiom. See docs/DESIGN_SYSTEM.md (preset.json).
  *
  *  - LAFKA_PRESET_TOKEN_WHITELIST — the 88 `--lafka-*` design tokens that have
  *    NO operator feed (surfaces, borders, text, semantics, radii, shadows,
@@ -229,7 +229,7 @@ define(
  * any of these keys to one of the listed values; the value becomes the DEFAULT
  * of the matching Customizer layout select (lafka_<surface>_layout), so the
  * operator always wins. Anything outside this map fails Lafka_Preset::validate()
- * and is ignored by lafka_preset_variant(). See docs/PRESET_ENGINE.md §3.
+ * and is ignored by lafka_preset_variant(). See docs/DESIGN_SYSTEM.md (preset.json).
  */
 define(
 	'LAFKA_PRESET_VARIANT_WHITELIST',
