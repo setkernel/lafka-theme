@@ -44,6 +44,41 @@ git tags + GitHub Releases.
   return with the test suite), `lafka_preset_display_preload_href()`, the Magnific-era gallery click
   handler, and the `deliveryLabel` script parameter.
 
+### Changed
+- **The redesigned pages fire WooCommerce's own hooks** (design unchanged, screenshots
+  identical at 375 and 1280): the product page fires `woocommerce_before_main_content`,
+  `woocommerce_before_single_product_summary`, `woocommerce_single_product_summary`,
+  `woocommerce_before_add_to_cart_form` / `after`, `woocommerce_product_meta_start` / `_end`,
+  `woocommerce_share`, `woocommerce_after_single_product_summary` and the closing actions;
+  each part of the summary is a callback on the summary hook (`incl/woocommerce/lafka-pdp-summary.php`),
+  and the core callbacks the design replaces are removed rather than skipped. The shop /
+  category / tag / search archive fires `woocommerce_shop_loop_header`, `before_shop_loop`,
+  the loop through `woocommerce_product_loop_start()` / `content-product.php` /
+  `woocommerce_product_loop_end()`, the loop-item actions, `after_shop_loop`,
+  `no_products_found` and the closing actions (`incl/woocommerce/lafka-archive-hooks.php`).
+  The cart drawer fires the mini-cart actions (`incl/woocommerce/lafka-cart-drawer-hooks.php`).
+  The GA4 `view_item` / `view_item_list` events now ride the core actions.
+- The product wrapper carries core's id and classes (type, stock, categories) for extensions.
+- WooCommerce's stylesheet is still not enqueued as it is (the theme owns the styling, and
+  loading it moved the cart, checkout and My Account layouts in measurement), but the theme
+  now keeps the URL from WooCommerce's own list and offers it as an opt-in fallback for
+  extension UI on the classic cart, checkout and account pages: it loads inside the
+  `lafka-wc-core` CSS layer, under every theme rule, when `lafka_wc_core_fallback_styles`
+  returns true (off by default).
+- `lafka_wc_add_cart_ajax` returns WooCommerce's notice markup on a failed add (shown in the
+  page's notices area) instead of an alert.
+- The gateway-asset dequeue matches handles by pattern (the SkyVerge framework versions its
+  handles).
+- `global/sidebar.php` calls `get_sidebar( 'shop' )`; the menu pager runs
+  `woocommerce_pagination_args`; the error-notice override keeps extension markup.
+
+### Fixed
+- The product page printed the age notice twice when it applied.
+
+### Removed
+- `woocommerce/loop/pagination.php` (the classic shop pager nothing reaches any more).
+- `lafka_pdp_summary` action (internal; its callbacks sit on `woocommerce_single_product_summary`).
+
 ### Added
 - Order tracker styling (`styles/lafka-order-tracker.css`) for the plugin's Order tracking
   stepper: large type and dots, vertical on phones and in a row from 640 px; "Order this

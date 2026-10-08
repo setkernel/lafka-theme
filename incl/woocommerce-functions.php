@@ -3,8 +3,111 @@
 // Woocommerce specific functions
 /** @var $product WC_Product */
 
-// Disable WooCommerce styles (the theme owns all storefront styling).
-add_filter( 'woocommerce_enqueue_styles', '__return_false' );
+if ( ! function_exists( 'lafka_add_to_cart_blocked' ) ) {
+	/**
+	 * Whether the store is closed with add-to-cart switched off (the plugin's
+	 * order-hours option) and no ordering ahead. The server gates refuse the add;
+	 * lists and the product page read this to show the closed card or a "Choose"
+	 * link instead of an Add button that cannot work. Products themselves stay
+	 * purchasable in WooCommerce (admin, REST, other channels).
+	 *
+	 * @since 7.4.0
+	 *
+	 * @return bool
+	 */
+	function lafka_add_to_cart_blocked(): bool {
+		if ( ! class_exists( 'Lafka_Order_Hours' ) ) {
+			return false;
+		}
+		if ( method_exists( 'Lafka_Order_Hours', 'is_add_to_cart_blocked' ) ) {
+			return (bool) Lafka_Order_Hours::is_add_to_cart_blocked();
+		}
+
+		// Older plugins: closed + opted in.
+		return ! Lafka_Order_Hours::is_shop_open()
+			&& ! empty( Lafka_Order_Hours::$lafka_order_hours_options['lafka_order_hours_disable_add_to_cart'] );
+	}
+}
+
+// WooCommerce's stylesheets are not enqueued as they are: the theme owns the storefront
+// styling and its own rules must win everywhere. Where the theme does not restyle
+// every element (the classic cart, checkout and My Account pages, where extensions
+// print their own forms and tables), core's general stylesheet comes in as a
+// fallback underneath the theme: see lafka_wc_core_fallback_styles().
+add_filter( 'woocommerce_enqueue_styles', 'lafka_wc_take_core_styles' );
+
+if ( ! function_exists( 'lafka_wc_take_core_styles' ) ) {
+	/**
+	 * woocommerce_enqueue_styles: keep WooCommerce's general stylesheet URL (the
+	 * file name changes between WooCommerce versions, so it is read from
+	 * WooCommerce's own list), and enqueue none of them as they are.
+	 *
+	 * @since 7.4.0
+	 *
+	 * @param array|false $styles WooCommerce's stylesheets.
+	 * @return array
+	 */
+	function lafka_wc_take_core_styles( $styles ) {
+		if ( is_array( $styles ) && ! empty( $styles['woocommerce-general']['src'] ) ) {
+			$GLOBALS['lafka_wc_general_css'] = (string) $styles['woocommerce-general']['src'];
+		}
+
+		return array();
+	}
+}
+
+if ( ! function_exists( 'lafka_wc_core_fallback_styles' ) ) {
+	add_action( 'wp_enqueue_scripts', 'lafka_wc_core_fallback_styles', 11 );
+	/**
+	 * WooCommerce's general stylesheet as an opt-in fallback layer on the classic
+	 * cart, checkout and account pages.
+	 *
+	 * Off by default: WooCommerce's rules reflow the theme's cart, checkout and
+	 * account layouts even from underneath (measured on the cart, the checkout
+	 * and every My Account screen), and the design must not move. A shop that
+	 * installs extensions with unstyled forms or tables there turns it on with
+	 * the filter below (child theme or a small plugin). It is imported into the
+	 * `lafka-wc-core` CSS cascade layer, so any rule the theme writes outranks a
+	 * layered rule whatever its specificity and only unstyled elements gain
+	 * WooCommerce's own look.
+	 *
+	 * @since 7.4.0
+	 */
+	function lafka_wc_core_fallback_styles() {
+		if ( ! function_exists( 'is_cart' ) || ! function_exists( 'WC' ) ) {
+			return;
+		}
+		$classic_cart     = is_cart() && ! has_block( 'woocommerce/cart' );
+		$classic_checkout = is_checkout() && ! has_block( 'woocommerce/checkout' );
+		if ( ! ( $classic_cart || $classic_checkout || is_account_page() ) ) {
+			return;
+		}
+
+		/**
+		 * Filter whether WooCommerce's general stylesheet loads as a fallback layer
+		 * on the classic cart, checkout and account pages.
+		 *
+		 * @since 7.4.0
+		 * @param bool $on Default false (the design stays as it is).
+		 */
+		if ( ! apply_filters( 'lafka_wc_core_fallback_styles', false ) ) {
+			return;
+		}
+
+		$href = isset( $GLOBALS['lafka_wc_general_css'] ) ? (string) $GLOBALS['lafka_wc_general_css'] : '';
+		if ( '' === $href ) {
+			return;
+		}
+		if ( is_rtl() ) {
+			$href = (string) preg_replace( '/\.css$/', '-rtl.css', $href );
+		}
+		$href = add_query_arg( 'ver', WC_VERSION, $href );
+
+		wp_register_style( 'lafka-wc-core', false, array(), WC_VERSION );
+		wp_enqueue_style( 'lafka-wc-core' );
+		wp_add_inline_style( 'lafka-wc-core', '@import url("' . esc_url_raw( $href ) . '") layer(lafka-wc-core);' );
+	}
+}
 
 add_filter( 'woocommerce_breadcrumb_defaults', 'lafka_woocommerce_breadcrumb_defaults' );
 if ( ! function_exists( 'lafka_woocommerce_breadcrumb_defaults' ) ) {
@@ -726,7 +829,7 @@ function lafka_taxonomy_archive_description() {
 				$output = $description;
 			}
 
-			echo '<div class="term-description fixed ' . esc_attr( sanitize_html_class( lafka_get_option( 'category_description_position' ) ) ) . '">' . wp_kses_post( $output ) . '</div>';
+			echo '<div class="term-description fixed">' . wp_kses_post( $output ) . '</div>';
 		}
 	}
 }
@@ -756,6 +859,15 @@ remove_action( 'woocommerce_after_shop_loop_item_title', 'woocommerce_template_l
 // Related products: count (int-coerced — WC logs an error on a string limit),
 // the 0 = hide switch, and the woocommerce_output_related_products_args filter.
 require_once get_template_directory() . '/incl/woocommerce/lafka-related-products.php';
+
+// Redesigned PDP summary parts on woocommerce_single_product_summary.
+require_once get_template_directory() . '/incl/woocommerce/lafka-pdp-summary.php';
+
+// Archive template: loop grid + the callbacks the design replaces.
+require_once get_template_directory() . '/incl/woocommerce/lafka-archive-hooks.php';
+
+// Cart drawer buttons on WooCommerce's mini-cart actions.
+require_once get_template_directory() . '/incl/woocommerce/lafka-cart-drawer-hooks.php';
 
 add_action( 'woocommerce_before_single_product_summary', 'lafka_add_this_share', 99 );
 if ( ! function_exists( 'lafka_add_this_share' ) ) {
@@ -822,26 +934,25 @@ if ( ! function_exists( 'lafka_wc_add_cart_ajax' ) ) {
 	function lafka_wc_add_cart_ajax() {
 		check_ajax_referer( 'lafka_ajax_nonce', 'security' );
 
-		$wc_notices = WC()->session->get( 'wc_notices' );
-		WC()->session->set( 'wc_notices', array() );
+		// The add itself ran on init (WC_Form_Handler::add_to_cart_action) and left
+		// its notices in the session. A failed add returns WooCommerce's own notice
+		// markup (all notice types, extension markup intact) for the page's notices
+		// area, plus the plain text; a successful one clears them (the drawer is the
+		// confirmation) and returns the refreshed fragments.
+		if ( wc_notice_count( 'error' ) > 0 ) {
+			$errors  = wc_get_notices( 'error' );
+			$first   = is_array( $errors ) && isset( $errors[0] ) ? $errors[0] : '';
+			$message = is_array( $first ) ? (string) ( $first['notice'] ?? '' ) : (string) $first;
 
-		if ( is_array( $wc_notices ) ) {
-			foreach ( $wc_notices as $notice_level => $notice ) {
-				if ( 'error' === $notice_level ) {
-					$notice_message = is_array( $notice[0] ) ? $notice[0]['notice'] : $notice[0];
-
-					// regex to remove html tags and content
-					$regex         = '/<[^>]*>[^<]*<[^>]*>/';
-					$alert_message = html_entity_decode( preg_replace( $regex, '', $notice_message ) );
-					$response      = array(
-						'error_message' => $alert_message,
-					);
-
-					wp_send_json( $response );
-				}
-			}
+			wp_send_json(
+				array(
+					'error_message' => html_entity_decode( wp_strip_all_tags( $message ), ENT_QUOTES, 'UTF-8' ),
+					'notices_html'  => wc_print_notices( true ),
+				)
+			);
 		}
 
+		wc_clear_notices();
 		WC_AJAX::get_refreshed_fragments();
 
 		wp_die();
@@ -1348,6 +1459,29 @@ if ( ! function_exists( 'lafka_quantity_input_on_listing' ) ) {
 				);
 			}
 		}
+	}
+}
+
+if ( ! function_exists( 'lafka_wc_core_product_classes' ) ) {
+	/**
+	 * WooCommerce's own product classes (type, stock, categories, ...) without the
+	 * classic loop card's theme classes (lafka_product_loop_item_class), for the
+	 * redesigned screens that carry core's classes for extensions' selectors but
+	 * their own design.
+	 *
+	 * @since 7.4.0
+	 *
+	 * @param string          $extra   Class(es) to add.
+	 * @param WC_Product|null $product Product.
+	 * @param string[]        $drop    Core classes to leave out (e.g. `product`).
+	 * @return string[]
+	 */
+	function lafka_wc_core_product_classes( $extra, $product, array $drop = array() ): array {
+		remove_filter( 'woocommerce_post_class', 'lafka_product_loop_item_class', 10 );
+		$classes = wc_get_product_class( $extra, $product );
+		add_filter( 'woocommerce_post_class', 'lafka_product_loop_item_class', 10, 2 );
+
+		return array_values( array_diff( $classes, $drop ) );
 	}
 }
 

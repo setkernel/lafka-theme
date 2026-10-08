@@ -419,7 +419,15 @@
                                     window.location = lafka_main_js_params.cart_url;
                                 } else {
                                     if ("error_message" in results) {
-                                        alert(results.error_message);
+                                        // WooCommerce's own notice markup goes into the page's
+                                        // notices area; a page without one falls back to an alert.
+                                        const $notices = $('.woocommerce-notices-wrapper').first();
+                                        if (results.notices_html && $notices.length) {
+                                            $notices.html(results.notices_html);
+                                            $notices[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+                                        } else {
+                                            alert(results.error_message);
+                                        }
                                     } else {
                                         // Trigger event so themes can refresh other areas
                                         $(document.body).trigger('added_to_cart', [results.fragments, results.cart_hash, $thisbutton]);
