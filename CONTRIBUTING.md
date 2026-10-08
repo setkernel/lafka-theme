@@ -79,8 +79,8 @@ Every npm script, one line each.
 
 - The full WordPress-Extra rule set (PHPCS), no exclusions, warnings fail; `array()` syntax;
   every global (function, class, hook, variable in a template file) starts with `lafka` / `Lafka`.
-- No lint suppressions anywhere: no `phpcs:ignore` / `phpcs:disable`, `eslint-disable` or
-  `stylelint-disable`. Fix the cause. Only `vendor/`, `node_modules/`, the unmodified
+- No lint suppressions anywhere: no inline PHPCS, ESLint or Stylelint suppression comments.
+  Fix the cause. Only `vendor/`, `node_modules/`, the unmodified
   `incl/tgm-plugin-activation/` and vendored front-end libraries are excluded.
 - Escape late: print markup with `wp_kses( $html, lafka_allowed_html() )` (or the `esc_` family);
   fire WordPress / WooCommerce hooks from template overrides with `lafka_core_action()` /

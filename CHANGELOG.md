@@ -68,8 +68,8 @@ git tags + GitHub Releases.
 - **Zero-suppression lint policy**: PHPCS runs the full `WordPress-Extra` standard with no
   `<exclude>` rules, warnings fail the run and `PrefixAllGlobals` enforces the `lafka`
   prefix. The only excluded paths are `vendor/`, `node_modules/` and the unmodified upstream
-  `incl/tgm-plugin-activation/`. Every inline `phpcs:ignore` / `phpcs:disable`, `eslint-disable`
-  and `stylelint-disable` comment is gone and each cause is fixed: output is escaped late
+  `incl/tgm-plugin-activation/`. Every inline PHPCS, ESLint and Stylelint
+  suppression comment is gone and each cause is fixed: output is escaped late
   (new `lafka_allowed_html()` kses allowlist in `incl/system/lafka-output.php`), public query
   arguments are read through `lafka_query_arg()`, the price-filter bounds use a real query
   plus a prepared statement, WordPress globals are no longer assigned, template variables
