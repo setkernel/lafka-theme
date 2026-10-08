@@ -4,7 +4,8 @@
  * few plain links on one row. Links: the counter's own "Footer menu (counter
  * layout)" location when assigned (depth 1, capped by
  * lafka_counter_footer_max_links), else Menu · Deals · Find us
- * (lafka_counter_footer_items()); the privacy policy link always (when the
+ * (lafka_counter_footer_items()); the operator's social profiles (Restaurant →
+ * Social Profiles, lafka_theme_social_links()); the privacy policy link always (when the
  * site has one). The legacy tertiary "Footer Menu" is never printed here — on
  * migrated stores it holds the old link wall. No logo wall, no signup
  * (classic keeps them).
@@ -27,6 +28,7 @@ $lafka_cf_location = lafka_counter_footer_location();
 $lafka_cf_menu     = has_nav_menu( $lafka_cf_location );
 $lafka_cf_items    = $lafka_cf_menu ? array() : lafka_counter_footer_items();
 $lafka_cf_policy   = (string) get_the_privacy_policy_link();
+$lafka_cf_social   = function_exists( 'lafka_theme_social_links' ) ? lafka_theme_social_links() : array();
 ?>
 <footer id="footer" class="lafka-footer lafka-footer--counter" role="contentinfo">
 	<div class="lafka-counter-footer lafka-counter-wrap">
@@ -52,10 +54,13 @@ $lafka_cf_policy   = (string) get_the_privacy_policy_link();
 				);
 			}
 			?>
-			<?php if ( $lafka_cf_items || '' !== $lafka_cf_policy ) : ?>
+			<?php if ( $lafka_cf_items || $lafka_cf_social || '' !== $lafka_cf_policy ) : ?>
 				<ul class="lafka-counter-footer__list">
 					<?php foreach ( $lafka_cf_items as $lafka_cf_item ) : ?>
 						<li><a href="<?php echo esc_url( $lafka_cf_item['url'] ); ?>"><?php echo esc_html( $lafka_cf_item['label'] ); ?></a></li>
+					<?php endforeach; ?>
+					<?php foreach ( $lafka_cf_social as $lafka_cf_net => $lafka_cf_url ) : ?>
+						<li><a href="<?php echo esc_url( $lafka_cf_url ); ?>" target="_blank" rel="noopener noreferrer"><?php echo esc_html( lafka_theme_social_label( (string) $lafka_cf_net ) ); ?></a></li>
 					<?php endforeach; ?>
 					<?php if ( '' !== $lafka_cf_policy ) : ?>
 						<li><?php echo wp_kses_post( $lafka_cf_policy ); ?></li>

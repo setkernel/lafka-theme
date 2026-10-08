@@ -36,7 +36,7 @@ $lafka_how_steps = (array) apply_filters(
 		),
 		array(
 			'title' => (string) get_theme_mod( 'lafka_home_how_3_title', __( 'We start cooking', 'lafka' ) ),
-			'body'  => (string) get_theme_mod( 'lafka_home_how_3_body', __( 'Track your order in real time. Most orders are ready in about 25 minutes.', 'lafka' ) ),
+			'body'  => (string) get_theme_mod( 'lafka_home_how_3_body', __( 'Track your order in real time from the confirmation page.', 'lafka' ) ),
 		),
 	)
 );

@@ -28,7 +28,7 @@ $lafka_ft_info  = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_res
 $lafka_ft_name  = isset( $lafka_ft_info['name'] ) ? (string) $lafka_ft_info['name'] : (string) get_bloginfo( 'name' );
 $lafka_ft_addr  = isset( $lafka_ft_info['address_display'] ) ? (string) $lafka_ft_info['address_display'] : '';
 $lafka_ft_phone = isset( $lafka_ft_info['phone_display'] ) ? (string) $lafka_ft_info['phone_display'] : '';
-$lafka_ft_tel   = isset( $lafka_ft_info['phone_e164'] ) ? (string) $lafka_ft_info['phone_e164'] : $lafka_ft_phone;
+$lafka_ft_tel   = (string) ( $lafka_ft_info['phone_tel'] ?? '' );
 // Reach-us email: prefer the configured business email; never leak a host port
 // (e.g. "info@localhost:8080" on a ported dev install) — audit V4.
 $lafka_ft_email = function_exists( 'lafka_theme_reach_email' )
@@ -65,12 +65,8 @@ if ( has_action( 'wp_ajax_nopriv_lafka_footer_subscribe' ) ) {
 
 $lafka_ft_signup_html = (string) apply_filters( 'lafka_footer_signup_html', $lafka_ft_signup_default_html );
 
-$lafka_ft_social = array(
-	'facebook'  => (string) get_theme_mod( 'lafka_social_facebook', '' ),
-	'instagram' => (string) get_theme_mod( 'lafka_social_instagram', '' ),
-	'tiktok'    => (string) get_theme_mod( 'lafka_social_tiktok', '' ),
-);
-$lafka_ft_social = array_filter( $lafka_ft_social );
+// Profile links come from WooCommerce → Settings → Restaurant → Social Profiles.
+$lafka_ft_social = function_exists( 'lafka_theme_social_links' ) ? lafka_theme_social_links() : array();
 
 $lafka_ft_year = wp_date( 'Y' );
 ?>
@@ -125,7 +121,7 @@ $lafka_ft_year = wp_date( 'Y' );
 					<ul class="lafka-footer__social">
 						<?php foreach ( $lafka_ft_social as $lafka_ft_net => $lafka_ft_url ) : ?>
 							<li>
-								<a class="lafka-footer__social-link lafka-footer__social-link--<?php echo esc_attr( $lafka_ft_net ); ?>" href="<?php echo esc_url( $lafka_ft_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( ucfirst( $lafka_ft_net ) ); ?>">
+								<a class="lafka-footer__social-link lafka-footer__social-link--<?php echo esc_attr( $lafka_ft_net ); ?>" href="<?php echo esc_url( $lafka_ft_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( lafka_theme_social_label( (string) $lafka_ft_net ) ); ?>">
 									<?php echo wp_kses( lafka_icon( $lafka_ft_net, 18 ), lafka_allowed_html() ); ?>
 								</a>
 							</li>
@@ -175,7 +171,7 @@ $lafka_ft_year = wp_date( 'Y' );
 				<ul class="lafka-footer__contact">
 					<?php if ( '' !== $lafka_ft_phone ) : ?>
 						<li>
-							<a class="lafka-footer__phone" href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_ft_tel ) ); ?>">
+							<a class="lafka-footer__phone" href="<?php echo esc_attr( 'tel:' . $lafka_ft_tel ); ?>">
 								<span aria-hidden="true">📞</span>
 								<?php echo esc_html( $lafka_ft_phone ); ?>
 							</a>

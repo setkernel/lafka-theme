@@ -11,7 +11,7 @@
  *   - FAQ section: 5 collapsible <details>
  *
  * Reads operator data via lafka_get_restaurant_info() (plugin schema helper).
- * FAQ entries via Customizer (lafka_contact_faq_*) — defaults included.
+ * FAQ entries come from the plugin (WooCommerce → Settings → Restaurant → Contact FAQ); standard questions show until the operator writes their own.
  *
  * @package Lafka
  * @since   5.66.0
@@ -25,7 +25,7 @@ $lafka_c_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get
 $lafka_c_addr       = isset( $lafka_c_info['address_display'] ) ? (string) $lafka_c_info['address_display'] : '';
 $lafka_c_short      = isset( $lafka_c_info['address_short'] ) ? (string) $lafka_c_info['address_short'] : '';
 $lafka_c_phone      = isset( $lafka_c_info['phone_display'] ) ? (string) $lafka_c_info['phone_display'] : '';
-$lafka_c_tel        = isset( $lafka_c_info['phone_e164'] ) ? (string) $lafka_c_info['phone_e164'] : $lafka_c_phone;
+$lafka_c_tel        = (string) ( $lafka_c_info['phone_tel'] ?? '' );
 $lafka_c_email      = isset( $lafka_c_info['email'] ) ? (string) $lafka_c_info['email'] : (string) get_bloginfo( 'admin_email' );
 $lafka_c_hours      = isset( $lafka_c_info['hours'] ) && is_array( $lafka_c_info['hours'] ) ? $lafka_c_info['hours'] : array();
 $lafka_c_directions = isset( $lafka_c_info['directions_url'] ) ? (string) $lafka_c_info['directions_url'] : '';
@@ -35,34 +35,35 @@ $lafka_c_photo_id = (int) get_theme_mod( 'lafka_contact_photo_id', 0 );
 $lafka_c_photo    = $lafka_c_photo_id ? wp_get_attachment_image_url( $lafka_c_photo_id, 'large' ) : '';
 
 /* v5.68.0: defaults are now restaurant-agnostic per OSS-bundle policy.
- * Operators can override per FAQ in Customizer, or via the
+ * Operators write their own under WooCommerce → Settings → Restaurant, or via the
  * `lafka_contact_faqs` filter (intended path for child themes that want
  * to set site-specific copy). */
-$lafka_faqs = (array) apply_filters(
-	'lafka_contact_faqs',
-	array(
+$lafka_faqs = function_exists( 'lafka_contact_faq_items' ) ? lafka_contact_faq_items() : array();
+if ( empty( $lafka_faqs ) ) {
+	$lafka_faqs = array(
 		array(
-			'q' => (string) get_theme_mod( 'lafka_contact_faq_1_q', __( 'How long do orders take?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_1_a', __( 'Pickup is typically ready in about 25 minutes. Delivery times vary by location and demand.', 'lafka' ) ),
+			'q' => __( 'How long do orders take?', 'lafka' ),
+			'a' => __( 'Pickup is typically ready in about 25 minutes. Delivery times vary by location and demand.', 'lafka' ),
 		),
 		array(
-			'q' => (string) get_theme_mod( 'lafka_contact_faq_2_q', __( 'Do you deliver?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_2_a', __( 'Yes — see our delivery area and fees during checkout.', 'lafka' ) ),
+			'q' => __( 'Do you deliver?', 'lafka' ),
+			'a' => __( 'Yes — see our delivery area and fees during checkout.', 'lafka' ),
 		),
 		array(
-			'q' => (string) get_theme_mod( 'lafka_contact_faq_3_q', __( 'Are vegan / vegetarian options available?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_3_a', __( 'Yes — look for the 🌱 and 🥬 marks on the menu, and you can swap toppings on most items.', 'lafka' ) ),
+			'q' => __( 'Are vegan / vegetarian options available?', 'lafka' ),
+			'a' => __( 'Yes — look for the 🌱 and 🥬 marks on the menu, and you can swap toppings on most items.', 'lafka' ),
 		),
 		array(
-			'q' => (string) get_theme_mod( 'lafka_contact_faq_4_q', __( 'How do I track my order?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_4_a', __( 'After you place an order you will see a status tracker on the confirmation page and receive an email update.', 'lafka' ) ),
+			'q' => __( 'How do I track my order?', 'lafka' ),
+			'a' => __( 'After you place an order you will see a status tracker on the confirmation page and receive an email update.', 'lafka' ),
 		),
 		array(
-			'q' => (string) get_theme_mod( 'lafka_contact_faq_5_q', __( 'Can I order for catering or large groups?', 'lafka' ) ),
-			'a' => (string) get_theme_mod( 'lafka_contact_faq_5_a', __( 'Yes — give us a call ahead of time so we can plan your order.', 'lafka' ) ),
+			'q' => __( 'Can I order for catering or large groups?', 'lafka' ),
+			'a' => __( 'Yes — give us a call ahead of time so we can plan your order.', 'lafka' ),
 		),
-	)
-);
+	);
+}
+$lafka_faqs = (array) apply_filters( 'lafka_contact_faqs', $lafka_faqs );
 ?>
 <div id="main" class="lafka-contact">
 	<div class="lafka-container">
@@ -163,7 +164,7 @@ $lafka_faqs = (array) apply_filters(
 						</a>
 					<?php endif; ?>
 					<?php if ( '' !== $lafka_c_phone ) : ?>
-						<a class="lafka-contact__cta lafka-contact__cta--primary" href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_c_tel ) ); ?>">
+						<a class="lafka-contact__cta lafka-contact__cta--primary" href="<?php echo esc_attr( 'tel:' . $lafka_c_tel ); ?>">
 							<span aria-hidden="true">📞</span>
 							<?php esc_html_e( 'Call to order', 'lafka' ); ?>
 						</a>

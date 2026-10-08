@@ -264,7 +264,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			'lafka_home_reviews',
 			array(
 				'title'       => __( 'Reviews', 'lafka' ),
-				'description' => __( 'Up to 3 customer review cards plus an optional aggregate rating callout. Section is hidden automatically when no reviews entered.', 'lafka' ),
+				'description' => __( 'Shows up to 3 of your customers\' real WooCommerce product reviews (4 stars and up). Nothing is typed in here: the section is hidden until customers have left a review. The rating next to the headline is your provider rating (Social Proof panel) or the average of your own reviews.', 'lafka' ),
 				'panel'       => 'lafka_home',
 				'priority'    => 50,
 			)
@@ -293,16 +293,6 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 				'default' => __( 'What our neighbors say', 'lafka' ),
 				'type'    => 'text',
 			),
-			'lafka_home_reviews_rating'   => array(
-				'label'   => __( 'Aggregate rating (e.g. 4.9)', 'lafka' ),
-				'default' => '',
-				'type'    => 'text',
-			),
-			'lafka_home_reviews_count'    => array(
-				'label'   => __( 'Number of reviews (e.g. 230)', 'lafka' ),
-				'default' => '',
-				'type'    => 'text',
-			),
 		);
 		foreach ( $lafka_home_reviews_fields as $lafka_setting_id => $lafka_field ) {
 			$wp_customize->add_setting(
@@ -323,70 +313,79 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			);
 		}
 
-		// Three review cards (quote + name + source + stars).
-		for ( $lafka_r = 1; $lafka_r <= 3; $lafka_r++ ) {
-			$lafka_review_card_fields = array(
-				"lafka_home_reviews_{$lafka_r}_quote"  => array(
-					/* translators: %d: review number. */
-					'label'   => sprintf( __( 'Review %d — quote', 'lafka' ), $lafka_r ),
-					'default' => '',
-					'type'    => 'textarea',
-				),
-				"lafka_home_reviews_{$lafka_r}_name"   => array(
-					/* translators: %d: review number. */
-					'label'   => sprintf( __( 'Review %d — reviewer name', 'lafka' ), $lafka_r ),
-					'default' => '',
-					'type'    => 'text',
-				),
-				"lafka_home_reviews_{$lafka_r}_source" => array(
-					/* translators: %d: review number. */
-					'label'   => sprintf( __( 'Review %d — source (Google/Yelp/etc.)', 'lafka' ), $lafka_r ),
-					'default' => '',
-					'type'    => 'text',
-				),
-			);
-			foreach ( $lafka_review_card_fields as $lafka_setting_id => $lafka_field ) {
-				$wp_customize->add_setting(
-					$lafka_setting_id,
-					array(
-						'default'           => $lafka_field['default'],
-						'sanitize_callback' => 'textarea' === $lafka_field['type'] ? 'sanitize_textarea_field' : 'sanitize_text_field',
-						'transport'         => 'refresh',
-					)
-				);
-				$wp_customize->add_control(
-					$lafka_setting_id,
-					array(
-						'label'   => $lafka_field['label'],
-						'section' => 'lafka_home_reviews',
-						'type'    => $lafka_field['type'],
-					)
-				);
-			}
-
+		// -----------------------------------------------------------------
+		// 4b. How it works (3 steps). Defaults mirror partials/home-how-it-works.php.
+		// -----------------------------------------------------------------
+		$wp_customize->add_section(
+			'lafka_home_how',
+			array(
+				'title'       => __( 'How it works', 'lafka' ),
+				'description' => __( 'The three-step explainer under the menu. Leave a field empty to use the standard wording.', 'lafka' ),
+				'panel'       => 'lafka_home',
+				'priority'    => 45,
+			)
+		);
+		$lafka_how_2_default = function_exists( 'lafka_home_how_step2_body_default' ) ? lafka_home_how_step2_body_default() : __( 'Pickup is fastest, or get it delivered piping hot.', 'lafka' );
+		$lafka_how_fields    = array(
+			'lafka_home_how_eyebrow'  => array( __( 'Small heading above', 'lafka' ), __( 'How it works', 'lafka' ), 'text' ),
+			'lafka_home_how_headline' => array( __( 'Headline', 'lafka' ), __( 'Hot food, three taps away.', 'lafka' ), 'text' ),
+			'lafka_home_how_1_title'  => array( __( 'Step 1 — title', 'lafka' ), __( 'Pick your favourites', 'lafka' ), 'text' ),
+			'lafka_home_how_1_body'   => array( __( 'Step 1 — text', 'lafka' ), __( 'Browse the full menu. Customize every order, save your favourites.', 'lafka' ), 'textarea' ),
+			'lafka_home_how_2_title'  => array( __( 'Step 2 — title', 'lafka' ), __( 'Pickup or delivery', 'lafka' ), 'text' ),
+			'lafka_home_how_2_body'   => array( __( 'Step 2 — text', 'lafka' ), $lafka_how_2_default, 'textarea' ),
+			'lafka_home_how_3_title'  => array( __( 'Step 3 — title', 'lafka' ), __( 'We start cooking', 'lafka' ), 'text' ),
+			'lafka_home_how_3_body'   => array( __( 'Step 3 — text', 'lafka' ), __( 'Track your order in real time from the confirmation page.', 'lafka' ), 'textarea' ),
+		);
+		foreach ( $lafka_how_fields as $lafka_setting_id => $lafka_field ) {
 			$wp_customize->add_setting(
-				"lafka_home_reviews_{$lafka_r}_stars",
+				$lafka_setting_id,
 				array(
-					'default'           => 5,
-					'sanitize_callback' => 'absint',
+					'default'           => $lafka_field[1],
+					'sanitize_callback' => 'textarea' === $lafka_field[2] ? 'sanitize_textarea_field' : 'sanitize_text_field',
 					'transport'         => 'refresh',
 				)
 			);
 			$wp_customize->add_control(
-				"lafka_home_reviews_{$lafka_r}_stars",
+				$lafka_setting_id,
 				array(
-					/* translators: %d: review number. */
-					'label'       => sprintf( __( 'Review %d — star rating (1–5)', 'lafka' ), $lafka_r ),
-					'section'     => 'lafka_home_reviews',
-					'type'        => 'number',
-					'input_attrs' => array(
-						'min'  => 1,
-						'max'  => 5,
-						'step' => 1,
-					),
+					'label'   => $lafka_field[0],
+					'section' => 'lafka_home_how',
+					'type'    => $lafka_field[2],
 				)
 			);
 		}
+
+		// -----------------------------------------------------------------
+		// 4c. Visit card photo (address, phone and hours come from the plugin).
+		// -----------------------------------------------------------------
+		$wp_customize->add_section(
+			'lafka_home_visit',
+			array(
+				'title'       => __( 'Visit us card', 'lafka' ),
+				'description' => __( 'The address, phone and hours on this card come from WooCommerce → Settings → Restaurant. Here you only choose its photo.', 'lafka' ),
+				'panel'       => 'lafka_home',
+				'priority'    => 55,
+			)
+		);
+		$wp_customize->add_setting(
+			'lafka_home_visit_image_id',
+			array(
+				'default'           => 0,
+				'sanitize_callback' => 'absint',
+				'transport'         => 'refresh',
+			)
+		);
+		$wp_customize->add_control(
+			new WP_Customize_Media_Control(
+				$wp_customize,
+				'lafka_home_visit_image_id',
+				array(
+					'label'     => __( 'Photo (optional)', 'lafka' ),
+					'section'   => 'lafka_home_visit',
+					'mime_type' => 'image',
+				)
+			)
+		);
 
 		// -----------------------------------------------------------------
 		// 5. CTA closer band

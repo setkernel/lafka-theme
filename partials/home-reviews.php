@@ -21,43 +21,19 @@ if ( ! $lafka_rev_visible ) {
 	return;
 }
 
-$lafka_rev_avg      = (float) get_theme_mod( 'lafka_home_reviews_rating', 0 );
-$lafka_rev_count    = (int) get_theme_mod( 'lafka_home_reviews_count', 0 );
 $lafka_rev_headline = (string) get_theme_mod( 'lafka_home_reviews_headline', __( 'What our neighbors say', 'lafka' ) );
 
-// Aggregate star count is derived from the rounded average (0–5), so the
-// star row can never disagree with the numeric score beside it.
-$lafka_rev_avg_stars = (int) max( 0, min( 5, (int) round( $lafka_rev_avg ) ) );
+/* Real reviews only (a fabricated review is a consumer-protection risk).
+ * The quotes are the store's own approved WooCommerce product reviews, picked
+ * by the plugin (lafka_get_store_reviews()); a child theme can replace the list
+ * with the `lafka_home_reviews` filter. With no real review the section is not
+ * printed. The rating line beside the headline is the operator's provider rating
+ * (Customizer → Social Proof, e.g. the Google rating) when set, else the average
+ * of the store's own review ratings. */
+$lafka_reviews = function_exists( 'lafka_get_store_reviews' ) ? lafka_get_store_reviews( 3 ) : array();
+$lafka_reviews = (array) apply_filters( 'lafka_home_reviews', $lafka_reviews );
 
-/* v6.13.0 (audit 2026-06-27 #5): NO fabricated social proof in defaults.
- * The aggregate and every testimonial default to empty, so a fresh install
- * shows nothing until the operator supplies REAL reviews via the Customizer
- * per-review fields or the `lafka_home_reviews` filter (the child-theme path). */
-$lafka_reviews = (array) apply_filters(
-	'lafka_home_reviews',
-	array(
-		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_reviews_1_quote', '' ),
-			'author' => (string) get_theme_mod( 'lafka_home_reviews_1_name', '' ),
-			'date'   => (string) get_theme_mod( 'lafka_home_reviews_1_source', '' ),
-			'stars'  => (int) max( 1, min( 5, absint( get_theme_mod( 'lafka_home_reviews_1_stars', 5 ) ) ) ),
-		),
-		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_reviews_2_quote', '' ),
-			'author' => (string) get_theme_mod( 'lafka_home_reviews_2_name', '' ),
-			'date'   => (string) get_theme_mod( 'lafka_home_reviews_2_source', '' ),
-			'stars'  => (int) max( 1, min( 5, absint( get_theme_mod( 'lafka_home_reviews_2_stars', 5 ) ) ) ),
-		),
-		array(
-			'quote'  => (string) get_theme_mod( 'lafka_home_reviews_3_quote', '' ),
-			'author' => (string) get_theme_mod( 'lafka_home_reviews_3_name', '' ),
-			'date'   => (string) get_theme_mod( 'lafka_home_reviews_3_source', '' ),
-			'stars'  => (int) max( 1, min( 5, absint( get_theme_mod( 'lafka_home_reviews_3_stars', 5 ) ) ) ),
-		),
-	)
-);
-
-// Drop any entry without real quote text — never render a fabricated review.
+// Drop any entry without real quote text.
 $lafka_reviews = array_values(
 	array_filter(
 		$lafka_reviews,
@@ -66,6 +42,23 @@ $lafka_reviews = array_values(
 		}
 	)
 );
+
+$lafka_rev_proof = function_exists( 'lafka_social_proof_get_data' ) ? lafka_social_proof_get_data() : null;
+if ( is_array( $lafka_rev_proof ) && ! empty( $lafka_rev_proof['has_rating'] ) ) {
+	$lafka_rev_avg   = (float) $lafka_rev_proof['rating'];
+	$lafka_rev_count = (int) $lafka_rev_proof['count'];
+} else {
+	$lafka_rev_summary = function_exists( 'lafka_get_store_review_summary' ) ? lafka_get_store_review_summary() : array(
+		'avg'   => 0.0,
+		'count' => 0,
+	);
+	$lafka_rev_avg     = (float) $lafka_rev_summary['avg'];
+	$lafka_rev_count   = (int) $lafka_rev_summary['count'];
+}
+
+// Aggregate star count is derived from the rounded average (0–5), so the
+// star row can never disagree with the numeric score beside it.
+$lafka_rev_avg_stars = (int) max( 0, min( 5, (int) round( $lafka_rev_avg ) ) );
 
 if ( empty( $lafka_reviews ) ) {
 	return;

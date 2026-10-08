@@ -137,6 +137,8 @@ require_once get_template_directory() . '/incl/template-helpers/payment-trust.ph
 // Visible phone text — formats a bare E.164 fallback via the plugin's
 // lafka_format_phone_display() when available (tel: hrefs keep E.164).
 require_once get_template_directory() . '/incl/template-helpers/phone-display.php';
+require_once get_template_directory() . '/incl/template-helpers/social-links.php';
+require_once get_template_directory() . '/incl/customizer-site-copy.php';
 
 // Empty-cart "Popular" entry-points (v5.32.0).
 require_once get_template_directory() . '/incl/woocommerce/lafka-cart-empty-popular.php';
