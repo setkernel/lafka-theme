@@ -16,9 +16,8 @@
  *   - Hours       → lafka_open_status() → the plugin's Lafka_Order_Hours::status()
  *   - City        → restaurant info → 'city'
  *   - Phone       → restaurant info → 'phone_display' / 'phone_e164'
- *   - Free over X → SSOT lafka_get_free_delivery_threshold() (plugin) when
- *                   available, else theme_mod 'lafka_announce_bar_delivery_threshold'
- *                   (0 = off). Promise is suppressed when the resolved value <= 0,
+ *   - Free over X → SSOT lafka_free_delivery_threshold() (the plugin's one
+ *                   resolver). Promise is suppressed when the resolved value <= 0,
  *                   so it can never diverge from what the shipping rule enforces.
  *   - Visible     → Customizer key 'lafka_announce_bar_enabled' (default true)
  *
@@ -53,11 +52,8 @@ if ( ! $lafka_ann_status && '' === $lafka_ann_phone && '' === $lafka_ann_city ) 
 	return;
 }
 
-// SSOT: read the same threshold the plugin's free-delivery rule enforces; fall
-// back to the single shared theme_mod (0 = off) when the plugin isn't loaded.
-$lafka_ann_threshold     = function_exists( 'lafka_get_free_delivery_threshold' )
-	? (float) lafka_get_free_delivery_threshold()
-	: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
+// SSOT: the threshold the plugin's free-delivery rule enforces (0 = off).
+$lafka_ann_threshold     = lafka_free_delivery_threshold();
 $lafka_ann_show_delivery = (bool) get_theme_mod( 'lafka_announce_bar_show_delivery', true );
 
 $lafka_ann_classes = array( 'lafka-announce-bar' );
@@ -67,9 +63,7 @@ if ( $lafka_ann_status && ! empty( $lafka_ann_status['is_open'] ) ) {
 	$lafka_ann_classes[] = 'lafka-announce-bar--closed';
 }
 
-$lafka_ann_threshold_label = function_exists( 'wc_price' )
-	? wp_strip_all_tags( wc_price( $lafka_ann_threshold ) )
-	: sprintf( '$%s', number_format_i18n( $lafka_ann_threshold, 0 ) );
+$lafka_ann_threshold_label = lafka_free_delivery_amount_text( $lafka_ann_threshold );
 ?>
 <aside
 	class="<?php echo esc_attr( implode( ' ', $lafka_ann_classes ) ); ?>"

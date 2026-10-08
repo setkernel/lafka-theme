@@ -71,29 +71,7 @@ if ( ! function_exists( 'lafka_customize_register_announce_bar' ) ) {
 				'type'        => 'checkbox',
 				'section'     => 'lafka_announce_bar_section',
 				'label'       => __( 'Show the delivery line', 'lafka' ),
-				'description' => __( 'Adds "Delivery in {city} · Free over ${threshold}" between the status and phone. Hidden below 560px on all viewports.', 'lafka' ),
-			)
-		);
-
-		$wp_customize->add_setting(
-			'lafka_announce_bar_delivery_threshold',
-			array(
-				'default'           => 30,
-				'sanitize_callback' => 'absint',
-				'transport'         => 'postMessage',
-			)
-		);
-		$wp_customize->add_control(
-			'lafka_announce_bar_delivery_threshold',
-			array(
-				'type'        => 'number',
-				'section'     => 'lafka_announce_bar_section',
-				'label'       => __( 'Free-delivery threshold', 'lafka' ),
-				'description' => __( 'Minimum cart subtotal that unlocks free delivery. Displayed in the bar and used by the cart progress meter.', 'lafka' ),
-				'input_attrs' => array(
-					'min'  => 0,
-					'step' => 1,
-				),
+				'description' => __( 'Adds "Delivery in {city} · Free over $X" between the status and phone; X is the free-delivery amount set in WooCommerce → Settings → Restaurant → Promotions. Hidden below 560px on all viewports.', 'lafka' ),
 			)
 		);
 
@@ -106,7 +84,6 @@ if ( ! function_exists( 'lafka_customize_register_announce_bar' ) ) {
 					'settings'            => array(
 						'lafka_announce_bar_enabled',
 						'lafka_announce_bar_show_delivery',
-						'lafka_announce_bar_delivery_threshold',
 					),
 					'container_inclusive' => true,
 					'fallback_refresh'    => true, // bar may render nothing when disabled/unconfigured → full refresh covers reappearance

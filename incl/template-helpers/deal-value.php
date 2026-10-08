@@ -51,7 +51,7 @@ if ( ! function_exists( 'lafka_per_person_text' ) ) {
 			/* translators: 1: number of people, 2: approximate price per person (e.g. "$11.50") */
 			_n( 'For %1$d: about %2$s each', 'For %1$d: about %2$s each', $serves, 'lafka' ),
 			$serves,
-			function_exists( 'lafka_price_plain' ) ? lafka_price_plain( $each, true ) : '$' . number_format( $each, 2 )
+			lafka_price_plain( $each, true )
 		);
 		return (string) apply_filters( 'lafka_per_person_text', $text, $price, $serves, $each );
 	}

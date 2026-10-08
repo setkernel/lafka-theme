@@ -24,16 +24,6 @@ if ( ! function_exists( 'lafka_active_promo_fmt_pct' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_active_promo_price' ) ) {
-	/** Plain-text money, e.g. "$45.00", using WC formatting when available. */
-	function lafka_active_promo_price( $amount ): string {
-		if ( function_exists( 'wc_price' ) ) {
-			return html_entity_decode( wp_strip_all_tags( wc_price( (float) $amount ) ), ENT_QUOTES );
-		}
-		return '$' . number_format( (float) $amount, 2 );
-	}
-}
-
 if ( ! function_exists( 'lafka_active_promo_messages' ) ) {
 	/**
 	 * Active promotions as display messages, urgency-ordered.
@@ -76,7 +66,7 @@ if ( ! function_exists( 'lafka_active_promo_messages' ) ) {
 				if ( $a && $b && ! is_wp_error( $a ) && ! is_wp_error( $b ) ) {
 					$amount = 'percent' === ( $c['type'] ?? 'fixed' )
 						? lafka_active_promo_fmt_pct( $c['amount'] ) . '%'
-						: lafka_active_promo_price( $c['amount'] );
+						: lafka_price_plain( (float) $c['amount'] );
 					$out[]  = array(
 						'key'  => 'combo',
 						/* translators: 1: category A, 2: category B, 3: amount */
@@ -87,15 +77,13 @@ if ( ! function_exists( 'lafka_active_promo_messages' ) ) {
 		}
 
 		// Free delivery.
-		if ( function_exists( 'lafka_get_free_delivery_threshold' ) ) {
-			$t = lafka_get_free_delivery_threshold();
-			if ( $t > 0 ) {
-				$out[] = array(
-					'key'  => 'free_delivery',
-					/* translators: %s: free-delivery threshold, e.g. "$30". */
-					'text' => sprintf( __( 'Free delivery over %s', 'lafka' ), lafka_active_promo_price( $t ) ),
-				);
-			}
+		$t = lafka_free_delivery_threshold();
+		if ( $t > 0 ) {
+			$out[] = array(
+				'key'  => 'free_delivery',
+				/* translators: %s: free-delivery threshold, e.g. "$30". */
+				'text' => sprintf( __( 'Free delivery over %s', 'lafka' ), lafka_price_plain( $t ) ),
+			);
 		}
 
 		return (array) apply_filters( 'lafka_active_promo_messages', $out );

@@ -48,19 +48,12 @@ $lafka_fdp_total = isset( $lafka_fdp_args['cart_total'] )
 
 // SSOT: the meter must track the exact threshold the plugin's free-delivery
 // rule enforces, so the bar can never disagree with what the cart charges.
-// Prefer an explicit caller-supplied value; otherwise the canonical plugin
-// resolver (operator option -> promotions knob, with the canonical
-// 'lafka_free_delivery_threshold' filter applied); otherwise 0 (off) when the
-// plugin isn't loaded.
+// Prefer an explicit caller-supplied value; otherwise the one accessor
+// (0 = off, also without the plugin).
 if ( isset( $lafka_fdp_args['threshold'] ) ) {
 	$lafka_fdp_threshold = (float) $lafka_fdp_args['threshold'];
 } else {
-	$lafka_fdp_threshold = function_exists( 'lafka_get_free_delivery_threshold' ) ? (float) lafka_get_free_delivery_threshold() : 0.0;
-	// Back-compat (deprecated): re-apply the legacy
-	// 'lafka_pdp_free_delivery_threshold' filter on top of the resolved value so
-	// existing child overrides keyed to that name keep working until they migrate
-	// to the canonical 'lafka_free_delivery_threshold' filter.
-	$lafka_fdp_threshold = (float) apply_filters( 'lafka_pdp_free_delivery_threshold', $lafka_fdp_threshold );
+	$lafka_fdp_threshold = lafka_free_delivery_threshold();
 }
 
 // Threshold disabled — render nothing. Matches the v6.7.4 cart-drawer gate.

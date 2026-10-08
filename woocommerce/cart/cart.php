@@ -90,15 +90,10 @@ do_action( 'woocommerce_before_cart' );
 	$lafka_cart_city       = isset( $lafka_cart_info['city'] ) ? (string) $lafka_cart_info['city'] : '';
 	$lafka_cart_eta        = function_exists( 'lafka_service_eta_get_data' ) ? lafka_service_eta_get_data() : null;
 	$lafka_cart_pickup_eta = $lafka_cart_eta && ! empty( $lafka_cart_eta['pickup'] ) ? (string) $lafka_cart_eta['pickup'] : '';
-	/* SSOT: the plugin's one free-delivery accessor, so the displayed promise can
-	 * never diverge from what's charged. Without the plugin there is no promise
-	 * (0). 0 also matches an unconfigured install. */
-	$lafka_cart_threshold       = function_exists( 'lafka_get_free_delivery_threshold' )
-		? (float) lafka_get_free_delivery_threshold()
-		: 0.0;
-	$lafka_cart_threshold_label = function_exists( 'wc_price' )
-		? wp_strip_all_tags( wc_price( $lafka_cart_threshold ) )
-		: sprintf( '$%s', number_format_i18n( $lafka_cart_threshold, 0 ) );
+	/* SSOT: the one free-delivery accessor, so the displayed promise can never
+	 * diverge from what's charged. 0 = no promise (also an unconfigured install). */
+	$lafka_cart_threshold       = lafka_free_delivery_threshold();
+	$lafka_cart_threshold_label = lafka_free_delivery_amount_text( $lafka_cart_threshold );
 	?>
 	<div class="lafka-cart-tabs" role="tablist" aria-label="<?php esc_attr_e( 'Fulfilment method', 'lafka' ); ?>" data-lafka-cart-tabs>
 		<button type="button" class="lafka-cart-tab is-active" role="tab" aria-selected="true" data-lafka-fulfilment="pickup">

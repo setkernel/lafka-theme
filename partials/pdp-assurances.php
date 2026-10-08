@@ -30,11 +30,9 @@ if ( ! ( $product instanceof WC_Product ) ) {
 	// so the lafka-theme OSS bundle stays neutral.
 	$lafka_pdp_info        = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 	$lafka_pdp_pickup_addr = isset( $lafka_pdp_info['address_short'] ) ? (string) $lafka_pdp_info['address_short'] : '';
-	// SSOT: the plugin's one free-delivery accessor (0 = off, also without the
-	// plugin). The free-delivery assurance is suppressed entirely when <= 0.
-	$lafka_pdp_threshold = function_exists( 'lafka_get_free_delivery_threshold' )
-		? (float) lafka_get_free_delivery_threshold()
-		: 0.0;
+	// SSOT: the one free-delivery accessor (0 = off, also without the plugin).
+	// The free-delivery assurance is suppressed entirely when <= 0.
+	$lafka_pdp_threshold = lafka_free_delivery_threshold();
 	?>
 	<?php // H-09: the ready time is the trust line above (one source); no second "Ready in". ?>
 	<ul class="lafka-pdp-summary__assurances" role="list">
@@ -44,7 +42,7 @@ if ( ! ( $product instanceof WC_Product ) ) {
 			<span>
 			<?php
 				/* translators: %s: free-delivery threshold, e.g. "$30". */
-				printf( esc_html__( 'Free delivery over %s', 'lafka' ), esc_html( function_exists( 'wc_price' ) ? wp_strip_all_tags( wc_price( $lafka_pdp_threshold ) ) : sprintf( '$%s', number_format_i18n( $lafka_pdp_threshold, 0 ) ) ) );
+				printf( esc_html__( 'Free delivery over %s', 'lafka' ), esc_html( lafka_free_delivery_amount_text( $lafka_pdp_threshold ) ) );
 			?>
 			</span>
 		</li>

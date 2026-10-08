@@ -67,14 +67,9 @@ $lafka_mc_eta        = function_exists( 'lafka_service_eta_get_data' ) ? lafka_s
 $lafka_mc_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_mc_addr_short = isset( $lafka_mc_info['address_short'] ) ? (string) $lafka_mc_info['address_short'] : '';
 $lafka_mc_city       = isset( $lafka_mc_info['city'] ) ? (string) $lafka_mc_info['city'] : '';
-// SSOT: read the same threshold the plugin's free-delivery rule enforces; fall
-// back to the single shared theme_mod (0 = off) when the plugin isn't loaded.
-$lafka_mc_threshold       = function_exists( 'lafka_get_free_delivery_threshold' )
-	? (float) lafka_get_free_delivery_threshold()
-	: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
-$lafka_mc_threshold_label = function_exists( 'wc_price' )
-	? wp_strip_all_tags( wc_price( $lafka_mc_threshold ) )
-	: sprintf( '$%s', number_format_i18n( $lafka_mc_threshold, 0 ) );
+// SSOT: the threshold the plugin's free-delivery rule enforces (0 = off).
+$lafka_mc_threshold       = lafka_free_delivery_threshold();
+$lafka_mc_threshold_label = lafka_free_delivery_amount_text( $lafka_mc_threshold );
 
 $lafka_mc_pickup_eta   = $lafka_mc_eta && ! empty( $lafka_mc_eta['pickup'] ) ? (string) $lafka_mc_eta['pickup'] : '';
 $lafka_mc_delivery_eta = $lafka_mc_eta && ! empty( $lafka_mc_eta['delivery'] ) ? (string) $lafka_mc_eta['delivery'] : '';

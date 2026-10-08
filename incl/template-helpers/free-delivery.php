@@ -2,12 +2,12 @@
 /**
  * Free-delivery threshold helpers — the theme-side SSOT accessors.
  *
- * The enforced threshold lives in the PLUGIN's shipping rule
- * (lafka_get_free_delivery_threshold()); the shared theme_mod
- * 'lafka_announce_bar_delivery_threshold' (0 = off) is the fallback when the
- * plugin isn't active. Every surface that CITES the threshold (announce bar,
- * hero stat, how-it-works, cart, PDP, menu controls) must read it through
- * here so marketing copy can never diverge from what shipping enforces.
+ * The threshold lives in the PLUGIN (lafka_get_free_delivery_threshold(), the
+ * one resolver the shipping rule also reads). Every surface that CITES it
+ * (announce bar, hero stat, how-it-works, cart, PDP, menu controls, drawer)
+ * reads it through here, so marketing copy can never diverge from what
+ * shipping enforces. Without the plugin nothing enforces a free-delivery
+ * offer, so there is none to cite (0).
  *
  * @package Lafka
  * @since   7.0.1
@@ -22,9 +22,7 @@ if ( ! function_exists( 'lafka_free_delivery_threshold' ) ) {
 	 * @return float
 	 */
 	function lafka_free_delivery_threshold(): float {
-		return function_exists( 'lafka_get_free_delivery_threshold' )
-			? (float) lafka_get_free_delivery_threshold()
-			: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
+		return function_exists( 'lafka_get_free_delivery_threshold' ) ? (float) lafka_get_free_delivery_threshold() : 0.0;
 	}
 }
 
@@ -41,9 +39,7 @@ if ( ! function_exists( 'lafka_free_delivery_amount_text' ) ) {
 			return '';
 		}
 
-		return function_exists( 'wc_price' )
-			? wp_strip_all_tags( wc_price( $threshold ) )
-			: sprintf( '$%s', number_format_i18n( $threshold, 0 ) );
+		return lafka_price_plain( $threshold );
 	}
 }
 

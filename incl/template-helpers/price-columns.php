@@ -25,25 +25,16 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'lafka_price_plain' ) ) {
 	/**
-	 * A price as plain text in the store currency format ("$19.45"), for
-	 * compact rows and accessible names. With $trim_whole, a whole amount drops
-	 * its zero cents ("$10").
+	 * Fallback for a site running this theme without lafka-plugin, which owns
+	 * lafka_price_plain() (a price as plain text in the WooCommerce currency
+	 * settings). Without the plugin the amount is formatted for the locale,
+	 * with no currency symbol assumed.
 	 *
-	 * @param float $amount     Amount (display price, i.e. tax handled by WC).
-	 * @param bool  $trim_whole Drop ".00" on whole amounts.
+	 * @param float $amount     Amount.
+	 * @param bool  $trim_whole Drop the zero decimals on a whole amount.
 	 */
 	function lafka_price_plain( float $amount, bool $trim_whole = false ): string {
-		if ( function_exists( 'wc_price' ) ) {
-			$text = html_entity_decode( wp_strip_all_tags( (string) wc_price( $amount ) ), ENT_QUOTES, 'UTF-8' );
-		} else {
-			$text = '$' . number_format( $amount, 2 );
-		}
-		$text = trim( $text );
-		if ( $trim_whole && abs( $amount - round( $amount ) ) < 0.005 ) {
-			$sep  = function_exists( 'wc_get_price_decimal_separator' ) ? (string) wc_get_price_decimal_separator() : '.';
-			$text = (string) preg_replace( '/' . preg_quote( $sep, '/' ) . '0+(?=\D*$)/', '', $text );
-		}
-		return $text;
+		return number_format_i18n( $amount, $trim_whole && abs( $amount - round( $amount ) ) < 0.005 ? 0 : 2 );
 	}
 }
 
