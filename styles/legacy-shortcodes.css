@@ -163,7 +163,6 @@
 }
 
 .lafka-foodmenu-categories ul li a {
-    color: #b1b1b1;
     text-decoration: none;
     font-weight: 500;
     font-size: 15px;
@@ -171,6 +170,7 @@
     position: relative;
     display: block;
     overflow: hidden;
+    color: var(--lafka-h2-color);
 }
 
 .lafka-foodmenu-categories ul li:first-of-type a {
@@ -194,9 +194,6 @@
 .lafka-foodmenu-shortcode-container .foodmenu-unit:last-of-type {
     border: none;
     padding: 0;
-}
-
-.lafka-foodmenu-shortcode-container .foodmenu-unit:last-of-type {
     margin-bottom: 0;
 }
 
@@ -668,10 +665,6 @@ html.no-touch .lafka-from-bottom {
 
 .lafka_content_slider_light_nav.lafka-pagination-numbers .owl-dot::before {
     color: #fff;
-}
-
-.lafka-foodmenu-categories ul li a {
-    color: var(--lafka-h2-color);
 }
 
 }

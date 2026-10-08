@@ -84,10 +84,37 @@ Every npm script, one line each.
   `incl/tgm-plugin-activation/` and vendored front-end libraries are excluded.
 - Escape late: print markup with `wp_kses( $html, lafka_allowed_html() )` (or the `esc_` family);
   read public query-string arguments with `lafka_query_arg()`.
-- Stylelint keeps `selector-class-pattern`, `selector-id-pattern`, `no-descending-specificity`,
-  `no-duplicate-selectors`, `font-family-no-missing-generic-family-keyword` and
-  `declaration-property-unit-allowed-list` off: they would rename public class names or reorder the
-  cascade.
+- ESLint and Stylelint run the shared configs with their rules on (`no-var`, `prefer-const`,
+  `no-unused-vars` and `eqeqeq` are errors; warnings fail the build). The single rule left off is
+  Stylelint's `no-descending-specificity`: satisfying it means reordering the cascade across
+  about 1,050 selectors, which is deferred to the 1.0 CSS rewrite.
+- CSS naming (`selector-class-pattern`, `selector-id-pattern`; the regexes live in
+  `.stylelintrc.json`). Class names and IDs are public contracts with the PHP templates, the JS,
+  the plugin's markup and WordPress/WooCommerce core, so they are never renamed to satisfy a lint
+  rule. The rules are configured to the project's real convention instead:
+  - New code: lowercase kebab-case words, BEM when a component has parts, with the `lafka-`
+    prefix: `lafka-card`, `lafka-card__title`, `lafka-card--featured`.
+  - Legacy and core-facing names: lowercase words joined by single underscores
+    (`lafka_title_holder`, `prod_hold`, `add_to_cart_button`, `billing_city_field`); hyphens and
+    underscores may be mixed (`lafka_banner-icon`). IDs follow the same rule.
+  - Third-party names we must target keep their own spelling: WooCommerce's own classes that
+    start with `woocommerce-` (`woocommerce-Price-amount`,
+    `woocommerce-MyAccount-navigation-link--orders`, the only place capitals are accepted) and
+    BlockUI's `blockUI` / `blockOverlay`, plus the two WooCommerce-generated names with a
+    trailing hyphen, `variation-` and `addon-wrap-`. WordPress (`wp-block-`, `screen-reader-text`) and
+    `wc-block-` names are already lowercase kebab/BEM and pass as they are.
+  - Rejected: camelCase or PascalCase in our own namespace (`lafkaCard`, `lafka_cardTitle`),
+    leading digits, hyphens or underscores, and runs of three separators. A new name that does
+    not fit means the name is wrong, not the pattern.
+- Stylelint `declaration-property-unit-allowed-list` allows `px`, `em` and `%` for `line-height`
+  (the WordPress default is `px` only). Thirteen legacy `em` and `%` values sit on heading,
+  paragraph, excerpt and account rules whose font size comes from the cascade or the Customizer,
+  and an `em` or `%` line-height is inherited as a computed length while a unitless one is
+  recomputed per descendant, so converting them changes rendering. New code uses a unitless
+  `line-height`.
+- `no-duplicate-selectors`: keep one block per selector. If a later block must stay later to
+  outrank an in-between rule, fold the declarations into the right block; only when that is
+  impossible, write the second block as an equivalent selector and say why in a comment.
 - Min PHP 8.3, min WP 7.0, min WooCommerce 11.0.
 - Text domain: `lafka`.
 

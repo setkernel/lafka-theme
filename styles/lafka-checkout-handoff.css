@@ -633,10 +633,11 @@
 }
 
 .woocommerce-checkout .woocommerce-info {
-	background: var(--lafka-color-info-50);
 	border-left: 4px solid var(--lafka-color-info-500);
-	color: var(--lafka-color-text-primary);
 	border-radius: var(--lafka-radius-md);
+	background: var(--lafka-color-surface-muted);
+	border-left-color: var(--lafka-color-border-strong);
+	color: var(--lafka-color-text-primary);
 }
 
 /* =========================================================================
@@ -838,11 +839,6 @@
 /* Info notices on checkout are neutral notes (O-29 / O-12): the old accent
  * (red) re-skin made "Have a coupon?" and the delivery-minimum note read as
  * errors. */
-.woocommerce-checkout .woocommerce-info {
-	background: var(--lafka-color-surface-muted);
-	border-left-color: var(--lafka-color-border-strong);
-	color: var(--lafka-color-text-primary);
-}
 
 .woocommerce-checkout .woocommerce-info a {
 	color: var(--lafka-color-text-primary);

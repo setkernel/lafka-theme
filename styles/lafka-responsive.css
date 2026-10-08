@@ -79,10 +79,6 @@
     .foodmenu-unit a.foodmenu-link {
         padding: 20px;
     }
-
-    .lafka_masonry_fullwidth .foodmenu-unit.masonry-unit {
-        width: 25%;
-    }
 }
 
 @media only screen and (max-width: 782px) {
@@ -235,7 +231,9 @@ and (orientation: landscape) {
 
     body.woocommerce-cart .cart-collaterals {
         width: 320px;
-        padding: 30px;
+        padding: 20px 0;
+        background: none;
+        border: none;
     }
 
     .lafka_title_holder.title_has_image h1.heading-title, .lafka_title_holder.title_has_image h6 {
@@ -390,12 +388,6 @@ and (orientation: landscape) {
 
     body.woocommerce-cart form.woocommerce-cart-form, form.checkout.woocommerce-checkout #customer_details, body.woocommerce-cart .cart-collaterals, form.checkout.woocommerce-checkout #order_review {
         width: 100%;
-    }
-
-    body.woocommerce-cart .cart-collaterals {
-        padding: 20px 0;
-        background: none;
-        border: none;
     }
 
     body.woocommerce-cart .cart-info, body.woocommerce-cart form.woocommerce-cart-form, form.checkout.woocommerce-checkout #customer_details {
@@ -950,10 +942,6 @@ and (orientation: landscape) {
 
     a.reset_variations {
         display: none;
-    }
-
-    #price-filter {
-        width: calc(100% - 110px);
     }
 
     .blog-post {

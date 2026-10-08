@@ -135,7 +135,9 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 /* === PDP pickers (W4-T12) === */
-.lafka-pdp-picker { border: none; padding: 0; margin: 0 0 16px; }
+
+/* Picker block: reduce vertical rhythm. */
+.lafka-pdp-picker { border: none; padding: 0; margin: 0 0 12px; }
 
 .lafka-pdp-picker__label {
   display: block;
@@ -145,7 +147,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   margin: 0 0 8px;
 }
 
-.lafka-pdp-picker__chips { display: flex; flex-wrap: wrap; gap: 6px; }
+.lafka-pdp-picker__chips { display: flex; flex-wrap: wrap; gap: 4px; }
 
 .lafka-pdp-chip { display: inline-flex; align-items: center; cursor: pointer; user-select: none; }
 
@@ -153,17 +155,16 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-chip__inner {
   display: inline-flex; flex-direction: column; align-items: center;
-  padding: 8px 14px;
   border: 1.5px solid var(--lafka-pdp-border);
   border-radius: var(--lafka-pdp-radius-chip);
   background: var(--lafka-pdp-surface);
   transition: border-color .12s, background .12s, color .12s;
-  text-align: center; min-width: 64px;
+  text-align: center;
+  padding: 6px 10px;
+  min-width: 56px;
 }
 
-.lafka-pdp-chip__name { font-size: 13px; font-weight: 500; }
-
-.lafka-pdp-chip__price { font-size: 11px; color: var(--lafka-pdp-muted); margin-top: 2px; }
+.lafka-pdp-chip__name { font-weight: 500; font-size: 12px; }
 
 .lafka-pdp-chip:hover .lafka-pdp-chip__inner { border-color: var(--lafka-pdp-accent); }
 
@@ -699,11 +700,18 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
  * Peppery is unchanged, and a dark preset flips it light. */
 .lafka-pdp-upsell__heading { font-size: 14px; font-weight: 700; margin: 0 0 12px; color: var(--lafka-color-text-primary); }
 
-.lafka-pdp-upsell__grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-
 @media (max-width: 720px) {
 
  .lafka-pdp-upsell__grid { grid-template-columns: repeat(2, 1fr); } }
+
+/* Upsell row: auto-fit so 2-3 cards don't leave a yawning gap on
+   the right. minmax(180px, 1fr) keeps cards a reasonable size while letting
+   the row collapse gracefully when fewer than 4 candidates are available. */
+.lafka-pdp-upsell__grid {
+  display: grid;
+  gap: 10px;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+}
 
 .lafka-pdp-upsell__card {
   background: var(--lafka-pdp-bg-soft);
@@ -818,7 +826,6 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .lafka-pdp-summary {
   background: var(--lafka-pdp-surface);
   border-radius: var(--lafka-pdp-radius);
-  padding: 20px;
   box-shadow: var(--lafka-pdp-shadow-card);
   position: sticky;
 
@@ -826,6 +833,10 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
    * site-wide suppressed (see lafka-header-chrome.css), so the
    * sticky offset only needs to clear the header. */
   top: var(--lafka-header-h, 80px);
+
+  /* Summary card: tighten internal spacing so it feels content-dense rather
+     than padded out with whitespace. */
+  padding: 16px 18px;
 }
 
 .lafka-pdp-eyebrow--bestseller {
@@ -836,17 +847,18 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   margin-bottom: 6px;
 }
 
-.lafka-pdp-summary__title { font-size: 28px; line-height: 1.15; margin: 0 0 8px; color: var(--lafka-pdp-text); }
-
-.lafka-pdp-summary__short { font-size: 13px; color: var(--lafka-pdp-muted); margin-bottom: 14px; line-height: 1.5; }
-
 .lafka-pdp-summary__short p { margin: 0; }
 
-.lafka-pdp-summary__price { font-size: 28px; font-weight: 700; color: var(--lafka-pdp-accent); margin-bottom: 16px; }
+.lafka-pdp-summary__price {
+  font-weight: 700;
+  color: var(--lafka-pdp-accent);
+  font-size: 24px;
+  margin: 6px 0 12px;
+}
 
 .lafka-pdp-summary__price small { font-size: 11px; font-weight: 400; color: var(--lafka-pdp-muted); margin-left: 8px; }
 
-.lafka-pdp-summary__cart-row { display: flex; gap: 10px; align-items: stretch; margin-top: 16px; }
+.lafka-pdp-summary__cart-row { display: flex; gap: 10px; align-items: stretch; margin-top: 12px; }
 
 /*
  * Cart-row reorder for variable products.
@@ -908,8 +920,6 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-summary__cta:disabled { background: #ccc; cursor: not-allowed; opacity: .85; }
 
-.lafka-pdp-summary__trust { font-size: 11px; color: var(--lafka-pdp-muted); margin-top: 12px; padding-top: 12px; border-top: 1px solid #f0f0f0; }
-
 .lafka-pdp-trust--closed { color: var(--lafka-pdp-accent); font-weight: 500; }
 
 /* === Mobile sticky bottom CTA === */
@@ -917,7 +927,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 @media (max-width: 720px) {
 
-  .lafka-pdp-summary { position: static; box-shadow: none; padding: 16px; }
+  .lafka-pdp-summary { position: static; box-shadow: none; }
 
   .lafka-pdp-summary__cart-row { display: none; }
 
@@ -1002,12 +1012,14 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 /* === PDP tabs (W4-T19) === */
+
+/* Tabs: adjust padding so panel content doesn't look orphaned */
 .lafka-pdp-tabs {
-  margin: 32px 0;
   background: var(--lafka-pdp-surface);
   border-radius: var(--lafka-pdp-radius);
-  padding: 20px;
   box-shadow: var(--lafka-pdp-shadow-card);
+  margin: 24px 0;
+  padding: 16px 20px;
 }
 
 .lafka-pdp-tabs__buttons {
@@ -1031,7 +1043,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   border-bottom-color: var(--lafka-pdp-accent);
 }
 
-.lafka-pdp-tabs__panel { font-size: 13px; line-height: 1.6; color: var(--lafka-pdp-text); }
+.lafka-pdp-tabs__panel { font-size: 13px; line-height: 1.6; color: var(--lafka-pdp-text); padding-top: 4px; }
 
 .lafka-pdp-tabs__panel[hidden] { display: none; }
 
@@ -1081,6 +1093,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   grid-template-columns: 1.2fr 1fr;
   gap: 32px;
   margin-bottom: 32px;
+
+  /* Align both columns at top so the right column doesn't get stretched
+     into a tall empty space below the summary card when the gallery image is
+     taller than the summary content. */
+  align-items: start;
 }
 
 @media (max-width: 960px) {
@@ -1088,13 +1105,6 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
  .lafka-pdp__hero { grid-template-columns: 1fr; gap: 16px; } }
 
 /* === PDP layout polish v5.8.5 — fix spacing issues observed post-deploy === */
-
-/* Hero grid: align both columns at top so right column doesn't get stretched
-   into a tall empty space below the summary card when the gallery image is
-   taller than the summary content. */
-.lafka-pdp__hero {
-  align-items: start;
-}
 
 /* Cap gallery image height so the right-column summary stays in proportion.
    Without this, a 1200x1200 native pizza photo dominates the hero and the
@@ -1112,80 +1122,19 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   object-fit: contain;
 }
 
-/* Summary card: tighten internal spacing so it feels content-dense rather
-   than padded out with whitespace. */
-.lafka-pdp-summary {
-  padding: 16px 18px;
-}
+.lafka-pdp-summary__title { line-height: 1.15; color: var(--lafka-pdp-text); font-size: 24px; margin: 0 0 4px; }
 
-.lafka-pdp-summary__title {
-  font-size: 24px;
-  margin: 0 0 4px;
-}
+.lafka-pdp-summary__short { font-size: 13px; color: var(--lafka-pdp-muted); line-height: 1.5; margin-bottom: 10px; }
 
-.lafka-pdp-summary__short {
-  margin-bottom: 10px;
-}
+.lafka-pdp-summary__trust { font-size: 11px; color: var(--lafka-pdp-muted); border-top: 1px solid #f0f0f0; margin-top: 10px; padding-top: 10px; }
 
-.lafka-pdp-summary__price {
-  font-size: 24px;
-  margin: 6px 0 12px;
-}
-
-.lafka-pdp-summary__cart-row {
-  margin-top: 12px;
-}
-
-.lafka-pdp-summary__trust {
-  margin-top: 10px;
-  padding-top: 10px;
-}
-
-/* Picker block: reduce vertical rhythm */
-.lafka-pdp-picker {
-  margin: 0 0 12px;
-}
-
-.lafka-pdp-picker__chips {
-  gap: 4px;
-}
-
-.lafka-pdp-chip__inner {
-  padding: 6px 10px;
-  min-width: 56px;
-}
-
-.lafka-pdp-chip__name {
-  font-size: 12px;
-}
-
-.lafka-pdp-chip__price {
-  font-size: 10px;
-  margin-top: 1px;
-}
-
-/* Upsell row: switch to auto-fit so 2-3 cards don't leave a yawning gap on
-   the right. minmax(180px, 1fr) keeps cards a reasonable size while letting
-   the row collapse gracefully when fewer than 4 candidates are available. */
-.lafka-pdp-upsell__grid {
-  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-}
+.lafka-pdp-chip__price { color: var(--lafka-pdp-muted); font-size: 10px; margin-top: 1px; }
 
 @media (max-width: 720px) {
 
   .lafka-pdp-upsell__grid {
     grid-template-columns: repeat(2, 1fr);
   }
-}
-
-/* Tabs: adjust padding so panel content doesn't look orphaned */
-.lafka-pdp-tabs {
-  margin: 24px 0;
-  padding: 16px 20px;
-}
-
-.lafka-pdp-tabs__panel {
-  padding-top: 4px;
 }
 
 /* Related products: when the parent theme's template renders an empty

@@ -314,8 +314,12 @@
 }
 
 .lafka-pdp__breadcrumb a {
-	color: var(--lafka-color-text-secondary);
-	text-decoration: none;
+
+	/* Inline padding widens the hit area without spreading wrapped lines. */
+	padding-block: 10px;
+	color: var(--lafka-color-text-primary);
+	text-decoration: underline;
+	text-underline-offset: 3px;
 }
 
 .lafka-pdp__breadcrumb a:hover {
@@ -623,14 +627,6 @@ body.lafka-layout-header-counter .lafka-pdp__main {
 
 .lafka-pdp__breadcrumb .breadcrumb {
 	line-height: 2;
-}
-
-/* Inline padding widens the hit area without spreading wrapped lines. */
-.lafka-pdp__breadcrumb a {
-	padding-block: 10px;
-	color: var(--lafka-color-text-primary);
-	text-decoration: underline;
-	text-underline-offset: 3px;
 }
 
 /* Gallery: the whole dish, never cropped (M-23); the zoom trigger is a

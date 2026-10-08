@@ -216,25 +216,9 @@
 	color: var(--lafka-color-text-muted);
 }
 
-.lafka-menu__search-clear {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	width: 24px;
-	height: 24px;
-	border: 0;
-	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-text-muted);
-	border-radius: var(--lafka-radius-pill);
-	font-size: 14px;
-	line-height: 1;
-	cursor: pointer;
-	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
 .lafka-menu__search-clear:hover {
-	background: var(--lafka-color-text-primary);
 	color: var(--lafka-color-text-inverse);
+	background: radial-gradient(circle, var(--lafka-color-text-primary) 12px, transparent 13px);
 }
 
 /* Dietary filter chips */
@@ -359,6 +343,11 @@
 	-ms-overflow-style: none;
 	-webkit-overflow-scrolling: touch;
 	flex-wrap: nowrap;
+
+	/* Room for the chips' focus ring inside the overflow-clipped strip (M-20). */
+	padding-block: 4px;
+	padding-inline: 2px;
+	scroll-padding-inline: 24px;
 }
 
 .lafka-menu__cats-list::-webkit-scrollbar {
@@ -383,6 +372,10 @@
 		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 	flex: 0 0 auto;
+	min-height: 44px;
+	min-width: 44px;
+	justify-content: center;
+	box-sizing: border-box;
 }
 
 .lafka-menu__cat-chip:hover {
@@ -417,6 +410,10 @@
 /* -------- Body (groups + grids) ----------------------------------------- */
 .lafka-menu__body {
 	padding-block: var(--lafka-space-6) var(--lafka-space-16);
+
+	/* Body padding adjustment now that controls / TOC sit between page header
+	 * and category strip — give the body breathing room. */
+	padding-top: var(--lafka-space-6);
 }
 
 .lafka-menu__group + .lafka-menu__group {
@@ -424,12 +421,9 @@
 }
 
 .lafka-menu__group-head {
-	margin-bottom: var(--lafka-space-5);
-}
 
-/* v5.74.0: group head is now a flex row with title + hairline rule + count
- * per handoff .menu-section__head layout. */
-.lafka-menu__group-head {
+	/* v5.74.0: group head is now a flex row with title + hairline rule + count
+	 * per handoff .menu-section__head layout. */
 	display: flex;
 	align-items: baseline;
 	gap: var(--lafka-space-3);
@@ -613,6 +607,7 @@
 	border-bottom: 1px solid var(--lafka-color-border-subtle);
 	padding-block: var(--lafka-space-3);
 	overflow: hidden;
+	position: relative;
 }
 
 .lafka-menu__toc-inner {
@@ -671,12 +666,6 @@
 	text-underline-offset: 4px;
 }
 
-/* Body padding adjustment now that controls / TOC sit between page header
- * and category strip — give the body breathing room. */
-.lafka-menu__body {
-	padding-top: var(--lafka-space-6);
-}
-
 /* =============================================================================
  * v6.7.8 — scroll fade affordance on the JUMP TO + category-pill rows.
  *
@@ -692,9 +681,6 @@
  * the absolutely-positioned fade — so it must not be reset to relative here
  * (that override is what stopped the category strip sticking).
  * ========================================================================= */
-.lafka-menu__toc {
-	position: relative;
-}
 
 .lafka-menu__cats::after,
 .lafka-menu__toc::after {
@@ -728,20 +714,6 @@
 	scroll-margin-top: var(--lafka-menu-cats-offset, 80px);
 }
 
-/* Room for the chips' focus ring inside the overflow-clipped strip (M-20). */
-.lafka-menu__cats-list {
-	padding-block: 4px;
-	padding-inline: 2px;
-	scroll-padding-inline: 24px;
-}
-
-.lafka-menu__cat-chip {
-	min-height: 44px;
-	min-width: 44px;
-	justify-content: center;
-	box-sizing: border-box;
-}
-
 .lafka-menu__cat-chip:focus-visible {
 	outline: 3px solid var(--lafka-color-accent-700);
 	outline-offset: -3px;
@@ -749,15 +721,21 @@
 
 /* Search clear: a 44 px hit area around the small visible disc (T-21). */
 .lafka-menu__search-clear {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	border: 0;
+	color: var(--lafka-color-text-muted);
+	border-radius: var(--lafka-radius-pill);
+	font-size: 14px;
+	line-height: 1;
+	cursor: pointer;
+	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 	width: 44px;
 	height: 44px;
 	margin-block: -10px;
 	margin-inline-end: -10px;
 	background: radial-gradient(circle, var(--lafka-color-surface-muted) 12px, transparent 13px);
-}
-
-.lafka-menu__search-clear:hover {
-	background: radial-gradient(circle, var(--lafka-color-text-primary) 12px, transparent 13px);
 }
 
 .lafka-menu__search-clear:focus-visible {

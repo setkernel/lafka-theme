@@ -109,11 +109,6 @@
     background: #71a900;
     color: #fff;
     border: none;
-    box-shadow: none;
-}
-
-.lafka_upload_image_button.button {
-    border: none;
     box-shadow: none !important;
     height: auto;
     padding: 5px 12px;
@@ -122,9 +117,6 @@
     -ms-transition: all 0.3s ease 0s;
     -moz-transition: all 0.3s ease 0s;
     -o-transition: all 0.3s ease 0s;
-}
-
-.lafka_upload_image_button.button {
     background-color: #0eafcc;
 }
 
@@ -207,7 +199,7 @@ label.lafka-admin-option-label {
     text-align: center;
     font-size: 14px;
     content: "\f0dc";
-    font-family: 'Font Awesome 6 Free';
+    font-family: 'Font Awesome 6 Free', sans-serif;
     font-weight: 900;
     position: absolute;
     right: 5px;

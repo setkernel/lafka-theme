@@ -205,6 +205,7 @@ body.gutenberg-editor-page .edit-post-visual-editor p.wp-block-cover-image-text 
     margin-left: 1em;
     padding: 8px 0;
     margin-bottom: 0;
+    line-height: normal;
 }
 
 .wp-block-freeform.block-library-rich-text__tinymce ol {
@@ -220,10 +221,6 @@ body.gutenberg-editor-page .edit-post-visual-editor p.wp-block-cover-image-text 
 
 .wp-block-freeform.block-library-rich-text__tinymce li ul li:last-of-type, .wp-block-freeform.block-library-rich-text__tinymce li ol li:last-of-type {
     padding-bottom: 0;
-}
-
-.wp-block-freeform.block-library-rich-text__tinymce li {
-    line-height: normal;
 }
 
 .wp-block-freeform.block-library-rich-text__tinymce p {

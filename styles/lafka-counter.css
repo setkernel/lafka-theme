@@ -239,6 +239,7 @@ body.lafka-layout-header-counter .lafka-header {
 	-webkit-backdrop-filter: none;
 	border-bottom: 0;
 	box-shadow: none;
+	position: relative;
 }
 
 .lafka-counter-header__brand {
@@ -544,6 +545,7 @@ body.lafka-layout-header-counter .lafka-header {
 	justify-content: space-between;
 	gap: 10px 16px;
 	margin-top: 10px;
+	container: lafka-row-foot / inline-size;
 }
 
 .lafka-row__price {
@@ -627,9 +629,6 @@ body.lafka-layout-header-counter .lafka-header {
  * breaks a label or a price ("X-Large", "6 Piece"). When the group and the
  * Add button do not fit side by side, the button wraps under the group; when
  * four columns do not fit the row at all, they become a 2×2 grid. */
-.lafka-row__foot {
-	container: lafka-row-foot / inline-size;
-}
 
 .lafka-prices {
 	display: grid;
@@ -1816,9 +1815,6 @@ body.lafka-has-counter-bar {
  * Scoped to body.lafka-layout-menu-counter; lafka-menu-archive.css is not
  * edited. The counter header does not stick (the phone bar carries the cart),
  * so the category tabs stick to the top of the viewport. */
-body.lafka-layout-header-counter .lafka-header {
-	position: relative;
-}
 
 body.lafka-layout-menu-counter .lafka-menu__header {
 	padding-block: 28px 12px;

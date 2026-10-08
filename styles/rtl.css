@@ -197,7 +197,7 @@ div.product input.qty, .star-rating span {
 	float: left;
 }
 
-.foodmenu-unit-info ul, #comments h3#reply-title, p.logged-in-as, #commentsForm label, .foodmenu-unit-info small, .foodmenu-unit-info h4 {
+.foodmenu-unit-info ul, #comments h3#reply-title, p.logged-in-as, .foodmenu-unit-info small, .foodmenu-unit-info h4 {
 	text-align: right;
 }
 

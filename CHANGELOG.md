@@ -7,6 +7,25 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Changed (lint)
+- **JS/CSS lint rules switched back on** (no `null`/`"off"` overrides left except
+  `no-descending-specificity`, deferred to the 1.0 CSS rewrite). `eslint.config.mjs` now
+  runs `no-var`, `prefer-const`, `no-unused-vars` and `eqeqeq` as errors; every `var` in
+  `js/` and `assets/customizer/` became `let`/`const` (no top-level `var` existed, so no
+  `window` global changed). `js/lafka-dialog.min.js` rebuilt.
+- **Stylelint**: `selector-class-pattern` / `selector-id-pattern` are configured to the
+  project's real naming convention (documented in CONTRIBUTING.md, Coding standards) instead
+  of being disabled, with no class or ID renamed. Every `font-family` that named only an icon
+  font now ends with `sans-serif`. `declaration-property-unit-allowed-list` allows `px`, `em`
+  and `%` for `line-height` (13 legacy declarations). `no-duplicate-selectors` is on: all 98
+  reports are resolved by merging blocks only where the cascade stays identical (every
+  equal-specificity rule in between was checked, and a computed-style comparison of old vs new
+  CSS across 3,000+ selectors at 375/768/1280 px shows no difference), dropping declarations
+  that a later block always overrode, and removing one selector listed twice. One block that
+  cannot be merged without reordering the cascade (the hover colour for links) is written as
+  the equivalent `a:is(:hover)` and keeps its place.
+- Dropped the dead `#commentsForm` selector from `styles/rtl.css` (no markup uses that ID).
+
 ### Removed
 - **All tests and test tooling** (to be reintroduced later): `tests/` (PHPUnit unit suite,
   Playwright e2e and visual suites, fixtures, support), `phpunit.xml.dist`,

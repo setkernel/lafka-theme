@@ -339,11 +339,11 @@
 
 .woocommerce-cart .coupon {
 	margin: 0;
-	display: flex;
-	gap: var(--lafka-space-2);
 	flex: 1 1 320px;
-	flex-wrap: wrap;
 	min-width: 0;
+	display: flex !important;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-2, 8px);
 	align-items: stretch;
 }
 
@@ -673,8 +673,8 @@
 	margin: 0 auto var(--lafka-space-5) auto;
 	max-width: 360px;
 	font-size: var(--lafka-font-size-body);
-	color: var(--lafka-color-text-muted);
 	line-height: 1.5;
+	color: var(--lafka-color-text-secondary);
 }
 
 /* v5.97.0: escalate selector to `a.lafka-cart-empty__cta` so it beats
@@ -692,13 +692,13 @@ a.lafka-cart-empty__cta {
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body);
 	font-weight: var(--lafka-font-weight-bold);
-	letter-spacing: var(--lafka-letter-spacing-wide);
-	text-transform: uppercase;
 	text-decoration: none;
 	border-radius: var(--lafka-radius-button);
 	box-shadow: var(--lafka-shadow-1);
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+	text-transform: none;
+	letter-spacing: normal;
 }
 
 a.lafka-cart-empty__cta:hover {
@@ -735,12 +735,6 @@ a.lafka-cart-empty__cta:focus-visible {
  * The structural change is invisible — both buttons stay <button>s, but
  * .lafka-page__content .coupon becomes a flex row so the input + Apply
  * line up, with Update wrapping after.  */
-.woocommerce-cart .coupon {
-	display: flex !important;
-	flex-wrap: wrap;
-	gap: var(--lafka-space-2, 8px);
-	align-items: stretch;
-}
 
 .woocommerce-cart .coupon #coupon_code {
 	flex: 1 1 220px;
@@ -773,14 +767,6 @@ a.lafka-cart-empty__cta:focus-visible {
  * cards line up: every card is the full row height, the image sits at the
  * top, the name below it and the price pinned to the bottom edge.
  * ========================================================================= */
-.lafka-cart-empty__lead {
-	color: var(--lafka-color-text-secondary);
-}
-
-a.lafka-cart-empty__cta {
-	text-transform: none;
-	letter-spacing: normal;
-}
 
 .lafka-cart-empty-popular__grid {
 	align-items: stretch;
