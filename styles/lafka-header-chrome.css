@@ -361,10 +361,10 @@ body .lafka-header {
 	color: var(--lafka-color-accent-text);
 }
 
-.lafka-header__icon-btn i,
-.lafka-header__cart i {
-	font-size: 18px;
-	line-height: 1;
+.lafka-header__icon-btn svg,
+.lafka-header__cart svg {
+	display: block;
+	flex: none;
 }
 
 .lafka-header__icon-btn:focus-visible,

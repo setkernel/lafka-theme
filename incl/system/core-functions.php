@@ -389,11 +389,6 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 			// wp-color-picker
 			wp_enqueue_style( 'wp-color-picker' );
 			wp_enqueue_script( 'wp-color-picker' );
-			// font-awesome
-			wp_enqueue_style( 'font_awesome_6_v4shims', get_template_directory_uri() . '/styles/font-awesome/css/v4-shims.min.css', array(), lafka_asset_version( '/styles/font-awesome/css/v4-shims.min.css' ), 'screen' );
-			wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . '/styles/font-awesome/css/all.min.css', array( 'font_awesome_6_v4shims' ), lafka_asset_version( '/styles/font-awesome/css/all.min.css' ), 'screen' );
-			// et-line-font
-			wp_enqueue_style( 'et-line-font', get_template_directory_uri() . '/styles/et-line-font/style.css', false, lafka_asset_version( '/styles/et-line-font/style.css' ), 'screen' );
 		}
 
 		if ( $needs_terms ) {
@@ -635,7 +630,7 @@ if ( ! function_exists( 'lafka_typography_enqueue_google_font' ) ) {
 add_filter( 'style_loader_tag', 'lafka_style_loader_tag_filter', 10, 2 );
 if ( ! function_exists( 'lafka_style_loader_tag_filter' ) ) {
 	function lafka_style_loader_tag_filter( $html, $handle ) {
-		if ( in_array( $handle, array( 'lafka-fonts', 'font_awesome_6_v4shims', 'font_awesome_6', 'et-line-font', 'flaticon' ), true ) ) {
+		if ( in_array( $handle, array( 'lafka-fonts' ), true ) ) {
 			$link_stylesheet = str_replace( "rel='stylesheet'", "rel='stylesheet' onload=\"this.media='all'\"", $html );
 			$link_preload    = str_replace( "rel='stylesheet'", "rel='preload' as='style'", $html );
 			$link_preload    = str_replace( "media='print'", '', $link_preload );
@@ -1451,6 +1446,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// Load the main stylesheet (use template URI so parent styles load even with a child theme).
 		wp_enqueue_style( 'lafka-style', get_template_directory_uri() . '/style.css', $lafka_style_deps, wp_get_theme( get_template() )->get( 'Version' ) );
+		// Icons drawn by CSS masks read their shapes from these custom properties
+		// (incl/template-helpers/icons.php — the one icon set; no icon font).
+		wp_add_inline_style( 'lafka-style', lafka_icon_css_properties() );
 
 		// NX1-10a: the legacy monolith remainder, split out of style.css into
 		// scoped sheets that load ONLY on the surfaces which render the matching
@@ -1483,45 +1481,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_style( 'lafka-responsive', get_template_directory_uri() . '/styles/lafka-responsive.css', array( 'lafka-style' ), lafka_asset_version( '/styles/lafka-responsive.css' ) );
 		}
 
-		// GX T-25: the legacy libraries (Font Awesome, imagesloaded, wp-util)
-		// only load where a template can render their
-		// markup — never on the counter surfaces (lafka_needs_legacy_libs()).
+		// GX T-25: the legacy libraries (imagesloaded, wp-util) only load where a
+		// template can render their markup (lafka_needs_legacy_libs()).
 		$lafka_legacy_libs = ! function_exists( 'lafka_needs_legacy_libs' ) || lafka_needs_legacy_libs();
-
-		if ( $lafka_legacy_libs ) {
-			wp_enqueue_style( 'font_awesome_6_v4shims', get_template_directory_uri() . '/styles/font-awesome/css/v4-shims.min.css', array(), lafka_asset_version( '/styles/font-awesome/css/v4-shims.min.css' ), 'print' );
-			wp_enqueue_style( 'font_awesome_6', get_template_directory_uri() . '/styles/font-awesome/css/all.min.css', array( 'font_awesome_6_v4shims' ), lafka_asset_version( '/styles/font-awesome/css/all.min.css' ), 'print' );
-		}
-
-		// P6-PERF-4 (W3-T2, 2026-04-28): et-line-font loaded conditionally — only
-		// enqueue when the current page content contains a VC/Lafka icon shortcode
-		// with type="etline". The font is ~80 KB; most pages have no etline icons.
-		// Admin enqueue (line ~433) is unaffected — the icon picker still needs it.
-		// GX T-25: only content the template renders counts (the static front
-		// page's post_content is never output by front-page.php).
-		$current_post_content = function_exists( 'lafka_rendered_post_content' )
-			? lafka_rendered_post_content()
-			: ( ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) ? (string) $GLOBALS['post']->post_content : '' );
-		$has_etline           = false !== strpos( $current_post_content, 'type="etline"' )
-			|| false !== strpos( $current_post_content, "type='etline'" );
-		$has_flaticon         = false !== strpos( $current_post_content, 'type="flaticon"' )
-			|| false !== strpos( $current_post_content, "type='flaticon'" )
-			|| false !== strpos( $current_post_content, 'i_type="flaticon"' )
-			|| false !== strpos( $current_post_content, "i_type='flaticon'" )
-			|| false !== strpos( $current_post_content, 'icon_flaticon=' );
-
-		if ( $has_etline ) {
-			wp_enqueue_style( 'et-line-font', get_template_directory_uri() . '/styles/et-line-font/style.css', array(), lafka_asset_version( '/styles/et-line-font/style.css' ), 'print' );
-		}
-
-		// P6-PERF-4 (W3-T2, 2026-04-28): flaticon loaded conditionally — same
-		// pattern as et-line-font above. Flaticon is used by lafka_icon and
-		// lafka_icon_teaser shortcodes with type="flaticon". ~80 KB saved on pages
-		// that don't use those shortcodes.
-		// Admin enqueue (line ~438) is unaffected — the menu icon picker still needs it.
-		if ( $has_flaticon ) {
-			wp_enqueue_style( 'flaticon', get_template_directory_uri() . '/styles/flaticon/font/flaticon.css', false, lafka_asset_version( '/styles/flaticon/font/flaticon.css' ), 'print' );
-		}
 
 		/* loading jquery-ui-slider only for price filter */
 		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_show_pricefilter', true ) && is_woocommerce() && ! is_product() ) {

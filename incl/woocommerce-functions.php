@@ -693,7 +693,7 @@ if ( ! function_exists( 'lafka_header_add_to_cart_fragment' ) ) {
 		/* translators: %d: number of items in the cart */
 		$lafka_cart_aria                   = sprintf( _n( 'View cart, %d item', 'View cart, %d items', $lafka_cart_count, 'lafka' ), $lafka_cart_count );
 		$fragments['a.lafka-header__cart'] = '<a class="lafka-header__cart" href="' . esc_url( wc_get_cart_url() ) . '" aria-label="' . esc_attr( $lafka_cart_aria ) . '" data-lafka-cart-open>'
-			. '<i class="fa fa-shopping-bag" aria-hidden="true"></i>'
+			. lafka_icon( 'bag', 18 )
 			. '<span class="lafka-header__cart-count" data-lafka-cart-count aria-hidden="true">' . esc_html( (string) $lafka_cart_count ) . '</span>'
 			. '</a>';
 

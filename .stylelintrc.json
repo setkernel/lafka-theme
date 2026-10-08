@@ -4,9 +4,6 @@
 		"vendor/**",
 		"node_modules/**",
 		"**/*.min.css",
-		"styles/et-line-font/**",
-		"styles/flaticon/**",
-		"styles/font-awesome/**",
 		"styles/magnific/**",
 		"styles/fonts/**"
 	],

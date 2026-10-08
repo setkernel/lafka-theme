@@ -888,8 +888,7 @@ body.search-results .blog-post.product.type-product .lafka-post-avatar {
     margin-right: 6px;
 }
 
-.blog-post-meta.post-meta-top>span.count_comments,
-.blog-post-meta.post-meta-top .fa-tags {
+.blog-post-meta.post-meta-top>span.count_comments {
     margin-left: 5px;
 }
 
@@ -940,9 +939,13 @@ body.single-post .lafka_title_holder .blog-post-meta img.avatar {
 }
 
 .blog-post-meta span.post-meta-date::before {
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
-    content: "\f017";
+    content: "";
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-clock) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-clock) center / 1em 1em no-repeat;
     display: inline-block;
     margin-right: 3px;
 }
@@ -951,11 +954,11 @@ body.single-post .lafka_title_holder .blog-post-meta img.avatar {
     margin-right: 3px;
 }
 
-.blog-post-meta span i,
-.blog-post-meta i,
+.blog-post-meta svg,
 .blog-post-meta span.post-meta-date::before {
     margin-right: 3px;
     line-height: 20px;
+    vertical-align: -0.125em;
     -webkit-transition: all 0.5s ease 0s;
     transition: all 0.5s ease 0s;
 }

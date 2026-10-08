@@ -231,13 +231,13 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 
 				<?php if ( get_theme_mod( 'lafka_show_searchform', true ) ) : ?>
 					<a class="lafka-header__icon-btn lafka-header__search" href="#search" aria-label="<?php esc_attr_e( 'Search', 'lafka' ); ?>" data-lafka-search-toggle>
-						<i class="fa fa-search" aria-hidden="true"></i>
+						<?php echo wp_kses( lafka_icon( 'search', 18 ), lafka_allowed_html() ); ?>
 					</a>
 				<?php endif; ?>
 
 				<?php if ( function_exists( 'lafka_should_show_account_icon' ) && lafka_should_show_account_icon() ) : ?>
 					<a class="lafka-header__icon-btn lafka-header__account" href="<?php echo esc_url( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) ); ?>" aria-label="<?php esc_attr_e( 'My account', 'lafka' ); ?>">
-						<i class="fa fa-user" aria-hidden="true"></i>
+						<?php echo wp_kses( lafka_icon( 'user', 18 ), lafka_allowed_html() ); ?>
 					</a>
 				<?php endif; ?>
 
@@ -259,7 +259,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 						aria-label="<?php echo esc_attr( $lafka_cart_aria ); ?>"
 						data-lafka-cart-open
 					>
-						<i class="fa fa-shopping-bag" aria-hidden="true"></i>
+						<?php echo wp_kses( lafka_icon( 'bag', 18 ), lafka_allowed_html() ); ?>
 						<span class="lafka-header__cart-count" data-lafka-cart-count aria-hidden="true">
 							<?php echo esc_html( (string) $lafka_cart_count ); ?>
 						</span>

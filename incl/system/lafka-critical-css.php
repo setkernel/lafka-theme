@@ -192,12 +192,7 @@ if ( ! function_exists( 'lafka_critical_css_async_handles' ) ) {
 			'lafka-sticky-cart',
 			'lafka-pdp-cta',
 			'lafka-footer-chrome',
-			// Vendored icon fonts, carousels and lightboxes (loaded only where
-			// legacy markup uses them — see lafka_needs_legacy_libs()).
-			'font_awesome_6',
-			'font_awesome_6_v4shims',
-			'flaticon',
-			'et-line-font',
+			// The WooCommerce gallery lightbox.
 			'photoswipe',
 			'photoswipe-default-skin',
 		);

@@ -139,9 +139,8 @@ Fonts (self-hosted, `assets/fonts/`):
 
 Scripts and styles (verified from the bundled file headers):
 
-* Font Awesome Free 6.7.2 — Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT —
-  Copyright 2024 Fonticons, Inc. — https://fontawesome.com/license/free
-  (`styles/font-awesome/`).
+* Icons — drawn for Lafka as inline SVG (`incl/template-helpers/icons.php`),
+  GPLv2 or later with the theme. No icon font is bundled.
 * Magnific Popup v1.1.0 — MIT — Copyright 2016 Dmitry Semenov (`js/magnific/`).
 
 Other vendored libraries not enumerated above (for example the remaining helper

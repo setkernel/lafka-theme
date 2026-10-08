@@ -126,7 +126,7 @@ $lafka_ft_year = wp_date( 'Y' );
 						<?php foreach ( $lafka_ft_social as $lafka_ft_net => $lafka_ft_url ) : ?>
 							<li>
 								<a class="lafka-footer__social-link lafka-footer__social-link--<?php echo esc_attr( $lafka_ft_net ); ?>" href="<?php echo esc_url( $lafka_ft_url ); ?>" target="_blank" rel="noopener noreferrer" aria-label="<?php echo esc_attr( ucfirst( $lafka_ft_net ) ); ?>">
-									<i class="fa fa-<?php echo esc_attr( $lafka_ft_net ); ?>" aria-hidden="true"></i>
+									<?php echo wp_kses( lafka_icon( $lafka_ft_net, 18 ), lafka_allowed_html() ); ?>
 								</a>
 							</li>
 						<?php endforeach; ?>

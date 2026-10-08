@@ -2,7 +2,7 @@
 /**
  * GX4: shared bits of the counter chrome (header, drawer, mobile bar, footer).
  *
- *   lafka_counter_icon( $name )             static inline SVG (aria-hidden)
+ *   lafka_counter_icon( $name )             inline SVG via lafka_icon() (icons.php)
  *   lafka_counter_nap()                     name / phone / address from lafka_get_restaurant_info()
  *   lafka_counter_fulfilment_modes()        which of pickup / delivery the store offers
  *   lafka_counter_fulfilment_current()      the visitor's preference (else the first mode)
@@ -22,27 +22,13 @@ defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'lafka_counter_icon' ) ) {
 	/**
-	 * A static, decorative inline SVG (24px grid, currentColor).
+	 * A static, decorative inline SVG from the theme's icon set (lafka_icon()).
 	 *
 	 * @param string $name Icon name.
 	 * @param int    $size Rendered size in px.
 	 */
 	function lafka_counter_icon( string $name, int $size = 20 ): string {
-		$paths = array(
-			'phone'      => '<path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.4 1.8.7 2.7a2 2 0 0 1-.5 2.1L8 9.8a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.8.6 2.7.7a2 2 0 0 1 1.7 2z"/>',
-			'bag'        => '<path d="M5 8h14l-1.2 12H6.2L5 8z"/><path d="M9 8a3 3 0 0 1 6 0"/>',
-			'arrow'      => '<path d="M5 12h14"/><path d="M13 6l6 6-6 6"/>',
-			'clock'      => '<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
-			'pin'        => '<path d="M12 21s-7-6.2-7-11.5a7 7 0 0 1 14 0C19 14.8 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.5"/>',
-			'directions' => '<path d="M3 11l18-8-8 18-2-8-8-2z"/>',
-			'close'      => '<path d="M6 6l12 12"/><path d="M18 6L6 18"/>',
-			'menu'       => '<path d="M4 7h16"/><path d="M4 12h16"/><path d="M4 17h16"/>',
-			'star'       => '<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/>',
-		);
-		if ( ! isset( $paths[ $name ] ) ) {
-			return '';
-		}
-		return '<svg class="lafka-icon lafka-icon--' . esc_attr( $name ) . '" width="' . (int) $size . '" height="' . (int) $size . '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">' . $paths[ $name ] . '</svg>';
+		return lafka_icon( $name, $size );
 	}
 }
 

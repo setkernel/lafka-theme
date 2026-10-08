@@ -148,16 +148,6 @@
         // SLIDING ELEMENTS
         // -------------------------------------------------------------------------------------------------------
 
-        $(document).find("a#toggle_switch").on("click", function() {
-            const $togglerone = $(this).siblings("#togglerone");
-            if ($(this).hasClass("swap")) {
-                $(this).removeClass("swap")
-                $togglerone.slideToggle("slow");
-            } else {
-                $(this).addClass("swap");
-                $togglerone.slideToggle("slow");
-            }
-        });
 
         if (!document.getElementById("lafka_page_title")) {
             $(document.body).addClass('page-no-title');

@@ -59,7 +59,7 @@ $lafka_product_video_url = lafka_product_video_trigger_url( $product, $lafka_med
 <div class="<?php echo esc_attr( implode( ' ', array_map( 'sanitize_html_class', $lafka_wrapper_classes ) ) ); ?>" data-columns="<?php echo esc_attr( $lafka_columns ); ?>" style="opacity: 0; transition: opacity .25s ease-in-out;">
 
 	<?php if ( $lafka_product_video_url ) : ?>
-		<a title="<?php esc_attr_e( 'Play the video', 'lafka' ); ?>" class="lafka_product_video_trigger" href="<?php echo esc_url( $lafka_product_video_url ); ?>" ><span class="fa fa-play-circle"></span><?php esc_html_e( 'Play the video', 'lafka' ); ?></a>
+		<a title="<?php esc_attr_e( 'Play the video', 'lafka' ); ?>" class="lafka_product_video_trigger" href="<?php echo esc_url( $lafka_product_video_url ); ?>" ><?php echo wp_kses( lafka_icon( 'play', 20 ), lafka_allowed_html() ); ?><?php esc_html_e( 'Play the video', 'lafka' ); ?></a>
 	<?php endif; ?>
 
 	<div class="woocommerce-product-gallery__wrapper">

@@ -217,6 +217,7 @@ require_once get_template_directory() . '/incl/template-helpers/hours-display.ph
 require_once get_template_directory() . '/incl/template-helpers/deal-value.php';
 require_once get_template_directory() . '/incl/template-helpers/menu-data.php';
 require_once get_template_directory() . '/incl/template-helpers/age-notice.php';
+require_once get_template_directory() . '/incl/template-helpers/icons.php';
 require_once get_template_directory() . '/incl/template-helpers/counter-chrome.php';
 require_once get_template_directory() . '/incl/customizer-counter.php';
 require_once get_template_directory() . '/incl/system/lafka-preset-reset.php';
@@ -1135,11 +1136,6 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 // Remove &nbsp from titles
 add_filter( 'the_title', 'lafka_remove_nbsp_from_titles' );
 
-// The rebuilt header renders FontAwesome icons (search / account / cart) on
-// every page, so keep FA enqueued site-wide — prevents the plugin's content-scan
-// FA dequeue (lafka-plugin/incl/perf/lafka-asset-pruning.php) from tofu-ing the
-// header icons. Revisit once the header icons move to inline SVG. (Baseline #perf.)
-add_filter( 'lafka_header_renders_fa_icons', '__return_true' );
 if ( ! function_exists( 'lafka_remove_nbsp_from_titles' ) ) {
 	function lafka_remove_nbsp_from_titles( $title ) {
 		return str_replace( '&nbsp;', ' ', $title );

@@ -826,10 +826,6 @@ and (orientation: landscape) {
         display: none;
     }
 
-    div.prod_hold a.button.add_to_cart_button i.fa {
-        display: none;
-    }
-
     a.reset_variations {
         display: none;
     }
@@ -1027,10 +1023,6 @@ and (orientation: landscape) {
         width: 100%;
     }
 
-    div.prod_hold a.button.add_to_cart_button i.fa {
-        display: none;
-    }
-
     a.reset_variations {
         display: none;
     }
@@ -1146,10 +1138,6 @@ and (orientation: landscape) {
 
     .summary form.cart div.product-addon p.form-row {
         width: 100%;
-    }
-
-    div.prod_hold a.button.add_to_cart_button i.fa {
-        display: none;
     }
 
     a.reset_variations {

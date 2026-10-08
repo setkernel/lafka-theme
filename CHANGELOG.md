@@ -141,6 +141,21 @@ git tags + GitHub Releases.
   data. The single-post gallery branch of `content.php` (never reached: single posts
   render through `single.php`) is gone.
 
+- **Icon fonts** (Font Awesome Free, Flaticon, ET-Line; `styles/font-awesome/`,
+  `styles/flaticon/`, `styles/et-line-font/`), their front-end and admin enqueues, the
+  content-sniffing loaders and the `lafka_header_renders_fa_icons` filter. Every icon is
+  now an inline SVG from one set, `incl/template-helpers/icons.php` (`lafka_icon( $name )`;
+  `lafka_counter_icon()` wraps it): the classic header search / account / cart, footer
+  social links, blog meta, the product video trigger and the cart-fragment bag.
+  Pseudo-element icons (show password, reset variations, share links, allergens, weight,
+  gallery zoom, sale and store-closed timers, comment replies, address edit, promo text,
+  order received) are CSS masks reading `--lafka-icon-<name>` custom properties printed
+  from the same set. The share links gain their own WhatsApp, Telegram and email icons
+  (they showed the Facebook glyph); a TikTok footer link now shows an icon (Font Awesome
+  Free had none under the `fa` class). Rules for markup nothing emits any more (top-bar
+  mail / phone, the old contact-form messages, the `#toggle_switch` slider and its script)
+  are gone.
+
 ## [7.3.0] — 2026-09-25
 
 Live-site QA sharpening (2026-09-25); pairs with lafka-plugin 10.3.0.

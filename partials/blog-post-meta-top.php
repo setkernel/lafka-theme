@@ -10,7 +10,7 @@
 <div class="blog-post-meta post-meta-top">
 	<?php $lafka_categories = get_the_category(); ?>
 <?php if ( $lafka_categories ) : ?>
-		<span class="posted_in"><i class="fa fa-folder-open"></i>
+		<span class="posted_in"><?php echo wp_kses( lafka_icon( 'folder', 14 ), lafka_allowed_html() ); ?>
 			<?php $lafka_last_category = end( $lafka_categories ); ?>
 			<?php foreach ( $lafka_categories as $lafka_category ) : ?>
 				<a href="<?php echo esc_url( get_category_link( $lafka_category->term_id ) ); ?>"
@@ -23,8 +23,8 @@
 				</span>
 	<?php endif; ?>
 	<?php if ( ! isset( $lafka_is_latest_posts ) ) : ?>
-		<?php the_tags( '<i class="fa fa-tags"></i> ' ); ?>
-		<span class="count_comments"><i class="fa fa-comments"></i> <a
+		<?php the_tags( lafka_icon( 'tag', 14 ) . ' ' ); ?>
+		<span class="count_comments"><?php echo wp_kses( lafka_icon( 'comment', 14 ), lafka_allowed_html() ); ?> <a
 					href="<?php echo esc_url( get_comments_link() ); ?>"
 					title="<?php esc_attr_e( 'View comments', 'lafka' ); ?>"><?php echo (int) get_comments_number(); ?></a></span>
 	<?php endif; ?>

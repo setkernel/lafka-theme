@@ -277,7 +277,6 @@ h3,
 h4,
 h5,
 h6,
-.fa,
 i {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -767,60 +766,6 @@ form.mc4wp-form input[type="email"] {
     display: none;
 }
 
-.error-message,
-.success-message {
-    padding: 8px;
-    float: left;
-    width: 100%;
-    margin-bottom: 10px;
-    border-radius: 2px;
-}
-
-.error-message {
-    border: 1px solid #fbc2c4;
-    background: #fbe3e4;
-    color: #8a1f11;
-    position: relative;
-}
-
-.error-message::before {
-    display: inline-block;
-    content: "\f071";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
-    margin-right: 6px;
-}
-
-.error-message::after {
-    content: ' ';
-    position: absolute;
-    background: #fbe3e4;
-    display: block;
-    width: 8px;
-    height: 8px;
-    left: 8px;
-    top: -4px;
-    z-index: 1000;
-    border: 1px solid;
-    -webkit-transform: rotate(45deg);
-    transform: rotate(45deg);
-    border-color: #fbc2c4 transparent transparent #fbc2c4;
-}
-
-.error-message a {
-    color: #8a1f11;
-}
-
-.success-message {
-    border: 1px solid #c6d880;
-    background: #e6efc2;
-    color: #264409;
-    margin: 35px 0;
-    float: left;
-    width: 100%;
-    clear: both;
-}
-
 p.woocommerce-thankyou-order-received {
     display: block;
     padding: 0 0 60px 0;
@@ -866,18 +811,6 @@ section.woocommerce-order-details address {
     border: none;
     font-size: 14px;
     font-style: normal;
-}
-
-.success-message::before {
-    display: inline-block;
-    content: "\f058";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
-    margin-right: 6px;
-}
-
-.success-message a {
-    color: #264409;
 }
 
 a.lafka-related-browse {
@@ -1302,9 +1235,14 @@ span.show-password-input {
 }
 
 span.show-password-input::before {
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    content: "\f06e";
-    font-weight: 900;
+    content: "";
+    display: inline-block;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-eye) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-eye) center / 1em 1em no-repeat;
     color: #666;
     cursor: pointer;
 }
@@ -1548,29 +1486,6 @@ body.lafka_transparent_header #header {
 
 /* CATEGORY MENU ----*/
 
-.lafka-top-bar-mail+.lafka-top-bar-phone {
-    padding-left: 15px;
-}
-
-.lafka-top-bar-mail::before,
-.lafka-top-bar-phone a::before {
-    content: "\f095";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    vertical-align: middle;
-    margin-right: 4px;
-    display: inline-block;
-    font-weight: 900;
-}
-
-.lafka-top-bar-mail::before {
-    content: "\f003";
-}
-
-.lafka-top-bar-mail,
-.lafka-top-bar-phone {
-    font-size: 19px;
-}
-
 #lafka-top-left-menu-container,
 #lafka-top-right-menu-container {
     width: calc(50% - 130px);
@@ -1630,10 +1545,6 @@ small.lafka-search-hint-text {
     margin: 10px 5px 0 0;
 }
 
-[class^="flaticon-"]::before {
-    position: relative;
-}
-
 /* FOOTER STYLES ----*/
 
 #footer {
@@ -1682,12 +1593,6 @@ html.no-touch #footer.lafka_do_reveal {
 
 #footer>.inner:empty {
     display: none;
-}
-
-.swap::before {
-    content: "\f068";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
 }
 
 /* ANIMATIONS */
@@ -2224,9 +2129,13 @@ form.variations_form {
 .reset_variations::before {
     display: inline-block;
     margin-right: 3px;
-    content: "\f021";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
+    content: "";
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-refresh) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-refresh) center / 1em 1em no-repeat;
 }
 
 .product-filter {
@@ -2452,29 +2361,46 @@ body.admin-bar .lafka-product-summary-wrapper div.summary.lafka-sticky-summary {
     height: 18px;
     line-height: 18px;
     font-size: 21px;
-    font-family: 'Font Awesome 6 Brands', sans-serif;
-    font-weight: 900;
-    content: "\f082";
+    content: "";
+    width: 18px;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-facebook) center / 18px 18px no-repeat;
+    mask: var(--lafka-icon-facebook) center / 18px 18px no-repeat;
 }
 
 .lafka-share-links a.lafka-share-twitter::before {
-    content: "\f081";
+    -webkit-mask-image: var(--lafka-icon-x);
+    mask-image: var(--lafka-icon-x);
 }
 
 .lafka-share-links a.lafka-share-pinterest::before {
-    content: "\f0d3";
-}
-
-.lafka-share-links a.lafka-share-google-plus::before {
-    content: "\f0d4";
+    -webkit-mask-image: var(--lafka-icon-pinterest);
+    mask-image: var(--lafka-icon-pinterest);
 }
 
 .lafka-share-links a.lafka-share-linkedin::before {
-    content: "\f08c";
+    -webkit-mask-image: var(--lafka-icon-linkedin);
+    mask-image: var(--lafka-icon-linkedin);
 }
 
 .lafka-share-links a.lafka-share-vkontakte::before {
-    content: "\f189";
+    -webkit-mask-image: var(--lafka-icon-vk);
+    mask-image: var(--lafka-icon-vk);
+}
+
+.lafka-share-links a.lafka-share-whatsapp::before {
+    -webkit-mask-image: var(--lafka-icon-whatsapp);
+    mask-image: var(--lafka-icon-whatsapp);
+}
+
+.lafka-share-links a.lafka-share-telegram::before {
+    -webkit-mask-image: var(--lafka-icon-telegram);
+    mask-image: var(--lafka-icon-telegram);
+}
+
+.lafka-share-links a.lafka-share-email::before {
+    -webkit-mask-image: var(--lafka-icon-mail);
+    mask-image: var(--lafka-icon-mail);
 }
 
 .lafka-share-links a:hover {
@@ -2487,10 +2413,6 @@ body.admin-bar .lafka-product-summary-wrapper div.summary.lafka-sticky-summary {
 
 .lafka-share-links a.lafka-share-pinterest:hover {
     color: #e3262e;
-}
-
-.lafka-share-links a.lafka-share-google-plus:hover {
-    color: #dd4b39;
 }
 
 .lafka-share-links a.lafka-share-linkedin:hover {
@@ -2654,9 +2576,13 @@ div.summary ul.lafka-nutrition-list li span.lafka-nutrition-list-label:last-of-t
 .lafka-nutrition-allergens::before {
     display: inline-block;
     margin-right: 5px;
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
-    content: "\f21e";
+    content: "";
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-heart-pulse) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-heart-pulse) center / 1em 1em no-repeat;
     color: #e88835;
     font-size: 16px;
 }
@@ -2696,9 +2622,13 @@ ul.lafka-item-weight-holder li {
 .lafka-item-weight::before {
     display: inline-block;
     margin-right: 5px;
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
-    content: "\f24e";
+    content: "";
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-scale) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-scale) center / 1em 1em no-repeat;
     color: #333;
     font-size: 18px;
 }
@@ -3126,12 +3056,9 @@ div.product div.images a.woocommerce-product-gallery__trigger,
     padding-right: 15px;
 }
 
-.lafka_product_video_trigger span.fa {
-    font-weight: 900;
-    font-size: 20px !important;
-    width: 40px;
-    height: 40px;
-    line-height: 37px;
+.lafka_product_video_trigger svg {
+    display: inline-block;
+    margin: 9px;
     vertical-align: middle;
 }
 
@@ -3149,14 +3076,6 @@ div.product div.images a.woocommerce-product-gallery__trigger,
         background: none;
     }
 
-    div.product .lafka-product-summary-wrapper.lafka-has-product-cover-image .lafka_product_video_trigger span.fa {
-        font-size: 80px !important;
-        width: 120px;
-        height: 80px;
-        line-height: 80px;
-        color: #fff;
-        border-radius: 50%;
-    }
 }
 
 div.product div.images a.woocommerce-product-gallery__trigger:hover,
@@ -3234,9 +3153,10 @@ div.product div.images a.woocommerce-product-gallery__trigger img.emoji {
 }
 
 div.product div.images a.woocommerce-product-gallery__trigger::before {
-    content: "\f065";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
+    content: "";
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-expand) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-expand) center / 1em 1em no-repeat;
     font-size: 14px;
     width: 40px;
     height: 40px;
@@ -4174,10 +4094,6 @@ a.lafka-quick-view-link:hover {
     opacity: 1;
 }
 
-.links a.button.add_to_cart_button i.fa {
-    font-size: 16px;
-}
-
 .summary.entry-summary>div.clear {
     display: none;
 }
@@ -4476,10 +4392,14 @@ div.product div.summary .offer_title {
 .count_holder .count_info::before {
     display: inline-block;
     margin-right: 8px;
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    content: "\f017";
+    content: "";
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-clock) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-clock) center / 1em 1em no-repeat;
     font-size: 14px !important;
-    font-weight: 900;
 }
 
 .count_holder .count_info b {
@@ -4744,9 +4664,10 @@ p#calc_shipping_state_field::after {
     vertical-align: middle;
     text-align: center;
     font-size: 14px;
-    content: "\f0dc";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
+    content: "";
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-sort) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-sort) center / 1em 1em no-repeat;
     position: absolute;
     right: 5px;
     top: 50%;
@@ -5203,9 +5124,10 @@ ul.commentlist>li.pingback .edit-link {
     height: 15px;
     line-height: 15px;
     vertical-align: middle;
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
-    content: "\f139";
+    content: "";
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-chevron-up) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-chevron-up) center / 1em 1em no-repeat;
     position: absolute;
     top: -20px;
     left: 9px;
@@ -5311,10 +5233,14 @@ p.logged-in-as a:first-of-type {
 p.logged-in-as a:first-of-type::before {
     display: inline-block;
     margin-right: 5px;
-    content: "\f007";
-    font-family: 'Font Awesome 6 Free', sans-serif;
+    content: "";
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-user) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-user) center / 1em 1em no-repeat;
     font-size: 14px !important;
-    font-weight: 900;
 }
 
 /* ACCORDION STYLES ----*/
@@ -5671,12 +5597,16 @@ div.woocommerce-MyAccount-content .lafka-account-avatar img {
 
 .col2-set.addresses header a.edit::before {
     display: inline-block;
-    content: "\f303";
-    font-family: 'Font Awesome 6 Free', sans-serif;
+    content: "";
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-edit) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-edit) center / 1em 1em no-repeat;
     color: #5e5e5e; /* P6-A11Y-2: #999→#5e5e5e, 4.6:1 WCAG AA */
     font-size: 14px;
     margin-right: 5px;
-    font-weight: 900 !important;
 }
 
 .col2-set.addresses header a.edit:hover::before {
@@ -5981,10 +5911,14 @@ ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details+p
 }
 
 ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details+p::before {
-    font-family: et-line, sans-serif;
     display: inline-block;
     font-size: 12px;
-    content: "\e03d";
+    content: "";
+    width: 1em;
+    height: 1em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-check-circle) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-check-circle) center / 1em 1em no-repeat;
     margin-right: 8px;
     vertical-align: middle;
     color: #bc973f;
@@ -7268,9 +7202,12 @@ p.woocommerce-LostPassword.lost_password,
     display: inline-block;
     margin-right: 2px;
     font-size: 14px;
-    content: "\f101";
-    font-family: 'Font Awesome 6 Free', sans-serif;
-    font-weight: 900;
+    content: "";
+    width: 1em;
+    height: 1em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-chevrons-right) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-chevrons-right) center / 1em 1em no-repeat;
     vertical-align: middle;
     position: relative;
     top: -1px;
@@ -7399,8 +7336,12 @@ p.woocommerce-LostPassword.lost_password,
 
 .lafka-closed-store-message::before {
     display: block;
-    content: "\f11e";
-    font-family: Flaticon, sans-serif;
+    content: "";
+    height: 1em;
+    vertical-align: -0.125em;
+    background-color: currentcolor;
+    -webkit-mask: var(--lafka-icon-clock) center / 1em 1em no-repeat;
+    mask: var(--lafka-icon-clock) center / 1em 1em no-repeat;
     font-size: 40px;
     width: 50px;
     float: left;
@@ -7455,7 +7396,7 @@ body.lafka-store-closed>div.widget.woocommerce.widget_shopping_cart .widget_shop
 /* All selectors below use CSS custom properties set via :root{} in dynamic-css.php */
 
 /* Site main accent color */
-.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate i, .lafka-delivery-time-toggle::before, a.lafka-branch-delivery::before, a.lafka-branch-pickup::before, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, div.widget_categories ul li.current-cat > a::before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li::before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title::before, button.single_add_to_cart_button::before, .links a.button.add_to_cart_button::after, .commentlist ul.children::before, .infinite-scroll-request::before, .prod_hold .name sup, .prod_hold .name sub, #content div.product div.summary h1.product_title sup, #content div.product div.summary h1.product_title sub, .lafka-spec-dot, .count_holder .count_info::before, .widget_product_categories ul li.current-cat > a, div.widget_categories ul li > a:hover::before {
+.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate svg, .lafka-delivery-time-toggle::before, a.lafka-branch-delivery::before, a.lafka-branch-pickup::before, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, div.widget_categories ul li.current-cat > a::before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li::before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title::before, button.single_add_to_cart_button::before, .links a.button.add_to_cart_button::after, .commentlist ul.children::before, .infinite-scroll-request::before, .prod_hold .name sup, .prod_hold .name sub, #content div.product div.summary h1.product_title sup, #content div.product div.summary h1.product_title sub, .lafka-spec-dot, .count_holder .count_info::before, .widget_product_categories ul li.current-cat > a, div.widget_categories ul li > a:hover::before {
     color: var(--lafka-accent-color);
 }
 
