@@ -127,18 +127,15 @@ if ( ! function_exists( 'lafka_counter_fulfilment_modes' ) ) {
 
 if ( ! function_exists( 'lafka_counter_fulfilment_current' ) ) {
 	/**
-	 * The visitor's fulfilment preference (lafka-plugin, cookie
-	 * `lafka_order_method`), else the first offered mode.
+	 * The mode in force for the visitor (lafka-plugin's
+	 * Lafka_Fulfilment::current_mode(): their choice, else the first offered
+	 * mode), limited to the modes this header offers.
 	 */
 	function lafka_counter_fulfilment_current(): string {
 		$modes = lafka_counter_fulfilment_modes();
-		if ( function_exists( 'lafka_fulfilment_preference' ) ) {
-			$pref = (string) lafka_fulfilment_preference();
-		} else {
-			$pref = isset( $_COOKIE['lafka_order_method'] ) ? sanitize_key( wp_unslash( $_COOKIE['lafka_order_method'] ) ) : '';
-		}
-		if ( in_array( $pref, $modes, true ) ) {
-			return $pref;
+		$mode  = class_exists( 'Lafka_Fulfilment' ) ? Lafka_Fulfilment::current_mode() : '';
+		if ( in_array( $mode, $modes, true ) ) {
+			return $mode;
 		}
 		return $modes ? $modes[0] : '';
 	}

@@ -127,8 +127,9 @@ if ( ! function_exists( 'lafka_order_path_fulfilment_cfg' ) ) {
 		if ( ! is_array( $cfg ) ) {
 			return $cfg;
 		}
-		// Same list (and filter) lafka-plugin uses to tell pickup from delivery.
-		$cfg['pickupMethods'] = array_values( array_map( 'strval', (array) apply_filters( 'lafka_pickup_shipping_method_ids', array( 'local_pickup', 'pickup_location' ) ) ) );
+		// The list lafka-plugin uses to tell pickup from delivery (the one list;
+		// the script has no copy of its own).
+		$cfg['pickupMethods'] = class_exists( 'Lafka_Fulfilment' ) ? Lafka_Fulfilment::pickup_method_ids() : array();
 
 		return $cfg;
 	}

@@ -23,7 +23,7 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter
 }
 
 $lafka_info   = lafka_get_restaurant_info();
-$lafka_method = isset( $_COOKIE['lafka_order_method'] ) && 'pickup' === $_COOKIE['lafka_order_method'] ? 'pickup' : 'delivery';
+$lafka_method = class_exists( 'Lafka_Fulfilment' ) && 'pickup' === Lafka_Fulfilment::current_mode() ? 'pickup' : 'delivery';
 $lafka_status = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
 ?>
 <div class="lafka-order-method-bar" data-method="<?php echo esc_attr( $lafka_method ); ?>">

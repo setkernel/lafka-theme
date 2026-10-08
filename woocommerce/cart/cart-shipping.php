@@ -17,8 +17,8 @@
  *  - When the chosen rate is a customer pickup, the /cart/ "Shipping to
  *    {destination}." line and the shipping-calculator toggle are not printed:
  *    nothing is shipped to that address (O-16). Pickup = the plugin's
- *    lafka_is_pickup_shipping_method() when present, else WooCommerce's two
- *    pickup methods (local_pickup, pickup_location).
+ *    lafka_is_pickup_shipping_method() (the one list of pickup methods);
+ *    without the plugin nothing is treated as pickup.
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
@@ -38,11 +38,7 @@ if ( '' === $lafka_chosen_method && ! empty( $available_methods ) && is_array( $
 	$lafka_only_method   = reset( $available_methods );
 	$lafka_chosen_method = is_object( $lafka_only_method ) && isset( $lafka_only_method->id ) ? (string) $lafka_only_method->id : '';
 }
-if ( function_exists( 'lafka_is_pickup_shipping_method' ) ) {
-	$lafka_is_pickup = '' !== $lafka_chosen_method && (bool) lafka_is_pickup_shipping_method( $lafka_chosen_method );
-} else {
-	$lafka_is_pickup = in_array( strtok( $lafka_chosen_method, ':' ), array( 'local_pickup', 'pickup_location' ), true );
-}
+$lafka_is_pickup = '' !== $lafka_chosen_method && function_exists( 'lafka_is_pickup_shipping_method' ) && (bool) lafka_is_pickup_shipping_method( $lafka_chosen_method );
 if ( $lafka_is_pickup ) {
 	// Nothing is shipped: no destination line, no "Change address" calculator.
 	$lafka_show_shipping_calculator = false;
