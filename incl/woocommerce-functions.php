@@ -472,7 +472,7 @@ if ( ! function_exists( 'lafka_wrap_before_shop_loop_after' ) ) {
 	function lafka_wrap_before_shop_loop_after() {
 		$shop_default_product_columns = get_theme_mod( 'lafka_shop_default_product_columns', 'columns-3' );
 
-		$uri_parts = explode( '?', esc_url_raw( $_SERVER['REQUEST_URI'] ), 2 ); // Reading only. Stripped to domain name. Used for redirection.
+		$uri_parts = explode( '?', isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '', 2 ); // Reading only. Stripped to domain name. Used for redirection.
 
 		$post_type_url_param  = esc_attr( (string) lafka_query_arg( 'post_type' ) );
 		$lafka_search_query   = get_search_query();
@@ -803,7 +803,7 @@ if ( ! function_exists( 'lafka_quickview' ) ) {
 	function lafka_quickview() {
 		check_ajax_referer( 'lafka_ajax_nonce', 'security' );
 
-		$lafka_product_id = absint( $_POST['productid'] );
+		$lafka_product_id = isset( $_POST['productid'] ) ? absint( $_POST['productid'] ) : 0;
 		$lafka_quickview  = new WP_Query(
 			array(
 				'p'                   => $lafka_product_id,

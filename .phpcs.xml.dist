@@ -21,6 +21,8 @@
 	<!-- Rules: the full WordPress-Extra standard, no exclusions, and warnings fail the run. -->
 	<rule ref="WordPress-Extra"/>
 
+	<!-- Request-input sanitization: added explicitly because WordPress-Extra omits it. -->
+	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
 
 	<!-- This is a theme: template-hierarchy file names such as
 	     taxonomy-lafka_foodmenu_category.php follow WordPress's naming. -->

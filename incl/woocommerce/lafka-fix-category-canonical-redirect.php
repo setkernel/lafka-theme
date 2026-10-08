@@ -51,7 +51,9 @@ if ( ! function_exists( 'lafka_force_product_cat_archive_query' ) ) {
 		if ( ! is_array( $vars ) ) {
 			return $vars;
 		}
-		$req = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
+		// esc_url_raw(), not sanitize_text_field(): the path can carry a
+		// percent-encoded (non-ASCII) slug, and sanitize_text_field() strips %XX.
+		$req = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		// Strip query string for pattern matching.
 		$path = strtok( $req, '?' );
 		if ( ! is_string( $path ) || '' === $path ) {
@@ -91,7 +93,7 @@ if ( ! function_exists( 'lafka_block_category_to_attachment_redirect' ) ) {
 		if ( ! is_string( $location ) || '' === $location ) {
 			return $location;
 		}
-		$req = isset( $_SERVER['REQUEST_URI'] ) ? (string) $_SERVER['REQUEST_URI'] : '';
+		$req = isset( $_SERVER['REQUEST_URI'] ) ? esc_url_raw( wp_unslash( $_SERVER['REQUEST_URI'] ) ) : '';
 		if ( strpos( $req, '/product-category/' ) === false ) {
 			return $location;
 		}

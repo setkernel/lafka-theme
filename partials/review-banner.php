@@ -53,7 +53,7 @@ if ( ! $lafka_review_banner_enabled ) {
 
 // Cookie gates whether the banner actually renders — the plugin owns that
 // decision so this partial trusts it.
-if ( ! isset( $_COOKIE['lafka_review_prompt_show'] ) || '1' !== (string) $_COOKIE['lafka_review_prompt_show'] ) {
+if ( ! isset( $_COOKIE['lafka_review_prompt_show'] ) || '1' !== $_COOKIE['lafka_review_prompt_show'] ) {
 	return;
 }
 
