@@ -97,6 +97,10 @@ git tags + GitHub Releases.
   layout resolver, cache keys). The `versionSync` entry for the old file is gone.
 
 ### Removed
+- Magnific Popup (`js/magnific/`, `styles/magnific/`) and about 80 lines of its
+  `mfp` CSS: the plugin's location popup, its last user, is a native dialog; the
+  lightboxes moved to `lafkaDialog` earlier. Also the hidden-popup workaround on
+  block cart / checkout and a rule for the retired shipping method's notice.
 - **All tests and test tooling** (to be reintroduced later): `tests/` (PHPUnit unit suite,
   Playwright e2e and visual suites, fixtures, support), `phpunit.xml.dist`,
   `playwright.config.js`, `playwright.visual.config.js`, the `presets/__fixtures__` fixture
