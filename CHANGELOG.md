@@ -121,6 +121,12 @@ git tags + GitHub Releases.
   now `lafka-content-wide`, same 1440 px uncropped; until thumbnails are regenerated
   WordPress serves the closest existing size.
 
+- **Style rules for the retired shortcodes** (counter, typed text, banner, icon box / teaser,
+  pricing table, countdown, map, contact form, product slider, latest posts, food-menu grid,
+  content slider): the plugin's stub renders none of that markup any more.
+  `lafka_needs_legacy_shortcode_styles()` no longer sniffs page content for `[lafka_` and
+  loads `styles/legacy-shortcodes.css` on the blog surfaces only.
+
 ## [7.3.0] — 2026-09-25
 
 Live-site QA sharpening (2026-09-25); pairs with lafka-plugin 10.3.0.

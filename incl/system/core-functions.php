@@ -1016,30 +1016,16 @@ if ( ! function_exists( 'lafka_is_legacy_blog_surface' ) ) {
 
 if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 	/**
-	 * Whether the current request may render legacy lafka_* shortcode
-	 * / post-slider markup whose CSS was extracted into
-	 * styles/legacy-shortcodes.css (NX1-10a). Loaded on: the blog surfaces (post
-	 * galleries/sliders) and any singular content whose
-	 * post_content (as rendered by its template) embeds a lafka_* shortcode. The
-	 * handoff routes carry none of that markup, so they never download it.
+	 * Whether the current request may render the legacy post-slider markup whose
+	 * CSS was extracted into styles/legacy-shortcodes.css (NX1-10a): the blog
+	 * surfaces only. The retired lafka_* shortcodes render no markup of their
+	 * own any more (plugin shortcodes/shortcodes.php), so page content is not
+	 * sniffed.
 	 *
 	 * @return bool
 	 */
 	function lafka_needs_legacy_shortcode_styles() {
-		if ( lafka_is_legacy_blog_surface() ) {
-			return true;
-		}
-		// page-menu.php ignores the page's own content (often an old page-builder
-		// layout), so its shortcodes never render there (GX M-37).
-		if ( isset( $GLOBALS['template'] ) && 'page-menu.php' === basename( (string) $GLOBALS['template'] ) ) {
-			return false;
-		}
-		// GX T-25: only content the template renders, and only lafka_*
-		// shortcodes.
-		$content = function_exists( 'lafka_rendered_post_content' )
-			? lafka_rendered_post_content()
-			: ( ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) ? (string) $GLOBALS['post']->post_content : '' );
-		return false !== strpos( $content, '[lafka_' );
+		return lafka_is_legacy_blog_surface();
 	}
 }
 

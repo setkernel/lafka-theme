@@ -628,7 +628,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings_general',
 				__( 'Google Maps API key', 'lafka' ),
 				'',
-				__( 'Required for the [lafka_map] shortcode and Shipping Areas (if enabled). Generate at https://console.cloud.google.com/google/maps-apis/.', 'lafka' )
+				__( 'Required for Shipping Areas (if enabled). Generate at https://console.cloud.google.com/google/maps-apis/.', 'lafka' )
 			);
 
 			// NX1-02.layout-behaviour-toggles: these four general toggles migrated

@@ -165,7 +165,6 @@ body {
 
 /* .lafka_content_slider uses owl-carousel which sets its own height via JS.
    We reserve space via aspect-ratio to prevent layout jump on first paint. */
-.lafka_content_slider,
 [id^="lafka_content_slider"] {
     position: relative;
     overflow: hidden;
@@ -175,7 +174,6 @@ body {
 /* On desktop the slider fills full width at roughly 600px of a 1280px canvas */
 @media (min-width: 768px) {
 
-    .lafka_content_slider,
     [id^="lafka_content_slider"] {
         aspect-ratio: 1280 / 600;
         min-height: unset;

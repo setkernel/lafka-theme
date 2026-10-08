@@ -84,7 +84,7 @@ div.prod_hold .links {
 	margin-left: 30px;
 }
 
-.lafka_post_data_holder, .woocommerce-billing-fields, div.woocommerce-MyAccount-content, .woocommerce-shipping-fields, body.woocommerce-cart .cart-collaterals, form.checkout.woocommerce-checkout #order_review, .foodmenu-unit.list-unit .foodmenu-unit-info h4, .foodmenu-unit.list-unit .foodmenu-unit-info small, .breadcrumb, .lafka_title_holder .inner h1.heading-title, .lafka_title_holder .inner h6, .sidebar, .widget, .foodmenu-unit-info h6, .foodmenu-unit.list-unit .foodmenu-unit-info {
+.lafka_post_data_holder, .woocommerce-billing-fields, div.woocommerce-MyAccount-content, .woocommerce-shipping-fields, body.woocommerce-cart .cart-collaterals, form.checkout.woocommerce-checkout #order_review, .breadcrumb, .lafka_title_holder .inner h1.heading-title, .lafka_title_holder .inner h6, .sidebar, .widget, .foodmenu-unit-info h6 {
 	text-align: right;
 }
 
@@ -115,11 +115,6 @@ div.post .post-date, div.product.type-product .post-date, div.page.type-page .po
 
 ul.post-list li {
 	float: none;
-}
-
-.foodmenu-unit.list-unit .foodmenu-unit-info a.foodmenu-lightbox-link {
-	left: auto;
-	right: -150px;
 }
 
 .off-canvas-wrapper {
@@ -199,20 +194,6 @@ div.product input.qty, .star-rating span {
 
 .foodmenu-unit-info ul, #comments h3#reply-title, p.logged-in-as, .foodmenu-unit-info small, .foodmenu-unit-info h4 {
 	text-align: right;
-}
-
-.foodmenu-unit-info a.foodmenu-lightbox-link {
-	left: auto;
-	right: 40px;
-}
-
-.foodmenu-unit-info h4 > span.lafka-item-weight-list {
-	display: inline-block;
-	padding: 0 6px;
-}
-
-.lafka-foodmenu-image-link + .foodmenu-unit-info a.foodmenu-link, .foodmenu-unit-holder > img + .foodmenu-unit-info a.foodmenu-link {
-    padding: 0 20px 0 0;
 }
 
 .lafka-products-list-view div.prod_hold .name {

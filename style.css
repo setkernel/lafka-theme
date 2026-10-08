@@ -164,7 +164,6 @@ Tags: e-commerce, food-and-drink, full-width-template, custom-menu, custom-logo,
     font-display: fallback;
 }
 
-.lafka-special-pre-title,
 .lafka-has-fancy {
     font-family: tiza, sans-serif !important;
     font-weight: 400 !important;
@@ -1484,8 +1483,7 @@ a.close-off-canvas::after {
     -webkit-overflow-scrolling: touch;
 }
 
-.content_holder.lafka_double_timeline::before,
-.lafka_shortcode_blog.lafka_double_timeline::before {
+.content_holder.lafka_double_timeline::before {
     width: 1px;
     height: 100%;
     content: '';
@@ -3030,36 +3028,11 @@ div.product .images .image img {
     margin-bottom: 30px;
 }
 
-ul.additional-images {
-    padding: 0;
-    margin: 10px 0;
-    list-style: none;
-    text-align: center;
-}
-
 div.product div.images ol.flex-control-nav,
 #content div.product div.images ol.flex-control-nav {
     list-style: none;
     text-align: center;
     margin: 15px 0;
-}
-
-ul.additional-images li {
-    list-style: none;
-    padding: 1px;
-    margin: 0;
-    display: inline-block;
-    overflow: hidden;
-    position: relative;
-    width: 67px;
-    height: 67px;
-    text-align: center;
-    z-index: 10;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none
 }
 
 div.product div.images ol.flex-control-nav li,
@@ -3078,13 +3051,6 @@ div.product div.images ol.flex-control-nav li:hover,
     z-index: 10;
 }
 
-ul.additional-images li a {
-    background-color: #fff;
-    border: 1px solid #f8f8f8;
-    display: block;
-    padding: 5px;
-}
-
 div.product div.images ol.flex-control-nav li img {
     background-color: #fff;
     border-bottom: 3px solid transparent;
@@ -3093,7 +3059,6 @@ div.product div.images ol.flex-control-nav li img {
     transition: all 0.3s ease;
 }
 
-ul.additional-images li a img,
 div.product div.images ol.flex-control-nav li a img {
     width: 100%;
     height: auto;
@@ -4000,9 +3965,7 @@ div.product-category>a {
 .woocommerce.owl-carousel,
 .related.products,
 .similar_projects,
-.lafka_shortcode_latest_posts,
-.lafka-quickview-images,
-.lafka_content_slider {
+.lafka-quickview-images {
     overflow: hidden;
     width: 100%;
     height: auto;
@@ -4012,30 +3975,22 @@ div.product-category>a {
 .related.products .owl-controls,
 .similar_projects .owl-controls,
 .lafka-foodmenu-shortcode .owl-controls,
-.lafka_shortcode_latest_posts .owl-controls,
 .lafka-quickview-images .owl-controls {
     margin: 0;
 }
 
-.lafka-product-slider .owl-nav,
 .woocommerce-product-gallery__wrapper .owl-nav,
-.lafka_content_slider .owl-nav,
 .woocommerce.owl-carousel .owl-nav,
 .related.products .owl-nav,
 .similar_projects .owl-nav,
 .lafka-foodmenu-shortcode .owl-nav,
-.lafka_shortcode_latest_posts .owl-nav,
 .lafka-quickview-images .owl-nav {
     width: 100%;
     height: auto;
 }
 
-.lafka-product-slider .owl-nav .owl-next,
-.lafka-product-slider .owl-nav .owl-prev,
 .woocommerce-product-gallery__wrapper .owl-nav .owl-prev,
 .woocommerce-product-gallery__wrapper .owl-nav .owl-next,
-.lafka_content_slider .owl-nav .owl-next,
-.lafka_content_slider .owl-nav .owl-prev,
 .woocommerce.owl-carousel .owl-nav .owl-next,
 .woocommerce.owl-carousel .owl-nav .owl-prev,
 .related.products .owl-nav .owl-prev,
@@ -4044,8 +3999,6 @@ div.product-category>a {
 .similar_projects .owl-nav .owl-next,
 .lafka-foodmenu-shortcode .owl-nav .owl-prev,
 .lafka-foodmenu-shortcode .owl-nav .owl-next,
-.lafka_shortcode_latest_posts .owl-nav .owl-prev,
-.lafka_shortcode_latest_posts .owl-nav .owl-next,
 .lafka-quickview-images .owl-nav .owl-prev,
 .lafka-quickview-images .owl-nav .owl-next {
     width: 60px;
@@ -4064,8 +4017,6 @@ div.product-category>a {
     border-radius: 50%;
 }
 
-html.touch .lafka_shortcode_latest_posts .owl-nav .owl-prev,
-html.touch .lafka_shortcode_latest_posts .owl-nav .owl-next,
 html.touch .related.products .owl-nav .owl-prev,
 html.touch .related.products .owl-nav .owl-next,
 html.touch .similar_projects .owl-nav .owl-next,
@@ -4079,38 +4030,30 @@ html.touch .similar_projects .owl-nav .owl-prev {
     margin-top: -45px !important;
 }
 
-html.touch .lafka_shortcode_latest_posts .owl-nav .owl-prev,
 html.touch .related.products .owl-nav .owl-prev,
 html.touch .similar_projects .owl-nav .owl-prev {
     left: 0;
 }
 
-html.touch .lafka_shortcode_latest_posts .owl-nav .owl-next,
 html.touch .related.products .owl-nav .owl-next,
 html.touch .similar_projects .owl-nav .owl-next {
     right: 0;
 }
 
-.lafka-product-slider.owl-carousel .owl-nav .owl-prev,
 .woocommerce-product-gallery__wrapper .owl-nav .owl-prev,
-.lafka_content_slider .owl-nav .owl-prev,
 .woocommerce.owl-carousel .owl-nav .owl-prev,
 .related.products .owl-nav .owl-prev,
 .similar_projects .owl-nav .owl-prev,
 .lafka-foodmenu-shortcode .owl-nav .owl-prev,
-.lafka_shortcode_latest_posts .owl-nav .owl-prev,
 .lafka-quickview-images .owl-nav .owl-prev {
     left: 0;
 }
 
-.lafka_content_slider .owl-nav .owl-next,
-.lafka-product-slider.owl-carousel .owl-nav .owl-next,
 .woocommerce-product-gallery__wrapper .owl-nav .owl-next,
 .woocommerce.owl-carousel .owl-nav .owl-next,
 .related.products .owl-nav .owl-next,
 .similar_projects .owl-nav .owl-next,
 .lafka-foodmenu-shortcode .owl-nav .owl-next,
-.lafka_shortcode_latest_posts .owl-nav .owl-next,
 .lafka-quickview-images .owl-nav .owl-next {
     right: 0;
 }
@@ -4123,24 +4066,20 @@ html.touch .similar_projects .owl-nav .owl-next {
     left: 5px;
 }
 
-.lafka-product-slider:hover .owl-nav .owl-prev,
 .woocommerce-product-gallery__wrapper:hover .owl-nav .owl-prev,
 .woocommerce.owl-carousel:hover .owl-nav .owl-prev,
 .related.products .owl-carousel:hover .owl-nav .owl-prev,
 .similar_projects .owl-carousel:hover .owl-nav .owl-prev,
 .lafka-foodmenu-shortcode:hover .owl-nav .owl-prev,
-.lafka_shortcode_latest_posts:hover .owl-nav .owl-prev,
 .lafka-quickview-images:hover .owl-nav .owl-prev {
     left: 0;
 }
 
-.lafka-product-slider:hover .owl-nav .owl-next,
 .woocommerce-product-gallery__wrapper:hover .owl-nav .owl-next,
 .woocommerce.owl-carousel:hover .owl-nav .owl-next,
 .related.products .owl-carousel:hover .owl-nav .owl-next,
 .similar_projects .owl-carousel:hover .owl-nav .owl-next,
 .lafka-foodmenu-shortcode:hover .owl-nav .owl-next,
-.lafka_shortcode_latest_posts:hover .owl-nav .owl-next,
 .lafka-quickview-images:hover .owl-nav .owl-next {
     right: 0;
 }
@@ -4554,10 +4493,6 @@ div#lafka_pick_delivery_address_field h3 {
     display: block;
 }
 
-.lafka-product-slide-holder .count_holder .countdown_time_tiny {
-    font-size: 23px;
-}
-
 .count_holder {
     margin-bottom: 20px;
 }
@@ -4582,20 +4517,6 @@ div.product div.summary .offer_title {
 div.summary .is-countdown {
     display: inline-block;
     vertical-align: middle;
-}
-
-.lafka-product-slider .offer_title {
-    display: block;
-    width: auto;
-    padding: 0;
-}
-
-.lafka-product-slider .count_holder .is-countdown {
-    margin: 0;
-    display: inline-block;
-    width: auto;
-    font-size: 55px !important;
-    font-weight: 400;
 }
 
 .count_holder .count_info {
@@ -4638,11 +4559,6 @@ div.summary .is-countdown {
     margin-top: 12px;
 }
 
-.lafka_shortcode_count_holder {
-    width: 100%;
-    padding: 20px;
-}
-
 .prod_hold .count_holder_small .is-countdown {
     display: inline-block;
     min-width: 106px;
@@ -4653,47 +4569,6 @@ div.summary .is-countdown {
     padding: 2px 0;
     color: #222;
     text-decoration: underline;
-}
-
-.lafka_shortcode_count_holder .countdown-section {
-    display: block;
-    float: left;
-    font-size: 12px;
-    text-align: center;
-    margin: 12px 0;
-    text-transform: uppercase;
-}
-
-.lafka_shortcode_count_holder .countdown-amount {
-    font-size: 36px;
-    font-weight: 500;
-    margin-bottom: 12px;
-}
-
-@media only screen and (min-width: 1024px) {
-
-    .lafka_shortcode_count_holder.lafka-counter-big .countdown-amount {
-        font-size: 72px;
-        font-weight: 700;
-        margin-bottom: 10px;
-        line-height: normal;
-    }
-}
-
-.lafka_shortcode_count_holder.lafka-counter-big .countdown-section {
-    padding: 20px;
-    position: relative;
-}
-
-.lafka_shortcode_count_holder.lafka-counter-big .countdown-section::before {
-    border-radius: 6px;
-    content: "";
-    display: block;
-    position: absolute;
-    top: 3px;
-    bottom: 3px;
-    left: 3px;
-    right: 3px;
 }
 
 .woocommerce.columns-5 .prod_hold .count_holder_small,
@@ -5078,16 +4953,6 @@ table.woocommerce-checkout-review-order-table dl.variation dt {
     margin-right: auto;
 }
 
-div.lafka-contacts-holder {
-    position: relative;
-    margin-top: 80px;
-}
-
-div.lafka-contacts-holder.lafka-contacts-shortcode {
-    margin-top: 0;
-    opacity: 0.85;
-}
-
 form.contact-form {
     padding: 20px;
     display: block;
@@ -5185,7 +5050,6 @@ form.contact-form textarea {
     text-align: center;
 }
 
-.similar_projects .foodmenu-unit,
 .related.products .prod_hold {
     width: 16.3%;
     float: none;
@@ -5221,7 +5085,6 @@ form.contact-form textarea {
     display: none;
 }
 
-.has-sidebar .similar_projects .foodmenu-unit,
 .has-sidebar .related.products .prod_hold {
     width: 33.33%;
 }
@@ -5231,26 +5094,9 @@ form.contact-form textarea {
     display: none;
 }
 
-.foodmenu-unit-holder,
 .post-unit-holder {
     position: relative;
     overflow: hidden;
-}
-
-.lafka_shortcode_latest_posts.lafka_blog_masonry.lafka-no-post-image div.post .post-date {
-    top: 38px;
-    background: none;
-    padding: 0;
-}
-
-.lafka_shortcode_latest_posts.lafka_blog_masonry.lafka-no-post-image div.post .post-date * {
-    color: #5e5e5e; /* P6-A11Y-2: #999→#5e5e5e, 4.6:1 WCAG AA */
-    background: none;
-    border: none;
-    font-size: 13px;
-    font-weight: 700;
-    padding: 0;
-    margin-right: 5px;
 }
 
 .woocommerce-Price-currencySymbol {
@@ -5351,10 +5197,6 @@ div.attachment .lafka-no-avatar .post-date {
     left: 30px;
 }
 
-.lafka_shortcode_latest_posts div.post.lafka-post-no-image .post-date {
-    left: 65px;
-}
-
 div.post.lafka-post-no-image .lafka-no-avatar .post-date {
     left: 15px;
 }
@@ -5362,17 +5204,6 @@ div.post.lafka-post-no-image .lafka-no-avatar .post-date {
 .post-meta-bottom .lazy-hidden,
 .woocommerce-MyAccount-content .myaccount_user .lafka-account-avatar .lazy-hidden {
     display: none !important;
-}
-
-.lafka_shortcode_latest_posts {
-    clear: both;
-    padding: 2px;
-    display: -webkit-box;
-    display: -webkit-flex;
-    -webkit-flex-wrap: wrap;
-    -ms-flex-wrap: wrap;
-    flex-wrap: wrap;
-    box-sizing: border-box;
 }
 
 ul.commentlist {
@@ -5633,8 +5464,6 @@ div.added-product-text strong {
 #main .lafka-share-links::after,
 .woocommerce-mini-cart__empty-message::after,
 #lafka-filter-widgets::after,
-.lafka-foodmenu-categories::after,
-.lafka-foodmenu-categories ul::after,
 .woocommerce-message::after,
 ul.product_list_widget li::after,
 .lafka_post_data_holder::after,
@@ -5649,11 +5478,8 @@ div.woocommerce::after,
 ul.lafka_woo_categories_shop::after,
 div.lafka_woo_categories_shop::after,
 .upsells.products::after,
-.lafka_shortcode_latest_posts::after,
 .cross-sells::after,
-.lafka_shortcode_count_holder::after,
 .lafka_blog_small_image .blog-post::after,
-.lafka_shortcode_latest_posts.lafka_blog_masonry .blog-post::after,
 .prod_hold .links::after {
     content: " ";
     display: block;
@@ -6484,57 +6310,6 @@ html.touch .ajax_loading .ajax_loading_inner {
     font-weight: 700;
 }
 
-.lafka-banner-dark .lafka_banner_buton {
-    background-color: #333;
-    color: #fff;
-}
-
-.lafka_banner_image img {
-    width: 100%;
-    vertical-align: text-bottom;
-    display: block;
-    -webkit-transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
-    transition: all .5s cubic-bezier(0.77, 0, 0.175, 1);
-}
-
-div.lafka_whole_banner_wrapper:hover .lafka_banner_image img {
-    -webkit-transform: scale(1.12);
-    transform: scale(1.12);
-}
-
-.lafka_banner_image {
-    z-index: 1;
-}
-
-div.lafka_whole_banner_wrapper {
-    width: 100%;
-}
-
-.lafka_banner_text {
-    z-index: 20;
-    overflow: hidden;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    text-align: center;
-}
-
-.lafka_banner_text .lafka_banner_centering {
-    display: table;
-    width: 100%;
-    height: 100%;
-}
-
-.lafka_banner_text .lafka_banner_centering .lafka_banner_centered {
-    display: table-cell;
-    vertical-align: middle;
-    text-align: center;
-    padding: 30px 32px;
-    position: relative;
-}
-
 #infscr-loading {
     margin-top: 20px;
 }
@@ -6575,12 +6350,6 @@ div.lafka_whole_banner_wrapper {
     }
 }
 
-span.lafka-icon-title {
-    margin-right: 4px;
-    font-weight: 400 !important;
-    font-size: 14px !important;
-}
-
 .lafka-google-maps {
     width: 100%;
     position: relative;
@@ -6590,7 +6359,6 @@ span.lafka-icon-title {
 }
 
 .lafka-quick-view-lightbox .mfp-container,
-.lafka-icon-teaser-lightbox .mfp-container,
 .lafka-product-popup-content .mfp-container {
     padding: 0;
 }
@@ -6620,20 +6388,11 @@ span.lafka-icon-title {
     content: none !important;
 }
 
-.lafka-icon-teaser-lightbox .mfp-content {
-    background: #fff;
-    width: 100%;
-    max-width: 100%;
-    min-height: 100vh;
-}
-
-.lafka-quick-view-lightbox.mfp-close-btn-in .mfp-close,
-.lafka-icon-teaser-lightbox.mfp-close-btn-in .mfp-close {
+.lafka-quick-view-lightbox.mfp-close-btn-in .mfp-close {
     color: #fff;
 }
 
 .mfp-wrap.lafka-quick-view-lightbox,
-.mfp-wrap.lafka-icon-teaser-lightbox,
 .mfp-wrap.lafka-product-popup-content {
     z-index: 100001;
 }
@@ -6800,258 +6559,11 @@ div.product .summary.entry-summary p.price+p.stock {
     font-style: italic;
 }
 
-.lafka-icon-teaser-lightbox .mfp-content,
 .lafka-product-popup-content .mfp-content {
-    background: #fff;
-}
-
-.lafka-product-popup-content .mfp-content {
-    background: #fff;
     background: #fff;
     width: 100%;
     max-width: 100%;
     min-height: 100vh;
-}
-
-.lafka-iconbox {
-    position: relative;
-    -webkit-transition: all 0.4s ease 0s;
-    transition: all 0.4s ease 0s;
-    top: 0;
-    vertical-align: top;
-    padding: 120px 30px 35px 30px;
-    border-radius: 8px;
-    background-color: #fff;
-    border: 1px solid var(--lafka-border-light, #f1f1f1);
-}
-
-.lafka-iconbox.lafka-icon-box-left::before,
-.lafka-iconbox.lafka-icon-box-right::before {
-    display: none;
-}
-
-.lafka-iconbox.lafka-clean-icon {
-    padding: 90px 20px 30px 20px;
-}
-
-.lafka-iconbox.lafka-icon-box-right,
-.lafka-iconbox.lafka-clean-icon.lafka-icon-box-right {
-    padding: 0 70px 0 0;
-    border: none;
-    box-shadow: none !important;
-    background: none !important;
-}
-
-.lafka-iconbox.lafka-icon-box-left,
-.lafka-iconbox.lafka-clean-icon.lafka-icon-box-left {
-    padding: 0 0 0 70px;
-    border: none;
-    box-shadow: none !important;
-    background: none !important;
-}
-
-.lafka-iconbox.lafka-icon-box-right.lafka-image-icon,
-.lafka-iconbox.lafka-clean-icon.lafka-icon-box-right.lafka-image-icon {
-    padding: 0 80px 0 0;
-}
-
-.lafka-iconbox.lafka-icon-box-left.lafka-image-icon,
-.lafka-iconbox.lafka-clean-icon.lafka-icon-box-left.lafka-image-icon {
-    padding: 0 0 0 80px;
-}
-
-.lafka-iconbox .icon_wrapper {
-    position: absolute;
-    top: 35px;
-    left: 50%;
-    margin-left: -35px;
-    border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    background: inherit;
-}
-
-.lafka-iconbox.lafka-image-icon .icon_wrapper {
-    top: 35px;
-    width: 60px;
-    height: 60px;
-    margin-left: -30px;
-    border-radius: 50%;
-    overflow: hidden;
-}
-
-.lafka-iconbox.lafka-icon-box-square .icon_wrapper {
-    border-radius: 3px;
-}
-
-.lafka-iconbox.lafka-clean-icon .icon_wrapper {
-    border: none;
-    background: none;
-    top: 25px;
-}
-
-.lafka-iconbox.lafka-icon-box-right .icon_wrapper {
-    top: -5px;
-    right: 5px;
-    left: auto;
-    margin: 0;
-    width: 52px;
-    height: 52px;
-    line-height: 52px;
-}
-
-.lafka-iconbox.lafka-icon-box-left .icon_wrapper {
-    top: -5px;
-    right: auto;
-    left: 5px;
-    margin: 0;
-    width: 52px;
-    height: 52px;
-    line-height: 52px;
-}
-
-.lafka-iconbox.lafka-icon-box-left.lafka-clean-icon .icon_wrapper,
-.lafka-iconbox.lafka-icon-box-right.lafka-clean-icon .icon_wrapper {
-    top: 0;
-}
-
-.lafka-iconbox.lafka-icon-box-right h5,
-.lafka-iconbox.lafka-icon-box-right small,
-.lafka-iconbox.lafka-icon-box-right .iconbox_text_content {
-    text-align: right;
-}
-
-.lafka-iconbox.lafka-icon-box-left h5,
-.lafka-iconbox.lafka-icon-box-left small,
-.lafka-iconbox.lafka-icon-box-left .iconbox_text_content {
-    text-align: left;
-}
-
-.lafka-iconbox .icon_inner {
-    display: block;
-    border-radius: 50%;
-    width: 70px;
-    height: 70px;
-    line-height: 70px;
-    text-align: center;
-    background-color: #333;
-    color: #fff;
-    font-size: 36px;
-    -webkit-transition: all 0.3s ease 0s;
-    transition: all 0.3s ease 0s;
-    position: relative;
-}
-
-.lafka_icon_teaser .icon_holder [class^="flaticon-"]::before,
-.lafka-iconbox .icon_inner [class^="flaticon-"]::before,
-.lafka-iconbox .icon_inner [class*=" flaticon-"]::before,
-.lafka-iconbox .icon_inner [class^="flaticon-"]::after,
-.lafka-iconbox .icon_inner [class*=" flaticon-"]::after {
-    font-size: 36px;
-}
-
-.lafka-iconbox.lafka-icon-box-right .icon_inner [class^="flaticon-"]::before,
-.lafka-iconbox.lafka-icon-box-right .icon_inner [class*=" flaticon-"]::before,
-.lafka-iconbox.lafka-icon-box-right .icon_inner [class^="flaticon-"]::after,
-.lafka-iconbox.lafka-icon-box-right .icon_inner [class*=" flaticon-"]::after,
-.lafka-iconbox.lafka-icon-box-left .icon_inner [class^="flaticon-"]::before,
-.lafka-iconbox.lafka-icon-box-left .icon_inner [class*=" flaticon-"]::before,
-.lafka-iconbox.lafka-icon-box-left .icon_inner [class^="flaticon-"]::after,
-.lafka-iconbox.lafka-icon-box-left .icon_inner [class*=" flaticon-"]::after {
-    font-size: 30px;
-}
-
-.lafka-iconbox.lafka-image-icon .icon_inner {
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    background: none;
-}
-
-.lafka-iconbox.lafka-icon-box-left .icon_inner,
-.lafka-iconbox.lafka-icon-box-right .icon_inner {
-    width: 52px;
-    height: 52px;
-    line-height: 52px;
-    font-size: 23px;
-}
-
-.lafka-iconbox.lafka-icon-box-left.lafka-image-icon .icon_wrapper,
-.lafka-iconbox.lafka-icon-box-right.lafka-image-icon .icon_wrapper,
-.lafka-iconbox.lafka-icon-box-left.lafka-image-icon .icon_inner,
-.lafka-iconbox.lafka-icon-box-right.lafka-image-icon .icon_inner {
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-}
-
-.lafka-iconbox.lafka-clean-icon .icon_inner {
-    background: none;
-    font-size: 42px;
-    vertical-align: top;
-    height: 48px;
-    line-height: 48px;
-    border: none;
-}
-
-.lafka-iconbox.lafka-clean-icon.lafka-icon-box-left .icon_inner,
-.lafka-iconbox.lafka-clean-icon.lafka-icon-box-right .icon_inner {
-    background: none;
-    font-size: 42px;
-    vertical-align: top;
-    height: 52px;
-    line-height: 52px;
-    width: 52px;
-}
-
-.lafka-iconbox.lafka-icon-box-square .icon_inner {
-    border-radius: 3px;
-}
-
-.lafka-iconbox h5 {
-    text-align: center;
-    margin-bottom: 6px;
-    padding-bottom: 6px;
-    font-size: 18px;
-    font-weight: 500;
-    position: relative;
-    display: block;
-    line-height: normal;
-}
-
-.lafka-iconbox.lafka-icon-box-left h5,
-.lafka-iconbox.lafka-icon-box-right h5 {
-    margin-bottom: 2px;
-    padding-bottom: 0;
-}
-
-.lafka-iconbox small {
-    text-align: center;
-    font-style: italic;
-    width: 100%;
-    display: block;
-    font-size: 14px;
-    margin-bottom: 30px;
-}
-
-.lafka-iconbox h5+small {
-    margin-top: -6px;
-}
-
-.lafka-iconbox .iconbox_text_content {
-    text-align: center;
-    margin-top: 10px;
-    font-size: 14px;
-}
-
-.lafka-iconbox.lafka-icon-box-left .iconbox_text_content,
-.lafka-iconbox.lafka-icon-box-right .iconbox_text_content {
-    margin-top: 10px;
-}
-
-.lafka-iconbox:hover {
-    box-shadow: 0 0 40px 0 rgba(0, 0, 0, 0.15);
-    background-color: #fff;
 }
 
 .lafka-social ul li {
@@ -7193,149 +6705,8 @@ a.lafka-post-nav img {
 
 /*PRICING TABLES*/
 
-.lafka-pricing-table-shortcode {
-    position: relative;
-    vertical-align: middle;
-    -webkit-transition: all 0.5s ease 0s;
-    transition: all 0.5s ease 0s;
-    top: 0;
-    overflow: hidden;
-    opacity: 0.95;
-    border-radius: 3px;
-    text-align: left;
-}
-
-.lafka-pricing-table-shortcode.lafka-pricing-is-featured,
-.lafka-pricing-table-shortcode:hover {
-    top: -15px;
-    background-color: #292929;
-}
-
-.lafka-pricing-table-shortcode:hover {
-    z-index: 500;
-}
-
-.lafka-pricing-table-shortcode.lafka-pricing-is-featured .lafka-pricing-table-price,
-.lafka-pricing-table-shortcode:hover .lafka-pricing-table-price,
-.lafka-pricing-table-shortcode.lafka-pricing-is-featured .lafka-pricing-heading h5,
-.lafka-pricing-table-shortcode:hover .lafka-pricing-heading h5,
-.lafka-pricing-table-shortcode.lafka-pricing-is-featured .lafka-pricing-table-content *,
-.lafka-pricing-table-shortcode:hover .lafka-pricing-table-content * {
-    color: #fff;
-}
-
-.lafka-pricing-heading {
-    position: relative;
-    padding: 0 40px;
-    -webkit-transition: all 0.5s ease 0s;
-    transition: all 0.5s ease 0s;
-    background: none !important;
-}
-
-.lafka-pricing-table-shortcode.lafka-pricing-is-featured .title-icon-holder,
-.lafka-pricing-table-shortcode:hover .title-icon-holder {
-    margin-bottom: 30px;
-}
-
-.lafka-pricing-table-shortcode.lafka-pricing-is-featured .lafka-pricing-table-button,
-.lafka-pricing-table-shortcode:hover .lafka-pricing-table-button {
-    opacity: 1;
-}
-
-.lafka-pricing-heading h5 {
-    font-size: 18px;
-    font-weight: 500;
-    padding-bottom: 2px;
-    position: relative;
-    margin-bottom: 5px;
-}
-
-.lafka-pricing-heading h5::after {
-    content: "";
-    display: block;
-    width: 28px;
-    height: 2px;
-    position: absolute;
-    bottom: 1px;
-    left: 0;
-}
-
 .lafka-spec-dot {
     font-size: 190%;
-}
-
-.lafka-pricing-heading small {
-    font-size: 13px;
-    font-style: italic;
-}
-
-.lafka-pricing-table-shortcode .title-icon-holder {
-    width: 60px;
-    height: 60px;
-    line-height: 60px;
-    vertical-align: middle;
-    font-size: 36px;
-    overflow: hidden;
-    text-align: center !Important;
-    color: #333;
-    margin-bottom: 0;
-    margin-top: 20px;
-    display: inline-block;
-    -webkit-transition: all 0.5s ease 0s;
-    transition: all 0.5s ease 0s;
-}
-
-.lafka-pricing-table-shortcode.lafka-pricing-is-featured .title-icon-holder .title-icon-wrapper,
-.lafka-pricing-table-shortcode:hover .title-icon-holder .title-icon-wrapper {
-    -webkit-animation: toggler 1s linear infinite;
-    -moz-animation: toggler 1s linear infinite;
-    -ms-animation: toggler 1s linear infinite;
-    animation: toggler 1s linear infinite;
-}
-
-.lafka-pricing-table-price {
-    padding: 30px 40px 0 40px;
-    color: #333;
-    font-size: 40px;
-}
-
-.lafka-pricing-table-price sub {
-    font-size: 50%;
-    font-weight: inherit;
-    top: 0;
-}
-
-.lafka-pricing-table-price sup {
-    font-size: 50%;
-    font-weight: inherit;
-    bottom: 1.4ex;
-}
-
-.lafka-pricing-table-price span {
-    color: #5e5e5e; /* P6-A11Y-2: #999→#5e5e5e, 4.6:1 WCAG AA */
-    display: inline-block;
-    font-size: 12.5px;
-    font-style: italic;
-    font-weight: 400;
-    line-height: 32px;
-    vertical-align: text-bottom;
-}
-
-.lafka-pricing-table-content {
-    padding: 25px 40px;
-    font-size: 14px;
-}
-
-.lafka-pricing-table-content ul {
-    margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.lafka-pricing-table-content ul li {
-    padding: 7px 0;
-    margin: 0;
-    list-style: none;
 }
 
 .lafka-pricing-table-button {
@@ -7361,171 +6732,17 @@ a.lafka-post-nav img {
 
 /*CLOUDZOOM GALLERY*/
 
-.lafka-cloudzoom-gallery ul.additional-images {
-    text-align: center;
-}
-
-.lafka-cloudzoom-gallery ul.additional-images li {
-    float: none;
-}
-
-.lafka-cloudzoom-gallery a img {
-    width: 100%;
-    max-width: 100%;
-    height: auto;
-}
-
-.lafka-cloudzoom-gallery #wrap a.cloud-zoom img {
-    padding: 8px;
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid var(--lafka-border-light, #f1f1f1);
-    width: 100%;
-}
-
 /*END OF CLOUDZOOM GALLERY*/
 
 /*PRODUCT SLIDER*/
-
-.lafka-product-slider {
-    margin-bottom: 35px;
-    overflow: hidden;
-    -webkit-transition: all 0.5s ease 0s;
-    transition: all 0.5s ease 0s;
-}
-
-.lafka-product-slide-holder {
-    padding: 50px;
-    display: table;
-    background: #fff;
-    overflow: hidden;
-    position: relative;
-}
-
-.lafka-product-slide-holder .lafka-product-slide-image,
-.lafka-product-slide-details {
-    width: 100%;
-    display: inline-block;
-    vertical-align: top;
-    position: relative;
-    z-index: 10;
-}
-
-.lafka-product-slide-details {
-    width: 60%;
-    display: table-cell;
-    vertical-align: middle;
-    padding-left: 50px;
-}
-
-.lafka-product-slide-details a {
-    text-decoration: none !important;
-}
-
-.lafka-product-slide-details a h4 {
-    font-size: 30px;
-    font-weight: 700;
-    text-decoration: none;
-    margin-bottom: 15px;
-    text-align: center;
-    text-transform: uppercase;
-}
-
-.lafka-product-slide-description {
-    display: block;
-    line-height: normal !important;
-    margin-bottom: 20px;
-    text-align: center;
-    font-size: 15px;
-}
-
-.lafka-product-slide-price {
-    display: block;
-    margin-bottom: 25px;
-    font-size: 30px;
-    font-weight: 600;
-    text-align: center;
-}
-
-.lafka-product-slider .count_holder {
-    padding: 10px 20px;
-    margin: 20px auto;
-    text-align: center;
-}
-
-.lafka-product-slide-price ins span.amount,
-.lafka-product-slide-price>span.amount {
-    color: #333;
-    vertical-align: bottom;
-}
-
-.lafka-product-slide-price del {
-    text-decoration: none;
-}
-
-.lafka-product-slide-price del span.amount {
-    font-size: 18px;
-    color: #cecece;
-    text-decoration: line-through;
-}
-
-.lafka-product-slide-cart {
-    display: block;
-    text-align: center;
-}
-
-.lafka-product-slide-cart a.added_to_cart {
-    clear: both;
-    text-align: center;
-    display: block;
-}
-
-.lafka-product-slide-countdown {
-    display: block;
-    margin-bottom: 20px;
-    position: relative;
-    text-align: center;
-}
-
-.lafka-product-slider.owl-carousel {
-    position: relative;
-}
 
 /*END OF PRODUCT SLIDER*/
 
 /*COUNTER SHORTCODE*/
 
-.lafka-counter-shortcode {
-    text-align: center;
-    margin-bottom: 10px;
-    display: inline-block;
-    width: 100%;
-}
-
-.lafka-counter-shortcode i {
-    color: #dadada;
-    font-size: 75%;
-}
-
-.lafka-counter-shortcode .lafka-counter {
-    display: inline-block;
-}
-
-.lafka-counter-shortcode .lafka-counter-left {
-    text-align: left;
-}
-
-.lafka-counter-shortcode .lafka-counter-right {
-    text-align: right;
-}
-
 /*END OF COUNTER SHORTCODE*/
 
 /* lafka CONTENT SLIDER */
-
-.lafka-fullheight-content-slider .owl-nav .owl-next,
-.lafka-fullheight-content-slider .owl-nav .owl-prev {
-    font-size: 30px;
-}
 
 .owl-nav .owl-next i::before,
 .owl-nav .owl-prev i::before {
@@ -7538,12 +6755,6 @@ a.lafka-post-nav img {
 
 .owl-nav .owl-prev i::before {
     content: "\e843" !important;
-}
-
-.lafka-fullheight-content-slider .owl-dots {
-    position: absolute;
-    bottom: 90px;
-    z-index: 999;
 }
 
 /* END OF lafka CONTENT SLIDER */
@@ -7583,25 +6794,6 @@ html.no-touch .lafka-fade {
 }
 
 /*TYPED SHORTCODE*/
-
-.lafka-typed-content {
-    text-align: center;
-    margin-bottom: 10px;
-    display: inline-block;
-    width: 100%;
-}
-
-.lafka-typed-content.lafka-typed {
-    display: inline-block;
-}
-
-.lafka-typed-content.lafka-typed-left {
-    text-align: left;
-}
-
-.lafka-typed-content.lafka-typed-right {
-    text-align: right;
-}
 
 .typed-cursor {
     opacity: 1;
@@ -7657,37 +6849,6 @@ html.no-touch .lafka-fade {
     }
 }
 
-.lafka_woo_recent_viewed {
-    margin: 55px 0 0 0;
-}
-
-.lafka_woo_recent_viewed>.woocommerce {
-    margin-bottom: 0 !important;
-}
-
-.lafka_woo_recent_viewed .prod_hold .new_prod {
-    display: none;
-}
-
-.lafka_woo_recent_viewed .prod_hold .name {
-    font-size: 13px;
-    text-transform: none;
-    font-weight: 500;
-    color: #333;
-}
-
-.lafka_woo_recent_viewed .prod_hold .links a.lafka-quick-view-link,
-.lafka_woo_recent_viewed .prod_hold .lafka-variations-in-catalog.cart,
-.lafka_woo_recent_viewed .prod_hold .lafka-product-list-description {
-    display: none !important;
-}
-
-.lafka_woo_recent_viewed>h4 {
-    font-size: 18px;
-    font-weight: 400;
-    margin-bottom: 30px;
-}
-
 .lafka-vertical-section-title {
     position: absolute !important;
     width: auto !important;
@@ -7732,7 +6893,6 @@ html.no-touch .lafka-fade {
 
 .mfp-iframe-holder .mfp-close,
 .lafka-quick-view-lightbox.mfp-close-btn-in .mfp-close,
-.lafka-icon-teaser-lightbox.mfp-close-btn-in .mfp-close,
 .lafka-product-popup-content.mfp-close-btn-in .mfp-close {
     width: 60px;
     height: 60px;
@@ -7745,8 +6905,6 @@ html.no-touch .lafka-fade {
 .mfp-iframe-holder .mfp-close::after,
 .lafka-quick-view-lightbox.mfp-close-btn-in .mfp-close::before,
 .lafka-quick-view-lightbox.mfp-close-btn-in .mfp-close::after,
-.lafka-icon-teaser-lightbox.mfp-close-btn-in .mfp-close::before,
-.lafka-icon-teaser-lightbox.mfp-close-btn-in .mfp-close::after,
 .lafka-product-popup-content.mfp-close-btn-in .mfp-close::before,
 .lafka-product-popup-content.mfp-close-btn-in .mfp-close::after {
     display: block;
@@ -7763,7 +6921,6 @@ html.no-touch .lafka-fade {
 }
 
 .mfp-iframe-holder .mfp-close::after,
-.lafka-icon-teaser-lightbox.mfp-close-btn-in .mfp-close::after,
 .lafka-quick-view-lightbox.mfp-close-btn-in .mfp-close::after,
 .lafka-product-popup-content.mfp-close-btn-in .mfp-close::after {
     -webkit-transform: rotate(-45deg);
@@ -8657,7 +7814,7 @@ body.lafka-store-closed>div.widget.woocommerce.widget_shopping_cart .widget_shop
 /* All selectors below use CSS custom properties set via :root{} in dynamic-css.php */
 
 /* Site main accent color */
-.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate i, .lafka-delivery-time-toggle::before, a.lafka-branch-delivery::before, a.lafka-branch-pickup::before, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-next, .lafka_content_slider.lafka_content_slider_light_nav .owl-nav .owl-prev, div.widget_categories ul li.current-cat > a::before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li::before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title::before, button.single_add_to_cart_button::before, .links a.button.add_to_cart_button::after, .commentlist ul.children::before, .infinite-scroll-request::before, .prod_hold .name sup, .prod_hold .name sub, #content div.product div.summary h1.product_title sup, #content div.product div.summary h1.product_title sub, .lafka-spec-dot, .count_holder .count_info::before, .lafka-pricing-table-shortcode .title-icon-holder, .widget_product_categories ul li.current-cat > a, div.widget_categories ul li > a:hover::before {
+.lafka-all-stores-closed-countdown .count_holder_small, .lafka-branch-auto-locate i, .lafka-delivery-time-toggle::before, a.lafka-branch-delivery::before, a.lafka-branch-pickup::before, ul.product_list_widget li span.quantity, .count_holder .countdown_time_tiny, div.widget_categories ul li.current-cat > a::before, #lafka_price_range, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li::before, p.product.woocommerce.add_to_cart_inline, .lafka-promo-wrapper .lafka-promo-text, .lafka-related-blog-posts div.post.blog-post.lafka-post-no-image .lafka_post_data_holder h2.heading-title::before, button.single_add_to_cart_button::before, .links a.button.add_to_cart_button::after, .commentlist ul.children::before, .infinite-scroll-request::before, .prod_hold .name sup, .prod_hold .name sub, #content div.product div.summary h1.product_title sup, #content div.product div.summary h1.product_title sub, .lafka-spec-dot, .count_holder .count_info::before, .widget_product_categories ul li.current-cat > a, div.widget_categories ul li > a:hover::before {
     color: var(--lafka-accent-color);
 }
 
@@ -8673,11 +7830,11 @@ body.lafka-store-closed>div.widget.woocommerce.widget_shopping_cart .widget_shop
     border-color: transparent transparent var(--lafka-logo-bg-color) var(--lafka-logo-bg-color);
 }
 
-a.lafka-change-branch-button::before, .lafka-change-branch-button-select::before, .woocommerce form.checkout h3.lafka-address-not-found, .woocommerce form.checkout h3.lafka-address-not-found::after, .lafka-author-info .title h2::after, .widget > h3:first-child::before, .double-bounce2, .foodmenu-unit-info a.foodmenu-lightbox-link, blockquote, q, .wp-block-pullquote:not(.is-style-solid-color), .lafka-product-slider .owl-nav .owl-next, .lafka-product-slider .owl-nav .owl-prev, .woocommerce-product-gallery__wrapper .owl-nav .owl-prev, .woocommerce-product-gallery__wrapper .owl-nav .owl-next, .lafka_content_slider .owl-nav .owl-next, .lafka_content_slider .owl-nav .owl-prev, .woocommerce.owl-carousel .owl-nav .owl-next, .woocommerce.owl-carousel .owl-nav .owl-prev, .related.products .owl-nav .owl-prev, .related.products .owl-nav .owl-next, .similar_projects .owl-nav .owl-prev, .similar_projects .owl-nav .owl-next, .lafka-foodmenu-shortcode .owl-nav .owl-prev, .lafka-foodmenu-shortcode .owl-nav .owl-next, .lafka_shortcode_latest_posts .owl-nav .owl-prev, .lafka_shortcode_latest_posts .owl-nav .owl-next, .lafka-quickview-images .owl-nav .owl-prev, .lafka-quickview-images .owl-nav .owl-next, .widget_shopping_cart_content p.buttons .button.checkout, .lafka-wcs-swatches .swatch.swatch-label.selected, .lafka-wcs-swatches .swatch.swatch-label:hover, .is-lafka-video .mfp-iframe-holder .mfp-content .mfp-close, blockquote::before, q::before, a.lafka-post-nav .entry-info-wrap::after, .lafka-author-info .title a::after, #comments h3.heading-title span.lafka_comments_count, div.lafka_whole_banner_wrapper::after, .blog-post:hover > .lafka_post_data_holder h2.heading-title a::after, .blog-post-meta.post-meta-top .count_comments a, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder::before, .woocommerce form.track_order input.button, .woocommerce-shipping-fields input[type="checkbox"]:checked + span::before, .widget_product_categories ul li.current-cat > .count, .lafka-iconbox h5::after, .lafka-pricing-heading h5::after, .lafka_title_holder.centered_title .inner h1.heading-title::before, a.sidebar-trigger, .pagination .links a:hover, .lafka_content_slider .owl-dot.active span, .product-category.product h2 mark::after, .blog-post-meta span.sticky_post, .widget > h3:first-child::after, .lafka-foodmenu-categories ul li a:hover::before, .lafka-foodmenu-categories ul li a.is-checked::before, .lafka-foodmenu-categories ul li a:hover::after, .lafka-foodmenu-categories ul li a.is-checked::after, div.woocommerce-product-gallery__image a::before {
+a.lafka-change-branch-button::before, .lafka-change-branch-button-select::before, .woocommerce form.checkout h3.lafka-address-not-found, .woocommerce form.checkout h3.lafka-address-not-found::after, .lafka-author-info .title h2::after, .widget > h3:first-child::before, .double-bounce2, blockquote, q, .wp-block-pullquote:not(.is-style-solid-color), .woocommerce-product-gallery__wrapper .owl-nav .owl-prev, .woocommerce-product-gallery__wrapper .owl-nav .owl-next, .woocommerce.owl-carousel .owl-nav .owl-next, .woocommerce.owl-carousel .owl-nav .owl-prev, .related.products .owl-nav .owl-prev, .related.products .owl-nav .owl-next, .similar_projects .owl-nav .owl-prev, .similar_projects .owl-nav .owl-next, .lafka-foodmenu-shortcode .owl-nav .owl-prev, .lafka-foodmenu-shortcode .owl-nav .owl-next, .lafka-quickview-images .owl-nav .owl-prev, .lafka-quickview-images .owl-nav .owl-next, .widget_shopping_cart_content p.buttons .button.checkout, .lafka-wcs-swatches .swatch.swatch-label.selected, .lafka-wcs-swatches .swatch.swatch-label:hover, .is-lafka-video .mfp-iframe-holder .mfp-content .mfp-close, blockquote::before, q::before, a.lafka-post-nav .entry-info-wrap::after, .lafka-author-info .title a::after, #comments h3.heading-title span.lafka_comments_count, .blog-post:hover > .lafka_post_data_holder h2.heading-title a::after, .blog-post-meta.post-meta-top .count_comments a, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder::before, .woocommerce form.track_order input.button, .woocommerce-shipping-fields input[type="checkbox"]:checked + span::before, .widget_product_categories ul li.current-cat > .count, .lafka_title_holder.centered_title .inner h1.heading-title::before, a.sidebar-trigger, .pagination .links a:hover, .product-category.product h2 mark::after, .blog-post-meta span.sticky_post, .widget > h3:first-child::after, div.woocommerce-product-gallery__image a::before {
     background-color: var(--lafka-accent-color);
 }
 
-span.lafka-branch-select-image.lafka-branch-selected-image, .similar_projects > h4 a::after, .related.products h2 a::after, .lafka-foodmenu-shortcode, .lafka_content_slider .owl-dot.active span::after, .lafka-product-slider .count_holder, .owl-next::before, .owl-prev::before, .lafka_title_holder .inner .lafka-title-text-container::before, #spinner::before, blockquote, q, .sidebar.off-canvas-sidebar, body > div.widget.woocommerce.widget_shopping_cart, .commentlist li .comment-body:hover::before, .commentlist li .comment-body:hover::after, .is-lafka-video .mfp-iframe-holder .mfp-content, .lafka-quick-view-lightbox .mfp-content, .lafka-icon-teaser-lightbox .mfp-content, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder, div.product div.images ol.flex-control-nav li img.flex-active, div.product div.images ol.flex-control-nav li:hover img, .widget_product_categories ul li.current-cat > .count, .error404 div.blog-post-excerpt, .lafka-none-overlay.lafka-10px-gap .foodmenu-unit-holder:hover, .foodmenu-unit-info a.foodmenu-lightbox-link:hover {
+span.lafka-branch-select-image.lafka-branch-selected-image, .similar_projects > h4 a::after, .related.products h2 a::after, .lafka-foodmenu-shortcode, .owl-next::before, .owl-prev::before, .lafka_title_holder .inner .lafka-title-text-container::before, #spinner::before, blockquote, q, .sidebar.off-canvas-sidebar, body > div.widget.woocommerce.widget_shopping_cart, .commentlist li .comment-body:hover::before, .commentlist li .comment-body:hover::after, .is-lafka-video .mfp-iframe-holder .mfp-content, .lafka-quick-view-lightbox .mfp-content, div:not(.lafka_blog_masonry) > .blog-post.sticky .lafka_post_data_holder, div.product div.images ol.flex-control-nav li img.flex-active, div.product div.images ol.flex-control-nav li:hover img, .widget_product_categories ul li.current-cat > .count, .error404 div.blog-post-excerpt {
     border-color: var(--lafka-accent-color) !Important;
 }
 
@@ -8696,12 +7853,12 @@ a:is(:hover) {
 /* Widgets Title Color */
 
 /* Buttons Default style */
-.lafka-banner-dark .lafka_banner_buton, a.button, .r_more_blog, input.button, button.button, a.button-inline, #submit_btn, #submit, .wpcf7-submit, form.mc4wp-form input[type="submit"], input[type="submit"] {
+a.button, .r_more_blog, input.button, button.button, a.button-inline, #submit_btn, #submit, .wpcf7-submit, form.mc4wp-form input[type="submit"], input[type="submit"] {
     background-color: var(--lafka-button-color);
 }
 
 /* Buttons Hover Color */
-a.button:hover, .r_more_blog:hover, .widget_shopping_cart_content p.buttons .button:hover, input.button:hover, button.button:hover, a.button-inline:hover, #submit_btn:hover, #submit:hover, .wpcf7-submit:hover, button.single_add_to_cart_button:hover, .lafka-product-slide-cart .button.add_to_cart_button:hover, form.mc4wp-form input[type="submit"]:hover {
+a.button:hover, .r_more_blog:hover, .widget_shopping_cart_content p.buttons .button:hover, input.button:hover, button.button:hover, a.button-inline:hover, #submit_btn:hover, #submit:hover, .wpcf7-submit:hover, button.single_add_to_cart_button:hover, form.mc4wp-form input[type="submit"]:hover {
     background-color: var(--lafka-button-hover-color) !important;
 }
 
@@ -8749,7 +7906,7 @@ a.button:hover, .r_more_blog:hover, .widget_shopping_cart_content p.buttons .but
 }
 
 /* Headings font */
-h1, h2, h3, h4, h5, h6, p.wp-block-cover-text, .lafka-product-summary-wrapper div.lafka-share-links span, #comments .nav-next a, #comments .nav-previous a, .woocommerce-form-coupon-toggle .woocommerce-info, .woocommerce-form-login-toggle .woocommerce-info, .r_more_blog, p.woocommerce-thankyou-order-received, nav.woocommerce-MyAccount-navigation ul li a, .lafka-header-user-data small, a.lafka-post-nav .entry-info span.entry-title, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .lafka-product-popup-link > a, .lafka-page-load-status, section.woocommerce-order-details, ul.woocommerce-error, table.woocommerce-checkout-review-order-table, body.woocommerce-cart .cart-collaterals, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li, .countdown_time_tiny, blockquote, q, .lafka-pagination-numbers .owl-dot::before, .lafka-wcs-swatches .swatch.swatch-label, .foodmenu-unit-info small, div.widget_nav_menu ul li a, .comment-body span, span.edit-link a, #reviews .commentlist li .meta, div.widget_categories ul li a, div.widget_archive ul li a, .woocommerce p.cart-empty, div.woocommerce-MyAccount-content .myaccount_user, label, .lafka-pricing-table-content, p.product.woocommerce.add_to_cart_inline, .product-filter .limit b, .product-filter .sort b, .product-filter .price_label, .contact-form .content span, .lafka-foodmenu-categories ul li a, .prod_hold .name, .lafka-counter-h1, .lafka-typed-h1, .lafka-typed-h2, .lafka-typed-h3, .lafka-typed-h4, .lafka-typed-h5, .lafka-typed-h6, .lafka-counter-h2, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .lafka-counter-h3, .error404 div.blog-post-excerpt::before, div.added-product-text strong, .lafka-product-slide-price, .lafka-counter-h4, .lafka-counter-h5, .lafka-counter-h6, div.product .price span, p.logged-in-as, .lafka-pricing-table-price, .breadcrumb, .offer_title, ul.tabs a, .lafka-products-list-view .prod_hold .name, .lafka_shortcode_count_holder .countdown-amount, .blog-post-meta a, .widget_shopping_cart_content p.total {
+h1, h2, h3, h4, h5, h6, p.wp-block-cover-text, .lafka-product-summary-wrapper div.lafka-share-links span, #comments .nav-next a, #comments .nav-previous a, .woocommerce-form-coupon-toggle .woocommerce-info, .woocommerce-form-login-toggle .woocommerce-info, .r_more_blog, p.woocommerce-thankyou-order-received, nav.woocommerce-MyAccount-navigation ul li a, .lafka-header-user-data small, a.lafka-post-nav .entry-info span.entry-title, .wp-block-cover-image .wp-block-cover-image-text, .wp-block-cover-image h2, .lafka-product-popup-link > a, .lafka-page-load-status, section.woocommerce-order-details, ul.woocommerce-error, table.woocommerce-checkout-review-order-table, body.woocommerce-cart .cart-collaterals, ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details li, .countdown_time_tiny, blockquote, q, .lafka-pagination-numbers .owl-dot::before, .lafka-wcs-swatches .swatch.swatch-label, .foodmenu-unit-info small, div.widget_nav_menu ul li a, .comment-body span, span.edit-link a, #reviews .commentlist li .meta, div.widget_categories ul li a, div.widget_archive ul li a, .woocommerce p.cart-empty, div.woocommerce-MyAccount-content .myaccount_user, label, p.product.woocommerce.add_to_cart_inline, .product-filter .limit b, .product-filter .sort b, .product-filter .price_label, .contact-form .content span, .prod_hold .name, .lafka-counter-h1, .lafka-typed-h1, .lafka-typed-h2, .lafka-typed-h3, .lafka-typed-h4, .lafka-typed-h5, .lafka-typed-h6, .lafka-counter-h2, body.woocommerce-account #customer_login.col2-set .owl-nav button, .woocommerce #customer_login.u-columns.col2-set .owl-nav button, .lafka-counter-h3, .error404 div.blog-post-excerpt::before, div.added-product-text strong, .lafka-counter-h4, .lafka-counter-h5, .lafka-counter-h6, div.product .price span, p.logged-in-as, .breadcrumb, .offer_title, ul.tabs a, .lafka-products-list-view .prod_hold .name, .blog-post-meta a, .widget_shopping_cart_content p.total {
     font-family: var(--lafka-headings-font-family);
 }
 
@@ -8811,7 +7968,7 @@ button.single_add_to_cart_button {
     background-color: var(--lafka-add-to-cart-color) !important;
 }
 
-.prod_hold .links a.lafka-quick-view-link:hover, .lafka-product-slide-cart .button.add_to_cart_button:hover {
+.prod_hold .links a.lafka-quick-view-link:hover {
     color: var(--lafka-add-to-cart-color);
 }
 

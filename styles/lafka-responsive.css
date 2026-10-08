@@ -68,13 +68,6 @@
         width: 100%;
     }
 
-    .lafka_masonry_fullwidth .foodmenu-unit.masonry-unit {
-        width: 25%;
-    }
-
-    .foodmenu-unit a.foodmenu-link {
-        padding: 20px;
-    }
 }
 
 @media only screen and (max-width: 782px) {
@@ -142,43 +135,13 @@
         width: 100%;
     }
 
-    .wpb_lafka_banner a span.lafka_banner-icon, .lafka-none-overlay .foodmenu-unit-info a.foodmenu-link::before {
-        display: none;
-    }
-
-    .wpb_lafka_banner.lafka_banner_big a h4 {
-        font-size: 21px;
-        font-weight: 600;
-        letter-spacing: 1px;
-    }
-
-    .wpb_lafka_banner a h4 {
-        font-size: 18px;
-    }
-
-    .lafka-none-overlay .foodmenu-unit-info a.foodmenu-link h4, .lafka-none-overlay .foodmenu-unit-info a.foodmenu-link small, .foodmenu-unit-info h6 {
+    .foodmenu-unit-info h6 {
         padding-left: 0;
     }
 
     .foodmenu-unit-info h4 {
         font-size: 15px;
         width: 100%;
-    }
-
-    .lafka_masonry_fullwidth .foodmenu-unit.masonry-unit, .lafka_shortcode_latest_posts.lafka_blog_masonry.lafka-latest-blog-col-4 .blog-post {
-        width: 33.33%;
-    }
-
-    .lafka_shortcode_latest_posts .blog-post {
-        width: 100% !important;
-    }
-
-    .lafka_shortcode_latest_posts > div.clear {
-        display: none;
-    }
-
-    .foodmenu-unit a.foodmenu-link {
-        padding: 20px;
     }
 
     #content div.product .lafka-product-summary-wrapper div.images {
@@ -352,18 +315,6 @@ and (orientation: landscape) {
 
     ul.tabs li {
         border: none !important;
-    }
-
-    .foodmenu-unit.masonry-unit {
-        width: 50%;
-    }
-
-    .lafka_masonry_fullwidth .foodmenu-unit.masonry-unit {
-        width: 33.33%;
-    }
-
-    .foodmenu-unit a.foodmenu-link {
-        padding: 20px;
     }
 
     .blog-post, .lafka_blog_masonry.lafka-mozaic .blog-post {
@@ -581,23 +532,8 @@ and (orientation: landscape) {
         margin-right: 4px;
     }
 
-    .foodmenu-unit.list-unit .foodmenu-unit-info, .foodmenu-unit.list-unit .port-unit-image-holder {
-        width: 100%;
-        float: left;
-        clear: both;
-    }
-
     .foodmenu-unit-info h6 {
         right: 15px;
-    }
-
-    div.product div.images ul.additional-images, #content div.product div.images ul.additional-images {
-        position: relative;
-        top: auto;
-        left: auto;
-        width: 100%;
-        float: left;
-        padding-top: 30px !important;
     }
 
     #footer .widget {
@@ -833,10 +769,6 @@ and (orientation: landscape) {
         top: 0;
     }
 
-    .foodmenu-unit {
-        width: 100% !important;
-    }
-
     #price-filter {
         width: 30%;
     }
@@ -894,11 +826,7 @@ and (orientation: landscape) {
         display: none;
     }
 
-    .foodmenu-unit.list-unit .foodmenu-unit-info {
-        padding: 20px;
-    }
-
-    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info::before {
+    div.prod_hold a.button.add_to_cart_button i.fa {
         display: none;
     }
 
@@ -926,31 +854,10 @@ and (orientation: landscape) {
         clear: both !important;
     }
 
-    .foodmenu-unit.masonry-unit, .lafka_masonry_fullwidth .foodmenu-unit.masonry-unit {
-        width: 50%;
-    }
-
-    .foodmenu-unit a.foodmenu-link {
-        padding: 20px;
-    }
-
-    .lafka-none-overlay .foodmenu-unit-info a.foodmenu-link::before {
-        top: 28px;
-    }
-
     .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.product_title {
         font-size: 36px !important;
     }
 
-    .lafka-product-slide-details, .lafka-product-slide-image {
-        width: 100%;
-        display: block;
-        padding: 0;
-    }
-
-    .lafka-product-slide-image {
-        margin-bottom: 30px;
-    }
 }
 
 @media only screen and (max-width: 599px) {
@@ -965,28 +872,10 @@ and (orientation: landscape) {
         padding-right: 16px;
     }
 
-    .foodmenu-unit-holder a.lafka-foodmenu-image-link + .foodmenu-unit-info, .foodmenu-unit-holder > img + .foodmenu-unit-info {
-        width: 100%;
-    }
-
-    a.lafka-foodmenu-image-link + .foodmenu-unit-info a.foodmenu-link, .foodmenu-unit-holder > img + .foodmenu-unit-info a.foodmenu-link {
-        padding: 0;
-    }
-
-    .lafka-none-overlay .foodmenu-unit-info h4 {
-        position: static;
-    }
-
     .foodmenu-unit-info h4 > span {
         position: absolute;
         top: 25px;
         right: 0;
-    }
-
-    .foodmenu-unit-info h4 > span.lafka-item-weight-list {
-        top: 52px;
-        max-width: calc(100% - 105px);
-        font-size: 11px;
     }
 
     .foodmenu-unit-info h4::after {
@@ -996,22 +885,6 @@ and (orientation: landscape) {
     .foodmenu-unit-info h6 {
         padding-top: 5px;
         border-top: 2px dotted;
-    }
-
-    .foodmenu-unit-info ul li .lafka-foodmenu-price, .lafka-foodmenu-option {
-        width: 44.5%;
-    }
-
-    .lafka-foodmenu-option {
-        width: 55%;
-    }
-
-    .lafka-foodmenu-image-link {
-        margin-bottom: 8px;
-    }
-
-    .foodmenu-unit-info a.foodmenu-lightbox-link {
-        top: 50px;
     }
 
     form.checkout.woocommerce-checkout #order_review {
@@ -1094,15 +967,6 @@ and (orientation: landscape) {
         width: 100%;
     }
 
-    .lafka_shortcode_latest_posts.lafka_blog_masonry .owl-item .blog-post {
-        padding: 0 !important;
-    }
-
-    .lafka-foodmenu-categories ul li {
-        width: 100%;
-        text-align: left;
-    }
-
     a.lafka-filter-widgets-triger {
         background-color: #fff;
         border: 1px solid #f1f1f1;
@@ -1163,11 +1027,7 @@ and (orientation: landscape) {
         width: 100%;
     }
 
-    .foodmenu-unit.list-unit .foodmenu-unit-info {
-        padding: 20px;
-    }
-
-    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info::before {
+    div.prod_hold a.button.add_to_cart_button i.fa {
         display: none;
     }
 
@@ -1195,14 +1055,6 @@ and (orientation: landscape) {
         clear: both !important;
     }
 
-    .foodmenu-unit.masonry-unit, .lafka_masonry_fullwidth .foodmenu-unit.masonry-unit {
-        width: 100%;
-    }
-
-    .foodmenu-unit a.foodmenu-link {
-        padding: 20px;
-    }
-
     .lafka_blog_small_image .blog-post {
         display: block;
     }
@@ -1217,16 +1069,6 @@ and (orientation: landscape) {
 
     .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.product_title {
         font-size: 32px !important;
-    }
-
-    .lafka-product-slide-details, .lafka-product-slide-image {
-        width: 100%;
-        display: block;
-        padding: 0;
-    }
-
-    .lafka-product-slide-image {
-        margin-bottom: 30px;
     }
 
     .cart-info .coupon, .cart-info .coupon input, table.shop_table.cart .actions > input.button, form.checkout_coupon p, form.checkout_coupon p input, .cart-info .coupon button, .cart-info tbody td.actions > button.button {
@@ -1246,21 +1088,12 @@ and (orientation: landscape) {
         width: 100%;
     }
 
-    .lafka_shortcode_latest_posts.lafka_blog_masonry .owl-item .blog-post {
-        padding: 0 !important;
-    }
-
     a.lafka-filter-widgets-triger {
         background-color: #fff;
         border: 1px solid #f1f1f1;
         vertical-align: middle;
         padding: 0 10px;
         margin-bottom: 10px;
-    }
-
-    .lafka-foodmenu-categories ul li {
-        width: 100%;
-        text-align: left;
     }
 
     a.lafka-filter-widgets-triger::before {
@@ -1315,11 +1148,7 @@ and (orientation: landscape) {
         width: 100%;
     }
 
-    .foodmenu-unit.list-unit .foodmenu-unit-info {
-        padding: 20px;
-    }
-
-    div.prod_hold a.button.add_to_cart_button i.fa, .foodmenu-unit.list-unit .foodmenu-unit-info::before {
+    div.prod_hold a.button.add_to_cart_button i.fa {
         display: none;
     }
 
@@ -1353,14 +1182,6 @@ and (orientation: landscape) {
     .lafka_blog_small_image .lafka_post_data_holder {
         margin-left: 0 !important;
         clear: both !important;
-    }
-
-    .foodmenu-unit.masonry-unit, .lafka_masonry_fullwidth .foodmenu-unit.masonry-unit {
-        width: 100%;
-    }
-
-    .foodmenu-unit a.foodmenu-link {
-        padding: 20px;
     }
 
     .lafka_blog_small_image .blog-post {
@@ -1416,25 +1237,6 @@ and (orientation: landscape) {
         top: -67px;
         width: 50px;
         height: 50px;
-    }
-
-    .lafka-product-slide-details, .lafka-product-slide-image {
-        width: 100%;
-        display: block;
-        padding: 0;
-    }
-
-    .lafka-product-slide-image {
-        margin-bottom: 30px;
-    }
-
-    .wpb_lafka_banner a h4 {
-        font-size: 16px;
-        line-height: normal;
-    }
-
-    .lafka_banner_text .lafka_banner_centering .lafka_banner_centered {
-        padding: 30px;
     }
 
     a#cancel-comment-reply-link {
