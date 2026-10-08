@@ -53,8 +53,6 @@ if ( ! function_exists( 'lafka_get_default_values' ) ) {
 			// Functional-shared keys read by BOTH repos through the shim; they
 			// stay in the `lafka` array (never forked into a theme_mod).
 			'google_maps_api_key'           => '',
-			'foodmenu_currency'             => '$',
-			'foodmenu_currency_position'    => 'left',
 			'category_description_position' => '',
 			'custom_product_popup_link'     => '',
 			'custom_product_popup_content'  => '',
@@ -69,7 +67,6 @@ if ( ! function_exists( 'lafka_get_default_values' ) ) {
 		for ( $i = 1; $i <= 3; $i++ ) {
 			$defaults[ 'promo_tooltip_' . $i . '_text' ]            = '';
 			$defaults[ 'promo_tooltip_' . $i . '_trigger_text' ]    = '';
-			$defaults[ 'promo_tooltip_' . $i . '_position' ]        = 'above_price';
 			$defaults[ 'promo_tooltip_' . $i . '_show_in_listing' ] = 0;
 			$defaults[ 'promo_tooltip_' . $i . '_content' ]         = '';
 		}

@@ -1295,21 +1295,8 @@ if ( ! function_exists( 'lafka_get_formatted_price' ) ) {
 				$formatted_price = '+' . $formatted_price;
 			}
 		} else {
-			$currency       = '<span class="woocommerce-Price-currencySymbol">' . lafka_get_option( 'foodmenu_currency' ) . '</span>';
-			$position       = lafka_get_option( 'foodmenu_currency_position' );
-			$stripped_price = trim( str_replace( '+', '', $price ) );
-
-			if ( $position === 'left' ) {
-				if ( $has_plus !== false ) {
-					$formatted_price = '+' . $currency . $stripped_price;
-				} else {
-					$formatted_price = $currency . $stripped_price;
-				}
-			} elseif ( $position === 'right' ) {
-				$formatted_price = $stripped_price . $currency;
-			} else {
-				$formatted_price = $stripped_price;
-			}
+			// Without WooCommerce there is no store currency: show the price as entered.
+			$formatted_price = esc_html( $price );
 		}
 
 		return $formatted_price;

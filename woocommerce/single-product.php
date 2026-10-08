@@ -60,29 +60,18 @@ if ( ! defined( 'LAFKA_PDP_SUMMARY_WIRED' ) ) {
         add_action( 'lafka_pdp_summary', 'lafka_product_sale_countdown', 9 );
     }
 
-    // Promo info tooltips (plugin): above-price / below-price / below-add-to-cart zones.
-    if ( function_exists( 'lafka_output_info_tooltips' ) ) {
-        add_action(
-            'lafka_pdp_summary',
-            function () {
-                lafka_output_info_tooltips( 'above-price' );
-            },
-            9
-        );
-        add_action(
-            'lafka_pdp_summary',
-            function () {
-                lafka_output_info_tooltips( 'below-price' );
-            },
-            11
-        );
-        add_action(
-            'lafka_pdp_summary',
-            function () {
-                lafka_output_info_tooltips( 'below-add-to-cart' );
-            },
-            39
-        );
+    // Promo info tooltips (plugin): one action per zone, from the plugin's
+    // single list of zones and priorities.
+    if ( function_exists( 'lafka_output_info_tooltips' ) && function_exists( 'lafka_promo_tooltip_zones' ) ) {
+        foreach ( lafka_promo_tooltip_zones() as $lafka_zone => $lafka_priority ) {
+            add_action(
+                'lafka_pdp_summary',
+                static function () use ( $lafka_zone ) {
+                    lafka_output_info_tooltips( $lafka_zone );
+                },
+                $lafka_priority
+            );
+        }
     }
 
     // Custom product popup link (plugin).
