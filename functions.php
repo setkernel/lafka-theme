@@ -53,7 +53,7 @@ require_once get_template_directory() . '/incl/system/asset-min.php';
  * lafka_* theme_mods; only the plugin-owned google_maps_api_key still writes
  * the legacy wp_options.lafka row.
  */
-require_once get_template_directory() . '/incl/customizer-bridge.php';
+require_once get_template_directory() . '/incl/class-lafka-customizer-bridge.php';
 
 /*
  * v6.2.0: Lafka Maintenance Tools page. Replaces the maintenance UI
@@ -61,7 +61,7 @@ require_once get_template_directory() . '/incl/customizer-bridge.php';
  * GitHub release cache flush button). Lives at Tools → Lafka
  * Maintenance — the canonical WP location for admin utilities.
  */
-require_once get_template_directory() . '/incl/system/lafka-tools-page.php';
+require_once get_template_directory() . '/incl/system/class-lafka-maintenance-page.php';
 
 
 
@@ -531,11 +531,11 @@ if ( ! function_exists( 'lafka_comment' ) ) {
 	/*
 	 * Add custom image sizes for the lafka theme blog part
 	 */
-add_image_size( 'lafka-foodmenu-single-thumb', 1440 ); // (not cropped)
-add_image_size( 'lafka-640x640', 640, 640, true ); //(cropped)
-add_image_size( 'lafka-general-small-size', 100, 100, true ); //(cropped)
-add_image_size( 'lafka-general-small-size-nocrop', 100 ); // (not cropped)
-add_image_size( 'lafka-widgets-thumb', 60, 60, true ); //(cropped)
+add_image_size( 'lafka-foodmenu-single-thumb', 1440 ); // Not cropped.
+add_image_size( 'lafka-640x640', 640, 640, true ); // Cropped.
+add_image_size( 'lafka-general-small-size', 100, 100, true ); // Cropped.
+add_image_size( 'lafka-general-small-size-nocrop', 100 ); // Not cropped.
+add_image_size( 'lafka-widgets-thumb', 60, 60, true ); // Cropped.
 
 	add_filter( 'wp_prepare_attachment_for_js', 'lafka_append_image_sizes_js', 10, 3 );
 if ( ! function_exists( 'lafka_append_image_sizes_js' ) ) {
@@ -704,7 +704,9 @@ if ( ! function_exists( 'lafka_get_lafka_foodmenu_category_parents' ) ) {
 			}
 		}
 
-		return $cache[ $term_id ] = $parents;
+		$cache[ $term_id ] = $parents;
+
+		return $parents;
 	}
 
 }
@@ -723,7 +725,7 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 			wp_die();
 		}
 
-		$search_term = apply_filters( 'get_search_query', $search_term );
+		$search_term = lafka_core_filter( 'get_search_query', $search_term );
 
 		// Allowlist post types — `post_type=any` previously hit every CPT
 		// (orders, addons, combos, etc.) which was both slow and a leak risk.
@@ -1113,7 +1115,7 @@ if ( ! function_exists( 'lafka_setup_nav_menu_item' ) ) {
 
 	function lafka_setup_nav_menu_item( $menu_item ) {
 		if ( $menu_item->db_id != 0 ) {
-			$menu_item->description = apply_filters( 'nav_menu_description', $menu_item->post_content );
+			$menu_item->description = lafka_core_filter( 'nav_menu_description', $menu_item->post_content );
 		}
 
 		return $menu_item;
@@ -1180,7 +1182,8 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 			$the_title = lafka_generate_excerpt( get_the_title( $entry['near_post']->ID ), 75, ' ', ' ', true, '', true );
 			$link      = get_permalink( $entry['near_post']->ID );
 
-			$tc1 = $tc2 = '';
+			$tc1 = '';
+			$tc2 = '';
 
 			$output .= "<a class='lafka-post-nav lafka-post-{$key} ' href='" . esc_url( $link ) . "' >";
 			$output .= "    <span class='entry-info-wrap'>";
@@ -1197,7 +1200,7 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 }
 
 // Remove &nbsp from titles
-add_filter( 'the_title', 'lafka_remove_nbsp_from_titles', 10, 2 );
+add_filter( 'the_title', 'lafka_remove_nbsp_from_titles' );
 
 // The rebuilt header renders FontAwesome icons (search / account / cart) on
 // every page, so keep FA enqueued site-wide — prevents the plugin's content-scan
@@ -1205,7 +1208,7 @@ add_filter( 'the_title', 'lafka_remove_nbsp_from_titles', 10, 2 );
 // header icons. Revisit once the header icons move to inline SVG. (Baseline #perf.)
 add_filter( 'lafka_header_renders_fa_icons', '__return_true' );
 if ( ! function_exists( 'lafka_remove_nbsp_from_titles' ) ) {
-	function lafka_remove_nbsp_from_titles( $title, $id ) {
+	function lafka_remove_nbsp_from_titles( $title ) {
 		return str_replace( '&nbsp;', ' ', $title );
 	}
 }
@@ -1304,8 +1307,8 @@ if ( ! function_exists( 'lafka_get_formatted_price' ) ) {
 	}
 }
 
-if ( ! function_exists( 'get_nutrition_list_for_foodmenu_entry' ) ) {
-	function get_nutrition_list_for_foodmenu_entry( $lafka_foodmenu_custom ) {
+if ( ! function_exists( 'lafka_get_nutrition_list_for_foodmenu_entry' ) ) {
+	function lafka_get_nutrition_list_for_foodmenu_entry( $lafka_foodmenu_custom ) {
 
 		$nutrition_list = array();
 		if ( class_exists( 'Lafka_Nutrition_Config' ) ) {
@@ -1782,3 +1785,21 @@ add_action(
 	},
 	30
 );
+
+/**
+ * The food-menu category template lives in a hyphenated file name. WordPress
+ * derives template names from the taxonomy slug (`lafka_foodmenu_category`), so
+ * the hyphenated file is offered right after the slug-named one; a child theme
+ * that ships the slug-named file still wins.
+ *
+ * @param string[] $templates Template candidates, most specific first.
+ * @return string[]
+ */
+function lafka_foodmenu_taxonomy_template_hierarchy( $templates ) {
+	$index = array_search( 'taxonomy-lafka_foodmenu_category.php', $templates, true );
+	if ( false !== $index ) {
+		array_splice( $templates, $index + 1, 0, 'taxonomy-lafka-foodmenu-category.php' );
+	}
+	return $templates;
+}
+add_filter( 'taxonomy_template_hierarchy', 'lafka_foodmenu_taxonomy_template_hierarchy' );

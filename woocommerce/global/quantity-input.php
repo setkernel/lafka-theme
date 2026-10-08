@@ -30,7 +30,7 @@ $label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 
 		 *
 		 * @since 7.2.0
 		 */
-		do_action( 'woocommerce_before_quantity_input_field' );
+		lafka_core_action( 'woocommerce_before_quantity_input_field' );
 		?>
 		<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_attr( $label ); ?></label>
 		<input
@@ -69,7 +69,7 @@ $label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 
 		 *
 		 * @since 3.6.0
 		 */
-		do_action( 'woocommerce_after_quantity_input_field' );
+		lafka_core_action( 'woocommerce_after_quantity_input_field' );
 		?>
 	</div>
 <?php

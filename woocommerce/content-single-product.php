@@ -24,7 +24,7 @@ global $product;
  *
  * @hooked woocommerce_output_all_notices - 10
  */
-do_action( 'woocommerce_before_single_product' );
+lafka_core_action( 'woocommerce_before_single_product' );
 
 if ( post_password_required() ) {
 	echo wp_kses( get_the_password_form(), lafka_allowed_html() );
@@ -63,7 +63,7 @@ if ( get_theme_mod( 'lafka_hide_product_price_on_zero', false ) && $product->get
 			 * @hooked woocommerce_show_product_sale_flash - 10 (removed by Althemist)
 			 * @hooked woocommerce_show_product_images - 20
 			 */
-			do_action( 'woocommerce_before_single_product_summary' );
+			lafka_core_action( 'woocommerce_before_single_product_summary' );
 			?>
 			<div class="summary entry-summary">
 
@@ -82,7 +82,7 @@ if ( get_theme_mod( 'lafka_hide_product_price_on_zero', false ) && $product->get
 				 * @hooked woocommerce_template_single_sharing - 50
 				 * @hooked WC_Structured_Data::generate_product_data() - 60
 				 */
-				do_action( 'woocommerce_single_product_summary' );
+				lafka_core_action( 'woocommerce_single_product_summary' );
 				?>
 
 			</div><!-- .summary -->
@@ -96,16 +96,16 @@ if ( get_theme_mod( 'lafka_hide_product_price_on_zero', false ) && $product->get
 		 * @hooked woocommerce_upsell_display - 15
 		 * @hooked woocommerce_output_related_products - 20
 		 */
-		do_action( 'woocommerce_after_single_product_summary' );
+		lafka_core_action( 'woocommerce_after_single_product_summary' );
 		?>
 
 	</div><!-- closing div of content-holder -->
 	<?php
 	if ( get_theme_mod( 'lafka_show_sidebar_product', false ) ) {
-		do_action( 'woocommerce_sidebar' );
+		lafka_core_action( 'woocommerce_sidebar' );
 		echo '<div class="clear"></div>';
 	}
 	?>
 </div><!-- #product-<?php the_ID(); ?> -->
 
-<?php do_action( 'woocommerce_after_single_product' ); ?>
+<?php lafka_core_action( 'woocommerce_after_single_product' ); ?>

@@ -9,7 +9,7 @@
  *
  * Without a listener (plugin inactive) nothing is written, unless the
  * fallback is on — WP_DEBUG by default, filter `lafka_theme_log_fallback` —
- * in which case one line goes to the PHP error log (message only; context is
+ * in which case one line goes to the WooCommerce log (message only; context is
  * never written there because the theme has no scrubber).
  *
  * The child theme uses the same action directly:
@@ -37,19 +37,17 @@ if ( ! function_exists( 'lafka_theme_log' ) ) {
 		$context = is_array( $context ) ? $context : array( 'value' => $context );
 		$message = is_scalar( $message ) ? (string) $message : '';
 
-		if ( function_exists( 'has_action' ) && has_action( 'lafka_log' ) ) {
+		if ( has_action( 'lafka_log' ) ) {
 			do_action( 'lafka_log', $level, $channel, $message, $context );
 			return true;
 		}
 
-		$fallback = defined( 'WP_DEBUG' ) && WP_DEBUG;
-		if ( function_exists( 'apply_filters' ) ) {
-			$fallback = (bool) apply_filters( 'lafka_theme_log_fallback', $fallback, $level, $channel );
-		}
-		if ( ! $fallback ) {
+		$fallback = (bool) apply_filters( 'lafka_theme_log_fallback', defined( 'WP_DEBUG' ) && WP_DEBUG, $level, $channel );
+		if ( ! $fallback || ! function_exists( 'wc_get_logger' ) ) {
 			return false;
 		}
-		error_log( sprintf( '[lafka-%1$s] %2$s: %3$s', $channel, strtoupper( $level ), $message ) );
+		$known_levels = array( 'emergency', 'alert', 'critical', 'error', 'warning', 'notice', 'info', 'debug' );
+		wc_get_logger()->log( in_array( $level, $known_levels, true ) ? $level : 'info', $message, array( 'source' => 'lafka-' . $channel ) );
 		return true;
 	}
 }

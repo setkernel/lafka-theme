@@ -53,7 +53,7 @@ if ( is_singular( array( 'post' ) ) ) {
 				</div>
 			<?php endif; ?>
 		</div>
-	<?php elseif ( has_post_thumbnail() && ( ! is_single() || is_singular( array( 'post' ) ) && $lafka_show_feat_image_in_post == 'yes' ) ) : ?>
+	<?php elseif ( has_post_thumbnail() && ( ! is_single() || ( is_singular( array( 'post' ) ) && 'yes' === $lafka_show_feat_image_in_post ) ) ) : ?>
 		<div class="post-unit-holder">
 			<?php the_post_thumbnail( $lafka_featured_image_size ); ?>
 			<?php if ( ! is_single() ) : ?>

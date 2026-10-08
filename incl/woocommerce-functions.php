@@ -19,7 +19,7 @@ if ( ! function_exists( 'lafka_woocommerce_breadcrumb_defaults' ) ) {
 
 add_filter( 'woocommerce_breadcrumb_home_url', 'lafka_woocommerce_breadcrumb_home_url' );
 if ( ! function_exists( 'lafka_woocommerce_breadcrumb_home_url' ) ) {
-	function lafka_woocommerce_breadcrumb_home_url( $home_url ) {
+	function lafka_woocommerce_breadcrumb_home_url() {
 		return lafka_wpml_get_home_url();
 	}
 }
@@ -66,7 +66,7 @@ if ( ! function_exists( 'lafka_shop_loop_image' ) ) {
 			if ( get_theme_mod( 'lafka_product_hover_onproduct', 'lafka-prodhover-zoom' ) == 'lafka-prodhover-swap' && $second_image ) :
 				?>
 				<?php
-				$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'shop_catalog' );
+				$image_size = lafka_core_filter( 'single_product_archive_thumbnail_size', 'shop_catalog' );
 
 				$alt   = get_post_meta( $second_image, '_wp_attachment_image_alt', true );
 				$title = get_the_title( $second_image );
@@ -289,7 +289,7 @@ if ( ! function_exists( 'lafka_price_filter' ) ) {
 		wp_enqueue_script( 'lafka-price-slider', get_template_directory_uri() . '/js/lafka-price-slider.js', array( 'jquery-ui-slider', 'wc-jquery-ui-touchpunch', $lafka_accounting_handle ), lafka_asset_version( '/js/lafka-price-slider.js' ), true );
 
 		// Round values to nearest 10 by default.
-		$step = max( apply_filters( 'woocommerce_price_filter_widget_step', 10 ), 1 );
+		$step = max( lafka_core_filter( 'woocommerce_price_filter_widget_step', 10 ), 1 );
 
 		// Find min and max price in current result set.
 		$prices    = lafka_get_filtered_price();
@@ -300,7 +300,7 @@ if ( ! function_exists( 'lafka_price_filter' ) ) {
 		$tax_display_mode = get_option( 'woocommerce_tax_display_shop' );
 
 		if ( wc_tax_enabled() && ! wc_prices_include_tax() && 'incl' === $tax_display_mode ) {
-			$tax_class = apply_filters( 'woocommerce_price_filter_widget_tax_class', '' ); // Uses standard tax class.
+			$tax_class = lafka_core_filter( 'woocommerce_price_filter_widget_tax_class', '' ); // Uses standard tax class.
 			$tax_rates = WC_Tax::get_rates( $tax_class );
 
 			if ( $tax_rates ) {
@@ -309,8 +309,8 @@ if ( ! function_exists( 'lafka_price_filter' ) ) {
 			}
 		}
 
-		$min_price = apply_filters( 'woocommerce_price_filter_widget_min_amount', floor( $min_price / $step ) * $step );
-		$max_price = apply_filters( 'woocommerce_price_filter_widget_max_amount', ceil( $max_price / $step ) * $step );
+		$min_price = lafka_core_filter( 'woocommerce_price_filter_widget_min_amount', floor( $min_price / $step ) * $step );
+		$max_price = lafka_core_filter( 'woocommerce_price_filter_widget_max_amount', ceil( $max_price / $step ) * $step );
 
 		// If both min and max are equal, we don't need a slider.
 		if ( $min_price === $max_price ) {
@@ -336,8 +336,9 @@ if ( ! function_exists( 'lafka_price_filter' ) ) {
 			}
 		}
 
-		if ( $_chosen_attributes = WC_Query::get_layered_nav_chosen_attributes() ) {
-			foreach ( $_chosen_attributes as $attribute => $data ) {
+		$lafka_chosen_attributes = WC_Query::get_layered_nav_chosen_attributes();
+		if ( $lafka_chosen_attributes ) {
+			foreach ( $lafka_chosen_attributes as $attribute => $data ) {
 				$taxonomy_filter = 'filter_' . str_replace( 'pa_', '', $attribute );
 
 				$fields .= '<input type="hidden" name="' . esc_attr( $taxonomy_filter ) . '" value="' . esc_attr( implode( ',', $data['terms'] ) ) . '" />';
@@ -403,29 +404,38 @@ if ( ! function_exists( 'lafka_get_filtered_price' ) ) {
 			return $cached;
 		}
 
-		$meta_query = new WP_Meta_Query( $meta_query );
-		$tax_query  = new WP_Tax_Query( $tax_query );
-		$search     = WC_Query::get_main_search_query_sql();
+		// The products this archive shows (price filter removed), found through a
+		// real query so the tax / meta / search SQL is WordPress' own.
+		$price_ids = get_posts(
+			array(
+				'post_type'              => (array) lafka_core_filter( 'woocommerce_price_filter_post_type', array( 'product' ) ),
+				'post_status'            => 'publish',
+				'fields'                 => 'ids',
+				'nopaging'               => true,
+				'no_found_rows'          => true,
+				'ignore_sticky_posts'    => true,
+				'update_post_meta_cache' => false,
+				'update_post_term_cache' => false,
+				'tax_query'              => $tax_query,
+				'meta_query'             => $meta_query,
+				's'                      => isset( $args['s'] ) ? $args['s'] : '',
+			)
+		);
 
-		$meta_query_sql   = $meta_query->get_sql( 'post', $wpdb->posts, 'ID' );
-		$tax_query_sql    = $tax_query->get_sql( $wpdb->posts, 'ID' );
-		$search_query_sql = $search ? ' AND ' . $search : '';
+		if ( empty( $price_ids ) ) {
+			$result = (object) array(
+				'min_price' => null,
+				'max_price' => null,
+			);
+		} else {
+			$result = $wpdb->get_row(
+				$wpdb->prepare(
+					'SELECT MIN( min_price ) AS min_price, MAX( max_price ) AS max_price FROM %i WHERE product_id IN ( ' . esc_sql( implode( ',', array_map( 'absint', $price_ids ) ) ) . ' )',
+					$wpdb->wc_product_meta_lookup
+				)
+			);
+		}
 
-		$sql = "
-			SELECT min( min_price ) as min_price, MAX( max_price ) as max_price
-			FROM {$wpdb->wc_product_meta_lookup}
-			WHERE product_id IN (
-				SELECT ID FROM {$wpdb->posts}
-				" . $tax_query_sql['join'] . $meta_query_sql['join'] . "
-				WHERE {$wpdb->posts}.post_type IN ('" . implode( "','", array_map( 'esc_sql', apply_filters( 'woocommerce_price_filter_post_type', array( 'product' ) ) ) ) . "')
-					AND {$wpdb->posts}.post_status = 'publish'
-				" . $tax_query_sql['where'] . $meta_query_sql['where'] . $search_query_sql . '
-			)';
-
-		$sql = apply_filters( 'woocommerce_price_filter_sql', $sql, $meta_query_sql, $tax_query_sql );
-
-		// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared -- All inputs pre-escaped: $tax_query_sql/$meta_query_sql come from WP_Tax_Query::get_sql()/WP_Meta_Query::get_sql() which return safe SQL; $search from WC_Query::get_main_search_query_sql(); post types wrapped in esc_sql(). Mirrors WC core class-wc-widget-price-filter.php pattern.
-		$result = $wpdb->get_row( $sql );
 		wp_cache_set( $cache_key, $result, 'lafka' );
 		return $result;
 	}
@@ -446,7 +456,7 @@ if ( ! function_exists( 'lafka_shop_sidebar' ) ) {
 	function lafka_shop_sidebar() {
 		echo '</div>'; // closes content_holder
 		if ( get_theme_mod( 'lafka_show_sidebar_shop', false ) ) {
-			do_action( 'woocommerce_sidebar' );
+			lafka_core_action( 'woocommerce_sidebar' );
 			echo '<div class="clear"></div>';
 		}
 	}
@@ -590,7 +600,7 @@ if ( ! function_exists( 'lafka_shop_sale_countdown' ) ) {
 				$random_num = uniqid();
 				?>
 				<div class="count_holder_small" data-countdown-id="<?php echo esc_js( '#lafkaCountSmallLatest' . $post->ID . $random_num ); ?>"
-					data-countdown-to="<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>">
+					data-countdown-to="<?php echo esc_js( gmdate( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>">
 					<div class="count_info"><?php esc_html_e( 'Offer ends in', 'lafka' ); ?>:</div>
 					<div id="lafkaCountSmallLatest<?php echo esc_attr( $post->ID . $random_num ); ?>"></div>
 					<div class="clear"></div>
@@ -632,7 +642,7 @@ if ( ! function_exists( 'lafka_product_sale_countdown' ) ) {
 								return;
 							}
 							$('#<?php echo esc_attr( $unique_id ); ?>').countdown({
-								until: new Date("<?php echo esc_js( date( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>"),
+								until: new Date("<?php echo esc_js( gmdate( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>"),
 								compact: false,
 								layout: '<span class="countdown_time_tiny">{dn} {dl} {hn}:{mnn}:{snn}</span>'
 							});
@@ -1115,7 +1125,7 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 						}
 					}
 					?>
-					<form class="lafka-variations-in-catalog cart" action="<?php echo esc_url( apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
+					<form class="lafka-variations-in-catalog cart" action="<?php echo esc_url( lafka_core_filter( 'woocommerce_add_to_cart_form_action', $product->get_permalink() ) ); ?>"
 							method="post"
 							enctype='multipart/form-data' data-product_id="<?php echo absint( $product->get_id() ); ?>">
 
@@ -1157,7 +1167,7 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 						</span>
 						<button type="submit" class="single_add_to_cart_button button alt"><?php echo esc_html( $product->single_add_to_cart_text() ); ?></button>
 
-						<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+						<?php lafka_core_action( 'woocommerce_after_add_to_cart_button' ); ?>
 
 						<?php foreach ( $variation['attributes'] as $attribute_name => $attribute_slug ) : ?>
 							<input type="hidden" name="<?php echo esc_attr( $attribute_name ); ?>" value="<?php echo esc_attr( $attribute_slug ); ?>"/>
@@ -1252,7 +1262,7 @@ if ( ! function_exists( 'lafka_get_available_variation_ids' ) ) {
 					}
 
 					// Filter 'woocommerce_hide_invisible_variations' to optionally hide invisible variations (disabled variations and variations with empty price).
-					if ( apply_filters( 'woocommerce_hide_invisible_variations', true, $variable_product->get_id(), $variation ) && ! $variation->variation_is_visible() ) {
+					if ( lafka_core_filter( 'woocommerce_hide_invisible_variations', true, $variable_product->get_id(), $variation ) && ! $variation->variation_is_visible() ) {
 						continue;
 					}
 

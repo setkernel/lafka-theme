@@ -35,7 +35,7 @@ if ( ! function_exists( 'wc_get_gallery_image_html' ) ) {
 
 global $product;
 
-$columns           = apply_filters( 'woocommerce_product_thumbnails_columns', 4 );
+$columns           = lafka_core_filter( 'woocommerce_product_thumbnails_columns', 4 );
 $post_thumbnail_id = $product->get_image_id();
 $media_items       = lafka_wc_product_media_items( $product );
 // The helper returns the full gallery order; product-thumbnails.php renders the remaining items.
@@ -43,7 +43,7 @@ $first_media_item = $media_items[0] ?? array();
 $first_media_id   = isset( $first_media_item['id'] ) ? absint( $first_media_item['id'] ) : $post_thumbnail_id;
 $has_media        = ! empty( $first_media_item ) && 'placeholder' !== ( $first_media_item['source_type'] ?? '' );
 $is_video         = $has_media && 'video' === ( $first_media_item['media_type'] ?? '' ) && lafka_wc_has_product_media_gallery();
-$wrapper_classes  = apply_filters(
+$wrapper_classes  = lafka_core_filter(
 	'woocommerce_single_product_image_gallery_classes',
 	array(
 		'woocommerce-product-gallery',
@@ -80,12 +80,12 @@ $lafka_product_video_url = lafka_product_video_trigger_url( $product, $media_ite
 		}
 
 		if ( $is_video ) {
-			echo wp_kses( apply_filters( 'woocommerce_single_product_video_thumbnail_html', $html, $first_media_id, $first_media_item ), lafka_allowed_html() );
+			echo wp_kses( lafka_core_filter( 'woocommerce_single_product_video_thumbnail_html', $html, $first_media_id, $first_media_item ), lafka_allowed_html() );
 		} else {
-			echo wp_kses( apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $first_media_id ), lafka_allowed_html() );
+			echo wp_kses( lafka_core_filter( 'woocommerce_single_product_image_thumbnail_html', $html, $first_media_id ), lafka_allowed_html() );
 		}
 
-		do_action( 'woocommerce_product_thumbnails' );
+		lafka_core_action( 'woocommerce_product_thumbnails' );
 		?>
 	</div>
 </div>

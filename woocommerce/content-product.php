@@ -33,7 +33,7 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 }
 ?>
 <li <?php wc_product_class( 'lafka-product-card', $product ); ?>>
-	<?php do_action( 'woocommerce_before_shop_loop_item' ); ?>
+	<?php lafka_core_action( 'woocommerce_before_shop_loop_item' ); ?>
 	<?php
 	// v5.84.0: a11y — dropped redundant aria-label="<product name>". The
 	// link's visible content (h3 title + description + price) already
@@ -64,7 +64,7 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 		data-lafka-item-price="<?php echo esc_attr( (string) wc_get_price_to_display( $product ) ); ?>"
 		data-lafka-list-name="<?php echo esc_attr( $lafka_card_list ); ?>">
 		<div class="lafka-product-card__img-wrap">
-			<?php do_action( 'woocommerce_before_shop_loop_item_title' ); ?>
+			<?php lafka_core_action( 'woocommerce_before_shop_loop_item_title' ); ?>
 			<?php
 			echo wp_kses( lafka_product_card_image_html( $product ), lafka_allowed_html() );
 			?>
@@ -72,11 +72,11 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 		<div class="lafka-product-card__body">
 			<div class="lafka-product-card__head">
 				<h3 class="lafka-product-card__title"><?php echo esc_html( $product->get_name() ); ?></h3>
-				<?php do_action( 'woocommerce_shop_loop_item_title' ); ?>
+				<?php lafka_core_action( 'woocommerce_shop_loop_item_title' ); ?>
 				<?php if ( $product->get_short_description() ) : ?>
 					<p class="lafka-product-card__desc"><?php echo esc_html( wp_strip_all_tags( $product->get_short_description() ) ); ?></p>
 				<?php endif; ?>
-				<?php do_action( 'woocommerce_after_shop_loop_item_title' ); ?>
+				<?php lafka_core_action( 'woocommerce_after_shop_loop_item_title' ); ?>
 			</div>
 			<div class="lafka-product-card__bottom">
 				<?php if ( ! lafka_is_product_eligible_for_variation_in_listings( $product ) ) : ?>
@@ -98,5 +98,5 @@ if ( ! is_a( $product, WC_Product::class ) || ! $product->is_visible() ) {
 			</div>
 		</div>
 	</a>
-	<?php do_action( 'woocommerce_after_shop_loop_item' ); ?>
+	<?php lafka_core_action( 'woocommerce_after_shop_loop_item' ); ?>
 </li>

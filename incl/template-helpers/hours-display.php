@@ -227,7 +227,7 @@ if ( ! function_exists( 'lafka_hours_late_note' ) ) {
 			$label = $names[ $first ][1] . '–' . $names[ $last ][1];
 		}
 		$time = lafka_time_plain( $closes[ $first ][1] );
-		/* translators: 1: closing time ("midnight"), 2: days ("Fri & Sat") */
+		/* translators: 1: closing time such as midnight; 2: the days it applies to, such as Fri & Sat. */
 		$note = sprintf( __( 'Open till %1$s %2$s', 'lafka' ), $time, $label );
 		return (string) apply_filters( 'lafka_hours_late_note', $note, $hours );
 	}

@@ -15,15 +15,15 @@ defined( 'ABSPATH' ) || exit;
 if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
 	// Redesign OFF — render WooCommerce's default single-product flow inline.
 	get_header( 'shop' );
-	do_action( 'woocommerce_before_main_content' );
+	lafka_core_action( 'woocommerce_before_main_content' );
 
 	while ( have_posts() ) {
 		the_post();
 		wc_get_template_part( 'content', 'single-product' );
 	}
 
-	do_action( 'woocommerce_after_main_content' );
-	do_action( 'woocommerce_sidebar' );
+	lafka_core_action( 'woocommerce_after_main_content' );
+	lafka_core_action( 'woocommerce_sidebar' );
 	get_footer( 'shop' );
 	return;
 }
@@ -110,7 +110,7 @@ get_header( 'shop' );
 			// layout. Side-effect-safe: WC core carries only
 			// woocommerce_output_all_notices here, and the plugin's gallery emit
 			// hooks the distinct woocommerce_before_single_product_summary.
-			do_action( 'woocommerce_before_single_product' );
+			lafka_core_action( 'woocommerce_before_single_product' );
 			?>
 
 			<nav class="lafka-pdp__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>"><?php woocommerce_breadcrumb(); ?></nav>
@@ -136,5 +136,5 @@ get_header( 'shop' );
 <?php
 // Fire woocommerce_after_single_product so third-party integrations hooked here
 // run on the redesigned PDP — the redesign otherwise never fires it.
-do_action( 'woocommerce_after_single_product' );
+lafka_core_action( 'woocommerce_after_single_product' );
 get_footer( 'shop' );

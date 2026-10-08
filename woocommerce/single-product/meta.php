@@ -29,7 +29,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 global $product;
 ?>
 <div class="tagcloud product_meta">
-	<?php do_action( 'woocommerce_product_meta_start' ); ?>
+	<?php lafka_core_action( 'woocommerce_product_meta_start' ); ?>
 	<?php
 		$categories      = wc_get_product_category_list( $product->get_id(), ', ', '', '', lafka_wc_product_meta_category_orderby( $product ) );
 		$size_categories = count( $product->get_category_ids() );
@@ -50,8 +50,9 @@ global $product;
 		<span class="sku_wrapper">
 			<?php esc_html_e( 'SKU:', 'lafka' ); ?> <span class="sku">
 			<?php
-			if ( $sku = $product->get_sku() ) {
-				echo esc_html( $sku );
+			$lafka_sku = $product->get_sku();
+			if ( $lafka_sku ) {
+				echo esc_html( $lafka_sku );
 			} else {
 				esc_html_e( 'N/A', 'lafka' );
 			}
@@ -60,5 +61,5 @@ global $product;
 		</span>
 
 	<?php endif; ?>
-	<?php do_action( 'woocommerce_product_meta_end' ); ?>
+	<?php lafka_core_action( 'woocommerce_product_meta_end' ); ?>
 </div>

@@ -19,7 +19,7 @@ defined( 'ABSPATH' ) || exit;
 
 ?>
 <li>
-	<?php do_action( 'woocommerce_widget_product_review_item_start', $args ); ?>
+	<?php lafka_core_action( 'woocommerce_widget_product_review_item_start', $args ); ?>
 
 	<a href="<?php echo esc_url( get_comment_link( $comment->comment_ID ) ); ?>">
 		<?php echo wp_kses_post( $product->get_image( 'lafka-general-small-size-nocrop' ) ); ?>
@@ -35,5 +35,5 @@ defined( 'ABSPATH' ) || exit;
 	?>
 	</span>
 
-	<?php do_action( 'woocommerce_widget_product_review_item_end', $args ); ?>
+	<?php lafka_core_action( 'woocommerce_widget_product_review_item_end', $args ); ?>
 </li>

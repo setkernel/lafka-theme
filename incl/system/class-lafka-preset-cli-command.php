@@ -56,10 +56,9 @@ if ( ! class_exists( 'Lafka_Preset_CLI_Command' ) ) {
 		 * <backup>
 		 * : Backup name (see `wp lafka preset backups`).
 		 *
-		 * @param array<int,string>    $args       Positional.
-		 * @param array<string,string> $assoc_args Flags.
+		 * @param array<int,string> $args Positional.
 		 */
-		public function restore( $args, $assoc_args ) {
+		public function restore( $args ) {
 			$restored = lafka_preset_restore_appearance( (string) ( $args[0] ?? '' ) );
 			if ( ! $restored ) {
 				WP_CLI::error( 'Unknown or empty backup. List them with: wp lafka preset backups' );
@@ -70,10 +69,8 @@ if ( ! class_exists( 'Lafka_Preset_CLI_Command' ) ) {
 		/**
 		 * List appearance backups.
 		 *
-		 * @param array<int,string>    $args       Positional.
-		 * @param array<string,string> $assoc_args Flags.
 		 */
-		public function backups( $args, $assoc_args ) {
+		public function backups() {
 			$names = lafka_preset_appearance_backups();
 			if ( ! $names ) {
 				WP_CLI::log( 'No backups.' );

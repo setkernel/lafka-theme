@@ -79,7 +79,7 @@ msgstr ""
 #: archive.php:133
 #: forum.php:181
 #: index.php:147
-#: partials/content-lafka_foodmenu_category.php:343
+#: partials/content-lafka-foodmenu-category.php:343
 #: single-lafka-foodmenu.php:519
 #: woocommerce/global/wrapper-start.php:130
 msgid "show"
@@ -253,7 +253,7 @@ msgstr ""
 #: incl/template-helpers/counter-chrome.php:239
 #: incl/template-helpers/counter-chrome.php:306
 #: incl/woocommerce/lafka-shop-to-menu.php:219
-#: partials/content-lafka_foodmenu_category.php:115
+#: partials/content-lafka-foodmenu-category.php:115
 #: partials/counter/header.php:76
 #: partials/counter/header.php:78
 #: partials/mobile-nav.php:101
@@ -399,7 +399,7 @@ msgid "Order now"
 msgstr ""
 
 #: incl/customizer-announce-bar.php:28
-#: incl/system/lafka-tools-page.php:153
+#: incl/system/class-lafka-maintenance-page.php:153
 msgid "Lafka — Announce Bar"
 msgstr ""
 
@@ -435,249 +435,249 @@ msgstr ""
 msgid "Minimum cart subtotal that unlocks free delivery. Displayed in the bar and used by the cart progress meter."
 msgstr ""
 
-#: incl/customizer-bridge.php:61
+#: incl/class-lafka-customizer-bridge.php:61
 msgid "Lafka — Site Settings"
 msgstr ""
 
-#: incl/customizer-bridge.php:62
+#: incl/class-lafka-customizer-bridge.php:62
 msgid "Logos, branding, integrations, and general site behavior."
 msgstr ""
 
-#: incl/customizer-bridge.php:87
+#: incl/class-lafka-customizer-bridge.php:87
 msgid "Logos (extras)"
 msgstr ""
 
 #. translators: %s — link to Customizer Site Identity → Logo
-#: incl/customizer-bridge.php:92
+#: incl/class-lafka-customizer-bridge.php:92
 #, php-format
 msgid "The main logo is now uploaded via the WP-native %s. This section only houses the mobile and footer variants — there are no WP-core controls for those."
 msgstr ""
 
-#: incl/customizer-bridge.php:95
+#: incl/class-lafka-customizer-bridge.php:95
 msgid "Site Identity → Logo"
 msgstr ""
 
-#: incl/customizer-bridge.php:113
+#: incl/class-lafka-customizer-bridge.php:113
 msgid "Mobile logo (optional)"
 msgstr ""
 
-#: incl/customizer-bridge.php:114
+#: incl/class-lafka-customizer-bridge.php:114
 msgid "Fallback logo, used only when no logo is set under Site Identity."
 msgstr ""
 
-#: incl/customizer-bridge.php:122
+#: incl/class-lafka-customizer-bridge.php:122
 msgid "Secondary accent color"
 msgstr ""
 
-#: incl/customizer-bridge.php:124
+#: incl/class-lafka-customizer-bridge.php:124
 msgid "Used by the page preloader and the active product-tab marker (it was the logo plate color before the 5.55 header)."
 msgstr ""
 
-#: incl/customizer-bridge.php:137
+#: incl/class-lafka-customizer-bridge.php:137
 msgid "Brand & Colors"
 msgstr ""
 
-#: incl/customizer-bridge.php:138
+#: incl/class-lafka-customizer-bridge.php:138
 msgid "The accent color drives every primary CTA, link hover, and badge. It also flows through the handoff design tokens (since v5.96 SSOT alias) so legacy and rebuilt pages share one brand color."
 msgstr ""
 
-#: incl/customizer-bridge.php:151
+#: incl/class-lafka-customizer-bridge.php:151
 msgid "Accent color"
 msgstr ""
 
-#: incl/customizer-bridge.php:153
+#: incl/class-lafka-customizer-bridge.php:153
 msgid "Primary brand color — CTAs, links, badges. Aliased to --lafka-color-accent-500 in modern components."
 msgstr ""
 
-#: incl/customizer-bridge.php:162
+#: incl/class-lafka-customizer-bridge.php:162
 msgid "Brand color"
 msgstr ""
 
-#: incl/customizer-bridge.php:164
+#: incl/class-lafka-customizer-bridge.php:164
 msgid "Secondary brand accent — drives the --lafka-color-brand-500 ramp (footer chrome, hero gradient, open-status dot). Defaults to the shipped pepper-yellow."
 msgstr ""
 
-#: incl/customizer-bridge.php:183
+#: incl/class-lafka-customizer-bridge.php:183
 msgid "Header Colors"
 msgstr ""
 
-#: incl/customizer-bridge.php:184
+#: incl/class-lafka-customizer-bridge.php:184
 msgid "Menu color for pages that use the transparent header with a dark scheme."
 msgstr ""
 
-#: incl/customizer-bridge.php:194
+#: incl/class-lafka-customizer-bridge.php:194
 msgid "Transparent header menu color (dark scheme)"
 msgstr ""
 
-#: incl/customizer-bridge.php:209
+#: incl/class-lafka-customizer-bridge.php:209
 msgid "Footer Colors"
 msgstr ""
 
-#: incl/customizer-bridge.php:210
+#: incl/class-lafka-customizer-bridge.php:210
 msgid "Title, link and text colors for the legacy footer widget areas."
 msgstr ""
 
-#: incl/customizer-bridge.php:220
+#: incl/class-lafka-customizer-bridge.php:220
 msgid "Footer titles color"
 msgstr ""
 
-#: incl/customizer-bridge.php:230
+#: incl/class-lafka-customizer-bridge.php:230
 msgid "Footer titles border color"
 msgstr ""
 
-#: incl/customizer-bridge.php:240
+#: incl/class-lafka-customizer-bridge.php:240
 msgid "Footer widget links color"
 msgstr ""
 
-#: incl/customizer-bridge.php:250
+#: incl/class-lafka-customizer-bridge.php:250
 msgid "Footer text color"
 msgstr ""
 
-#: incl/customizer-bridge.php:265
+#: incl/class-lafka-customizer-bridge.php:265
 msgid "Content Colors"
 msgstr ""
 
-#: incl/customizer-bridge.php:266
+#: incl/class-lafka-customizer-bridge.php:266
 msgid "Links, sidebar widget titles, buttons, and the New / Sale product badges. These drive the content --lafka-* CSS custom properties."
 msgstr ""
 
-#: incl/customizer-bridge.php:276
+#: incl/class-lafka-customizer-bridge.php:276
 msgid "Links color"
 msgstr ""
 
-#: incl/customizer-bridge.php:286
+#: incl/class-lafka-customizer-bridge.php:286
 msgid "Links hover color"
 msgstr ""
 
-#: incl/customizer-bridge.php:296
+#: incl/class-lafka-customizer-bridge.php:296
 msgid "Sidebar widget titles color"
 msgstr ""
 
-#: incl/customizer-bridge.php:306
+#: incl/class-lafka-customizer-bridge.php:306
 msgid "Buttons color"
 msgstr ""
 
-#: incl/customizer-bridge.php:316
+#: incl/class-lafka-customizer-bridge.php:316
 msgid "Buttons hover color"
 msgstr ""
 
-#: incl/customizer-bridge.php:326
+#: incl/class-lafka-customizer-bridge.php:326
 msgid "New product label color"
 msgstr ""
 
-#: incl/customizer-bridge.php:336
+#: incl/class-lafka-customizer-bridge.php:336
 msgid "Sale product label color"
 msgstr ""
 
-#: incl/customizer-bridge.php:351
+#: incl/class-lafka-customizer-bridge.php:351
 msgid "Page Title"
 msgstr ""
 
-#: incl/customizer-bridge.php:352
+#: incl/class-lafka-customizer-bridge.php:352
 msgid "The page-title bar: title, subtitle, and — when a title background image is set — the overlaid custom title, plus the bar background and border, and the default background image used on pages without their own."
 msgstr ""
 
-#: incl/customizer-bridge.php:362
+#: incl/class-lafka-customizer-bridge.php:362
 msgid "Page title color"
 msgstr ""
 
-#: incl/customizer-bridge.php:372
+#: incl/class-lafka-customizer-bridge.php:372
 msgid "Page subtitle color"
 msgstr ""
 
-#: incl/customizer-bridge.php:382
+#: incl/class-lafka-customizer-bridge.php:382
 msgid "Custom title color (over background image)"
 msgstr ""
 
-#: incl/customizer-bridge.php:384
+#: incl/class-lafka-customizer-bridge.php:384
 msgid "Used for the page title when the title bar has a background image."
 msgstr ""
 
-#: incl/customizer-bridge.php:392
+#: incl/class-lafka-customizer-bridge.php:392
 msgid "Page title bar background color"
 msgstr ""
 
-#: incl/customizer-bridge.php:402
+#: incl/class-lafka-customizer-bridge.php:402
 msgid "Page title bar border color"
 msgstr ""
 
-#: incl/customizer-bridge.php:415
+#: incl/class-lafka-customizer-bridge.php:415
 msgid "Default page title background image"
 msgstr ""
 
-#: incl/customizer-bridge.php:416
+#: incl/class-lafka-customizer-bridge.php:416
 msgid "Shown behind the page-title bar on any page without its own title image. Leave empty for the flat background color above."
 msgstr ""
 
-#: incl/customizer-bridge.php:429
+#: incl/class-lafka-customizer-bridge.php:429
 msgid "Product Listing Colors"
 msgstr ""
 
-#: incl/customizer-bridge.php:430
+#: incl/class-lafka-customizer-bridge.php:430
 msgid "Add-to-cart button, price tag, and fancy category title colors used across the product grid and menu listings."
 msgstr ""
 
-#: incl/customizer-bridge.php:440
+#: incl/class-lafka-customizer-bridge.php:440
 msgid "Add to cart button color"
 msgstr ""
 
-#: incl/customizer-bridge.php:450
+#: incl/class-lafka-customizer-bridge.php:450
 msgid "Listing price color"
 msgstr ""
 
-#: incl/customizer-bridge.php:460
+#: incl/class-lafka-customizer-bridge.php:460
 msgid "Listing price background color"
 msgstr ""
 
-#: incl/customizer-bridge.php:470
+#: incl/class-lafka-customizer-bridge.php:470
 msgid "Fancy category title color"
 msgstr ""
 
-#: incl/customizer-bridge.php:618
+#: incl/class-lafka-customizer-bridge.php:618
 msgid "General"
 msgstr ""
 
-#: incl/customizer-bridge.php:619
+#: incl/class-lafka-customizer-bridge.php:619
 msgid "Site-wide behavior toggles and integrations."
 msgstr ""
 
-#: incl/customizer-bridge.php:629
+#: incl/class-lafka-customizer-bridge.php:629
 msgid "Google Maps API key"
 msgstr ""
 
-#: incl/customizer-bridge.php:631
+#: incl/class-lafka-customizer-bridge.php:631
 msgid "Required for the [lafka_map] shortcode and Shipping Areas (if enabled). Generate at https://console.cloud.google.com/google/maps-apis/."
 msgstr ""
 
-#: incl/customizer-bridge.php:645
+#: incl/class-lafka-customizer-bridge.php:645
 msgid "Show breadcrumb trail"
 msgstr ""
 
-#: incl/customizer-bridge.php:646
+#: incl/class-lafka-customizer-bridge.php:646
 msgid "Renders the breadcrumb on archive, single, and page templates that support it."
 msgstr ""
 
-#: incl/customizer-bridge.php:655
+#: incl/class-lafka-customizer-bridge.php:655
 msgid "Show previous / next post links"
 msgstr ""
 
-#: incl/customizer-bridge.php:656
+#: incl/class-lafka-customizer-bridge.php:656
 msgid "Appears at the bottom of blog posts and products."
 msgstr ""
 
-#: incl/customizer-bridge.php:665
+#: incl/class-lafka-customizer-bridge.php:665
 msgid "Enable smooth scroll for anchor links"
 msgstr ""
 
-#: incl/customizer-bridge.php:666
+#: incl/class-lafka-customizer-bridge.php:666
 msgid "Smoothly animates jumps to in-page anchors (e.g. one-pager layouts)."
 msgstr ""
 
-#: incl/customizer-bridge.php:675
+#: incl/class-lafka-customizer-bridge.php:675
 msgid "Show search form in header"
 msgstr ""
 
-#: incl/customizer-bridge.php:676
+#: incl/class-lafka-customizer-bridge.php:676
 msgid "Adds the search icon + form to the main navigation."
 msgstr ""
 
@@ -1201,7 +1201,7 @@ msgid "Can reuse the same URL configured in the Editorial Home panel."
 msgstr ""
 
 #: incl/customizer-home.php:34
-#: incl/system/lafka-tools-page.php:154
+#: incl/system/class-lafka-maintenance-page.php:154
 msgid "Lafka — Home Page"
 msgstr ""
 
@@ -1769,7 +1769,7 @@ msgid "Bar hidden after this date. Leave blank for no end."
 msgstr ""
 
 #: incl/customizer-service-eta.php:31
-#: incl/system/lafka-tools-page.php:155
+#: incl/system/class-lafka-maintenance-page.php:155
 msgid "Lafka — Service ETA"
 msgstr ""
 
@@ -2277,85 +2277,85 @@ msgstr ""
 msgid "Could not reset. Please try again."
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:44
-#: incl/system/lafka-tools-page.php:45
-#: incl/system/lafka-tools-page.php:83
+#: incl/system/class-lafka-maintenance-page.php:44
+#: incl/system/class-lafka-maintenance-page.php:45
+#: incl/system/class-lafka-maintenance-page.php:83
 msgid "Lafka Maintenance"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:57
+#: incl/system/class-lafka-maintenance-page.php:57
 msgid "You do not have permission to access this page."
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:84
+#: incl/system/class-lafka-maintenance-page.php:84
 msgid "Operator-facing maintenance utilities for the Lafka theme + plugin. Each action below is a one-click utility — use only when something needs explicit refreshing."
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:86
+#: incl/system/class-lafka-maintenance-page.php:86
 msgid "Versions"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:91
+#: incl/system/class-lafka-maintenance-page.php:91
 msgid "Active (child) theme"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:91
+#: incl/system/class-lafka-maintenance-page.php:91
 msgid "Theme"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:101
+#: incl/system/class-lafka-maintenance-page.php:101
 msgid "Parent theme"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:110
+#: incl/system/class-lafka-maintenance-page.php:110
 #: incl/tgm-plugin-activation/class-tgm-plugin-activation.php:2632
 msgid "Plugin"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:116
+#: incl/system/class-lafka-maintenance-page.php:116
 msgid "GitHub release cache"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:118
+#: incl/system/class-lafka-maintenance-page.php:118
 msgid "WordPress caches GitHub release metadata for ~12 hours between update checks. After pushing a new release tag, click below to force WordPress to re-check immediately — otherwise the new version may not appear in Updates for several hours."
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:122
+#: incl/system/class-lafka-maintenance-page.php:122
 msgid "Clear GitHub release cache + re-check now"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:125
+#: incl/system/class-lafka-maintenance-page.php:125
 msgid "Go to Updates page"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:132
+#: incl/system/class-lafka-maintenance-page.php:132
 #, php-format
 msgid "Internal action: %s. Clears the lafka_gh_* release transients and the WordPress update_themes / update_plugins site transients in one click. Safe to run repeatedly."
 msgstr ""
 
 #. translators: %1$s: option key, %2$s: option name, %3$s: example WP-CLI command
-#: incl/system/lafka-tools-page.php:141
+#: incl/system/class-lafka-maintenance-page.php:141
 #, php-format
 msgid "Hitting the GitHub API rate limit? Store a personal access token in the %1$s key of the %2$s option, e.g. %3$s."
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:149
+#: incl/system/class-lafka-maintenance-page.php:149
 msgid "Quick links"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:151
+#: incl/system/class-lafka-maintenance-page.php:151
 msgid "Lafka — Site Settings (logos, brand, general)"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:152
+#: incl/system/class-lafka-maintenance-page.php:152
 msgid "Lafka — Restaurant Information (NAP, hours, cuisines)"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:156
+#: incl/system/class-lafka-maintenance-page.php:156
 msgid "WordPress → Settings → General (site title, timezone)"
 msgstr ""
 
-#: incl/system/lafka-tools-page.php:157
+#: incl/system/class-lafka-maintenance-page.php:157
 msgid "WooCommerce → Settings (store address, payment, shipping)"
 msgstr ""
 
@@ -3344,24 +3344,24 @@ msgstr ""
 msgid "View full cart"
 msgstr ""
 
-#: partials/content-lafka_foodmenu_category.php:177
+#: partials/content-lafka-foodmenu-category.php:177
 msgid "show all"
 msgstr ""
 
-#: partials/content-lafka_foodmenu_category.php:271
-#: partials/content-lafka_foodmenu_category.php:287
+#: partials/content-lafka-foodmenu-category.php:271
+#: partials/content-lafka-foodmenu-category.php:287
 #: single-lafka-foodmenu.php:466
 #: single-lafka-foodmenu.php:481
 msgid "View more"
 msgstr ""
 
-#: partials/content-lafka_foodmenu_category.php:278
+#: partials/content-lafka-foodmenu-category.php:278
 #: single-lafka-foodmenu.php:261
 #: single-lafka-foodmenu.php:473
 msgid "No image available"
 msgstr ""
 
-#: partials/content-lafka_foodmenu_category.php:335
+#: partials/content-lafka-foodmenu-category.php:335
 msgid "No Foodmenu found. Sorry!"
 msgstr ""
 

@@ -8,14 +8,15 @@
  */
 ?>
 <div class="blog-post-meta post-meta-top">
-	<?php if ( $lafka_categories = get_the_category() ) : ?>
+	<?php $lafka_categories = get_the_category(); ?>
+<?php if ( $lafka_categories ) : ?>
 		<span class="posted_in"><i class="fa fa-folder-open"></i>
-			<?php $lafka_lastElmnt = end( $lafka_categories ); ?>
+			<?php $lafka_last_category = end( $lafka_categories ); ?>
 			<?php foreach ( $lafka_categories as $lafka_category ) : ?>
 				<a href="<?php echo esc_url( get_category_link( $lafka_category->term_id ) ); ?>"
 					title="<?php /* translators: %s: category name. */ printf( esc_attr__( 'View all posts in %s', 'lafka' ), esc_attr( $lafka_category->name ) ); ?>"><?php echo esc_html( $lafka_category->name ); ?></a>
 					<?php
-					if ( $lafka_category != $lafka_lastElmnt ) :
+					if ( $lafka_category !== $lafka_last_category ) :
 						?>
 						,<?php endif; ?>
 			<?php endforeach; ?>

@@ -158,7 +158,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// legacy `lafka` option). After this slice styles/dynamic-css.php has ZERO
 		// legacy Options-Framework reads (NX1-02 accept criterion). The composite array
 		// SHAPE — a JSON-encoded `style` sub-field decoded below — is preserved by
-		// the theme_mod sanitizers registered in incl/customizer-bridge.php; the
+		// the theme_mod sanitizers registered in incl/class-lafka-customizer-bridge.php; the
 		// inline defaults reproduce the Options-Framework `std` so a fresh install
 		// still renders the shipped Peppery pixels.
 

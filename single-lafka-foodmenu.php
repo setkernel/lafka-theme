@@ -274,7 +274,7 @@ while ( have_posts() ) :
 													<li class="lafka-foodmenu-ingredients"><strong><?php esc_html_e( 'Ingredients', 'lafka' ); ?>:</strong> <?php echo esc_html( $lafka_ingredients ); ?></li>
 												<?php endif; ?>
 
-												<?php $lafka_nutrition_list = get_nutrition_list_for_foodmenu_entry( $lafka_foodmenu_custom ); ?>
+												<?php $lafka_nutrition_list = lafka_get_nutrition_list_for_foodmenu_entry( $lafka_foodmenu_custom ); ?>
 												<?php if ( class_exists( 'Lafka_Nutrition_Config' ) && count( $lafka_nutrition_list ) ) : ?>
 													<li class="lafka-foodmenu-nutrition-list">
 														<ul>

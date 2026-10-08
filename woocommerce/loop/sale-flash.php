@@ -25,15 +25,15 @@ global $post, $product;
 <?php if ( $product->is_on_sale() ) : ?>
 	<?php if ( $product->is_type( 'grouped' ) ) : ?>
 		<?php
-		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' ) );
+		echo wp_kses_post( lafka_core_filter( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' ) );
 		?>
 	<?php elseif ( $product->is_type( 'combo' ) ) : ?>
 		<?php
-		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' ) );
+		echo wp_kses_post( lafka_core_filter( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' ) );
 		?>
 	<?php else : ?>
 		<?php
-		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale"> -' . (int) lafka_get_product_saving( $product ) . '%</span>', $post, $product ) );
+		echo wp_kses_post( lafka_core_filter( 'woocommerce_sale_flash', '<span class="sale"> -' . (int) lafka_get_product_saving( $product ) . '%</span>', $post, $product ) );
 		?>
 	<?php endif ?>
 <?php endif; ?>

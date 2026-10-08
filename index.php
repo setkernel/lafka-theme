@@ -68,7 +68,7 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 	echo 'class="' . esc_attr( implode( ' ', $lafka_sidebar_classes ) ) . '"';}
 ?>
 >
-	<?php if ( lafka_is_blog() && $lafka_show_blog_title || lafka_breadcrumb() ) : ?>
+	<?php if ( ( lafka_is_blog() && $lafka_show_blog_title ) || lafka_breadcrumb() ) : ?>
 		<div id="lafka_page_title" class="lafka_title_holder <?php echo esc_attr( get_theme_mod( 'lafka_blog_title_alignment', 'centered_title' ) ); ?>
 		<?php
 		if ( $lafka_title_background_image ) :

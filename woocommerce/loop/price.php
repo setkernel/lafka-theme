@@ -32,6 +32,7 @@ if ( lafka_is_product_listview() ) {
 	</div>
 <?php endif; ?>
 
-<?php if ( $price_html = $product->get_price_html() ) : ?>
-	<div class="price_hold"><?php echo wp_kses_post( $price_html ); ?></div>
+<?php $lafka_price_html = $product->get_price_html(); ?>
+<?php if ( $lafka_price_html ) : ?>
+	<div class="price_hold"><?php echo wp_kses_post( $lafka_price_html ); ?></div>
 <?php endif; ?>

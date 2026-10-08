@@ -68,7 +68,7 @@ if ( ! function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
 }
 lafka_localize_fulfilment_cfg( 'lafka-cart-controls' );
 
-do_action( 'woocommerce_before_cart' );
+lafka_core_action( 'woocommerce_before_cart' );
 ?>
 
 <form class="woocommerce-cart-form" action="<?php echo esc_url( wc_get_cart_url() ); ?>" method="post">
@@ -138,25 +138,25 @@ do_action( 'woocommerce_before_cart' );
 		</button>
 	</div>
 
-	<?php do_action( 'woocommerce_before_cart_table' ); ?>
+	<?php lafka_core_action( 'woocommerce_before_cart_table' ); ?>
 
 	<ul class="lafka-cart">
-		<?php do_action( 'woocommerce_before_cart_contents' ); ?>
+		<?php lafka_core_action( 'woocommerce_before_cart_contents' ); ?>
 
 		<?php
 		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
-			$_product   = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
-			$product_id = apply_filters( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
+			$_product   = lafka_core_filter( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
+			$product_id = lafka_core_filter( 'woocommerce_cart_item_product_id', $cart_item['product_id'], $cart_item, $cart_item_key );
 
-			if ( $_product instanceof WC_Product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
-				$product_permalink = apply_filters( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
+			if ( $_product instanceof WC_Product && $_product->exists() && $cart_item['quantity'] > 0 && lafka_core_filter( 'woocommerce_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
+				$product_permalink = lafka_core_filter( 'woocommerce_cart_item_permalink', $_product->is_visible() ? $_product->get_permalink( $cart_item ) : '', $cart_item, $cart_item_key );
 				$cart_item_name    = lafka_wc_cart_item_product_name( $cart_item, $_product );
-				$product_name      = apply_filters( 'woocommerce_cart_item_name', $cart_item_name, $cart_item, $cart_item_key );
+				$product_name      = lafka_core_filter( 'woocommerce_cart_item_name', $cart_item_name, $cart_item, $cart_item_key );
 				?>
-				<li class="lafka-cart-item <?php echo esc_attr( apply_filters( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
+				<li class="lafka-cart-item <?php echo esc_attr( lafka_core_filter( 'woocommerce_cart_item_class', 'cart_item', $cart_item, $cart_item_key ) ); ?>">
 					<div class="lafka-cart-item__img-wrap">
 						<?php
-						$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
+						$thumbnail = lafka_core_filter( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
 
 						if ( ! $product_permalink ) {
 							echo wp_kses( $thumbnail, lafka_allowed_html() );
@@ -180,11 +180,11 @@ do_action( 'woocommerce_before_cart' );
 								echo wp_kses_post( $product_name . '&nbsp;' );
 							} else {
 								// Same filter WooCommerce core applies to the linked name.
-								echo wp_kses_post( apply_filters( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $cart_item_name ), $cart_item, $cart_item_key ) );
+								echo wp_kses_post( lafka_core_filter( 'woocommerce_cart_item_name', sprintf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $cart_item_name ), $cart_item, $cart_item_key ) );
 							}
 							?>
 						</p>
-						<?php do_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key ); ?>
+						<?php lafka_core_action( 'woocommerce_after_cart_item_name', $cart_item, $cart_item_key ); ?>
 
 						<?php
 						// WC 11.2+ reads the name to skip attributes it already shows; older WC ignores the argument.
@@ -202,7 +202,7 @@ do_action( 'woocommerce_before_cart' );
 									sprintf(
 										/* translators: %s: unit price of the cart item. */
 										__( '%s each', 'lafka' ),
-										apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
+										lafka_core_filter( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
 									)
 								);
 								?>
@@ -211,13 +211,13 @@ do_action( 'woocommerce_before_cart' );
 
 						<?php
 						if ( $_product->backorders_require_notification() && $_product->is_on_backorder( $cart_item['quantity'] ) ) {
-							echo wp_kses_post( apply_filters( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'lafka' ) . '</p>', $product_id ) );
+							echo wp_kses_post( lafka_core_filter( 'woocommerce_cart_item_backorder_notification', '<p class="backorder_notification">' . esc_html__( 'Available on backorder', 'lafka' ) . '</p>', $product_id ) );
 						}
 						?>
 
 						<div class="lafka-cart-item__bottom">
 							<span class="lafka-cart-item__price">
-								<?php echo wp_kses( apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ), lafka_allowed_html() ); ?>
+								<?php echo wp_kses( lafka_core_filter( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ), lafka_allowed_html() ); ?>
 							</span>
 
 							<div class="lafka-cart-item__qty">
@@ -242,13 +242,13 @@ do_action( 'woocommerce_before_cart' );
 									false
 								);
 
-								echo wp_kses( apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ), lafka_allowed_html() );
+								echo wp_kses( lafka_core_filter( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ), lafka_allowed_html() );
 								?>
 							</div>
 
 							<?php
 							echo wp_kses(
-								apply_filters(
+								lafka_core_filter(
 									'woocommerce_cart_item_remove_link',
 									sprintf(
 										'<a href="%s" class="lafka-cart-item__remove" role="button" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
@@ -271,9 +271,9 @@ do_action( 'woocommerce_before_cart' );
 		}
 		?>
 
-		<?php do_action( 'woocommerce_cart_contents' ); ?>
+		<?php lafka_core_action( 'woocommerce_cart_contents' ); ?>
 
-		<?php do_action( 'woocommerce_after_cart_contents' ); ?>
+		<?php lafka_core_action( 'woocommerce_after_cart_contents' ); ?>
 	</ul>
 
 	<?php
@@ -306,21 +306,21 @@ do_action( 'woocommerce_before_cart' );
 				<label for="coupon_code" class="screen-reader-text"><?php esc_html_e( 'Coupon:', 'lafka' ); ?></label>
 				<input type="text" name="coupon_code" class="input-text" id="coupon_code" value="" placeholder="<?php esc_attr_e( 'Coupon code', 'lafka' ); ?>" />
 				<button type="submit" class="button" name="apply_coupon" value="<?php esc_attr_e( 'Apply coupon', 'lafka' ); ?>"><?php esc_html_e( 'Apply coupon', 'lafka' ); ?></button>
-				<?php do_action( 'woocommerce_cart_coupon' ); ?>
+				<?php lafka_core_action( 'woocommerce_cart_coupon' ); ?>
 			</div>
 		<?php } ?>
 
 		<button type="submit" class="button" name="update_cart" value="<?php esc_attr_e( 'Update cart', 'lafka' ); ?>"><?php esc_html_e( 'Update cart', 'lafka' ); ?></button>
 
-		<?php do_action( 'woocommerce_cart_actions' ); ?>
+		<?php lafka_core_action( 'woocommerce_cart_actions' ); ?>
 
 		<?php wp_nonce_field( 'woocommerce-cart', 'woocommerce-cart-nonce' ); ?>
 	</div>
 
-	<?php do_action( 'woocommerce_after_cart_table' ); ?>
+	<?php lafka_core_action( 'woocommerce_after_cart_table' ); ?>
 </form>
 
-<?php do_action( 'woocommerce_before_cart_collaterals' ); ?>
+<?php lafka_core_action( 'woocommerce_before_cart_collaterals' ); ?>
 
 <?php
 /* v6.9.0 (Pillar 3A): prominent free-delivery progress component, emitted
@@ -349,8 +349,8 @@ get_template_part(
 		 * @hooked woocommerce_cross_sell_display
 		 * @hooked woocommerce_cart_totals - 10
 		 */
-		do_action( 'woocommerce_cart_collaterals' );
+		lafka_core_action( 'woocommerce_cart_collaterals' );
 	?>
 </div>
 
-<?php do_action( 'woocommerce_after_cart' ); ?>
+<?php lafka_core_action( 'woocommerce_after_cart' ); ?>

@@ -46,7 +46,11 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 		$lafka_legacy_main    = (int) get_theme_mod( 'lafka_theme_logo', 0 );
 		$lafka_legacy_mobile  = (int) get_theme_mod( 'lafka_mobile_theme_logo', 0 );
 
-		return $lafka_custom_logo_id ?: $lafka_legacy_main ?: $lafka_legacy_mobile;
+		if ( $lafka_custom_logo_id ) {
+			return $lafka_custom_logo_id;
+		}
+
+		return $lafka_legacy_main ? $lafka_legacy_main : $lafka_legacy_mobile;
 	}
 }
 ?><!DOCTYPE html>

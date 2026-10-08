@@ -35,7 +35,7 @@ defined( 'ABSPATH' ) || exit;
 // CTA to differ from the global menu URL.
 $lafka_cart_empty_menu_url = (string) apply_filters(
 	'lafka_cart_empty_menu_url',
-	apply_filters( 'woocommerce_return_to_shop_redirect', lafka_theme_menu_url() )
+	lafka_core_filter( 'woocommerce_return_to_shop_redirect', lafka_theme_menu_url() )
 );
 ?>
 <section class="lafka-cart-empty" data-lafka-cart-empty>
@@ -43,7 +43,7 @@ $lafka_cart_empty_menu_url = (string) apply_filters(
 	<h2 class="lafka-cart-empty__title">
 		<?php
 		echo esc_html(
-			(string) apply_filters(
+			(string) lafka_core_filter(
 				'wc_empty_cart_message',
 				esc_html__( 'Your cart is empty', 'lafka' )
 			)
@@ -55,7 +55,7 @@ $lafka_cart_empty_menu_url = (string) apply_filters(
 	</p>
 	<a class="lafka-cart-empty__cta" href="<?php echo esc_url( $lafka_cart_empty_menu_url ); ?>">
 		<?php
-		echo esc_html( apply_filters( 'woocommerce_return_to_shop_text', __( 'Browse the menu', 'lafka' ) ) );
+		echo esc_html( lafka_core_filter( 'woocommerce_return_to_shop_text', __( 'Browse the menu', 'lafka' ) ) );
 		?>
 	</a>
 </section>
@@ -66,4 +66,4 @@ $lafka_cart_empty_menu_url = (string) apply_filters(
  * "Add a side?" upsell strip. Triggering it AFTER our empty-state shell
  * means the upsell sits below the CTA — matching the handoff structure.
  */
-do_action( 'woocommerce_cart_is_empty' );
+lafka_core_action( 'woocommerce_cart_is_empty' );

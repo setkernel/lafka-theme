@@ -24,7 +24,7 @@ if ( ! ( $product instanceof WC_Product ) ) {
 }
 
 $is_variable = $product->is_type( 'variable' );
-$form_action = apply_filters( 'woocommerce_add_to_cart_form_action', $product->get_permalink() );
+$form_action = lafka_core_filter( 'woocommerce_add_to_cart_form_action', $product->get_permalink() );
 
 // Store-closed gate. When the store is closed AND the operator has opted into
 // lafka_order_hours_disable_add_to_cart, the add-to-cart form must be replaced
@@ -149,7 +149,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 		// the addon display() callback from woocommerce_before_add_to_cart_button
 		// to woocommerce_single_variation. Without this, no addons render
 		// for variable products.
-		do_action( 'woocommerce_before_variations_form' );
+		lafka_core_action( 'woocommerce_before_variations_form' );
 		?>
 		<form class="cart variations_form"
 				action="<?php echo esc_url( $form_action ); ?>"
@@ -162,18 +162,18 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 				?>
 				">
 
-			<?php do_action( 'woocommerce_before_variations_table' ); ?>
+			<?php lafka_core_action( 'woocommerce_before_variations_table' ); ?>
 			<?php require __DIR__ . '/pdp-pickers.php'; ?>
-			<?php do_action( 'woocommerce_after_variations_table' ); ?>
+			<?php lafka_core_action( 'woocommerce_after_variations_table' ); ?>
 
 			<div class="single_variation_wrap">
-				<?php do_action( 'woocommerce_before_single_variation' ); ?>
+				<?php lafka_core_action( 'woocommerce_before_single_variation' ); ?>
 
 				<div class="single_variation"></div>
 
 				<div class="variations_button">
-					<?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
-					<?php do_action( 'woocommerce_before_add_to_cart_quantity' ); ?>
+					<?php lafka_core_action( 'woocommerce_before_add_to_cart_button' ); ?>
+					<?php lafka_core_action( 'woocommerce_before_add_to_cart_quantity' ); ?>
 
 					<div class="lafka-pdp-summary__cart-row">
 						<div class="quantity lafka-pdp-summary__qty">
@@ -197,8 +197,8 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 						</button>
 					</div>
 
-					<?php do_action( 'woocommerce_after_add_to_cart_quantity' ); ?>
-					<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+					<?php lafka_core_action( 'woocommerce_after_add_to_cart_quantity' ); ?>
+					<?php lafka_core_action( 'woocommerce_after_add_to_cart_button' ); ?>
 				</div>
 
 				<?php
@@ -231,7 +231,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 					remove_action( 'woocommerce_single_variation', 'woocommerce_single_variation_add_to_cart_button', $lafka_wc_sv_priority_20_was_hooked );
 				}
 
-				do_action( 'woocommerce_single_variation' );
+				lafka_core_action( 'woocommerce_single_variation' );
 
 				if ( false !== $lafka_wc_sv_priority_10_was_hooked ) {
 					add_action( 'woocommerce_single_variation', 'woocommerce_single_variation', $lafka_wc_sv_priority_10_was_hooked );
@@ -240,7 +240,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 					add_action( 'woocommerce_single_variation', 'woocommerce_single_variation_add_to_cart_button', $lafka_wc_sv_priority_20_was_hooked );
 				}
 
-				do_action( 'woocommerce_after_single_variation' );
+				lafka_core_action( 'woocommerce_after_single_variation' );
 				?>
 			</div>
 
@@ -248,7 +248,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 			<input type="hidden" name="product_id" value="<?php echo absint( $product->get_id() ); ?>">
 			<input type="hidden" name="variation_id" class="variation_id" value="0">
 		</form>
-		<?php do_action( 'woocommerce_after_variations_form' ); ?>
+		<?php lafka_core_action( 'woocommerce_after_variations_form' ); ?>
 
 	<?php else : /* simple / combo / etc. */ ?>
 
@@ -257,8 +257,8 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 				method="post"
 				enctype="multipart/form-data">
 
-			<?php do_action( 'woocommerce_before_add_to_cart_button' ); ?>
-			<?php do_action( 'woocommerce_before_add_to_cart_quantity' ); ?>
+			<?php lafka_core_action( 'woocommerce_before_add_to_cart_button' ); ?>
+			<?php lafka_core_action( 'woocommerce_before_add_to_cart_quantity' ); ?>
 
 			<div class="lafka-pdp-summary__cart-row">
 				<div class="quantity lafka-pdp-summary__qty">
@@ -282,8 +282,8 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 				</button>
 			</div>
 
-			<?php do_action( 'woocommerce_after_add_to_cart_quantity' ); ?>
-			<?php do_action( 'woocommerce_after_add_to_cart_button' ); ?>
+			<?php lafka_core_action( 'woocommerce_after_add_to_cart_quantity' ); ?>
+			<?php lafka_core_action( 'woocommerce_after_add_to_cart_button' ); ?>
 
 			<input type="hidden" name="add-to-cart" value="<?php echo absint( $product->get_id() ); ?>">
 		</form>

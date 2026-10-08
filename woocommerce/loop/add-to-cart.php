@@ -27,7 +27,7 @@ $aria_describedby = isset( $args['aria-describedby_text'] ) ? sprintf( 'aria-des
 echo '<div class="links">';
 echo wp_kses_post( apply_filters( 'lafka_links_before_add_to_cart', '' ) );
 echo wp_kses(
-	apply_filters(
+	lafka_core_filter(
 		'woocommerce_loop_add_to_cart_link',
 		sprintf(
 			'<a href="%s" %s data-quantity="%s" class="%s" title="%s" %s>%s</a>',

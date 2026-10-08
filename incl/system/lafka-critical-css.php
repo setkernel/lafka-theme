@@ -116,7 +116,7 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 
 		// Printed through core's style API, right here, so it stays the first
 		// thing in <head> and is never printed a second time.
-		wp_register_style( 'lafka-critical', false, array(), null );
+		wp_register_style( 'lafka-critical', false, array(), wp_get_theme( get_template() )->get( 'Version' ) );
 		wp_add_inline_style( 'lafka-critical', $css );
 		wp_print_styles( 'lafka-critical' );
 	}

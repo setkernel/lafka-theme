@@ -890,7 +890,7 @@ if ( ! function_exists( 'lafka_typography_google_fonts_url' ) ) {
 			$font_families_string_to_encode = implode( '|', $font_families );
 			$font_url                       = add_query_arg(
 				array(
-					'family'  => urlencode( $font_families_string_to_encode . ':100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic&subset=' . lafka_get_google_subsets() ),
+					'family'  => str_replace( '%20', '+', rawurlencode( $font_families_string_to_encode . ':100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic&subset=' . lafka_get_google_subsets() ) ),
 					'display' => 'swap',
 				),
 				'//fonts.googleapis.com/css'
@@ -937,7 +937,7 @@ if ( ! function_exists( 'lafka_typography_enqueue_google_font' ) ) {
 				}
 			}
 		}
-		wp_enqueue_style( 'lafka-fonts', $url, array(), false, 'print' );
+		wp_enqueue_style( 'lafka-fonts', $url, array(), wp_get_theme( get_template() )->get( 'Version' ), 'print' );
 	}
 }
 
@@ -1895,7 +1895,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		$cart_url                = '';
 		if ( LAFKA_IS_WOOCOMMERCE && get_option( 'woocommerce_cart_redirect_after_add' ) == 'yes' ) {
 			$cart_redirect_after_add = 'yes';
-			$cart_url                = apply_filters( 'woocommerce_add_to_cart_redirect', wc_get_cart_url(), null );
+			$cart_url                = lafka_core_filter( 'woocommerce_add_to_cart_redirect', wc_get_cart_url(), null );
 		}
 
 		$enable_ajax_add_to_cart = 'no';
@@ -1976,7 +1976,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		/* imagesloaded — legacy shop infinite-scroll only (GX T-25). */
 		if ( $lafka_legacy_libs ) {
-			wp_enqueue_script( 'imagesloaded', '', array( 'jquery' ), false, true );
+			wp_enqueue_script( 'imagesloaded' );
 		}
 
 		// PERF-2/16/17/26: bias every optional library toward `wp_register_*`
@@ -2094,7 +2094,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'lafka-google-maps',
 				'https://maps.googleapis.com/maps/api/js?key=' . rawurlencode( $lafka_maps_api_key ) . '&callback=Function.prototype', // No obsolete `sensor` param (Maps warns on it).
 				array( 'jquery' ),
-				false,
+				wp_get_theme( get_template() )->get( 'Version' ),
 				true
 			);
 		}
@@ -2277,7 +2277,11 @@ if ( ! function_exists( 'lafka_generate_excerpt' ) ) {
 	 */
 	function lafka_generate_excerpt( $input, $limit, $break_at = '.', $more = '...', $strip_it = false, $exclude = '<strong><em><span>', $safe_truncate = false ) {
 		if ( $strip_it ) {
-			$input = strip_shortcodes( strip_tags( $input, $exclude ) );
+			$allowed_tags = array();
+			foreach ( array_filter( explode( '>', (string) $exclude ) ) as $allowed_tag ) {
+				$allowed_tags[ trim( $allowed_tag, '< ' ) ] = array();
+			}
+			$input = strip_shortcodes( empty( $allowed_tags ) ? wp_strip_all_tags( $input ) : wp_kses( $input, $allowed_tags ) );
 		}
 
 		if ( strlen( $input ) <= $limit ) {
@@ -2297,7 +2301,7 @@ if ( ! function_exists( 'lafka_generate_excerpt' ) ) {
 		}
 
 		// prevent accidental word break
-		if ( ! $breakpoint && strlen( strip_tags( $input ) ) == strlen( $input ) ) {
+		if ( ! $breakpoint && wp_strip_all_tags( $input ) === trim( $input ) ) {
 			if ( $safe_truncate || is_rtl() ) {
 				$input = mb_strimwidth( $input, 0, $limit ) . $more;
 			} else {
@@ -2359,7 +2363,7 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 		// 2. Unmapped / plugin-owned key. If the shared helper is available
 		// (loaded by the plugin), use it.
 		if ( class_exists( 'Lafka_Options' ) ) {
-			return Lafka_Options::get( $name, $default_value ?: null );
+			return Lafka_Options::get( $name, $default_value ? $default_value : null );
 		}
 
 		// Standalone fallback when plugin is not active.

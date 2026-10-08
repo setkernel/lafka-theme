@@ -290,7 +290,7 @@ Every appearance/behaviour setting the theme owns is now a **Customizer
 each reader, so a fresh install renders the pixel-perfect defaults). To add or
 change a setting:
 
-- Register the control in `incl/customizer-bridge.php` (or a sibling
+- Register the control in `incl/class-lafka-customizer-bridge.php` (or a sibling
   `incl/customizer-*.php` panel) writing a `theme_mod` named `lafka_<key>`, and
   read it with `get_theme_mod( 'lafka_<key>', <default> )` — never re-introduce a
   `lafka_get_option()` read for a theme setting (it is a deprecated back-compat

@@ -3,7 +3,7 @@
  * depends on.
  *
  * Audit 2026-06-27 #6: the parent emits .section-subtitle (woocommerce/global/
- * wrapper-start.php, partials/content-lafka_foodmenu_category.php), the
+ * wrapper-start.php, partials/content-lafka-foodmenu-category.php), the
  * .foodmenu-unit-info .ingredients text, .screen-reader-text labels (Owl/slider
  * navText), and .lafka-owl-carousel sliders — but these were styled ONLY in
  * lafka-child, so the OSS parent baseline was non-accessible and CLS-unsafe on
