@@ -188,8 +188,19 @@ function lafka_allowed_html(): array {
 		'time'     => array( 'datetime' => true ),
 	);
 
-	// Attributes any tag may carry: the ARIA states and the data hooks the theme's scripts toggle.
+	// Attributes any tag may carry: WordPress's core global attributes (also for
+	// tags the post allowlist lacks, such as input), the ARIA states and the data
+	// hooks the theme's scripts toggle.
 	$global = array(
+		'class'                => true,
+		'id'                   => true,
+		'style'                => true,
+		'title'                => true,
+		'role'                 => true,
+		'aria-label'           => true,
+		'aria-labelledby'      => true,
+		'aria-describedby'     => true,
+		'aria-hidden'          => true,
 		'aria-expanded'        => true,
 		'aria-controls'        => true,
 		'aria-current'         => true,
