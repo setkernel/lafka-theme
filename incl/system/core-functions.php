@@ -1642,6 +1642,22 @@ if ( ! function_exists( 'lafka_dequeue_irrelevant_plugin_assets' ) ) {
 require_once __DIR__ . '/lafka-script-loading.php';
 
 add_filter( 'wp_resource_hints', 'lafka_add_resource_hints', 20, 2 );
+if ( ! function_exists( 'lafka_maps_use_google' ) ) {
+	/**
+	 * Whether the maps use Google: the plugin's provider when it is active
+	 * (OpenStreetMap without a key), else whether a key is saved.
+	 *
+	 * @return bool
+	 */
+	function lafka_maps_use_google(): bool {
+		if ( function_exists( 'lafka_maps_provider' ) ) {
+			return 'google' === lafka_maps_provider();
+		}
+
+		return function_exists( 'lafka_get_option' ) && '' !== trim( (string) lafka_get_option( 'google_maps_api_key' ) );
+	}
+}
+
 if ( ! function_exists( 'lafka_add_resource_hints' ) ) {
 	/**
 	 * Preconnect / dns-prefetch hints for third-party origins this theme depends on.
@@ -1669,8 +1685,9 @@ if ( ! function_exists( 'lafka_add_resource_hints' ) ) {
 			}
 
 			// O-27: only where a map can load (cart/checkout, or a page that
-			// enqueued the Maps loader) — not on every page.
-			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) && ( ! function_exists( 'lafka_page_may_load_google_maps' ) || lafka_page_may_load_google_maps() ) ) {
+			// enqueued the Maps loader) — not on every page — and only when the
+			// maps use Google (a key is set; without one they use OpenStreetMap).
+			if ( lafka_maps_use_google() && ( ! function_exists( 'lafka_page_may_load_google_maps' ) || lafka_page_may_load_google_maps() ) ) {
 				$urls[] = array(
 					'href' => 'https://maps.googleapis.com',
 					'crossorigin',
@@ -1684,7 +1701,7 @@ if ( ! function_exists( 'lafka_add_resource_hints' ) ) {
 
 		// dns-prefetch is a cheaper hint for resources we may load lazily.
 		if ( 'dns-prefetch' === $relation_type ) {
-			if ( function_exists( 'lafka_get_option' ) && lafka_get_option( 'google_maps_api_key' ) && ( ! function_exists( 'lafka_page_may_load_google_maps' ) || lafka_page_may_load_google_maps() ) ) {
+			if ( lafka_maps_use_google() && ( ! function_exists( 'lafka_page_may_load_google_maps' ) || lafka_page_may_load_google_maps() ) ) {
 				$urls[] = 'https://maps.googleapis.com';
 				$urls[] = 'https://maps.gstatic.com';
 			}

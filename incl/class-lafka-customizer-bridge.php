@@ -628,7 +628,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_settings_general',
 				__( 'Google Maps API key', 'lafka' ),
 				'',
-				__( 'Required for Shipping Areas (if enabled). Generate at https://console.cloud.google.com/google/maps-apis/.', 'lafka' )
+				__( 'Optional. Without a key the delivery maps use OpenStreetMap. With a key they use Google Maps and the location popup suggests addresses (enable the Maps JavaScript, Places and Geocoding APIs). The same key as in Lafka Shipping Settings.', 'lafka' )
 			);
 
 			// NX1-02.layout-behaviour-toggles: these four general toggles migrated
