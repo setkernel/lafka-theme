@@ -6,7 +6,11 @@
  *  - Static assets (CSS, JS, fonts, images): Stale-while-revalidate (instant from cache, update in background)
  *  - API / AJAX / admin-ajax: Network-first with 5s timeout fallback
  *  - Navigation requests: Network-first with offline fallback page
- *  - Third-party (Google Maps, fonts.googleapis): Cache-first with 7-day TTL
+ *  - Third-party (Google Fonts): Cache-first with 7-day TTL
+ *  - Map tiles and map APIs (Google Maps, OpenStreetMap or any tile server)
+ *    are never cached here: only same-origin static assets and Google Fonts
+ *    are, so tiles get the browser's own HTTP cache and nothing more (the
+ *    tile servers' usage policies).
  */
 
 const CACHE_VERSION = 'lafka-v1';
@@ -67,13 +71,13 @@ self.addEventListener('fetch', (event) => {
         return; // Let browser handle — no caching for dynamic data
     }
 
-    // ── Static assets → Stale-while-revalidate ────────────────────────
-    if (isStaticAsset(url)) {
+    // ── Same-origin static assets → Stale-while-revalidate ────────────
+    if (url.origin === self.location.origin && isStaticAsset(url)) {
         event.respondWith(staleWhileRevalidate(request, STATIC_CACHE, MAX_STATIC_ITEMS));
         return;
     }
 
-    // ── Third-party cacheable resources (Google Fonts CSS/woff, Maps tiles) ─
+    // ── Third-party cacheable resources (Google Fonts CSS/woff) ──────
     if (isThirdPartyCacheable(url)) {
         event.respondWith(cacheFirst(request, DYNAMIC_CACHE, MAX_DYNAMIC_ITEMS, 7 * 24 * 60 * 60 * 1000));
         return;
@@ -163,9 +167,7 @@ function isStaticAsset(url) {
 function isThirdPartyCacheable(url) {
     const host = url.hostname;
     return host === 'fonts.googleapis.com' ||
-           host === 'fonts.gstatic.com' ||
-           host === 'maps.googleapis.com' ||
-           host === 'maps.gstatic.com';
+           host === 'fonts.gstatic.com';
 }
 
 /**
