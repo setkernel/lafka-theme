@@ -67,17 +67,8 @@ export default [
 			"node_modules/**",
 			// Minified files are build artifacts — lint the source, not the output.
 			"**/*.min.js",
-			// Third-party libraries, kept unmodified: Cloud Zoom (R Cecco), jQuery Countdown
-			// (Keith Wood), FlexSlider (WooThemes), Isotope, Magnific Popup, Owl Carousel,
-			// Nice Select, Typed.js.
-			"js/cloud-zoom/**",
-			"js/count/**",
-			"js/flex/**",
-			"js/isotope/**",
-			"js/jquery.nice-select.min.js",
+			// Third-party library, kept unmodified: Magnific Popup.
 			"js/magnific/**",
-			"js/owl-carousel2-dist/**",
-			"js/typed.min.js",
 		],
 	},
 ];

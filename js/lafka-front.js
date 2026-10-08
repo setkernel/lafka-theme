@@ -1,10 +1,6 @@
 (function($) {
     "use strict";
     let lafka_ajaxXHR = null;
-    let is_rtl = false;
-    if (lafka_main_js_params.is_rtl === 'true') {
-        is_rtl = true;
-    }
 
     /**
      * lafkaOnVisible — IntersectionObserver-based one-shot trigger.
@@ -66,7 +62,6 @@
     $('.mask').remove();
     lafkaOnLoad(function() {
         checkRevealFooter();
-        checkProductGalleryCarousel();
     });
 
     $(document).ready(function() {
@@ -75,14 +70,6 @@
         // -------------------------------------------------------------------------------------------------------
         // Dropdown Menu
         // -------------------------------------------------------------------------------------------------------
-
-        // PERF-2: nice-select is conditionally enqueued (skipped on cart /
-        // checkout / blog / etc. where there are no styled selects). Guard with
-        // a typeof check so the missing-plugin case degrades to the native
-        // browser dropdown rather than a console TypeError.
-        if (typeof $.fn.niceSelect === 'function') {
-            $('.box-sort-filter .woocommerce-ordering .limit select, .box-sort-filter .woocommerce-ordering .sort select, .widget_archive select, .widget_categories select').niceSelect();
-        }
 
         /*
          * Special Characters
@@ -134,30 +121,13 @@
 
         $('p.demo_store').prependTo('#header');
 
-        const $accountMenuSliderElement = $('body.woocommerce-account .content_holder #customer_login.col2-set, .content_holder .woocommerce #customer_login.u-columns.col2-set');
-        // GX T-25: owl only loads on legacy surfaces — guard the call.
-        if ($accountMenuSliderElement.length && typeof $.fn.owlCarousel === 'function') {
-            $accountMenuSliderElement.addClass('owl-carousel');
-            $accountMenuSliderElement.owlCarousel({
-                rtl: is_rtl,
-                items: 1,
-                dots: false,
-                mouseDrag: false,
-                nav: true,
-                navText: [
-                    lafka_main_js_params.login_label,
-                    lafka_main_js_params.register_label
-                ]
-            });
-        }
-
         $(document).on('click', function(e) {
             if (!$(e.target).closest('.off-canvas-sidebar').hasClass('active_sidebar')) {
                 $(".sidebar.off-canvas-sidebar").removeClass("active_sidebar");
             }
         });
 
-        $(document.body).find('a[href="#"], a.cloud-zoom').on('click', function(event) {
+        $(document.body).find('a[href="#"]').on('click', function(event) {
             event.preventDefault();
         });
 
@@ -673,7 +643,6 @@
         if (!resizeTicking) {
             window.requestAnimationFrame(function() {
                 checkRevealFooter();
-                checkProductGalleryCarousel();
                 checkSummaryHeight();
                 checkSidebarHeight();
                 checkCommentsHeight();
@@ -685,48 +654,28 @@
     });
 
     /**
-     * Initialise the small countdowns on products list
-     * @param prodHoldElements
+     * (Re)start the countdowns inside the given elements — sale timers and the
+     * store-closed card (js/lafka-countdown.js, loaded only where that markup
+     * renders; a no-op elsewhere).
+     * @param {jQuery|Element|string} elements
      */
-    window.lafkaInitSmallCountdowns = function(prodHoldElements) {
-        // The countdown library is only enqueued where countdown markup renders.
-        if (typeof $.fn.countdown !== 'function') {
+    window.lafkaInitSmallCountdowns = function(elements) {
+        if (typeof window.lafkaCountdown !== 'function') {
             return;
         }
-        $(prodHoldElements).each(function() {
-            const data = $(this).find('.count_holder_small').data();
-            if (typeof data !== 'undefined') {
-                let timeFormat = '{dn} {dl} {hn}:{mnn}:{snn}';
-                if (typeof data.countdownShowDays !== 'undefined' && data.countdownShowDays === 'no') {
-                    timeFormat = '{hn}:{mnn}:{snn}';
-                }
-                $(data.countdownId).countdown({
-                    until: new Date(data.countdownTo),
-                    compact: false,
-                    layout: '<span class="countdown_time_tiny">' + timeFormat + '</span>'
-                });
-            }
-        })
+        $(elements).each(function() {
+            window.lafkaCountdown(this);
+        });
     };
 
     /**
-     * Initialize the counter for opening the store
+     * Restart the store opening countdowns anywhere on the page.
      */
     window.lafkaOrderHoursCountdown = function() {
-        if (typeof $.fn.countdown !== 'function') {
-            return;
+        if (typeof window.lafkaCountdown === 'function') {
+            window.lafkaCountdown(document);
         }
-        $(document.body).find('.lafka_order_hours_countdown').each(function() {
-            const count_to = '+' + $(this).data('diff-days') + 'd +' + $(this).data('diff-hours') + 'h +' + $(this).data('diff-minutes') + 'm +' + $(this).data('diff-seconds') + 's';
-            const counter_format = $(this).data('output-format');
-
-            $(this).countdown({
-                until: count_to,
-                compact: false,
-                layout: '<span class="countdown_time_small">' + counter_format + '</span>'
-            });
-        });
-    }
+    };
 
     function checkRevealFooter() {
         const isReveal = $('#footer').height() - 1;
@@ -737,33 +686,6 @@
             $('html.no-touch body.lafka_fullwidth.lafka-reveal-footer #content').css("margin-bottom", 0 + "px");
             $('body.lafka_fullwidth.lafka-reveal-footer #footer').removeClass('lafka_do_reveal');
 
-        }
-    }
-
-    function checkProductGalleryCarousel() {
-        const current_window_width = $(window).width();
-        const $singleProductImages = $(document.body).find('div.lafka-single-product .lafka-image-list-product-gallery .woocommerce-product-gallery__wrapper');
-
-        if (typeof $.fn.owlCarousel !== 'function') {
-            return; // GX T-25: owl is not loaded on this surface.
-        }
-        if (current_window_width < 769 && $singleProductImages.length) {
-            $singleProductImages.addClass('owl-carousel');
-            $singleProductImages.owlCarousel({
-                rtl: is_rtl,
-                items: 1,
-                dots: false,
-                loop: false,
-                rewind: true,
-                nav: true,
-                navText: [
-                    "<i class='fa fa-angle-left'></i>",
-                    "<i class='fa fa-angle-right'></i>"
-                ]
-            });
-        } else if ($singleProductImages.length) {
-            $singleProductImages.trigger('destroy.owl.carousel').removeClass('owl-carousel owl-loaded');
-            $singleProductImages.find('.owl-stage-outer').children().unwrap();
         }
     }
 
@@ -1011,29 +933,29 @@
         }).addClass('last').after('<div class="clear"></div>');
 
         // Woocommerce part columns
-        $('.woocommerce.columns-2:not(.owl-carousel)').each(function() {
+        $('.woocommerce.columns-2').each(function() {
             $(this).find('div.prod_hold, .product-category').filter(function(index) {
                 return index % 2 === 1;
             }).addClass('last').after('<div class="clear"></div>');
         });
 
-        $('.woocommerce.columns-3:not(.owl-carousel)').each(function() {
+        $('.woocommerce.columns-3').each(function() {
             $(this).find('div.prod_hold, .product-category').filter(function(index) {
                 return index % 3 === 2;
             }).addClass('last').after('<div class="clear"></div>');
         });
 
-        $('.woocommerce.columns-4:not(.owl-carousel)').each(function() {
+        $('.woocommerce.columns-4').each(function() {
             $(this).find('div.prod_hold, .product-category').filter(function(index) {
                 return index % 4 === 3;
             }).addClass('last').after('<div class="clear"></div>');
         });
-        $('.woocommerce.columns-5:not(.owl-carousel)').each(function() {
+        $('.woocommerce.columns-5').each(function() {
             $(this).find('div.prod_hold, .product-category').filter(function(index) {
                 return index % 5 === 4;
             }).addClass('last').after('<div class="clear"></div>');
         });
-        $('.woocommerce.columns-6:not(.owl-carousel)').each(function() {
+        $('.woocommerce.columns-6').each(function() {
             $(this).find('div.prod_hold, .product-category').filter(function(index) {
                 return index % 6 === 5;
             }).addClass('last').after('<div class="clear"></div>');
@@ -1072,35 +994,35 @@
         lafkaInitSmallCountdowns($newProducts);
 
         // Woocommerce part columns
-        $('.woocommerce.columns-2:not(.owl-carousel) div.prod_hold').filter(function(index) {
+        $('.woocommerce.columns-2 div.prod_hold').filter(function(index) {
             if ($(this).next().hasClass('clear')) {
                 return false;
             } else {
                 return index % 2 === 1;
             }
         }).addClass('last').after('<div class="clear"></div>');
-        $('.woocommerce.columns-3:not(.owl-carousel) div.prod_hold').filter(function(index) {
+        $('.woocommerce.columns-3 div.prod_hold').filter(function(index) {
             if ($(this).next().hasClass('clear')) {
                 return false;
             } else {
                 return index % 3 === 2;
             }
         }).addClass('last').after('<div class="clear"></div>');
-        $('.woocommerce.columns-4:not(.owl-carousel) div.prod_hold').filter(function(index) {
+        $('.woocommerce.columns-4 div.prod_hold').filter(function(index) {
             if ($(this).next().hasClass('clear')) {
                 return false;
             } else {
                 return index % 4 === 3;
             }
         }).addClass('last').after('<div class="clear"></div>');
-        $('.woocommerce.columns-5:not(.owl-carousel) div.prod_hold').filter(function(index) {
+        $('.woocommerce.columns-5 div.prod_hold').filter(function(index) {
             if ($(this).next().hasClass('clear')) {
                 return false;
             } else {
                 return index % 5 === 4;
             }
         }).addClass('last').after('<div class="clear"></div>');
-        $('.woocommerce.columns-6:not(.owl-carousel) div.prod_hold').filter(function(index) {
+        $('.woocommerce.columns-6 div.prod_hold').filter(function(index) {
             if ($(this).next().hasClass('clear')) {
                 return false;
             } else {

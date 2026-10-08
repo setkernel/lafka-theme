@@ -401,11 +401,9 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 		}
 
 		if ( $needs_editor || $needs_options || $needs_terms ) {
-			wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), true );
-
 			// Admin helpers (colour pickers, metabox layout). The new-order
 			// notification poller lives in lafka-plugin (NX1-08b).
-			wp_enqueue_script( 'lafka-back', get_template_directory_uri() . '/js/lafka-back.js', array( 'jquery', 'nice-select', 'wp-color-picker' ), lafka_asset_version( '/js/lafka-back.js' ), true );
+			wp_enqueue_script( 'lafka-back', get_template_directory_uri() . '/js/lafka-back.js', array( 'jquery', 'wp-color-picker' ), lafka_asset_version( '/js/lafka-back.js' ), true );
 		}
 	}
 
@@ -517,313 +515,6 @@ if ( ! function_exists( 'lafka_get_more_featured_images' ) ) {
 		}
 
 		return $featured_imgs;
-	}
-
-}
-
-if ( ! function_exists( 'lafka_wp_lang_to_valid_language_code' ) ) {
-
-	function lafka_wp_lang_to_valid_language_code( $wp_lang ) {
-		$wp_lang = str_replace( '_', '-', $wp_lang );
-		switch ( strtolower( $wp_lang ) ) {
-			// arabic
-			case 'ar':
-			case 'ar-ae':
-			case 'ar-bh':
-			case 'ar-dz':
-			case 'ar-eg':
-			case 'ar-iq':
-			case 'ar-jo':
-			case 'ar-kw':
-			case 'ar-lb':
-			case 'ar-ly':
-			case 'ar-ma':
-			case 'ar-om':
-			case 'ar-qa':
-			case 'ar-sa':
-			case 'ar-sy':
-			case 'ar-tn':
-			case 'ar-ye':
-				return 'ar';
-
-			// bulgarian
-			case 'bg':
-			case 'bg-bg':
-				return 'bg';
-
-			// bosnian
-			case 'bs':
-			case 'bs-ba':
-				return 'bs';
-
-			// catalan
-			case 'ca':
-			case 'ca-es':
-				return 'ca';
-
-			// czech
-			case 'cs':
-			case 'cs-cz':
-				return 'cs';
-
-			case 'cy':
-				return 'cy';
-
-			// danish
-			case 'da':
-			case 'da-dk':
-				return 'da';
-
-			// german
-			case 'de':
-			case 'de-at':
-			case 'de-ch':
-			case 'de-de':
-			case 'de-li':
-			case 'de-lu':
-				return 'de';
-
-			// greek
-			case 'el':
-			case 'el-gr':
-				return 'el';
-
-			// spanish
-			case 'es':
-			case 'es-ar':
-			case 'es-bo':
-			case 'es-cl':
-			case 'es-co':
-			case 'es-cr':
-			case 'es-do':
-			case 'es-ec':
-			case 'es-es':
-			case 'es-gt':
-			case 'es-hn':
-			case 'es-mx':
-			case 'es-ni':
-			case 'es-pa':
-			case 'es-pe':
-			case 'es-pr':
-			case 'es-py':
-			case 'es-sv':
-			case 'es-uy':
-			case 'es-ve':
-				return 'es';
-
-			// estonian
-			case 'et':
-			case 'et-ee':
-				return 'et';
-
-			// farsi/persian
-			case 'fa':
-			case 'fa fa-ir':
-				return 'fa';
-
-			// finnish
-			case 'fi':
-			case 'fi-fi':
-				return 'fi';
-
-			// french
-			case 'fr':
-			case 'fr-be':
-			case 'fr-ca':
-			case 'fr-ch':
-			case 'fr-fr':
-			case 'fr-lu':
-			case 'fr-mc':
-				return 'fr';
-
-			// galician
-			case 'gl':
-			case 'gl-es':
-				return 'gl';
-
-			// gujarati
-			case 'gu':
-			case 'gu-in':
-				return 'gu';
-
-			// hebrew
-			case 'he':
-			case 'he-il':
-				return 'he';
-
-			// croatian
-			case 'hr':
-			case 'hr-ba':
-			case 'hr-hr':
-				return 'hr';
-
-			// hungarian
-			case 'hu':
-			case 'hu-hu':
-				return 'hu';
-
-			// armenian
-			case 'hy':
-			case 'hy-am':
-				return 'hy';
-
-			// indonesian
-			case 'id':
-			case 'id-id':
-				return 'id';
-
-			// italian
-			case 'it':
-			case 'it-ch':
-			case 'it-it':
-				return 'it';
-
-			// japanese
-			case 'ja':
-			case 'ja-jp':
-				return 'ja';
-
-			// kannada
-			case 'kn':
-			case 'kn-in':
-				return 'kn';
-
-			// korean
-			case 'ko':
-			case 'ko-kr':
-				return 'ko';
-
-			// lithuanian
-			case 'lt':
-			case 'lt-lt':
-				return 'lt';
-
-			// latvian
-			case 'lv':
-			case 'lv-lv':
-				return 'lv';
-
-			// malay
-			case 'ms':
-			case 'ms-bn':
-			case 'ms-my':
-				return 'ms';
-
-			// burmese
-			case 'my':
-				return 'my';
-
-			// norwegian
-			case 'nb':
-			case 'nb-no':
-				return 'nb';
-
-			// dutch
-			case 'nl':
-			case 'nl-be':
-			case 'nl-nl':
-				return 'nl';
-
-			// polish
-			case 'pl':
-			case 'pl-pl':
-				return 'pl';
-
-			// portuguese
-			case 'pt':
-			case 'pt-br':
-			case 'pt-pt':
-				return 'pt-br';
-
-			// romanian
-			case 'ro':
-			case 'ro-ro':
-				return 'ro';
-
-			// russian
-			case 'ru':
-			case 'ru-ru':
-				return 'ru';
-
-			// slovak
-			case 'sk':
-			case 'sk-sk':
-				return 'sk';
-
-			// slovenian
-			case 'sl':
-			case 'sl-si':
-				return 'sl';
-
-			// albanian
-			case 'sq':
-			case 'sq-al':
-				return 'sq';
-
-			// serbian
-			case 'sr-ba':
-			case 'sr-sp':
-			case 'sr-rs':
-				return 'sr-rs';
-
-			// swedish
-			case 'sv':
-			case 'sv-fi':
-			case 'sv-se':
-				return 'sv';
-
-			// thai
-			case 'th':
-			case 'th-th':
-				return 'th';
-
-			// turkish
-			case 'tr':
-			case 'tr-tr':
-				return 'tr';
-
-			// ukranian
-			case 'uk':
-			case 'uk-ua':
-				return 'uk';
-
-			// urdu
-			case 'ur':
-			case 'ur-pk':
-				return 'ur';
-
-			// uzbek
-			case 'uz':
-			case 'uz-uz':
-				return 'uz';
-
-			// vietnamese
-			case 'vi':
-			case 'vi-vn':
-				return 'vi';
-
-			// chinese/simplified
-			case 'zh-cn':
-				return 'zh-cn';
-
-			// chinese/traditional
-			case 'zh':
-			case 'zh-hk':
-			case 'zh-mo':
-			case 'zh-sg':
-			case 'zh-tw':
-				return 'zh-tw';
-
-			/* these don't exist and have no real language code? */
-
-			// malaylam
-			case 'ml':
-				return 'ml';
-
-			// assume english
-			default:
-				return '';
-		}
 	}
 
 }
@@ -1014,50 +705,24 @@ if ( ! function_exists( 'lafka_is_legacy_blog_surface' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
-	/**
-	 * Whether the current request may render the legacy post-slider markup whose
-	 * CSS was extracted into styles/legacy-shortcodes.css (NX1-10a): the blog
-	 * surfaces only. The retired lafka_* shortcodes render no markup of their
-	 * own any more (plugin shortcodes/shortcodes.php), so page content is not
-	 * sniffed.
-	 *
-	 * @return bool
-	 */
-	function lafka_needs_legacy_shortcode_styles() {
-		return lafka_is_legacy_blog_surface();
-	}
-}
-
-if ( ! function_exists( 'lafka_needs_cloud_zoom' ) ) {
-	/**
-	 * Whether the current request renders CloudZoom markup: singular content
-	 * that embeds the plugin's [lafka_cloudzoom_gallery] shortcode.
-	 *
-	 * @return bool
-	 */
-	function lafka_needs_cloud_zoom() {
-		if ( ! is_singular() ) {
-			return false;
-		}
-		$post = get_post();
-		return $post instanceof WP_Post && false !== strpos( (string) $post->post_content, '[lafka_cloudzoom_gallery' );
-	}
-}
-
 if ( ! function_exists( 'lafka_enqueue_countdown' ) ) {
 	/**
-	 * Enqueue the jQuery countdown library (plus its locale file when the site
-	 * language has one). Safe to call while a template renders: the handles are
-	 * footer scripts, so a late enqueue still prints in wp_footer.
-	 *
-	 * @return void
+	 * Enqueue the countdown timer (js/lafka-countdown.js). Called where
+	 * countdown markup renders — a sale countdown, or the plugin's "store
+	 * closed" card — so no other page downloads it. Safe to call mid-render:
+	 * it is a footer script.
 	 */
 	function lafka_enqueue_countdown() {
-		wp_enqueue_script( 'countdown' );
-		if ( wp_script_is( 'jquery-countdown-local', 'registered' ) ) {
-			wp_enqueue_script( 'jquery-countdown-local' );
-		}
+		wp_enqueue_script(
+			'lafka-countdown',
+			get_template_directory_uri() . '/js/lafka-countdown.js',
+			array(),
+			lafka_asset_version( '/js/lafka-countdown.js' ),
+			array(
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
+		);
 	}
 }
 
@@ -1798,9 +1463,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		if ( lafka_is_legacy_blog_surface() ) {
 			wp_enqueue_style( 'lafka-legacy-blog', get_template_directory_uri() . '/styles/legacy-blog.css', array( 'lafka-style' ), $lafka_legacy_ver );
 		}
-		if ( lafka_needs_legacy_shortcode_styles() ) {
-			wp_enqueue_style( 'lafka-legacy-shortcodes', get_template_directory_uri() . '/styles/legacy-shortcodes.css', array( 'lafka-style' ), $lafka_legacy_ver );
-		}
 
 		// v5.40.0: tokenized WC notices (success / error / info). Loads
 		// site-wide after lafka-style so source order wins over the legacy
@@ -1821,8 +1483,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			wp_enqueue_style( 'lafka-responsive', get_template_directory_uri() . '/styles/lafka-responsive.css', array( 'lafka-style' ), lafka_asset_version( '/styles/lafka-responsive.css' ) );
 		}
 
-		// GX T-25: the legacy libraries (Font Awesome, flexslider, owl, animate,
-		// nice-select, imagesloaded) only load where a template can render their
+		// GX T-25: the legacy libraries (Font Awesome, imagesloaded, wp-util)
+		// only load where a template can render their
 		// markup — never on the counter surfaces (lafka_needs_legacy_libs()).
 		$lafka_legacy_libs = ! function_exists( 'lafka_needs_legacy_libs' ) || lafka_needs_legacy_libs();
 
@@ -1935,8 +1597,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'nonce'                   => wp_create_nonce( 'lafka_ajax_nonce' ),
 				'show_preloader'          => function_exists( 'lafka_preloader_enabled' ) && lafka_preloader_enabled() ? '1' : '',
 				'enable_smooth_scroll'    => esc_js( get_theme_mod( 'lafka_enable_smooth_scroll', true ) ),
-				'login_label'             => esc_js( __( 'Login', 'lafka' ) ),
-				'register_label'          => esc_js( __( 'Register', 'lafka' ) ),
 				'cart_redirect_after_add' => $cart_redirect_after_add,
 				'cart_url'                => $cart_url,
 				'enable_ajax_add_to_cart' => $enable_ajax_add_to_cart,
@@ -1945,7 +1605,6 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				'use_product_filter_ajax' => $use_product_filter_ajax,
 				'categories_fancy'        => $categories_fancy,
 				'order_hours_cart_update' => $order_hours_cart_update,
-				'is_rtl'                  => ( is_rtl() ? 'true' : 'false' ),
 			)
 		);
 
@@ -1963,61 +1622,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			'strategy'  => 'defer',
 		);
 
-		$post_content_for_lib_detect = $current_post_content;
-
-		// flexslider — `lafka-libs-config.js` calls `$(...).flexslider()`
-		// unconditionally on `window.load`, so we keep it enqueued globally.
-		// The defer strategy is the real win here. JS guard added at the call
-		// site protects against future narrowing.
-		// WooCommerce registers the same library (FlexSlider 2.7.2) as
-		// `wc-flexslider` (with `flexslider` as a legacy alias) before this runs,
-		// so the theme reuses it — product pages never load two copies and the
-		// generic `flexslider` handle is never claimed by the theme. Without it
-		// (no WooCommerce) the bundled copy loads under the theme's own
-		// `lafka-flexslider` handle (lafka_enqueue_flexslider()).
-		// GX T-25: kept on product pages (WooCommerce gallery slider) and
-		// wherever the legacy libraries load; dropped on the other counter
-		// surfaces, which render no slider markup.
-		$flex_enqueue            = $lafka_legacy_libs || ( function_exists( 'is_product' ) && is_product() );
-		$lafka_flexslider_handle = '';
-		if ( $flex_enqueue ) {
-			$lafka_flexslider_handle = lafka_enqueue_flexslider( $footer_defer );
-			wp_enqueue_style( 'lafka-flexslider', get_template_directory_uri() . '/styles/flex/flexslider.css', array(), lafka_asset_version( '/styles/flex/flexslider.css' ) );
-		}
-
-		// owl-carousel — same story; `lafka-libs-config.js` runs
-		// `.owlCarousel()` on multiple selectors at `window.load`. Defer is the
-		// safe gain. PERF-2 narrowing here is deferred until the JS file is
-		// converted to a "if-element-exists, lazy-import" pattern (P3-05).
-		// GX T-25: legacy surfaces only (lafka_needs_legacy_libs()).
-		$owl_enqueue = $lafka_legacy_libs;
-		if ( $owl_enqueue ) {
-			wp_enqueue_script( 'owl-carousel', get_template_directory_uri() . '/js/owl-carousel2-dist/owl.carousel.min.js', array( 'jquery' ), lafka_asset_version( '/js/owl-carousel2-dist/owl.carousel.min.js' ), $footer_defer );
-			wp_enqueue_style( 'owl-carousel', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.carousel.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.carousel.min.css' ) );
-			wp_enqueue_style( 'owl-carousel-theme-default', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/owl.theme.default.min.css' ) );
-			wp_enqueue_style( 'owl-carousel-animate', get_template_directory_uri() . '/styles/owl-carousel2-dist/assets/animate.css', array(), lafka_asset_version( '/styles/owl-carousel2-dist/assets/animate.css' ) );
-		}
-
-		// cloud-zoom — only where CloudZoom markup renders: content embedding
-		// [lafka_cloudzoom_gallery].
-		// The redesigned PDP has no zoom gallery, so product pages skip it.
-		wp_register_script( 'cloud-zoom', get_template_directory_uri() . '/js/cloud-zoom/cloud-zoom.1.0.2.min.js', array( 'jquery' ), lafka_asset_version( '/js/cloud-zoom/cloud-zoom.1.0.2.min.js' ), $footer_defer );
-		wp_register_style( 'cloud-zoom', get_template_directory_uri() . '/styles/cloud-zoom/cloud-zoom.css', array(), lafka_asset_version( '/styles/cloud-zoom/cloud-zoom.css' ) );
-		if ( lafka_needs_cloud_zoom() ) {
-			wp_enqueue_script( 'cloud-zoom' );
-			wp_enqueue_style( 'cloud-zoom' );
-		}
-
-		// countdown — registered everywhere, enqueued only where countdown
-		// markup renders (see lafka_enqueue_countdown()). The locale file is a
-		// dependant of the base library, so it never loads on its own.
-		wp_register_script( 'jquery-plugin', get_template_directory_uri() . '/js/count/jquery.plugin.min.js', array( 'jquery' ), lafka_asset_version( '/js/count/jquery.plugin.min.js' ), $footer_defer );
-		wp_register_script( 'countdown', get_template_directory_uri() . '/js/count/jquery.countdown.min.js', array( 'jquery', 'jquery-plugin' ), lafka_asset_version( '/js/count/jquery.countdown.min.js' ), $footer_defer );
-		$lafka_local = lafka_wp_lang_to_valid_language_code( get_locale() );
-		if ( $lafka_local ) {
-			wp_register_script( 'jquery-countdown-local', get_template_directory_uri() . "/js/count/jquery.countdown-$lafka_local.js", array( 'jquery', 'countdown' ), lafka_asset_version( "/js/count/jquery.countdown-$lafka_local.js" ), $footer_defer );
-		}
-		if ( ( function_exists( 'is_product' ) && is_product() ) || lafka_store_closed_countdown_visible() ) {
+		// The store-closed card (plugin) can render anywhere, including the mini
+		// cart, so its countdown is loaded whenever the store is closed; sale
+		// countdowns enqueue the timer themselves (lafka_enqueue_countdown()).
+		if ( lafka_store_closed_countdown_visible() ) {
 			lafka_enqueue_countdown();
 		}
 
@@ -2032,30 +1640,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// jquery.appear + isInViewport replaced by lafkaOnVisible() (IntersectionObserver)
 		// inside lafka-front.js — see P3-05. No standalone scripts to enqueue.
 
-		// typed.js v2 — only when the page actually uses `[lafka_typed]`. Lib is
-		// ~8 KB minified; loading it everywhere was pure overhead.
-		wp_register_script( 'typed', get_template_directory_uri() . '/js/typed.min.js', array(), lafka_asset_version( '/js/typed.min.js' ), $footer_defer );
-		if ( is_singular() && false !== strpos( $post_content_for_lib_detect, '[lafka_typed' ) ) {
-			wp_enqueue_script( 'typed' );
-		}
-
-		// nice-select — `lafka-front.js` calls `$(...).niceSelect()` (JS-guarded)
-		// on the classic shop sort / widget selects only. GX T-25: legacy
-		// surfaces only.
-		$nice_enqueue = $lafka_legacy_libs;
-		if ( $nice_enqueue ) {
-			wp_enqueue_script( 'nice-select', get_template_directory_uri() . '/js/jquery.nice-select.min.js', array( 'jquery' ), lafka_asset_version( '/js/jquery.nice-select.min.js' ), $footer_defer );
-		}
-
 		// is-in-viewport replaced by native getBoundingClientRect() check in
 		// lafka-front.js infinite-scroll handler (P3-05). No script to enqueue.
-
-		// register Isotope
-		wp_register_script( 'isotope', get_template_directory_uri() . '/js/isotope/dist/isotope.pkgd.min.js', array( 'jquery', 'imagesloaded' ), lafka_asset_version( '/js/isotope/dist/isotope.pkgd.min.js' ), true );
-		if ( get_theme_mod( 'lafka_general_blog_style', '' ) === 'lafka_blog_masonry' && ( is_archive() || is_category() || lafka_is_blog() ) ) {
-			// load Isotope
-			wp_enqueue_script( 'isotope' );
-		}
 
 		/* JavaScript to pages with the comment form
 		 * to support sites with threaded comments (when in use).
@@ -2070,31 +1656,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// wp-util backs the legacy quick view's variation template only
 		// (WooCommerce's own variation script depends on it where needed).
 		$lafka_libs_deps = $lafka_legacy_libs ? array( 'jquery', 'wp-util' ) : array( 'jquery' );
-		if ( $flex_enqueue && '' !== $lafka_flexslider_handle ) {
-			$lafka_libs_deps[] = $lafka_flexslider_handle;
-		}
-		if ( $owl_enqueue ) {
-			$lafka_libs_deps[] = 'owl-carousel';
-		}
-		if ( wp_script_is( 'typed', 'enqueued' ) ) {
-			$lafka_libs_deps[] = 'typed';
-		}
-		if ( $nice_enqueue ) {
-			$lafka_libs_deps[] = 'nice-select';
-		}
 		// lafka-libs-config calls window.lafkaDialog — depend on it explicitly
 		// so the script load order is correct even when defer is on.
 		$lafka_libs_deps[] = 'lafka-dialog';
 		wp_enqueue_script( 'lafka-libs-config', get_template_directory_uri() . '/js/lafka-libs-config.js', $lafka_libs_deps, lafka_asset_version( '/js/lafka-libs-config.js' ), $footer_defer );
-
-		// send is_rtl to js for owl carousel
-		wp_localize_script(
-			'lafka-libs-config',
-			'lafka_rtl',
-			array(
-				'is_rtl' => ( is_rtl() ? 'true' : 'false' ),
-			)
-		);
 
 		if ( LAFKA_IS_WOOCOMMERCE && get_theme_mod( 'lafka_use_quickview', true ) ) {
 			wp_localize_script(

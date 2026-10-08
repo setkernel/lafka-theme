@@ -221,16 +221,8 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 		$style_class = 'columns-' . get_theme_mod( 'lafka_category_columns_num', '3' );
 
 		if ( get_theme_mod( 'lafka_enable_shop_cat_carousel', true ) ) {
-			// owl carousel
-			wp_localize_script(
-				'lafka-libs-config',
-				'lafka_owl_carousel_cat',
-				array(
-					'columns' => esc_js( get_theme_mod( 'lafka_category_columns_num', '3' ) ),
-				)
-			);
-
-			$style_class = 'owl-carousel lafka-owl-carousel';
+			// A swipeable CSS scroll-snap row (style.css, .lafka-snap-row).
+			$style_class = 'lafka-snap-row lafka-snap-row--cols-' . absint( get_theme_mod( 'lafka_category_columns_num', '3' ) );
 		}
 
 		$display_type = woocommerce_get_loop_display_mode();
@@ -592,17 +584,15 @@ if ( ! function_exists( 'lafka_shop_sale_countdown' ) ) {
 			$sales_dates = lafka_get_product_sales_dates( $post );
 			$now         = time();
 			if ( $sales_dates['to'] && $now < $sales_dates['to'] ) {
-				// Late enqueue: the countdown handles are footer scripts, so
-				// they still print even though the loop is mid-render.
+				// Late enqueue: the timer is a footer script, so it still prints
+				// even though the loop is mid-render.
 				if ( function_exists( 'lafka_enqueue_countdown' ) ) {
 					lafka_enqueue_countdown();
 				}
-				$random_num = uniqid();
 				?>
-				<div class="count_holder_small" data-countdown-id="<?php echo esc_js( '#lafkaCountSmallLatest' . $post->ID . $random_num ); ?>"
-					data-countdown-to="<?php echo esc_js( gmdate( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>">
+				<div class="count_holder_small">
 					<div class="count_info"><?php esc_html_e( 'Offer ends in', 'lafka' ); ?>:</div>
-					<div id="lafkaCountSmallLatest<?php echo esc_attr( $post->ID . $random_num ); ?>"></div>
+					<div data-lafka-countdown-until="<?php echo esc_attr( (string) (int) $sales_dates['to'] ); ?>"></div>
 					<div class="clear"></div>
 				</div>
 				<?php
@@ -625,30 +615,14 @@ if ( ! function_exists( 'lafka_product_sale_countdown' ) ) {
 			$now         = time();
 
 			if ( $sales_dates['to'] && $now < $sales_dates['to'] ) {
-				$sales_dates = lafka_get_product_sales_dates( $post );
-				$now         = time();
-
-				$unique_id = uniqid( 'lafka_sale_countdown' );
+				if ( function_exists( 'lafka_enqueue_countdown' ) ) {
+					lafka_enqueue_countdown();
+				}
 				?>
 				<div class="count_holder"><span class="offer_title"><?php esc_html_e( 'Offer ends in', 'lafka' ); ?>:</span>
-					<div id="<?php echo esc_attr( $unique_id ); ?>"></div>
+					<div data-lafka-countdown-until="<?php echo esc_attr( (string) (int) $sales_dates['to'] ); ?>"></div>
 					<div class="clear"></div>
 				</div>
-				<script>
-					(function ($) {
-						"use strict";
-						$(window).on("load lafka_quickview_loaded", function () {
-							if (typeof $.fn.countdown !== 'function') {
-								return;
-							}
-							$('#<?php echo esc_attr( $unique_id ); ?>').countdown({
-								until: new Date("<?php echo esc_js( gmdate( 'F j, Y G:i:s', $sales_dates['to'] ) ); ?>"),
-								compact: false,
-								layout: '<span class="countdown_time_tiny">{dn} {dl} {hn}:{mnn}:{snn}</span>'
-							});
-						});
-					})(window.jQuery);
-				</script>
 				<?php
 			}
 		}

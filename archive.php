@@ -38,20 +38,8 @@ if ( $lafka_title_background_image ) {
 	$lafka_title_background_image = $lafka_img ? $lafka_img[0] : $lafka_img;
 }
 
-// Blog style
+// Blog style (lafka_blog_masonry is laid out by CSS, legacy-blog.css).
 $lafka_general_blog_style = get_theme_mod( 'lafka_general_blog_style', '' );
-switch ( $lafka_general_blog_style ) {
-	case 'lafka_blog_masonry':
-		// Isotope settings
-		wp_localize_script(
-			'lafka-libs-config',
-			'lafka_masonry_settings',
-			array(
-				'include' => 'true',
-			)
-		);
-		break;
-}
 ?>
 <?php if ( $lafka_has_offcanvas_sidebar ) : ?>
 	<?php get_sidebar( 'offcanvas' ); ?>

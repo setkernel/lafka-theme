@@ -14,7 +14,7 @@
  *
  * Scope rules:
  *   - top-level `styles/*.css` and `js/*.js` only — vendored libraries live in
- *     subdirectories (font-awesome/, owl-carousel2-dist/, ...) and are skipped
+ *     subdirectories (magnific/, fonts/, ...) and are skipped
  *     automatically by not recursing;
  *   - already-minified `*.min.*` inputs are skipped (no `.min.min.*`);
  *   - `styles/dynamic-css.php` is a `.php` file, so it never matches.

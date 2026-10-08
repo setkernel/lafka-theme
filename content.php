@@ -1,59 +1,19 @@
 <?php defined( 'ABSPATH' ) || exit; ?>
 <?php
-//  The default template for displaying content. Used for both single/archive/search/shortcode.
-
-$lafka_custom_options = get_post_custom( get_the_ID() );
-
-$lafka_featured_flex_slider_imgs = lafka_get_more_featured_images( get_the_ID() );
-
-// Blog style
-$lafka_general_blog_style = get_theme_mod( 'lafka_general_blog_style', '' );
+// One post in a blog list (index.php, archive.php, search.php). Single posts
+// render through single.php.
 
 // Featured image size
 $lafka_featured_image_size = 'lafka-content-wide';
-
-// If is latest posts
-if ( isset( $lafka_is_latest_posts ) && $lafka_is_latest_posts ) { // If is latest post shortcode
-	$lafka_featured_image_size = 'lafka-640x640';
-}
 
 $lafka_post_classes = array( 'blog-post' );
 if ( ! has_post_thumbnail() ) {
 	array_push( $lafka_post_classes, 'lafka-post-no-image' );
 }
-
-// Show or not the featured image in single post view
-if ( is_singular( array( 'post' ) ) ) {
-	$lafka_show_feat_image_in_post = 'yes';
-	if ( isset( $lafka_custom_options['lafka_show_feat_image_in_post'] ) && '' !== trim( $lafka_custom_options['lafka_show_feat_image_in_post'][0] ) ) {
-		$lafka_show_feat_image_in_post = $lafka_custom_options['lafka_show_feat_image_in_post'][0];
-	}
-}
 ?>
 <div id="post-<?php the_ID(); ?>" <?php post_class( $lafka_post_classes ); ?>>
 	<?php // Featured content for post list ?>
-	<?php if ( ! empty( $lafka_featured_flex_slider_imgs ) && is_singular() ) : // if there is slider or featured image attached and it is single post view, display it ?>
-		<div class="lafka_flexslider post_slide">
-			<ul class="slides">
-				<?php if ( has_post_thumbnail() ) : ?>
-					<li>
-						<?php echo wp_get_attachment_image( get_post_thumbnail_id(), $lafka_featured_image_size ); ?>
-					</li>
-				<?php endif; ?>
-
-				<?php foreach ( $lafka_featured_flex_slider_imgs as $lafka_img_att_id ) : ?>
-					<li>
-						<?php echo wp_get_attachment_image( $lafka_img_att_id, $lafka_featured_image_size ); ?>
-					</li>
-				<?php endforeach; ?>
-			</ul>
-			<?php if ( ! is_single() ) : ?>
-				<div class="foodmenu-unit-info">
-					<a class="go_to_page go_to_page_blog" title="<?php esc_attr_e( 'View', 'lafka' ); ?>" href="<?php echo esc_url( get_permalink() ); ?>"><?php the_title(); ?></a>
-				</div>
-			<?php endif; ?>
-		</div>
-	<?php elseif ( has_post_thumbnail() && ( ! is_single() || ( is_singular( array( 'post' ) ) && 'yes' === $lafka_show_feat_image_in_post ) ) ) : ?>
+	<?php if ( has_post_thumbnail() ) : ?>
 		<div class="post-unit-holder">
 			<?php the_post_thumbnail( $lafka_featured_image_size ); ?>
 			<?php if ( ! is_single() ) : ?>

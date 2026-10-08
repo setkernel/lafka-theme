@@ -142,22 +142,7 @@ Scripts and styles (verified from the bundled file headers):
 * Font Awesome Free 6.7.2 — Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT —
   Copyright 2024 Fonticons, Inc. — https://fontawesome.com/license/free
   (`styles/font-awesome/`).
-* Owl Carousel 2 v2.3.4 — MIT — Copyright 2013-2018 David Deutsch
-  (`js/owl-carousel2-dist/`, `styles/owl-carousel2-dist/`).
 * Magnific Popup v1.1.0 — MIT — Copyright 2016 Dmitry Semenov (`js/magnific/`).
-* Isotope v3.0.6 — GPLv3 (open-source use) or Isotope Commercial License —
-  Copyright 2010-2018 Metafizzy (`js/isotope/`).
-* FlexSlider v2.7.2 — GPLv2 — Copyright 2012 WooThemes (`js/flex/`).
-* jQuery Countdown v2.1.0 — MIT — Copyright Keith Wood (`js/count/`).
-* Simple JavaScript Inheritance (`js/count/jquery.plugin.js`) — MIT —
-  by John Resig.
-* Cloud Zoom v1.0.2 — MIT — Copyright 2010 R. Cecco — http://www.professorcloud.com
-  (`js/cloud-zoom/`).
-* jQuery Nice Select v1.0 — MIT — by Hernan Sartorio
-  (`js/jquery.nice-select.min.js`).
-* Typed.js — MIT — Copyright Matt Boldt — https://github.com/mattboldt/typed.js
-  (`js/typed.min.js`; TODO NX5-01: the bundled minified build records no
-  version, so the exact upstream release is unverified).
 
 Other vendored libraries not enumerated above (for example the remaining helper
 scripts under `js/`) are pending the same NX5-01 GPL audit.

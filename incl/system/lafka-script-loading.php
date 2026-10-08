@@ -49,16 +49,7 @@ if ( ! function_exists( 'lafka_deferred_script_handles' ) ) {
 			'lafka-upsell-modal',
 			'lafka-pdp-addons',
 			'lafka-price-slider',
-			// Vendor libraries the theme bundles and registers itself.
-			'lafka-flexslider',
-			'owl-carousel',
-			'cloud-zoom',
-			'jquery-plugin',
-			'countdown',
-			'jquery-countdown-local',
-			'typed',
-			'nice-select',
-			'isotope',
+			'lafka-countdown',
 		);
 
 		/**
@@ -101,29 +92,5 @@ if ( ! function_exists( 'lafka_apply_script_defer_strategy' ) ) {
 			}
 			wp_script_add_data( $handle, 'strategy', 'defer' );
 		}
-	}
-}
-
-if ( ! function_exists( 'lafka_enqueue_flexslider' ) ) {
-	/**
-	 * Enqueue FlexSlider and return the handle that provides it.
-	 *
-	 * WooCommerce registers FlexSlider 2.7.2 — the version the theme
-	 * bundles — as `wc-flexslider` (legacy alias `flexslider`), so it is reused
-	 * and product pages never load a second copy. Without WooCommerce the bundled copy
-	 * loads under the theme's own `lafka-flexslider` handle; the theme never
-	 * claims the generic `flexslider` name another plugin may own.
-	 *
-	 * @param array|bool $args Loading args for the bundled copy (wp_enqueue_script()'s $args).
-	 * @return string Script handle.
-	 */
-	function lafka_enqueue_flexslider( $args = true ) {
-		if ( wp_script_is( 'wc-flexslider', 'registered' ) ) {
-			wp_enqueue_script( 'wc-flexslider' );
-			return 'wc-flexslider';
-		}
-
-		wp_enqueue_script( 'lafka-flexslider', get_template_directory_uri() . '/js/flex/jquery.flexslider-min.js', array( 'jquery' ), lafka_asset_version( '/js/flex/jquery.flexslider-min.js' ), $args );
-		return 'lafka-flexslider';
 	}
 }

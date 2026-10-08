@@ -670,8 +670,7 @@ body.lafka_transparent_header .term-description+.content_holder div.lafka_woo_ca
     background-size: cover;
 }
 
-.post-unit-holder:hover .foodmenu-unit-info,
-.lafka_flexslider.post_slide:hover .foodmenu-unit-info {
+.post-unit-holder:hover .foodmenu-unit-info {
     opacity: 1;
 }
 
@@ -1060,10 +1059,6 @@ body.single-post .has-sidebar .lafka_post_data_holder {
     padding: 0 !important;
 }
 
-.lafka-related-blog-posts .owl-item div.post {
-    margin-bottom: 0 !important;
-}
-
 .lafka-related-blog-posts .lafka-post-no-image .lafka_post_data_holder {
     padding-top: 30px !important;
     min-height: 390px;
@@ -1418,14 +1413,6 @@ body.woocommerce-account .content_holder>.page>.woocommerce {
     padding-bottom: 60px;
 }
 
-body.woocommerce-account .content_holder #customer_login.col2-set .owl-nav button,
-.woocommerce .content_holder #customer_login.u-columns.col2-set .owl-nav button {
-    font-size: 24px;
-    font-weight: 600;
-    text-transform: uppercase;
-    background: none;
-}
-
 .content_holder li.lafka-shipping-no-options {
     background-color: #f00;
     color: #fff;
@@ -1495,10 +1482,6 @@ body.woocommerce-account .content_holder #customer_login.col2-set .owl-nav butto
     font-weight: 700;
 }
 
-.widget .nice-select {
-    width: 100%;
-}
-
 li.widget {
     list-style: none !important;
 }
@@ -1543,6 +1526,18 @@ body.lafka_transparent_header.lafka-transparent-dark #lafka_page_title.lafka_tit
 
 .lafka-uppercase-titles .lafka_title_holder .inner h1.heading-title {
     text-transform: uppercase;
+}
+
+/* Masonry blog style: a wrapping row of fixed-width cards (CSS only; replaces
+ * the Isotope script). Item widths come from the .blog-post rules above. */
+.content_holder.lafka_blog_masonry {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+}
+
+.content_holder.lafka_blog_masonry > :not(.blog-post) {
+    flex: 0 0 100%;
 }
 
 }

@@ -1059,7 +1059,7 @@ and (orientation: landscape) {
         display: block;
     }
 
-    .lafka_blog_small_image .blog-post .post-unit-holder, .lafka_blog_small_image .blog-post .lafka_flexslider.post_slide {
+    .lafka_blog_small_image .blog-post .post-unit-holder {
         margin-right: 0;
         width: 100%;
         float: none;
@@ -1188,7 +1188,7 @@ and (orientation: landscape) {
         display: block;
     }
 
-    .lafka_blog_small_image .blog-post .post-unit-holder, .lafka_blog_small_image .blog-post .lafka_flexslider.post_slide {
+    .lafka_blog_small_image .blog-post .post-unit-holder {
         margin-right: 0;
         width: 100%;
         float: none;

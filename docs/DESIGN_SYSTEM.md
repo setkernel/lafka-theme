@@ -456,6 +456,10 @@ New button-like UI reuses them.
   (outline, inverts on hover), `--lg` (52 px minimum height).
 - `.lafka-status-pill`: open and closed badge (`--closed`).
 - `.lafka-product-card`: product list row, image left and body right.
+- `.lafka-snap-row` (`style.css`): a swipeable row built on CSS scroll-snap, one
+  item per view; `--cols-N` shows up to N items as the viewport widens. It replaces
+  the old carousel library (no script). Countdowns use `js/lafka-countdown.js`
+  (`data-lafka-countdown-until="<unix time>"`), loaded only where one renders.
 
 ## Stylesheets
 
@@ -466,7 +470,7 @@ Tokens are the contract. These are the files that consume them.
 | `styles/lafka-tokens.css` | Token source: colour, type, space, radii, motion, dark scaffold, `accent-text` derivation. |
 | `styles/dynamic-css.php` | Operator layer: the accent and brand overrides and the chrome theme_mods, resolved through the active preset. |
 | `incl/presets/`, `presets/*/preset.json` | The preset engine (above). |
-| `styles/lafka-base.css` | Structural rules the parent's markup needs on its own: `.section-subtitle`, ingredient lists, `.screen-reader-text`, carousel height reservation. |
+| `styles/lafka-base.css` | Structural rules the parent's markup needs on its own: `.section-subtitle`, `.screen-reader-text`, the grouped mobile menu. |
 | `styles/lafka-counter.css`, `styles/critical-counter.css` | Counter layout and its inlined first-paint slice. |
 | `styles/lafka-search.css` | Header search overlay (native `<dialog>`). |
 | `styles/pdp-redesign.css` | Product page. |

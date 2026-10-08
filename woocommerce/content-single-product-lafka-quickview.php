@@ -46,11 +46,7 @@ if ( $product->is_downloadable() ) {
 	 */
 	do_action( 'woocommerce_before_single_product_summary' );
 	?>
-	<div class="lafka-quickview-images images 
-	<?php
-	if ( count( $lafka_attachment_ids ) ) :
-		?>
-		owl-carousel lafka-owl-carousel<?php endif; ?>">
+	<div class="lafka-quickview-images images<?php echo count( $lafka_attachment_ids ) ? ' lafka-snap-row' : ''; ?>">
 
 		<?php
 		if ( has_post_thumbnail() ) {
@@ -69,22 +65,6 @@ if ( $product->is_downloadable() ) {
 		}
 		?>
 	</div>
-	<?php if ( count( $lafka_attachment_ids ) ) : ?>
-		<script>
-			jQuery(".lafka-quickview-images").owlCarousel({
-				rtl: <?php echo is_rtl() ? 'true' : 'false'; ?>,
-				items: 1,
-				dots: false,
-				loop: false,
-				rewind: true,
-				nav: true,
-				navText: [
-					"<i class='fas fa-angle-left'></i>",
-					"<i class='fas fa-angle-right'></i>"
-				],
-			});
-		</script>
-	<?php endif; ?>
 	<div class="summary entry-summary">
 		<?php
 		/**

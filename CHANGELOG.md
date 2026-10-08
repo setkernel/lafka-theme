@@ -127,6 +127,20 @@ git tags + GitHub Releases.
   `lafka_needs_legacy_shortcode_styles()` no longer sniffs page content for `[lafka_` and
   loads `styles/legacy-shortcodes.css` on the blog surfaces only.
 
+- **Vendored jQuery plugins**: Cloud Zoom, Typed.js, Nice Select, the theme's FlexSlider copy
+  and `styles/flex/` (WooCommerce's own `wc-flexslider` still drives the product gallery;
+  the few thumbnail rules it needs moved into `style.css`), Owl Carousel (the shop
+  category row and the quick-view images are now CSS scroll-snap rows, `.lafka-snap-row`;
+  the login/register pair on My account is no longer a slider), Isotope (the masonry blog
+  style is a CSS flex-wrap grid) and jQuery Countdown with `jquery.plugin` and its 55
+  locale files (replaced by `js/lafka-countdown.js`, a small `Intl`-based timer loaded
+  only where a sale countdown or the store-closed card renders), with their handles,
+  `lafka_enqueue_flexslider()`, `lafka_needs_cloud_zoom()`,
+  `lafka_wp_lang_to_valid_language_code()`, `styles/legacy-shortcodes.css`, the dead
+  `lafka_owl_carousel` block and `lafka_rtl` / `login_label` / `register_label` script
+  data. The single-post gallery branch of `content.php` (never reached: single posts
+  render through `single.php`) is gone.
+
 ## [7.3.0] — 2026-09-25
 
 Live-site QA sharpening (2026-09-25); pairs with lafka-plugin 10.3.0.

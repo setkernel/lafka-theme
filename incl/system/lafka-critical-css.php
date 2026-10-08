@@ -198,11 +198,6 @@ if ( ! function_exists( 'lafka_critical_css_async_handles' ) ) {
 			'font_awesome_6_v4shims',
 			'flaticon',
 			'et-line-font',
-			'lafka-flexslider',
-			'owl-carousel',
-			'owl-carousel-theme-default',
-			'owl-carousel-animate',
-			'cloud-zoom',
 			'photoswipe',
 			'photoswipe-default-skin',
 		);

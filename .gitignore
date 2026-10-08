@@ -28,12 +28,9 @@ vendor/
 # only when present on disk.
 /styles/*.min.css
 /js/*.min.js
-# Exceptions: lafka-dialog.min.js is build output that lafka-plugin registers
-# by path, so it stays committed (CI fails if it drifts from `npm run build`);
-# two vendored libraries are distributed only in minified form.
+# Exception: lafka-dialog.min.js is build output that lafka-plugin registers
+# by path, so it stays committed (CI fails if it drifts from `npm run build`).
 !/js/lafka-dialog.min.js
-!/js/typed.min.js
-!/js/jquery.nice-select.min.js
 
 # Misc
 *.log
