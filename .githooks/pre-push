@@ -1,66 +1,57 @@
 #!/usr/bin/env bash
 #
-# Pre-push hook for lafka-theme.
-#
-# Runs the repository's quality gates — PHPCS, ESLint, Stylelint and the
-# version-consistency check — in parallel, and prints the output of any gate
-# that fails. Every gate always runs; nothing is skipped.
+# Pre-push hook for lafka-theme: runs every CI gate (version SSOT, PHP
+# syntax, PHPCS, ESLint, Stylelint, committed build output) on every push, the
+# independent ones in parallel. Lint caches keep unchanged files fast.
+# Nothing is optional: a missing dependency fails the push.
 #
 # Install (one-time per clone):
 #     git config core.hooksPath .githooks
-#     composer install && npm ci
 #
 
 set -uo pipefail
-
-cd "$(git rev-parse --show-toplevel)"
+cd "$(git rev-parse --show-toplevel)" || exit 1
 
 red()   { printf '\033[31m%s\033[0m\n' "$1"; }
 green() { printf '\033[32m%s\033[0m\n' "$1"; }
 blue()  { printf '\033[36m%s\033[0m\n' "$1"; }
 
-if [ ! -d node_modules ]; then
-	red "✖ pre-push: node_modules is missing, so ESLint, Stylelint and the version check cannot run."
-	red "   Run 'npm ci' (and 'composer install' for PHPCS), then push again."
-	exit 1
-fi
+[ -d node_modules ] || { red "✖ pre-push: node_modules missing — run: npm ci"; exit 1; }
+[ -d vendor ] || { red "✖ pre-push: vendor missing — run: composer install"; exit 1; }
 
-if [ ! -x vendor/bin/phpcs ]; then
-	red "✖ pre-push: vendor/bin/phpcs is missing, so PHPCS cannot run."
-	red "   Run 'composer install', then push again."
-	exit 1
-fi
+blue "▸ pre-push: version SSOT"
+npm run check-version --silent || { red "✖ pre-push: version check FAILED"; exit 1; }
 
-logs="$(mktemp -d)"
-trap 'rm -rf "$logs"' EXIT
-
-names=()
+logdir=$(mktemp -d)
+trap 'rm -rf "$logdir"' EXIT
 pids=()
-run() {
-	local name="$1"
+names=()
+run() { # run <name> <command...> in the background, output to a log
+	local name=$1
 	shift
-	names+=( "$name" )
-	"$@" >"$logs/$name.log" 2>&1 &
-	pids+=( $! )
+	blue "▸ pre-push: $name"
+	( "$@" > "$logdir/$name.log" 2>&1 ) &
+	pids+=($!)
+	names+=("$name")
 }
 
-blue "▸ pre-push: PHPCS, ESLint, Stylelint and version check (in parallel)"
-run PHPCS composer phpcs
-run ESLint npm run lint:js --silent
-run Stylelint npm run lint:css --silent
-run Version npm run check-version --silent
+run php-syntax composer lint:php --quiet
+run phpcs composer phpcs --quiet
+run eslint npm run lint:js --silent
+run stylelint npm run lint:css --silent
+run build-output sh -c 'npm run build --silent > /dev/null && git diff --exit-code -- js/lafka-dialog.min.js'
 
 failed=0
 for i in "${!pids[@]}"; do
 	if ! wait "${pids[$i]}"; then
-		failed=1
 		red "✖ pre-push: ${names[$i]} FAILED"
-		tail -n 40 "$logs/${names[$i]}.log"
+		tail -20 "$logdir/${names[$i]}.log"
+		failed=1
 	fi
 done
 
-if [ "$failed" -ne 0 ]; then
-	red "   fix the failures above, then push again."
+if [ "$failed" = 1 ]; then
+	red "   fix the failing gates above, then push again"
 	exit 1
 fi
 

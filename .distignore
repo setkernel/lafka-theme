@@ -1,0 +1,28 @@
+# Dev-only paths kept out of the installable zip. Single source of truth:
+# release.yml builds the zip with `rsync --exclude-from=.distignore` (after
+# `npm run build`, so the git-ignored .min siblings ship), and
+# `wp dist-archive` honours the same file.
+/.git
+/.github
+/.githooks
+/.gitignore
+/.distignore
+/.npmrc
+/.phpcs.cache
+/.eslintcache
+/.stylelintcache
+.DS_Store
+/node_modules
+/vendor
+/package.json
+/package-lock.json
+/composer.json
+/composer.lock
+/.phpcs.xml.dist
+/.stylelintrc.json
+/eslint.config.mjs
+/scripts
+/docs
+/CONTRIBUTING.md
+/DESIGN_SYSTEM.md
+/README.md

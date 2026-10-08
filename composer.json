@@ -23,6 +23,7 @@
 		}
 	},
 	"scripts": {
+		"lint:php": "find . -name '*.php' -not -path './vendor/*' -not -path './node_modules/*' -print0 | xargs -0 -n1 -P4 php -d display_errors=stderr -l > /dev/null",
 		"phpcs": "phpcs",
 		"phpcbf": "phpcbf"
 	}
