@@ -34,7 +34,7 @@ if ( ! function_exists( 'lafka_counter_customize_register_layouts' ) ) {
 			)
 		);
 
-		$labels = array(
+		$labels  = array(
 			'header' => __( 'Header', 'lafka' ),
 			'home'   => __( 'Home page', 'lafka' ),
 			'menu'   => __( 'Menu page and category pages', 'lafka' ),

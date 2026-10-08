@@ -146,9 +146,9 @@ if ( ! class_exists( 'Lafka_Presets' ) ) {
 			if ( '' === $parent || ! isset( $all[ $parent ] ) || isset( $seen[ $slug ] ) ) {
 				return $data;
 			}
-			$seen[ $slug ] = true;
-			$base          = $this->resolve_extends( $parent, $all, $seen );
-			$merged        = self::deep_merge( $base, $data );
+			$seen[ $slug ]     = true;
+			$base              = $this->resolve_extends( $parent, $all, $seen );
+			$merged            = self::deep_merge( $base, $data );
 			$merged['slug']    = $slug; // never inherit the parent's slug.
 			$merged['extends'] = null;  // resolved.
 			return $merged;

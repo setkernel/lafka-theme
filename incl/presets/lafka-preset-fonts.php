@@ -75,7 +75,7 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 		array(
 
 			// ---- BASE families (already self-hosted; engine emits nothing) -----
-			'rubik'            => array(
+			'rubik'                      => array(
 				'family'   => 'Rubik',
 				'source'   => 'base',
 				'dir'      => 'rubik',
@@ -88,7 +88,7 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 					700 => array( 'latin' => 'Rubik-700.woff2' ),
 				),
 			),
-			'fraunces'         => array(
+			'fraunces'                   => array(
 				'family'   => 'Fraunces',
 				'source'   => 'base',
 				'dir'      => 'fraunces',
@@ -103,7 +103,7 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 			),
 
 			// ---- POOL families (conditional per-preset @font-face) -------------
-			'inter'            => array(
+			'inter'                      => array(
 				'family'   => 'Inter',
 				'source'   => 'pool',
 				'dir'      => 'inter',
@@ -112,20 +112,20 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 				'license'  => 'LICENSE',
 				'weights'  => array(
 					400 => array(
-						'latin' => 'Inter-400.woff2',
+						'latin'     => 'Inter-400.woff2',
 						'latin-ext' => 'Inter-400-ext.woff2',
 					),
 					600 => array(
-						'latin' => 'Inter-600.woff2',
+						'latin'     => 'Inter-600.woff2',
 						'latin-ext' => 'Inter-600-ext.woff2',
 					),
 					700 => array(
-						'latin' => 'Inter-700.woff2',
+						'latin'     => 'Inter-700.woff2',
 						'latin-ext' => 'Inter-700-ext.woff2',
 					),
 				),
 			),
-			'archivo'          => array(
+			'archivo'                    => array(
 				'family'   => 'Archivo',
 				'source'   => 'pool',
 				'dir'      => 'archivo',
@@ -134,20 +134,20 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 				'license'  => 'LICENSE',
 				'weights'  => array(
 					400 => array(
-						'latin' => 'Archivo-400.woff2',
+						'latin'     => 'Archivo-400.woff2',
 						'latin-ext' => 'Archivo-400-ext.woff2',
 					),
 					600 => array(
-						'latin' => 'Archivo-600.woff2',
+						'latin'     => 'Archivo-600.woff2',
 						'latin-ext' => 'Archivo-600-ext.woff2',
 					),
 					700 => array(
-						'latin' => 'Archivo-700.woff2',
+						'latin'     => 'Archivo-700.woff2',
 						'latin-ext' => 'Archivo-700-ext.woff2',
 					),
 				),
 			),
-			'lora'             => array(
+			'lora'                       => array(
 				'family'   => 'Lora',
 				'source'   => 'pool',
 				'dir'      => 'lora',
@@ -156,20 +156,20 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 				'license'  => 'LICENSE',
 				'weights'  => array(
 					400 => array(
-						'latin' => 'Lora-400.woff2',
+						'latin'     => 'Lora-400.woff2',
 						'latin-ext' => 'Lora-400-ext.woff2',
 					),
 					600 => array(
-						'latin' => 'Lora-600.woff2',
+						'latin'     => 'Lora-600.woff2',
 						'latin-ext' => 'Lora-600-ext.woff2',
 					),
 					700 => array(
-						'latin' => 'Lora-700.woff2',
+						'latin'     => 'Lora-700.woff2',
 						'latin-ext' => 'Lora-700-ext.woff2',
 					),
 				),
 			),
-			'manrope'          => array(
+			'manrope'                    => array(
 				'family'   => 'Manrope',
 				'source'   => 'pool',
 				'dir'      => 'manrope',
@@ -178,20 +178,20 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 				'license'  => 'LICENSE',
 				'weights'  => array(
 					400 => array(
-						'latin' => 'Manrope-400.woff2',
+						'latin'     => 'Manrope-400.woff2',
 						'latin-ext' => 'Manrope-400-ext.woff2',
 					),
 					600 => array(
-						'latin' => 'Manrope-600.woff2',
+						'latin'     => 'Manrope-600.woff2',
 						'latin-ext' => 'Manrope-600-ext.woff2',
 					),
 					700 => array(
-						'latin' => 'Manrope-700.woff2',
+						'latin'     => 'Manrope-700.woff2',
 						'latin-ext' => 'Manrope-700-ext.woff2',
 					),
 				),
 			),
-			'space-grotesk'    => array(
+			'space-grotesk'              => array(
 				'family'   => 'Space Grotesk',
 				'source'   => 'pool',
 				'dir'      => 'space-grotesk',
@@ -200,20 +200,20 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 				'license'  => 'LICENSE',
 				'weights'  => array(
 					400 => array(
-						'latin' => 'SpaceGrotesk-400.woff2',
+						'latin'     => 'SpaceGrotesk-400.woff2',
 						'latin-ext' => 'SpaceGrotesk-400-ext.woff2',
 					),
 					600 => array(
-						'latin' => 'SpaceGrotesk-600.woff2',
+						'latin'     => 'SpaceGrotesk-600.woff2',
 						'latin-ext' => 'SpaceGrotesk-600-ext.woff2',
 					),
 					700 => array(
-						'latin' => 'SpaceGrotesk-700.woff2',
+						'latin'     => 'SpaceGrotesk-700.woff2',
 						'latin-ext' => 'SpaceGrotesk-700-ext.woff2',
 					),
 				),
 			),
-			'dm-serif-display' => array(
+			'dm-serif-display'           => array(
 				'family'   => 'DM Serif Display',
 				'source'   => 'pool',
 				'dir'      => 'dm-serif-display',
@@ -222,7 +222,7 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 				'license'  => 'LICENSE',
 				'weights'  => array(
 					400 => array(
-						'latin' => 'DMSerifDisplay-400.woff2',
+						'latin'     => 'DMSerifDisplay-400.woff2',
 						'latin-ext' => 'DMSerifDisplay-400-ext.woff2',
 					),
 				),
@@ -239,11 +239,11 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 				'license'  => 'LICENSE',
 				'weights'  => array(
 					400 => array(
-						'latin' => 'AtkinsonHyperlegibleNext-400.woff2',
+						'latin'     => 'AtkinsonHyperlegibleNext-400.woff2',
 						'latin-ext' => 'AtkinsonHyperlegibleNext-400-ext.woff2',
 					),
 					700 => array(
-						'latin' => 'AtkinsonHyperlegibleNext-700.woff2',
+						'latin'     => 'AtkinsonHyperlegibleNext-700.woff2',
 						'latin-ext' => 'AtkinsonHyperlegibleNext-700-ext.woff2',
 					),
 				),
@@ -251,7 +251,7 @@ if ( ! defined( 'LAFKA_FONT_POOL' ) ) {
 			// Display: ONE variable file per subset (optical size + weight 200–800).
 			// `variable` entries carry `weight` (the font-weight range) + `files`
 			// (subset => file) instead of per-weight `weights`.
-			'bricolage-grotesque' => array(
+			'bricolage-grotesque'        => array(
 				'family'   => 'Bricolage Grotesque',
 				'source'   => 'pool',
 				'dir'      => 'bricolage-grotesque',

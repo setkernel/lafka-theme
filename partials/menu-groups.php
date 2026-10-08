@@ -86,7 +86,7 @@ foreach ( $lafka_mg_terms as $lafka_mg_term ) :
 			foreach ( $lafka_mg_products as $lafka_mg_p ) {
 				$lafka_mg_by_id[ (int) $lafka_mg_p->get_id() ] = $lafka_mg_p;
 			}
-			$lafka_mg_used  = array();
+			$lafka_mg_used           = array();
 			$lafka_mg_child_sections = array();
 			foreach ( $lafka_mg_children as $lafka_mg_child ) {
 				$lafka_mg_child_ids = (array) wc_get_products(
@@ -99,7 +99,7 @@ foreach ( $lafka_mg_terms as $lafka_mg_term ) :
 						'return'     => 'ids',
 					)
 				);
-				$lafka_mg_pick = array();
+				$lafka_mg_pick      = array();
 				foreach ( $lafka_mg_child_ids as $lafka_mg_cid ) {
 					$lafka_mg_cid = (int) $lafka_mg_cid;
 					if ( isset( $lafka_mg_by_id[ $lafka_mg_cid ] ) && ! isset( $lafka_mg_used[ $lafka_mg_cid ] ) ) {
@@ -115,7 +115,7 @@ foreach ( $lafka_mg_terms as $lafka_mg_term ) :
 				}
 			}
 			if ( $lafka_mg_child_sections ) {
-				$lafka_mg_loose = array_values(
+				$lafka_mg_loose    = array_values(
 					array_filter(
 						$lafka_mg_products,
 						static fn( $p ) => ! isset( $lafka_mg_used[ (int) $p->get_id() ] )

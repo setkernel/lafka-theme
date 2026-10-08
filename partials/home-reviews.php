@@ -21,8 +21,8 @@ if ( ! $lafka_rev_visible ) {
 	return;
 }
 
-$lafka_rev_avg   = (float) get_theme_mod( 'lafka_home_reviews_rating', 0 );
-$lafka_rev_count = (int) get_theme_mod( 'lafka_home_reviews_count', 0 );
+$lafka_rev_avg      = (float) get_theme_mod( 'lafka_home_reviews_rating', 0 );
+$lafka_rev_count    = (int) get_theme_mod( 'lafka_home_reviews_count', 0 );
 $lafka_rev_headline = (string) get_theme_mod( 'lafka_home_reviews_headline', __( 'What our neighbors say', 'lafka' ) );
 
 // Aggregate star count is derived from the rounded average (0–5), so the

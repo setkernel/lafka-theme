@@ -102,12 +102,12 @@ if ( taxonomy_exists( 'product_cat' ) && function_exists( 'lafka_menu_top_catego
 					<?php
 					wp_nav_menu(
 						array(
-							'theme_location' => 'primary',
-							'container'      => 'nav',
+							'theme_location'  => 'primary',
+							'container'       => 'nav',
 							'container_class' => 'lafka-mobile-nav__nav',
-							'menu_class'     => 'lafka-mobile-nav__list',
-							'depth'          => 1,
-							'fallback_cb'    => '',
+							'menu_class'      => 'lafka-mobile-nav__list',
+							'depth'           => 1,
+							'fallback_cb'     => '',
 						)
 					);
 					?>

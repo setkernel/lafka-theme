@@ -111,46 +111,46 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// theme_mods (migrated off the legacy `lafka` option); inline defaults
 		// reproduce the registry `std` so fresh installs still render the
 		// shipped Peppery pixels.
-		$accent_color                    = esc_attr( get_theme_mod( 'lafka_accent_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_accent_color', '#dc2626' ) : '#dc2626' ) );
+		$accent_color = esc_attr( get_theme_mod( 'lafka_accent_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_accent_color', '#dc2626' ) : '#dc2626' ) );
 		// f074: brand-ramp anchor. Default #f59e0b matches the shipped
 		// pepper-yellow in lafka-tokens.css so the out-of-box ramp is
 		// unchanged; operators who set a brand color drive the handoff
 		// `--lafka-color-brand-500` consumers (footer chrome, hero gradient,
 		// open-status dot, etc.) instead of that token being fixed in CSS.
-		$brand_color                     = esc_attr( get_theme_mod( 'lafka_brand_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_brand_color', '#f59e0b' ) : '#f59e0b' ) );
-		$logo_bg_color                   = esc_attr( get_theme_mod( 'lafka_logo_background_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_logo_background_color', '#fccc4c' ) : '#fccc4c' ) );
+		$brand_color   = esc_attr( get_theme_mod( 'lafka_brand_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_brand_color', '#f59e0b' ) : '#f59e0b' ) );
+		$logo_bg_color = esc_attr( get_theme_mod( 'lafka_logo_background_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_logo_background_color', '#fccc4c' ) : '#fccc4c' ) );
 		// NX1-02.dyncss-content-colors: content color tokens (links, sidebar
 		// titles, all-buttons, new/sale labels, page title/subtitle) read from
 		// `lafka_<key>` theme_mods (migrated off the legacy `lafka` option).
 		// Inline defaults reproduce the Options-Framework `std` so fresh installs
 		// still render the shipped Peppery pixels.
-		$links_color                     = esc_attr( get_theme_mod( 'lafka_links_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_links_color', '#dc2626' ) : '#dc2626' ) );
-		$links_hover_color               = esc_attr( get_theme_mod( 'lafka_links_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_links_hover_color', '#ce4f44' ) : '#ce4f44' ) );
-		$sidebar_titles_color            = esc_attr( get_theme_mod( 'lafka_sidebar_titles_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_sidebar_titles_color', '#333333' ) : '#333333' ) );
-		$all_buttons_color               = esc_attr( get_theme_mod( 'lafka_all_buttons_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_all_buttons_color', '#dc2626' ) : '#dc2626' ) );
-		$all_buttons_hover_color         = esc_attr( get_theme_mod( 'lafka_all_buttons_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_all_buttons_hover_color', '#b91c1c' ) : '#b91c1c' ) );
-		$new_label_color                 = esc_attr( get_theme_mod( 'lafka_new_label_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_new_label_color', '#047857' ) : '#047857' ) );
-		$sale_label_color                = esc_attr( get_theme_mod( 'lafka_sale_label_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_sale_label_color', '#dc2626' ) : '#dc2626' ) );
-		$page_title_color                = esc_attr( get_theme_mod( 'lafka_page_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_title_color', '#22272d' ) : '#22272d' ) );
-		$page_subtitle_color             = esc_attr( get_theme_mod( 'lafka_page_subtitle_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_subtitle_color', '#5e5e5e' ) : '#5e5e5e' ) );
-		$custom_page_title_color         = esc_attr( get_theme_mod( 'lafka_custom_page_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_custom_page_title_color', '#ffffff' ) : '#ffffff' ) );
+		$links_color             = esc_attr( get_theme_mod( 'lafka_links_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_links_color', '#dc2626' ) : '#dc2626' ) );
+		$links_hover_color       = esc_attr( get_theme_mod( 'lafka_links_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_links_hover_color', '#ce4f44' ) : '#ce4f44' ) );
+		$sidebar_titles_color    = esc_attr( get_theme_mod( 'lafka_sidebar_titles_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_sidebar_titles_color', '#333333' ) : '#333333' ) );
+		$all_buttons_color       = esc_attr( get_theme_mod( 'lafka_all_buttons_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_all_buttons_color', '#dc2626' ) : '#dc2626' ) );
+		$all_buttons_hover_color = esc_attr( get_theme_mod( 'lafka_all_buttons_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_all_buttons_hover_color', '#b91c1c' ) : '#b91c1c' ) );
+		$new_label_color         = esc_attr( get_theme_mod( 'lafka_new_label_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_new_label_color', '#047857' ) : '#047857' ) );
+		$sale_label_color        = esc_attr( get_theme_mod( 'lafka_sale_label_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_sale_label_color', '#dc2626' ) : '#dc2626' ) );
+		$page_title_color        = esc_attr( get_theme_mod( 'lafka_page_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_title_color', '#22272d' ) : '#22272d' ) );
+		$page_subtitle_color     = esc_attr( get_theme_mod( 'lafka_page_subtitle_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_subtitle_color', '#5e5e5e' ) : '#5e5e5e' ) );
+		$custom_page_title_color = esc_attr( get_theme_mod( 'lafka_custom_page_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_custom_page_title_color', '#ffffff' ) : '#ffffff' ) );
 		// NX1-02.dyncss-chrome-colors: page-title and footer color tokens read
 		// from `lafka_<key>` theme_mods (migrated off the legacy `lafka` option).
 		// Inline defaults reproduce the Options-Framework `std` so fresh installs
 		// still render the shipped Peppery pixels.
-		$transparent_dark_menu_color     = esc_attr( get_theme_mod( 'lafka_transparent_header_dark_menu_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_transparent_header_dark_menu_color', '#22272d' ) : '#22272d' ) );
-		$page_title_bg_color             = esc_attr( get_theme_mod( 'lafka_page_title_bckgr_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_title_bckgr_color', '#f7f7f7' ) : '#f7f7f7' ) );
-		$page_title_border_color         = esc_attr( get_theme_mod( 'lafka_page_title_border_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_title_border_color', '#f0f0f0' ) : '#f0f0f0' ) );
-		$footer_titles_color             = esc_attr( get_theme_mod( 'lafka_footer_titles_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_titles_color', '#ffffff' ) : '#ffffff' ) );
-		$footer_title_border_color       = esc_attr( get_theme_mod( 'lafka_footer_title_border_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_title_border_color', '#f1f1f1' ) : '#f1f1f1' ) );
-		$footer_links_color              = esc_attr( get_theme_mod( 'lafka_footer_links_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_links_color', '#f5f5f5' ) : '#f5f5f5' ) );
-		$footer_text_color               = esc_attr( get_theme_mod( 'lafka_footer_text_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_text_color', '#aeaeae' ) : '#aeaeae' ) );
+		$transparent_dark_menu_color = esc_attr( get_theme_mod( 'lafka_transparent_header_dark_menu_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_transparent_header_dark_menu_color', '#22272d' ) : '#22272d' ) );
+		$page_title_bg_color         = esc_attr( get_theme_mod( 'lafka_page_title_bckgr_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_title_bckgr_color', '#f7f7f7' ) : '#f7f7f7' ) );
+		$page_title_border_color     = esc_attr( get_theme_mod( 'lafka_page_title_border_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_title_border_color', '#f0f0f0' ) : '#f0f0f0' ) );
+		$footer_titles_color         = esc_attr( get_theme_mod( 'lafka_footer_titles_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_titles_color', '#ffffff' ) : '#ffffff' ) );
+		$footer_title_border_color   = esc_attr( get_theme_mod( 'lafka_footer_title_border_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_title_border_color', '#f1f1f1' ) : '#f1f1f1' ) );
+		$footer_links_color          = esc_attr( get_theme_mod( 'lafka_footer_links_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_links_color', '#f5f5f5' ) : '#f5f5f5' ) );
+		$footer_text_color           = esc_attr( get_theme_mod( 'lafka_footer_text_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_footer_text_color', '#aeaeae' ) : '#aeaeae' ) );
 		// NX1-02.dyncss-content-colors: product-listing color tokens (add-to-cart
 		// button, listing price fg/bg, fancy category title) read from theme_mods.
-		$add_to_cart_color               = esc_attr( get_theme_mod( 'lafka_add_to_cart_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_add_to_cart_color', '#e4584b' ) : '#e4584b' ) );
-		$price_color                     = esc_attr( get_theme_mod( 'lafka_price_color_in_listings', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_price_color_in_listings', '#feda5e' ) : '#feda5e' ) );
-		$price_bg_color                  = esc_attr( get_theme_mod( 'lafka_price_background_color_in_listings', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_price_background_color_in_listings', '#4d2c21' ) : '#4d2c21' ) );
-		$fancy_category_title_color      = esc_attr( get_theme_mod( 'lafka_fancy_category_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_fancy_category_title_color', '#dd3333' ) : '#dd3333' ) );
+		$add_to_cart_color          = esc_attr( get_theme_mod( 'lafka_add_to_cart_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_add_to_cart_color', '#e4584b' ) : '#e4584b' ) );
+		$price_color                = esc_attr( get_theme_mod( 'lafka_price_color_in_listings', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_price_color_in_listings', '#feda5e' ) : '#feda5e' ) );
+		$price_bg_color             = esc_attr( get_theme_mod( 'lafka_price_background_color_in_listings', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_price_background_color_in_listings', '#4d2c21' ) : '#4d2c21' ) );
+		$fancy_category_title_color = esc_attr( get_theme_mod( 'lafka_fancy_category_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_fancy_category_title_color', '#dd3333' ) : '#dd3333' ) );
 
 		// NX1-02.dyncss-typography-backgrounds: the body/heading typography
 		// arrays + header/footer backgrounds + the default title
@@ -168,15 +168,15 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 			'size'  => '16px',
 			'color' => '#5e5e5e',
 		);
-		$body_font        = get_theme_mod(
+		$body_font         = get_theme_mod(
 			'lafka_body_font',
 			function_exists( 'lafka_preset_default' )
 				? lafka_preset_default( 'lafka_body_font', $body_font_default )
 				: $body_font_default
 		);
-		$body_font_family = ! empty( $body_font['face'] ) ? '"' . esc_attr( $body_font['face'] ) . '", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-		$body_font_size   = esc_attr( $body_font['size'] );
-		$body_font_color  = esc_attr( $body_font['color'] );
+		$body_font_family  = ! empty( $body_font['face'] ) ? '"' . esc_attr( $body_font['face'] ) . '", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+		$body_font_size    = esc_attr( $body_font['size'] );
+		$body_font_color   = esc_attr( $body_font['color'] );
 
 		// Headings font.
 		// v5.44.0: the legacy theme-options "Headings Font" picker is now
@@ -197,23 +197,23 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		$h_weights = array( '700', '700', '700', '600', '500', '500' );
 		$h_vars    = '';
 		for ( $i = 1; $i <= 6; $i++ ) {
-			$h_font_default = array(
+			$h_font_default             = array(
 				'face'  => 'Rubik',
 				'size'  => $h_sizes[ $i - 1 ],
 				'color' => '#22272d',
 				'style' => '{"font-weight":"' . $h_weights[ $i - 1 ] . '","font-style":"normal"}',
 			);
-			$h_font  = get_theme_mod(
+			$h_font                     = get_theme_mod(
 				'lafka_h' . $i . '_font',
 				function_exists( 'lafka_preset_default' )
 					? lafka_preset_default( 'lafka_h' . $i . '_font', $h_font_default )
 					: $h_font_default
 			);
 			list( $h_weight, $h_slant ) = lafka_dynamic_css_style_pair( $h_font );
-			$h_vars .= '--lafka-h' . $i . '-color:' . esc_attr( $h_font['color'] ) . ';';
-			$h_vars .= '--lafka-h' . $i . '-size:' . esc_attr( $h_font['size'] ) . ';';
-			$h_vars .= '--lafka-h' . $i . '-weight:' . $h_weight . ';';
-			$h_vars .= '--lafka-h' . $i . '-style:' . $h_slant . ';';
+			$h_vars                    .= '--lafka-h' . $i . '-color:' . esc_attr( $h_font['color'] ) . ';';
+			$h_vars                    .= '--lafka-h' . $i . '-size:' . esc_attr( $h_font['size'] ) . ';';
+			$h_vars                    .= '--lafka-h' . $i . '-weight:' . $h_weight . ';';
+			$h_vars                    .= '--lafka-h' . $i . '-style:' . $h_slant . ';';
 		}
 
 		// Header background
@@ -224,17 +224,17 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 			'position'   => '',
 			'attachment' => 'scroll',
 		);
-		$header_backgr        = get_theme_mod(
+		$header_backgr         = get_theme_mod(
 			'lafka_header_background',
 			function_exists( 'lafka_preset_default' )
 				? lafka_preset_default( 'lafka_header_background', $header_backgr_default )
 				: $header_backgr_default
 		);
-		$header_bg_color      = esc_attr( $header_backgr['color'] );
-		$header_bg_image      = 'none';
-		$header_bg_position   = 'center center';
-		$header_bg_repeat     = 'no-repeat';
-		$header_bg_attachment = 'scroll';
+		$header_bg_color       = esc_attr( $header_backgr['color'] );
+		$header_bg_image       = 'none';
+		$header_bg_position    = 'center center';
+		$header_bg_repeat      = 'no-repeat';
+		$header_bg_attachment  = 'scroll';
 		if ( $header_backgr['image'] ) {
 			$header_bg_image      = 'url("' . esc_url( wp_get_attachment_image_url( $header_backgr['image'], 'full' ) ) . '")';
 			$header_bg_position   = esc_attr( $header_backgr['position'] );
@@ -250,18 +250,18 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 			'position'   => '',
 			'attachment' => 'scroll',
 		);
-		$footer_backgr        = get_theme_mod(
+		$footer_backgr         = get_theme_mod(
 			'lafka_footer_background',
 			function_exists( 'lafka_preset_default' )
 				? lafka_preset_default( 'lafka_footer_background', $footer_backgr_default )
 				: $footer_backgr_default
 		);
-		$footer_bg_color      = esc_attr( $footer_backgr['color'] );
-		$footer_bg_image      = 'none';
-		$footer_bg_position   = 'center center';
-		$footer_bg_repeat     = 'no-repeat';
-		$footer_bg_attachment = 'scroll';
-		$footer_bg_size       = 'auto';
+		$footer_bg_color       = esc_attr( $footer_backgr['color'] );
+		$footer_bg_image       = 'none';
+		$footer_bg_position    = 'center center';
+		$footer_bg_repeat      = 'no-repeat';
+		$footer_bg_attachment  = 'scroll';
+		$footer_bg_size        = 'auto';
 		if ( $footer_backgr['image'] ) {
 			$footer_bg_image      = 'url("' . esc_url( wp_get_attachment_image_url( $footer_backgr['image'], 'full' ) ) . '")';
 			$footer_bg_position   = esc_attr( $footer_backgr['position'] );

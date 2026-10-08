@@ -37,9 +37,9 @@ if ( ! (bool) get_theme_mod( 'lafka_home_hero_show_status', true ) ) {
 if ( $lafka_hero_status && (bool) get_theme_mod( 'lafka_announce_bar_enabled', true ) ) {
 	$lafka_hero_status = null;
 }
-$lafka_hero_info        = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
-$lafka_hero_phone       = isset( $lafka_hero_info['phone_display'] ) ? (string) $lafka_hero_info['phone_display'] : '';
-$lafka_hero_phone_tel   = isset( $lafka_hero_info['phone_e164'] ) ? (string) $lafka_hero_info['phone_e164'] : $lafka_hero_phone;
+$lafka_hero_info      = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
+$lafka_hero_phone     = isset( $lafka_hero_info['phone_display'] ) ? (string) $lafka_hero_info['phone_display'] : '';
+$lafka_hero_phone_tel = isset( $lafka_hero_info['phone_e164'] ) ? (string) $lafka_hero_info['phone_e164'] : $lafka_hero_phone;
 
 $lafka_hero_headline_default = sprintf(
 	/* translators: HTML allowed — second clause wrapped in an <em> for the accent treatment. */

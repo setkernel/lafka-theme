@@ -18,7 +18,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$lafka_cf_nap      = lafka_counter_nap();
+$lafka_cf_nap = lafka_counter_nap();
 // H-24: the full street + city/region/postcode line (the address display's
 // first two lines, not the short form), then the phone.
 $lafka_cf_address  = $lafka_cf_nap['address_lines'] ? implode( ', ', array_slice( $lafka_cf_nap['address_lines'], 0, 2 ) ) : $lafka_cf_nap['address_short'];

@@ -72,7 +72,7 @@ if ( ! function_exists( 'lafka_filter_subcategories_exclude_uncategorized' ) ) {
 		if ( empty( $excluded ) ) {
 			return $args;
 		}
-		$existing = isset( $args['exclude'] ) ? (array) $args['exclude'] : array();
+		$existing        = isset( $args['exclude'] ) ? (array) $args['exclude'] : array();
 		$args['exclude'] = array_values( array_unique( array_merge( $existing, $excluded ) ) );
 		return $args;
 	}
@@ -102,7 +102,7 @@ if ( ! function_exists( 'lafka_filter_get_terms_exclude_uncategorized' ) ) {
 		if ( empty( $excluded ) ) {
 			return $args;
 		}
-		$existing = isset( $args['exclude'] ) ? (array) $args['exclude'] : array();
+		$existing        = isset( $args['exclude'] ) ? (array) $args['exclude'] : array();
 		$args['exclude'] = array_values( array_unique( array_merge( $existing, $excluded ) ) );
 		return $args;
 	}

@@ -35,8 +35,8 @@ $lafka_row_thumbs = 'photo' === $lafka_row_style || ! isset( $args['thumbs'] ) |
 $lafka_row_id     = (int) $lafka_row_p->get_id();
 $lafka_row_name   = wp_strip_all_tags( (string) $lafka_row_p->get_name() );
 // H-30: a short parenthetical never breaks ("(3 pc)", not "(3 / pc)").
-$lafka_row_label  = (string) preg_replace_callback( '/\([^()]{1,12}\)/u', static fn( $m ) => str_replace( ' ', "\u{00A0}", $m[0] ), $lafka_row_name );
-$lafka_row_url    = (string) $lafka_row_p->get_permalink();
+$lafka_row_label = (string) preg_replace_callback( '/\([^()]{1,12}\)/u', static fn( $m ) => str_replace( ' ', "\u{00A0}", $m[0] ), $lafka_row_name );
+$lafka_row_url   = (string) $lafka_row_p->get_permalink();
 
 $lafka_row_desc = wp_strip_all_tags( (string) $lafka_row_p->get_short_description() );
 if ( '' === trim( $lafka_row_desc ) && method_exists( $lafka_row_p, 'get_description' ) ) {
@@ -48,7 +48,7 @@ $lafka_row_prices = lafka_price_columns( $lafka_row_p );
 
 // Menu-controls filters (search / dietary chips) key off these, exactly as the
 // classic card li does.
-$lafka_row_tags = array();
+$lafka_row_tags      = array();
 $lafka_row_tag_terms = wp_get_post_terms( $lafka_row_id, 'product_tag', array( 'fields' => 'slugs' ) );
 if ( is_array( $lafka_row_tag_terms ) ) {
 	$lafka_row_tags = array_map( 'strtolower', $lafka_row_tag_terms );

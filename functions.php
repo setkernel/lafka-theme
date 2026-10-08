@@ -375,7 +375,7 @@ if ( ! function_exists( 'lafka_breadcrumb' ) ) {
 					$post_type = get_post_type_object( get_post_type( $wp_query->post->ID ) );
 					$slug      = $post_type->rewrite;
 					$real_slug = $slug['slug'];
-					$brdcrmb .= '<a class="no-link" href="' . esc_url( $homeLink . '/' . $real_slug ) . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
+					$brdcrmb  .= '<a class="no-link" href="' . esc_url( $homeLink . '/' . $real_slug ) . '/">' . $post_type->labels->name . '</a> ' . $delimiter . ' ';
 
 					$brdcrmb .= $before . get_the_title( $wp_query->post->ID ) . $after;
 				} else {
@@ -688,7 +688,7 @@ if ( ! function_exists( 'lafka_get_lafka_foodmenu_category_parents' ) ) {
 		// through `get_ancestors()` + `get_term()` (object-cache backed) instead
 		// of `get_term_by('id', ...)` (which goes to DB on miss).
 		static $cache = array();
-		$term_id = (int) $term_id;
+		$term_id      = (int) $term_id;
 		if ( isset( $cache[ $term_id ] ) ) {
 			return $cache[ $term_id ];
 		}
@@ -730,7 +730,7 @@ if ( ! function_exists( 'lafka_ajax_search' ) ) {
 			'lafka_ajax_search_allowed_post_types',
 			array( 'post', 'product', 'lafka-foodmenu' )
 		);
-		$post_type = $allowed_post_types;
+		$post_type          = $allowed_post_types;
 		if ( isset( $_REQUEST['post_type'] ) ) {
 			$requested = sanitize_text_field( wp_unslash( $_REQUEST['post_type'] ) );
 			if ( in_array( $requested, $allowed_post_types, true ) ) {
@@ -1336,13 +1336,13 @@ if ( ! function_exists( 'lafka_comments_valid_for_post' ) ) {
 	 */
 	function lafka_comments_valid_for_post( $post_id ) {
 		static $cache = array();
-		$post_id = (int) $post_id;
+		$post_id      = (int) $post_id;
 		if ( isset( $cache[ $post_id ] ) ) {
 			return $cache[ $post_id ];
 		}
 
 		global $wpdb;
-		$total = (int) $wpdb->get_var(
+		$total    = (int) $wpdb->get_var(
 			$wpdb->prepare(
 				"SELECT COUNT(*) FROM {$wpdb->comments}
                   WHERE comment_post_ID = %d
@@ -1399,15 +1399,15 @@ if ( ! function_exists( 'lafka_add_action_to_multi_currency_ajax' ) ) {
  * Migrated from lafka-child v5.10.6 functions.php in v5.16.0.
  */
 add_action(
-    'wp',
-    function () {
+	'wp',
+	function () {
 		if ( ! function_exists( 'is_shop' ) ) {
 			return;
 		}
 		if ( is_shop() || is_product_taxonomy() ) {
 			remove_action( 'woocommerce_shop_loop_header', 'woocommerce_product_taxonomy_archive_header' );
 		}
-	} 
+	}
 );
 
 /**
@@ -1418,8 +1418,8 @@ add_action(
  * class-lafka-customizer-pdp.php).
  */
 add_action(
-    'wp_enqueue_scripts',
-    function () {
+	'wp_enqueue_scripts',
+	function () {
 		if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
 			return;
 		}
@@ -1450,49 +1450,49 @@ add_action(
 		}
 
 		wp_enqueue_script(
-            'lafka-order-method',
-            $tpl_uri . '/js/order-method.js',
-            array(),
-            $ver_for( 'js/order-method.js' ),
-            array(
+			'lafka-order-method',
+			$tpl_uri . '/js/order-method.js',
+			array(),
+			$ver_for( 'js/order-method.js' ),
+			array(
 				'in_footer' => true,
-				'strategy' => 'defer',
-            )
+				'strategy'  => 'defer',
+			)
 		);
 
 		if ( function_exists( 'lafka_get_restaurant_info' ) ) {
 			$info = lafka_get_restaurant_info();
 			wp_localize_script(
-                'lafka-order-method',
-                'lafkaOrderMethodLabels',
-                array(
+				'lafka-order-method',
+				'lafkaOrderMethodLabels',
+				array(
 					'pickupLabel'   => trim( (string) ( $info['address_short'] ?? '' ) ),
 					'deliveryLabel' => trim( (string) ( $info['city'] ?? '' ) ),
-                )
+				)
 			);
 		}
 
 		wp_enqueue_script(
-            'lafka-cart-drawer',
-            $tpl_uri . '/js/cart-drawer.js',
-            array( 'jquery' ),
-            $ver_for( 'js/cart-drawer.js' ),
-            array(
+			'lafka-cart-drawer',
+			$tpl_uri . '/js/cart-drawer.js',
+			array( 'jquery' ),
+			$ver_for( 'js/cart-drawer.js' ),
+			array(
 				'in_footer' => true,
-				'strategy' => 'defer',
-            )
+				'strategy'  => 'defer',
+			)
 		);
 
 		if ( is_product() ) {
 			wp_enqueue_script(
-                'lafka-pdp-pickers',
-                $tpl_uri . '/js/pdp-pickers.js',
-                array(),
-                $ver_for( 'js/pdp-pickers.js' ),
-                array(
+				'lafka-pdp-pickers',
+				$tpl_uri . '/js/pdp-pickers.js',
+				array(),
+				$ver_for( 'js/pdp-pickers.js' ),
+				array(
 					'in_footer' => true,
-					'strategy' => 'defer',
-                )
+					'strategy'  => 'defer',
+				)
 			);
 
 			wp_localize_script(
@@ -1504,7 +1504,7 @@ add_action(
 					'thousandSep' => function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : ',',
 					'decimalSep'  => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : '.',
 					'decimals'    => function_exists( 'wc_get_price_decimals' ) ? (int) wc_get_price_decimals() : 2,
-                )
+				)
 			);
 
 			// GX M-11: the add button's words, translatable (pdp-pickers.js).
@@ -1526,8 +1526,8 @@ add_action(
 				$ver_for( 'js/upsell-modal.js' ),
 				array(
 					'in_footer' => true,
-					'strategy' => 'defer',
-                )
+					'strategy'  => 'defer',
+				)
 			);
 
 			wp_enqueue_script(
@@ -1537,20 +1537,20 @@ add_action(
 				$ver_for( 'js/pdp-addons.js' ),
 				array(
 					'in_footer' => true,
-					'strategy' => 'defer',
-                )
+					'strategy'  => 'defer',
+				)
 			);
 		}
 	},
-    11 
+	11
 );
 
 /**
  * PDP redesign — order-method bar partial via wp_body_open.
  */
 add_action(
-    'wp_body_open',
-    function () {
+	'wp_body_open',
+	function () {
 		if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
 			return;
 		}
@@ -1559,15 +1559,15 @@ add_action(
 			include $partial;
 		}
 	},
-    5 
+	5
 );
 
 /**
  * Cart drawer partial via wp_footer (v5.57.0 — handoff: drawer on every page).
  */
 add_action(
-    'wp_footer',
-    function () {
+	'wp_footer',
+	function () {
 		if ( is_admin() ) {
 			return;
 		}
@@ -1579,7 +1579,7 @@ add_action(
 			include $partial;
 		}
 	},
-    5
+	5
 );
 
 /**
@@ -1595,8 +1595,8 @@ add_action(
  * 9000-tier scrim never sits over a banner the user may still be reading.
  */
 add_action(
-    'wp_footer',
-    function () {
+	'wp_footer',
+	function () {
 		if ( is_admin() ) {
 			return;
 		}
@@ -1605,7 +1605,7 @@ add_action(
 			include $partial;
 		}
 	},
-    10
+	10
 );
 
 /**
@@ -1622,8 +1622,8 @@ add_action(
  * sits below the banner's 1090 if both happen to render together.
  */
 add_action(
-    'wp_footer',
-    function () {
+	'wp_footer',
+	function () {
 		if ( is_admin() ) {
 			return;
 		}
@@ -1632,20 +1632,20 @@ add_action(
 			include $partial;
 		}
 	},
-    11
+	11
 );
 
 /**
  * PDP redesign — body_class signal for redesign-disabled state.
  */
 add_filter(
-    'body_class',
-    function ( $classes ) {
+	'body_class',
+	function ( $classes ) {
 		if ( function_exists( 'lafka_pdp_redesign_enabled' ) && ! lafka_pdp_redesign_enabled() ) {
 			$classes[] = 'lafka-pdp-disabled';
 		}
 		return $classes;
-	} 
+	}
 );
 
 /**
@@ -1657,27 +1657,27 @@ add_filter(
  * Migrated from lafka-child v5.10.6 in v5.16.0.
  */
 add_action(
-    'wp_enqueue_scripts',
-    function () {
+	'wp_enqueue_scripts',
+	function () {
 		if ( ! is_page() ) {
 			return;
 		}
 		if ( ! is_page_template(
-            array(
+			array(
 				'page_templates/template-editorial-home.php',
 				'page_templates/template-editorial-contact.php',
-            ) 
+			)
 		) ) {
 			return;
 		}
 		wp_enqueue_style(
-            'lafka-editorial',
-            get_template_directory_uri() . '/styles/editorial.css',
-            array( 'lafka-style' ),
-            wp_get_theme( get_template() )->get( 'Version' )
+			'lafka-editorial',
+			get_template_directory_uri() . '/styles/editorial.css',
+			array( 'lafka-style' ),
+			wp_get_theme( get_template() )->get( 'Version' )
 		);
 	},
-    30 
+	30
 );
 
 /**
@@ -1719,16 +1719,16 @@ add_action(
  * @since 5.18.0
  */
 add_action(
-    'wp_enqueue_scripts',
-    function () {
+	'wp_enqueue_scripts',
+	function () {
 		wp_enqueue_style(
-            'lafka-store-closed',
-            get_template_directory_uri() . '/styles/store-closed.css',
-            array( 'lafka-style' ),
-            wp_get_theme( get_template() )->get( 'Version' )
+			'lafka-store-closed',
+			get_template_directory_uri() . '/styles/store-closed.css',
+			array( 'lafka-style' ),
+			wp_get_theme( get_template() )->get( 'Version' )
 		);
 	},
-    30 
+	30
 );
 
 /**
@@ -1740,19 +1740,19 @@ add_action(
  * @since 5.19.0
  */
 add_action(
-    'wp_enqueue_scripts',
-    function () {
+	'wp_enqueue_scripts',
+	function () {
 		if ( ! function_exists( 'is_cart' ) || ! is_cart() ) {
 			return;
 		}
 		wp_enqueue_style(
-            'lafka-cart-item',
-            get_template_directory_uri() . '/styles/cart-item.css',
-            array( 'lafka-style' ),
-            wp_get_theme( get_template() )->get( 'Version' )
+			'lafka-cart-item',
+			get_template_directory_uri() . '/styles/cart-item.css',
+			array( 'lafka-style' ),
+			wp_get_theme( get_template() )->get( 'Version' )
 		);
 	},
-    30 
+	30
 );
 
 /**
@@ -1767,17 +1767,17 @@ add_action(
  * @since 5.19.0
  */
 add_action(
-    'wp_enqueue_scripts',
-    function () {
+	'wp_enqueue_scripts',
+	function () {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 			return;
 		}
 		wp_enqueue_style(
-            'lafka-checkout-tweaks',
-            get_template_directory_uri() . '/styles/checkout-tweaks.css',
-            array( 'lafka-style' ),
-            wp_get_theme( get_template() )->get( 'Version' )
+			'lafka-checkout-tweaks',
+			get_template_directory_uri() . '/styles/checkout-tweaks.css',
+			array( 'lafka-style' ),
+			wp_get_theme( get_template() )->get( 'Version' )
 		);
 	},
-    30 
+	30
 );

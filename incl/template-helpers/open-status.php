@@ -212,10 +212,10 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 			6 => 'Saturday',
 		);
 
-		$today_idx     = (int) date( 'w', $now );
-		$now_minutes   = ( (int) date( 'H', $now ) * 60 ) + (int) date( 'i', $now );
-		$today_name    = $day_names[ $today_idx ];
-		$today_hours   = isset( $hours[ $today_name ] ) ? (string) $hours[ $today_name ] : '';
+		$today_idx   = (int) date( 'w', $now );
+		$now_minutes = ( (int) date( 'H', $now ) * 60 ) + (int) date( 'i', $now );
+		$today_name  = $day_names[ $today_idx ];
+		$today_hours = isset( $hours[ $today_name ] ) ? (string) $hours[ $today_name ] : '';
 
 		// 1. Check if currently open under today's range OR yesterday's range
 		// (yesterday's range can extend past midnight into today, e.g. Fri 11:00-02:00).

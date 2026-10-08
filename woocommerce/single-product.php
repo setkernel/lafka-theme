@@ -13,19 +13,19 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
-    // Redesign OFF — render WooCommerce's default single-product flow inline.
-    get_header( 'shop' );
-    do_action( 'woocommerce_before_main_content' );
+	// Redesign OFF — render WooCommerce's default single-product flow inline.
+	get_header( 'shop' );
+	do_action( 'woocommerce_before_main_content' );
 
-    while ( have_posts() ) {
-        the_post();
-        wc_get_template_part( 'content', 'single-product' );
-    }
+	while ( have_posts() ) {
+		the_post();
+		wc_get_template_part( 'content', 'single-product' );
+	}
 
-    do_action( 'woocommerce_after_main_content' );
-    do_action( 'woocommerce_sidebar' );
-    get_footer( 'shop' );
-    return;
+	do_action( 'woocommerce_after_main_content' );
+	do_action( 'woocommerce_sidebar' );
+	get_footer( 'shop' );
+	return;
 }
 
 /*
@@ -42,50 +42,50 @@ if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_e
  * the theme degrades cleanly when the plugin is inactive (OSS bundle).
  */
 if ( ! defined( 'LAFKA_PDP_SUMMARY_WIRED' ) ) {
-    define( 'LAFKA_PDP_SUMMARY_WIRED', true );
+	define( 'LAFKA_PDP_SUMMARY_WIRED', true );
 
-    // Social-proof block (theme): rating + order-count under the title.
-    if ( function_exists( 'lafka_social_proof_render_pdp' ) ) {
-        add_action( 'lafka_pdp_summary', 'lafka_social_proof_render_pdp', 6 );
-    }
+	// Social-proof block (theme): rating + order-count under the title.
+	if ( function_exists( 'lafka_social_proof_render_pdp' ) ) {
+		add_action( 'lafka_pdp_summary', 'lafka_social_proof_render_pdp', 6 );
+	}
 
-    // Nutrition + weight (plugin): methods on the shared display singleton.
-    if ( isset( $GLOBALS['Lafka_Nutrition_Display'] ) && is_object( $GLOBALS['Lafka_Nutrition_Display'] ) ) {
-        add_action( 'lafka_pdp_summary', array( $GLOBALS['Lafka_Nutrition_Display'], 'display_weight' ), 7 );
-        add_action( 'lafka_pdp_summary', array( $GLOBALS['Lafka_Nutrition_Display'], 'display_nutrition' ), 8 );
-    }
+	// Nutrition + weight (plugin): methods on the shared display singleton.
+	if ( isset( $GLOBALS['Lafka_Nutrition_Display'] ) && is_object( $GLOBALS['Lafka_Nutrition_Display'] ) ) {
+		add_action( 'lafka_pdp_summary', array( $GLOBALS['Lafka_Nutrition_Display'], 'display_weight' ), 7 );
+		add_action( 'lafka_pdp_summary', array( $GLOBALS['Lafka_Nutrition_Display'], 'display_nutrition' ), 8 );
+	}
 
-    // Sale countdown (theme).
-    if ( function_exists( 'lafka_product_sale_countdown' ) ) {
-        add_action( 'lafka_pdp_summary', 'lafka_product_sale_countdown', 9 );
-    }
+	// Sale countdown (theme).
+	if ( function_exists( 'lafka_product_sale_countdown' ) ) {
+		add_action( 'lafka_pdp_summary', 'lafka_product_sale_countdown', 9 );
+	}
 
-    // Promo info tooltips (plugin): one action per zone, from the plugin's
-    // single list of zones and priorities.
-    if ( function_exists( 'lafka_output_info_tooltips' ) && function_exists( 'lafka_promo_tooltip_zones' ) ) {
-        foreach ( lafka_promo_tooltip_zones() as $lafka_zone => $lafka_priority ) {
-            add_action(
-                'lafka_pdp_summary',
-                static function () use ( $lafka_zone ) {
-                    lafka_output_info_tooltips( $lafka_zone );
-                },
-                $lafka_priority
-            );
-        }
-    }
+	// Promo info tooltips (plugin): one action per zone, from the plugin's
+	// single list of zones and priorities.
+	if ( function_exists( 'lafka_output_info_tooltips' ) && function_exists( 'lafka_promo_tooltip_zones' ) ) {
+		foreach ( lafka_promo_tooltip_zones() as $lafka_zone => $lafka_priority ) {
+			add_action(
+				'lafka_pdp_summary',
+				static function () use ( $lafka_zone ) {
+					lafka_output_info_tooltips( $lafka_zone );
+				},
+				$lafka_priority
+			);
+		}
+	}
 
-    // Custom product popup link (plugin).
-    if ( function_exists( 'lafka_show_custom_product_popup_link' ) ) {
-        add_action( 'lafka_pdp_summary', 'lafka_show_custom_product_popup_link', 12 );
-    }
+	// Custom product popup link (plugin).
+	if ( function_exists( 'lafka_show_custom_product_popup_link' ) ) {
+		add_action( 'lafka_pdp_summary', 'lafka_show_custom_product_popup_link', 12 );
+	}
 }
 
 get_header( 'shop' );
 ?>
 <div class="lafka-pdp">
-    <div class="lafka-pdp__main">
-        <?php
-        while ( have_posts() ) :
+	<div class="lafka-pdp__main">
+		<?php
+		while ( have_posts() ) :
 			the_post();
 
 			// GA4 view_item: the redesigned PDP never fires
@@ -113,25 +113,25 @@ get_header( 'shop' );
 			do_action( 'woocommerce_before_single_product' );
 			?>
 
-            <nav class="lafka-pdp__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>"><?php woocommerce_breadcrumb(); ?></nav>
+			<nav class="lafka-pdp__breadcrumb" aria-label="<?php esc_attr_e( 'Breadcrumb', 'lafka' ); ?>"><?php woocommerce_breadcrumb(); ?></nav>
 
-            <div class="lafka-pdp__hero">
-                <div class="lafka-pdp__gallery">
-                    <?php woocommerce_show_product_images(); ?>
-                </div>
-                <?php require get_template_directory() . '/partials/pdp-summary.php'; ?>
-            </div>
+			<div class="lafka-pdp__hero">
+				<div class="lafka-pdp__gallery">
+					<?php woocommerce_show_product_images(); ?>
+				</div>
+				<?php require get_template_directory() . '/partials/pdp-summary.php'; ?>
+			</div>
 
-            <?php require get_template_directory() . '/partials/pdp-make-it-a-meal.php'; ?>
-            <?php // v5.91.0: ingredients + reviews 2-card grid (handoff). Replaces the WC tabs. ?>
-            <?php require get_template_directory() . '/partials/pdp-ingredients-reviews.php'; ?>
+			<?php require get_template_directory() . '/partials/pdp-make-it-a-meal.php'; ?>
+			<?php // v5.91.0: ingredients + reviews 2-card grid (handoff). Replaces the WC tabs. ?>
+			<?php require get_template_directory() . '/partials/pdp-ingredients-reviews.php'; ?>
 
-            <?php woocommerce_output_related_products(); ?>
+			<?php woocommerce_output_related_products(); ?>
 
-        <?php endwhile; ?>
-    </div>
+		<?php endwhile; ?>
+	</div>
 
-    <?php /* Cart drawer now renders globally via wp_footer — see functions.php (v5.57.0). */ ?>
+	<?php /* Cart drawer now renders globally via wp_footer — see functions.php (v5.57.0). */ ?>
 </div>
 <?php
 // Fire woocommerce_after_single_product so third-party integrations hooked here

@@ -121,9 +121,9 @@ function lafka_service_eta_customizer_register( WP_Customize_Manager $wp_customi
 	$wp_customize->add_control(
 		'lafka_service_eta_show_cart',
 		array(
-			'label'       => __( 'Show on cart and checkout', 'lafka' ),
-			'section'     => 'lafka_service_eta_visibility',
-			'type'        => 'checkbox',
+			'label'   => __( 'Show on cart and checkout', 'lafka' ),
+			'section' => 'lafka_service_eta_visibility',
+			'type'    => 'checkbox',
 		)
 	);
 }

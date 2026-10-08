@@ -57,14 +57,14 @@ if ( ! function_exists( 'lafka_direct_value_data' ) ) {
 			$cta_url = lafka_direct_value_default_cta_url();
 		}
 		$points = array_values(
-            array_filter(
-                array(
+			array_filter(
+				array(
 					(string) get_theme_mod( 'lafka_direct_value_point_1', __( 'Our real menu prices — no delivery-app markup', 'lafka' ) ),
 					(string) get_theme_mod( 'lafka_direct_value_point_2', __( 'Straight to our kitchen, made fresh', 'lafka' ) ),
 					(string) get_theme_mod( 'lafka_direct_value_point_3', __( 'Direct-only deals you won’t find on the apps', 'lafka' ) ),
-                ) 
-            ) 
-        );
+				)
+			)
+		);
 
 		return (array) apply_filters(
 			'lafka_direct_value_data',
@@ -164,23 +164,23 @@ if ( ! function_exists( 'lafka_customize_register_direct_value' ) ) {
 		);
 		foreach ( $fields as $key => $cfg ) {
 			list( $type, $label, $default ) = $cfg;
-			$sanitize = 'checkbox' === $type ? 'wp_validate_boolean' : ( 'url' === $type ? 'esc_url_raw' : 'sanitize_text_field' );
+			$sanitize                       = 'checkbox' === $type ? 'wp_validate_boolean' : ( 'url' === $type ? 'esc_url_raw' : 'sanitize_text_field' );
 			$wp_customize->add_setting(
-                $key,
-                array(
-					'default' => $default,
-					'transport' => 'refresh',
+				$key,
+				array(
+					'default'           => $default,
+					'transport'         => 'refresh',
 					'sanitize_callback' => $sanitize,
-                ) 
-            );
+				)
+			);
 			$wp_customize->add_control(
-                $key,
-                array(
-					'label' => $label,
+				$key,
+				array(
+					'label'   => $label,
 					'section' => 'lafka_direct_value',
-					'type' => 'checkbox' === $type ? 'checkbox' : ( 'url' === $type ? 'url' : 'text' ),
-                ) 
-            );
+					'type'    => 'checkbox' === $type ? 'checkbox' : ( 'url' === $type ? 'url' : 'text' ),
+				)
+			);
 		}
 	}
 }

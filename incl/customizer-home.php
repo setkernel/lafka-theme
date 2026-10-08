@@ -158,9 +158,9 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		$wp_customize->add_control(
 			'lafka_home_hero_overlay',
 			array(
-				'label'       => __( 'Darken background image with overlay (for photo-style heroes)', 'lafka' ),
-				'section'     => 'lafka_home_hero',
-				'type'        => 'checkbox',
+				'label'   => __( 'Darken background image with overlay (for photo-style heroes)', 'lafka' ),
+				'section' => 'lafka_home_hero',
+				'type'    => 'checkbox',
 			)
 		);
 
@@ -289,19 +289,19 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 
 		$lafka_home_reviews_fields = array(
 			'lafka_home_reviews_headline' => array(
-				'label' => __( 'Headline', 'lafka' ),
+				'label'   => __( 'Headline', 'lafka' ),
 				'default' => __( 'What our neighbors say', 'lafka' ),
-				'type' => 'text',
+				'type'    => 'text',
 			),
 			'lafka_home_reviews_rating'   => array(
-				'label' => __( 'Aggregate rating (e.g. 4.9)', 'lafka' ),
+				'label'   => __( 'Aggregate rating (e.g. 4.9)', 'lafka' ),
 				'default' => '',
-				'type' => 'text',
+				'type'    => 'text',
 			),
 			'lafka_home_reviews_count'    => array(
-				'label' => __( 'Number of reviews (e.g. 230)', 'lafka' ),
+				'label'   => __( 'Number of reviews (e.g. 230)', 'lafka' ),
 				'default' => '',
-				'type' => 'text',
+				'type'    => 'text',
 			),
 		);
 		foreach ( $lafka_home_reviews_fields as $lafka_setting_id => $lafka_field ) {
@@ -327,19 +327,19 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		for ( $lafka_r = 1; $lafka_r <= 3; $lafka_r++ ) {
 			$lafka_review_card_fields = array(
 				"lafka_home_reviews_{$lafka_r}_quote"  => array(
-					'label' => sprintf( __( 'Review %d — quote', 'lafka' ), $lafka_r ),
+					'label'   => sprintf( __( 'Review %d — quote', 'lafka' ), $lafka_r ),
 					'default' => '',
-					'type' => 'textarea',
+					'type'    => 'textarea',
 				),
 				"lafka_home_reviews_{$lafka_r}_name"   => array(
-					'label' => sprintf( __( 'Review %d — reviewer name', 'lafka' ), $lafka_r ),
+					'label'   => sprintf( __( 'Review %d — reviewer name', 'lafka' ), $lafka_r ),
 					'default' => '',
-					'type' => 'text',
+					'type'    => 'text',
 				),
 				"lafka_home_reviews_{$lafka_r}_source" => array(
-					'label' => sprintf( __( 'Review %d — source (Google/Yelp/etc.)', 'lafka' ), $lafka_r ),
+					'label'   => sprintf( __( 'Review %d — source (Google/Yelp/etc.)', 'lafka' ), $lafka_r ),
 					'default' => '',
-					'type' => 'text',
+					'type'    => 'text',
 				),
 			);
 			foreach ( $lafka_review_card_fields as $lafka_setting_id => $lafka_field ) {
@@ -376,8 +376,8 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 					'section'     => 'lafka_home_reviews',
 					'type'        => 'number',
 					'input_attrs' => array(
-						'min' => 1,
-						'max' => 5,
+						'min'  => 1,
+						'max'  => 5,
 						'step' => 1,
 					),
 				)
@@ -419,24 +419,24 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		// that partial's get_theme_mod() fallback so preview == render.
 		$lafka_home_closer_fields = array(
 			'lafka_home_closer_headline'  => array(
-				'label' => __( 'Headline', 'lafka' ),
+				'label'   => __( 'Headline', 'lafka' ),
 				'default' => __( 'Hungry?', 'lafka' ),
-				'type' => 'text',
+				'type'    => 'text',
 			),
 			'lafka_home_closer_lead'      => array(
-				'label' => __( 'Sub-headline', 'lafka' ),
+				'label'   => __( 'Sub-headline', 'lafka' ),
 				'default' => __( 'Pickup or delivery. Ready in about 25 minutes.', 'lafka' ),
-				'type' => 'textarea',
+				'type'    => 'textarea',
 			),
 			'lafka_home_closer_cta_label' => array(
-				'label' => __( 'CTA label', 'lafka' ),
+				'label'   => __( 'CTA label', 'lafka' ),
 				'default' => __( 'Order Now', 'lafka' ),
-				'type' => 'text',
+				'type'    => 'text',
 			),
 			'lafka_home_closer_cta_url'   => array(
-				'label' => __( 'CTA URL', 'lafka' ),
+				'label'   => __( 'CTA URL', 'lafka' ),
 				'default' => '',
-				'type' => 'url',
+				'type'    => 'url',
 			),
 		);
 		foreach ( $lafka_home_closer_fields as $lafka_setting_id => $lafka_field ) {

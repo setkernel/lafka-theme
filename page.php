@@ -21,10 +21,10 @@ get_header();
 
 while ( have_posts() ) :
 	the_post();
-	$lafka_pg_id       = get_the_ID();
-	$lafka_pg_title    = get_the_title();
-	$lafka_pg_excerpt  = has_excerpt( $lafka_pg_id ) ? get_the_excerpt( $lafka_pg_id ) : '';
-	$lafka_pg_thumb    = '';
+	$lafka_pg_id      = get_the_ID();
+	$lafka_pg_title   = get_the_title();
+	$lafka_pg_excerpt = has_excerpt( $lafka_pg_id ) ? get_the_excerpt( $lafka_pg_id ) : '';
+	$lafka_pg_thumb   = '';
 	if ( has_post_thumbnail( $lafka_pg_id ) ) {
 		$lafka_pg_thumb_src = wp_get_attachment_image_src( get_post_thumbnail_id( $lafka_pg_id ), 'full' );
 		$lafka_pg_thumb     = $lafka_pg_thumb_src ? (string) $lafka_pg_thumb_src[0] : '';

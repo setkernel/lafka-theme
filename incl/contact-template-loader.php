@@ -30,7 +30,7 @@ if ( ! function_exists( 'lafka_auto_contact_template' ) ) {
 			return $template;
 		}
 
-		$slug = (string) get_post_field( 'post_name', get_queried_object_id() );
+		$slug          = (string) get_post_field( 'post_name', get_queried_object_id() );
 		$contact_slugs = (array) apply_filters(
 			'lafka_contact_page_slugs',
 			array( 'contact', 'contact-us', 'contacts' )

@@ -146,11 +146,11 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 						// `get_terms($tax_name)` positional first-arg was
 						// deprecated in WP 4.5 and is removed in WP 7.0.
 						$lafka_foodmenu_categories = get_terms(
-                            array(
+							array(
 								'taxonomy'   => 'lafka_foodmenu_category',
 								'hide_empty' => false,
-                            ) 
-                        );
+							)
+						);
 					?>
 				<?php endif; ?>
 

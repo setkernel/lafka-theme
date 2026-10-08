@@ -296,10 +296,10 @@ if ( ! function_exists( 'lafka_preset_font_selection' ) ) {
 		$fonts = $preset->fonts();
 		$out   = array();
 		foreach ( array( 'body', 'display' ) as $role ) {
-			$decl    = isset( $fonts[ $role ] ) && is_array( $fonts[ $role ] ) ? $fonts[ $role ] : array();
-			$family  = isset( $decl['family'] ) ? (string) $decl['family'] : '';
-			$source  = isset( $decl['source'] ) ? (string) $decl['source'] : 'base';
-			$display = isset( $decl['font_display'] ) ? (string) $decl['font_display'] : 'swap';
+			$decl         = isset( $fonts[ $role ] ) && is_array( $fonts[ $role ] ) ? $fonts[ $role ] : array();
+			$family       = isset( $decl['family'] ) ? (string) $decl['family'] : '';
+			$source       = isset( $decl['source'] ) ? (string) $decl['source'] : 'base';
+			$display      = isset( $decl['font_display'] ) ? (string) $decl['font_display'] : 'swap';
 			$out[ $role ] = array(
 				'role'         => $role,
 				'family'       => $family,
@@ -333,7 +333,7 @@ if ( ! function_exists( 'lafka_font_face_css_for_slug' ) ) {
 		if ( ! isset( $pool[ $slug ] ) ) {
 			return '';
 		}
-		$entry = $pool[ $slug ];
+		$entry  = $pool[ $slug ];
 		$source = isset( $entry['source'] ) ? (string) $entry['source'] : 'pool';
 		if ( 'pool' !== $source ) {
 			return '';

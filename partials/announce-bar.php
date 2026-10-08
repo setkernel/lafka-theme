@@ -55,7 +55,7 @@ if ( ! $lafka_ann_status && '' === $lafka_ann_phone && '' === $lafka_ann_city ) 
 
 // SSOT: read the same threshold the plugin's free-delivery rule enforces; fall
 // back to the single shared theme_mod (0 = off) when the plugin isn't loaded.
-$lafka_ann_threshold = function_exists( 'lafka_get_free_delivery_threshold' )
+$lafka_ann_threshold     = function_exists( 'lafka_get_free_delivery_threshold' )
 	? (float) lafka_get_free_delivery_threshold()
 	: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
 $lafka_ann_show_delivery = (bool) get_theme_mod( 'lafka_announce_bar_show_delivery', true );

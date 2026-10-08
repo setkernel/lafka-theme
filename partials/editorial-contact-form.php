@@ -19,19 +19,19 @@ $info    = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant
 $email   = ! empty( $info['email'] ) ? $info['email'] : '';
 ?>
 <div class="contact-form">
-    <h2><?php esc_html_e( 'Send us a message', 'lafka' ); ?></h2>
+	<h2><?php esc_html_e( 'Send us a message', 'lafka' ); ?></h2>
 
-    <?php if ( $form_id > 0 && function_exists( 'wpcf7_contact_form' ) ) : ?>
-        <?php echo do_shortcode( '[contact-form-7 id="' . absint( $form_id ) . '"]' ); ?>
+	<?php if ( $form_id > 0 && function_exists( 'wpcf7_contact_form' ) ) : ?>
+		<?php echo do_shortcode( '[contact-form-7 id="' . absint( $form_id ) . '"]' ); ?>
 
-    <?php elseif ( $email ) : ?>
-        <p>
-            <?php esc_html_e( 'Email us directly:', 'lafka' ); ?>
-            <a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
-        </p>
+	<?php elseif ( $email ) : ?>
+		<p>
+			<?php esc_html_e( 'Email us directly:', 'lafka' ); ?>
+			<a href="mailto:<?php echo esc_attr( $email ); ?>"><?php echo esc_html( $email ); ?></a>
+		</p>
 
-    <?php else : ?>
-        <?php /* Neither CF7 nor email configured — nothing to show. */ ?>
+	<?php else : ?>
+		<?php /* Neither CF7 nor email configured — nothing to show. */ ?>
 
-    <?php endif; ?>
+	<?php endif; ?>
 </div>

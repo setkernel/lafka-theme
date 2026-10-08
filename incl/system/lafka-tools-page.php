@@ -57,9 +57,9 @@ if ( ! class_exists( 'Lafka_Maintenance_Page' ) ) {
 				wp_die( esc_html__( 'You do not have permission to access this page.', 'lafka' ), 403 );
 			}
 
-			$theme       = wp_get_theme();
-			$theme_name  = (string) $theme->get( 'Name' );
-			$theme_ver   = (string) $theme->get( 'Version' );
+			$theme      = wp_get_theme();
+			$theme_name = (string) $theme->get( 'Name' );
+			$theme_ver  = (string) $theme->get( 'Version' );
 
 			// If a child theme is active, surface the parent theme version
 			// too — operators tracking which `lafka` (parent) release ships

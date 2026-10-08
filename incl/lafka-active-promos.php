@@ -77,7 +77,7 @@ if ( ! function_exists( 'lafka_active_promo_messages' ) ) {
 					$amount = 'percent' === ( $c['type'] ?? 'fixed' )
 						? lafka_active_promo_fmt_pct( $c['amount'] ) . '%'
 						: lafka_active_promo_price( $c['amount'] );
-					$out[] = array(
+					$out[]  = array(
 						'key'  => 'combo',
 						/* translators: 1: category A, 2: category B, 3: amount */
 						'text' => sprintf( __( '%1$s + %2$s? Save %3$s', 'lafka' ), $a->name, $b->name, $amount ),

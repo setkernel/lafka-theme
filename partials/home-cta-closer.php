@@ -29,8 +29,8 @@ $lafka_closer_headline_default = sprintf(
 	__( 'Hungry? %s', 'lafka' ),
 	'<em class="lafka-closer__accent">' . esc_html__( "Let's fix that.", 'lafka' ) . '</em>'
 );
-$lafka_closer_headline = (string) get_theme_mod( 'lafka_home_closer_headline', $lafka_closer_headline_default );
-$lafka_closer_lead     = (string) get_theme_mod(
+$lafka_closer_headline  = (string) get_theme_mod( 'lafka_home_closer_headline', $lafka_closer_headline_default );
+$lafka_closer_lead      = (string) get_theme_mod(
 	'lafka_home_closer_lead',
 	__( 'Pickup or delivery. Ready in about 25 minutes.', 'lafka' )
 );

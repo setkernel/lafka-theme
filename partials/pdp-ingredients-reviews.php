@@ -35,21 +35,21 @@ $lafka_pdp_short     = (string) $product->get_short_description();
 $lafka_pdp_allergen_slugs = (array) apply_filters(
 	'lafka_pdp_allergen_slugs',
 	array(
-		'wheat'   => __( 'Wheat', 'lafka' ),
-		'gluten'  => __( 'Gluten', 'lafka' ),
-		'milk'    => __( 'Milk', 'lafka' ),
-		'dairy'   => __( 'Dairy', 'lafka' ),
-		'eggs'    => __( 'Egg', 'lafka' ),
-		'egg'     => __( 'Egg', 'lafka' ),
-		'soy'     => __( 'Soy', 'lafka' ),
-		'peanuts' => __( 'Peanuts', 'lafka' ),
-		'nuts'    => __( 'May contain nuts', 'lafka' ),
-		'fish'    => __( 'Fish', 'lafka' ),
+		'wheat'     => __( 'Wheat', 'lafka' ),
+		'gluten'    => __( 'Gluten', 'lafka' ),
+		'milk'      => __( 'Milk', 'lafka' ),
+		'dairy'     => __( 'Dairy', 'lafka' ),
+		'eggs'      => __( 'Egg', 'lafka' ),
+		'egg'       => __( 'Egg', 'lafka' ),
+		'soy'       => __( 'Soy', 'lafka' ),
+		'peanuts'   => __( 'Peanuts', 'lafka' ),
+		'nuts'      => __( 'May contain nuts', 'lafka' ),
+		'fish'      => __( 'Fish', 'lafka' ),
 		'shellfish' => __( 'Shellfish', 'lafka' ),
 	)
 );
 
-$lafka_pdp_tags  = wp_get_post_terms( $product->get_id(), 'product_tag', array( 'fields' => 'slugs' ) );
+$lafka_pdp_tags = wp_get_post_terms( $product->get_id(), 'product_tag', array( 'fields' => 'slugs' ) );
 if ( is_wp_error( $lafka_pdp_tags ) ) {
 	$lafka_pdp_tags = array();
 }
@@ -179,7 +179,7 @@ if ( '' === $lafka_pdp_long_desc && empty( $lafka_pdp_allergens ) && ! $lafka_pd
 				<ul class="lafka-pdp-info__reviews" role="list">
 					<?php foreach ( $lafka_pdp_reviews as $lafka_pdp_rev ) : ?>
 						<?php
-                        if ( empty( $lafka_pdp_rev['quote'] ) ) {
+						if ( empty( $lafka_pdp_rev['quote'] ) ) {
 							continue; }
 						?>
 						<li class="lafka-pdp-info__review">

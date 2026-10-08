@@ -21,15 +21,15 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 
-$lafka_c_info = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
-$lafka_c_addr = isset( $lafka_c_info['address_display'] ) ? (string) $lafka_c_info['address_display'] : '';
-$lafka_c_short = isset( $lafka_c_info['address_short'] ) ? (string) $lafka_c_info['address_short'] : '';
-$lafka_c_phone = isset( $lafka_c_info['phone_display'] ) ? (string) $lafka_c_info['phone_display'] : '';
-$lafka_c_tel   = isset( $lafka_c_info['phone_e164'] ) ? (string) $lafka_c_info['phone_e164'] : $lafka_c_phone;
-$lafka_c_email = isset( $lafka_c_info['email'] ) ? (string) $lafka_c_info['email'] : (string) get_bloginfo( 'admin_email' );
-$lafka_c_hours = isset( $lafka_c_info['hours'] ) && is_array( $lafka_c_info['hours'] ) ? $lafka_c_info['hours'] : array();
+$lafka_c_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
+$lafka_c_addr       = isset( $lafka_c_info['address_display'] ) ? (string) $lafka_c_info['address_display'] : '';
+$lafka_c_short      = isset( $lafka_c_info['address_short'] ) ? (string) $lafka_c_info['address_short'] : '';
+$lafka_c_phone      = isset( $lafka_c_info['phone_display'] ) ? (string) $lafka_c_info['phone_display'] : '';
+$lafka_c_tel        = isset( $lafka_c_info['phone_e164'] ) ? (string) $lafka_c_info['phone_e164'] : $lafka_c_phone;
+$lafka_c_email      = isset( $lafka_c_info['email'] ) ? (string) $lafka_c_info['email'] : (string) get_bloginfo( 'admin_email' );
+$lafka_c_hours      = isset( $lafka_c_info['hours'] ) && is_array( $lafka_c_info['hours'] ) ? $lafka_c_info['hours'] : array();
 $lafka_c_directions = isset( $lafka_c_info['directions_url'] ) ? (string) $lafka_c_info['directions_url'] : '';
-$lafka_c_logo  = get_theme_mod( 'lafka_theme_logo', 0 );
+$lafka_c_logo       = get_theme_mod( 'lafka_theme_logo', 0 );
 
 $lafka_c_photo_id = (int) get_theme_mod( 'lafka_contact_photo_id', 0 );
 $lafka_c_photo    = $lafka_c_photo_id ? wp_get_attachment_image_url( $lafka_c_photo_id, 'large' ) : '';

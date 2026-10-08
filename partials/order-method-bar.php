@@ -12,78 +12,78 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( ! function_exists( 'lafka_pdp_redesign_enabled' ) || ! lafka_pdp_redesign_enabled() ) {
-    return;
+	return;
 }
 if ( ! function_exists( 'lafka_get_restaurant_info' ) ) {
-    return;
+	return;
 }
 // GX4: the counter header owns fulfilment + status + phone.
 if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter' ) ) {
-    return;
+	return;
 }
 
-$info = lafka_get_restaurant_info();
-$method = isset( $_COOKIE['lafka_order_method'] ) && 'pickup' === $_COOKIE['lafka_order_method'] ? 'pickup' : 'delivery';
-$is_open = function_exists( 'lafka_pdp_is_store_open' ) ? lafka_pdp_is_store_open() : true;
+$info        = lafka_get_restaurant_info();
+$method      = isset( $_COOKIE['lafka_order_method'] ) && 'pickup' === $_COOKIE['lafka_order_method'] ? 'pickup' : 'delivery';
+$is_open     = function_exists( 'lafka_pdp_is_store_open' ) ? lafka_pdp_is_store_open() : true;
 $today_hours = $info['hours'][ wp_date( 'l' ) ] ?? '';
-$close_time = '';
+$close_time  = '';
 if ( preg_match( '/-(\d{2}:\d{2})$/', $today_hours, $m ) ) {
-    $close_time = $m[1];
+	$close_time = $m[1];
 }
 ?>
 <div class="lafka-order-method-bar" data-method="<?php echo esc_attr( $method ); ?>">
-    <div class="lafka-order-method-bar__inner">
-        <button type="button" class="lafka-order-method-bar__method" data-lafka-method-toggle>
-            <span class="lafka-order-method-bar__icon" aria-hidden="true">
-                <?php echo 'pickup' === $method ? '🏪' : '🚚'; ?>
-            </span>
-            <span class="lafka-order-method-bar__method-label">
-                <?php
-                echo 'pickup' === $method
-                    ? esc_html__( 'Pickup at', 'lafka' )
-                    : esc_html__( 'Delivery to', 'lafka' );
+	<div class="lafka-order-method-bar__inner">
+		<button type="button" class="lafka-order-method-bar__method" data-lafka-method-toggle>
+			<span class="lafka-order-method-bar__icon" aria-hidden="true">
+				<?php echo 'pickup' === $method ? '🏪' : '🚚'; ?>
+			</span>
+			<span class="lafka-order-method-bar__method-label">
+				<?php
+				echo 'pickup' === $method
+					? esc_html__( 'Pickup at', 'lafka' )
+					: esc_html__( 'Delivery to', 'lafka' );
 				?>
-            </span>
-            <span class="lafka-order-method-bar__location">
-                <?php
-                if ( 'pickup' === $method ) {
-                    // Operator-specific value MUST come from the resolver
-                    // (theme_mod → option → WP-core → empty). Never hardcode
-                    // a literal address — the lafka-* repos are public OSS
-                    // and operator data must not leak into them. If the
-                    // resolver returns empty, render an empty span rather
-                    // than fall back to a literal string.
-                    echo esc_html( $info['address_short'] );
-                } else {
-                    echo esc_html( $info['city'] . ', ' . $info['region'] );
-                }
-                ?>
-            </span>
-            <span class="lafka-order-method-bar__switch"><?php esc_html_e( 'Switch', 'lafka' ); ?></span>
-        </button>
-        <div class="lafka-order-method-bar__right">
-            <?php if ( ! empty( $info['phone_display'] ) ) : ?>
-                <a class="lafka-order-method-bar__phone" href="tel:<?php echo esc_attr( $info['phone_e164'] ); ?>">📞 <?php echo esc_html( $info['phone_display'] ); ?></a>
-            <?php endif; ?>
-            <span class="lafka-order-method-bar__hours">
-                <?php if ( $is_open && $close_time ) : ?>
-                    <?php printf( esc_html__( 'Open until %s', 'lafka' ), esc_html( $close_time ) ); ?>
-                <?php elseif ( $is_open ) : ?>
-                    <?php esc_html_e( 'Open', 'lafka' ); ?>
-                <?php else : ?>
-                    <?php
-                    esc_html_e( 'Closed', 'lafka' );
+			</span>
+			<span class="lafka-order-method-bar__location">
+				<?php
+				if ( 'pickup' === $method ) {
+					// Operator-specific value MUST come from the resolver
+					// (theme_mod → option → WP-core → empty). Never hardcode
+					// a literal address — the lafka-* repos are public OSS
+					// and operator data must not leak into them. If the
+					// resolver returns empty, render an empty span rather
+					// than fall back to a literal string.
+					echo esc_html( $info['address_short'] );
+				} else {
+					echo esc_html( $info['city'] . ', ' . $info['region'] );
+				}
+				?>
+			</span>
+			<span class="lafka-order-method-bar__switch"><?php esc_html_e( 'Switch', 'lafka' ); ?></span>
+		</button>
+		<div class="lafka-order-method-bar__right">
+			<?php if ( ! empty( $info['phone_display'] ) ) : ?>
+				<a class="lafka-order-method-bar__phone" href="tel:<?php echo esc_attr( $info['phone_e164'] ); ?>">📞 <?php echo esc_html( $info['phone_display'] ); ?></a>
+			<?php endif; ?>
+			<span class="lafka-order-method-bar__hours">
+				<?php if ( $is_open && $close_time ) : ?>
+					<?php printf( esc_html__( 'Open until %s', 'lafka' ), esc_html( $close_time ) ); ?>
+				<?php elseif ( $is_open ) : ?>
+					<?php esc_html_e( 'Open', 'lafka' ); ?>
+				<?php else : ?>
+					<?php
+					esc_html_e( 'Closed', 'lafka' );
 
-                    if ( class_exists( 'Lafka_Order_Hours' ) ) {
-                        $next_open = Lafka_Order_Hours::get_next_opening_time();
-                        $human     = Lafka_Order_Hours::format_next_open_time_human( $next_open );
-                        if ( '' !== $human ) {
-                            echo ' &middot; ' . esc_html( sprintf( __( 'Opens %s', 'lafka' ), $human ) );
-                        }
-                    }
-                    ?>
-                <?php endif; ?>
-            </span>
-        </div>
-    </div>
+					if ( class_exists( 'Lafka_Order_Hours' ) ) {
+						$next_open = Lafka_Order_Hours::get_next_opening_time();
+						$human     = Lafka_Order_Hours::format_next_open_time_human( $next_open );
+						if ( '' !== $human ) {
+							echo ' &middot; ' . esc_html( sprintf( __( 'Opens %s', 'lafka' ), $human ) );
+						}
+					}
+					?>
+				<?php endif; ?>
+			</span>
+		</div>
+	</div>
 </div>

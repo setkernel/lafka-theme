@@ -136,7 +136,7 @@ if ( ! function_exists( 'lafka_hours_grouped' ) ) {
 		}
 		$out = array();
 		foreach ( $groups as $group ) {
-			$days = 1 === $group['n'] ? $group['from'] : $group['from'] . '–' . $group['to'];
+			$days  = 1 === $group['n'] ? $group['from'] : $group['from'] . '–' . $group['to'];
 			$out[] = array(
 				'days'  => $days,
 				'hours' => $group['hours'],

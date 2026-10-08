@@ -45,12 +45,12 @@ if ( ! function_exists( 'lafka_sticky_cart_render' ) ) {
 			return;
 		}
 
-		$cart           = WC()->cart;
-		$count          = $cart ? (int) $cart->get_cart_contents_count() : 0;
-		$subtotal_html  = $cart ? wc_price( $cart->get_subtotal() ) : '';
-		$cart_url       = wc_get_cart_url();
-		$has_items      = $count > 0;
-		$hidden_attr    = $has_items ? '' : ' hidden';
+		$cart          = WC()->cart;
+		$count         = $cart ? (int) $cart->get_cart_contents_count() : 0;
+		$subtotal_html = $cart ? wc_price( $cart->get_subtotal() ) : '';
+		$cart_url      = wc_get_cart_url();
+		$has_items     = $count > 0;
+		$hidden_attr   = $has_items ? '' : ' hidden';
 
 		// Templates render even when empty so JS can show the bar after
 		// add-to-cart without needing a page refresh — `[hidden]` is just

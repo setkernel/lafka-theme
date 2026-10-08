@@ -400,7 +400,7 @@ if ( ! function_exists( 'lafka_counter_hero_products' ) ) {
 				}
 			}
 			if ( $product && (int) $product->get_image_id() && ! isset( $used[ (int) $product->get_id() ] ) ) {
-				$out[]                                 = $product;
+				$out[]                            = $product;
 				$used[ (int) $product->get_id() ] = true;
 			}
 		}
@@ -467,7 +467,7 @@ if ( ! function_exists( 'lafka_menu_filter_chip_defs' ) ) {
 				),
 			)
 		);
-		$out = array();
+		$out  = array();
 		foreach ( $defs as $slug => $def ) {
 			$slug = sanitize_key( (string) $slug );
 			if ( '' === $slug || ! is_array( $def ) || empty( $def['label'] ) ) {

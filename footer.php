@@ -66,7 +66,7 @@ if ( has_action( 'wp_ajax_nopriv_lafka_footer_subscribe' ) ) {
 $lafka_ft_signup_html = (string) apply_filters( 'lafka_footer_signup_html', $lafka_ft_signup_default_html );
 
 $lafka_ft_social = array(
-	'facebook' => (string) get_theme_mod( 'lafka_social_facebook', '' ),
+	'facebook'  => (string) get_theme_mod( 'lafka_social_facebook', '' ),
 	'instagram' => (string) get_theme_mod( 'lafka_social_instagram', '' ),
 	'tiktok'    => (string) get_theme_mod( 'lafka_social_tiktok', '' ),
 );

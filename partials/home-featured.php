@@ -64,9 +64,9 @@ if ( empty( $lafka_feat_products ) ) {
 
 		<ul class="lafka-favs__grid" role="list">
 			<?php
-            foreach ( $lafka_feat_products as $lafka_feat_product ) :
-				$lafka_feat_id    = $lafka_feat_product->get_id();
-				$lafka_feat_url   = get_permalink( $lafka_feat_id );
+			foreach ( $lafka_feat_products as $lafka_feat_product ) :
+				$lafka_feat_id  = $lafka_feat_product->get_id();
+				$lafka_feat_url = get_permalink( $lafka_feat_id );
 				// Below the hero (the LCP), so every card stays lazy.
 				$lafka_feat_img   = function_exists( 'lafka_card_image_html' ) ? lafka_card_image_html( $lafka_feat_product ) : '';
 				$lafka_feat_name  = $lafka_feat_product->get_name();
@@ -74,7 +74,7 @@ if ( empty( $lafka_feat_products ) ) {
 				if ( '' === $lafka_feat_short ) {
 					$lafka_feat_short = wp_trim_words( $lafka_feat_product->get_description(), 18 );
 				}
-				$lafka_feat_price = $lafka_feat_product->get_price_html();
+				$lafka_feat_price       = $lafka_feat_product->get_price_html();
 				$lafka_feat_is_featured = $lafka_feat_product->is_featured();
 				?>
 				<li class="lafka-favs__item">

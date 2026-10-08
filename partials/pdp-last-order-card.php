@@ -13,5 +13,5 @@
 defined( 'ABSPATH' ) || exit;
 
 if ( function_exists( 'lafka_pdp_render_last_order_card' ) ) {
-    lafka_pdp_render_last_order_card();
+	lafka_pdp_render_last_order_card();
 }

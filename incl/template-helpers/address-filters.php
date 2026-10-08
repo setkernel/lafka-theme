@@ -31,7 +31,7 @@ if ( ! function_exists( 'lafka_strip_country_from_restaurant_info' ) ) {
 		if ( ! empty( $info['address_display'] ) ) {
 			$lines = explode( "\n", (string) $info['address_display'] );
 			if ( count( $lines ) > 1 ) {
-				$last = trim( end( $lines ) );
+				$last    = trim( end( $lines ) );
 				$country = isset( $info['country'] ) ? trim( (string) $info['country'] ) : '';
 				// Drop the last line if it equals the country (case-insensitive).
 				if ( '' !== $country && 0 === strcasecmp( $last, $country ) ) {

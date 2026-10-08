@@ -20,12 +20,12 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$lafka_visit_info  = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
-$lafka_visit_addr  = isset( $lafka_visit_info['address_display'] ) ? (string) $lafka_visit_info['address_display'] : '';
-$lafka_visit_short = isset( $lafka_visit_info['address_short'] ) ? (string) $lafka_visit_info['address_short'] : '';
-$lafka_visit_phone = isset( $lafka_visit_info['phone_display'] ) ? (string) $lafka_visit_info['phone_display'] : '';
-$lafka_visit_tel   = isset( $lafka_visit_info['phone_e164'] ) ? (string) $lafka_visit_info['phone_e164'] : $lafka_visit_phone;
-$lafka_visit_hours = isset( $lafka_visit_info['hours'] ) && is_array( $lafka_visit_info['hours'] ) ? $lafka_visit_info['hours'] : array();
+$lafka_visit_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
+$lafka_visit_addr       = isset( $lafka_visit_info['address_display'] ) ? (string) $lafka_visit_info['address_display'] : '';
+$lafka_visit_short      = isset( $lafka_visit_info['address_short'] ) ? (string) $lafka_visit_info['address_short'] : '';
+$lafka_visit_phone      = isset( $lafka_visit_info['phone_display'] ) ? (string) $lafka_visit_info['phone_display'] : '';
+$lafka_visit_tel        = isset( $lafka_visit_info['phone_e164'] ) ? (string) $lafka_visit_info['phone_e164'] : $lafka_visit_phone;
+$lafka_visit_hours      = isset( $lafka_visit_info['hours'] ) && is_array( $lafka_visit_info['hours'] ) ? $lafka_visit_info['hours'] : array();
 $lafka_visit_directions = isset( $lafka_visit_info['directions_url'] ) ? (string) $lafka_visit_info['directions_url'] : '';
 
 // Photo: Customizer override → operator's first product image fallback.

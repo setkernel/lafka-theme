@@ -96,7 +96,7 @@ if ( ! function_exists( 'lafka_page_may_load_google_maps' ) ) {
 	 * @return bool
 	 */
 	function lafka_page_may_load_google_maps(): bool {
-		$may = ( function_exists( 'is_cart' ) && is_cart() ) || ( function_exists( 'is_checkout' ) && is_checkout() );
+		$may     = ( function_exists( 'is_cart' ) && is_cart() ) || ( function_exists( 'is_checkout' ) && is_checkout() );
 		$scripts = ! $may ? wp_scripts() : null;
 		if ( is_object( $scripts ) && isset( $scripts->queue, $scripts->registered ) ) {
 			foreach ( (array) $scripts->queue as $handle ) {

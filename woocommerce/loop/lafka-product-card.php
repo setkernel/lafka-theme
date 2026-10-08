@@ -34,7 +34,7 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'menu', 'counter' 
 	return;
 }
 
-$lafka_arch_url   = get_permalink( $lafka_arch_p->get_id() );
+$lafka_arch_url = get_permalink( $lafka_arch_p->get_id() );
 // Responsive image (srcset/sizes/width/height, real alt). This card only
 // renders on the menu page + shop/category/tag archives, where the grid sits
 // near the top: the first row loads eagerly and the first card is the LCP
@@ -54,7 +54,7 @@ $lafka_arch_featured = $lafka_arch_p->is_featured();
 // Tags come from WC product_tag slugs ('popular', 'vegetarian', 'vegan', 'spicy').
 // Featured products auto-tagged 'popular' regardless of WC tag.
 $lafka_arch_tag_slugs = array();
-$lafka_arch_tags = wp_get_post_terms( $lafka_arch_p->get_id(), 'product_tag', array( 'fields' => 'slugs' ) );
+$lafka_arch_tags      = wp_get_post_terms( $lafka_arch_p->get_id(), 'product_tag', array( 'fields' => 'slugs' ) );
 if ( ! is_wp_error( $lafka_arch_tags ) && is_array( $lafka_arch_tags ) ) {
 	$lafka_arch_tag_slugs = array_map( 'strtolower', $lafka_arch_tags );
 }

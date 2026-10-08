@@ -210,10 +210,10 @@ if ( ! function_exists( 'lafka_preset_customize_register' ) ) {
 		$wp_customize->add_section(
 			'lafka_design_preset',
 			array(
-				'title'    => esc_html__( 'Design Preset', 'lafka' ),
+				'title'       => esc_html__( 'Design Preset', 'lafka' ),
 				'description' => esc_html__( 'Ten complete restaurant identities — colors, typography, dark/light. Your own Customizer overrides always win over the preset.', 'lafka' ),
-				'panel'    => 'lafka_settings',
-				'priority' => 5,
+				'panel'       => 'lafka_settings',
+				'priority'    => 5,
 			)
 		);
 

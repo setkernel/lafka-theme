@@ -48,8 +48,8 @@ if ( ! function_exists( 'lafka_home_default_hero_bg' ) ) {
 
 		// Cache the auto-discovered URL for 24h — wc_get_products is
 		// not free and we shouldn't run it on every pageview.
-		$cache_key   = 'lafka_home_hero_auto_bg';
-		$cached_url  = get_transient( $cache_key );
+		$cache_key  = 'lafka_home_hero_auto_bg';
+		$cached_url = get_transient( $cache_key );
 		if ( is_string( $cached_url ) && '' !== $cached_url ) {
 			return $cached_url;
 		}

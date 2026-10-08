@@ -111,7 +111,7 @@ if ( ! function_exists( 'lafka_price_columns_rows' ) ) {
 		foreach ( $prices as $vid => $price ) {
 			// WC keeps out-of-stock variations in the price cache unless "hide out
 			// of stock" is on: record whether this one can be bought right now.
-			$variation = function_exists( 'wc_get_product' ) ? wc_get_product( (int) $vid ) : null;
+			$variation          = function_exists( 'wc_get_product' ) ? wc_get_product( (int) $vid ) : null;
 			$rows[ (int) $vid ] = array(
 				'price'       => (float) $price,
 				'attributes'  => function_exists( 'wc_get_product_variation_attributes' ) ? (array) wc_get_product_variation_attributes( (int) $vid ) : array(),
@@ -289,10 +289,10 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 		}
 
 		if ( $variable ) {
-			$rows    = lafka_price_columns_rows( $product );
-			$columns = lafka_price_columns( $product );
-			$names   = array_keys( (array) $product->get_variation_attributes() );
-			$primary = isset( $columns['attribute'] ) ? (string) $columns['attribute'] : ( $names ? (string) $names[0] : '' );
+			$rows     = lafka_price_columns_rows( $product );
+			$columns  = lafka_price_columns( $product );
+			$names    = array_keys( (array) $product->get_variation_attributes() );
+			$primary  = isset( $columns['attribute'] ) ? (string) $columns['attribute'] : ( $names ? (string) $names[0] : '' );
 			$defaults = (array) $product->get_default_attributes();
 
 			foreach ( $rows as $row ) {
@@ -334,8 +334,8 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 				if ( ! in_array( $default, $values, true ) ) {
 					$default = $values ? $values[0] : '';
 				}
-				$key                = lafka_price_columns_attribute_key( $name );
-				$selection[ $key ]  = $default;
+				$key                     = lafka_price_columns_attribute_key( $name );
+				$selection[ $key ]       = $default;
 				$payload['attributes'][] = array(
 					'key'     => $key,
 					'name'    => $name,
@@ -353,7 +353,7 @@ if ( ! function_exists( 'lafka_chooser_payload' ) ) {
 					continue;
 				}
 				foreach ( $attr['options'] as $j => $option ) {
-					$want                                                     = array( $primary_key => $option['value'] ) + $selection;
+					$want = array( $primary_key => $option['value'] ) + $selection;
 					$payload['attributes'][ $i ]['options'][ $j ]['available'] = null !== lafka_chooser_match( $rows, $want );
 				}
 			}

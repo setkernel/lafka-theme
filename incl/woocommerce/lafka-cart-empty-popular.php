@@ -34,11 +34,11 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 		$count = (int) apply_filters( 'lafka_cart_empty_popular_count', 6 );
 
 		$args = array(
-			'status'  => 'publish',
-			'limit'   => $count,
-			'orderby' => 'meta_value_num',
-			'meta_key' => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-			'order'   => 'DESC',
+			'status'     => 'publish',
+			'limit'      => $count,
+			'orderby'    => 'meta_value_num',
+			'meta_key'   => 'total_sales', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+			'order'      => 'DESC',
 			'visibility' => 'visible',
 		);
 		$args = (array) apply_filters( 'lafka_cart_empty_popular_args', $args );
@@ -73,9 +73,9 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 							)
 						)
 						: '';
-					$price = '';
+					$price      = '';
 					if ( $product->is_type( 'variable' ) ) {
-						$min   = $product->get_variation_price( 'min' );
+						$min = $product->get_variation_price( 'min' );
 						if ( '' !== $min ) {
 							/* translators: %s: starting price */
 							$price = sprintf( esc_html__( 'from %s', 'lafka' ), wc_price( $min ) );

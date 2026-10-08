@@ -211,13 +211,13 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 			if ( has_nav_menu( 'primary' ) ) :
 				wp_nav_menu(
 					array(
-						'theme_location' => 'primary',
-						'container'      => 'nav',
-						'container_id'   => 'lafka-primary-nav',
+						'theme_location'  => 'primary',
+						'container'       => 'nav',
+						'container_id'    => 'lafka-primary-nav',
 						'container_class' => 'lafka-header__nav',
-						'menu_class'     => 'lafka-header__nav-list',
-						'depth'          => 1,
-						'fallback_cb'    => '',
+						'menu_class'      => 'lafka-header__nav-list',
+						'depth'           => 1,
+						'fallback_cb'     => '',
 					)
 				);
 			endif;
@@ -247,7 +247,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 					// "View cart" which didn't include the count.
 					$lafka_cart_count = (int) WC()->cart->get_cart_contents_count();
 					/* translators: %d: number of items in the cart */
-					$lafka_cart_aria  = sprintf( _n( 'View cart, %d item', 'View cart, %d items', $lafka_cart_count, 'lafka' ), $lafka_cart_count );
+					$lafka_cart_aria = sprintf( _n( 'View cart, %d item', 'View cart, %d items', $lafka_cart_count, 'lafka' ), $lafka_cart_count );
 					?>
 					<a
 						class="lafka-header__cart"

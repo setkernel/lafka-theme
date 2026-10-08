@@ -73,10 +73,10 @@ if ( $lafka_review_banner_on_conversion_page ) {
 
 // Read copy from the plugin's helper functions (Customizer-backed). Falls back
 // to inline defaults if the plugin isn't active.
-$lafka_review_banner_copy_text = function_exists( 'lafka_review_banner_copy' )
+$lafka_review_banner_copy_text  = function_exists( 'lafka_review_banner_copy' )
 	? (string) lafka_review_banner_copy()
 	: 'Loved your order? Tap to rate us';
-$lafka_review_banner_cta_text = function_exists( 'lafka_review_banner_cta_label' )
+$lafka_review_banner_cta_text   = function_exists( 'lafka_review_banner_cta_label' )
 	? (string) lafka_review_banner_cta_label()
 	: 'Leave a review →';
 $lafka_review_banner_target_url = function_exists( 'lafka_review_target_url' )

@@ -1067,7 +1067,7 @@ if ( ! function_exists( 'lafka_show_variations_in_listings' ) ) {
 
 			// PERF-C06: Batch-fetch all attribute terms for all variations at once,
 			// instead of calling get_term_by() per attribute per variation (N+1).
-			$available_variations    = $lafka_variable_product->get_available_variations();
+			$available_variations = $lafka_variable_product->get_available_variations();
 			// One row per size: the plugin lists them cheapest first unless the
 			// operator ordered the variations.
 			if ( function_exists( 'lafka_sort_variation_rows' ) ) {
@@ -1301,7 +1301,7 @@ if ( ! function_exists( 'lafka_custom_related_products_heading' ) ) {
 		// GX M-35: "More from Poutine" — one translatable sentence (the
 		// category name linked), not "Other" + name + "you'll love".
 		if ( null !== $lafka_chosen_category && 'uncategorized' !== $lafka_chosen_category->slug ) {
-			$link   = sprintf(
+			$link = sprintf(
 				'<a class="lafka-related-browse" href="%1$s">%2$s</a>',
 				esc_url( get_term_link( $lafka_chosen_category ) ),
 				esc_html( $lafka_chosen_category->name )
@@ -1370,10 +1370,10 @@ if ( ! function_exists( 'lafka_quantity_input_on_listing' ) ) {
 
 			if ( ! empty( $product ) && $product->is_purchasable() && ! $product->is_sold_individually() && $product->is_in_stock() && 'variable' != $product->get_type() && 'bundle' != $product->get_type() && 'combo' != $product->get_type() ) {
 				woocommerce_quantity_input(
-					[
+					array(
 						'min_value' => 1,
 						'max_value' => $product->backorders_allowed() ? '' : $product->get_stock_quantity(),
-					]
+					)
 				);
 			}
 		}

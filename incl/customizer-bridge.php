@@ -501,43 +501,43 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 */
 		private static function register_typography_settings( $wp_customize ): void {
 			$typography = array(
-				'lafka_body_font'             => array(
+				'lafka_body_font'     => array(
 					'face'  => 'Rubik',
 					'size'  => '16px',
 					'color' => '#5e5e5e',
 				),
-				'lafka_headings_font'         => array( 'face' => 'Rubik' ),
-				'lafka_h1_font'               => array(
+				'lafka_headings_font' => array( 'face' => 'Rubik' ),
+				'lafka_h1_font'       => array(
 					'face'  => 'Rubik',
 					'size'  => '60px',
 					'color' => '#22272d',
 					'style' => '{"font-weight":"700","font-style":"normal"}',
 				),
-				'lafka_h2_font'               => array(
+				'lafka_h2_font'       => array(
 					'face'  => 'Rubik',
 					'size'  => '44px',
 					'color' => '#22272d',
 					'style' => '{"font-weight":"700","font-style":"normal"}',
 				),
-				'lafka_h3_font'               => array(
+				'lafka_h3_font'       => array(
 					'face'  => 'Rubik',
 					'size'  => '30px',
 					'color' => '#22272d',
 					'style' => '{"font-weight":"700","font-style":"normal"}',
 				),
-				'lafka_h4_font'               => array(
+				'lafka_h4_font'       => array(
 					'face'  => 'Rubik',
 					'size'  => '24px',
 					'color' => '#22272d',
 					'style' => '{"font-weight":"600","font-style":"normal"}',
 				),
-				'lafka_h5_font'               => array(
+				'lafka_h5_font'       => array(
 					'face'  => 'Rubik',
 					'size'  => '21px',
 					'color' => '#22272d',
 					'style' => '{"font-weight":"500","font-style":"normal"}',
 				),
-				'lafka_h6_font'               => array(
+				'lafka_h6_font'       => array(
 					'face'  => 'Rubik',
 					'size'  => '19px',
 					'color' => '#22272d',
@@ -711,38 +711,38 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		private static function register_layout_behaviour_settings( $wp_customize ): void {
 
 			$checkbox_defaults = array(
-				'lafka_is_responsive'                  => 1,
+				'lafka_is_responsive'              => 1,
 				// GX T-01: off by default (and forced off under a counter layout).
-				'lafka_show_preloader'                 => 0,
-				'lafka_fancy_title_font'               => 0,
-				'lafka_uppercase_page_titles'          => 1,
-				'lafka_show_my_account'                => 1,
-				'lafka_enable_shop_infinite'           => 1,
-				'lafka_use_load_more_on_shop'          => 0,
-				'lafka_show_refine_area'               => 1,
-				'lafka_use_product_filter_ajax'        => 1,
-				'lafka_only_free_delivery'             => 0,
-				'lafka_ajax_to_cart_single'            => 1,
-				'lafka_use_quickview'                  => 1,
-				'lafka_show_quantity_on_listing'       => 0,
-				'lafka_hide_product_price_on_zero'     => 0,
-				'lafka_categories_fancy'               => 0,
-				'lafka_enable_shop_cat_carousel'       => 1,
-				'lafka_show_pricefilter'               => 1,
-				'lafka_show_products_limit'            => 1,
-				'lafka_show_shop_video_bckgr'          => 0,
-				'lafka_show_related_menu_entries'      => 1,
-				'lafka_show_light_menu_entries'        => 1,
-				'lafka_hide_foodmenu_images'           => 0,
-				'lafka_foodmenu_simple_menu'           => 0,
-				'lafka_show_video_bckgr'               => 0,
-				'lafka_show_blog_title'                => 1,
-				'lafka_show_author_info'               => 1,
-				'lafka_show_author_avatar'             => 1,
-				'lafka_show_blog_video_bckgr'          => 0,
-				'lafka_show_sidebar_shop'              => 0,
-				'lafka_show_sidebar_product'           => 0,
-				'lafka_github_updates_enabled'         => 1,
+				'lafka_show_preloader'             => 0,
+				'lafka_fancy_title_font'           => 0,
+				'lafka_uppercase_page_titles'      => 1,
+				'lafka_show_my_account'            => 1,
+				'lafka_enable_shop_infinite'       => 1,
+				'lafka_use_load_more_on_shop'      => 0,
+				'lafka_show_refine_area'           => 1,
+				'lafka_use_product_filter_ajax'    => 1,
+				'lafka_only_free_delivery'         => 0,
+				'lafka_ajax_to_cart_single'        => 1,
+				'lafka_use_quickview'              => 1,
+				'lafka_show_quantity_on_listing'   => 0,
+				'lafka_hide_product_price_on_zero' => 0,
+				'lafka_categories_fancy'           => 0,
+				'lafka_enable_shop_cat_carousel'   => 1,
+				'lafka_show_pricefilter'           => 1,
+				'lafka_show_products_limit'        => 1,
+				'lafka_show_shop_video_bckgr'      => 0,
+				'lafka_show_related_menu_entries'  => 1,
+				'lafka_show_light_menu_entries'    => 1,
+				'lafka_hide_foodmenu_images'       => 0,
+				'lafka_foodmenu_simple_menu'       => 0,
+				'lafka_show_video_bckgr'           => 0,
+				'lafka_show_blog_title'            => 1,
+				'lafka_show_author_info'           => 1,
+				'lafka_show_author_avatar'         => 1,
+				'lafka_show_blog_video_bckgr'      => 0,
+				'lafka_show_sidebar_shop'          => 0,
+				'lafka_show_sidebar_product'       => 0,
+				'lafka_github_updates_enabled'     => 1,
 			);
 			foreach ( $checkbox_defaults as $id => $default ) {
 				$wp_customize->add_setting(
@@ -758,45 +758,45 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			}
 
 			$string_defaults = array(
-				'lafka_general_layout'                   => 'lafka_fullwidth',
-				'lafka_footer_style'                     => '',
-				'lafka_all_buttons_style'                => 'round',
-				'lafka_date_format'                      => 'default',
-				'lafka_shop_header_style'                => '',
-				'lafka_shop_top_menu'                    => 'default',
-				'lafka_shop_subtitle'                    => '',
-				'lafka_shop_title_alignment'             => 'centered_title',
-				'lafka_single_product_gallery_type'      => 'woo_default',
-				'lafka_refine_area_state'                => 'opened',
-				'lafka_shop_pages_width'                 => '',
-				'lafka_product_columns_mobile'           => '1',
-				'lafka_product_list_buttons_visibility'  => 'lafka-visible-buttons',
-				'lafka_product_hover_onproduct'          => 'lafka-prodhover-zoom',
+				'lafka_general_layout'                  => 'lafka_fullwidth',
+				'lafka_footer_style'                    => '',
+				'lafka_all_buttons_style'               => 'round',
+				'lafka_date_format'                     => 'default',
+				'lafka_shop_header_style'               => '',
+				'lafka_shop_top_menu'                   => 'default',
+				'lafka_shop_subtitle'                   => '',
+				'lafka_shop_title_alignment'            => 'centered_title',
+				'lafka_single_product_gallery_type'     => 'woo_default',
+				'lafka_refine_area_state'               => 'opened',
+				'lafka_shop_pages_width'                => '',
+				'lafka_product_columns_mobile'          => '1',
+				'lafka_product_list_buttons_visibility' => 'lafka-visible-buttons',
+				'lafka_product_hover_onproduct'         => 'lafka-prodhover-zoom',
 				// NX1-02.plugin-owned-confirm — the WooCommerce sale-countdown
 				// toggle (legacy 'use_countdown' select; std 'enabled'). The only
 				// theme-owned key migrated in that otherwise plugin-owned slice.
-				'lafka_use_countdown'                    => 'enabled',
-				'lafka_category_columns_num'             => '3',
-				'lafka_shop_default_product_columns'     => 'columns-3',
-				'lafka_shopwide_video_bckgr'             => '0',
-				'lafka_shop_video_bckgr_url'             => '',
-				'lafka_video_bckgr_url'                  => '',
-				'lafka_general_blog_style'               => '',
-				'lafka_blog_top_menu'                    => 'default',
-				'lafka_blog_header_style'                => '',
-				'lafka_blog_title'                       => 'Blog',
-				'lafka_blog_subtitle'                    => '',
-				'lafka_blog_title_alignment'             => 'centered_title',
-				'lafka_blog_pages_width'                 => 'lafka-fullwidth-blog-pages',
-				'lafka_blog_video_bckgr_url'             => '',
-				'lafka_sidebar_position'                 => 'lafka-right-sidebar',
-				'lafka_sidebar_ids'                      => '',
-				'lafka_blog_categoty_sidebar'            => 'right_sidebar',
-				'lafka_blog_sidebar_position'            => 'default',
-				'lafka_foodmenu_categoty_sidebar'        => 'none',
-				'lafka_shop_sidebar_position'            => 'default',
-				'lafka_product_sidebar_position'         => 'default',
-				'lafka_offcanvas_sidebar'                => 'none',
+				'lafka_use_countdown'                   => 'enabled',
+				'lafka_category_columns_num'            => '3',
+				'lafka_shop_default_product_columns'    => 'columns-3',
+				'lafka_shopwide_video_bckgr'            => '0',
+				'lafka_shop_video_bckgr_url'            => '',
+				'lafka_video_bckgr_url'                 => '',
+				'lafka_general_blog_style'              => '',
+				'lafka_blog_top_menu'                   => 'default',
+				'lafka_blog_header_style'               => '',
+				'lafka_blog_title'                      => 'Blog',
+				'lafka_blog_subtitle'                   => '',
+				'lafka_blog_title_alignment'            => 'centered_title',
+				'lafka_blog_pages_width'                => 'lafka-fullwidth-blog-pages',
+				'lafka_blog_video_bckgr_url'            => '',
+				'lafka_sidebar_position'                => 'lafka-right-sidebar',
+				'lafka_sidebar_ids'                     => '',
+				'lafka_blog_categoty_sidebar'           => 'right_sidebar',
+				'lafka_blog_sidebar_position'           => 'default',
+				'lafka_foodmenu_categoty_sidebar'       => 'none',
+				'lafka_shop_sidebar_position'           => 'default',
+				'lafka_product_sidebar_position'        => 'default',
+				'lafka_offcanvas_sidebar'               => 'none',
 			);
 			foreach ( $string_defaults as $id => $default ) {
 				$wp_customize->add_setting(
@@ -812,10 +812,10 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			}
 
 			$int_defaults = array(
-				'lafka_products_per_page'         => 12,
-				'lafka_number_related_products'   => 6,
-				'lafka_price_filter_widget_step'  => 10,
-				'lafka_new_label_period'          => 45,
+				'lafka_products_per_page'        => 12,
+				'lafka_number_related_products'  => 6,
+				'lafka_price_filter_widget_step' => 10,
+				'lafka_new_label_period'         => 45,
 			);
 			foreach ( $int_defaults as $id => $default ) {
 				$wp_customize->add_setting(
@@ -848,7 +848,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 			}
 
 			$dyn_sidebar_defaults = array(
-				'lafka_woocommerce_sidebar'  => lafka_registered_sidebar_default( 'shop' ),
+				'lafka_woocommerce_sidebar' => lafka_registered_sidebar_default( 'shop' ),
 			);
 			foreach ( $dyn_sidebar_defaults as $id => $default ) {
 				$wp_customize->add_setting(

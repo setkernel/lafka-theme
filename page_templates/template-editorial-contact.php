@@ -22,26 +22,26 @@ get_header();
 
 <div class="lafka-editorial-contact">
 
-    <?php /* Utility bar */ ?>
-    <?php get_template_part( 'partials/editorial-utility-bar' ); ?>
+	<?php /* Utility bar */ ?>
+	<?php get_template_part( 'partials/editorial-utility-bar' ); ?>
 
-    <?php /* Page heading */ ?>
-    <section class="contact-head">
-        <div class="contact-head-inner">
-            <h1><?php echo esc_html( get_theme_mod( 'lafka_editorial_contact_h1', __( 'Contact us', 'lafka' ) ) ); ?></h1>
-            <?php $intro = get_theme_mod( 'lafka_editorial_contact_intro', '' ); ?>
-            <?php if ( $intro ) : ?>
-            <p class="contact-intro"><?php echo esc_html( $intro ); ?></p>
-            <?php endif; ?>
-        </div>
-    </section>
+	<?php /* Page heading */ ?>
+	<section class="contact-head">
+		<div class="contact-head-inner">
+			<h1><?php echo esc_html( get_theme_mod( 'lafka_editorial_contact_h1', __( 'Contact us', 'lafka' ) ) ); ?></h1>
+			<?php $intro = get_theme_mod( 'lafka_editorial_contact_intro', '' ); ?>
+			<?php if ( $intro ) : ?>
+			<p class="contact-intro"><?php echo esc_html( $intro ); ?></p>
+			<?php endif; ?>
+		</div>
+	</section>
 
-    <?php /* 3-column grid: NAP | Map | Form */ ?>
-    <div class="contact-grid">
-        <?php get_template_part( 'partials/editorial-contact-nap' ); ?>
-        <?php get_template_part( 'partials/editorial-contact-map' ); ?>
-        <?php get_template_part( 'partials/editorial-contact-form' ); ?>
-    </div>
+	<?php /* 3-column grid: NAP | Map | Form */ ?>
+	<div class="contact-grid">
+		<?php get_template_part( 'partials/editorial-contact-nap' ); ?>
+		<?php get_template_part( 'partials/editorial-contact-map' ); ?>
+		<?php get_template_part( 'partials/editorial-contact-form' ); ?>
+	</div>
 
 </div>
 

@@ -39,12 +39,12 @@ if ( ! $lafka_rest ) {
 					'partials/counter/menu-section',
 					null,
 					array(
-						'term'   => $lafka_rest_block['term'],
-						'ids'    => $lafka_rest_block['ids'],
-						'total'  => $lafka_rest_block['total'],
-						'style'  => $lafka_rest_settings['menu_style'],
-						'thumbs' => $lafka_rest_settings['menu_thumbs'],
-						'list'   => __( 'Home', 'lafka' ),
+						'term'          => $lafka_rest_block['term'],
+						'ids'           => $lafka_rest_block['ids'],
+						'total'         => $lafka_rest_block['total'],
+						'style'         => $lafka_rest_settings['menu_style'],
+						'thumbs'        => $lafka_rest_settings['menu_thumbs'],
+						'list'          => __( 'Home', 'lafka' ),
 						'heading_level' => 3,
 					)
 				);

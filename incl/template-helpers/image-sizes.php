@@ -29,7 +29,7 @@ if ( ! function_exists( 'lafka_counter_image_sizes' ) ) {
 	 * @param string $slot logo | hero-front | hero-back | deal-featured | deal-small | row-photo | row-compact.
 	 */
 	function lafka_counter_image_sizes( string $slot ): string {
-		$map = array(
+		$map   = array(
 			// .lafka-counter-header__logo: 40 / 52 (≥600) / 64 (≥1280) px.
 			'logo'          => '(min-width: 1280px) 64px, (min-width: 600px) 52px, 40px',
 			// Hero dishes: 58% / 66% of the art column (≥1024), 44% (≥600), 58% / 54% below.

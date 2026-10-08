@@ -1460,10 +1460,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			// AND we're not on a conversion page. The JS additionally gates on
 			// pageview count + Notification.permission state + 30-day
 			// suppression localStorage.
-			$lafka_push_master_on  = '1' === (string) get_theme_mod( 'lafka_push_enabled', '0' );
-			$lafka_push_prompt_on  = '1' === (string) get_theme_mod( 'lafka_push_subscribe_prompt_enabled', '1' );
-			$lafka_push_vapid_pub  = (string) get_theme_mod( 'lafka_push_vapid_public_key', '' );
-			$lafka_push_on_conv    = ( function_exists( 'is_cart' ) && is_cart() )
+			$lafka_push_master_on = '1' === (string) get_theme_mod( 'lafka_push_enabled', '0' );
+			$lafka_push_prompt_on = '1' === (string) get_theme_mod( 'lafka_push_subscribe_prompt_enabled', '1' );
+			$lafka_push_vapid_pub = (string) get_theme_mod( 'lafka_push_vapid_public_key', '' );
+			$lafka_push_on_conv   = ( function_exists( 'is_cart' ) && is_cart() )
 				|| ( function_exists( 'is_checkout' ) && is_checkout() )
 				|| ( function_exists( 'is_account_page' ) && is_account_page() )
 				|| ( function_exists( 'is_wc_endpoint_url' ) && is_wc_endpoint_url( 'order-received' ) );
@@ -1659,7 +1659,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		$lafka_is_contact_tpl  = is_page_template( 'template-contact.php' );
 		$lafka_is_contact_slug = false;
 		if ( is_page() ) {
-			$lafka_slug = (string) get_post_field( 'post_name' );
+			$lafka_slug            = (string) get_post_field( 'post_name' );
 			$lafka_is_contact_slug = in_array( $lafka_slug, array( 'contact', 'contact-us' ), true );
 		}
 		if ( $lafka_is_404 || $lafka_is_contact_tpl || $lafka_is_contact_slug ) {
@@ -1865,9 +1865,9 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		$current_post_content = function_exists( 'lafka_rendered_post_content' )
 			? lafka_rendered_post_content()
 			: ( ( is_singular() && isset( $GLOBALS['post'] ) && $GLOBALS['post'] instanceof WP_Post ) ? (string) $GLOBALS['post']->post_content : '' );
-		$has_etline  = false !== strpos( $current_post_content, 'type="etline"' )
+		$has_etline           = false !== strpos( $current_post_content, 'type="etline"' )
 			|| false !== strpos( $current_post_content, "type='etline'" );
-		$has_flaticon = false !== strpos( $current_post_content, 'type="flaticon"' )
+		$has_flaticon         = false !== strpos( $current_post_content, 'type="flaticon"' )
 			|| false !== strpos( $current_post_content, "type='flaticon'" )
 			|| false !== strpos( $current_post_content, 'i_type="flaticon"' )
 			|| false !== strpos( $current_post_content, "i_type='flaticon'" )

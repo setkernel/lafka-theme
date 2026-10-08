@@ -95,7 +95,7 @@ do_action( 'woocommerce_before_cart' );
 	 * plugin isn't loaded, fall back to the single shared theme_mod (0 = off).
 	 * 0 means "no free-delivery promise" — matching enforcement on a fresh
 	 * (unconfigured) install. */
-	$lafka_cart_threshold = function_exists( 'lafka_get_free_delivery_threshold' )
+	$lafka_cart_threshold       = function_exists( 'lafka_get_free_delivery_threshold' )
 		? (float) lafka_get_free_delivery_threshold()
 		: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
 	$lafka_cart_threshold_label = function_exists( 'wc_price' )
@@ -199,11 +199,11 @@ do_action( 'woocommerce_before_cart' );
 								<?php
 								// translators: %s: per-unit price
 								echo wp_kses_post(
-                                    sprintf(
-                                        __( '%s each', 'lafka' ),
-                                        apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
-                                    ) 
-                                );
+									sprintf(
+										__( '%s each', 'lafka' ),
+										apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
+									)
+								);
 								?>
 							</div>
 						<?php endif; ?>

@@ -58,23 +58,23 @@ if ( is_wp_error( $lafka_cat_terms ) || empty( $lafka_cat_terms ) ) {
 // Emoji map for common category names — first hit wins. Operator can
 // override per-term via lafka_category_emoji filter.
 $lafka_cat_emoji_map = array(
-	'pizza'    => '🍕',
-	'poutine'  => '🍟',
-	'burger'   => '🍔',
-	'donair'   => '🥙',
-	'wing'     => '🍗',
-	'fish'     => '🐟',
-	'salad'    => '🥗',
-	'dessert'  => '🍰',
-	'drink'    => '🥤',
-	'beer'     => '🍺',
-	'wine'     => '🍷',
-	'combo'    => '🍽',
-	'side'     => '🍞',
+	'pizza'     => '🍕',
+	'poutine'   => '🍟',
+	'burger'    => '🍔',
+	'donair'    => '🥙',
+	'wing'      => '🍗',
+	'fish'      => '🐟',
+	'salad'     => '🥗',
+	'dessert'   => '🍰',
+	'drink'     => '🥤',
+	'beer'      => '🍺',
+	'wine'      => '🍷',
+	'combo'     => '🍽',
+	'side'      => '🍞',
 	'appetizer' => '🍤',
-	'sub'      => '🥖',
-	'sauce'    => '🥫',
-	'kid'      => '🥪',
+	'sub'       => '🥖',
+	'sauce'     => '🥫',
+	'kid'       => '🥪',
 );
 ?>
 <section class="lafka-cats" aria-labelledby="lafka-cats-heading">
@@ -87,7 +87,7 @@ $lafka_cat_emoji_map = array(
 
 		<ul class="lafka-cats__grid" role="list">
 			<?php
-            foreach ( $lafka_cat_terms as $lafka_cat_term ) :
+			foreach ( $lafka_cat_terms as $lafka_cat_term ) :
 				$lafka_cat_url  = get_term_link( $lafka_cat_term );
 				$lafka_cat_slug = strtolower( (string) $lafka_cat_term->slug );
 

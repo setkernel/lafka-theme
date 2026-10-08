@@ -17,8 +17,8 @@ if ( ! function_exists( 'lafka_direct_value_data' ) ) {
 	return;
 }
 
-$lafka_dv_ctx  = isset( $GLOBALS['lafka_direct_value_context'] ) ? (string) $GLOBALS['lafka_direct_value_context'] : 'home';
-$lafka_dv      = lafka_direct_value_data();
+$lafka_dv_ctx = isset( $GLOBALS['lafka_direct_value_context'] ) ? (string) $GLOBALS['lafka_direct_value_context'] : 'home';
+$lafka_dv     = lafka_direct_value_data();
 if ( empty( $lafka_dv['enabled'] ) ) {
 	return;
 }

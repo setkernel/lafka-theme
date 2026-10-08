@@ -145,7 +145,7 @@ if ( ! function_exists( 'lafka_card_image_html' ) ) {
 			 */
 			$eager_count = max( 0, (int) apply_filters( 'lafka_product_card_eager_count', 4 ) );
 			if ( $index < $eager_count ) {
-				$attr['loading']       = 'eager';
+				$attr['loading'] = 'eager';
 				// Pin the priority explicitly so core's loading-optimization
 				// heuristics never promote a second card: only the first card
 				// competes for the LCP slot.
