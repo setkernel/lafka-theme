@@ -82,9 +82,7 @@ git tags + GitHub Releases.
   `incl/system/lafka-google-fonts.php` and the media-picker script `js/lafka-medialibrary-uploader.js`
   (its dead Theme Options sidebar and accordion code is gone). Class files follow the
   `class-*.php` convention (`class-lafka-customizer-bridge.php`, `class-lafka-maintenance-page.php`),
-  the food-menu partial and taxonomy template use hyphenated names (the taxonomy template
-  is still found through the `taxonomy_template_hierarchy` filter; a child theme's
-  `taxonomy-lafka_foodmenu_category.php` still wins), and dead test-seam guards in
+  the food-menu partial uses a hyphenated name, and dead test-seam guards in
   `incl/presets/` are removed.
 - The log fallback (plugin inactive, `WP_DEBUG` or the `lafka_theme_log_fallback` filter) now
   writes to the WooCommerce log, source `lafka-theme`, instead of the PHP error log. The

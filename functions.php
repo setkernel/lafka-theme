@@ -1782,21 +1782,3 @@ add_action(
 	},
 	30
 );
-
-/**
- * The food-menu category template lives in a hyphenated file name. WordPress
- * derives template names from the taxonomy slug (`lafka_foodmenu_category`), so
- * the hyphenated file is offered right after the slug-named one; a child theme
- * that ships the slug-named file still wins.
- *
- * @param string[] $templates Template candidates, most specific first.
- * @return string[]
- */
-function lafka_foodmenu_taxonomy_template_hierarchy( $templates ) {
-	$index = array_search( 'taxonomy-lafka_foodmenu_category.php', $templates, true );
-	if ( false !== $index ) {
-		array_splice( $templates, $index + 1, 0, 'taxonomy-lafka-foodmenu-category.php' );
-	}
-	return $templates;
-}
-add_filter( 'taxonomy_template_hierarchy', 'lafka_foodmenu_taxonomy_template_hierarchy' );

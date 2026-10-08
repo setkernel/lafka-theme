@@ -31,6 +31,14 @@
 		</properties>
 	</rule>
 
+	<!-- This is a theme: template-hierarchy file names such as
+	     taxonomy-lafka_foodmenu_category.php follow WordPress's naming. -->
+	<rule ref="WordPress.Files.FileName">
+		<properties>
+			<property name="is_theme" value="true"/>
+		</properties>
+	</rule>
+
 	<!-- Cross-version PHP compatibility against the 8.3 floor. PHPCompatibility
 	     10 (alpha, same as lafka-plugin) is required: 9.3.5 has no PHP 8.x sniffs. -->
 	<config name="testVersion" value="8.3-"/>
