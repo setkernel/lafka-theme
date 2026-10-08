@@ -131,6 +131,15 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 		Lafka_Order_Hours::echo_closed_store_message();
 		?>
 
+	<?php elseif ( $product->is_type( 'lafka_deal' ) ) : ?>
+
+		<?php
+		// A Deal (the plugin's lafka_deal type): the customer picks each item.
+		// The plugin renders its builder from WooCommerce's own per-type
+		// add-to-cart action, the same hook any theme's product page fires.
+		do_action( 'woocommerce_lafka_deal_add_to_cart' );
+		?>
+
 	<?php elseif ( $lafka_is_variable ) : ?>
 		<?php
 		// The add button's prompt until every attribute is chosen (the script
