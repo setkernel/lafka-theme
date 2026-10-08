@@ -71,6 +71,13 @@
 		"salads": "🥗",
 		"drinks": "🍷"
 	},
-	"variants": {},
+	"variants": {
+		"header_layout": "counter",
+		"home_layout": "counter",
+		"menu_layout": "counter",
+		"footer_layout": "counter",
+		"drawer_layout": "counter",
+		"motif": "none"
+	},
 	"contrast_exceptions": []
 }

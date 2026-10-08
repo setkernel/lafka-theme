@@ -216,8 +216,10 @@ A preset is a folder in `presets/<slug>/` with a `preset.json` and a
 
 Peppery is "The counter": warm white surfaces, tomato accent `#B0271D`, leaf-green
 brand `#2E6A3B`, pool fonts with `font_display: optional`, 17/18 px body, and the
-counter layout on every surface (see Layouts). The other nine keep the classic
-layouts.
+counter layout on every surface (see Layouts) with the checkered motif. Every other
+preset also uses the counter layout on every surface, without the motif, so all
+ten share one modern, token-driven layout and differ in colour, type and surface;
+the classic layouts remain selectable per surface in the Customizer.
 
 ### Files
 

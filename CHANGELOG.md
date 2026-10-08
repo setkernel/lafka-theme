@@ -8,6 +8,9 @@ git tags + GitHub Releases.
 ## [Unreleased]
 
 ### Added
+- All ten presets use the modern counter layout on every surface (header, home,
+  menu, footer, cart drawer); only Peppery adds the checkered motif. Verified on
+  the production clone at 375 and 1280 px: home, menu and a product page per preset.
 - The product page renders the plugin's Deal builder for Deal products (WooCommerce's
   `woocommerce_lafka_deal_add_to_cart` action), and styles the plugin's half-and-half
   Left / Whole / Right choice and the tips picker (classic and block checkout).
