@@ -326,16 +326,16 @@ if ( ! function_exists( 'lafka_counter_render_nav' ) ) {
 	/**
 	 * The counter nav: the assigned menu (depth 1) or the default items.
 	 *
-	 * @param string $class List class.
+	 * @param string $css_class List class.
 	 */
-	function lafka_counter_render_nav( string $class ): void {
+	function lafka_counter_render_nav( string $css_class ): void {
 		$location = lafka_counter_nav_location();
 		if ( has_nav_menu( $location ) ) {
 			wp_nav_menu(
 				array(
 					'theme_location' => $location,
 					'container'      => false,
-					'menu_class'     => $class,
+					'menu_class'     => $css_class,
 					'depth'          => 1,
 					'fallback_cb'    => false,
 				)
@@ -347,7 +347,7 @@ if ( ! function_exists( 'lafka_counter_render_nav' ) ) {
 			return;
 		}
 		$request = isset( $_SERVER['REQUEST_URI'] ) ? sanitize_text_field( wp_unslash( (string) $_SERVER['REQUEST_URI'] ) ) : '';
-		echo '<ul class="' . esc_attr( $class ) . '">';
+		echo '<ul class="' . esc_attr( $css_class ) . '">';
 		foreach ( $items as $item ) {
 			$current = lafka_counter_nav_is_current( (string) $item['url'], $request );
 			echo '<li class="menu-item' . ( $current ? ' current-menu-item' : '' ) . '"><a href="' . esc_url( $item['url'] ) . '"' . ( $current ? ' aria-current="page"' : '' ) . '>' . esc_html( $item['label'] ) . '</a></li>';
@@ -519,9 +519,9 @@ if ( ! function_exists( 'lafka_counter_add_action' ) ) {
 	 *
 	 * @param WC_Product $product Product.
 	 * @param string     $label   Visible word(s), e.g. "Add" / "Add to order".
-	 * @param string     $class   Extra classes.
+	 * @param string     $css_class   Extra classes.
 	 */
-	function lafka_counter_add_action( $product, string $label, string $class = '' ): string {
+	function lafka_counter_add_action( $product, string $label, string $css_class = '' ): string {
 		$name = wp_strip_all_tags( (string) $product->get_name() );
 		$url  = (string) $product->get_permalink();
 		$mode = lafka_counter_add_mode( $product );
@@ -529,14 +529,14 @@ if ( ! function_exists( 'lafka_counter_add_action' ) ) {
 			// A one-variation variable product adds that variation directly.
 			$payload = 'direct' === $mode ? lafka_chooser_payload( $product ) : array();
 			$add_id  = ! empty( $payload['variation_id'] ) ? (int) $payload['variation_id'] : (int) $product->get_id();
-			return '<button type="button" class="' . esc_attr( trim( 'lafka-counter-btn ' . $class ) ) . '"'
+			return '<button type="button" class="' . esc_attr( trim( 'lafka-counter-btn ' . $css_class ) ) . '"'
 				. ' data-lafka-add="' . esc_attr( (string) $add_id ) . '"'
 				. ' data-lafka-add-mode="' . esc_attr( $mode ) . '"'
 				. ' data-lafka-add-url="' . esc_url( $url ) . '">'
 				. esc_html( $label ) . '<span class="screen-reader-text"> ' . esc_html( $name ) . '</span></button>';
 		}
 		$choose = (string) apply_filters( 'lafka_counter_choose_label', __( 'Choose', 'lafka' ), $product );
-		return '<a class="' . esc_attr( trim( 'lafka-counter-btn lafka-counter-btn--choose ' . $class ) ) . '" href="' . esc_url( $url ) . '">'
+		return '<a class="' . esc_attr( trim( 'lafka-counter-btn lafka-counter-btn--choose ' . $css_class ) ) . '" href="' . esc_url( $url ) . '">'
 			. esc_html( $choose ) . '<span class="screen-reader-text"> '
 			/* translators: %s: product name */
 			. esc_html( sprintf( __( 'options for %s', 'lafka' ), $name ) ) . '</span></a>';

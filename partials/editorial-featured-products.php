@@ -48,8 +48,7 @@ if ( empty( $products ) ) {
 		<article class="product-card">
 			<a href="<?php echo esc_url( $url ); ?>" class="product-photo">
 				<?php
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core.
-				echo $thumb_html;
+				echo wp_kses( $thumb_html, lafka_allowed_html() );
 				?>
 			</a>
 			<h3><a href="<?php echo esc_url( $url ); ?>"><?php echo esc_html( $name ); ?></a></h3>

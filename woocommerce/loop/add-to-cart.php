@@ -26,21 +26,23 @@ $aria_describedby = isset( $args['aria-describedby_text'] ) ? sprintf( 'aria-des
 
 echo '<div class="links">';
 echo wp_kses_post( apply_filters( 'lafka_links_before_add_to_cart', '' ) );
-// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern (woocommerce/templates/loop/add-to-cart.php); sprintf args are esc_url/esc_attr escaped; filter consumers responsible for safe output.
-echo apply_filters(
-	'woocommerce_loop_add_to_cart_link',
-	sprintf(
-		'<a href="%s" %s data-quantity="%s" class="%s" title="%s" %s>%s</a>',
-		esc_url( $product->add_to_cart_url() ),
-		$aria_describedby,
-		esc_attr( isset( $args['quantity'] ) ? $args['quantity'] : 1 ),
-		esc_attr( isset( $args['class'] ) ? $args['class'] : 'button' ),
-		esc_attr( $product->add_to_cart_text() ),
-		isset( $args['attributes'] ) ? wc_implode_html_attributes( $args['attributes'] ) : '',
-		esc_html( $product->add_to_cart_text() )
+echo wp_kses(
+	apply_filters(
+		'woocommerce_loop_add_to_cart_link',
+		sprintf(
+			'<a href="%s" %s data-quantity="%s" class="%s" title="%s" %s>%s</a>',
+			esc_url( $product->add_to_cart_url() ),
+			$aria_describedby,
+			esc_attr( isset( $args['quantity'] ) ? $args['quantity'] : 1 ),
+			esc_attr( isset( $args['class'] ) ? $args['class'] : 'button' ),
+			esc_attr( $product->add_to_cart_text() ),
+			isset( $args['attributes'] ) ? wc_implode_html_attributes( $args['attributes'] ) : '',
+			esc_html( $product->add_to_cart_text() )
+		),
+		$product,
+		$args
 	),
-	$product,
-	$args
+	lafka_allowed_html()
 );
 ?>
 <?php if ( isset( $args['aria-describedby_text'] ) ) : ?>

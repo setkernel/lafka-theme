@@ -62,14 +62,14 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 	<?php
 	// GX M-25: operator-chosen age-restricted categories (empty by default).
 	if ( function_exists( 'lafka_product_age_notice_html' ) ) {
-		echo lafka_product_age_notice_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_age_notice_html().
+		echo wp_kses( lafka_product_age_notice_html( $product ), lafka_allowed_html() );
 	}
 	?>
 
 	<?php
 	// GX M-25: operator-chosen age-restricted categories (empty by default).
 	if ( function_exists( 'lafka_product_age_notice_html' ) ) {
-		echo lafka_product_age_notice_html( $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_age_notice_html().
+		echo wp_kses( lafka_product_age_notice_html( $product ), lafka_allowed_html() );
 	}
 	?>
 
@@ -158,8 +158,7 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
 				data-product_id="<?php echo absint( $product->get_id() ); ?>"
 				data-product_variations="
 				<?php
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_esc_json() is WC's attribute-context escape function.
-				echo wc_esc_json( wp_json_encode( $product->get_available_variations() ) );
+				echo esc_attr( wp_json_encode( $product->get_available_variations(), JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT ) );
 				?>
 				">
 

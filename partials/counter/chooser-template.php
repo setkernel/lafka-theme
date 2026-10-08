@@ -23,7 +23,7 @@ defined( 'ABSPATH' ) || exit;
 			</div>
 			<form method="dialog">
 				<button type="submit" class="lafka-chooser__close lafka-counter-btn">
-					<?php echo lafka_counter_icon( 'close', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+					<?php echo wp_kses( lafka_counter_icon( 'close', 18 ), lafka_allowed_html() ); ?>
 					<span><?php esc_html_e( 'Close', 'lafka' ); ?></span>
 				</button>
 			</form>

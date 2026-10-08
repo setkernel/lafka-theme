@@ -26,8 +26,14 @@ if ( ! $notices ) {
 <div class="lafka-notice-alert" role="alert">
 	<ul class="woocommerce-error">
 		<?php foreach ( $notices as $notice ) : ?>
-			<li<?php echo wc_get_notice_data_attr( $notice ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-				<?php echo wc_kses_notice( $notice['notice'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_kses_notice() is WooCommerce's notice sanitizer. ?>
+			<li
+			<?php
+			foreach ( (array) ( $notice['data'] ?? array() ) as $lafka_notice_key => $lafka_notice_value ) {
+				printf( ' data-%1$s="%2$s"', esc_attr( $lafka_notice_key ), esc_attr( $lafka_notice_value ) );
+			}
+			?>
+			>
+				<?php echo wp_kses( wc_kses_notice( $notice['notice'] ), lafka_allowed_html() ); ?>
 			</li>
 		<?php endforeach; ?>
 	</ul>

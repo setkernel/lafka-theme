@@ -25,18 +25,15 @@ global $post, $product;
 <?php if ( $product->is_on_sale() ) : ?>
 	<?php if ( $product->is_type( 'grouped' ) ) : ?>
 		<?php
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; default markup uses esc_html__; filter consumers responsible for safe output.
-		echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' );
+		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'sale', 'lafka' ) . '</span>' ) );
 		?>
 	<?php elseif ( $product->is_type( 'combo' ) ) : ?>
 		<?php
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; default markup uses esc_html__; filter consumers responsible for safe output.
-		echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' );
+		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . esc_html__( 'save', 'lafka' ) . '</span>' ) );
 		?>
 	<?php else : ?>
 		<?php
-		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; default markup uses literal int from lafka_get_product_saving(); filter consumers responsible for safe output.
-		echo apply_filters( 'woocommerce_sale_flash', '<span class="sale">' . ' -' . (int) lafka_get_product_saving( $product ) . '%</span>', $post, $product );
+		echo wp_kses_post( apply_filters( 'woocommerce_sale_flash', '<span class="sale"> -' . (int) lafka_get_product_saving( $product ) . '%</span>', $post, $product ) );
 		?>
 	<?php endif ?>
 <?php endif; ?>

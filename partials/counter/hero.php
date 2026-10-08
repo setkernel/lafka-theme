@@ -89,11 +89,11 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 			<div class="lafka-counter-hero__ctas">
 				<a class="lafka-counter-btn lafka-counter-btn--primary lafka-counter-btn--lg" href="<?php echo esc_url( $lafka_hero_cta_url ); ?>">
 					<span><?php echo esc_html( $lafka_hero_cta_label ); ?></span>
-					<?php echo lafka_counter_icon( 'arrow' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+					<?php echo wp_kses( lafka_counter_icon( 'arrow' ), lafka_allowed_html() ); ?>
 				</a>
 				<?php if ( '' !== $lafka_hero_nap['phone'] ) : ?>
 					<a class="lafka-counter-btn lafka-counter-btn--lg" href="<?php echo esc_attr( 'tel:' . $lafka_hero_nap['tel'] ); ?>" data-lafka-channel="phone">
-						<?php echo lafka_counter_icon( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+						<?php echo wp_kses( lafka_counter_icon( 'phone' ), lafka_allowed_html() ); ?>
 						<span>
 						<?php
 						// The number gets its own span so it can use the display face's figures.
@@ -114,7 +114,7 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 				<ul class="lafka-counter-hero__meta">
 					<?php if ( '' !== $lafka_hero_eta || '' !== $lafka_hero_modes_text ) : ?>
 						<li>
-							<?php echo lafka_counter_icon( '' !== $lafka_hero_eta ? 'clock' : 'bag' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG (H-25: a clock only beside a time). ?>
+							<?php echo wp_kses( lafka_counter_icon( '' !== $lafka_hero_eta ? 'clock' : 'bag' ), lafka_allowed_html() ); ?>
 							<span>
 								<?php if ( '' !== $lafka_hero_eta ) : ?>
 									<strong>
@@ -130,13 +130,13 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 					<?php endif; ?>
 					<?php if ( $lafka_hero_place ) : ?>
 						<li>
-							<?php echo lafka_counter_icon( 'pin' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+							<?php echo wp_kses( lafka_counter_icon( 'pin' ), lafka_allowed_html() ); ?>
 							<span><?php echo esc_html( implode( ' · ', $lafka_hero_place ) ); ?></span>
 						</li>
 					<?php endif; ?>
 					<?php if ( '' !== $lafka_hero_rating ) : ?>
 						<li class="lafka-counter-hero__rating">
-							<?php echo lafka_counter_icon( 'star' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+							<?php echo wp_kses( lafka_counter_icon( 'star' ), lafka_allowed_html() ); ?>
 							<span><?php echo esc_html( $lafka_hero_rating ); ?></span>
 						</li>
 					<?php endif; ?>

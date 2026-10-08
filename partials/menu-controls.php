@@ -130,8 +130,8 @@ $lafka_mc_chips = function_exists( 'lafka_menu_filter_chips' ) ? lafka_menu_filt
 			<span class="lafka-menu__tab-meta">
 				<?php
 				if ( $lafka_mc_threshold > 0 ) {
-					/* translators: 1: free-delivery threshold (e.g. "$30"); 2: city. */
 					printf(
+						/* translators: 1: free-delivery threshold (e.g. "$30"); 2: city. */
 						esc_html__( 'Free over %1$s%2$s', 'lafka' ),
 						esc_html( $lafka_mc_threshold_label ),
 						'' !== $lafka_mc_city ? ' · ' . esc_html( $lafka_mc_city ) : ''

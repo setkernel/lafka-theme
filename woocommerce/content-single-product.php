@@ -27,8 +27,7 @@ global $product;
 do_action( 'woocommerce_before_single_product' );
 
 if ( post_password_required() ) {
-	// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- get_the_password_form() returns trusted WP-core HTML.
-	echo get_the_password_form();
+	echo wp_kses( get_the_password_form(), lafka_allowed_html() );
 
 	return;
 }

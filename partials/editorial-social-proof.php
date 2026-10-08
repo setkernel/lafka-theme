@@ -31,7 +31,7 @@ if ( $stars > 0 ) {
 ?>
 <div class="social-proof">
 	<?php if ( $stars > 0 ) : ?>
-	<div class="stars"><?php echo $star_str; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- only &# entities ?></div>
+	<div class="stars"><?php echo wp_kses( $star_str, lafka_allowed_html() ); ?></div>
 	<?php endif; ?>
 	<?php if ( $quote ) : ?>
 	<div class="quote">&ldquo;<?php echo esc_html( $quote ); ?>&rdquo;</div>

@@ -51,11 +51,12 @@ if ( ! function_exists( 'lafka_image_detect_cutout' ) ) {
 		if ( '' === $path || ! is_readable( $path ) || ! function_exists( 'imagecolorat' ) ) {
 			return false;
 		}
-		$ext = strtolower( (string) pathinfo( $path, PATHINFO_EXTENSION ) );
-		if ( 'png' === $ext && function_exists( 'imagecreatefrompng' ) ) {
-			$img = @imagecreatefrompng( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- a corrupt file just means "not a cut-out".
-		} elseif ( 'webp' === $ext && function_exists( 'imagecreatefromwebp' ) ) {
-			$img = @imagecreatefromwebp( $path ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged -- as above.
+		// The header must declare a PNG / WebP before GD is asked to decode it.
+		$mime = wp_get_image_mime( $path );
+		if ( 'image/png' === $mime && function_exists( 'imagecreatefrompng' ) ) {
+			$img = imagecreatefrompng( $path );
+		} elseif ( 'image/webp' === $mime && function_exists( 'imagecreatefromwebp' ) ) {
+			$img = imagecreatefromwebp( $path );
 		} else {
 			return false;
 		}

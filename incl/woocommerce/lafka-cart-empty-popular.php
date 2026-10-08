@@ -92,7 +92,7 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 							<span class="lafka-cart-empty-popular__media">
 								<?php
 								if ( $image_html ) {
-									echo $image_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									echo wp_kses( $image_html, lafka_allowed_html() );
 								} else {
 									echo '<span class="lafka-cart-empty-popular__img lafka-cart-empty-popular__img--placeholder" aria-hidden="true"></span>';
 								}
@@ -109,7 +109,7 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 		</section>
 		<?php
 		$html = (string) ob_get_clean();
-		echo apply_filters( 'lafka_cart_empty_popular_html', $html ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( apply_filters( 'lafka_cart_empty_popular_html', $html ), lafka_allowed_html() );
 	}
 }
 

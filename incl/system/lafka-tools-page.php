@@ -127,8 +127,8 @@ if ( ! class_exists( 'Lafka_Maintenance_Page' ) ) {
 				</p>
 				<p class="description">
 					<?php
-					/* translators: %s — internal admin-post action name */
 					printf(
+						/* translators: %s — internal admin-post action name */
 						esc_html__( 'Internal action: %s. Clears the lafka_gh_* release transients and the WordPress update_themes / update_plugins site transients in one click. Safe to run repeatedly.', 'lafka' ),
 						'<code>lafka_flush_github_cache</code>'
 					);

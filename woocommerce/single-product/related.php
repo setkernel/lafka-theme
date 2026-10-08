@@ -52,18 +52,29 @@ if ( $related_products ) :
 		<div class="lafka-related-carousel">
 			<?php woocommerce_product_loop_start(); ?>
 
-				<?php foreach ( $related_products as $related_product ) : ?>
-
-					<?php
-					/** @var WC_Product $related_product */
-					$post_object = get_post( $related_product->get_id() );
-
-					setup_postdata( $GLOBALS['post'] = $post_object ); // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
-
+				<?php
+				// A real loop over the related products, so WordPress sets the post globals itself.
+				$lafka_related_loop = new WP_Query(
+					array(
+						'post_type'           => 'product',
+						'post__in'            => array_map(
+							static function ( $lafka_related_product ) {
+								return $lafka_related_product->get_id();
+							},
+							$related_products
+						),
+						'orderby'             => 'post__in',
+						'posts_per_page'      => count( $related_products ),
+						'ignore_sticky_posts' => true,
+						'no_found_rows'       => true,
+					)
+				);
+				while ( $lafka_related_loop->have_posts() ) :
+					$lafka_related_loop->the_post();
 					wc_get_template_part( 'content', 'product' );
-					?>
-
-				<?php endforeach; ?>
+				endwhile;
+				wp_reset_postdata();
+				?>
 
 			<?php woocommerce_product_loop_end(); ?>
 		</div>

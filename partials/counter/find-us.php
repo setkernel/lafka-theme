@@ -34,7 +34,7 @@ if ( 2 === count( $lafka_find_modes ) ) {
 			<h2 id="lafka-counter-find-title" class="lafka-counter-find__title"><?php esc_html_e( 'Find us', 'lafka' ); ?></h2>
 			<?php if ( '' !== $lafka_find['map_url'] ) : ?>
 				<a class="lafka-counter-btn" href="<?php echo esc_url( $lafka_find['map_url'] ); ?>" target="_blank" rel="noopener">
-					<?php echo lafka_counter_icon( 'directions', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+					<?php echo wp_kses( lafka_counter_icon( 'directions', 18 ), lafka_allowed_html() ); ?>
 					<span><?php esc_html_e( 'Get directions', 'lafka' ); ?></span>
 					<span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'lafka' ); ?></span>
 				</a>
@@ -43,7 +43,7 @@ if ( 2 === count( $lafka_find_modes ) ) {
 		<?php if ( $lafka_find['address_lines'] ) : ?>
 			<div class="lafka-counter-find__block">
 				<h3 class="lafka-counter-find__label"><?php esc_html_e( 'Address', 'lafka' ); ?></h3>
-				<address class="lafka-counter-find__text"><?php echo implode( '<br>', array_map( 'esc_html', $lafka_find['address_lines'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- each line esc_html'd. ?></address>
+				<address class="lafka-counter-find__text"><?php echo wp_kses( implode( '<br>', array_map( 'esc_html', $lafka_find['address_lines'] ) ), lafka_allowed_html() ); ?></address>
 			</div>
 		<?php endif; ?>
 		<?php if ( $lafka_find_hours ) : ?>

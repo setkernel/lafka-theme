@@ -891,17 +891,17 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 * @param string               $id          E.g. 'lafka[google_maps_api_key]'
 		 * @param string               $section
 		 * @param string               $label
-		 * @param string               $default
+		 * @param string               $default_value
 		 * @param string               $description
 		 * @param string               $type        'option' (legacy lafka[] storage)
 		 *                                           or 'theme_mod' (migrated home).
 		 */
-		private static function add_text( $wp_customize, $id, $section, $label, $default = '', $description = '', $type = 'option' ): void {
+		private static function add_text( $wp_customize, $id, $section, $label, $default_value = '', $description = '', $type = 'option' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
 					'type'              => $type,
-					'default'           => $default,
+					'default'           => $default_value,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'sanitize_text_field',
 					'transport'         => 'refresh',
@@ -927,12 +927,12 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 *                          matching preview binding, see NX2-04 Task 4)
 		 *                          to update the preview without reloading.
 		 */
-		private static function add_color( $wp_customize, $id, $section, $label, $default = '#000000', $description = '', $type = 'option', $transport = 'refresh' ): void {
+		private static function add_color( $wp_customize, $id, $section, $label, $default_value = '#000000', $description = '', $type = 'option', $transport = 'refresh' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
 					'type'              => $type,
-					'default'           => $default,
+					'default'           => $default_value,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => 'sanitize_hex_color',
 					'transport'         => $transport,
@@ -991,12 +991,12 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 		 *
 		 * @param string $type 'option' (legacy lafka[] storage) or 'theme_mod'.
 		 */
-		private static function add_checkbox( $wp_customize, $id, $section, $label, $description = '', $default = 0, $type = 'option' ): void {
+		private static function add_checkbox( $wp_customize, $id, $section, $label, $description = '', $default_value = 0, $type = 'option' ): void {
 			$wp_customize->add_setting(
 				$id,
 				array(
 					'type'              => $type,
-					'default'           => $default ? 1 : 0,
+					'default'           => $default_value ? 1 : 0,
 					'capability'        => 'edit_theme_options',
 					'sanitize_callback' => array( __CLASS__, 'sanitize_checkbox' ),
 					'transport'         => 'refresh',

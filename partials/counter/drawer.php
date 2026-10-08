@@ -47,7 +47,7 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 			<div>
 				<h2 id="lafka-cart-drawer-title" class="lafka-drawer__title"><?php esc_html_e( 'Your order', 'lafka' ); ?></h2>
 				<p class="lafka-drawer__sub">
-					<?php echo lafka_counter_drawer_summary(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_html in lafka_counter_drawer_summary(). ?>
+					<?php echo wp_kses( lafka_counter_drawer_summary(), lafka_allowed_html() ); ?>
 					<?php if ( $lafka_drw_current ) : ?>
 						<span aria-hidden="true">·</span>
 						<span
@@ -59,7 +59,7 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 				</p>
 			</div>
 			<button type="button" class="lafka-cart-drawer__close lafka-drawer__close lafka-counter-btn" data-lafka-cart-close>
-				<?php echo lafka_counter_icon( 'close', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+				<?php echo wp_kses( lafka_counter_icon( 'close', 18 ), lafka_allowed_html() ); ?>
 				<span><?php esc_html_e( 'Close', 'lafka' ); ?></span>
 			</button>
 		</header>
@@ -90,7 +90,7 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 					<?php lafka_counter_render_fulfilment( 'drawer', __( 'Pickup or delivery?', 'lafka' ) ); ?>
 					<?php if ( '' !== $lafka_drw_nap['address_short'] ) : ?>
 						<p class="lafka-drawer__note" data-lafka-fulfilment-note="pickup"<?php echo 'pickup' === $lafka_drw_current ? '' : ' hidden'; ?>>
-							<?php echo lafka_counter_icon( 'pin', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+							<?php echo wp_kses( lafka_counter_icon( 'pin', 18 ), lafka_allowed_html() ); ?>
 							<span>
 							<?php
 							/* translators: %s: pickup address */
@@ -117,7 +117,7 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 			?>
 			<p class="lafka-drawer__tax"><?php echo esc_html( (string) apply_filters( 'lafka_counter_drawer_tax_note', __( 'Taxes are added at checkout.', 'lafka' ) ) ); ?></p>
 			<a class="lafka-cart-drawer__checkout lafka-counter-btn lafka-counter-btn--primary lafka-counter-btn--lg" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">
-				<?php echo lafka_counter_drawer_checkout_label(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_html in lafka_counter_drawer_checkout_label(). ?>
+				<?php echo wp_kses( lafka_counter_drawer_checkout_label(), lafka_allowed_html() ); ?>
 			</a>
 			<?php if ( '' !== $lafka_drw_nap['phone'] ) : ?>
 				<p class="lafka-drawer__call">

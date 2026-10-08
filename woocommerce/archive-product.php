@@ -162,10 +162,10 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 			<?php endif; ?>
 			<?php
 			if ( '' !== $lafka_arch_intro ) {
-				echo $lafka_arch_intro; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- lafka_menu_term_intro_html() returns wp_kses_post()-sanitised markup.
+				echo wp_kses( $lafka_arch_intro, lafka_allowed_html() );
 			}
 			if ( $lafka_arch_is_cat && function_exists( 'lafka_age_notice_html' ) && $lafka_arch_queried ) {
-				echo lafka_age_notice_html( array_merge( $lafka_arch_ancestors, array( $lafka_arch_queried ) ), 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_age_notice_html().
+				echo wp_kses( lafka_age_notice_html( array_merge( $lafka_arch_ancestors, array( $lafka_arch_queried ) ), 'menu' ), lafka_allowed_html() );
 			}
 			?>
 		</div>
@@ -274,7 +274,7 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 				<p class="screen-reader-text" data-lafka-menu-status aria-live="polite"></p>
 				<?php
 				if ( function_exists( 'lafka_menu_pagination_html' ) ) {
-					echo lafka_menu_pagination_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- paginate_links() markup built from escaped URLs.
+					echo wp_kses( lafka_menu_pagination_html(), lafka_allowed_html() );
 				}
 				// GX3: optional per-category FAQ (lafka-plugin term meta; the
 				// plugin emits the FAQPage JSON-LD). Renders nothing when empty.

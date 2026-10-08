@@ -69,7 +69,12 @@ if ( ! empty( $lafka_sidebar_classes ) ) {
 				<?php lafka_breadcrumb(); ?>
 				<!-- END OF BREADCRUMB -->
 				<!-- TITLE -->
-				<h1 class="heading-title"><?php printf( esc_html__( 'Search Results for: %s', 'lafka' ), '<span>' . get_search_query() . '</span>' ); ?></h1>
+				<h1 class="heading-title">
+					<?php
+					/* translators: %s: the search query. */
+					printf( esc_html__( 'Search Results for: %s', 'lafka' ), '<span>' . get_search_query() . '</span>' );
+					?>
+				</h1>
 				<!-- END OF TITLE -->
 			</div>
 		</div>

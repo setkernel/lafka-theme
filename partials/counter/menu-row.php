@@ -97,7 +97,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 >
 	<?php if ( '' !== $lafka_row_img ) : ?>
 		<a class="lafka-row__media lafka-dish-frame lafka-dish-frame--<?php echo esc_attr( $lafka_row_kind ); ?>" href="<?php echo esc_url( $lafka_row_url ); ?>" tabindex="-1" aria-hidden="true">
-			<?php echo $lafka_row_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core. ?>
+			<?php echo wp_kses( $lafka_row_img, lafka_allowed_html() ); ?>
 		</a>
 	<?php endif; ?>
 	<div class="lafka-row__body">
@@ -135,7 +135,7 @@ if ( $lafka_row_thumbs && function_exists( 'lafka_card_image_html' ) ) {
 				<p class="lafka-row__price"><?php echo esc_html( lafka_price_plain( (float) $lafka_row_prices['price'] ) ); ?></p>
 			<?php endif; ?>
 
-			<?php echo lafka_counter_add_action( $lafka_row_p, $lafka_row_add_label, 'lafka-row__add' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_counter_add_action(). ?>
+			<?php echo wp_kses( lafka_counter_add_action( $lafka_row_p, $lafka_row_add_label, 'lafka-row__add' ), lafka_allowed_html() ); ?>
 		</div>
 	</div>
 </li>

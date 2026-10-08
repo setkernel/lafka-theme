@@ -68,7 +68,6 @@ if ( ! function_exists( 'lafka_social_proof_render' ) ) {
 		$has_rating   = ! empty( $data['has_rating'] );
 		$has_link     = '' !== $url;
 		$tag          = $has_link ? 'a' : 'div';
-		$href_attr    = $has_link ? ' href="' . esc_url( $url ) . '" target="_blank" rel="noopener nofollow"' : '';
 		$rating_label = $has_rating ? number_format_i18n( $rating, 1 ) : '';
 
 		// Accessible label: "4.8 out of 5 stars based on 312 Google reviews"
@@ -92,7 +91,10 @@ if ( ! function_exists( 'lafka_social_proof_render' ) ) {
 		?>
 		<<?php echo esc_html( $tag ); ?>
 			class="lafka-social-proof<?php echo $has_link ? ' lafka-social-proof--linked' : ''; ?>"
-			<?php echo $href_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php
+			if ( $has_link ) :
+				?>
+				href="<?php echo esc_url( $url ); ?>" target="_blank" rel="noopener nofollow"<?php endif; ?>
 			aria-label="<?php echo esc_attr( $aria_label ); ?>"
 		>
 			<?php if ( $has_rating ) : ?>
@@ -128,7 +130,7 @@ if ( ! function_exists( 'lafka_social_proof_render' ) ) {
 		</<?php echo esc_html( $tag ); ?>>
 		<?php
 		$html = (string) ob_get_clean();
-		echo apply_filters( 'lafka_social_proof_html', $html, $data ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( apply_filters( 'lafka_social_proof_html', $html, $data ), lafka_allowed_html() );
 	}
 }
 

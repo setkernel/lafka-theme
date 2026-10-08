@@ -21,12 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 $id_suffix = wp_unique_id();
 
-$per_page_requets = '';
-// phpcs:disable WordPress.Security.NonceVerification.Recommended -- WC shop orderby filter; public archive URL param, no state mutation.
-if ( array_key_exists( 'per_page', $_GET ) ) {
-	$per_page_requets = esc_attr( $_GET['per_page'] );
-}
-// phpcs:enable WordPress.Security.NonceVerification.Recommended
+$per_page_requets = esc_attr( (string) lafka_query_arg( 'per_page' ) );
 
 ?>
 <form class="woocommerce-ordering" method="get">

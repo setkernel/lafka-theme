@@ -81,7 +81,7 @@ if ( empty( $lafka_feat_products ) ) {
 					<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_feat_url ); ?>">
 						<div class="lafka-favs__media">
 							<?php if ( $lafka_feat_img ) : ?>
-								<?php echo $lafka_feat_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core. ?>
+								<?php echo wp_kses( $lafka_feat_img, lafka_allowed_html() ); ?>
 							<?php else : ?>
 								<span class="lafka-favs__img-placeholder" aria-hidden="true">🍕</span>
 							<?php endif; ?>

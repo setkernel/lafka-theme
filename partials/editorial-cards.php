@@ -45,9 +45,12 @@ if ( ! $has_content ) {
 			}
 			$class = $card['spotlight'] ? 'card spotlight' : 'card';
 			$tag   = $card['url'] ? 'a' : 'div';
-			$href  = $card['url'] ? ' href="' . esc_url( $card['url'] ) . '"' : '';
 			?>
-		<<?php echo esc_attr( $tag ); ?> class="<?php echo esc_attr( $class ); ?>"<?php echo $href; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- href already escaped ?>>
+		<<?php echo esc_attr( $tag ); ?> class="<?php echo esc_attr( $class ); ?>"
+			<?php
+			if ( $card['url'] ) :
+				?>
+			href="<?php echo esc_url( $card['url'] ); ?>"<?php endif; ?>>
 			<?php if ( $card['image'] ) : ?>
 			<div class="photo" style="background-image: url('<?php echo esc_url( $card['image'] ); ?>')"></div>
 			<?php endif; ?>

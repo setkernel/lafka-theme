@@ -1,6 +1,7 @@
 <?php
 /* Load core functions */
 require_once get_template_directory() . '/incl/system/core-functions.php';
+require_once get_template_directory() . '/incl/system/lafka-output.php';
 
 /*
  * GX1: lafka_theme_log() — logs through the Lafka plugin's `lafka_log` action
@@ -281,6 +282,7 @@ if ( ! function_exists( 'lafka_pagination' ) ) {
 			$last_article_on_page = min( $wp_query->found_posts, $wp_query->get( 'posts_per_page' ) * $paged );
 
 			$html .= "</div><div class='results'>";
+			/* translators: 1: first item number, 2: last item number, 3: total items, 4: number of pages. */
 			$html .= sprintf( esc_html__( 'Showing %1$s to %2$s of %3$s (%4$s Pages)', 'lafka' ), $first_article_on_page, $last_article_on_page, $wp_query->found_posts, $pages );
 			$html .= '</div></div>';
 		}
@@ -475,7 +477,6 @@ if ( ! function_exists( 'lafka_comment' ) ) {
 
 	function lafka_comment( $comment, $args, $depth ) {
 		if ( $comment->comment_author !== 'ActionScheduler' ) {
-			$GLOBALS['comment'] = $comment;
 			switch ( $comment->comment_type ) {
 				case 'pingback':
 				case 'trackback':

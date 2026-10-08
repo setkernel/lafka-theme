@@ -164,7 +164,7 @@ foreach ( $lafka_mg_terms as $lafka_mg_term ) :
 			<?php endif; ?>
 			<?php
 			if ( function_exists( 'lafka_age_notice_html' ) ) {
-				echo lafka_age_notice_html( array( $lafka_mg_term ), 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_age_notice_html().
+				echo wp_kses( lafka_age_notice_html( array( $lafka_mg_term ), 'menu' ), lafka_allowed_html() );
 			}
 			?>
 		</header>

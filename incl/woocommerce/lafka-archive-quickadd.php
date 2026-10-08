@@ -86,6 +86,6 @@ if ( ! function_exists( 'lafka_archive_quickadd_render' ) ) {
 		</span>
 		<?php
 		$html = (string) ob_get_clean();
-		echo apply_filters( 'lafka_archive_quickadd_html', $html, $product ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( apply_filters( 'lafka_archive_quickadd_html', $html, $product ), lafka_allowed_html() );
 	}
 }

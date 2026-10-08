@@ -472,7 +472,13 @@ if ( ! function_exists( 'lafka_chooser_print_data' ) ) {
 			return;
 		}
 		$json = wp_json_encode( $registry, JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_UNICODE );
-		echo '<script type="application/json" id="lafka-chooser-data">' . $json . '</script>' . "\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- JSON with every HTML-significant char hex-escaped.
+		wp_print_inline_script_tag(
+			(string) $json,
+			array(
+				'type' => 'application/json',
+				'id'   => 'lafka-chooser-data',
+			)
+		);
 		if ( function_exists( 'get_template_part' ) ) {
 			get_template_part( 'partials/counter/chooser-template' );
 		}

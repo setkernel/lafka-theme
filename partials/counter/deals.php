@@ -48,7 +48,7 @@ $lafka_deals_link  = get_term_link( $lafka_deals['term'] );
 			<?php if ( is_string( $lafka_deals_link ) ) : ?>
 				<a class="lafka-counter-link" href="<?php echo esc_url( $lafka_deals_link ); ?>">
 					<?php esc_html_e( 'See all deals', 'lafka' ); ?>
-					<?php echo lafka_counter_icon( 'arrow', 18 ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+					<?php echo wp_kses( lafka_counter_icon( 'arrow', 18 ), lafka_allowed_html() ); ?>
 				</a>
 			<?php endif; ?>
 		</div>

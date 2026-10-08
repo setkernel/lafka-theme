@@ -40,7 +40,7 @@ if ( ( get_theme_mod( 'lafka_show_author_avatar', true ) ) || ( is_singular() &&
 				<?php $lafka_lastElmnt = end( $lafka_categories ); ?>
 				<?php foreach ( $lafka_categories as $lafka_category ) : ?>
 					<a href="<?php echo esc_url( get_category_link( $lafka_category->term_id ) ); ?>"
-						title="<?php printf( esc_attr__( 'View all posts in %s', 'lafka' ), esc_attr( $lafka_category->name ) ); ?>"><?php echo esc_html( $lafka_category->name ); ?></a>
+						title="<?php /* translators: %s: category name. */ printf( esc_attr__( 'View all posts in %s', 'lafka' ), esc_attr( $lafka_category->name ) ); ?>"><?php echo esc_html( $lafka_category->name ); ?></a>
 						<?php
 						if ( $lafka_category != $lafka_lastElmnt ) :
 							?>

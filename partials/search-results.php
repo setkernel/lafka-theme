@@ -75,7 +75,7 @@ $lafka_sr_menu  = function_exists( 'lafka_theme_menu_url' ) ? lafka_theme_menu_u
 				</ul>
 				<?php
 				if ( function_exists( 'lafka_menu_pagination_html' ) ) {
-					echo lafka_menu_pagination_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- paginate_links() markup built from escaped URLs.
+					echo wp_kses( lafka_menu_pagination_html(), lafka_allowed_html() );
 				}
 				?>
 			<?php else : ?>

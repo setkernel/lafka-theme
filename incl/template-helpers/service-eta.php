@@ -74,7 +74,7 @@ if ( ! function_exists( 'lafka_service_eta_render' ) ) {
 		</div>
 		<?php
 		$html = (string) ob_get_clean();
-		echo apply_filters( 'lafka_service_eta_html', $html, $data, $context ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		echo wp_kses( apply_filters( 'lafka_service_eta_html', $html, $data, $context ), lafka_allowed_html() );
 	}
 }
 

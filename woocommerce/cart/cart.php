@@ -124,8 +124,8 @@ do_action( 'woocommerce_before_cart' );
 			<span class="lafka-cart-tab__meta">
 				<?php
 				if ( $lafka_cart_threshold > 0 ) {
-					/* translators: 1: free-delivery threshold; 2: city. */
 					printf(
+						/* translators: 1: free-delivery threshold; 2: city. */
 						esc_html__( 'Free over %1$s%2$s', 'lafka' ),
 						esc_html( $lafka_cart_threshold_label ),
 						'' !== $lafka_cart_city ? ' · ' . esc_html( $lafka_cart_city ) : ''
@@ -159,9 +159,9 @@ do_action( 'woocommerce_before_cart' );
 						$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
 
 						if ( ! $product_permalink ) {
-							echo $thumbnail; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							echo wp_kses( $thumbnail, lafka_allowed_html() );
 						} else {
-							printf( '<a href="%s">%s</a>', esc_url( $product_permalink ), $thumbnail ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+							printf( '<a href="%s">%s</a>', esc_url( $product_permalink ), wp_kses( $thumbnail, lafka_allowed_html() ) );
 						}
 						?>
 					</div>
@@ -200,6 +200,7 @@ do_action( 'woocommerce_before_cart' );
 								// translators: %s: per-unit price
 								echo wp_kses_post(
 									sprintf(
+										/* translators: %s: unit price of the cart item. */
 										__( '%s each', 'lafka' ),
 										apply_filters( 'woocommerce_cart_item_price', WC()->cart->get_product_price( $_product ), $cart_item, $cart_item_key )
 									)
@@ -216,7 +217,7 @@ do_action( 'woocommerce_before_cart' );
 
 						<div class="lafka-cart-item__bottom">
 							<span class="lafka-cart-item__price">
-								<?php echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+								<?php echo wp_kses( apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ), lafka_allowed_html() ); ?>
 							</span>
 
 							<div class="lafka-cart-item__qty">
@@ -241,22 +242,25 @@ do_action( 'woocommerce_before_cart' );
 									false
 								);
 
-								echo apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+								echo wp_kses( apply_filters( 'woocommerce_cart_item_quantity', $product_quantity, $cart_item_key, $cart_item ), lafka_allowed_html() );
 								?>
 							</div>
 
 							<?php
-							echo apply_filters( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-								'woocommerce_cart_item_remove_link',
-								sprintf(
-									'<a href="%s" class="lafka-cart-item__remove" role="button" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
-									esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
-									/* translators: %s: Product name */
-									esc_attr( sprintf( __( 'Remove %s from cart', 'lafka' ), wp_strip_all_tags( $product_name ) ) ),
-									esc_attr( $product_id ),
-									esc_attr( $_product->get_sku() )
+							echo wp_kses(
+								apply_filters(
+									'woocommerce_cart_item_remove_link',
+									sprintf(
+										'<a href="%s" class="lafka-cart-item__remove" role="button" aria-label="%s" data-product_id="%s" data-product_sku="%s">&times;</a>',
+										esc_url( wc_get_cart_remove_url( $cart_item_key ) ),
+										/* translators: %s: Product name */
+										esc_attr( sprintf( __( 'Remove %s from cart', 'lafka' ), wp_strip_all_tags( $product_name ) ) ),
+										esc_attr( $product_id ),
+										esc_attr( $_product->get_sku() )
+									),
+									$cart_item_key
 								),
-								$cart_item_key
+								lafka_allowed_html()
 							);
 							?>
 						</div>

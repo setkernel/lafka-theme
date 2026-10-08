@@ -28,9 +28,9 @@ if ( ! function_exists( 'lafka_counter_settings' ) ) {
 	 * @return array<string,mixed>
 	 */
 	function lafka_counter_settings(): array {
-		$clamp = static function ( $value, int $min, int $max, int $default ): int {
+		$clamp = static function ( $value, int $min, int $max, int $default_value ): int {
 			$value = (int) $value;
-			return $value < $min || $value > $max ? $default : $value;
+			return $value < $min || $value > $max ? $default_value : $value;
 		};
 		$style = (string) get_theme_mod( 'lafka_counter_menu_style', 'compact' );
 		return array(

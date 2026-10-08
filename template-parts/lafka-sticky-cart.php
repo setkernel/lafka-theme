@@ -50,7 +50,6 @@ if ( ! function_exists( 'lafka_sticky_cart_render' ) ) {
 		$subtotal_html = $cart ? wc_price( $cart->get_subtotal() ) : '';
 		$cart_url      = wc_get_cart_url();
 		$has_items     = $count > 0;
-		$hidden_attr   = $has_items ? '' : ' hidden';
 
 		// Templates render even when empty so JS can show the bar after
 		// add-to-cart without needing a page refresh — `[hidden]` is just
@@ -61,7 +60,7 @@ if ( ! function_exists( 'lafka_sticky_cart_render' ) ) {
 			data-lafka-sticky-cart
 			data-lafka-empty-text="<?php esc_attr_e( 'Your cart is empty', 'lafka' ); ?>"
 			aria-label="<?php esc_attr_e( 'Cart summary', 'lafka' ); ?>"
-			<?php echo $hidden_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			<?php echo $has_items ? '' : 'hidden'; ?>
 		>
 			<a class="lafka-sticky-cart__link" href="<?php echo esc_url( $cart_url ); ?>">
 				<span class="lafka-sticky-cart__summary">

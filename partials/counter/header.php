@@ -68,17 +68,17 @@ $lafka_ch_short  = lafka_counter_brand_short( $lafka_ch_nap['name'] );
 		<div class="lafka-counter-header__actions">
 			<?php if ( '' !== $lafka_ch_nap['phone'] ) : ?>
 				<a class="lafka-counter-header__phone" href="<?php echo esc_attr( 'tel:' . $lafka_ch_nap['tel'] ); ?>" data-lafka-channel="phone">
-					<?php echo lafka_counter_icon( 'phone' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+					<?php echo wp_kses( lafka_counter_icon( 'phone' ), lafka_allowed_html() ); ?>
 					<span class="lafka-counter-header__phone-number"><?php echo esc_html( $lafka_ch_nap['phone'] ); ?></span>
 				</a>
 			<?php endif; ?>
 
 			<button type="button" class="lafka-counter-header__menu" aria-label="<?php esc_attr_e( 'Menu', 'lafka' ); ?>" aria-controls="lafka-mobile-nav" aria-expanded="false" data-lafka-menu-toggle>
-				<?php echo lafka_counter_icon( 'menu' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- static SVG. ?>
+				<?php echo wp_kses( lafka_counter_icon( 'menu' ), lafka_allowed_html() ); ?>
 				<span class="lafka-counter-header__menu-label"><?php esc_html_e( 'Menu', 'lafka' ); ?></span>
 			</button>
 
-			<?php echo lafka_counter_header_cart_html(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* (also a cart fragment, so the name + count stay current). ?>
+			<?php echo wp_kses( lafka_counter_header_cart_html(), lafka_allowed_html() ); ?>
 
 			<a class="lafka-counter-header__order lafka-counter-btn lafka-counter-btn--primary" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 				<?php echo esc_html( (string) apply_filters( 'lafka_header_cta_label', __( 'Order online', 'lafka' ) ) ); ?>

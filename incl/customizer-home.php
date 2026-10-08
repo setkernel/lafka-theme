@@ -327,16 +327,19 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 		for ( $lafka_r = 1; $lafka_r <= 3; $lafka_r++ ) {
 			$lafka_review_card_fields = array(
 				"lafka_home_reviews_{$lafka_r}_quote"  => array(
+					/* translators: %d: review number. */
 					'label'   => sprintf( __( 'Review %d — quote', 'lafka' ), $lafka_r ),
 					'default' => '',
 					'type'    => 'textarea',
 				),
 				"lafka_home_reviews_{$lafka_r}_name"   => array(
+					/* translators: %d: review number. */
 					'label'   => sprintf( __( 'Review %d — reviewer name', 'lafka' ), $lafka_r ),
 					'default' => '',
 					'type'    => 'text',
 				),
 				"lafka_home_reviews_{$lafka_r}_source" => array(
+					/* translators: %d: review number. */
 					'label'   => sprintf( __( 'Review %d — source (Google/Yelp/etc.)', 'lafka' ), $lafka_r ),
 					'default' => '',
 					'type'    => 'text',
@@ -372,6 +375,7 @@ if ( ! function_exists( 'lafka_customize_register_home' ) ) {
 			$wp_customize->add_control(
 				"lafka_home_reviews_{$lafka_r}_stars",
 				array(
+					/* translators: %d: review number. */
 					'label'       => sprintf( __( 'Review %d — star rating (1–5)', 'lafka' ), $lafka_r ),
 					'section'     => 'lafka_home_reviews',
 					'type'        => 'number',

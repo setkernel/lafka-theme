@@ -257,6 +257,7 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 					array(
 						'is_open'   => true,
 						'short'     => __( 'Open now', 'lafka' ),
+						/* translators: %s: closing time (lowercased "h:mm am/pm"). */
 						'label'     => sprintf( __( 'Open now · until %s', 'lafka' ), lafka_open_status_format_12h( $m[2] ) ),
 						'dot_color' => 'var(--lafka-color-success-500)',
 						'close'     => $m[2],

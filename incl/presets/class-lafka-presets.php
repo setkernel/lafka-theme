@@ -226,7 +226,7 @@ if ( ! class_exists( 'Lafka_Presets' ) ) {
 		 * @return array<string,mixed>|null
 		 */
 		private function read_json( string $file ) {
-			$contents = @file_get_contents( $file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents,WordPress.PHP.NoSilencedErrors.Discouraged -- local preset file, missing/unreadable degrades to skip.
+			$contents = lafka_read_file( $file );
 			if ( false === $contents ) {
 				return null;
 			}
@@ -239,7 +239,7 @@ if ( ! class_exists( 'Lafka_Presets' ) ) {
 			$fp = '';
 			foreach ( $this->dirs as $dir ) {
 				foreach ( (array) glob( $dir . '/*/preset.json' ) as $file ) {
-					$fp .= $file . ':' . (string) @filemtime( $file ) . '|'; // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					$fp .= $file . ':' . (string) ( is_file( $file ) ? filemtime( $file ) : 0 ) . '|';
 				}
 			}
 			return 'lafka_presets_' . md5( $fp );

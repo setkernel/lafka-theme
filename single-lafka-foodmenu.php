@@ -158,8 +158,7 @@ while ( have_posts() ) :
 										$lafka_image       = get_the_post_thumbnail( null, 'lafka-foodmenu-single-thumb' );
 										?>
 										<?php
-										// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_image is get_the_post_thumbnail() output (trusted WP-core HTML with attrs pre-escaped).
-										printf( '<a id="zoom1" href="%s" itemprop="image" class="cloud-zoom " title="%s"  rel="position: \'inside\' , showTitle: false, adjustX:-4, adjustY:-4">%s</a>', esc_url( $lafka_image_link ), esc_attr( $lafka_image_title ), $lafka_image );
+										printf( '<a id="zoom1" href="%s" itemprop="image" class="cloud-zoom " title="%s"  rel="position: \'inside\' , showTitle: false, adjustX:-4, adjustY:-4">%s</a>', esc_url( $lafka_image_link ), esc_attr( $lafka_image_title ), wp_kses( $lafka_image, lafka_allowed_html() ) );
 										?>
 
 										<?php if ( ! empty( $lafka_featured_flex_slider_imgs ) ) : // If there are additional images show CloudZoom gallery ?>
@@ -178,8 +177,7 @@ while ( have_posts() ) :
 													?>
 													<li>
 														<?php
-														// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_thumb_image is wp_get_attachment_image() output (trusted WP-core HTML with attrs pre-escaped).
-														printf( '<a rel="useZoom: \'zoom1\', smallImage: \'%s\'" title="%s" class="cloud-zoom-gallery" href="%s">%s</a>', esc_url( $lafka_small_image_link ), esc_attr( $lafka_image_title ), esc_url( $lafka_image_link ), $lafka_thumb_image );
+														printf( '<a rel="useZoom: \'zoom1\', smallImage: \'%s\'" title="%s" class="cloud-zoom-gallery" href="%s">%s</a>', esc_url( $lafka_small_image_link ), esc_attr( $lafka_image_title ), esc_url( $lafka_image_link ), wp_kses( $lafka_thumb_image, lafka_allowed_html() ) );
 														?>
 													</li>
 												<?php endforeach; ?>
@@ -217,8 +215,7 @@ while ( have_posts() ) :
 												?>
 												<?php $lafka_img_tag = wp_get_attachment_image( get_post_thumbnail_id(), 'lafka-foodmenu-single-thumb' ); ?>
 												<?php
-												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_img_tag is wp_get_attachment_image() output (trusted WP-core HTML with attrs pre-escaped).
-												printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), $lafka_img_tag );
+												printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), wp_kses( $lafka_img_tag, lafka_allowed_html() ) );
 												?>
 											<?php endif; ?>
 											<?php foreach ( $lafka_featured_flex_slider_imgs as $lafka_img_att_id ) : ?>
@@ -233,8 +230,7 @@ while ( have_posts() ) :
 												?>
 												<?php $lafka_img_tag = wp_get_attachment_image( $lafka_img_att_id, 'lafka-foodmenu-single-thumb' ); ?>
 												<?php
-												// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- %s arg $lafka_img_tag is wp_get_attachment_image() output (trusted WP-core HTML with attrs pre-escaped).
-												printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), $lafka_img_tag );
+												printf( '<a href="%s" class="lafka-magnific-gallery-item" title="%s" >%s</a>', esc_url( $lafka_attach_url ), esc_attr( $lafka_image_title ), wp_kses( $lafka_img_tag, lafka_allowed_html() ) );
 												?>
 											<?php endforeach; ?>
 										</div>
@@ -426,7 +422,7 @@ while ( have_posts() ) :
 									<?php if ( $lafka_foodmenu_first_category !== null ) : ?>
 										<a class="lafka-related-browse"
 											href="<?php echo esc_url( get_term_link( $lafka_foodmenu_first_category ) ); ?>"
-											title="<?php printf( esc_attr__( 'Browse more "%s"', 'lafka' ), esc_attr( $lafka_foodmenu_first_category->name ) ); ?>">
+											title="<?php /* translators: %s: menu category name. */ printf( esc_attr__( 'Browse more "%s"', 'lafka' ), esc_attr( $lafka_foodmenu_first_category->name ) ); ?>">
 											<?php echo esc_html( $lafka_foodmenu_first_category->name ); ?>
 										</a>
 									<?php else : ?>

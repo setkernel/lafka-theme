@@ -68,7 +68,7 @@ if ( ! function_exists( 'lafka_register_theme_features' ) ) {
 		// field into type="url", which the input styles don't cover) nor 'caption'
 		// (div.wp-caption -> figure, which the caption styles target), and not
 		// 'script'/'style' (deprecated and ignored since WordPress 7.0).
-		add_theme_support( 'html5', array( 'search-form', 'gallery', 'navigation-widgets' ) );
+		add_theme_support( 'html5', array( 'search-form', 'gallery', 'navigation-widgets', 'script' ) );
 
 		// Use the classic widget editor — theme widgets are WP_Widget-based.
 		// Filter is used instead of remove_theme_support because WP adds the
@@ -268,38 +268,38 @@ if ( ! function_exists( 'lafka_register_required_plugins' ) ) {
 				/* translators: %s: plugin name. */
 				'updating'                        => esc_html__( 'Updating Plugin: %s', 'lafka' ),
 				'oops'                            => esc_html__( 'Something went wrong with the plugin API.', 'lafka' ),
+				/* translators: 1: plugin name(s). */
 				'notice_can_install_required'     => _n_noop(
-								/* translators: 1: plugin name(s). */
 					'This theme requires the following plugin: %1$s.',
 					'This theme requires the following plugins: %1$s.',
 					'lafka'
 				),
+				/* translators: 1: plugin name(s). */
 				'notice_can_install_recommended'  => _n_noop(
-								/* translators: 1: plugin name(s). */
 					'This theme recommends the following plugin: %1$s.',
 					'This theme recommends the following plugins: %1$s.',
 					'lafka'
 				),
+				/* translators: 1: plugin name(s). */
 				'notice_ask_to_update'            => _n_noop(
-								/* translators: 1: plugin name(s). */
 					'The following plugin needs to be updated to its latest version to ensure maximum compatibility with this theme: %1$s.',
 					'The following plugins need to be updated to their latest version to ensure maximum compatibility with this theme: %1$s.',
 					'lafka'
 				),
+				/* translators: 1: plugin name(s). */
 				'notice_ask_to_update_maybe'      => _n_noop(
-								/* translators: 1: plugin name(s). */
 					'There is an update available for: %1$s. Prior update please make sure that the theme is compatible with the new version.',
 					'There are updates available for the following plugins: %1$s. Prior update please make sure that the theme is compatible with the new version.',
 					'lafka'
 				),
+				/* translators: 1: plugin name(s). */
 				'notice_can_activate_required'    => _n_noop(
-								/* translators: 1: plugin name(s). */
 					'The following required plugin is currently inactive: %1$s.',
 					'The following required plugins are currently inactive: %1$s.',
 					'lafka'
 				),
+				/* translators: 1: plugin name(s). */
 				'notice_can_activate_recommended' => _n_noop(
-								/* translators: 1: plugin name(s). */
 					'The following recommended plugin is currently inactive: %1$s.',
 					'The following recommended plugins are currently inactive: %1$s.',
 					'lafka'
@@ -2268,14 +2268,14 @@ if ( ! function_exists( 'lafka_generate_excerpt' ) ) {
 	 *
 	 * @param string $input input to truncate
 	 * @param number $limit  number of chars to reach to tuncate
-	 * @param string $break
+	 * @param string $break_at
 	 * @param string $more more string
 	 * @param boolean $strip_it strip tags
 	 * @param string $exclude exclude tags
 	 * @param boolean $safe_truncate use mb_strimwidth()
 	 * @return string the generated excerpt
 	 */
-	function lafka_generate_excerpt( $input, $limit, $break = '.', $more = '...', $strip_it = false, $exclude = '<strong><em><span>', $safe_truncate = false ) {
+	function lafka_generate_excerpt( $input, $limit, $break_at = '.', $more = '...', $strip_it = false, $exclude = '<strong><em><span>', $safe_truncate = false ) {
 		if ( $strip_it ) {
 			$input = strip_shortcodes( strip_tags( $input, $exclude ) );
 		}
@@ -2284,7 +2284,7 @@ if ( ! function_exists( 'lafka_generate_excerpt' ) ) {
 			return $input;
 		}
 
-		$breakpoint = strpos( $input, $break, $limit );
+		$breakpoint = strpos( $input, $break_at, $limit );
 
 		if ( $breakpoint != false ) {
 			if ( $breakpoint < strlen( $input ) - 1 ) {
@@ -2335,7 +2335,7 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 	 * the plugin defines lafka_get_option() first, so its function_exists() guard
 	 * supersedes this whenever both load.
 	 */
-	function lafka_get_option( $name, $default = false ) {
+	function lafka_get_option( $name, $default_value = false ) {
 		// 1. Mapped appearance key: its home is now a `lafka_<key>` theme_mod.
 		$lafka_option_map = function_exists( 'lafka_legacy_migrate_map' ) ? lafka_legacy_migrate_map() : array();
 		if ( isset( $lafka_option_map[ $name ] ) ) {
@@ -2353,13 +2353,13 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 					'7.0.0'
 				);
 			}
-			return get_theme_mod( $lafka_option_map[ $name ], $default );
+			return get_theme_mod( $lafka_option_map[ $name ], $default_value );
 		}
 
 		// 2. Unmapped / plugin-owned key. If the shared helper is available
 		// (loaded by the plugin), use it.
 		if ( class_exists( 'Lafka_Options' ) ) {
-			return Lafka_Options::get( $name, $default ?: null );
+			return Lafka_Options::get( $name, $default_value ?: null );
 		}
 
 		// Standalone fallback when plugin is not active.
@@ -2372,8 +2372,8 @@ if ( ! function_exists( 'lafka_get_option' ) ) {
 			return $options[ $name ];
 		}
 
-		if ( $default ) {
-			return $default;
+		if ( $default_value ) {
+			return $default_value;
 		}
 
 		static $all_defaults = null;

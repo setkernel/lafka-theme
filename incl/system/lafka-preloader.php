@@ -80,7 +80,7 @@ if ( ! function_exists( 'lafka_preloader_css' ) ) {
 		if ( ! file_exists( $path ) ) {
 			return '';
 		}
-		$css = (string) file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$css = (string) lafka_read_file( $path );
 		return function_exists( 'lafka_critical_css_minify' ) ? lafka_critical_css_minify( $css ) : $css;
 	}
 }

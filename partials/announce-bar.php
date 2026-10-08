@@ -102,15 +102,15 @@ $lafka_ann_threshold_label = function_exists( 'wc_price' )
 				<span class="lafka-announce-bar__icon" aria-hidden="true">🚚</span>
 				<?php
 				if ( $lafka_ann_threshold > 0 ) {
-					/* translators: 1: city name; 2: formatted threshold (e.g. "$30") */
 					printf(
+						/* translators: 1: city name; 2: formatted threshold (e.g. "$30") */
 						esc_html__( 'Delivery in %1$s · Free over %2$s', 'lafka' ),
 						esc_html( $lafka_ann_city ),
 						esc_html( $lafka_ann_threshold_label )
 					);
 				} else {
-					/* translators: %s: city name */
 					printf(
+						/* translators: %s: city name */
 						esc_html__( 'Delivery in %s', 'lafka' ),
 						esc_html( $lafka_ann_city )
 					);

@@ -16,8 +16,8 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 		// NX1-02.dyncss-typography-backgrounds: reads the migrated `lafka_<key>`
 		// theme_mods; the caller passes the Options-Framework `std` as the default
 		// so a fresh install keeps the shipped editor typography.
-		$lafka_safe_font  = static function ( $mod_key, $default = array() ) {
-			$font = get_theme_mod( $mod_key, $default );
+		$lafka_safe_font  = static function ( $mod_key, $default_value = array() ) {
+			$font = get_theme_mod( $mod_key, $default_value );
 			if ( ! is_array( $font ) ) {
 				$font = array();
 			}

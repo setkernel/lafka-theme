@@ -86,7 +86,7 @@ $lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title
 		data-lafka-list-name="<?php echo esc_attr( $lafka_arch_list ); ?>">
 		<div class="lafka-favs__media">
 			<?php if ( $lafka_arch_img ) : ?>
-				<?php echo $lafka_arch_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup, attributes escaped by core. ?>
+				<?php echo wp_kses( $lafka_arch_img, lafka_allowed_html() ); ?>
 			<?php else : ?>
 				<span class="lafka-favs__img-placeholder" aria-hidden="true">🍕</span>
 			<?php endif; ?>

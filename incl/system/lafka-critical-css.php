@@ -8,7 +8,7 @@
  *     Reads styles/critical.css (+ the counter slice and the preset's critical
  *     tokens under a counter layout, + the preloader rules when that default-off
  *     feature is on), strips comments + extra whitespace, and emits a
- *     <style id="lafka-critical-css"> as the very first thing in <head>.
+ *     <style id="lafka-critical-inline-css"> as the very first thing in <head>.
  *
  *  2. lafka_defer_non_critical_css()  — style_loader_tag priority 999
  *     GX T-02: stylesheets are render-blocking by default (WordPress's normal
@@ -64,7 +64,7 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 			return;
 		}
 
-		$css = file_get_contents( $path ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+		$css = lafka_read_file( $path );
 		if ( ! $css ) {
 			return;
 		}
@@ -77,7 +77,7 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 		$preset_block = lafka_critical_preset_css();
 		if ( '' !== $preset_block ) {
 			$slice_path = get_template_directory() . '/styles/critical-counter.css';
-			$slice      = file_exists( $slice_path ) ? (string) file_get_contents( $slice_path ) : ''; // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			$slice      = file_exists( $slice_path ) ? (string) lafka_read_file( $slice_path ) : '';
 			$css       .= ' ' . $preset_block . ' ' . lafka_critical_css_minify( $slice );
 		}
 
@@ -114,7 +114,11 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 			$css
 		);
 
-		echo "\n<style id=\"lafka-critical-css\">" . $css . "</style>\n"; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		// Printed through core's style API, right here, so it stays the first
+		// thing in <head> and is never printed a second time.
+		wp_register_style( 'lafka-critical', false, array(), null );
+		wp_add_inline_style( 'lafka-critical', $css );
+		wp_print_styles( 'lafka-critical' );
 	}
 }
 

@@ -118,7 +118,7 @@ $lafka_ft_year = wp_date( 'Y' );
 
 				<?php
 				/* Email signup — filterable. Default markup escaped above; filter consumers responsible. */
-				echo $lafka_ft_signup_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo wp_kses( $lafka_ft_signup_html, lafka_allowed_html() );
 				?>
 
 				<?php if ( ! empty( $lafka_ft_social ) ) : ?>

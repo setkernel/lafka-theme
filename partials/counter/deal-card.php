@@ -60,7 +60,7 @@ $lafka_deal_button_class = 'featured' === $lafka_deal_variant ? 'lafka-counter-b
 	<?php endif; ?>
 	<?php if ( '' !== $lafka_deal_img ) : ?>
 		<a class="lafka-deal__media lafka-dish-frame lafka-dish-frame--<?php echo esc_attr( $lafka_deal_kind ); ?>" href="<?php echo esc_url( $lafka_deal_url ); ?>" tabindex="-1" aria-hidden="true">
-			<?php echo $lafka_deal_img; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wp_get_attachment_image() markup. ?>
+			<?php echo wp_kses( $lafka_deal_img, lafka_allowed_html() ); ?>
 		</a>
 	<?php endif; ?>
 	<div class="lafka-deal__body">
@@ -70,7 +70,7 @@ $lafka_deal_button_class = 'featured' === $lafka_deal_variant ? 'lafka-counter-b
 		<?php endif; ?>
 		<div class="lafka-deal__foot">
 			<p class="lafka-deal__price"><?php echo esc_html( $lafka_deal_price ); ?></p>
-			<?php echo lafka_counter_add_action( $lafka_deal, $lafka_deal_label, $lafka_deal_button_class ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- built with esc_* in lafka_counter_add_action(). ?>
+			<?php echo wp_kses( lafka_counter_add_action( $lafka_deal, $lafka_deal_label, $lafka_deal_button_class ), lafka_allowed_html() ); ?>
 		</div>
 	</div>
 </article>

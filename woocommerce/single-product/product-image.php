@@ -80,11 +80,9 @@ $lafka_product_video_url = lafka_product_video_trigger_url( $product, $media_ite
 		}
 
 		if ( $is_video ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core; markup built by ProductMediaGallery; filter consumers responsible for safe output.
-			echo apply_filters( 'woocommerce_single_product_video_thumbnail_html', $html, $first_media_id, $first_media_item );
+			echo wp_kses( apply_filters( 'woocommerce_single_product_video_thumbnail_html', $html, $first_media_id, $first_media_item ), lafka_allowed_html() );
 		} else {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- matches WC core pattern; $html is built with esc_url/esc_html__ above; filter consumers responsible for safe output.
-			echo apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $first_media_id );
+			echo wp_kses( apply_filters( 'woocommerce_single_product_image_thumbnail_html', $html, $first_media_id ), lafka_allowed_html() );
 		}
 
 		do_action( 'woocommerce_product_thumbnails' );
