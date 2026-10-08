@@ -128,10 +128,14 @@ $lafka_faqs = (array) apply_filters(
 					<div class="lafka-contact__card">
 						<h2 class="lafka-contact__card-title"><?php esc_html_e( 'Hours', 'lafka' ); ?></h2>
 						<dl class="lafka-contact__hours">
-							<?php foreach ( $lafka_c_hours as $lafka_c_day => $lafka_c_range ) : ?>
+							<?php
+							// Days with the same hours share a row, in spoken time
+							// ("Mon–Thu · 11 am–11 pm"), like the rest of the site.
+							foreach ( lafka_hours_grouped( $lafka_c_hours ) as $lafka_c_group ) :
+								?>
 								<div class="lafka-contact__hours-row">
-									<dt><?php echo esc_html( $lafka_c_day ); ?></dt>
-									<dd><?php echo esc_html( $lafka_c_range ); ?></dd>
+									<dt><?php echo esc_html( $lafka_c_group['days'] ); ?></dt>
+									<dd><?php echo esc_html( $lafka_c_group['hours'] ); ?></dd>
 								</div>
 							<?php endforeach; ?>
 						</dl>
