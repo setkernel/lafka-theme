@@ -65,6 +65,32 @@ git tags + GitHub Releases.
   `scripts/lib/wp-cli.mjs`; the preview script uses the `playwright` library.
 - The pre-push hook runs PHPCS, ESLint, Stylelint and the version check, never skips a gate and
   fails with an `npm ci` / `composer install` hint when dependencies are missing.
+- **Zero-suppression lint policy**: PHPCS runs the full `WordPress-Extra` standard with no
+  `<exclude>` rules, warnings fail the run and `PrefixAllGlobals` enforces the `lafka`
+  prefix. The only excluded paths are `vendor/`, `node_modules/` and the unmodified upstream
+  `incl/tgm-plugin-activation/`. Every inline `phpcs:ignore` / `phpcs:disable`, `eslint-disable`
+  and `stylelint-disable` comment is gone and each cause is fixed: output is escaped late
+  (new `lafka_allowed_html()` kses allowlist in `incl/system/lafka-output.php`), public query
+  arguments are read through `lafka_query_arg()`, the price-filter bounds use a real query
+  plus a prepared statement, WordPress globals are no longer assigned, template variables
+  carry the `lafka_` prefix, comparisons are strict and Yoda, dates use `gmdate()`, and
+  translator comments are in place. WordPress / WooCommerce hooks fired from template
+  overrides go through `lafka_core_action()` / `lafka_core_filter()`. ESLint and Stylelint
+  run with `--max-warnings=0`, and the rules that were switched off are on again except the
+  structural Stylelint ones (see CONTRIBUTING).
+- `incl/lafka-options-framework/` is retired: the Google-font list helper is now
+  `incl/system/lafka-google-fonts.php` and the media-picker script `js/lafka-medialibrary-uploader.js`
+  (its dead Theme Options sidebar and accordion code is gone). Class files follow the
+  `class-*.php` convention (`class-lafka-customizer-bridge.php`, `class-lafka-maintenance-page.php`),
+  the food-menu partial and taxonomy template use hyphenated names (the taxonomy template
+  is still found through the `taxonomy_template_hierarchy` filter; a child theme's
+  `taxonomy-lafka_foodmenu_category.php` still wins), and dead test-seam guards in
+  `incl/presets/` are removed.
+- The log fallback (plugin inactive, `WP_DEBUG` or the `lafka_theme_log_fallback` filter) now
+  writes to the WooCommerce log, source `lafka-theme`, instead of the PHP error log. The
+  critical CSS is printed through core's style API (`<style id="lafka-critical-inline-css">`).
+  The WooCommerce `woocommerce_price_filter_sql` filter is no longer applied to the
+  theme's own price-filter query.
 
 ## [7.3.0] — 2026-09-25
 
