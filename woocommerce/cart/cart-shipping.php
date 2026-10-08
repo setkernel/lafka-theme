@@ -27,9 +27,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$lafka_formatted_destination    = isset( $lafka_formatted_destination ) ? $lafka_formatted_destination : WC()->countries->get_formatted_address( $package['destination'], ', ' );
-$lafka_has_calculated_shipping  = ! empty( $lafka_has_calculated_shipping );
-$lafka_show_shipping_calculator = ! empty( $lafka_show_shipping_calculator );
+$lafka_formatted_destination    = isset( $formatted_destination ) ? $formatted_destination : WC()->countries->get_formatted_address( $package['destination'], ', ' );
+$lafka_has_calculated_shipping  = ! empty( $has_calculated_shipping );
+$lafka_show_shipping_calculator = ! empty( $show_shipping_calculator );
 $lafka_calculator_text          = '';
 
 // Lafka: is the chosen rate a customer pickup?

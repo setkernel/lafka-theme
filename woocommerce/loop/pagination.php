@@ -21,10 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 global $wp_query;
 
-$lafka_total   = isset( $lafka_total ) ? $lafka_total : wc_get_loop_prop( 'total_pages' );
-$lafka_current = isset( $lafka_current ) ? $lafka_current : wc_get_loop_prop( 'current_page' );
-$lafka_base    = isset( $lafka_base ) ? $lafka_base : esc_url_raw( str_replace( 999999999, '%#%', remove_query_arg( 'add-to-cart', get_pagenum_link( 999999999, false ) ) ) );
-$lafka_format  = isset( $lafka_format ) ? $lafka_format : '';
+$lafka_total   = isset( $total ) ? $total : wc_get_loop_prop( 'total_pages' );
+$lafka_current = isset( $current ) ? $current : wc_get_loop_prop( 'current_page' );
+$lafka_base    = isset( $base ) ? $base : esc_url_raw( str_replace( 999999999, '%#%', remove_query_arg( 'add-to-cart', get_pagenum_link( 999999999, false ) ) ) );
+$lafka_format  = isset( $format ) ? $format : '';
 
 if ( $lafka_total <= 1 ) {
 	return;
