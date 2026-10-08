@@ -15,10 +15,10 @@
 	// JS via window.lafkaCfg (wp_localize_script), so the menu and cart
 	// controllers can never read different keys. The literals below are a
 	// brand-neutral fallback only, used if the localized config is absent.
-	var LAFKA_CFG = window.lafkaCfg || {};
-	var KEY_FULFILMENT = LAFKA_CFG.fulfilmentKey || 'lafka.fulfilment';
-	var DEFAULT_FULFILMENT = LAFKA_CFG.fulfilmentDefault || 'pickup';
-	var LEGACY_KEY_FULFILMENT = LAFKA_CFG.fulfilmentLegacyKey || '';
+	const LAFKA_CFG = window.lafkaCfg || {};
+	const KEY_FULFILMENT = LAFKA_CFG.fulfilmentKey || 'lafka.fulfilment';
+	const DEFAULT_FULFILMENT = LAFKA_CFG.fulfilmentDefault || 'pickup';
+	const LEGACY_KEY_FULFILMENT = LAFKA_CFG.fulfilmentLegacyKey || '';
 
 	function $$( sel, scope ) {
 		return Array.prototype.slice.call( ( scope || document ).querySelectorAll( sel ) );
@@ -26,7 +26,7 @@
 
 	function getFulfilment() {
 		try {
-			var value = localStorage.getItem( KEY_FULFILMENT );
+			let value = localStorage.getItem( KEY_FULFILMENT );
 			// One-time migration: adopt the value stored under the pre-rename
 			// key when the current key has not been written yet, so returning
 			// customers keep their previously-chosen fulfilment method.
@@ -57,32 +57,32 @@
 	}
 
 	function initTabs() {
-		var tabs = $$( '[data-lafka-cart-tabs] [data-lafka-fulfilment]' );
+		const tabs = $$( '[data-lafka-cart-tabs] [data-lafka-fulfilment]' );
 		if ( ! tabs.length ) {
 			return;
 		}
-		var current = getFulfilment();
+		const current = getFulfilment();
 		// GX4: the counter header / drawer radios (js/lafka-fulfilment.js)
 		// announce their choice — mirror it so the page never shows two answers.
 		document.addEventListener( 'lafka:fulfilment-change', function ( e ) {
-			var detail = e.detail || {};
+			const detail = e.detail || {};
 			if ( detail.source !== 'lafka-fulfilment' || ! detail.mode ) {
 				return;
 			}
 			tabs.forEach( function ( t ) {
-				var on = t.getAttribute( 'data-lafka-fulfilment' ) === detail.mode;
+				const on = t.getAttribute( 'data-lafka-fulfilment' ) === detail.mode;
 				t.classList.toggle( 'is-active', on );
 				t.setAttribute( 'aria-selected', on ? 'true' : 'false' );
 			} );
 		} );
 		tabs.forEach( function ( tab ) {
-			var mode = tab.getAttribute( 'data-lafka-fulfilment' );
-			var on = mode === current;
+			const mode = tab.getAttribute( 'data-lafka-fulfilment' );
+			const on = mode === current;
 			tab.classList.toggle( 'is-active', on );
 			tab.setAttribute( 'aria-selected', on ? 'true' : 'false' );
 			tab.addEventListener( 'click', function () {
 				tabs.forEach( function ( t ) {
-					var m = t.getAttribute( 'data-lafka-fulfilment' );
+					const m = t.getAttribute( 'data-lafka-fulfilment' );
 					t.classList.toggle( 'is-active', m === mode );
 					t.setAttribute( 'aria-selected', m === mode ? 'true' : 'false' );
 				} );
@@ -92,21 +92,21 @@
 	}
 
 	function initClearOrder() {
-		var clearBtn = document.querySelector( '[data-lafka-cart-clear]' );
+		const clearBtn = document.querySelector( '[data-lafka-cart-clear]' );
 		if ( ! clearBtn ) {
 			return;
 		}
 		clearBtn.addEventListener( 'click', function () {
-			var ok = window.confirm( 'Clear all items from your order?' );
+			const ok = window.confirm( 'Clear all items from your order?' );
 			if ( ! ok ) {
 				return;
 			}
 			// Set every cart quantity input to 0, then submit the WC update form.
-			var qtyInputs = $$( '.woocommerce-cart-form input.qty' );
+			const qtyInputs = $$( '.woocommerce-cart-form input.qty' );
 			qtyInputs.forEach( function ( q ) {
 				q.value = '0';
 			} );
-			var updateBtn = document.querySelector( 'button[name="update_cart"]' );
+			const updateBtn = document.querySelector( 'button[name="update_cart"]' );
 			if ( updateBtn ) {
 				updateBtn.removeAttribute( 'disabled' );
 				updateBtn.click();
@@ -123,12 +123,12 @@
 	 * through jQuery (.trigger('change')), which native listeners never see —
 	 * so listen through jQuery when it is present.
 	 */
-	var AUTOUPDATE_DELAY = 600;
-	var autoUpdateTimer = null;
+	const AUTOUPDATE_DELAY = 600;
+	let autoUpdateTimer = null;
 
 	function submitQuantityUpdate() {
 		autoUpdateTimer = null;
-		var updateBtn = document.querySelector( '.woocommerce-cart-form button[name="update_cart"]' );
+		const updateBtn = document.querySelector( '.woocommerce-cart-form button[name="update_cart"]' );
 		if ( ! updateBtn ) {
 			return;
 		}
@@ -138,7 +138,7 @@
 	}
 
 	function scheduleQuantityUpdate( event ) {
-		var target = event && event.target;
+		const target = event && event.target;
 		if ( ! target || ! target.matches || ! target.matches( '.woocommerce-cart-form input.qty' ) ) {
 			return;
 		}

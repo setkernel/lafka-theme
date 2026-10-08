@@ -12,10 +12,10 @@
 (function () {
   'use strict';
 
-  var root = document.querySelector('.lafka-pdp-pickers');
+  const root = document.querySelector('.lafka-pdp-pickers');
   // Simple products have no pickers but share the quantity stepper below
   // (it used to be dead on them: this script returned before binding it).
-  var summary = document.querySelector('.lafka-pdp-summary');
+  const summary = document.querySelector('.lafka-pdp-summary');
   if (!root && !summary) return;
 
   // Currency formatter — reads symbol, position, separators, and decimal
@@ -23,19 +23,19 @@
   // WC's settings). Falls back to a USD-style default if the localized
   // data isn't present (e.g. third-party page builder that doesn't
   // enqueue our script in the standard way).
-  var CURRENCY = (typeof window.lafkaPdpCurrency === 'object' && window.lafkaPdpCurrency)
+  const CURRENCY = (typeof window.lafkaPdpCurrency === 'object' && window.lafkaPdpCurrency)
     ? window.lafkaPdpCurrency
     : { symbol: '$', position: 'left', thousandSep: ',', decimalSep: '.', decimals: 2 };
 
   function formatPrice(amount) {
-    var n = parseFloat(amount);
+    let n = parseFloat(amount);
     if (isNaN(n)) n = 0;
-    var dec = CURRENCY.decimals != null ? CURRENCY.decimals : 2;
-    var fixed = n.toFixed(dec);
-    var parts = fixed.split('.');
+    const dec = CURRENCY.decimals != null ? CURRENCY.decimals : 2;
+    const fixed = n.toFixed(dec);
+    const parts = fixed.split('.');
     parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, CURRENCY.thousandSep || ',');
-    var formatted = (parts.length > 1 ? parts.join(CURRENCY.decimalSep || '.') : parts[0]);
-    var sym = CURRENCY.symbol || '$';
+    const formatted = (parts.length > 1 ? parts.join(CURRENCY.decimalSep || '.') : parts[0]);
+    const sym = CURRENCY.symbol || '$';
     switch (CURRENCY.position) {
       case 'right':       return formatted + sym;
       case 'left_space':  return sym + ' ' + formatted;
@@ -45,10 +45,10 @@
     }
   }
 
-  var priceEl   = document.querySelector('[data-lafka-live-price]');
-  var ctas      = document.querySelectorAll('[data-lafka-add-to-cart]');
-  var ctaLabels = document.querySelectorAll('[data-lafka-cta-label]');
-  var formEl    = root ? root.closest('form.cart') : (summary ? summary.querySelector('form.cart') : null);
+  const priceEl   = document.querySelector('[data-lafka-live-price]');
+  const ctas      = document.querySelectorAll('[data-lafka-add-to-cart]');
+  const ctaLabels = document.querySelectorAll('[data-lafka-cta-label]');
+  const formEl    = root ? root.closest('form.cart') : (summary ? summary.querySelector('form.cart') : null);
 
   // WC's canonical variations data — emitted as data-product_variations on
   // the form (pdp-summary.php uses $product->get_available_variations()).
@@ -56,21 +56,21 @@
   // customer picks attributes. Without setting variation_id on the hidden
   // input before submit, WC's add-to-cart handler rejects with "Please
   // choose product options for X".
-  var wcVariations = [];
+  let wcVariations = [];
   if (formEl) {
     try {
-      var rawV = formEl.getAttribute('data-product_variations');
+      const rawV = formEl.getAttribute('data-product_variations');
       if (rawV) wcVariations = JSON.parse(rawV) || [];
     } catch { wcVariations = []; }
   }
 
   // Legacy: data-prices was a custom price map. Kept as a fallback only.
-  var variationPrices;
+  let variationPrices;
   try { variationPrices = JSON.parse((root && root.dataset.prices) || '{}'); }
   catch { variationPrices = {}; }
 
   function getSelectedAttrs() {
-    var attrs = {};
+    const attrs = {};
     root.querySelectorAll('input[type=radio]:checked').forEach(function (input) {
       attrs[input.name] = input.value;
     });
@@ -87,7 +87,7 @@
   // taxonomy attributes (their keys are already lowercase). Values keep their
   // case — WC matches those exactly (and both sides carry the same value).
   function lowerAttrKeys( obj ) {
-    var out = {};
+    const out = {};
     Object.keys( obj || {} ).forEach( function ( k ) {
       out[ k.toLowerCase() ] = obj[ k ];
     } );
@@ -96,16 +96,16 @@
 
   function findMatchingVariation(attrs) {
     if (!wcVariations.length) return null;
-    var selected = lowerAttrKeys( attrs );
-    for (var i = 0; i < wcVariations.length; i++) {
-      var v = wcVariations[i];
+    const selected = lowerAttrKeys( attrs );
+    for (let i = 0; i < wcVariations.length; i++) {
+      const v = wcVariations[i];
       if (!v || !v.attributes) continue;
-      var stored = lowerAttrKeys( v.attributes );
-      var ok = true;
+      const stored = lowerAttrKeys( v.attributes );
+      let ok = true;
       // Every attribute the user selected must match (or be wildcard '').
-      for (var k in selected) {
+      for (const k in selected) {
         if (!Object.prototype.hasOwnProperty.call(selected, k)) continue;
-        var sv = stored[k];
+        const sv = stored[k];
         if (sv !== '' && sv != null && sv !== selected[k]) {
           ok = false;
           break;
@@ -115,7 +115,7 @@
       // Every non-wildcard attribute on the variation must be in the user
       // selection too — prevents matching a 3-attribute variation when
       // only 2 are picked.
-      for (var k2 in stored) {
+      for (const k2 in stored) {
         if (!Object.prototype.hasOwnProperty.call(stored, k2)) continue;
         if (stored[k2] === '' || stored[k2] == null) continue;
         if (!Object.prototype.hasOwnProperty.call(selected, k2)) {
@@ -130,9 +130,9 @@
 
   function setVariationId(id, matchedVariation) {
     if (!formEl) return;
-    var input = formEl.querySelector('input.variation_id, input[name="variation_id"]');
+    const input = formEl.querySelector('input.variation_id, input[name="variation_id"]');
     if (!input) return;
-    var newVal = String(id || 0);
+    const newVal = String(id || 0);
     if (input.value === newVal) return;
     input.value = newVal;
     // Mirror WC's variations widget: dispatch found_variation when a real
@@ -141,7 +141,7 @@
     // listening for variation choice) gets the same lifecycle they would
     // with WC's stock variations form.
     if (window.jQuery) {
-      var $form = window.jQuery(formEl);
+      const $form = window.jQuery(formEl);
       if (matchedVariation && id) {
         $form.trigger('found_variation', [matchedVariation]);
       } else {
@@ -154,15 +154,15 @@
   // Legacy fallback price walker — only used when data-product_variations
   // is missing or empty (e.g. third-party page builder rendering).
   function findVariationPrice(attrs) {
-    var keys = Object.keys(variationPrices);
-    for (var i = 0; i < keys.length; i++) {
-      var stored;
+    const keys = Object.keys(variationPrices);
+    for (let i = 0; i < keys.length; i++) {
+      let stored;
       try { stored = JSON.parse(keys[i]); } catch { continue; }
-      var ok = true;
-      var attrKeys = Object.keys(attrs);
-      for (var j = 0; j < attrKeys.length; j++) {
-        var n = attrKeys[j];
-        var v = attrs[n];
+      let ok = true;
+      const attrKeys = Object.keys(attrs);
+      for (let j = 0; j < attrKeys.length; j++) {
+        const n = attrKeys[j];
+        const v = attrs[n];
         if (stored[n] !== v && stored[n] !== '') { ok = false; break; }
       }
       if (ok) return parseFloat(variationPrices[keys[i]]);
@@ -173,29 +173,29 @@
   function bareAttrMap(attrs) {
     // attrs come keyed by 'attribute_pa_size'; lafka-plugin emits prices
     // keyed by bare 'pa_size'. Strip the prefix.
-    var out = {};
+    const out = {};
     Object.keys(attrs).forEach(function (k) {
-      var bare = k.indexOf('attribute_') === 0 ? k.substring('attribute_'.length) : k;
+      const bare = k.indexOf('attribute_') === 0 ? k.substring('attribute_'.length) : k;
       out[bare] = attrs[k];
     });
     return out;
   }
 
   function getAddonDelta(allAttrs) {
-    var attrMap = bareAttrMap(allAttrs);
-    var total = 0;
+    const attrMap = bareAttrMap(allAttrs);
+    let total = 0;
     document.querySelectorAll('input[name^="addon-"]:checked').forEach(function (input) {
-      var price = null;
+      let price = null;
       // Canonical: lafka-plugin's renderer puts the per-attribute price
       // matrix on each addon input as data-attribute-prices, shape
       // { "pa_size": { "small": "1.00", "medium": "1.50" }, ... }.
-      var attrPricesJson = input.getAttribute('data-attribute-prices');
+      const attrPricesJson = input.getAttribute('data-attribute-prices');
       if (attrPricesJson) {
         try {
-          var attrPrices = JSON.parse(attrPricesJson);
+          const attrPrices = JSON.parse(attrPricesJson);
           Object.keys(attrPrices).forEach(function (taxonomyName) {
             if (price !== null) return;
-            var slug = attrMap[taxonomyName];
+            const slug = attrMap[taxonomyName];
             if (slug && attrPrices[taxonomyName] && attrPrices[taxonomyName][slug] !== undefined) {
               price = parseFloat(attrPrices[taxonomyName][slug]);
             }
@@ -204,7 +204,7 @@
       }
       // Flat-price fallback (addon without per-attribute pricing).
       if (price === null) {
-        var raw = input.getAttribute('data-price');
+        const raw = input.getAttribute('data-price');
         if (raw !== null && raw !== '') price = parseFloat(raw);
       }
       if (price !== null && !isNaN(price)) total += price;
@@ -213,35 +213,35 @@
   }
 
   function allRequiredSet() {
-    var ok = true;
+    let ok = true;
     root.querySelectorAll('[data-required="true"]').forEach(function (field) {
       if (field.querySelectorAll('input:checked').length === 0) ok = false;
     });
     return ok;
   }
 
-  var I18N = (typeof window.lafkaPdpI18n === 'object' && window.lafkaPdpI18n) ? window.lafkaPdpI18n : {};
+  const I18N = (typeof window.lafkaPdpI18n === 'object' && window.lafkaPdpI18n) ? window.lafkaPdpI18n : {};
   function t(key, fallback) { return I18N[key] || fallback; }
 
   // The price line as rendered ("From $10.50" / the default variation) —
   // restored whenever the selection stops resolving to one variation.
-  var initialPriceText = priceEl ? priceEl.textContent : '';
+  const initialPriceText = priceEl ? priceEl.textContent : '';
 
   function getQty() {
-    var q = formEl ? formEl.querySelector('input[name="quantity"]') : null;
-    var n = q ? parseInt(q.value, 10) : 1;
+    const q = formEl ? formEl.querySelector('input[name="quantity"]') : null;
+    const n = q ? parseInt(q.value, 10) : 1;
     return isNaN(n) || n < 1 ? 1 : n;
   }
 
   // Every variation that could still be bought with this (partial) selection.
   function candidates(attrs) {
-    var selected = lowerAttrKeys(attrs);
+    const selected = lowerAttrKeys(attrs);
     return wcVariations.filter(function (v) {
       if (!v || !v.attributes || v.is_purchasable === false || v.is_in_stock === false) return false;
-      var stored = lowerAttrKeys(v.attributes);
-      for (var k in selected) {
+      const stored = lowerAttrKeys(v.attributes);
+      for (const k in selected) {
         if (!Object.prototype.hasOwnProperty.call(selected, k)) continue;
-        var sv = stored[k];
+        const sv = stored[k];
         if (sv !== '' && sv != null && sv !== selected[k]) return false;
       }
       return true;
@@ -254,28 +254,28 @@
   // An unavailable chip is disabled (and unchecked if it was chosen).
   function refreshChips() {
     if (!wcVariations.length) return false;
-    var changed = false;
+    let changed = false;
     root.querySelectorAll('.lafka-pdp-picker').forEach(function (field) {
-      var name = field.getAttribute('data-attribute');
-      var others = getSelectedAttrs();
+      const name = field.getAttribute('data-attribute');
+      const others = getSelectedAttrs();
       delete others[name];
       field.querySelectorAll('input[type=radio]').forEach(function (input) {
-        var want = {};
+        const want = {};
         Object.keys(others).forEach(function (k) { want[k] = others[k]; });
         want[name] = input.value;
-        var list = candidates(want);
-        var ok = list.length > 0;
-        var chip = input.closest('.lafka-pdp-chip');
+        const list = candidates(want);
+        const ok = list.length > 0;
+        const chip = input.closest('.lafka-pdp-chip');
         input.disabled = !ok;
         if (chip) {
           chip.classList.toggle('is-unavailable', !ok);
-          var na = chip.querySelector('[data-lafka-chip-na]');
-          var priceNode = chip.querySelector('[data-lafka-chip-price]');
+          const na = chip.querySelector('[data-lafka-chip-na]');
+          const priceNode = chip.querySelector('[data-lafka-chip-price]');
           if (na) na.hidden = ok;
           if (priceNode) {
             priceNode.hidden = !ok;
             if (ok) {
-              var min = Math.min.apply(null, list.map(function (v) { return parseFloat(v.display_price) || 0; }));
+              const min = Math.min.apply(null, list.map(function (v) { return parseFloat(v.display_price) || 0; }));
               priceNode.textContent = formatPrice(min);
             }
           }
@@ -293,7 +293,7 @@
     if (!root) return; // Simple product: nothing to resolve.
     // Re-run once if a now-impossible choice was cleared.
     if (refreshChips()) refreshChips();
-    var attrs = getSelectedAttrs();
+    const attrs = getSelectedAttrs();
 
     // Resolve the matching variation via WC's canonical data — without this
     // the hidden variation_id stays at 0 and WC's add-to-cart handler
@@ -301,18 +301,18 @@
     // data-prices walker is only a fallback when WC variations data is
     // missing, and only for a COMPLETE selection (it used to match anything
     // on an empty selection and show a price nobody picked — M-10).
-    var complete = allRequiredSet();
-    var match = complete ? findMatchingVariation(attrs) : null;
+    const complete = allRequiredSet();
+    const match = complete ? findMatchingVariation(attrs) : null;
     setVariationId(match ? (match.variation_id || 0) : 0, match);
 
-    var basePrice = null;
+    let basePrice = null;
     if (match && match.display_price !== undefined && match.display_price !== '') {
       basePrice = parseFloat(match.display_price);
     } else if (complete && !wcVariations.length) {
       basePrice = findVariationPrice(attrs);
     }
-    var addonDelta = getAddonDelta(attrs);
-    var unit = (basePrice || 0) + addonDelta;
+    const addonDelta = getAddonDelta(attrs);
+    const unit = (basePrice || 0) + addonDelta;
 
     if (priceEl) {
       priceEl.textContent = basePrice !== null ? formatPrice(unit) : initialPriceText;
@@ -324,11 +324,11 @@
     // event so addons.js re-resolves the per-attribute prices and updates
     // the visible topping labels.
     if (window.jQuery) {
-      var $form = window.jQuery(root).closest('form.cart');
+      const $form = window.jQuery(root).closest('form.cart');
       if ($form.length) $form.trigger('lafka-product-addons-update');
     }
 
-    var ok = complete && basePrice !== null;
+    const ok = complete && basePrice !== null;
     ctas.forEach(function (cta) {
       cta.disabled = !ok;
       cta.dataset.lafkaState = ok ? 'ready' : 'incomplete';
@@ -338,12 +338,12 @@
         // M-11: the line total — unit (+ add-ons) × quantity.
         label.textContent = t('addToOrder', 'Add to order · %s').replace('%s', formatPrice(unit * getQty()));
       } else {
-        var firstMissing = null;
-        var fields = root.querySelectorAll('[data-required="true"]');
-        for (var i = 0; i < fields.length; i++) {
+        let firstMissing = null;
+        const fields = root.querySelectorAll('[data-required="true"]');
+        for (let i = 0; i < fields.length; i++) {
           if (fields[i].querySelectorAll('input:checked').length === 0) { firstMissing = fields[i]; break; }
         }
-        var prompt = firstMissing ? firstMissing.getAttribute('data-choose-label') : '';
+        const prompt = firstMissing ? firstMissing.getAttribute('data-choose-label') : '';
         label.textContent = prompt || t('chooseOptions', 'Choose your options');
       }
     });
@@ -367,22 +367,22 @@
   }
 
   document.addEventListener('click', function (e) {
-    var btn = e.target && e.target.closest ? e.target.closest('[data-lafka-qty]') : null;
+    const btn = e.target && e.target.closest ? e.target.closest('[data-lafka-qty]') : null;
     if (!btn) return;
-    var qtyInput = getQtyInput();
+    const qtyInput = getQtyInput();
     if (!qtyInput) return;
-    var delta = parseInt(btn.getAttribute('data-lafka-qty'), 10) || 0;
-    var min   = parseInt(qtyInput.getAttribute('min') || '1', 10) || 1;
-    var maxAttr = qtyInput.getAttribute('max');
-    var max   = maxAttr ? parseInt(maxAttr, 10) : Infinity;
-    var current = parseInt(qtyInput.value, 10) || min;
-    var next  = Math.max(min, Math.min(max, current + delta));
+    const delta = parseInt(btn.getAttribute('data-lafka-qty'), 10) || 0;
+    const min   = parseInt(qtyInput.getAttribute('min') || '1', 10) || 1;
+    const maxAttr = qtyInput.getAttribute('max');
+    const max   = maxAttr ? parseInt(maxAttr, 10) : Infinity;
+    const current = parseInt(qtyInput.value, 10) || min;
+    const next  = Math.max(min, Math.min(max, current + delta));
     if (next === current) return;
     qtyInput.value = String(next);
     syncQtyDisplays(next);
     // Trigger the addons-update event so addon-cost × qty totals refresh.
     if (window.jQuery) {
-      var $form = window.jQuery(qtyInput).closest('form.cart');
+      const $form = window.jQuery(qtyInput).closest('form.cart');
       if ($form.length) $form.trigger('lafka-product-addons-update');
     }
     // Trigger native change event so any other listeners pick it up.
@@ -395,7 +395,7 @@
   document.addEventListener('input', function (e) {
     if (!e.target || !e.target.matches) return;
     if (!e.target.matches('input[name="quantity"]')) return;
-    var v = parseInt(e.target.value, 10);
+    const v = parseInt(e.target.value, 10);
     if (!isNaN(v)) syncQtyDisplays(v);
     recompute();
   });

@@ -18,11 +18,11 @@
 ( function () {
 	'use strict';
 
-	var cfg = window.lafkaCounter || {};
-	var i18n = cfg.i18n || {};
-	var data = null;
-	var current = null;
-	var trigger = null;
+	const cfg = window.lafkaCounter || {};
+	const i18n = cfg.i18n || {};
+	let data = null;
+	let current = null;
+	let trigger = null;
 
 	function t( key, fallback ) {
 		return i18n[ key ] || fallback;
@@ -34,7 +34,7 @@
 
 	function payloads() {
 		if ( data === null ) {
-			var node = document.getElementById( 'lafka-chooser-data' );
+			const node = document.getElementById( 'lafka-chooser-data' );
 			try {
 				data = node ? JSON.parse( node.textContent ) : {};
 			} catch {
@@ -45,7 +45,7 @@
 	}
 
 	function announce( message ) {
-		var live = document.querySelector( '[data-lafka-chooser-live]' );
+		const live = document.querySelector( '[data-lafka-chooser-live]' );
 		if ( live ) {
 			live.textContent = '';
 			window.setTimeout( function () {
@@ -65,7 +65,7 @@
 	}
 
 	function selection( dialog ) {
-		var sel = {};
+		const sel = {};
 		Array.prototype.forEach.call( dialog.querySelectorAll( '[data-lafka-chooser-attr]:checked' ), function ( input ) {
 			sel[ input.name ] = input.value;
 		} );
@@ -73,12 +73,12 @@
 	}
 
 	function match( product, sel ) {
-		for ( var i = 0; i < product.variations.length; i++ ) {
-			var v = product.variations[ i ];
-			var ok = true;
-			for ( var key in sel ) {
+		for ( let i = 0; i < product.variations.length; i++ ) {
+			const v = product.variations[ i ];
+			let ok = true;
+			for ( const key in sel ) {
 				if ( Object.prototype.hasOwnProperty.call( sel, key ) ) {
-					var have = v.attributes[ key ] || '';
+					const have = v.attributes[ key ] || '';
 					if ( have !== '' && have !== sel[ key ] ) {
 						ok = false;
 						break;
@@ -93,7 +93,7 @@
 	}
 
 	function primaryAttr( product ) {
-		for ( var i = 0; i < product.attributes.length; i++ ) {
+		for ( let i = 0; i < product.attributes.length; i++ ) {
 			if ( product.attributes[ i ].primary ) {
 				return product.attributes[ i ];
 			}
@@ -102,29 +102,29 @@
 	}
 
 	function renderOptions( dialog ) {
-		var product = current;
-		var primary = primaryAttr( product );
-		var wrap = dialog.querySelector( '[data-lafka-chooser-options]' );
-		var sel = selection( dialog );
+		const product = current;
+		const primary = primaryAttr( product );
+		const wrap = dialog.querySelector( '[data-lafka-chooser-options]' );
+		const sel = selection( dialog );
 		wrap.textContent = '';
 		primary.options.forEach( function ( option ) {
-			var want = {};
-			for ( var k in sel ) {
+			const want = {};
+			for ( const k in sel ) {
 				if ( Object.prototype.hasOwnProperty.call( sel, k ) ) {
 					want[ k ] = sel[ k ];
 				}
 			}
 			want[ primary.key ] = option.value;
-			var variation = match( product, want );
-			var button = document.createElement( 'button' );
+			const variation = match( product, want );
+			const button = document.createElement( 'button' );
 			button.type = 'button';
 			button.className = 'lafka-chooser__option';
-			var name = document.createElement( 'span' );
+			const name = document.createElement( 'span' );
 			name.className = 'lafka-chooser__option-name';
 			name.textContent = option.label;
-			var price = document.createElement( 'span' );
+			const price = document.createElement( 'span' );
 			price.className = 'lafka-chooser__option-price';
-			var cta = document.createElement( 'span' );
+			const cta = document.createElement( 'span' );
 			cta.className = 'lafka-chooser__option-cta';
 			if ( variation ) {
 				price.textContent = variation.price_text;
@@ -144,7 +144,7 @@
 	}
 
 	function open( product, el ) {
-		var dialog = document.getElementById( 'lafka-chooser' );
+		const dialog = document.getElementById( 'lafka-chooser' );
 		if ( ! dialog || typeof dialog.showModal !== 'function' ) {
 			window.location.href = product.url;
 			return;
@@ -152,31 +152,31 @@
 		current = product;
 		trigger = el;
 		dialog.querySelector( '[data-lafka-chooser-name]' ).textContent = product.name;
-		var groups = dialog.querySelector( '[data-lafka-chooser-groups]' );
+		const groups = dialog.querySelector( '[data-lafka-chooser-groups]' );
 		groups.textContent = '';
 		product.attributes.forEach( function ( attr ) {
 			if ( attr.primary ) {
 				dialog.querySelector( '[data-lafka-chooser-primary-label]' ).textContent = attr.label;
 				return;
 			}
-			var fieldset = document.createElement( 'fieldset' );
+			const fieldset = document.createElement( 'fieldset' );
 			fieldset.className = 'lafka-chooser__group';
-			var legend = document.createElement( 'legend' );
+			const legend = document.createElement( 'legend' );
 			legend.className = 'lafka-chooser__legend';
 			legend.textContent = attr.label;
 			fieldset.appendChild( legend );
-			var row = document.createElement( 'div' );
+			const row = document.createElement( 'div' );
 			row.className = 'lafka-chooser__radios';
 			attr.options.forEach( function ( option ) {
-				var label = document.createElement( 'label' );
+				const label = document.createElement( 'label' );
 				label.className = 'lafka-chooser__radio';
-				var input = document.createElement( 'input' );
+				const input = document.createElement( 'input' );
 				input.type = 'radio';
 				input.name = attr.key;
 				input.value = option.value;
 				input.checked = option.value === attr.default;
 				input.setAttribute( 'data-lafka-chooser-attr', '' );
-				var span = document.createElement( 'span' );
+				const span = document.createElement( 'span' );
 				span.textContent = option.label;
 				label.appendChild( input );
 				label.appendChild( span );
@@ -185,12 +185,12 @@
 			fieldset.appendChild( row );
 			groups.appendChild( fieldset );
 		} );
-		var more = dialog.querySelector( '[data-lafka-chooser-more]' );
+		const more = dialog.querySelector( '[data-lafka-chooser-more]' );
 		more.hidden = ! product.has_addons;
 		dialog.querySelector( '[data-lafka-chooser-more-link]' ).setAttribute( 'href', product.url );
 		// The eyebrow names the actual choice: "Choose pieces", or "Choose your
 		// options" when a secondary attribute (e.g. crust) is also asked.
-		var eyebrow = dialog.querySelector( '[data-lafka-chooser-eyebrow]' );
+		const eyebrow = dialog.querySelector( '[data-lafka-chooser-eyebrow]' );
 		if ( eyebrow ) {
 			eyebrow.textContent = product.attributes.length > 1
 				? t( 'chooseMany', 'Choose your options' )
@@ -200,7 +200,7 @@
 		dialog.showModal();
 		// Focus starts at the first choice in reading order: the checked radio
 		// of the first secondary group (e.g. crust), else the first size.
-		var first = dialog.querySelector( '[data-lafka-chooser-groups] input:checked' ) || dialog.querySelector( '.lafka-chooser__option:not([disabled])' );
+		const first = dialog.querySelector( '[data-lafka-chooser-groups] input:checked' ) || dialog.querySelector( '.lafka-chooser__option:not([disabled])' );
 		if ( first ) {
 			first.focus();
 		}
@@ -213,7 +213,7 @@
 			dialog.querySelectorAll( 'button:not([disabled]), a[href], input:not([disabled])' ),
 			function ( el ) {
 				if ( el.type === 'radio' && ! el.checked ) {
-					var group = dialog.querySelectorAll( 'input[type="radio"][name="' + el.name + '"]:checked' );
+					const group = dialog.querySelectorAll( 'input[type="radio"][name="' + el.name + '"]:checked' );
 					if ( group.length ) {
 						return false; // A radio group is one tab stop: its checked radio.
 					}
@@ -227,16 +227,16 @@
 		if ( e.key !== 'Tab' ) {
 			return;
 		}
-		var dialog = document.getElementById( 'lafka-chooser' );
+		const dialog = document.getElementById( 'lafka-chooser' );
 		if ( ! dialog || ! dialog.open ) {
 			return;
 		}
-		var list = focusables( dialog );
+		const list = focusables( dialog );
 		if ( ! list.length ) {
 			return;
 		}
-		var firstEl = list[ 0 ];
-		var lastEl = list[ list.length - 1 ];
+		const firstEl = list[ 0 ];
+		const lastEl = list[ list.length - 1 ];
 		if ( e.shiftKey && ( document.activeElement === firstEl || ! dialog.contains( document.activeElement ) ) ) {
 			e.preventDefault();
 			lastEl.focus();
@@ -247,21 +247,21 @@
 	} );
 
 	function close() {
-		var dialog = document.getElementById( 'lafka-chooser' );
+		const dialog = document.getElementById( 'lafka-chooser' );
 		if ( dialog && dialog.open ) {
 			dialog.close();
 		}
 	}
 
 	document.addEventListener( 'click', function ( e ) {
-		var target = e.target;
-		var addButton = target.closest ? target.closest( '[data-lafka-add]' ) : null;
+		const target = e.target;
+		const addButton = target.closest ? target.closest( '[data-lafka-add]' ) : null;
 		if ( addButton ) {
 			e.preventDefault();
-			var id = addButton.getAttribute( 'data-lafka-add' );
-			var url = addButton.getAttribute( 'data-lafka-add-url' );
+			const id = addButton.getAttribute( 'data-lafka-add' );
+			const url = addButton.getAttribute( 'data-lafka-add-url' );
 			if ( addButton.getAttribute( 'data-lafka-add-mode' ) === 'chooser' ) {
-				var product = payloads()[ id ];
+				const product = payloads()[ id ];
 				if ( ! product ) {
 					window.location.href = url;
 					return;
@@ -272,17 +272,17 @@
 			add( id, addButton, {
 				fallbackUrl: url,
 				onSuccess: function () {
-					var name = addButton.querySelector( '.screen-reader-text' );
+					const name = addButton.querySelector( '.screen-reader-text' );
 					announce( fill( t( 'addedSimple', 'Added %s' ), name ? name.textContent.trim() : '' ) );
 				},
 			} );
 			return;
 		}
 
-		var option = target.closest ? target.closest( '[data-lafka-chooser-variation]' ) : null;
+		const option = target.closest ? target.closest( '[data-lafka-chooser-variation]' ) : null;
 		if ( option && current ) {
-			var chosen = current;
-			var label = option.getAttribute( 'data-lafka-chooser-label' );
+			const chosen = current;
+			const label = option.getAttribute( 'data-lafka-chooser-label' );
 			add( option.getAttribute( 'data-lafka-chooser-variation' ), option, {
 				fallbackUrl: chosen.url,
 				beforeAdded: function () {
@@ -330,14 +330,14 @@
 ( function () {
 	'use strict';
 
-	var rest = document.querySelector( '.lafka-counter-rest' );
+	const rest = document.querySelector( '.lafka-counter-rest' );
 	if ( ! rest ) {
 		return;
 	}
 
 	/* Render the sections when `id` is inside or after them; return the target. */
 	function prepare( id ) {
-		var target;
+		let target;
 		try {
 			target = id ? document.getElementById( decodeURIComponent( id ) ) : null;
 		} catch {
@@ -356,7 +356,7 @@
 
 	// Capture phase: runs before the browser's own fragment scroll.
 	document.addEventListener( 'click', function ( e ) {
-		var link = e.target && e.target.closest ? e.target.closest( 'a[href*="#"]' ) : null;
+		const link = e.target && e.target.closest ? e.target.closest( 'a[href*="#"]' ) : null;
 		if ( ! link || link.pathname !== window.location.pathname || link.host !== window.location.host ) {
 			return;
 		}
@@ -364,7 +364,7 @@
 	}, true );
 
 	if ( window.location.hash.length > 1 ) {
-		var target = prepare( window.location.hash.slice( 1 ) );
+		const target = prepare( window.location.hash.slice( 1 ) );
 		if ( target ) {
 			target.scrollIntoView();
 		}

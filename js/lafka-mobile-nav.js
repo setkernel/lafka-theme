@@ -8,17 +8,17 @@
 ( function () {
 	'use strict';
 
-	var nav = document.getElementById( 'lafka-mobile-nav' );
+	const nav = document.getElementById( 'lafka-mobile-nav' );
 	if ( ! nav ) {
 		return;
 	}
 
-	var toggleBtn = document.querySelector( '[data-lafka-menu-toggle]' );
-	var closeEls = nav.querySelectorAll( '[data-lafka-mobile-nav-close]' );
-	var panel = nav.querySelector( '.lafka-mobile-nav__panel' );
+	const toggleBtn = document.querySelector( '[data-lafka-menu-toggle]' );
+	const closeEls = nav.querySelectorAll( '[data-lafka-mobile-nav-close]' );
+	const panel = nav.querySelector( '.lafka-mobile-nav__panel' );
 
 	// Focusable elements inside the drawer panel, used by the Tab focus trap.
-	var FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+	const FOCUSABLE_SELECTOR = 'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])';
 
 	// Page wrappers that sit *behind* the drawer scrim. The drawer is rendered
 	// at the end of <body> via wp_footer, so we must NOT inert <body> — that
@@ -26,14 +26,14 @@
 	// (header + main content + footer) so neither keyboard focus nor the
 	// screen-reader virtual cursor can reach the obscured page while the
 	// drawer is open (WCAG 2.4.3 / 2.4.7).
-	var supportsInert = ( 'inert' in HTMLElement.prototype );
-	var backgroundEls = null;
+	const supportsInert = ( 'inert' in HTMLElement.prototype );
+	let backgroundEls = null;
 
 	function getBackgroundEls() {
 		if ( null === backgroundEls ) {
 			backgroundEls = [];
 			[ '#header', '#content', '#main', '#footer', '.lafka-counter-bar' ].forEach( function ( sel ) {
-				var el = document.querySelector( sel );
+				const el = document.querySelector( sel );
 				if ( el && el !== nav && ! nav.contains( el ) ) {
 					backgroundEls.push( el );
 				}
@@ -68,7 +68,7 @@
 		}
 		// Focus the close button so keyboard users can dismiss easily.
 		setTimeout( function () {
-			var closeBtn = nav.querySelector( '.lafka-mobile-nav__close' );
+			const closeBtn = nav.querySelector( '.lafka-mobile-nav__close' );
 			if ( closeBtn ) {
 				closeBtn.focus();
 			} else if ( panel ) {
@@ -122,14 +122,14 @@
 		// user can never tab onto the page content hidden behind the scrim.
 		// Mirrors cart-drawer.js: wrap shift+Tab first->last and Tab last->first.
 		if ( e.key === 'Tab' && panel ) {
-			var focusables = Array.prototype.slice.call(
+			const focusables = Array.prototype.slice.call(
 				panel.querySelectorAll( FOCUSABLE_SELECTOR )
 			);
 			if ( ! focusables.length ) {
 				return;
 			}
-			var first = focusables[ 0 ];
-			var last  = focusables[ focusables.length - 1 ];
+			const first = focusables[ 0 ];
+			const last  = focusables[ focusables.length - 1 ];
 			if ( e.shiftKey && document.activeElement === first ) {
 				e.preventDefault();
 				last.focus();

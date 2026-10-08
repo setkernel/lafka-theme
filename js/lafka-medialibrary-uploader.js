@@ -2,7 +2,7 @@
 (function ($) {
     $(document).ready(function () {
         // Uploading files
-        var file_frame;
+        let file_frame;
 
         $(document.body).on('click', '.lafka_upload_image_button', function (event) {
 
@@ -11,10 +11,10 @@
                 file_frame.close();
             }
             // get the id of the option
-            var optionId = $(this).attr('id').substr(7);
+            const optionId = $(this).attr('id').substr(7);
 
-            var has_multiple_images = false;
-            var is_upload_link = false;
+            let has_multiple_images = false;
+            let is_upload_link = false;
 
             if ($(this).hasClass('is_multiple')) {
                 has_multiple_images = true;
@@ -38,13 +38,13 @@
             });
 
             file_frame.on('open', function () {
-                var selection = file_frame.state().get('selection');
-                var attachment;
+                const selection = file_frame.state().get('selection');
+                let attachment;
 
                 if (has_multiple_images) {
 
                     // The stored ids, separated by semicolons.
-                    var ids = $('#' + optionId).val().split(';');
+                    const ids = $('#' + optionId).val().split(';');
                     ids.forEach(function (id) {
                         attachment = wp.media.attachment(id);
                         attachment.fetch();
@@ -64,7 +64,7 @@
 
             // When an image is selected, run a callback.
             file_frame.on('select', function () {
-                var selection = file_frame.state().get('selection');
+                const selection = file_frame.state().get('selection');
 
                 // Clear previous images
                 $('#' + optionId).val('');
@@ -73,7 +73,7 @@
 
                 selection.map(function (selected) {
 
-                    var attachment = selected.toJSON();
+                    const attachment = selected.toJSON();
 
                     // store the id
                     $('#' + optionId).val($('#' + optionId).val() + attachment.id + ';');
@@ -96,7 +96,7 @@
 
                     $('#' + optionId + '_remove_link').show();
                     // For the background option type
-                    var backgroundProps = $('#' + optionId + '_images').nextAll('div.of-background-properties');
+                    const backgroundProps = $('#' + optionId + '_images').nextAll('div.of-background-properties');
                     if (backgroundProps.length) {
                         backgroundProps.removeClass('hide');
                     }
@@ -115,7 +115,7 @@
 
             // When closed and no image selected remove all
             file_frame.on('close', function () {
-                var selection = file_frame.state().get('selection');
+                const selection = file_frame.state().get('selection');
 
                 if (selection.length === 0) {
                     // No images selected, so empty the hidden
@@ -131,14 +131,14 @@
 
         $(document.body).on('click', 'a.lafka_remove_image_link', function () {
             if (confirm('Remove the image(s)?')) {
-                var imageIdHidden = $(this).prevAll('input.upload');
-                var imagePreview = $(this).nextAll('span.screenshot');
+                const imageIdHidden = $(this).prevAll('input.upload');
+                const imagePreview = $(this).nextAll('span.screenshot');
                 if (imageIdHidden.length && imagePreview.length) {
                     imageIdHidden.val('');
                     imagePreview.html('');
                 }
                 // For the background option type
-                var backgroundProps = $(this).nextAll('div.of-background-properties');
+                const backgroundProps = $(this).nextAll('div.of-background-properties');
                 if (backgroundProps.length) {
                     backgroundProps.addClass('hide');
                 }
@@ -154,7 +154,7 @@
         $('.lafka_delete_image_button').on('click', function (event) {
 
             // get the id of the option
-            var optionId = $(this).attr('id').substr(7);
+            const optionId = $(this).attr('id').substr(7);
             event.preventDefault();
 
             // Clear the image

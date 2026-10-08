@@ -32,12 +32,12 @@
 (function () {
 	'use strict';
 
-	var CONFIG = window.lafkaPdpCtaConfig || {};
-	var DEFAULT_STRATEGY = CONFIG.defaultStrategy || 'median';
-	var CURRENCY_SYMBOL = CONFIG.currencySymbol || '$';
-	var ADD_LABEL = CONFIG.addLabel || 'Add';
-	var PICK_LABEL = CONFIG.pickLabel || 'Select options';
-	var OUT_OF_STOCK_LABEL = CONFIG.outOfStockLabel || 'Out of stock';
+	const CONFIG = window.lafkaPdpCtaConfig || {};
+	const DEFAULT_STRATEGY = CONFIG.defaultStrategy || 'median';
+	const CURRENCY_SYMBOL = CONFIG.currencySymbol || '$';
+	const ADD_LABEL = CONFIG.addLabel || 'Add';
+	const PICK_LABEL = CONFIG.pickLabel || 'Select options';
+	const OUT_OF_STOCK_LABEL = CONFIG.outOfStockLabel || 'Out of stock';
 
 	function $form() { return document.querySelector('form.variations_form'); }
 	function $cta() { return document.querySelector('[data-lafka-pdp-cta]'); }
@@ -51,11 +51,11 @@
 	}
 
 	function pickDefault(variations, strategy) {
-		var inStock = variations.filter(function (v) {
+		const inStock = variations.filter(function (v) {
 			return v.is_in_stock !== false && v.is_purchasable !== false;
 		});
 		if (!inStock.length) { return null; }
-		var sorted = inStock.slice().sort(function (a, b) {
+		const sorted = inStock.slice().sort(function (a, b) {
 			return parseFloat(a.display_price) - parseFloat(b.display_price);
 		});
 		if (strategy === 'lowest') { return sorted[0]; }
@@ -66,10 +66,10 @@
 	}
 
 	function applyDefaultVariation(form, variations) {
-		var strategy = DEFAULT_STRATEGY;
-		var override = CONFIG.defaultVariationId ? parseInt(CONFIG.defaultVariationId, 10) : 0;
-		var wcDefaults = CONFIG.wcDefaultAttrs || {};
-		var chosen = null;
+		const strategy = DEFAULT_STRATEGY;
+		const override = CONFIG.defaultVariationId ? parseInt(CONFIG.defaultVariationId, 10) : 0;
+		const wcDefaults = CONFIG.wcDefaultAttrs || {};
+		let chosen = null;
 
 		// Priority 1: explicit filter override (lafka_pdp_default_variation).
 		if (override) {
@@ -93,9 +93,9 @@
 
 		if (!chosen) { return; }
 		Object.keys(chosen.attributes).forEach(function (attrName) {
-			var value = chosen.attributes[attrName];
+			const value = chosen.attributes[attrName];
 			if (!value) { return; }
-			var radio = form.querySelector('input[type="radio"][name="' + attrName + '"][value="' + cssEscape(value) + '"]');
+			const radio = form.querySelector('input[type="radio"][name="' + attrName + '"][value="' + cssEscape(value) + '"]');
 			if (radio && !radio.checked) {
 				if (window.jQuery) {
 					window.jQuery(radio).prop('checked', true).trigger('change');
@@ -113,7 +113,7 @@
 	}
 
 	function getSelectedVariation(form, variations) {
-		var selected = {};
+		const selected = {};
 		form.querySelectorAll('input[type="radio"]:checked, select').forEach(function (el) {
 			if (el.type === 'radio') {
 				selected[el.name] = el.value;
@@ -123,7 +123,7 @@
 		});
 		return variations.find(function (v) {
 			return Object.keys(v.attributes).every(function (key) {
-				var want = v.attributes[key];
+				const want = v.attributes[key];
 				if (!want) { return true; } // wildcard
 				return selected[key] === want;
 			});
@@ -133,7 +133,7 @@
 	// Read and JSON-parse a data attribute (e.g. the plugin's per-attribute
 	// price matrix). Returns null when absent or malformed.
 	function parseJsonAttr(el, name) {
-		var raw = el.getAttribute(name);
+		const raw = el.getAttribute(name);
 		if (!raw) { return null; }
 		try {
 			return JSON.parse(raw);
@@ -147,12 +147,12 @@
 	// what the plugin's addons.js does internally so per-attribute topping
 	// prices resolve the same way here.
 	function getAttributeSelections(form) {
-		var sels = {};
+		const sels = {};
 		form.querySelectorAll('table.variations select').forEach(function (el) {
 			if (el.id) { sels[el.id] = el.value; }
 		});
 		form.querySelectorAll('.lafka-pdp-pickers input[type="radio"]:checked').forEach(function (el) {
-			var name = el.name || '';
+			const name = el.name || '';
 			if (name.indexOf('attribute_') === 0) {
 				sels[name.substring('attribute_'.length)] = el.value;
 			}
@@ -175,18 +175,18 @@
 	//      inputs after each recompute (read via getAttribute, never a stale
 	//      jQuery .data() cache).
 	function getToppingPrice(checkbox, attrSelections) {
-		var matrix = parseJsonAttr(checkbox, 'data-attribute-prices');
+		const matrix = parseJsonAttr(checkbox, 'data-attribute-prices');
 		if (matrix) {
-			for (var attr in attrSelections) {
+			for (const attr in attrSelections) {
 				if (!Object.prototype.hasOwnProperty.call(attrSelections, attr)) { continue; }
-				var value = attrSelections[attr];
+				const value = attrSelections[attr];
 				if (matrix[attr] && Object.prototype.hasOwnProperty.call(matrix[attr], value)) {
-					var perAttr = parseFloat(matrix[attr][value]);
+					const perAttr = parseFloat(matrix[attr][value]);
 					if (!isNaN(perAttr)) { return perAttr; }
 				}
 			}
 		}
-		var price = parseFloat(checkbox.getAttribute('data-price'));
+		const price = parseFloat(checkbox.getAttribute('data-price'));
 		return isNaN(price) ? 0 : price;
 	}
 
@@ -198,16 +198,16 @@
 		// must be read through jQuery. This also covers select/text add-ons,
 		// not just checkbox toppings.
 		if (window.jQuery) {
-			var $totals = window.jQuery('#product-addons-total');
+			const $totals = window.jQuery('#product-addons-total');
 			if ($totals.length) {
-				var authoritative = parseFloat($totals.data('addons-price'));
+				const authoritative = parseFloat($totals.data('addons-price'));
 				if (!isNaN(authoritative)) { return authoritative; }
 			}
 		}
 		// Fallback (no add-ons plugin / total not yet computed / no jQuery):
 		// sum checked toppings from their numeric data attributes.
-		var attrSelections = getAttributeSelections(form);
-		var total = 0;
+		const attrSelections = getAttributeSelections(form);
+		let total = 0;
 		document.querySelectorAll('input[type="checkbox"][data-price]:checked').forEach(function (c) {
 			total += getToppingPrice(c, attrSelections);
 		});
@@ -215,8 +215,8 @@
 	}
 
 	function getQuantity(form) {
-		var input = form.querySelector('input[name="quantity"]');
-		var qty = input ? parseInt(input.value, 10) : 1;
+		const input = form.querySelector('input[name="quantity"]');
+		const qty = input ? parseInt(input.value, 10) : 1;
 		return isNaN(qty) || qty < 1 ? 1 : qty;
 	}
 
@@ -225,11 +225,11 @@
 	}
 
 	function setCtaState(state, total) {
-		var cta = $cta();
+		const cta = $cta();
 		if (!cta) { return; }
-		var btn = cta.querySelector('[data-lafka-pdp-cta-btn]');
-		var priceEl = cta.querySelector('[data-lafka-pdp-cta-price]');
-		var labelEl = cta.querySelector('[data-lafka-pdp-cta-label]');
+		const btn = cta.querySelector('[data-lafka-pdp-cta-btn]');
+		const priceEl = cta.querySelector('[data-lafka-pdp-cta-price]');
+		const labelEl = cta.querySelector('[data-lafka-pdp-cta-label]');
 		if (state === 'ready') {
 			cta.dataset.state = 'ready';
 			btn.disabled = false;
@@ -250,10 +250,10 @@
 	}
 
 	function recompute() {
-		var form = $form();
+		const form = $form();
 		if (!form) { return; }
-		var variations = readVariations(form);
-		var selected = getSelectedVariation(form, variations);
+		const variations = readVariations(form);
+		const selected = getSelectedVariation(form, variations);
 		if (!selected) {
 			setCtaState('pick', 0);
 			return;
@@ -262,9 +262,9 @@
 			setCtaState('out-of-stock', 0);
 			return;
 		}
-		var base = parseFloat(selected.display_price) || 0;
-		var toppings = getToppingTotal(form);
-		var qty = getQuantity(form);
+		const base = parseFloat(selected.display_price) || 0;
+		const toppings = getToppingTotal(form);
+		const qty = getQuantity(form);
 		setCtaState('ready', (base + toppings) * qty);
 	}
 
@@ -293,13 +293,13 @@
 		// stock .single_add_to_cart_button no longer exists on the redesigned
 		// PDP, so we must target the redesign's CTA — its click is delegated
 		// by lafka-front.js to the AJAX add path (cart drawer / sticky cart).
-		var cta = $cta();
+		const cta = $cta();
 		if (cta) {
 			cta.addEventListener('click', function (e) {
-				var btn = e.target.closest('[data-lafka-pdp-cta-btn]');
+				const btn = e.target.closest('[data-lafka-pdp-cta-btn]');
 				if (!btn || btn.disabled) { return; }
 				e.preventDefault();
-				var addBtn = form.querySelector('[data-lafka-add-to-cart]');
+				const addBtn = form.querySelector('[data-lafka-add-to-cart]');
 				if (addBtn && !addBtn.disabled) {
 					addBtn.click();
 				} else {
@@ -311,10 +311,10 @@
 	}
 
 	function init() {
-		var form = $form();
+		const form = $form();
 		if (!form) { return; }
 		document.body.classList.add('lafka-has-pdp-cta');
-		var variations = readVariations(form);
+		const variations = readVariations(form);
 		bindEvents(form);
 		if (variations.length && DEFAULT_STRATEGY !== 'none') {
 			applyDefaultVariation(form, variations);

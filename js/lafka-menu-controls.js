@@ -20,16 +20,16 @@
 ( function () {
 	'use strict';
 
-	var root = document.querySelector( '[data-lafka-menu-controls]' ) || document.createElement( 'div' );
+	const root = document.querySelector( '[data-lafka-menu-controls]' ) || document.createElement( 'div' );
 
 	// The fulfilment storage contract is defined once in PHP and handed to the
 	// JS via window.lafkaCfg (wp_localize_script), so the menu and cart
 	// controllers can never read different keys. The literals below are a
 	// brand-neutral fallback only, used if the localized config is absent.
-	var LAFKA_CFG = window.lafkaCfg || {};
-	var KEY_FULFILMENT = LAFKA_CFG.fulfilmentKey || 'lafka.fulfilment';
-	var DEFAULT_FULFILMENT = LAFKA_CFG.fulfilmentDefault || 'pickup';
-	var LEGACY_KEY_FULFILMENT = LAFKA_CFG.fulfilmentLegacyKey || '';
+	const LAFKA_CFG = window.lafkaCfg || {};
+	const KEY_FULFILMENT = LAFKA_CFG.fulfilmentKey || 'lafka.fulfilment';
+	const DEFAULT_FULFILMENT = LAFKA_CFG.fulfilmentDefault || 'pickup';
+	const LEGACY_KEY_FULFILMENT = LAFKA_CFG.fulfilmentLegacyKey || '';
 
 	function $$( sel, scope ) {
 		return Array.prototype.slice.call( ( scope || document ).querySelectorAll( sel ) );
@@ -37,7 +37,7 @@
 
 	function getFulfilment() {
 		try {
-			var value = localStorage.getItem( KEY_FULFILMENT );
+			let value = localStorage.getItem( KEY_FULFILMENT );
 			// One-time migration: adopt the value stored under the pre-rename
 			// key when the current key has not been written yet, so returning
 			// customers keep their previously-chosen fulfilment method.
@@ -64,7 +64,7 @@
 		} catch {
 			/* ignore */
 		}
-		var ev = new CustomEvent( 'lafka:fulfilment-change', { detail: { mode: mode }, bubbles: true } );
+		const ev = new CustomEvent( 'lafka:fulfilment-change', { detail: { mode: mode }, bubbles: true } );
 		document.dispatchEvent( ev );
 	}
 
@@ -74,14 +74,14 @@
 	// We manage a roving tabindex (checked = 0, others = -1) and ArrowLeft/Right/
 	// Up/Down to move + check selection, per the ARIA radiogroup pattern.
 	function initTabs() {
-		var tabs = $$( '[data-lafka-fulfilment]', root );
+		const tabs = $$( '[data-lafka-fulfilment]', root );
 		if ( ! tabs.length ) { return; }
 
 		// Reflect a mode in the DOM (class + ARIA + roving tabindex) without
 		// persisting it — used to mirror the stored state on load.
 		function reflect( mode ) {
 			tabs.forEach( function ( tab ) {
-				var on = tab.getAttribute( 'data-lafka-fulfilment' ) === mode;
+				const on = tab.getAttribute( 'data-lafka-fulfilment' ) === mode;
 				tab.classList.toggle( 'is-active', on );
 				tab.setAttribute( 'aria-checked', on ? 'true' : 'false' );
 				tab.setAttribute( 'tabindex', on ? '0' : '-1' );
@@ -107,21 +107,21 @@
 
 		// GX4: mirror the counter drawer / header radios (js/lafka-fulfilment.js).
 		document.addEventListener( 'lafka:fulfilment-change', function ( e ) {
-			var detail = e.detail || {};
+			const detail = e.detail || {};
 			if ( detail.source === 'lafka-fulfilment' && detail.mode ) {
 				reflect( detail.mode );
 			}
 		} );
 
 		tabs.forEach( function ( tab, idx ) {
-			var mode = tab.getAttribute( 'data-lafka-fulfilment' );
+			const mode = tab.getAttribute( 'data-lafka-fulfilment' );
 
 			tab.addEventListener( 'click', function () {
 				select( mode );
 			} );
 
 			tab.addEventListener( 'keydown', function ( e ) {
-				var next;
+				let next;
 				if ( e.key === 'ArrowRight' || e.key === 'ArrowDown' ) {
 					next = ( idx + 1 ) % tabs.length;
 				} else if ( e.key === 'ArrowLeft' || e.key === 'ArrowUp' ) {
@@ -138,7 +138,7 @@
 	// -------- Search ------------------------------------------------------
 	// Case- and accent-insensitive ("jalapeno" finds "Jalapeño").
 	function fold( text ) {
-		var out = String( text || '' ).toLowerCase();
+		let out = String( text || '' ).toLowerCase();
 		if ( out.normalize ) {
 			out = out.normalize( 'NFD' ).replace( /[̀-ͯ]/g, '' );
 		}
@@ -150,14 +150,14 @@
 	}
 
 	function isServerSearch() {
-		var form = searchForm();
+		const form = searchForm();
 		return !! form && form.getAttribute( 'data-lafka-menu-search-mode' ) === 'server';
 	}
 
 	function initSearch() {
-		var form = searchForm();
-		var input = root.querySelector( '[data-lafka-menu-search-input]' );
-		var clear = root.querySelector( '[data-lafka-menu-search-clear]' );
+		const form = searchForm();
+		const input = root.querySelector( '[data-lafka-menu-search-input]' );
+		const clear = root.querySelector( '[data-lafka-menu-search-clear]' );
 		if ( ! input ) { return; }
 
 		input.addEventListener( 'input', function () {
@@ -186,7 +186,7 @@
 					if ( ! input.value.trim() ) { e.preventDefault(); }
 					return;
 				}
-				var visible = applyFilter();
+				const visible = applyFilter();
 				if ( ! input.value.trim() || visible > 0 ) {
 					e.preventDefault();
 				}
@@ -196,12 +196,12 @@
 
 	// -------- Dietary filter chips ----------------------------------------
 	function initFilters() {
-		var chips = $$( '[data-lafka-filter]', root );
-		var clearAll = root.querySelector( '[data-lafka-clear-filters]' );
+		const chips = $$( '[data-lafka-filter]', root );
+		const clearAll = root.querySelector( '[data-lafka-clear-filters]' );
 
 		chips.forEach( function ( chip ) {
 			chip.addEventListener( 'click', function () {
-				var pressed = chip.getAttribute( 'aria-pressed' ) === 'true';
+				const pressed = chip.getAttribute( 'aria-pressed' ) === 'true';
 				chip.setAttribute( 'aria-pressed', pressed ? 'false' : 'true' );
 				chip.classList.toggle( 'is-on', ! pressed );
 				updateClearAllVisibility();
@@ -226,7 +226,7 @@
 	}
 
 	function updateClearAllVisibility() {
-		var clearAll = root.querySelector( '[data-lafka-clear-filters]' );
+		const clearAll = root.querySelector( '[data-lafka-clear-filters]' );
 		if ( ! clearAll ) { return; }
 		clearAll.hidden = ! $$( '[data-lafka-filter]', root ).some( function ( c ) {
 			return c.getAttribute( 'aria-pressed' ) === 'true';
@@ -237,8 +237,8 @@
 	function initReset() {
 		$$( '[data-lafka-menu-reset]' ).forEach( function ( btn ) {
 			btn.addEventListener( 'click', function () {
-				var input = root.querySelector( '[data-lafka-menu-search-input]' );
-				var clear = root.querySelector( '[data-lafka-menu-search-clear]' );
+				const input = root.querySelector( '[data-lafka-menu-search-input]' );
+				const clear = root.querySelector( '[data-lafka-menu-search-clear]' );
 				if ( input ) { input.value = ''; }
 				if ( clear ) { clear.hidden = true; }
 				resetChips();
@@ -249,10 +249,10 @@
 	}
 
 	// -------- Apply combined filter to product cards ----------------------
-	var announceTimer = null;
+	let announceTimer = null;
 
 	function announce( text ) {
-		var status = document.querySelector( '[data-lafka-menu-status]' );
+		const status = document.querySelector( '[data-lafka-menu-status]' );
 		if ( ! status ) { return; }
 		window.clearTimeout( announceTimer );
 		announceTimer = window.setTimeout( function () {
@@ -261,7 +261,7 @@
 	}
 
 	function countLabel( n ) {
-		var i18n = window.lafkaMenuI18n || {};
+		const i18n = window.lafkaMenuI18n || {};
 		if ( 0 === n ) {
 			return i18n.none || 'No menu items match.';
 		}
@@ -272,28 +272,28 @@
 	}
 
 	function applyFilter() {
-		var input = root.querySelector( '[data-lafka-menu-search-input]' );
-		var query = input && ! isServerSearch() ? fold( input.value ) : '';
-		var activeChips = $$( '[data-lafka-filter][aria-pressed="true"]', root ).map( function ( c ) {
+		const input = root.querySelector( '[data-lafka-menu-search-input]' );
+		const query = input && ! isServerSearch() ? fold( input.value ) : '';
+		const activeChips = $$( '[data-lafka-filter][aria-pressed="true"]', root ).map( function ( c ) {
 			return c.getAttribute( 'data-lafka-filter' );
 		} );
-		var filtering = '' !== query || activeChips.length > 0;
+		const filtering = '' !== query || activeChips.length > 0;
 
-		var cards = $$( '.lafka-favs__item, .lafka-menu__grid > li' );
-		var totalVisible = 0;
+		const cards = $$( '.lafka-favs__item, .lafka-menu__grid > li' );
+		let totalVisible = 0;
 
 		cards.forEach( function ( card ) {
-			var haystack = fold( card.getAttribute( 'data-lafka-product-search' ) || card.getAttribute( 'data-lafka-product-name' ) || card.textContent );
-			var tags = ( card.getAttribute( 'data-lafka-product-tags' ) || '' ).toLowerCase().split( ',' ).map( function ( t ) { return t.trim(); } );
+			const haystack = fold( card.getAttribute( 'data-lafka-product-search' ) || card.getAttribute( 'data-lafka-product-name' ) || card.textContent );
+			const tags = ( card.getAttribute( 'data-lafka-product-tags' ) || '' ).toLowerCase().split( ',' ).map( function ( t ) { return t.trim(); } );
 
-			var matchSearch = ! query || query.split( ' ' ).every( function ( word ) {
+			const matchSearch = ! query || query.split( ' ' ).every( function ( word ) {
 				return haystack.indexOf( word ) !== -1;
 			} );
-			var matchChips = activeChips.length === 0 || activeChips.every( function ( chip ) {
+			const matchChips = activeChips.length === 0 || activeChips.every( function ( chip ) {
 				return tags.indexOf( chip ) !== -1;
 			} );
 
-			var visible = matchSearch && matchChips;
+			const visible = matchSearch && matchChips;
 			card.hidden = ! visible;
 			card.classList.toggle( 'is-hidden-by-filter', ! visible );
 			if ( visible ) {
@@ -307,7 +307,7 @@
 		} );
 
 		// Show / hide the empty state (it carries the reset button).
-		var emptyEl = document.querySelector( '[data-lafka-menu-empty]' );
+		const emptyEl = document.querySelector( '[data-lafka-menu-empty]' );
 		if ( emptyEl && cards.length ) {
 			emptyEl.hidden = totalVisible > 0;
 		}
@@ -321,22 +321,22 @@
 
 	// -------- Category strip: sticky offset, scroll-spy, active chip -------
 	function initCategoryStrip() {
-		var nav = document.querySelector( '.lafka-menu__cats' );
+		const nav = document.querySelector( '.lafka-menu__cats' );
 		if ( ! nav ) { return; }
-		var list = nav.querySelector( '.lafka-menu__cats-list' );
-		var chips = $$( '.lafka-menu__cat-chip', nav );
+		const list = nav.querySelector( '.lafka-menu__cats-list' );
+		const chips = $$( '.lafka-menu__cat-chip', nav );
 
 		// Keep a chip visible inside the horizontally-scrolling strip without
 		// scrolling the page vertically (scrollIntoView would).
 		function reveal( chip ) {
 			if ( ! list || ! chip || list.scrollWidth <= list.clientWidth ) { return; }
-			var left = chip.offsetLeft - ( ( list.clientWidth - chip.offsetWidth ) / 2 );
+			const left = chip.offsetLeft - ( ( list.clientWidth - chip.offsetWidth ) / 2 );
 			list.scrollLeft = Math.max( 0, left );
 		}
 
 		// Section anchors land below the sticky strip.
 		function measure() {
-			var top = parseFloat( window.getComputedStyle( nav ).top ) || 0;
+			const top = parseFloat( window.getComputedStyle( nav ).top ) || 0;
 			document.documentElement.style.setProperty( '--lafka-menu-cats-offset', Math.round( top + nav.offsetHeight + 8 ) + 'px' );
 		}
 		measure();
@@ -345,23 +345,23 @@
 		reveal( nav.querySelector( '.lafka-menu__cat-chip.is-active' ) );
 
 		// In-page chips only (/menu/): archives link to other pages.
-		var targets = [];
+		const targets = [];
 		chips.forEach( function ( chip ) {
-			var href = chip.getAttribute( 'href' ) || '';
+			const href = chip.getAttribute( 'href' ) || '';
 			if ( href.charAt( 0 ) !== '#' ) { return; }
-			var el = document.getElementById( href.slice( 1 ) );
+			const el = document.getElementById( href.slice( 1 ) );
 			if ( el ) {
 				targets.push( { chip: chip, el: el } );
 			}
 		} );
 		if ( targets.length < 2 ) { return; }
 
-		var current = null;
+		let current = null;
 		function setActive( chip ) {
 			if ( chip === current ) { return; }
 			current = chip;
 			chips.forEach( function ( c ) {
-				var on = c === chip;
+				const on = c === chip;
 				c.classList.toggle( 'is-active', on );
 				if ( on ) {
 					c.setAttribute( 'aria-current', 'true' );
@@ -372,18 +372,18 @@
 			reveal( chip );
 		}
 
-		var ticking = false;
+		let ticking = false;
 		function spy() {
 			ticking = false;
 			// A section is "in view" once its top passes a quarter of the way
 			// down the visible area below the strip.
-			var navBottom = nav.getBoundingClientRect().bottom;
-			var line = navBottom + Math.max( 16, ( window.innerHeight - navBottom ) * 0.25 );
+			const navBottom = nav.getBoundingClientRect().bottom;
+			const line = navBottom + Math.max( 16, ( window.innerHeight - navBottom ) * 0.25 );
 			// The first target is "All" (the whole body); a section wins once
 			// its top has scrolled up to just below the strip.
-			var active = targets[ 0 ].chip;
-			for ( var i = 1; i < targets.length; i++ ) {
-				var t = targets[ i ];
+			let active = targets[ 0 ].chip;
+			for ( let i = 1; i < targets.length; i++ ) {
+				const t = targets[ i ];
 				if ( t.el.hidden ) { continue; }
 				if ( t.el.getBoundingClientRect().top <= line ) {
 					active = t.chip;
@@ -414,16 +414,16 @@
 	// points at this very page — take the customer to the menu instead of
 	// reloading it. Delegated: the bar is a refreshed cart fragment.
 	function initBarShortcut() {
-		var body = document.getElementById( 'lafka-menu-all' );
+		const body = document.getElementById( 'lafka-menu-all' );
 		if ( ! body ) { return; }
 		document.addEventListener( 'click', function ( e ) {
-			var link = e.target && e.target.closest ? e.target.closest( 'a.lafka-counter-bar__order' ) : null;
+			const link = e.target && e.target.closest ? e.target.closest( 'a.lafka-counter-bar__order' ) : null;
 			if ( ! link || link.hash || link.pathname !== window.location.pathname || link.host !== window.location.host ) {
 				return;
 			}
 			e.preventDefault();
 			body.scrollIntoView( { behavior: 'smooth', block: 'start' } );
-			var input = root.querySelector( '[data-lafka-menu-search-input]' );
+			const input = root.querySelector( '[data-lafka-menu-search-input]' );
 			if ( input ) {
 				input.focus( { preventScroll: true } );
 			}
@@ -438,7 +438,7 @@
 		initReset();
 		initCategoryStrip();
 		// A prefilled live search (browser back / autofill) applies at once.
-		var input = root.querySelector( '[data-lafka-menu-search-input]' );
+		const input = root.querySelector( '[data-lafka-menu-search-input]' );
 		if ( input && input.value && ! isServerSearch() ) {
 			applyFilter();
 		}

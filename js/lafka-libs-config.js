@@ -58,7 +58,7 @@
 		 * "lafka-ajax-search"
 		 *********************************/
 		if (typeof lafka_ajax_search !== 'undefined') {
-			var touch = $('html.touch');
+			const touch = $('html.touch');
 			if (touch.length === 0) {
 				new $.LafkaAjaxSearch();
 			}
@@ -73,11 +73,11 @@
 			// Gallery: collect all items, open at the clicked index.
 			$(document).on('click', 'a.lafka-magnific-gallery-item', function (e) {
 				e.preventDefault();
-				var $links = $('a.lafka-magnific-gallery-item');
-				var items = $links.map(function () {
+				const $links = $('a.lafka-magnific-gallery-item');
+				const items = $links.map(function () {
 					return { src: this.href, alt: $(this).find('img').attr('alt') || '' };
 				}).get();
-				var startIndex = $links.index(this);
+				const startIndex = $links.index(this);
 				window.lafkaDialog.gallery(items, startIndex);
 			});
 
@@ -92,7 +92,7 @@
 		 * "lafka-owl-carousel-cat"
 		 *****************************/
 		// Hoisted is_rtl shared with the next two carousel blocks below.
-		var is_rtl = false;
+		let is_rtl = false;
 		if (typeof lafka_rtl !== 'undefined' && lafka_rtl.is_rtl === 'true') {
 			is_rtl = true;
 		}
@@ -196,8 +196,8 @@
 			$(document).on('click', 'a.lafka-quick-view-link', function (e) {
 
 				$(this).closest('div.prod_hold').addClass('loading');
-				var product_id = $(this).attr('data-id');
-				var data = {action: 'lafka_quickview', productid: product_id, security: lafka_quickview.nonce};
+				const product_id = $(this).attr('data-id');
+				const data = {action: 'lafka_quickview', productid: product_id, security: lafka_quickview.nonce};
 
 				$.post(
 								lafka_quickview.lafka_ajax_url, data, function (response) {
@@ -211,11 +211,11 @@
 									// The response is server-rendered WC product HTML (trusted) — the
 									// helper parses it inside an inert <template> so any inline scripts
 									// don't execute.
-									var dlg = window.lafkaDialog.inline(
+									const dlg = window.lafkaDialog.inline(
 										'<div class="lafka-quickview-product-pop">' + response + '</div>',
 										{ className: 'lafka-quick-view-lightbox' }
 									);
-									var $content = $(dlg).find('.lafka-dialog__content');
+									const $content = $(dlg).find('.lafka-dialog__content');
 									$content.find('form').each(function () {
 										$(this).lafka_wc_variation_form();
 									});
@@ -235,7 +235,7 @@
 	 *  "lafka-ajax-search"
 	 ************************/
 	$.LafkaAjaxSearch = function (options) {
-		var defaults = {
+		const defaults = {
 			delay: 200, //delay in ms until the user stops typing.
 			minChars: 3, //dont start searching before we got at least that much characters
 			scope: 'body > div#search'
@@ -260,7 +260,7 @@
 							clearTimeout(this.timer);
 							//if the field is empty - clear the results
 							if (e.currentTarget.value.trim().length === 0) {
-								var result = $('.ajax_search_result');
+								const result = $('.ajax_search_result');
 								if (result)
 									result.remove();
 							}
@@ -274,12 +274,12 @@
 						},
 						execute_search: function (e)
 						{
-							var currentField = $(e.currentTarget).attr("autocomplete", "off"),
-											form = currentField.parents('form:eq(0)'),
-											results = form.find('.ajax_search_result'),
-											loading = $('<div class="ajax_loading"><span class="ajax_loading_inner"></span></div>'),
-											action = form.attr('action'),
-											values = form.serialize();
+							const currentField = $(e.currentTarget).attr("autocomplete", "off");
+							const form = currentField.parents('form:eq(0)');
+							let results = form.find('.ajax_search_result');
+							const loading = $('<div class="ajax_loading"><span class="ajax_loading_inner"></span></div>');
+							let action = form.attr('action');
+							let values = form.serialize();
 							values += '&action=lafka_ajax_search&security=' + encodeURIComponent(lafka_main_js_params.nonce);
 							//check if the form got get parameters applied and also apply them
 							if (action.indexOf('?') !== -1)
@@ -332,8 +332,8 @@ if (typeof lafka_quickview !== 'undefined') {
         /**
          * LafkaVariationForm class which handles variation forms and attributes.
          */
-        var LafkaVariationForm = function ($form) {
-            var self = this;
+        const LafkaVariationForm = function ($form) {
+            const self = this;
             self.$form = $form;
             self.$attributeFields = $form.find('.variations select');
             self.$singleVariation = $form.find('.single_variation');
@@ -396,7 +396,7 @@ if (typeof lafka_quickview !== 'undefined') {
          * Reload variation data from the DOM.
          */
         LafkaVariationForm.prototype.onReload = function (event) {
-            var form = event.data.variationForm;
+            const form = event.data.variationForm;
             form.variationData = form.$form.data('product_variations');
             form.useAjax = false === form.variationData;
             form.$form.trigger('check_variations');
@@ -444,7 +444,7 @@ if (typeof lafka_quickview !== 'undefined') {
          * When displayed variation data is reset.
          */
         LafkaVariationForm.prototype.onResetDisplayedVariation = function (event) {
-            var form = event.data.variationForm;
+            const form = event.data.variationForm;
             form.$product.find('.product_meta').find('.sku').wc_reset_content();
             form.$product.find('.product_weight, .woocommerce-product-attributes-item--weight .woocommerce-product-attributes-item__value').wc_reset_content();
             form.$product.find('.product_dimensions, .woocommerce-product-attributes-item--dimensions .woocommerce-product-attributes-item__value').wc_reset_content();
@@ -463,7 +463,7 @@ if (typeof lafka_quickview !== 'undefined') {
          * Looks for matching variations for current selected attributes.
          */
         LafkaVariationForm.prototype.onFindVariation = function (event, chosenAttributes) {
-            var form = event.data.variationForm,
+            const form = event.data.variationForm,
 				attributes        = 'undefined' !== typeof chosenAttributes ? chosenAttributes : form.getChosenAttributes(),
                 currentAttributes = attributes.data;
 
@@ -499,7 +499,7 @@ if (typeof lafka_quickview !== 'undefined') {
                 } else {
                     form.$form.trigger('update_variation_values');
 
-                    var matching_variations = form.findMatchingVariations(form.variationData, currentAttributes),
+                    const matching_variations = form.findMatchingVariations(form.variationData, currentAttributes),
                         variation = matching_variations.shift();
 
                     if (variation) {
@@ -527,14 +527,14 @@ if (typeof lafka_quickview !== 'undefined') {
          * Triggered when a variation has been found which matches all attributes.
          */
         LafkaVariationForm.prototype.onFoundVariation = function (event, variation) {
-            var form = event.data.variationForm,
-                $sku = form.$product.find('.product_meta').find('.sku'),
-                $weight = form.$product.find('.product_weight, .woocommerce-product-attributes-item--weight .woocommerce-product-attributes-item__value'),
-                $dimensions = form.$product.find('.product_dimensions, .woocommerce-product-attributes-item--dimensions .woocommerce-product-attributes-item__value'),
-                $qty = form.$singleVariationWrap.find('.quantity'),
-                purchasable = true,
-                template,
-                $template_html;
+            const form = event.data.variationForm;
+            const $sku = form.$product.find('.product_meta').find('.sku');
+            const $weight = form.$product.find('.product_weight, .woocommerce-product-attributes-item--weight .woocommerce-product-attributes-item__value');
+            const $dimensions = form.$product.find('.product_dimensions, .woocommerce-product-attributes-item--dimensions .woocommerce-product-attributes-item__value');
+            const $qty = form.$singleVariationWrap.find('.quantity');
+            let purchasable = true;
+            let template;
+            let $template_html;
 
             if (variation.sku) {
                 $sku.wc_set_content(variation.sku);
@@ -598,7 +598,7 @@ if (typeof lafka_quickview !== 'undefined') {
          * Triggered when an attribute field changes.
          */
         LafkaVariationForm.prototype.onChange = function (event) {
-            var form = event.data.variationForm;
+            const form = event.data.variationForm;
 
             form.$form.find('input[name="variation_id"], input.variation_id').val('').trigger( 'change' );
             form.$form.find('.wc-no-matching-variations').remove();
@@ -619,7 +619,7 @@ if (typeof lafka_quickview !== 'undefined') {
          * Updates attributes in the DOM to show valid values.
          */
         LafkaVariationForm.prototype.onUpdateAttributes = function (event) {
-            var form = event.data.variationForm,
+            const form = event.data.variationForm,
                 attributes = form.getChosenAttributes(),
                 currentAttributes = attributes.data;
 
@@ -629,18 +629,17 @@ if (typeof lafka_quickview !== 'undefined') {
 
             // Loop through selects and disable/enable options based on selections.
             form.$attributeFields.each(function (index, el) {
-                var current_attr_select = $(el),
-                    current_attr_name = current_attr_select.data('attribute_name') || current_attr_select.attr('name'),
-                    show_option_none = $(el).data('show_option_none'),
-                    option_gt_filter = ':gt(0)',
-                    attached_options_count,
-                    new_attr_select = $('<select/>'),
-                    selected_attr_val = current_attr_select.val() || '',
-                    selected_attr_val_valid = true;
+                const current_attr_select = $(el);
+                const current_attr_name = current_attr_select.data('attribute_name') || current_attr_select.attr('name');
+                const show_option_none = $(el).data('show_option_none');
+                let option_gt_filter = ':gt(0)';
+                const new_attr_select = $('<select/>');
+                const selected_attr_val = current_attr_select.val() || '';
+                let selected_attr_val_valid = true;
 
                 // Lafkaence options set at first.
                 if (!current_attr_select.data('attribute_html')) {
-                    var refSelect = current_attr_select.clone();
+                    const refSelect = current_attr_select.clone();
 
                     refSelect.find('option').removeAttr('disabled attached').removeAttr('selected');
 
@@ -652,20 +651,20 @@ if (typeof lafka_quickview !== 'undefined') {
 
                 // The attribute of this select field should not be taken into account when calculating its matching variations:
                 // The constraints of this attribute are shaped by the values of the other attributes.
-                var checkAttributes = $.extend(true, {}, currentAttributes);
+                const checkAttributes = $.extend(true, {}, currentAttributes);
 
                 checkAttributes[current_attr_name] = '';
 
-                var variations = form.findMatchingVariations(form.variationData, checkAttributes);
+                const variations = form.findMatchingVariations(form.variationData, checkAttributes);
 
                 // Loop through variations.
-                for (var num in variations) {
+                for (const num in variations) {
                     if (typeof (variations[num]) !== 'undefined') {
-                        var variationAttributes = variations[num].attributes;
+                        const variationAttributes = variations[num].attributes;
 
-                        for (var attr_name in variationAttributes) {
+                        for (const attr_name in variationAttributes) {
                             if (Object.prototype.hasOwnProperty.call(variationAttributes, attr_name)) {
-                                var attr_val = variationAttributes[attr_name],
+                                let attr_val = variationAttributes[attr_name],
                                     variation_active = '';
 
                                 if (attr_name === current_attr_name) {
@@ -679,10 +678,10 @@ if (typeof lafka_quickview !== 'undefined') {
 
                                         // Attach to matching options by value. This is done to compare
                                         // TEXT values rather than any HTML entities.
-                                        var $option_elements = new_attr_select.find('option');
+                                        const $option_elements = new_attr_select.find('option');
                                         if ($option_elements.length) {
-                                            for (var i = 0, len = $option_elements.length; i < len; i++) {
-                                                var $option_element = $($option_elements[i]),
+                                            for (let i = 0, len = $option_elements.length; i < len; i++) {
+                                                const $option_element = $($option_elements[i]),
                                                     option_value = $option_element.val();
 
                                                 if (attr_val === option_value) {
@@ -702,7 +701,7 @@ if (typeof lafka_quickview !== 'undefined') {
                 }
 
                 // Count available options.
-                attached_options_count = new_attr_select.find('option.attached').length;
+                const attached_options_count = new_attr_select.find('option.attached').length;
 
                 // Check if current selection is in attached options.
                 if (selected_attr_val) {
@@ -710,7 +709,7 @@ if (typeof lafka_quickview !== 'undefined') {
 
                     if (0 !== attached_options_count) {
                         new_attr_select.find('option.attached.enabled').each(function () {
-                            var option_value = $(this).val();
+                            const option_value = $(this).val();
 
                             if (selected_attr_val === option_value) {
                                 selected_attr_val_valid = true;
@@ -759,13 +758,13 @@ if (typeof lafka_quickview !== 'undefined') {
          * @return array
          */
         LafkaVariationForm.prototype.getChosenAttributes = function () {
-            var data = {};
-            var count = 0;
-            var chosen = 0;
+            const data = {};
+            let count = 0;
+            let chosen = 0;
 
             this.$attributeFields.each(function () {
-                var attribute_name = $(this).data('attribute_name') || $(this).attr('name');
-                var value = $(this).val() || '';
+                const attribute_name = $(this).data('attribute_name') || $(this).attr('name');
+                const value = $(this).val() || '';
 
                 if (value.length > 0) {
                     chosen++;
@@ -786,10 +785,10 @@ if (typeof lafka_quickview !== 'undefined') {
          * Find matching variations for attributes.
          */
         LafkaVariationForm.prototype.findMatchingVariations = function (variations, attributes) {
-            var matching = [];
+            const matching = [];
             if (typeof variations != 'undefined') {
-                for (var i = 0; i < variations.length; i++) {
-                    var variation = variations[i];
+                for (let i = 0; i < variations.length; i++) {
+                    const variation = variations[i];
 
                     if (this.isMatch(variation.attributes, attributes)) {
                         matching.push(variation);
@@ -804,11 +803,11 @@ if (typeof lafka_quickview !== 'undefined') {
          * @return {Boolean}
          */
         LafkaVariationForm.prototype.isMatch = function (variation_attributes, attributes) {
-            var match = true;
-            for (var attr_name in variation_attributes) {
+            let match = true;
+            for (const attr_name in variation_attributes) {
                 if (Object.prototype.hasOwnProperty.call(variation_attributes, attr_name)) {
-                    var val1 = variation_attributes[attr_name];
-                    var val2 = attributes[attr_name];
+                    const val1 = variation_attributes[attr_name];
+                    const val2 = attributes[attr_name];
                     if (val1 !== undefined && val2 !== undefined && val1.length !== 0 && val2.length !== 0 && val1 !== val2) {
                         match = false;
                     }
@@ -884,11 +883,11 @@ if (typeof lafka_quickview !== 'undefined') {
          * Reset the slide position if the variation has a different image than the current one
          */
         $.fn.wc_maybe_trigger_slide_position_reset = function (variation) {
-            var $form = $(this),
-                $product = $form.closest('.product'),
-                $product_gallery = $product.find('.images'),
-                reset_slide_position = false,
-                new_image_id = (variation && variation.image_id) ? variation.image_id : '';
+            const $form = $(this);
+            const $product = $form.closest('.product');
+            const $product_gallery = $product.find('.images');
+            let reset_slide_position = false;
+            const new_image_id = (variation && variation.image_id) ? variation.image_id : '';
 
             if ($form.attr('current-image') !== new_image_id) {
                 reset_slide_position = true;
@@ -905,7 +904,7 @@ if (typeof lafka_quickview !== 'undefined') {
          * Sets product images for the chosen variation
          */
         $.fn.wc_variations_image_update = function (variation) {
-            var $form = this,
+            const $form = this,
                 $product = $form.closest('.product'),
                 $product_gallery = $product.find('.images'),
                 $gallery_nav = $product.find('.flex-control-nav'),
@@ -916,7 +915,7 @@ if (typeof lafka_quickview !== 'undefined') {
 
             if (variation && variation.image && variation.image.src && variation.image.src.length > 1) {
                 // See if the gallery has an image with the same original src as the image we want to switch to.
-                var galleryHasImage = $gallery_nav.find('li img[data-o_src="' + variation.image.gallery_thumbnail_src + '"]').length > 0;
+                const galleryHasImage = $gallery_nav.find('li img[data-o_src="' + variation.image.gallery_thumbnail_src + '"]').length > 0;
 
                 // If the gallery has the image, reset the images. We'll scroll to the correct one.
                 if (galleryHasImage) {
@@ -924,7 +923,7 @@ if (typeof lafka_quickview !== 'undefined') {
                 }
 
                 // See if gallery has a matching image we can slide to.
-                var slideToImage = $gallery_nav.find('li img[src="' + variation.image.gallery_thumbnail_src + '"]');
+                const slideToImage = $gallery_nav.find('li img[src="' + variation.image.gallery_thumbnail_src + '"]');
 
                 if (slideToImage.length > 0) {
                     slideToImage.trigger('click');
@@ -966,7 +965,7 @@ if (typeof lafka_quickview !== 'undefined') {
          * Reset main image to defaults.
          */
         $.fn.wc_variations_image_reset = function () {
-            var $form = this,
+            const $form = this,
                 $product = $form.closest('.product'),
                 $product_gallery = $product.find('.images'),
                 $gallery_nav = $product.find('.flex-control-nav'),
@@ -1005,11 +1004,11 @@ if (typeof lafka_quickview !== 'undefined') {
          * @deprecated 2.6.9
          * @type {Object}
          */
-        var wc_variation_form_matcher = {
+        const wc_variation_form_matcher = {
             find_matching_variations: function (product_variations, settings) {
-                var matching = [];
-                for (var i = 0; i < product_variations.length; i++) {
-                    var variation = product_variations[i];
+                const matching = [];
+                for (let i = 0; i < product_variations.length; i++) {
+                    const variation = product_variations[i];
 
                     if (wc_variation_form_matcher.variations_match(variation.attributes, settings)) {
                         matching.push(variation);
@@ -1018,11 +1017,11 @@ if (typeof lafka_quickview !== 'undefined') {
                 return matching;
             },
             variations_match: function (attrs1, attrs2) {
-                var match = true;
-                for (var attr_name in attrs1) {
+                let match = true;
+                for (const attr_name in attrs1) {
                     if (Object.prototype.hasOwnProperty.call(attrs1, attr_name)) {
-                        var val1 = attrs1[attr_name];
-                        var val2 = attrs2[attr_name];
+                        const val1 = attrs1[attr_name];
+                        const val2 = attrs2[attr_name];
                         if (val1 !== undefined && val2 !== undefined && val1.length !== 0 && val2.length !== 0 && val1 !== val2) {
                             match = false;
                         }

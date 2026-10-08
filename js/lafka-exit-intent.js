@@ -90,14 +90,14 @@
 		return;
 	}
 
-	var settings = window.lafkaExitIntentSettings;
+	const settings = window.lafkaExitIntentSettings;
 	if (!settings) {
 		return;
 	}
 	// wp_localize_script stringifies booleans + ints, so accept both '1' / 1
 	// and true / 'true' as the enabled signal. Anything else = no-op.
-	var enabledRaw = settings.enabled;
-	var isEnabled = (
+	const enabledRaw = settings.enabled;
+	const isEnabled = (
 		true === enabledRaw ||
 		'1' === enabledRaw ||
 		1 === enabledRaw ||
@@ -109,22 +109,22 @@
 
 	// Defensive defaults — payload SHOULD ship these from PHP, but if a
 	// future filter strips a field we don't want to crash.
-	var graceMs = (parseInt(settings.gracePeriodSeconds, 10) || 30) * 1000;
-	var blocklist = Array.isArray(settings.pageBlocklist) ? settings.pageBlocklist : [];
-	var cartUrl = settings.cartUrl || '/cart/';
-	var headlineBelow = settings.headlineBelow || 'Add {amount} more for free delivery';
-	var headlineReached = settings.headlineReached || 'Your cart is ready — checkout in 30 seconds';
-	var bodyText = settings.bodyText || 'Tap below to pick up where you left off.';
-	var ctaLabel = settings.ctaLabel || 'Resume checkout';
-	var dismissLabel = settings.dismissLabel || 'Maybe later';
-	var closeAriaLabel = settings.closeAriaLabel || 'Close reminder';
+	const graceMs = (parseInt(settings.gracePeriodSeconds, 10) || 30) * 1000;
+	const blocklist = Array.isArray(settings.pageBlocklist) ? settings.pageBlocklist : [];
+	const cartUrl = settings.cartUrl || '/cart/';
+	const headlineBelow = settings.headlineBelow || 'Add {amount} more for free delivery';
+	const headlineReached = settings.headlineReached || 'Your cart is ready — checkout in 30 seconds';
+	const bodyText = settings.bodyText || 'Tap below to pick up where you left off.';
+	const ctaLabel = settings.ctaLabel || 'Resume checkout';
+	const dismissLabel = settings.dismissLabel || 'Maybe later';
+	const closeAriaLabel = settings.closeAriaLabel || 'Close reminder';
 
 	// ─────────────────────────────────────────────────────────────────────
 	// Page blocklist check — never fire on conversion pages.
 	// ─────────────────────────────────────────────────────────────────────
-	var currentPath = window.location && window.location.pathname ? window.location.pathname : '';
-	for (var i = 0; i < blocklist.length; i++) {
-		var token = blocklist[i];
+	const currentPath = window.location && window.location.pathname ? window.location.pathname : '';
+	for (let i = 0; i < blocklist.length; i++) {
+		const token = blocklist[i];
 		if (token && currentPath.indexOf(token) !== -1) {
 			return;
 		}
@@ -167,9 +167,9 @@
 		if (!window.dataLayer || typeof window.dataLayer.push !== 'function') {
 			return;
 		}
-		var payload = { event: eventName };
+		const payload = { event: eventName };
 		if (params && typeof params === 'object') {
-			for (var key in params) {
+			for (const key in params) {
 				if (Object.prototype.hasOwnProperty.call(params, key)) {
 					payload[key] = params[key];
 				}
@@ -185,7 +185,7 @@
 		if (!window.lafkaDataLayer || !window.lafkaDataLayer.cartSnapshot) {
 			return { items_count: 0, value: 0 };
 		}
-		var snap = window.lafkaDataLayer.cartSnapshot;
+		const snap = window.lafkaDataLayer.cartSnapshot;
 		return {
 			items_count: parseInt(snap.items_count, 10) || 0,
 			value: parseFloat(snap.value) || 0
@@ -200,11 +200,11 @@
 	 * toast falls back to the "reached"-style headline.
 	 */
 	function readThreshold() {
-		var fdp = document.querySelector('.lafka-fdp[data-threshold]');
+		const fdp = document.querySelector('.lafka-fdp[data-threshold]');
 		if (!fdp) {
 			return null;
 		}
-		var t = parseFloat(fdp.dataset.threshold);
+		const t = parseFloat(fdp.dataset.threshold);
 		if (isNaN(t) || t <= 0) {
 			return null;
 		}
@@ -217,7 +217,7 @@
 		if (typeof window.lafkaFdpFormatCurrency === 'function') {
 			return window.lafkaFdpFormatCurrency(value);
 		}
-		var num = parseFloat(value);
+		let num = parseFloat(value);
 		if (isNaN(num)) {
 			num = 0;
 		}
@@ -233,33 +233,33 @@
 			// "ready" headline (cart-page-equivalent state).
 			return { text: headlineReached, state: 'reached' };
 		}
-		var remaining = threshold - snapshot.value;
+		const remaining = threshold - snapshot.value;
 		if (remaining <= 0) {
 			return { text: headlineReached, state: 'reached' };
 		}
-		var formatted = formatCurrency(remaining);
+		const formatted = formatCurrency(remaining);
 		// Token substitution: replace {amount} with formatted remaining.
 		// Use a function so we don't risk regex special chars in the
 		// formatted output.
-		var text = headlineBelow.split('{amount}').join(formatted);
+		const text = headlineBelow.split('{amount}').join(formatted);
 		return { text: text, state: 'below' };
 	}
 
 	function buildToast(snapshot, threshold) {
-		var headline = buildHeadlineText(snapshot, threshold);
+		const headline = buildHeadlineText(snapshot, threshold);
 
-		var root = document.createElement('div');
+		const root = document.createElement('div');
 		root.className = 'lafka-exit-toast';
 		root.dataset.state = headline.state;
 		root.setAttribute('role', 'dialog');
 		root.setAttribute('aria-live', 'polite');
 		root.setAttribute('aria-labelledby', 'lafka-exit-toast-headline');
 
-		var inner = document.createElement('div');
+		const inner = document.createElement('div');
 		inner.className = 'lafka-exit-toast__inner';
 
 		// Close × in top-right corner.
-		var closeBtn = document.createElement('button');
+		const closeBtn = document.createElement('button');
 		closeBtn.type = 'button';
 		closeBtn.className = 'lafka-exit-toast__close';
 		closeBtn.setAttribute('aria-label', closeAriaLabel);
@@ -267,29 +267,29 @@
 		inner.appendChild(closeBtn);
 
 		// Headline.
-		var headlineEl = document.createElement('p');
+		const headlineEl = document.createElement('p');
 		headlineEl.className = 'lafka-exit-toast__headline';
 		headlineEl.id = 'lafka-exit-toast-headline';
 		headlineEl.textContent = headline.text;
 		inner.appendChild(headlineEl);
 
 		// Body copy.
-		var bodyEl = document.createElement('p');
+		const bodyEl = document.createElement('p');
 		bodyEl.className = 'lafka-exit-toast__body';
 		bodyEl.textContent = bodyText;
 		inner.appendChild(bodyEl);
 
 		// Actions row.
-		var actions = document.createElement('div');
+		const actions = document.createElement('div');
 		actions.className = 'lafka-exit-toast__actions';
 
-		var primary = document.createElement('a');
+		const primary = document.createElement('a');
 		primary.className = 'lafka-exit-toast__primary';
 		primary.href = cartUrl;
 		primary.textContent = ctaLabel;
 		actions.appendChild(primary);
 
-		var dismiss = document.createElement('button');
+		const dismiss = document.createElement('button');
 		dismiss.type = 'button';
 		dismiss.className = 'lafka-exit-toast__dismiss';
 		dismiss.textContent = dismissLabel;
@@ -309,11 +309,11 @@
 	// ─────────────────────────────────────────────────────────────────────
 	// Show / dismiss lifecycle.
 	// ─────────────────────────────────────────────────────────────────────
-	var hasShown = false;
-	var armed = false;
+	let hasShown = false;
+	let armed = false;
 
 	function dismiss(reason) {
-		var toast = document.querySelector('.lafka-exit-toast');
+		const toast = document.querySelector('.lafka-exit-toast');
 		if (!toast) {
 			return;
 		}
@@ -340,15 +340,15 @@
 		if (hasShown) {
 			return;
 		}
-		var snapshot = readCartSnapshot();
+		const snapshot = readCartSnapshot();
 		if (snapshot.items_count <= 0) {
 			// Cart emptied between arming and trigger — bail silently.
 			return;
 		}
 		hasShown = true;
 
-		var threshold = readThreshold();
-		var parts = buildToast(snapshot, threshold);
+		const threshold = readThreshold();
+		const parts = buildToast(snapshot, threshold);
 		document.body.appendChild(parts.root);
 
 		// Force a layout flush before flipping data-visible so the CSS
@@ -413,7 +413,7 @@
 		if (evt.relatedTarget || evt.toElement) {
 			return;
 		}
-		var snapshot = readCartSnapshot();
+		const snapshot = readCartSnapshot();
 		if (snapshot.items_count <= 0) {
 			return;
 		}
@@ -435,14 +435,14 @@
 	//   - in <500ms
 	//   - landing within the top 200px of the page
 	// ─────────────────────────────────────────────────────────────────────
-	var scrollSamples = [];
+	const scrollSamples = [];
 
 	function onScroll() {
 		if (!armed || hasShown) {
 			return;
 		}
-		var now = Date.now();
-		var y = window.pageYOffset || document.documentElement.scrollTop || 0;
+		const now = Date.now();
+		const y = window.pageYOffset || document.documentElement.scrollTop || 0;
 		scrollSamples.push({ t: now, y: y });
 		// Trim samples older than 500ms — the velocity window.
 		while (scrollSamples.length > 0 && now - scrollSamples[0].t > 500) {
@@ -451,14 +451,14 @@
 		if (scrollSamples.length < 2) {
 			return;
 		}
-		var oldest = scrollSamples[0];
-		var deltaY = oldest.y - y; // positive when scrolling UP (y decreasing)
-		var deltaT = now - oldest.t;
+		const oldest = scrollSamples[0];
+		const deltaY = oldest.y - y; // positive when scrolling UP (y decreasing)
+		const deltaT = now - oldest.t;
 		// Must be: scrolling up ≥800px in <500ms AND currently in top 200px.
 		if (deltaY < 800 || deltaT > 500 || y > 200) {
 			return;
 		}
-		var snapshot = readCartSnapshot();
+		const snapshot = readCartSnapshot();
 		if (snapshot.items_count <= 0) {
 			return;
 		}

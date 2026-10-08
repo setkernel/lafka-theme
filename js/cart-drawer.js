@@ -30,10 +30,10 @@
   // Sum the per-item quantities (each rendered as "×N") across a node list of
   // .lafka-cart-drawer__qty elements.
   function countQtyNodes(qtyNodes) {
-    var total = 0;
+    let total = 0;
     Array.prototype.forEach.call(qtyNodes, function (node) {
-      var digits = (node.textContent || '').replace(/[^0-9]/g, '');
-      var n = parseInt(digits, 10);
+      const digits = (node.textContent || '').replace(/[^0-9]/g, '');
+      const n = parseInt(digits, 10);
       if (!isNaN(n)) { total += n; }
     });
     return total;
@@ -46,25 +46,25 @@
   // carry no fragments arg, but they fire AFTER WC has replaced the DOM nodes,
   // so the live-DOM read is accurate for them.
   function liveCartCount(fragments) {
-    var itemsHtml = fragments && fragments['ul.lafka-cart-drawer__items'];
+    const itemsHtml = fragments && fragments['ul.lafka-cart-drawer__items'];
     if (itemsHtml) {
       // Parse in an inert document (no script execution, no thumbnail refetch).
-      var doc = new DOMParser().parseFromString('<div>' + itemsHtml + '</div>', 'text/html');
+      const doc = new DOMParser().parseFromString('<div>' + itemsHtml + '</div>', 'text/html');
       return countQtyNodes(doc.querySelectorAll('.lafka-cart-drawer__qty'));
     }
     return countQtyNodes(document.querySelectorAll('.lafka-cart-drawer__items .lafka-cart-drawer__qty'));
   }
 
   function writeCartCount(count) {
-    var text = String(count);
-    var nodes = document.querySelectorAll('[data-lafka-cart-count], [data-lafka-cart-count-pill]');
+    const text = String(count);
+    const nodes = document.querySelectorAll('[data-lafka-cart-count], [data-lafka-cart-count-pill]');
     Array.prototype.forEach.call(nodes, function (node) {
       node.textContent = text;
     });
   }
 
   function syncCartCount(event, fragments) {
-    var itemsHtml = fragments && fragments['ul.lafka-cart-drawer__items'];
+    const itemsHtml = fragments && fragments['ul.lafka-cart-drawer__items'];
     // Skip when there's no authoritative source on this page (no fragment and
     // no drawer item list in the DOM) so we never clobber the correct
     // server-rendered count with a false 0.
@@ -82,10 +82,10 @@
   // -------------------------------------------------------------------------
   // Drawer slide-in + focus trap.
   // -------------------------------------------------------------------------
-  var drawer = document.querySelector('.lafka-cart-drawer');
+  const drawer = document.querySelector('.lafka-cart-drawer');
   if (!drawer) return;
 
-  var lastFocus = null;
+  let lastFocus = null;
 
   // ---------------------------------------------------------------------------
   // Background isolation (f092 — a11y). The drawer behaves as a modal: it locks
@@ -100,11 +100,11 @@
   // (functions.php) as a sibling of #header/#content, so inert-ing those
   // wrappers never disables the drawer. We must NOT inert document.body — the
   // drawer lives inside it.
-  var BACKGROUND_SELECTORS = ['#header', '#content'];
+  const BACKGROUND_SELECTORS = ['#header', '#content'];
 
   function setBackgroundInert(on) {
     BACKGROUND_SELECTORS.forEach(function (selector) {
-      var node = document.querySelector(selector);
+      const node = document.querySelector(selector);
       if (!node) return;
       if (on) {
         node.setAttribute('inert', '');
@@ -131,7 +131,7 @@
     // lets the visible + inert state settle first, so focus reliably lands on
     // the drawer's first control. (requestAnimationFrame is unreliable here —
     // it is throttled when the page is not actively painting.) (WCAG 2.4.3)
-    var f = drawer.querySelector('button, a, [tabindex="0"]');
+    const f = drawer.querySelector('button, a, [tabindex="0"]');
     if (f && f.focus) {
       setTimeout(function () {
         if (drawer.dataset.open === 'true') { f.focus(); }
@@ -157,9 +157,9 @@
   document.addEventListener('keydown', function (e) {
     if (e.key === 'Escape' && drawer.dataset.open === 'true') close();
     if (e.key === 'Tab' && drawer.dataset.open === 'true') {
-      var focusables = Array.prototype.slice.call(drawer.querySelectorAll('button, a, [tabindex]:not([tabindex="-1"])'));
-      var first = focusables[0];
-      var last  = focusables[focusables.length - 1];
+      const focusables = Array.prototype.slice.call(drawer.querySelectorAll('button, a, [tabindex]:not([tabindex="-1"])'));
+      const first = focusables[0];
+      const last  = focusables[focusables.length - 1];
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
@@ -175,22 +175,22 @@
   // the row now in its place (or the last row), or the empty state's "Browse
   // the menu" when the order is empty.
   // ---------------------------------------------------------------------------
-  var removedIndex = -1;
+  let removedIndex = -1;
 
   document.addEventListener('click', function (e) {
-    var btn = e.target.closest && e.target.closest('.remove_from_cart_button');
+    const btn = e.target.closest && e.target.closest('.remove_from_cart_button');
     if (!btn || !drawer.contains(btn)) return;
-    var rows = Array.prototype.slice.call(drawer.querySelectorAll('.lafka-cart-drawer__items > li'));
+    const rows = Array.prototype.slice.call(drawer.querySelectorAll('.lafka-cart-drawer__items > li'));
     removedIndex = rows.indexOf(btn.closest('li'));
   }, true);
 
   function focusAfterRemove(index) {
-    var active = document.activeElement;
+    const active = document.activeElement;
     if (active && active !== document.body && drawer.contains(active)) return;
-    var rows = drawer.querySelectorAll('.lafka-cart-drawer__items > .lafka-cart-drawer__item');
-    var target;
+    const rows = drawer.querySelectorAll('.lafka-cart-drawer__items > .lafka-cart-drawer__item');
+    let target;
     if (rows.length) {
-      var row = rows[Math.min(index, rows.length - 1)];
+      const row = rows[Math.min(index, rows.length - 1)];
       target = row.querySelector('.lafka-cart-drawer__remove') || row.querySelector('button:not([disabled]), a[href]');
     } else {
       target = drawer.querySelector('.lafka-cart-drawer__empty-cta');
@@ -203,7 +203,7 @@
   }
 
   $(document.body).on('removed_from_cart', function () {
-    var index = removedIndex;
+    const index = removedIndex;
     removedIndex = -1;
     if (index < 0 || drawer.dataset.open !== 'true') return;
     // After WooCommerce's own handler has swapped the fragments in.
@@ -211,7 +211,7 @@
   });
 
   document.addEventListener('click', function (e) {
-    var trigger = e.target.closest && e.target.closest('[data-lafka-cart-open]');
+    const trigger = e.target.closest && e.target.closest('[data-lafka-cart-open]');
     if (trigger) { e.preventDefault(); open(); }
   });
 })(window.jQuery);

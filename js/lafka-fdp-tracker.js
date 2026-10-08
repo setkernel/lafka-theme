@@ -60,15 +60,15 @@
 		if (!fdpEl || !fdpEl.dataset) {
 			return null;
 		}
-		var threshold = parseFloat(fdpEl.dataset.threshold);
-		var value = parseFloat(fdpEl.dataset.value);
-		var remaining = parseFloat(fdpEl.dataset.remaining);
-		var pct = parseInt(fdpEl.dataset.pct, 10);
-		var state = fdpEl.dataset.state || 'below';
+		const threshold = parseFloat(fdpEl.dataset.threshold);
+		const value = parseFloat(fdpEl.dataset.value);
+		const remaining = parseFloat(fdpEl.dataset.remaining);
+		const pct = parseInt(fdpEl.dataset.pct, 10);
+		const state = fdpEl.dataset.state || 'below';
 		if (isNaN(threshold) || threshold <= 0) {
 			return null;
 		}
-		var safeValue = isNaN(value) ? 0 : value;
+		const safeValue = isNaN(value) ? 0 : value;
 		return {
 			threshold: threshold,
 			value: safeValue,
@@ -89,9 +89,9 @@
 		if (!window.dataLayer || typeof window.dataLayer.push !== 'function') {
 			return;
 		}
-		var payload = { event: eventName };
+		const payload = { event: eventName };
 		if (params && typeof params === 'object') {
-			for (var key in params) {
+			for (const key in params) {
 				if (Object.prototype.hasOwnProperty.call(params, key)) {
 					payload[key] = params[key];
 				}
@@ -108,28 +108,28 @@
 	 * strong when no .lafka-fdp is mounted (operator disabled threshold).
 	 */
 	function updateCartSnapshot() {
-		var itemsCount = 0;
-		var pill = document.querySelector('[data-lafka-cart-count-pill]');
+		let itemsCount = 0;
+		const pill = document.querySelector('[data-lafka-cart-count-pill]');
 		if (pill) {
-			var parsed = parseInt(pill.textContent || '0', 10);
+			const parsed = parseInt(pill.textContent || '0', 10);
 			if (!isNaN(parsed)) {
 				itemsCount = parsed;
 			}
 		}
-		var value = 0;
-		var fdpEl = document.querySelector('.lafka-fdp');
+		let value = 0;
+		const fdpEl = document.querySelector('.lafka-fdp');
 		if (fdpEl) {
-			var fdpState = readFdpState(fdpEl);
+			const fdpState = readFdpState(fdpEl);
 			if (fdpState) {
 				value = fdpState.value;
 			}
 		}
 		if (0 === value) {
 			// Fallback when threshold is disabled and no .lafka-fdp exists.
-			var sub = document.querySelector('.lafka-cart-drawer__subtotal strong');
+			const sub = document.querySelector('.lafka-cart-drawer__subtotal strong');
 			if (sub) {
-				var raw = (sub.textContent || '').replace(/[^\d.-]/g, '');
-				var parsedVal = parseFloat(raw);
+				const raw = (sub.textContent || '').replace(/[^\d.-]/g, '');
+				const parsedVal = parseFloat(raw);
 				if (!isNaN(parsedVal)) {
 					value = parsedVal;
 				}
@@ -149,7 +149,7 @@
 	// gate. Lives at module scope so it survives fragment refreshes within
 	// the same page view. Reset on every cart change that drops back below
 	// the threshold — legitimate re-crossing should fire again.
-	var unlockedFired = false;
+	let unlockedFired = false;
 
 	/**
 	 * Fire free_delivery_unlocked exactly once per crossing.
@@ -184,7 +184,7 @@
 		if (typeof window !== 'undefined' && typeof window.lafkaFdpFormatCurrency === 'function') {
 			return window.lafkaFdpFormatCurrency(value);
 		}
-		var num = parseFloat(value);
+		let num = parseFloat(value);
 		if (isNaN(num)) {
 			num = 0;
 		}
@@ -200,8 +200,8 @@
 	 * attributes change.
 	 */
 	function buildFdpElement(state) {
-		var root = document.createElement('div');
-		var contextClass = state.context === 'cart' ? 'lafka-fdp--cart-page' : 'lafka-fdp--drawer';
+		const root = document.createElement('div');
+		const contextClass = state.context === 'cart' ? 'lafka-fdp--cart-page' : 'lafka-fdp--drawer';
 		root.className = 'lafka-fdp ' + contextClass;
 		root.setAttribute('data-lafka-fdp', '');
 		root.dataset.state = state.state;
@@ -212,24 +212,24 @@
 		root.setAttribute('role', 'status');
 		root.setAttribute('aria-live', 'polite');
 
-		var label = document.createElement('div');
+		const label = document.createElement('div');
 		label.className = 'lafka-fdp__label';
-		var title = document.createElement('span');
+		const title = document.createElement('span');
 		title.className = 'lafka-fdp__title';
 		title.textContent = state.reached
 			? '✓ Free delivery unlocked'
 			: 'Add ' + formatCurrency(state.remaining) + ' more for free delivery!';
 		label.appendChild(title);
 
-		var bar = document.createElement('div');
+		const bar = document.createElement('div');
 		bar.className = 'lafka-fdp__bar';
 		bar.setAttribute('aria-hidden', 'true');
-		var fill = document.createElement('div');
+		const fill = document.createElement('div');
 		fill.className = 'lafka-fdp__fill';
 		fill.style.width = state.pct + '%';
 		bar.appendChild(fill);
 
-		var sub = document.createElement('div');
+		const sub = document.createElement('div');
 		sub.className = 'lafka-fdp__sub';
 		sub.textContent =
 			formatCurrency(state.value) +
@@ -258,17 +258,17 @@
 		fdpEl.dataset.remaining = String(state.remaining);
 		fdpEl.dataset.pct = String(state.pct);
 
-		var fill = fdpEl.querySelector('.lafka-fdp__fill');
+		const fill = fdpEl.querySelector('.lafka-fdp__fill');
 		if (fill) {
 			fill.style.width = state.pct + '%';
 		}
-		var titleEl = fdpEl.querySelector('.lafka-fdp__title');
+		const titleEl = fdpEl.querySelector('.lafka-fdp__title');
 		if (titleEl) {
 			titleEl.textContent = state.reached
 				? '✓ Free delivery unlocked'
 				: 'Add ' + formatCurrency(state.remaining) + ' more for free delivery!';
 		}
-		var subEl = fdpEl.querySelector('.lafka-fdp__sub');
+		const subEl = fdpEl.querySelector('.lafka-fdp__sub');
 		if (subEl) {
 			subEl.textContent =
 				formatCurrency(state.value) +
@@ -291,7 +291,7 @@
 	 * threshold), leave the plain text alone — gracefully degrades.
 	 */
 	function syncDrawerFdpFromFragment() {
-		var drawerTotal = document.querySelector('.lafka-cart-drawer .lafka-cart-drawer__total');
+		const drawerTotal = document.querySelector('.lafka-cart-drawer .lafka-cart-drawer__total');
 		if (!drawerTotal) {
 			return;
 		}
@@ -300,20 +300,20 @@
 		// server render. We use its data-threshold as our source of truth
 		// for the threshold value (Customizer-driven, doesn't change
 		// per-AJAX).
-		var existingFdp = drawerTotal.querySelector('.lafka-fdp');
-		var thresholdRef = existingFdp ? readFdpState(existingFdp) : null;
+		const existingFdp = drawerTotal.querySelector('.lafka-fdp');
+		const thresholdRef = existingFdp ? readFdpState(existingFdp) : null;
 
 		// Fragment re-render may have replaced our .lafka-fdp with the
 		// plain .lafka-cart-drawer__threshold notice. Look for both.
-		var plainThreshold = drawerTotal.querySelector('.lafka-cart-drawer__threshold');
+		const plainThreshold = drawerTotal.querySelector('.lafka-cart-drawer__threshold');
 
 		// Read the current subtotal off the fragment-emitted strong tag.
-		var subtotalStrong = drawerTotal.querySelector('.lafka-cart-drawer__subtotal strong');
-		var currentValue = 0;
+		const subtotalStrong = drawerTotal.querySelector('.lafka-cart-drawer__subtotal strong');
+		let currentValue = 0;
 		if (subtotalStrong) {
 			// Strip currency symbols + commas, parse the float.
-			var subtotalText = (subtotalStrong.textContent || '').replace(/[^\d.-]/g, '');
-			var parsedVal = parseFloat(subtotalText);
+			const subtotalText = (subtotalStrong.textContent || '').replace(/[^\d.-]/g, '');
+			const parsedVal = parseFloat(subtotalText);
 			if (!isNaN(parsedVal)) {
 				currentValue = parsedVal;
 			}
@@ -328,11 +328,11 @@
 			return;
 		}
 
-		var threshold = thresholdRef.threshold;
-		var remaining = Math.max(0, threshold - currentValue);
-		var reached = remaining <= 0;
-		var pct = Math.max(0, Math.min(100, Math.round((currentValue / threshold) * 100)));
-		var nextState = {
+		const threshold = thresholdRef.threshold;
+		const remaining = Math.max(0, threshold - currentValue);
+		const reached = remaining <= 0;
+		const pct = Math.max(0, Math.min(100, Math.round((currentValue / threshold) * 100)));
+		const nextState = {
 			context: 'drawer',
 			threshold: threshold,
 			value: currentValue,
@@ -352,7 +352,7 @@
 		} else if (plainThreshold) {
 			// No prior .lafka-fdp survived; build one from scratch and
 			// swap in for the plugin's plain notice.
-			var newFdp = buildFdpElement(nextState);
+			const newFdp = buildFdpElement(nextState);
 			plainThreshold.parentNode.replaceChild(newFdp, plainThreshold);
 		}
 
@@ -383,7 +383,7 @@
 	 * regardless of which path triggered the update.
 	 */
 	function bindCartListeners() {
-		var $body = window.jQuery ? window.jQuery(document.body) : null;
+		const $body = window.jQuery ? window.jQuery(document.body) : null;
 		if (!$body) {
 			// No jQuery — initial render still wired the snapshot below
 			// but we can't subscribe to WC AJAX events without it. WC
@@ -392,7 +392,7 @@
 			return;
 		}
 
-		var events = [
+		const events = [
 			'added_to_cart',
 			'removed_from_cart',
 			'wc_fragments_refreshed',
@@ -415,7 +415,7 @@
 		// initial unlocked-gate check so the event fires for customers
 		// who land on /cart/ already past the threshold.
 		updateCartSnapshot();
-		var initialFdp = document.querySelector('.lafka-fdp');
+		const initialFdp = document.querySelector('.lafka-fdp');
 		if (initialFdp) {
 			maybeFireUnlocked(readFdpState(initialFdp));
 		}

@@ -33,7 +33,7 @@
 	}
 
 	function getWcAjaxUrl(endpoint) {
-		var params = window.wc_add_to_cart_params || {};
+		const params = window.wc_add_to_cart_params || {};
 		if (params.wc_ajax_url) {
 			return params.wc_ajax_url.replace('%%endpoint%%', endpoint);
 		}
@@ -57,8 +57,8 @@
 	 */
 	function add(productId, trigger, opts) {
 		opts = opts || {};
-		var fallbackUrl = opts.fallbackUrl || '';
-		var ajaxUrl = getWcAjaxUrl('add_to_cart');
+		const fallbackUrl = opts.fallbackUrl || '';
+		const ajaxUrl = getWcAjaxUrl('add_to_cart');
 
 		if (!ajaxUrl || !window.jQuery) {
 			// No WC AJAX available — degrade to plain link.
@@ -67,7 +67,7 @@
 		}
 
 		setPillState(trigger, 'loading');
-		var $body = window.jQuery(document.body);
+		const $body = window.jQuery(document.body);
 		$body.trigger('adding_to_cart', [window.jQuery(trigger), { product_id: productId }]);
 
 		window.jQuery.post(ajaxUrl, {
@@ -103,11 +103,11 @@
 	}
 
 	function handleActivation(pill) {
-		var action = pill.dataset.lafkaQuickaddAction;
+		const action = pill.dataset.lafkaQuickaddAction;
 		if (action === 'add') {
 			ajaxAddToCart(pill);
 		} else {
-			var url = pill.dataset.lafkaQuickaddUrl;
+			const url = pill.dataset.lafkaQuickaddUrl;
 			if (url) { window.location.href = url; }
 		}
 	}
@@ -115,7 +115,7 @@
 	// Capture-phase click handler — intercepts BEFORE the parent <a>
 	// would bubble its own navigation.
 	document.addEventListener('click', function (e) {
-		var pill = findPill(e.target);
+		const pill = findPill(e.target);
 		if (!pill) { return; }
 		e.preventDefault();
 		e.stopPropagation();

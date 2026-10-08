@@ -31,14 +31,14 @@
 	}
 
 	function setText(selector, value) {
-		var bar = $bar();
+		const bar = $bar();
 		if (!bar) { return; }
-		var el = bar.querySelector(selector);
+		const el = bar.querySelector(selector);
 		if (el) { el.textContent = value; }
 	}
 
 	function update(count, subtotalText) {
-		var bar = $bar();
+		const bar = $bar();
 		if (!bar) { return; }
 		setText('[data-lafka-cart-count]', String(count));
 		if (subtotalText) {
@@ -52,20 +52,20 @@
 		// containing the rendered mini-cart HTML. Parse it via DOMParser
 		// (inert document, no script execution) and pull just the subtotal
 		// text + item count.
-		var miniCartHtml = fragments && fragments['div.widget_shopping_cart_content'];
+		const miniCartHtml = fragments && fragments['div.widget_shopping_cart_content'];
 		if (!miniCartHtml) { return; }
-		var doc = new DOMParser().parseFromString('<div>' + miniCartHtml + '</div>', 'text/html');
-		var subtotalEl = doc.querySelector(
+		const doc = new DOMParser().parseFromString('<div>' + miniCartHtml + '</div>', 'text/html');
+		const subtotalEl = doc.querySelector(
 			'.woocommerce-mini-cart__total .woocommerce-Price-amount, .total .woocommerce-Price-amount'
 		);
-		var countItems = doc.querySelectorAll('.woocommerce-mini-cart .mini_cart_item, .mini_cart_item');
-		var count = countItems.length;
-		var subtotalText = subtotalEl ? subtotalEl.textContent.trim() : '';
+		const countItems = doc.querySelectorAll('.woocommerce-mini-cart .mini_cart_item, .mini_cart_item');
+		const count = countItems.length;
+		const subtotalText = subtotalEl ? subtotalEl.textContent.trim() : '';
 		update(count, subtotalText);
 	}
 
 	function init() {
-		var bar = $bar();
+		const bar = $bar();
 		if (!bar) { return; }
 		if (!bar.hidden) { applyBodyPadding(true); }
 

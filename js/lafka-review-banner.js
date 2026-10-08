@@ -54,19 +54,19 @@
 		return;
 	}
 
-	var settings = window.lafkaReviewBannerSettings || {};
-	var restRoot = settings.restRoot || '/wp-json/';
-	var restNonce = settings.restNonce || '';
-	var blocklist = Array.isArray(settings.pageBlocklist) ? settings.pageBlocklist : [
+	const settings = window.lafkaReviewBannerSettings || {};
+	const restRoot = settings.restRoot || '/wp-json/';
+	const restNonce = settings.restNonce || '';
+	const blocklist = Array.isArray(settings.pageBlocklist) ? settings.pageBlocklist : [
 		'/cart/', '/checkout/', '/order-received/', '/my-account/'
 	];
 
 	// ─────────────────────────────────────────────────────────────────────
 	// Conversion-page guard — JS-side double-check.
 	// ─────────────────────────────────────────────────────────────────────
-	var currentPath = window.location && window.location.pathname ? window.location.pathname : '';
-	for (var i = 0; i < blocklist.length; i++) {
-		var token = blocklist[i];
+	const currentPath = window.location && window.location.pathname ? window.location.pathname : '';
+	for (let i = 0; i < blocklist.length; i++) {
+		const token = blocklist[i];
 		if (token && currentPath.indexOf(token) !== -1) {
 			return;
 		}
@@ -76,11 +76,11 @@
 	// Cookie reader — bail when the plugin hasn't set the show flag.
 	// ─────────────────────────────────────────────────────────────────────
 	function getCookieValue(name) {
-		var raw = document.cookie || '';
-		var pairs = raw.split(';');
-		for (var p = 0; p < pairs.length; p++) {
-			var parts = pairs[p].split('=');
-			var key = (parts[0] || '').trim();
+		const raw = document.cookie || '';
+		const pairs = raw.split(';');
+		for (let p = 0; p < pairs.length; p++) {
+			const parts = pairs[p].split('=');
+			const key = (parts[0] || '').trim();
 			if (key === name) {
 				return decodeURIComponent((parts[1] || '').trim());
 			}
@@ -102,9 +102,9 @@
 		if (!window.dataLayer || typeof window.dataLayer.push !== 'function') {
 			return;
 		}
-		var payload = { event: eventName };
+		const payload = { event: eventName };
 		if (params && typeof params === 'object') {
-			for (var key in params) {
+			for (const key in params) {
 				if (Object.prototype.hasOwnProperty.call(params, key)) {
 					payload[key] = params[key];
 				}
@@ -120,7 +120,7 @@
 	// ─────────────────────────────────────────────────────────────────────
 	function postBeacon(path) {
 		try {
-			var url = restRoot.replace(/\/$/, '') + path;
+			const url = restRoot.replace(/\/$/, '') + path;
 			if (typeof window.fetch !== 'function') {
 				return;
 			}
@@ -141,14 +141,14 @@
 	// ─────────────────────────────────────────────────────────────────────
 	// Boot — once per page.
 	// ─────────────────────────────────────────────────────────────────────
-	var hasRun = false;
+	let hasRun = false;
 	function init() {
 		if (hasRun) {
 			return;
 		}
 		hasRun = true;
 
-		var banner = document.querySelector('.lafka-review-banner');
+		const banner = document.querySelector('.lafka-review-banner');
 		if (!banner) {
 			// Partial didn't render (e.g. SSR raced cookie set; banner will
 			// render on the next page load).
@@ -164,7 +164,7 @@
 		postBeacon('/lafka/v1/review-banner-shown');
 
 		// Bind close button.
-		var closeBtn = banner.querySelector('.lafka-review-banner__close');
+		const closeBtn = banner.querySelector('.lafka-review-banner__close');
 		if (closeBtn) {
 			closeBtn.addEventListener('click', function (evt) {
 				if (evt && typeof evt.preventDefault === 'function') {
@@ -175,7 +175,7 @@
 		}
 
 		// Bind CTA click — fire event then let browser navigate.
-		var cta = banner.querySelector('.lafka-review-banner__cta');
+		const cta = banner.querySelector('.lafka-review-banner__cta');
 		if (cta) {
 			cta.addEventListener('click', function () {
 				pushEvent('review_banner_click', {
@@ -199,7 +199,7 @@
 	}
 
 	function dismiss() {
-		var banner = document.querySelector('.lafka-review-banner');
+		const banner = document.querySelector('.lafka-review-banner');
 		if (!banner) {
 			return;
 		}

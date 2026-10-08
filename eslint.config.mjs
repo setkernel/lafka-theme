@@ -28,11 +28,11 @@ export default [
 			},
 		},
 		rules: {
-			"no-unused-vars": "warn",
+			"no-unused-vars": "error",
 			"no-undef": "error",
-			"eqeqeq": ["warn", "smart"],
-			"no-var": "off",
-			"prefer-const": "off",
+			"eqeqeq": ["error", "smart"],
+			"no-var": "error",
+			"prefer-const": "error",
 			// Allow user code to declare locals that shadow our wp_localize_script globals.
 			"no-redeclare": ["error", { "builtinGlobals": false }],
 		},

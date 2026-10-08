@@ -6,16 +6,16 @@ jQuery( function( $ ) {
      **************************/
     jQuery.lafka_build_price_slider = function() {
 
-        var $body = $('body');
-        var $price_slider_form = $body.find('#lafka-price-filter-form');
+        const $body = $('body');
+        const $price_slider_form = $body.find('#lafka-price-filter-form');
 
         // Price slider uses jquery ui
-        var min_price = $price_slider_form.find('#min_price').data('min');
-        var max_price = $price_slider_form.find('#max_price').data('max');
-        var step      = $( '.price_slider_amount' ).data( 'step' ) || 1
+        const min_price = $price_slider_form.find('#min_price').data('min');
+        const max_price = $price_slider_form.find('#max_price').data('max');
+        const step      = $( '.price_slider_amount' ).data( 'step' ) || 1
 
-        var current_min_price = parseInt($price_slider_form.find('#min_price').val(), 10);
-        var current_max_price = parseInt($price_slider_form.find('#max_price').val(), 10);
+        let current_min_price = parseInt($price_slider_form.find('#min_price').val(), 10);
+        let current_max_price = parseInt($price_slider_form.find('#max_price').val(), 10);
 
         if(current_min_price < min_price) {
             current_min_price = min_price;
@@ -24,8 +24,8 @@ jQuery( function( $ ) {
             current_max_price = max_price;
         }
 
-        var currency_pos = $price_slider_form.data('currency_pos');
-        var currency_symbol = $price_slider_form.data('currency_symbol');
+        const currency_pos = $price_slider_form.data('currency_pos');
+        const currency_symbol = $price_slider_form.data('currency_symbol');
 
         $body.on('price_slider_create price_slider_slide', function (event, min, max) {
             if (currency_pos === "left") {
@@ -95,11 +95,11 @@ jQuery( function( $ ) {
         });
 
         $(document.body).on('price_slider_change', function () {
-            var form = $('.price_slider').closest('form').get(0);
-            var $form = $(form);
+            const form = $('.price_slider').closest('form').get(0);
+            const $form = $(form);
 
-            var currentUrlParams = window.location.search;
-            var url = $form.attr('action') + lafkaUpdateUrlParameters(currentUrlParams, $form.serialize());
+            const currentUrlParams = window.location.search;
+            const url = $form.attr('action') + lafkaUpdateUrlParameters(currentUrlParams, $form.serialize());
 
             $(document.body).trigger('lafka_products_filter_ajax', [url, $(this)]);
         });

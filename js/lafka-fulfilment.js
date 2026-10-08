@@ -15,18 +15,18 @@
 ( function () {
 	'use strict';
 
-	var cfg = window.lafkaCfg || {};
-	var KEY = cfg.fulfilmentKey || 'lafka.fulfilment';
-	var COOKIE = 'lafka_order_method';
-	var MODES = [ 'pickup', 'delivery' ];
+	const cfg = window.lafkaCfg || {};
+	const KEY = cfg.fulfilmentKey || 'lafka.fulfilment';
+	const COOKIE = 'lafka_order_method';
+	const MODES = [ 'pickup', 'delivery' ];
 
 	function readCookie() {
-		var m = new RegExp( '(?:^|;\\s*)' + COOKIE + '=([^;]+)' ).exec( document.cookie );
+		const m = new RegExp( '(?:^|;\\s*)' + COOKIE + '=([^;]+)' ).exec( document.cookie );
 		return m ? decodeURIComponent( m[ 1 ] ) : '';
 	}
 
 	function read() {
-		var value = readCookie();
+		let value = readCookie();
 		if ( MODES.indexOf( value ) === -1 ) {
 			try {
 				value = window.localStorage.getItem( KEY ) || '';
@@ -38,7 +38,7 @@
 	}
 
 	function write( method ) {
-		var secure = window.location.protocol === 'https:' ? '; Secure' : '';
+		const secure = window.location.protocol === 'https:' ? '; Secure' : '';
 		document.cookie = COOKIE + '=' + method + '; path=/; max-age=31536000; SameSite=Lax' + secure;
 		try {
 			window.localStorage.setItem( KEY, method );
@@ -55,7 +55,7 @@
 			note.hidden = note.getAttribute( 'data-lafka-fulfilment-note' ) !== method;
 		} );
 		Array.prototype.forEach.call( document.querySelectorAll( '[data-lafka-fulfilment-text]' ), function ( node ) {
-			var label = node.getAttribute( 'data-lafka-fulfilment-' + method );
+			const label = node.getAttribute( 'data-lafka-fulfilment-' + method );
 			if ( label ) {
 				node.textContent = label;
 			}
@@ -69,27 +69,27 @@
 	// choice everywhere else. Pickup rates are the plugin's pickup method ids
 	// (lafkaCfg.pickupMethods); every other rate — including the plugin's
 	// "Delivery" placeholder shown before an address — is delivery.
-	var PICKUP_METHODS = Array.isArray( cfg.pickupMethods ) ? cfg.pickupMethods : [ 'local_pickup', 'pickup_location' ];
-	var applyingRate = false;
+	const PICKUP_METHODS = Array.isArray( cfg.pickupMethods ) ? cfg.pickupMethods : [ 'local_pickup', 'pickup_location' ];
+	let applyingRate = false;
 
 	function rateMode( value ) {
 		return PICKUP_METHODS.indexOf( String( value ).split( ':' )[ 0 ] ) === -1 ? 'delivery' : 'pickup';
 	}
 
 	function selectRate( method ) {
-		var groups = {};
+		const groups = {};
 		Array.prototype.forEach.call( document.querySelectorAll( 'input[type="radio"][name^="shipping_method"]' ), function ( radio ) {
 			( groups[ radio.name ] = groups[ radio.name ] || [] ).push( radio );
 		} );
 		Object.keys( groups ).forEach( function ( name ) {
-			var radios = groups[ name ];
-			var current = radios.filter( function ( r ) {
+			const radios = groups[ name ];
+			const current = radios.filter( function ( r ) {
 				return r.checked;
 			} )[ 0 ];
 			if ( current && rateMode( current.value ) === method ) {
 				return;
 			}
-			var match = radios.filter( function ( r ) {
+			const match = radios.filter( function ( r ) {
 				return rateMode( r.value ) === method;
 			} )[ 0 ];
 			if ( ! match ) {
@@ -121,7 +121,7 @@
 	}
 
 	document.addEventListener( 'change', function ( e ) {
-		var input = e.target;
+		const input = e.target;
 		if ( input && input.matches && input.matches( '[data-lafka-fulfilment-input]' ) && input.checked ) {
 			choose( input.value, 'radio' );
 		} else if ( ! applyingRate && input && input.matches && input.matches( 'input[type="radio"][name^="shipping_method"]' ) && input.checked ) {
@@ -131,14 +131,14 @@
 
 	// The /menu/ and cart page controllers announce their own changes.
 	document.addEventListener( 'lafka:fulfilment-change', function ( e ) {
-		var detail = e.detail || {};
+		const detail = e.detail || {};
 		if ( detail.source !== 'lafka-fulfilment' && detail.mode ) {
 			choose( detail.mode, 'controls' );
 		}
 	} );
 
 	function init() {
-		var method = read();
+		const method = read();
 		if ( method ) {
 			sync( method );
 			// The cookie is the preference of record: keep the controllers'

@@ -9,17 +9,17 @@
 (function () {
 	'use strict';
 
-	var dialog = document.getElementById( 'lafka-search-dialog' );
+	const dialog = document.getElementById( 'lafka-search-dialog' );
 	if ( ! dialog || typeof dialog.showModal !== 'function' ) {
 		return;
 	}
 
-	var toggles = document.querySelectorAll( '[data-lafka-search-toggle]' );
+	const toggles = document.querySelectorAll( '[data-lafka-search-toggle]' );
 	Array.prototype.forEach.call( toggles, function ( toggle ) {
 		toggle.addEventListener( 'click', function ( event ) {
 			event.preventDefault();
 			dialog.showModal();
-			var input = dialog.querySelector( 'input[type="search"]' );
+			const input = dialog.querySelector( 'input[type="search"]' );
 			if ( input ) {
 				input.focus();
 			}

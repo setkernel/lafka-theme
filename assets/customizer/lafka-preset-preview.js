@@ -10,10 +10,10 @@
 ( function ( api ) {
 	'use strict';
 
-	var data = window.lafkaPresetPreview || { payloads: {} };
+	const data = window.lafkaPresetPreview || { payloads: {} };
 
 	function styleEl( id ) {
-		var el = document.getElementById( id );
+		let el = document.getElementById( id );
 		if ( ! el ) {
 			// dynamic-css always exists; PTL/fonts are absent when Peppery is
 			// active (empty inline CSS renders no tag) — create the shell so
@@ -26,7 +26,7 @@
 	}
 
 	function applyPreset( slug ) {
-		var payload = data.payloads[ slug ];
+		const payload = data.payloads[ slug ];
 		if ( ! payload ) {
 			return;
 		}

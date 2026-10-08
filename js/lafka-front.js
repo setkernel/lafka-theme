@@ -1,7 +1,7 @@
 (function($) {
     "use strict";
-    var lafka_ajaxXHR = null;
-    var is_rtl = false;
+    let lafka_ajaxXHR = null;
+    let is_rtl = false;
     if (lafka_main_js_params.is_rtl === 'true') {
         is_rtl = true;
     }
@@ -18,7 +18,7 @@
      * @param {Object} opts        Optional IntersectionObserver init options.
      */
     function lafkaOnVisible(el, fn, opts) {
-        var node = (el && el.jquery) ? el.get(0) : el;
+        const node = (el && el.jquery) ? el.get(0) : el;
         if (!node || typeof IntersectionObserver === 'undefined') {
             // Legacy fallback: fire immediately so the animated elements at
             // least settle into their final state instead of staying invisible.
@@ -27,8 +27,8 @@
             }
             return;
         }
-        var observer = new IntersectionObserver(function(entries, obs) {
-            for (var i = 0; i < entries.length; i++) {
+        const observer = new IntersectionObserver(function(entries, obs) {
+            for (let i = 0; i < entries.length; i++) {
                 if (entries[i].isIntersecting) {
                     fn.call(node);
                     obs.unobserve(node);
@@ -130,12 +130,12 @@
         checkCommentsHeight();
         checkFoodmenuHeight();
 
-        var customTitleHeight = $('body.lafka_transparent_header #header').height();
+        const customTitleHeight = $('body.lafka_transparent_header #header').height();
         $('body.lafka_transparent_header .lafka_title_holder .inner').css({ "padding-top": customTitleHeight + 160, "padding-bottom": customTitleHeight - 60 });
 
         $('p.demo_store').prependTo('#header');
 
-        var $accountMenuSliderElement = $('body.woocommerce-account .content_holder #customer_login.col2-set, .content_holder .woocommerce #customer_login.u-columns.col2-set');
+        const $accountMenuSliderElement = $('body.woocommerce-account .content_holder #customer_login.col2-set, .content_holder .woocommerce #customer_login.u-columns.col2-set');
         // GX T-25: owl only loads on legacy surfaces — guard the call.
         if ($accountMenuSliderElement.length && typeof $.fn.owlCarousel === 'function') {
             $accountMenuSliderElement.addClass('owl-carousel');
@@ -180,7 +180,7 @@
         // -------------------------------------------------------------------------------------------------------
 
         $(document).find("a#toggle_switch").on("click", function() {
-            var $togglerone = $(this).siblings("#togglerone");
+            const $togglerone = $(this).siblings("#togglerone");
             if ($(this).hasClass("swap")) {
                 $(this).removeClass("swap")
                 $togglerone.slideToggle("slow");
@@ -277,7 +277,7 @@
 
         function subtractQty() {
             const $input = $(this).parent().find('input[type=number]');
-            let quantity = parseInt($input.val());
+            const quantity = parseInt($input.val());
 
             if (isNaN(quantity)) {
                 $input.val(1);
@@ -289,7 +289,7 @@
         }
 
         function lafka_handle_quantity_on_listing() {
-            var $add_to_cart_button = $(this).closest(".links").find(".add_to_cart_button");
+            const $add_to_cart_button = $(this).closest(".links").find(".add_to_cart_button");
 
             // For AJAX add-to-cart actions
             $add_to_cart_button.attr("data-quantity", jQuery(this).val());
@@ -315,16 +315,16 @@
         });
 
         // Smooth scroll
-        var scrollDuration = 0;
+        let scrollDuration = 0;
         if (lafka_main_js_params.enable_smooth_scroll) {
             scrollDuration = 1500;
         }
 
         $("li.menu-item a[href*='#']:not([href='#'])").on('click', function() {
             if (location.pathname.replace(/^\//, '') === this.pathname.replace(/^\//, '') && location.hostname === this.hostname) {
-                var hashVal = this.hash;
+                const hashVal = this.hash;
                 if (!hashVal || !/^#[a-zA-Z0-9_-]+$/.test(hashVal)) return;
-                var target = $(document.getElementById(hashVal.slice(1)));
+                let target = $(document.getElementById(hashVal.slice(1)));
                 target = target.length ? target : $('[name=' + CSS.escape(hashVal.slice(1)) + ']');
                 if (target.length) {
                     $('html,body').animate({
@@ -339,32 +339,32 @@
          * This part handles the menu highlighting functionality.
          * When using anchors
          */
-        var aChildren = $("li.menu-item a[href*='#']:not([href='#'])"); // find the a children of the list items
-        var aArray = []; // create the empty aArray
-        for (var i = 0; i < aChildren.length; i++) {
-            var aChild = aChildren[i];
-            var ahref = $(aChild).prop('href');
+        const aChildren = $("li.menu-item a[href*='#']:not([href='#'])"); // find the a children of the list items
+        const aArray = []; // create the empty aArray
+        for (let i = 0; i < aChildren.length; i++) {
+            const aChild = aChildren[i];
+            const ahref = $(aChild).prop('href');
             aArray.push(ahref);
         } // this for loop fills the aArray with attribute href values
 
         // Throttled scroll handler using requestAnimationFrame
-        var scrollTicking = false;
+        let scrollTicking = false;
         $(window).on('scroll', function() {
             if (!scrollTicking) {
                 window.requestAnimationFrame(function() {
-                    var windowPos = $(window).scrollTop();
-                    var windowHeight = $(window).height();
-                    var docHeight = $(document).height();
+                    const windowPos = $(window).scrollTop();
+                    const windowHeight = $(window).height();
+                    const docHeight = $(document).height();
 
-                    for (var i = 0; i < aArray.length; i++) {
-                        var theID = aArray[i];
-                        var theHash;
+                    for (let i = 0; i < aArray.length; i++) {
+                        const theID = aArray[i];
+                        let theHash;
                         try { theHash = new URL(theID).hash; } catch { continue; }
                         if (!theHash || !/^#[a-zA-Z0-9_-]+$/.test(theHash)) continue;
-                        var theEl = document.getElementById(theHash.slice(1));
+                        const theEl = document.getElementById(theHash.slice(1));
                         if (theEl) {
-                            var divPos = $(theEl).offset().top - 145;
-                            var divHeight = $(theEl).height();
+                            const divPos = $(theEl).offset().top - 145;
+                            const divHeight = $(theEl).height();
                             if (windowPos >= divPos && windowPos < (divPos + divHeight)) {
                                 $("li.current-menu-item").removeClass("current-menu-item");
                                 $("li.menu-item a").filter(function() { return this.href === theID; }).parent().addClass("current-menu-item");
@@ -374,7 +374,7 @@
 
                     if (windowPos + windowHeight === docHeight) {
                         if (!$("li.menu-item:last-child").hasClass("current-menu-item")) {
-                            var navActiveCurrent = $("li.current-menu-item a").prop("href");
+                            const navActiveCurrent = $("li.current-menu-item a").prop("href");
                             $("li.menu-item a").filter(function() { return this.href === navActiveCurrent; }).parent().removeClass("current-menu-item");
                             $("li.menu-item:last-child a").addClass("current-menu-item");
                         }
@@ -395,20 +395,19 @@
             // serialize the same form.cart, so the AJAX add path is identical.
             $(document).on('click', '.single_add_to_cart_button, [data-lafka-add-to-cart]', function(e) {
 
-                var $add_to_cart_form = $(this).closest('form.cart');
+                const $add_to_cart_form = $(this).closest('form.cart');
 
-                if ($add_to_cart_form.length) {
-                    var is_combo_update_from_cart = $add_to_cart_form.find('input[name="update-combo"]').length !== 0;
-                    if (is_combo_update_from_cart) {
-                        return true;
-                    }
-                    var is_variable = $add_to_cart_form.hasClass('variations_form');
-                    var is_grouped = $add_to_cart_form.hasClass('grouped_form');
-                    var is_external = $add_to_cart_form.prop('method') === 'get';
-                    var is_subscription = $add_to_cart_form.closest("div.product").hasClass("has-subscription-plans");
-                } else {
+                if (!$add_to_cart_form.length) {
                     return true;
                 }
+                const is_combo_update_from_cart = $add_to_cart_form.find('input[name="update-combo"]').length !== 0;
+                if (is_combo_update_from_cart) {
+                    return true;
+                }
+                const is_variable = $add_to_cart_form.hasClass('variations_form');
+                const is_grouped = $add_to_cart_form.hasClass('grouped_form');
+                const is_external = $add_to_cart_form.prop('method') === 'get';
+                const is_subscription = $add_to_cart_form.closest("div.product").hasClass("has-subscription-plans");
 
                 if (!is_grouped && !is_external && !is_subscription) {
 
@@ -421,19 +420,19 @@
 
                     // If we've chosen unavailable variation don't execute
                     if (!$(this).is('.wc-variation-is-unavailable,.wc-variation-selection-needed')) {
-                        var quantity = $add_to_cart_form.find('input[name="quantity"]').val();
+                        const quantity = $add_to_cart_form.find('input[name="quantity"]').val();
 
-                        var product_id;
+                        let product_id;
                         if (is_variable) {
                             product_id = $add_to_cart_form.find('input[name="add-to-cart"]').val();
                         } else {
                             product_id = $add_to_cart_form.find('button[name="add-to-cart"]').val();
                         }
 
-                        var data = { product_id: product_id, quantity: quantity, product_sku: "" };
+                        const data = { product_id: product_id, quantity: quantity, product_sku: "" };
 
                         // AJAX add to cart request.
-                        var $thisbutton = $(this);
+                        const $thisbutton = $(this);
 
                         // Trigger event.
                         $(document.body).trigger('adding_to_cart', [$thisbutton, data]);
@@ -442,7 +441,7 @@
                         $thisbutton.addClass('loading');
                         $thisbutton.prop('disabled', true);
 
-                        var add_to_cart_ajax_data = {};
+                        const add_to_cart_ajax_data = {};
                         add_to_cart_ajax_data.action = 'lafka_wc_add_cart';
                         add_to_cart_ajax_data.security = lafka_main_js_params.nonce;
 
@@ -487,7 +486,7 @@
         // if is set infinite load on shop - run it de..
         if (lafka_main_js_params.enable_infinite_on_shop === 'yes') {
             // hide the pagination
-            var $pagination = $('#products-wrapper').find('div.pagination');
+            const $pagination = $('#products-wrapper').find('div.pagination');
             $pagination.hide();
 
             // If enabled load more button
@@ -498,17 +497,17 @@
                 });
             } else {
                 // Track scrolling, hunting for infinite ajax load (throttled)
-                var infiniteTicking = false;
+                let infiniteTicking = false;
                 $(window).on("scroll", function() {
                     if (!infiniteTicking) {
                         window.requestAnimationFrame(function() {
                             // Native bbox check replaces the old isInViewport
                             // jQuery selector (:in-viewport). Inside a scroll
                             // throttler, IO would be overkill — bbox is fine.
-                            var $pager = $(document.body).find('div.lafka-shop-pager.lafka-infinite');
+                            const $pager = $(document.body).find('div.lafka-shop-pager.lafka-infinite');
                             if ($pager.length) {
-                                var rect = $pager[0].getBoundingClientRect();
-                                var inView = rect.top < window.innerHeight && rect.bottom > 0;
+                                const rect = $pager[0].getBoundingClientRect();
+                                const inView = rect.top < window.innerHeight && rect.bottom > 0;
                                 if (inView) {
                                     $(document.body).find('div.lafka-shop-pager.lafka-infinite a.next_page').trigger("click");
                                 }
@@ -530,8 +529,8 @@
 
                 $(this).data('requestRunning', true);
 
-                var $products = $('#products-wrapper').find('div.box-products.woocommerce');
-                var $pageStatus = $pagination.prevAll('.lafka-page-load-status');
+                const $products = $('#products-wrapper').find('div.box-products.woocommerce');
+                const $pageStatus = $pagination.prevAll('.lafka-page-load-status');
 
                 $pageStatus.children('.infinite-scroll-last').hide();
                 $pageStatus.children('.infinite-scroll-request').show();
@@ -551,9 +550,9 @@
 
         if (typeof lafka_foodmenu_js_params !== 'undefined') {
 
-            var $container = $('div.foodmenus', '#main');
+            const $container = $('div.foodmenus', '#main');
 
-            var $isotopedGrid = $container.isotope({
+            const $isotopedGrid = $container.isotope({
                 itemSelector: 'div.foodmenu-unit',
                 layoutMode: 'masonry',
                 transitionDuration: '0.5s'
@@ -566,14 +565,14 @@
 
             // bind filter button click
             $('.lafka-foodmenu-categories').on('click', 'a', function() {
-                var filterValue = $(this).prop('data-filter');
+                const filterValue = $(this).prop('data-filter');
                 // use filterFn if matches value
                 $isotopedGrid.isotope({ filter: filterValue });
             });
 
             // change is-checked class on buttons
             $('div.lafka-foodmenu-categories', '#main').each(function(i, buttonGroup) {
-                var $buttonGroup = $(buttonGroup);
+                const $buttonGroup = $(buttonGroup);
                 $buttonGroup.on('click', 'a', function() {
                     $buttonGroup.find('.is-checked').removeClass('is-checked');
                     $(this).addClass('is-checked');
@@ -584,7 +583,7 @@
         // AJAXIFY products listing filters, widgets, etc
         if (lafka_main_js_params.use_product_filter_ajax === 'yes') {
             // products ordering and per page
-            var woocommerceOrderingForm = $(document.body).find('form.woocommerce-ordering');
+            const woocommerceOrderingForm = $(document.body).find('form.woocommerce-ordering');
             if (woocommerceOrderingForm.length) {
                 woocommerceOrderingForm.on('submit', function(e) {
                     e.preventDefault();
@@ -593,8 +592,8 @@
                 $(document.body).on('change', 'form.woocommerce-ordering select.orderby, form.woocommerce-ordering select.per_page', function(e) {
                     e.preventDefault();
 
-                    var currentUrlParams = window.location.search;
-                    var url = window.location.href.replace(window.location.search, '') + lafkaUpdateUrlParameters(currentUrlParams, woocommerceOrderingForm.serialize());
+                    const currentUrlParams = window.location.search;
+                    const url = window.location.href.replace(window.location.search, '') + lafkaUpdateUrlParameters(currentUrlParams, woocommerceOrderingForm.serialize());
 
                     $(document.body).trigger('lafka_products_filter_ajax', [url, woocommerceOrderingForm]);
                 });
@@ -606,11 +605,11 @@
             });
 
             $(document.body).on('price_slider_change', function() {
-                var form = $('.price_slider').closest('form').get(0);
-                var $form = $(form);
+                const form = $('.price_slider').closest('form').get(0);
+                const $form = $(form);
 
-                var currentUrlParams = window.location.search;
-                var url = $form.prop('action') + lafkaUpdateUrlParameters(currentUrlParams, $form.serialize());
+                const currentUrlParams = window.location.search;
+                const url = $form.prop('action') + lafkaUpdateUrlParameters(currentUrlParams, $form.serialize());
 
                 $(document.body).trigger('lafka_products_filter_ajax', [url, $(this)]);
             });
@@ -618,14 +617,14 @@
             // lafka_product_filter
             $(document.body).on('click', 'div.lafka_product_filter a', function(e) {
                 e.preventDefault();
-                var url = $(this).prop('href');
+                const url = $(this).prop('href');
                 $(document.body).trigger('lafka_products_filter_ajax', [url, $(this)]);
             });
 
             // reset all filters
             $(document.body).on('click', 'a.lafka-reset-filters', function(e) {
                 e.preventDefault();
-                var url = $(this).prop('href');
+                const url = $(this).prop('href');
                 $(document.body).trigger('lafka_products_filter_ajax', [url, $(this)]);
             });
         }
@@ -641,10 +640,10 @@
 
         // Handle unavailable variations swatches on single product
         $(document.body).find(".variations_form").on("woocommerce_update_variation_values", function() {
-            var $swatches = $('.lafka-wcs-swatches');
+            const $swatches = $('.lafka-wcs-swatches');
             $swatches.find('.swatch').removeClass('lafka-not-available');
             $swatches.each(function() {
-                var $select = $(this).prev().find('select');
+                const $select = $(this).prev().find('select');
                 $(this).find('.swatch').each(function() {
                     if (!$select.find('option[value="' + $(this).data('value') + '"]').length) {
                         $(this).addClass('lafka-not-available');
@@ -669,10 +668,10 @@
     // Handle the products filtering
     $(document.body).on('lafka_products_filter_ajax', function(e, url) {
 
-        var $products_wrapper = $('#products-wrapper');
-        var $products = $products_wrapper.find('div.box-products.woocommerce');
-        var $pagination = $products_wrapper.find('div.pagination');
-        var $pageStatus = $pagination.prevAll('.lafka-page-load-status');
+        const $products_wrapper = $('#products-wrapper');
+        const $products = $products_wrapper.find('div.box-products.woocommerce');
+        const $pagination = $products_wrapper.find('div.pagination');
+        const $pageStatus = $pagination.prevAll('.lafka-page-load-status');
 
         $.lafka_show_loader();
 
@@ -702,7 +701,7 @@
     });
 
     // Throttled resize handler using requestAnimationFrame
-    var resizeTicking = false;
+    let resizeTicking = false;
     window.addEventListener('resize', function() {
         if (!resizeTicking) {
             window.requestAnimationFrame(function() {
@@ -729,9 +728,9 @@
             return;
         }
         $(prodHoldElements).each(function() {
-            var data = $(this).find('.count_holder_small').data();
+            const data = $(this).find('.count_holder_small').data();
             if (typeof data !== 'undefined') {
-                var timeFormat = '{dn} {dl} {hn}:{mnn}:{snn}';
+                let timeFormat = '{dn} {dl} {hn}:{mnn}:{snn}';
                 if (typeof data.countdownShowDays !== 'undefined' && data.countdownShowDays === 'no') {
                     timeFormat = '{hn}:{mnn}:{snn}';
                 }
@@ -752,8 +751,8 @@
             return;
         }
         $(document.body).find('.lafka_order_hours_countdown').each(function() {
-            var count_to = '+' + $(this).data('diff-days') + 'd +' + $(this).data('diff-hours') + 'h +' + $(this).data('diff-minutes') + 'm +' + $(this).data('diff-seconds') + 's';
-            var counter_format = $(this).data('output-format');
+            const count_to = '+' + $(this).data('diff-days') + 'd +' + $(this).data('diff-hours') + 'h +' + $(this).data('diff-minutes') + 'm +' + $(this).data('diff-seconds') + 's';
+            const counter_format = $(this).data('output-format');
 
             $(this).countdown({
                 until: count_to,
@@ -764,7 +763,7 @@
     }
 
     function checkRevealFooter() {
-        var isReveal = $('#footer').height() - 1;
+        const isReveal = $('#footer').height() - 1;
         if (isReveal < 550 && $(document.body).hasClass("lafka_fullwidth")) {
             $('html.no-touch body.lafka_fullwidth.lafka-reveal-footer #content').css("margin-bottom", isReveal + "px");
             $('body.lafka_fullwidth.lafka-reveal-footer #footer').addClass('lafka_do_reveal');
@@ -776,8 +775,8 @@
     }
 
     function checkProductGalleryCarousel() {
-        var current_window_width = $(window).width();
-        var $singleProductImages = $(document.body).find('div.lafka-single-product .lafka-image-list-product-gallery .woocommerce-product-gallery__wrapper, .lafka_image_list_foodmenu .lafka_image_list');
+        const current_window_width = $(window).width();
+        const $singleProductImages = $(document.body).find('div.lafka-single-product .lafka-image-list-product-gallery .woocommerce-product-gallery__wrapper, .lafka_image_list_foodmenu .lafka_image_list');
 
         if (typeof $.fn.owlCarousel !== 'function') {
             return; // GX T-25: owl is not loaded on this surface.
@@ -803,10 +802,10 @@
     }
 
     function checkSummaryHeight() {
-        var $lafkaSummaryHeight = $('.lafka-product-summary-wrapper div.summary').height();
-        var $lafkaVisibleHeight = $(window).height();
-        var current_window_width = $(window).width();
-        var $body_summary = $("body, .lafka-product-summary-wrapper div.summary");
+        const $lafkaSummaryHeight = $('.lafka-product-summary-wrapper div.summary').height();
+        const $lafkaVisibleHeight = $(window).height();
+        const current_window_width = $(window).width();
+        const $body_summary = $("body, .lafka-product-summary-wrapper div.summary");
         if ($lafkaSummaryHeight < $lafkaVisibleHeight - 250 && current_window_width > 768) {
             $body_summary.addClass("lafka-sticky-summary");
         } else {
@@ -815,10 +814,10 @@
     }
 
     function checkSidebarHeight() {
-        var $lafkaSidebarHeight = $('.sidebar').height();
-        var $lafkaVisibleHeight = $(window).height();
-        var current_window_width = $(window).width();
-        var $body_sidebar = $("body, .sidebar");
+        const $lafkaSidebarHeight = $('.sidebar').height();
+        const $lafkaVisibleHeight = $(window).height();
+        const current_window_width = $(window).width();
+        const $body_sidebar = $("body, .sidebar");
         if ($lafkaSidebarHeight < $lafkaVisibleHeight - 250 && current_window_width > 768) {
             $body_sidebar.addClass("lafka-sticky-sidebar");
         } else {
@@ -827,9 +826,9 @@
     }
 
     function checkCommentsHeight() {
-        var $lafkaCommentsHeight = $('body.single-post #comments > #respond.comment-respond').height();
-        var $lafkaVisibleHeight = $(window).height();
-        var $body_summary = $("body.single-post #comments > #respond.comment-respond");
+        const $lafkaCommentsHeight = $('body.single-post #comments > #respond.comment-respond').height();
+        const $lafkaVisibleHeight = $(window).height();
+        const $body_summary = $("body.single-post #comments > #respond.comment-respond");
         if ($lafkaCommentsHeight < $lafkaVisibleHeight - 200) {
             $body_summary.addClass("lafka-sticky-comments");
         } else {
@@ -838,10 +837,10 @@
     }
 
     function checkFoodmenuHeight() {
-        var $lafkaFoodmenuHeight = $('.foodmenu_top div.one_third.last.project-data').height();
-        var $lafkaPortVisibleHeight = $(window).height();
-        var current_window_width = $(window).width();
-        var $body_PortSummary = $("body, .foodmenu_top div.one_third.last.project-data");
+        const $lafkaFoodmenuHeight = $('.foodmenu_top div.one_third.last.project-data').height();
+        const $lafkaPortVisibleHeight = $(window).height();
+        const current_window_width = $(window).width();
+        const $body_PortSummary = $("body, .foodmenu_top div.one_third.last.project-data");
         if ($lafkaFoodmenuHeight < $lafkaPortVisibleHeight - 250 && current_window_width > 768) {
             $body_PortSummary.addClass("lafka-sticky-summary");
         } else {
@@ -850,18 +849,18 @@
     }
 
     function lafka_fullwidth_elements() {
-        var $elements = $('#content:not(.has-sidebar) #products-wrapper .woocommerce-tabs.wc-tabs-wrapper, #content:not(.has-sidebar) p.woocommerce-thankyou-order-received, body.single-post #content:not(.has-sidebar) #comments, body.page #content:not(.has-sidebar) #comments, #content:not(.has-sidebar) ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details');
-        var $rtl = $('body.rtl');
-        var $contentDiv = $('#content');
+        const $elements = $('#content:not(.has-sidebar) #products-wrapper .woocommerce-tabs.wc-tabs-wrapper, #content:not(.has-sidebar) p.woocommerce-thankyou-order-received, body.single-post #content:not(.has-sidebar) #comments, body.page #content:not(.has-sidebar) #comments, #content:not(.has-sidebar) ul.woocommerce-order-overview.woocommerce-thankyou-order-details.order_details');
+        const $rtl = $('body.rtl');
+        const $contentDiv = $('#content');
 
         if ($contentDiv.length) {
             // P6-PERF-8: Hoist ALL geometry reads outside the .each() loop.
             // Old pattern called $contentDiv.width() twice and .css("width") once
             // per iteration, each forcing a layout recalc after the previous
             // iteration's .css() write had invalidated the layout.
-            var row_padding = 40;
-            var contentWidth = $contentDiv.width();
-            var contentOffset = -(contentWidth - parseFloat($('#content > .inner').css("width"))) / 2 - row_padding + 15;
+            const row_padding = 40;
+            const contentWidth = $contentDiv.width();
+            const contentOffset = -(contentWidth - parseFloat($('#content > .inner').css("width"))) / 2 - row_padding + 15;
 
             $elements.each(function() {
                 $(this).css({
@@ -885,8 +884,8 @@
     // Showing loader
     jQuery.lafka_show_loader = function() {
 
-        var overlay;
-        var $shopbypricefilter_overlay = $('.shopbypricefilter-overlay');
+        let overlay;
+        const $shopbypricefilter_overlay = $('.shopbypricefilter-overlay');
         if ($shopbypricefilter_overlay.length) {
             overlay = $shopbypricefilter_overlay;
         } else {
@@ -908,11 +907,11 @@
         // so the browser could return the post-constraint width.
         // Fix: read window geometry once before the loop; read overlay geometry
         // in a dedicated read pass before applying any CSS writes.
-        var winHeight = $(window).outerHeight();
-        var winWidth  = $(window).outerWidth();
+        const winHeight = $(window).outerHeight();
+        const winWidth  = $(window).outerWidth();
         $shopbypricefilter_overlay.each(function() {
-            var overlay = this;
-            var img;
+            const overlay = this;
+            let img;
 
             if ($('img', overlay).length) {
                 img = $('img', overlay);
@@ -921,8 +920,8 @@
             }
 
             // Read phase: capture overlay dimensions before writing anything.
-            var overlayHeight = $(overlay).height();
-            var overlayWidth  = $(overlay).width();
+            const overlayHeight = $(overlay).height();
+            const overlayWidth  = $(overlay).width();
 
             // Write phase: all CSS writes together; no reads in between.
             $(img).css({
@@ -944,16 +943,16 @@
     // Refresh product filters area
     jQuery.lafka_refresh_product_filters_areas = function(response) {
         // lafka_product_filter widget
-        var $lafka_product_filters = $(document.body).find('div.lafka_product_filter');
-        var $new_lafka_product_filters = $(response).find('div.lafka_product_filter');
+        const $lafka_product_filters = $(document.body).find('div.lafka_product_filter');
+        const $new_lafka_product_filters = $(response).find('div.lafka_product_filter');
 
         if ($lafka_product_filters.length > $new_lafka_product_filters.length) {
-            var existing_titles = [];
-            var found_titles = [];
+            const existing_titles = [];
+            const found_titles = [];
 
             $lafka_product_filters.each(function() {
-                var $curr_elmnt = $(this);
-                var title = $curr_elmnt.find('h3:first-of-type').html();
+                const $curr_elmnt = $(this);
+                const title = $curr_elmnt.find('h3:first-of-type').html();
                 existing_titles.push(title);
 
                 $new_lafka_product_filters.each(function() {
@@ -964,7 +963,7 @@
                 });
             });
 
-            for (var i = 0; i < existing_titles.length; i++) {
+            for (let i = 0; i < existing_titles.length; i++) {
                 if ($.inArray(existing_titles[i], found_titles) === -1) {
                     $lafka_product_filters.each(function() {
                         $(this).find("h3:contains('" + existing_titles[i] + "')").parent().remove();
@@ -985,7 +984,7 @@
 
         $.lafka_widget_columns();
 
-        var $price_slider_form = $(document).find('#lafka-price-filter-form');
+        const $price_slider_form = $(document).find('#lafka-price-filter-form');
         if ($price_slider_form.length === 0) {
             $(document).find('div#main').find('div.product-filter').prepend($(response).find('#lafka-price-filter-form'));
         } else {
@@ -1003,13 +1002,13 @@
 
     jQuery.lafka_handle_active_filters_reset_button = function() {
         // Show reset button if there are active filters
-        var $reset_button = $(document).find('div.lafka-filter-widgets-holder a.lafka-reset-filters');
+        const $reset_button = $(document).find('div.lafka-filter-widgets-holder a.lafka-reset-filters');
         if (typeof $reset_button !== 'undefined') {
-            var show_reset_button = false;
+            let show_reset_button = false;
 
-            var lafka_reset_query = $reset_button.data('lafka_reset_query');
+            const lafka_reset_query = $reset_button.data('lafka_reset_query');
             if (window.location.href.indexOf('?') !== -1) {
-                var right_side_of_the_url = window.location.href.substr(window.location.href.indexOf('?'));
+                const right_side_of_the_url = window.location.href.substr(window.location.href.indexOf('?'));
                 if (right_side_of_the_url !== lafka_reset_query) {
                     show_reset_button = true;
                 }
@@ -1090,8 +1089,8 @@
     // Refresh products list after ajax calls
     jQuery.lafka_refresh_products_after_ajax = function(response, $products, $pagination, $pageStatus) {
 
-        var $newProducts = $(response).find('.content_holder').find('.prod_hold');
-        var $pagination_html = $(response).find('.lafka-shop-pager .pagination').html();
+        const $newProducts = $(response).find('.content_holder').find('.prod_hold');
+        const $pagination_html = $(response).find('.lafka-shop-pager .pagination').html();
 
         if (typeof $pagination_html === 'undefined') {
             $pagination.html('');
@@ -1102,7 +1101,7 @@
 
         // Do the necessary for the appending products. GX T-25: imagesloaded
         // is not loaded on the counter surfaces — mark them loaded directly.
-        var markLoaded = function() {
+        const markLoaded = function() {
             $newProducts.each(function() {
                 $(this).addClass('lafka-infinite-loaded');
             });
@@ -1177,20 +1176,20 @@ function lafkaUpdateUrlParameters(currentParams, newParams) {
         return "?" + newParams;
     }
 
-    var newParamsObj = {};
+    const newParamsObj = {};
     newParams.split('&').forEach(function(x) {
-        var arr = x.split('=');
+        const arr = x.split('=');
         arr[1] && (newParamsObj[arr[0]] = arr[1]);
     });
 
-    for (var prop in newParamsObj) {
+    for (const prop in newParamsObj) {
         // remove the hash part before operating on the uri
-        var i = currentParams.indexOf('#');
-        var hash = i === -1 ? '' : currentParams.substr(i);
+        const i = currentParams.indexOf('#');
+        const hash = i === -1 ? '' : currentParams.substr(i);
         currentParams = i === -1 ? currentParams : currentParams.substr(0, i);
 
-        var re = new RegExp("([?&])" + prop + "=.*?(&|$)", "i");
-        var separator = "&";
+        const re = new RegExp("([?&])" + prop + "=.*?(&|$)", "i");
+        const separator = "&";
         if (currentParams.match(re)) {
             currentParams = currentParams.replace(re, '$1' + prop + "=" + newParamsObj[prop] + '$2');
         } else {

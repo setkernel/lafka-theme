@@ -23,20 +23,20 @@
 		return;
 	}
 
-	var cfg = window.lafkaCheckoutFields || {};
-	var i18n = cfg.i18n || {};
-	var MIN_DIGITS = parseInt( cfg.phoneMinDigits, 10 );
+	const cfg = window.lafkaCheckoutFields || {};
+	const i18n = cfg.i18n || {};
+	let MIN_DIGITS = parseInt( cfg.phoneMinDigits, 10 );
 	if ( isNaN( MIN_DIGITS ) ) {
 		MIN_DIGITS = 7;
 	}
-	var MESSAGE_CLASS = 'checkout-inline-error-message';
+	const MESSAGE_CLASS = 'checkout-inline-error-message';
 
 	function labelText( row ) {
-		var label = row.querySelector( 'label' );
+		const label = row.querySelector( 'label' );
 		if ( ! label ) {
 			return '';
 		}
-		var copy = label.cloneNode( true );
+		const copy = label.cloneNode( true );
 		Array.prototype.forEach.call( copy.querySelectorAll( '.required, .optional, abbr, .screen-reader-text' ), function ( node ) {
 			node.parentNode.removeChild( node );
 		} );
@@ -44,9 +44,9 @@
 	}
 
 	function messageFor( row, field ) {
-		var empty = '' === String( field.value || '' ).trim();
+		const empty = '' === String( field.value || '' ).trim();
 		if ( row.classList.contains( 'woocommerce-invalid-required-field' ) && empty ) {
-			var label = labelText( row );
+			const label = labelText( row );
 			return label ? String( i18n.required || '%s is required.' ).replace( '%s', label ) : ( i18n.invalid || '' );
 		}
 		if ( row.classList.contains( 'woocommerce-invalid-email' ) ) {
@@ -63,7 +63,7 @@
 	}
 
 	function markPhone( row, field ) {
-		var value = String( field.value || '' ).trim();
+		const value = String( field.value || '' ).trim();
 		if ( ! MIN_DIGITS || '' === value || digits( value ) >= MIN_DIGITS ) {
 			return;
 		}
@@ -73,7 +73,7 @@
 	}
 
 	function describe( field ) {
-		var row = field.closest( '.form-row' );
+		const row = field.closest( '.form-row' );
 		if ( ! row || ! field.id ) {
 			return;
 		}
@@ -82,15 +82,15 @@
 		if ( row.classList.contains( 'validate-phone' ) ) {
 			markPhone( row, field );
 		}
-		var existing = row.querySelector( '.' + MESSAGE_CLASS );
+		let existing = row.querySelector( '.' + MESSAGE_CLASS );
 		if ( ! row.classList.contains( 'woocommerce-invalid' ) ) {
 			return; // WooCommerce already removed its message when the field validated.
 		}
-		var text = messageFor( row, field );
+		const text = messageFor( row, field );
 		if ( ! text ) {
 			return;
 		}
-		var id = field.id + '_description';
+		const id = field.id + '_description';
 		if ( ! existing ) {
 			existing = document.createElement( 'p' );
 			existing.className = MESSAGE_CLASS;
@@ -103,7 +103,7 @@
 	}
 
 	$( document.body ).on( 'validate change focusout', 'form.checkout .form-row .input-text, form.checkout .form-row select', function () {
-		var field = this;
+		const field = this;
 		window.setTimeout( function () {
 			describe( field );
 		}, 0 );

@@ -29,21 +29,21 @@
 		return;
 	}
 
-	var current = null;
+	let current = null;
 
 	function makeDialog(extraClass) {
-		var dlg = document.createElement('dialog');
+		const dlg = document.createElement('dialog');
 		dlg.className = 'lafka-dialog' + (extraClass ? ' ' + extraClass : '');
 		dlg.setAttribute('aria-modal', 'true');
 
-		var closeBtn = document.createElement('button');
+		const closeBtn = document.createElement('button');
 		closeBtn.type = 'button';
 		closeBtn.className = 'lafka-dialog__close';
 		closeBtn.setAttribute('aria-label', 'Close');
 		closeBtn.textContent = '×'; // multiplication sign as close glyph
 		closeBtn.addEventListener('click', function () { close(dlg); });
 
-		var content = document.createElement('div');
+		const content = document.createElement('div');
 		content.className = 'lafka-dialog__content';
 
 		dlg.appendChild(closeBtn);
@@ -92,8 +92,8 @@
 
 	function image(src, opts) {
 		opts = opts || {};
-		var dlg = makeDialog('lafka-dialog--image');
-		var img = document.createElement('img');
+		const dlg = makeDialog('lafka-dialog--image');
+		const img = document.createElement('img');
 		img.src = src;
 		img.alt = opts.alt || '';
 		img.className = 'lafka-dialog__image';
@@ -104,20 +104,20 @@
 
 	function gallery(items, startIndex) {
 		if (!items || !items.length) { return null; }
-		var index = startIndex || 0;
-		var dlg = makeDialog('lafka-dialog--gallery');
+		let index = startIndex || 0;
+		const dlg = makeDialog('lafka-dialog--gallery');
 
-		var img = document.createElement('img');
+		const img = document.createElement('img');
 		img.className = 'lafka-dialog__image';
 		img.alt = '';
 		dlg.__content.appendChild(img);
 
-		var caption = document.createElement('div');
+		const caption = document.createElement('div');
 		caption.className = 'lafka-dialog__caption';
 		dlg.__content.appendChild(caption);
 
 		function render() {
-			var it = items[index];
+			const it = items[index];
 			img.src = it.src;
 			img.alt = it.alt || '';
 			caption.textContent = it.title || '';
@@ -125,7 +125,7 @@
 			nextBtn.hidden = items.length < 2;
 		}
 
-		var prevBtn = document.createElement('button');
+		const prevBtn = document.createElement('button');
 		prevBtn.type = 'button';
 		prevBtn.className = 'lafka-dialog__nav lafka-dialog__nav--prev';
 		prevBtn.setAttribute('aria-label', 'Previous image');
@@ -135,7 +135,7 @@
 			render();
 		});
 
-		var nextBtn = document.createElement('button');
+		const nextBtn = document.createElement('button');
 		nextBtn.type = 'button';
 		nextBtn.className = 'lafka-dialog__nav lafka-dialog__nav--next';
 		nextBtn.setAttribute('aria-label', 'Next image');
@@ -160,12 +160,12 @@
 
 	function inline(html, opts) {
 		opts = opts || {};
-		var dlg = makeDialog('lafka-dialog--inline' + (opts.className ? ' ' + opts.className : ''));
+		const dlg = makeDialog('lafka-dialog--inline' + (opts.className ? ' ' + opts.className : ''));
 		if (typeof html === 'string') {
 			// Parse into an inert <template> so <script> tags don't execute
 			// (event handler attributes and other XSS vectors are still
 			// possible — see TRUST note at top of file).
-			var tpl = document.createElement('template');
+			const tpl = document.createElement('template');
 			tpl.innerHTML = html;
 			dlg.__content.appendChild(tpl.content.cloneNode(true));
 		} else if (html && html.nodeType === 1) {
@@ -176,8 +176,8 @@
 	}
 
 	function iframe(url) {
-		var dlg = makeDialog('lafka-dialog--iframe');
-		var frame = document.createElement('iframe');
+		const dlg = makeDialog('lafka-dialog--iframe');
+		const frame = document.createElement('iframe');
 		frame.src = toEmbedUrl(url);
 		frame.setAttribute('allowfullscreen', '');
 		frame.setAttribute('allow', 'accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture');
@@ -191,9 +191,9 @@
 	// Map common video URLs (YouTube watch links, Vimeo) to embed URLs.
 	// Direct file URLs (.mp4, .mov) pass through unchanged.
 	function toEmbedUrl(url) {
-		var yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?#]+)/);
+		const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&?#]+)/);
 		if (yt) { return 'https://www.youtube.com/embed/' + yt[1]; }
-		var vimeo = url.match(/vimeo\.com\/(\d+)/);
+		const vimeo = url.match(/vimeo\.com\/(\d+)/);
 		if (vimeo) { return 'https://player.vimeo.com/video/' + vimeo[1]; }
 		return url;
 	}

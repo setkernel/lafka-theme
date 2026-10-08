@@ -36,15 +36,15 @@
 	}
 
 	function formatMoney( n ) {
-		var c = window.lafkaPdpCurrency || {};
-		var sym = c.symbol || '$';
-		var dec = c.decimalSep || '.';
-		var thou = c.thousandSep || ',';
-		var decimals = typeof c.decimals === 'number' ? c.decimals : 2;
-		var fixed = n.toFixed( decimals );
-		var parts = fixed.split( '.' );
-		var withSep = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, thou );
-		var num = decimals > 0 ? withSep + dec + parts[ 1 ] : withSep;
+		const c = window.lafkaPdpCurrency || {};
+		const sym = c.symbol || '$';
+		const dec = c.decimalSep || '.';
+		const thou = c.thousandSep || ',';
+		const decimals = typeof c.decimals === 'number' ? c.decimals : 2;
+		const fixed = n.toFixed( decimals );
+		const parts = fixed.split( '.' );
+		const withSep = parts[ 0 ].replace( /\B(?=(\d{3})+(?!\d))/g, thou );
+		const num = decimals > 0 ? withSep + dec + parts[ 1 ] : withSep;
 		return c.position === 'right' ? num + sym : sym + num;
 	}
 
@@ -56,15 +56,15 @@
 	 * Returns { pa_size: 'medium', pa_crust: 'thin', ... }
 	 */
 	function getAttributeSelections( $form ) {
-		var sels = {};
+		const sels = {};
 		$form.find( 'table.variations select' ).each( function () {
-			var id = $( this ).attr( 'id' );
+			const id = $( this ).attr( 'id' );
 			if ( id ) {
 				sels[ id ] = $( this ).find( 'option:selected' ).val();
 			}
 		} );
 		$form.find( '.lafka-pdp-pickers input[type=radio]:checked' ).each( function () {
-			var name = $( this ).attr( 'name' ) || '';
+			const name = $( this ).attr( 'name' ) || '';
 			if ( name.indexOf( 'attribute_' ) === 0 ) {
 				sels[ name.substring( 'attribute_'.length ) ] = $( this ).val();
 			}
@@ -90,15 +90,15 @@
 	 * always present when per-attribute pricing is configured.
 	 */
 	function getEffectivePrice( $input, attrSelections ) {
-		var matrix = $input.data( 'attribute-raw-prices' );
+		const matrix = $input.data( 'attribute-raw-prices' );
 		if ( matrix && typeof matrix === 'object' ) {
-			for ( var attr in attrSelections ) {
+			for ( const attr in attrSelections ) {
 				if ( ! Object.prototype.hasOwnProperty.call( attrSelections, attr ) ) {
 					continue;
 				}
-				var val = attrSelections[ attr ];
+				const val = attrSelections[ attr ];
 				if ( matrix[ attr ] && val in matrix[ attr ] ) {
-					var p = parseFloat( matrix[ attr ][ val ] );
+					const p = parseFloat( matrix[ attr ][ val ] );
 					if ( ! isNaN( p ) ) {
 						return p;
 					}
@@ -108,19 +108,19 @@
 		// Fallback for non-matrix pricing: the input's original data-raw-price
 		// (set at page render). Read via .attr() not .data() to avoid jQuery's
 		// data-cache returning stale values.
-		var fallback = parseFloat( $input.attr( 'data-raw-price' ) );
+		const fallback = parseFloat( $input.attr( 'data-raw-price' ) );
 		return isNaN( fallback ) ? 0 : fallback;
 	}
 
 	function refreshSummary( $group, $form ) {
-		var attrSelections = getAttributeSelections( $form );
-		var count = 0;
-		var total = 0;
+		const attrSelections = getAttributeSelections( $form );
+		let count = 0;
+		let total = 0;
 		$group.find( 'input.addon-checkbox:checked, input.addon-radio:checked' ).each( function () {
 			count++;
 			total += getEffectivePrice( $( this ), attrSelections );
 		} );
-		var $summary = $group.find( '.lafka-addon-summary' ).first();
+		const $summary = $group.find( '.lafka-addon-summary' ).first();
 		if ( ! $summary.length ) {
 			return;
 		}
@@ -134,7 +134,7 @@
 	}
 
 	function initGroup( $group, $form ) {
-		var $heading = $group.find( '.addon-name' ).first();
+		const $heading = $group.find( '.addon-name' ).first();
 		if ( ! $heading.length ) {
 			return;
 		}
@@ -157,7 +157,7 @@
 	$( function () {
 		// Init at document ready. WC's variation_form may re-render parts of
 		// the DOM after the variation JS hydrates; we re-init on its events.
-		var $form = $( 'form.cart' );
+		const $form = $( 'form.cart' );
 		if ( ! $form.length ) {
 			return;
 		}
@@ -178,7 +178,7 @@
 
 		// Toggle group expand/collapse on heading click + keyboard.
 		$form.on( 'click keydown', '.product-addon .addon-name', function ( e ) {
-			var $toggle = $( this ).find( '.lafka-addon-toggle' );
+			const $toggle = $( this ).find( '.lafka-addon-toggle' );
 			if ( $toggle.length ) {
 				// GX T-19: the button toggles itself (lafka-plugin addons.js).
 				// A click on the rest of the heading bar (caret, summary) is
@@ -192,8 +192,8 @@
 				return;
 			}
 			e.preventDefault();
-			var $group = $( this ).closest( '.product-addon' );
-			var collapsed = $group.attr( 'data-collapsed' ) === 'true';
+			const $group = $( this ).closest( '.product-addon' );
+			const collapsed = $group.attr( 'data-collapsed' ) === 'true';
 			$group.attr( 'data-collapsed', collapsed ? 'false' : 'true' );
 			$( this ).attr( 'aria-expanded', collapsed ? 'true' : 'false' );
 		} );

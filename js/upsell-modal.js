@@ -10,12 +10,12 @@
 	if (!$) return;
 
 	document.addEventListener('click', function (e) {
-		var btn = e.target.closest && e.target.closest('.lafka-pdp-upsell__add');
+		const btn = e.target.closest && e.target.closest('.lafka-pdp-upsell__add');
 		if (!btn) return;
 		e.preventDefault();
-		var productId   = btn.dataset.productId;
-		var productType = btn.dataset.productType;
-		var permalink   = btn.dataset.permalink;
+		const productId   = btn.dataset.productId;
+		const productType = btn.dataset.productType;
+		const permalink   = btn.dataset.permalink;
 
 		if (productType === 'simple') {
 			addSimple(btn, productId);
@@ -26,9 +26,9 @@
 
 	function addSimple(btn, productId) {
 		btn.disabled = true;
-		var originalText = btn.textContent;
+		const originalText = btn.textContent;
 		btn.textContent = '...';
-		var endpoint = (window.wc_add_to_cart_params && window.wc_add_to_cart_params.wc_ajax_url
+		const endpoint = (window.wc_add_to_cart_params && window.wc_add_to_cart_params.wc_ajax_url
 			? window.wc_add_to_cart_params.wc_ajax_url.toString().replace('%%endpoint%%', 'add_to_cart')
 			: '/?wc-ajax=add_to_cart');
 		$.post(endpoint, { product_id: productId, quantity: 1 })
