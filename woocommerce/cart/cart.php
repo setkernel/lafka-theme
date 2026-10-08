@@ -47,7 +47,7 @@ if ( ! function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
 	 */
 	function lafka_localize_fulfilment_cfg( $handle ) {
 		static $done = array();
-		if ( isset( $done[ $handle ] ) || ! function_exists( 'wp_localize_script' ) ) {
+		if ( isset( $done[ $handle ] ) ) {
 			return;
 		}
 		$done[ $handle ] = true;

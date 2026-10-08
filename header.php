@@ -42,9 +42,9 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 	 * @return int Logo attachment ID, or 0 when none is configured.
 	 */
 	function lafka_get_logo_id() {
-		$lafka_custom_logo_id = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'custom_logo', 0 ) : 0;
-		$lafka_legacy_main    = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'lafka_theme_logo', 0 ) : 0;
-		$lafka_legacy_mobile  = function_exists( 'get_theme_mod' ) ? (int) get_theme_mod( 'lafka_mobile_theme_logo', 0 ) : 0;
+		$lafka_custom_logo_id = (int) get_theme_mod( 'custom_logo', 0 );
+		$lafka_legacy_main    = (int) get_theme_mod( 'lafka_theme_logo', 0 );
+		$lafka_legacy_mobile  = (int) get_theme_mod( 'lafka_mobile_theme_logo', 0 );
 
 		return $lafka_custom_logo_id ?: $lafka_legacy_main ?: $lafka_legacy_mobile;
 	}
@@ -182,7 +182,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 					$lafka_has_logo_img = true;
 				} else {
 					// Site icon as last-resort fallback.
-					$lafka_site_icon = function_exists( 'get_site_icon_url' ) ? get_site_icon_url( 96 ) : '';
+					$lafka_site_icon = get_site_icon_url( 96 );
 					if ( $lafka_site_icon ) {
 						printf(
 							'<img class="lafka-header__logo-img" src="%s" alt="%s" loading="eager">',
@@ -231,7 +231,7 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 					</a>
 				<?php endif; ?>
 
-				<?php if ( function_exists( 'is_user_logged_in' ) && function_exists( 'lafka_should_show_account_icon' ) && lafka_should_show_account_icon() ) : ?>
+				<?php if ( function_exists( 'lafka_should_show_account_icon' ) && lafka_should_show_account_icon() ) : ?>
 					<a class="lafka-header__icon-btn lafka-header__account" href="<?php echo esc_url( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) ); ?>" aria-label="<?php esc_attr_e( 'My account', 'lafka' ); ?>">
 						<i class="fa fa-user" aria-hidden="true"></i>
 					</a>

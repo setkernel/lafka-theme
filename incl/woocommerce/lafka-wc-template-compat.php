@@ -3,9 +3,9 @@
  * Version bridges for the theme's WooCommerce template overrides.
  *
  * The overrides in woocommerce/ track the newest core templates, but the theme
- * still supports WooCommerce back to its floor (9.5). Each helper here adopts a
- * newer core API when the running WooCommerce has it and falls back to the
- * previous behaviour otherwise, so a template never calls something that does
+ * still supports WooCommerce back to its floor (11.0). Each helper here adopts a
+ * core API added in 11.1 / 11.2 when the running WooCommerce has it and falls
+ * back to the 11.0 behaviour otherwise, so a template never calls something that does
  * not exist and never disagrees with the core partial it pairs with.
  *
  * Filter surface:
@@ -46,8 +46,8 @@ if ( ! function_exists( 'lafka_wc_product_media_items' ) ) {
 	 * Each item is an array with at least `media_type` ('image'|'video'),
 	 * `source_type` ('attachment'|'placeholder') and `id`. On WooCommerce 11.1+
 	 * this is core's own display ordering (featured image, gallery images,
-	 * positioned gallery videos, de-duplicated, placeholder when empty). On older
-	 * WooCommerce, core's product-thumbnails.php renders every gallery image
+	 * positioned gallery videos, de-duplicated, placeholder when empty). Before
+	 * WooCommerce 11.1, core's product-thumbnails.php renders every gallery image
 	 * itself, so the main slot is the featured image alone (or the placeholder).
 	 *
 	 * @param WC_Product $product Product.
@@ -128,7 +128,7 @@ if ( ! function_exists( 'lafka_wc_cart_item_product_name' ) ) {
 	 * Unfiltered display name of a cart line's product.
 	 *
 	 * WooCommerce 11.2 names a variation from the attributes the customer
-	 * actually selected (WC_Cart::get_item_product_name()); older versions use
+	 * actually selected (WC_Cart::get_item_product_name()); WooCommerce 11.0 / 11.1 use
 	 * the product's own name. The result is what core feeds into the
 	 * woocommerce_cart_item_name filter.
 	 *
@@ -155,7 +155,7 @@ if ( ! function_exists( 'lafka_wc_product_meta_category_orderby' ) ) {
 	 * Mirrors WooCommerce 11.2's single-product/meta.php: 'breadcrumb' by default,
 	 * filterable through core's woocommerce_product_meta_category_orderby, and
 	 * limited to the modes wc_get_product_category_list() accepts ('name',
-	 * 'breadcrumb', '' for plain term order). Older WooCommerce ignores the
+	 * 'breadcrumb', '' for plain term order). WooCommerce before 11.2 ignores the
 	 * argument and keeps its plain term order.
 	 *
 	 * @param WC_Product $product Product.

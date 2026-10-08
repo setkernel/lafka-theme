@@ -233,20 +233,11 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 			$style_class = 'owl-carousel lafka-owl-carousel';
 		}
 
-		// Get display mode - compatible with WC 3.3+
-		if ( function_exists( 'woocommerce_get_loop_display_mode' ) ) {
-			$display_type = woocommerce_get_loop_display_mode();
-		} else {
-			$display_type = is_product_category()
-				? get_option( 'woocommerce_category_archive_display', '' )
-				: get_option( 'woocommerce_shop_page_display', '' );
-		}
+		$display_type = woocommerce_get_loop_display_mode();
 		if ( 'subcategories' === $display_type || 'both' === $display_type ) {
 			$before_categories_html = '<div class="lafka_woo_categories_shop woocommerce ' . esc_attr( $style_class ) . '">';
-			if ( function_exists( 'woocommerce_maybe_show_product_subcategories' ) ) {
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- woocommerce_maybe_show_product_subcategories() returns WC core HTML with per-piece escaping.
-				echo woocommerce_maybe_show_product_subcategories( $before_categories_html );
-			}
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- woocommerce_maybe_show_product_subcategories() returns WC core HTML with per-piece escaping.
+			echo woocommerce_maybe_show_product_subcategories( $before_categories_html );
 			echo '</div>';
 		}
 
@@ -255,13 +246,7 @@ if ( ! function_exists( 'lafka_add_content_holder' ) ) {
 			Lafka_Branch_Locations::show_change_branch();
 		}
 
-		// Check if products will display - compatible with WC 4.0+
-		$lafka_products_will_display = true;
-		if ( function_exists( 'woocommerce_products_will_display' ) ) {
-			$lafka_products_will_display = woocommerce_products_will_display();
-		} else {
-			$lafka_products_will_display = ( 'subcategories' !== $display_type || is_search() || is_paged() );
-		}
+		$lafka_products_will_display = woocommerce_products_will_display();
 		if ( get_theme_mod( 'lafka_show_refine_area', true ) && $lafka_products_will_display ) {
 			echo '<div class="box-sort-filter' . ( is_active_sidebar( 'lafka_product_filters_sidebar' ) ? ' lafka-product-filters-has-widgets' : '' ) . '">';
 			echo '<div class="product-filter">';

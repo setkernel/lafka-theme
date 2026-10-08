@@ -40,7 +40,23 @@ git tags + GitHub Releases.
   - Removed settings are also dropped from the legacy-option migration map and
     `wpml-config.xml`.
 
+- **Compatibility code below the new floors**: the `version_compare( $wp_version, '3.8' )`
+  branch in `lafka_post_nav()`, and `function_exists()` guards for WordPress and
+  WooCommerce functions that exist at WP 7.0 / WC 11.0 (`wp_date`, `wp_timezone`,
+  `wp_doing_ajax`, `get_site_icon_url`, `get_the_privacy_policy_link`, `term_exists`,
+  `has_block`, `woocommerce_get_loop_display_mode`, `woocommerce_products_will_display`,
+  `wc_esc_json`, `woocommerce_output_all_notices`, and similar). Guards for plugin
+  presence, PHP extensions and core-mirrored template checks stay.
+
 ### Changed
+- **New platform floors**: WordPress 7.0 (tested up to 7.1), WooCommerce 11.0 (tested up
+  to 11.2), PHP 8.3 (style.css, readme.txt, composer.json, `.phpcs.xml.dist`, docs).
+  `theme.json` already uses the newest schema (version 3, `schemas.wp.org/wp/7.1`).
+- The GitHub updater reports the 7.0 / 7.1 WordPress requirement and tested versions
+  from named constants instead of stale literals (`5.0` / `6.7`).
+- WooCommerce template overrides synced to 11.2.0: `cart/cart-shipping.php`
+  8.8.0 -> 11.2.0 (package index normalised with `%d` in every printf, as core does);
+  every other override already matched its 11.2.0 core `@version`.
 - TGM Plugin Activation now registers only the Lafka plugin and WooCommerce, both
   required (no more optional YITH Wishlist, Revolution Slider or WPBakery entries).
 - `npm run i18n:pot` and `npm run previews:presets` now target the local stack

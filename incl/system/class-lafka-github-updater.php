@@ -20,6 +20,11 @@ class Lafka_GitHub_Updater {
 	const PLUGIN_ASSET = 'lafka-plugin.zip';
 	const PLUGIN_FILE  = 'lafka-plugin/lafka-plugin.php';
 
+	// WordPress floor and newest tested release reported to the update UI.
+	// Keep in step with `Requires at least` / `Tested up to` in style.css.
+	const WP_REQUIRES = '7.0';
+	const WP_TESTED   = '7.1';
+
 	const CACHE_SUCCESS    = 43200; // 12 hours
 	const CACHE_FAILURE    = 3600;  // 1 hour
 	const CACHE_RATE_LIMIT = 86400; // 24 hours — used when near rate limit
@@ -500,8 +505,8 @@ class Lafka_GitHub_Updater {
 			'description' => $current_theme->get( 'Description' ),
 			'changelog'   => ! empty( $release->body ) ? self::format_changelog( $release->body ) : '',
 		);
-		$info->requires      = '5.0';
-		$info->tested        = '6.7';
+		$info->requires      = self::WP_REQUIRES;
+		$info->tested        = self::WP_TESTED;
 
 		return $info;
 	}
@@ -546,7 +551,7 @@ class Lafka_GitHub_Updater {
 					'new_version' => $remote_version,
 					'url'         => 'https://github.com/' . self::PLUGIN_REPO,
 					'package'     => $download_url,
-					'tested'      => '6.7',
+					'tested'      => self::WP_TESTED,
 				);
 			} else {
 				self::log( 'Plugin update ' . $remote_version . ' available but asset "' . self::PLUGIN_ASSET . '" missing from release.', 'warning' );
@@ -591,8 +596,8 @@ class Lafka_GitHub_Updater {
 			'description' => 'Companion plugin for the Lafka WordPress theme.',
 			'changelog'   => ! empty( $release->body ) ? self::format_changelog( $release->body ) : '',
 		);
-		$info->requires      = '5.0';
-		$info->tested        = '6.7';
+		$info->requires      = self::WP_REQUIRES;
+		$info->tested        = self::WP_TESTED;
 		$info->banners       = array();
 
 		return $info;

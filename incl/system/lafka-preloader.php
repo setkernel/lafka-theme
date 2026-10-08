@@ -35,7 +35,7 @@ if ( ! function_exists( 'lafka_preloader_enabled' ) ) {
 	 * Whether the preloader mask renders on this request.
 	 */
 	function lafka_preloader_enabled(): bool {
-		$mods = function_exists( 'get_theme_mods' ) ? (array) get_theme_mods() : array();
+		$mods = (array) get_theme_mods();
 		// No stored value ⇒ the new default: off.
 		$on = array_key_exists( 'lafka_show_preloader', $mods ) && (bool) $mods['lafka_show_preloader'];
 

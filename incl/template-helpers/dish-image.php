@@ -93,8 +93,8 @@ if ( ! function_exists( 'lafka_image_is_cutout' ) ) {
 			if ( '1' === $cached || '0' === $cached ) {
 				$is = '1' === $cached;
 			} else {
-				$path = function_exists( 'get_attached_file' ) ? (string) get_attached_file( $attachment_id ) : '';
-				$meta = function_exists( 'wp_get_attachment_metadata' ) ? wp_get_attachment_metadata( $attachment_id ) : array();
+				$path = (string) get_attached_file( $attachment_id );
+				$meta = wp_get_attachment_metadata( $attachment_id );
 				// The smallest stored size is the cheapest to decode.
 				if ( '' !== $path && is_array( $meta ) && ! empty( $meta['sizes'] ) && is_array( $meta['sizes'] ) ) {
 					$sizes = $meta['sizes'];

@@ -2,8 +2,9 @@
 /**
  * Shipping Methods Display
  *
- * Lafka override of WooCommerce core cart/cart-shipping.php 8.8.0 (reviewed
- * against WooCommerce 10.9.1, which still ships 8.8.0). Two changes, both
+ * Lafka override of WooCommerce core cart/cart-shipping.php 11.2.0 (synced
+ * with WooCommerce 11.2.0: the package index is normalised with %d in every
+ * printf, as core does). Two changes, both
  * presentation only — every input keeps core's name/id/value/data-index, so
  * WooCommerce's cart.js / checkout.js shipping updates are untouched:
  *
@@ -21,7 +22,7 @@
  *
  * @see https://woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 8.8.0
+ * @version 11.2.0
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -60,7 +61,7 @@ if ( $lafka_is_pickup ) {
 						} else {
 							printf( '<input type="hidden" name="shipping_method[%1$d]" data-index="%1$d" id="shipping_method_%1$d_%2$s" value="%3$s" class="shipping_method" />', absint( $index ), esc_attr( sanitize_title( $method->id ) ), esc_attr( $method->id ) );
 						}
-						printf( '<label for="shipping_method_%1$s_%2$s">%3$s</label>', absint( $index ), esc_attr( sanitize_title( $method->id ) ), wp_kses_post( wc_cart_totals_shipping_method_label( $method ) ) );
+						printf( '<label for="shipping_method_%1$d_%2$s">%3$s</label>', absint( $index ), esc_attr( sanitize_title( $method->id ) ), wp_kses_post( wc_cart_totals_shipping_method_label( $method ) ) );
 						do_action( 'woocommerce_after_shipping_rate', $method, $index );
 						?>
 					</li>

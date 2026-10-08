@@ -108,9 +108,9 @@ if ( ! function_exists( 'lafka_enqueue_flexslider' ) ) {
 	/**
 	 * Enqueue FlexSlider and return the handle that provides it.
 	 *
-	 * WooCommerce 10.3+ registers FlexSlider 2.7.2 — the version the theme
+	 * WooCommerce registers FlexSlider 2.7.2 — the version the theme
 	 * bundles — as `wc-flexslider` (legacy alias `flexslider`), so it is reused
-	 * and product pages never load a second copy. Otherwise the bundled copy
+	 * and product pages never load a second copy. Without WooCommerce the bundled copy
 	 * loads under the theme's own `lafka-flexslider` handle; the theme never
 	 * claims the generic `flexslider` name another plugin may own.
 	 *

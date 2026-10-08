@@ -199,7 +199,7 @@ if ( ! function_exists( 'lafka_layout_theme_supports' ) ) {
 	function lafka_layout_theme_supports(): void {
 		if ( lafka_layout_is( 'drawer', 'counter' ) ) {
 			add_theme_support( 'lafka-drawer-stepper' );
-		} elseif ( function_exists( 'remove_theme_support' ) ) {
+		} else {
 			remove_theme_support( 'lafka-drawer-stepper' );
 		}
 	}

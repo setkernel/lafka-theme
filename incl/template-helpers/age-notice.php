@@ -57,7 +57,7 @@ if ( ! function_exists( 'lafka_age_notice_applies' ) ) {
 			if ( in_array( $slug, $restricted, true ) ) {
 				return true;
 			}
-			if ( is_object( $term ) && ! empty( $term->term_id ) && function_exists( 'get_ancestors' ) && function_exists( 'get_term' ) ) {
+			if ( is_object( $term ) && ! empty( $term->term_id ) ) {
 				foreach ( (array) get_ancestors( (int) $term->term_id, 'product_cat', 'taxonomy' ) as $ancestor_id ) {
 					$ancestor = get_term( (int) $ancestor_id, 'product_cat' );
 					if ( is_object( $ancestor ) && in_array( (string) ( $ancestor->slug ?? '' ), $restricted, true ) ) {
@@ -114,7 +114,7 @@ if ( ! function_exists( 'lafka_product_age_notice_html' ) ) {
 		if ( ! is_object( $product ) || ! method_exists( $product, 'get_id' ) || empty( lafka_age_notice_slugs() ) ) {
 			return '';
 		}
-		$terms = function_exists( 'wp_get_post_terms' ) ? wp_get_post_terms( (int) $product->get_id(), 'product_cat' ) : array();
+		$terms = wp_get_post_terms( (int) $product->get_id(), 'product_cat' );
 		if ( ! is_array( $terms ) || empty( $terms ) ) {
 			return '';
 		}

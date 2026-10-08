@@ -49,7 +49,7 @@ $lafka_row_prices = lafka_price_columns( $lafka_row_p );
 // Menu-controls filters (search / dietary chips) key off these, exactly as the
 // classic card li does.
 $lafka_row_tags = array();
-$lafka_row_tag_terms = function_exists( 'wp_get_post_terms' ) ? wp_get_post_terms( $lafka_row_id, 'product_tag', array( 'fields' => 'slugs' ) ) : array();
+$lafka_row_tag_terms = wp_get_post_terms( $lafka_row_id, 'product_tag', array( 'fields' => 'slugs' ) );
 if ( is_array( $lafka_row_tag_terms ) ) {
 	$lafka_row_tags = array_map( 'strtolower', $lafka_row_tag_terms );
 }
@@ -58,13 +58,13 @@ if ( $lafka_row_p->is_featured() && ! in_array( 'popular', $lafka_row_tags, true
 }
 
 // GA4 select_item contract (docs/TRACKING.md), on the name link.
-$lafka_row_cats = function_exists( 'wp_get_post_terms' ) ? wp_get_post_terms( $lafka_row_id, 'product_cat', array( 'fields' => 'names' ) ) : array();
+$lafka_row_cats = wp_get_post_terms( $lafka_row_id, 'product_cat', array( 'fields' => 'names' ) );
 $lafka_row_cat  = is_array( $lafka_row_cats ) && $lafka_row_cats ? (string) $lafka_row_cats[0] : '';
 if ( isset( $args['list'] ) ) {
 	$lafka_row_list = (string) $args['list'];
-} elseif ( function_exists( 'is_tax' ) && is_tax( 'product_cat' ) ) {
+} elseif ( is_tax( 'product_cat' ) ) {
 	$lafka_row_list = (string) single_term_title( '', false );
-} elseif ( function_exists( 'is_page' ) && is_page() ) {
+} elseif ( is_page() ) {
 	$lafka_row_list = (string) get_the_title();
 } else {
 	$lafka_row_list = 'Menu';

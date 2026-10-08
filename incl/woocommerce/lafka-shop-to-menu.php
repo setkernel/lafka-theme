@@ -100,7 +100,7 @@ if ( ! function_exists( 'lafka_shop_to_menu_request_path' ) ) {
 if ( ! function_exists( 'lafka_shop_to_menu_redirect' ) ) {
 	/** template_redirect: hand the shop page (or a legacy /shop/ 404) to /menu/. */
 	function lafka_shop_to_menu_redirect(): void {
-		if ( is_admin() || is_customize_preview() || ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) || is_feed() ) {
+		if ( is_admin() || is_customize_preview() || wp_doing_ajax() || is_feed() ) {
 			return;
 		}
 		$is_shop = function_exists( 'is_shop' ) && is_shop();
@@ -118,7 +118,7 @@ if ( ! function_exists( 'lafka_shop_to_menu_redirect' ) ) {
 				'path'         => lafka_shop_to_menu_request_path(),
 				'menu_url'     => $menu_url,
 				'shop_url'     => function_exists( 'wc_get_page_permalink' ) ? (string) wc_get_page_permalink( 'shop' ) : '',
-				'menu_is_page' => function_exists( 'url_to_postid' ) && url_to_postid( $menu_url ) > 0,
+				'menu_is_page' => url_to_postid( $menu_url ) > 0,
 				'legacy_paths' => (array) apply_filters( 'lafka_shop_legacy_paths', array( 'shop' ) ),
 			)
 		);
@@ -145,7 +145,7 @@ if ( ! function_exists( 'lafka_shop_to_menu_sitemap_args' ) ) {
 			return $args;
 		}
 		$shop_id = (int) wc_get_page_id( 'shop' );
-		$menu_id = function_exists( 'url_to_postid' ) ? (int) url_to_postid( lafka_theme_menu_url() ) : 0;
+		$menu_id = (int) url_to_postid( lafka_theme_menu_url() );
 		if ( $shop_id > 0 && $menu_id > 0 && $shop_id !== $menu_id ) {
 			$args['post__not_in'] = array_values( array_unique( array_merge( array_map( 'intval', (array) ( $args['post__not_in'] ?? array() ) ), array( $shop_id ) ) ) );
 		}

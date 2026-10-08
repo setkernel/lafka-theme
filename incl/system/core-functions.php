@@ -111,14 +111,52 @@ if ( ! function_exists( 'lafka_register_sidebars' ) ) {
 	 * Register sidebars
 	 */
 	function lafka_register_sidebars() {
-		if ( function_exists( 'register_sidebar' ) ) {
+		// Define default sidebar
+		register_sidebar(
+			array(
+				'name'          => esc_html__( 'Default Sidebar', 'lafka' ),
+				'id'            => 'right_sidebar',
+				'description'   => esc_html__( 'Default Blog widget area', 'lafka' ),
+				'before_widget' => '<div id="%1$s" class="widget box %2$s">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3>',
+				'after_title'   => '</h3>',
+			)
+		);
 
-			// Define default sidebar
+		// Define bottom footer widget area
+		register_sidebar(
+			array(
+				'name'          => esc_html__( 'Footer Sidebar', 'lafka' ),
+				'id'            => 'bottom_footer_sidebar',
+				'description'   => esc_html__( 'Footer widget area', 'lafka' ),
+				'before_widget' => '<div id="%1$s" class="widget %2$s ">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3>',
+				'after_title'   => '</h3>',
+			)
+		);
+
+		// Define Pre header widget area
+		register_sidebar(
+			array(
+				'name'          => esc_html__( 'Pre Header Sidebar', 'lafka' ),
+				'id'            => 'pre_header_sidebar',
+				'description'   => esc_html__( 'Pre header widget area', 'lafka' ),
+				'before_widget' => '<div id="%1$s" class="widget %2$s ">',
+				'after_widget'  => '</div>',
+				'before_title'  => '<h3>',
+				'after_title'   => '</h3>',
+			)
+		);
+
+		if ( LAFKA_IS_WOOCOMMERCE ) {
+			// Define shop sidebar if woocommerce is active
 			register_sidebar(
 				array(
-					'name'          => esc_html__( 'Default Sidebar', 'lafka' ),
-					'id'            => 'right_sidebar',
-					'description'   => esc_html__( 'Default Blog widget area', 'lafka' ),
+					'name'          => esc_html__( 'Shop Sidebar', 'lafka' ),
+					'id'            => 'shop',
+					'description'   => esc_html__( 'Default Shop sidebar', 'lafka' ),
 					'before_widget' => '<div id="%1$s" class="widget box %2$s">',
 					'after_widget'  => '</div>',
 					'before_title'  => '<h3>',
@@ -126,78 +164,37 @@ if ( ! function_exists( 'lafka_register_sidebars' ) ) {
 				)
 			);
 
-			// Define bottom footer widget area
+			// Define widget area for product filters
 			register_sidebar(
 				array(
-					'name'          => esc_html__( 'Footer Sidebar', 'lafka' ),
-					'id'            => 'bottom_footer_sidebar',
-					'description'   => esc_html__( 'Footer widget area', 'lafka' ),
-					'before_widget' => '<div id="%1$s" class="widget %2$s ">',
+					'name'          => esc_html__( 'Product Filters Sidebar', 'lafka' ),
+					'id'            => 'lafka_product_filters_sidebar',
+					'description'   => esc_html__( 'Product filters widget area, shown on shop and product category pages', 'lafka' ),
+					'before_widget' => '<div id="%1$s" class="widget box %2$s">',
 					'after_widget'  => '</div>',
 					'before_title'  => '<h3>',
 					'after_title'   => '</h3>',
 				)
 			);
+		}
 
-			// Define Pre header widget area
-			register_sidebar(
-				array(
-					'name'          => esc_html__( 'Pre Header Sidebar', 'lafka' ),
-					'id'            => 'pre_header_sidebar',
-					'description'   => esc_html__( 'Pre header widget area', 'lafka' ),
-					'before_widget' => '<div id="%1$s" class="widget %2$s ">',
-					'after_widget'  => '</div>',
-					'before_title'  => '<h3>',
-					'after_title'   => '</h3>',
-				)
-			);
+		// Register the custom sidbars
+		$lafka_custom_sdbrs = substr( get_theme_mod( 'lafka_sidebar_ids', '' ), 0, -1 );
 
-			if ( LAFKA_IS_WOOCOMMERCE ) {
-				// Define shop sidebar if woocommerce is active
+		if ( $lafka_custom_sdbrs ) {
+			$sdbrsArr = explode( ';', $lafka_custom_sdbrs );
+			foreach ( $sdbrsArr as $sdbr ) {
+				$sdbr_id = lafka_generate_slug( $sdbr, 45 );
 				register_sidebar(
 					array(
-						'name'          => esc_html__( 'Shop Sidebar', 'lafka' ),
-						'id'            => 'shop',
-						'description'   => esc_html__( 'Default Shop sidebar', 'lafka' ),
+						'name'          => $sdbr,
+						'id'            => $sdbr_id,
 						'before_widget' => '<div id="%1$s" class="widget box %2$s">',
 						'after_widget'  => '</div>',
 						'before_title'  => '<h3>',
 						'after_title'   => '</h3>',
 					)
 				);
-
-				// Define widget area for product filters
-				register_sidebar(
-					array(
-						'name'          => esc_html__( 'Product Filters Sidebar', 'lafka' ),
-						'id'            => 'lafka_product_filters_sidebar',
-						'description'   => esc_html__( 'Product filters widget area, shown on shop and product category pages', 'lafka' ),
-						'before_widget' => '<div id="%1$s" class="widget box %2$s">',
-						'after_widget'  => '</div>',
-						'before_title'  => '<h3>',
-						'after_title'   => '</h3>',
-					)
-				);
-			}
-
-			// Register the custom sidbars
-			$lafka_custom_sdbrs = substr( get_theme_mod( 'lafka_sidebar_ids', '' ), 0, -1 );
-
-			if ( $lafka_custom_sdbrs ) {
-				$sdbrsArr = explode( ';', $lafka_custom_sdbrs );
-				foreach ( $sdbrsArr as $sdbr ) {
-					$sdbr_id = lafka_generate_slug( $sdbr, 45 );
-					register_sidebar(
-						array(
-							'name'          => $sdbr,
-							'id'            => $sdbr_id,
-							'before_widget' => '<div id="%1$s" class="widget box %2$s">',
-							'after_widget'  => '</div>',
-							'before_title'  => '<h3>',
-							'after_title'   => '</h3>',
-						)
-					);
-				}
 			}
 		}
 	}
@@ -978,9 +975,6 @@ if ( ! function_exists( 'lafka_is_block_cart_checkout_page' ) ) {
 	 * @return bool
 	 */
 	function lafka_is_block_cart_checkout_page() {
-		if ( ! function_exists( 'has_block' ) ) {
-			return false;
-		}
 		// Classic mode ⇒ never a block page (shim serves shortcodes). Absent
 		// plugin ⇒ fall through and style whatever WC block pages exist.
 		if ( class_exists( 'Lafka_Checkout_Mode' ) && ! Lafka_Checkout_Mode::is_blocks() ) {
@@ -1044,7 +1038,7 @@ if ( ! function_exists( 'lafka_needs_legacy_shortcode_styles' ) ) {
 		// taxonomy uses underscores.
 		if ( is_post_type_archive( 'lafka-foodmenu' )
 			|| is_singular( 'lafka-foodmenu' )
-			|| ( function_exists( 'is_tax' ) && is_tax( 'lafka_foodmenu_category' ) ) ) {
+			|| is_tax( 'lafka_foodmenu_category' ) ) {
 			return true;
 		}
 		// GX T-25: only content the template renders, and only lafka_*
@@ -1551,7 +1545,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// directly — the template loader has already resolved which
 		// page is rendering by the time wp_enqueue_scripts fires.
 		$lafka_is_menu_slug = false;
-		if ( function_exists( 'is_page' ) && is_page() ) {
+		if ( is_page() ) {
 			$lafka_queried = get_queried_object();
 			if ( $lafka_queried && isset( $lafka_queried->post_name ) && 'menu' === $lafka_queried->post_name ) {
 				$lafka_is_menu_slug = true;
@@ -1661,13 +1655,10 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// Lafka editorial template) still get FAQ + NAP styling — without
 		// this the .lafka-contact__faq markup emitted from the page content
 		// rendered as an unstyled <details> list with a bare "+" suffix.
-		$lafka_is_404 = function_exists( 'is_404' ) ? is_404() : false;
-		$lafka_is_contact_tpl = false;
-		if ( function_exists( 'is_page_template' ) ) {
-			$lafka_is_contact_tpl = is_page_template( 'template-contact.php' );
-		}
+		$lafka_is_404          = is_404();
+		$lafka_is_contact_tpl  = is_page_template( 'template-contact.php' );
 		$lafka_is_contact_slug = false;
-		if ( function_exists( 'is_page' ) && is_page() && function_exists( 'get_post_field' ) ) {
+		if ( is_page() ) {
 			$lafka_slug = (string) get_post_field( 'post_name' );
 			$lafka_is_contact_slug = in_array( $lafka_slug, array( 'contact', 'contact-us' ), true );
 		}
@@ -1684,28 +1675,26 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// Terms / generic). Loads on any singular page except the
 		// front page and custom templates that supply their own
 		// stylesheet (contact, menu page, editorial templates).
-		$lafka_skip_page_css = false;
-		if ( function_exists( 'is_page_template' ) ) {
-			$lafka_skip_page_templates = array(
-				'template-contact.php',
-				'page-menu.php',
-				'page_templates/template-editorial-home.php',
-				'page_templates/template-editorial-contact.php',
-				'page_templates/blank-page.php',
-			);
-			foreach ( $lafka_skip_page_templates as $lafka_skip_tpl ) {
-				if ( is_page_template( $lafka_skip_tpl ) ) {
-					$lafka_skip_page_css = true;
-					break;
-				}
+		$lafka_skip_page_css       = false;
+		$lafka_skip_page_templates = array(
+			'template-contact.php',
+			'page-menu.php',
+			'page_templates/template-editorial-home.php',
+			'page_templates/template-editorial-contact.php',
+			'page_templates/blank-page.php',
+		);
+		foreach ( $lafka_skip_page_templates as $lafka_skip_tpl ) {
+			if ( is_page_template( $lafka_skip_tpl ) ) {
+				$lafka_skip_page_css = true;
+				break;
 			}
 		}
 		$lafka_is_static_page = is_singular( 'page' )
-			&& ! ( function_exists( 'is_front_page' ) && is_front_page() )
+			&& ! is_front_page()
 			&& ! $lafka_skip_page_css;
 		// v5.76.0: also load lafka-page.css for single blog posts —
 		// single.php reuses .lafka-page primitives + adds .lafka-post__*.
-		$lafka_is_blog_single = function_exists( 'is_single' ) ? is_single() : false;
+		$lafka_is_blog_single = is_single();
 		if ( $lafka_is_static_page || $lafka_is_blog_single ) {
 			wp_enqueue_style(
 				'lafka-page',
@@ -2005,12 +1994,12 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 		// unconditionally on `window.load`, so we keep it enqueued globally.
 		// The defer strategy is the real win here. JS guard added at the call
 		// site protects against future narrowing.
-		// WooCommerce 10.3+ registers the same library (FlexSlider 2.7.2) as
+		// WooCommerce registers the same library (FlexSlider 2.7.2) as
 		// `wc-flexslider` (with `flexslider` as a legacy alias) before this runs,
 		// so the theme reuses it — product pages never load two copies and the
 		// generic `flexslider` handle is never claimed by the theme. Without it
-		// (no WooCommerce / WooCommerce < 10.3) the bundled copy loads under the
-		// theme's own `lafka-flexslider` handle (lafka_enqueue_flexslider()).
+		// (no WooCommerce) the bundled copy loads under the theme's own
+		// `lafka-flexslider` handle (lafka_enqueue_flexslider()).
 		// GX T-25: kept on product pages (WooCommerce gallery slider) and
 		// wherever the legacy libraries load; dropped on the other counter
 		// surfaces, which render no slider markup.

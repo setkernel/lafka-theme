@@ -15,7 +15,7 @@ defined( 'ABSPATH' ) || exit;
 
 get_header();
 
-$lafka_sr_query = function_exists( 'get_search_query' ) ? (string) get_search_query( false ) : '';
+$lafka_sr_query = (string) get_search_query( false );
 $lafka_sr_found = ( isset( $GLOBALS['wp_query'] ) && is_object( $GLOBALS['wp_query'] ) && isset( $GLOBALS['wp_query']->found_posts ) ) ? (int) $GLOBALS['wp_query']->found_posts : 0;
 $lafka_sr_menu  = function_exists( 'lafka_theme_menu_url' ) ? lafka_theme_menu_url() : home_url( '/' );
 ?>

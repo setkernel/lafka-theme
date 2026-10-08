@@ -36,7 +36,7 @@ if ( ! function_exists( 'lafka_sanitize_attachment_id_from_url' ) ) {
 		if ( '' === trim( $url ) ) {
 			return 0;
 		}
-		$id = function_exists( 'attachment_url_to_postid' ) ? attachment_url_to_postid( $url ) : 0;
+		$id = attachment_url_to_postid( $url );
 		return $id ? (int) $id : 0;
 	}
 }

@@ -29,7 +29,7 @@ if ( ! function_exists( 'lafka_counter_cart_redirect_after_add' ) ) {
 	 * @return mixed
 	 */
 	function lafka_counter_cart_redirect_after_add( $pre ) {
-		if ( is_admin() && ! ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) ) {
+		if ( is_admin() && ! wp_doing_ajax() ) {
 			return $pre;
 		}
 		if ( ! function_exists( 'lafka_layout_is' ) || ! lafka_layout_is( 'drawer', 'counter' ) ) {
@@ -97,7 +97,7 @@ if ( ! function_exists( 'lafka_page_may_load_google_maps' ) ) {
 	 */
 	function lafka_page_may_load_google_maps(): bool {
 		$may = ( function_exists( 'is_cart' ) && is_cart() ) || ( function_exists( 'is_checkout' ) && is_checkout() );
-		$scripts = ! $may && function_exists( 'wp_scripts' ) ? wp_scripts() : null;
+		$scripts = ! $may ? wp_scripts() : null;
 		if ( is_object( $scripts ) && isset( $scripts->queue, $scripts->registered ) ) {
 			foreach ( (array) $scripts->queue as $handle ) {
 				$src = isset( $scripts->registered[ $handle ] ) ? (string) $scripts->registered[ $handle ]->src : '';

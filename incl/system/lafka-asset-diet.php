@@ -41,7 +41,7 @@ if ( ! function_exists( 'lafka_asset_context' ) ) {
 		};
 
 		$menu_page = false;
-		if ( function_exists( 'is_page' ) && is_page() ) {
+		if ( is_page() ) {
 			$queried   = get_queried_object();
 			$menu_page = $queried && isset( $queried->post_name ) && 'menu' === $queried->post_name;
 		}
@@ -50,7 +50,7 @@ if ( ! function_exists( 'lafka_asset_context' ) ) {
 			'counter'      => function_exists( 'lafka_any_counter_layout' ) && lafka_any_counter_layout(),
 			'counter_home' => $layout( 'home' ),
 			'counter_menu' => $layout( 'menu' ),
-			'front_page'   => function_exists( 'is_front_page' ) && is_front_page(),
+			'front_page'   => is_front_page(),
 			'menu_surface' => $menu_page
 				|| ( function_exists( 'is_shop' ) && is_shop() )
 				|| ( function_exists( 'is_product_taxonomy' ) && is_product_taxonomy() ),
@@ -127,7 +127,7 @@ if ( ! function_exists( 'lafka_rendered_post_content' ) ) {
 		 *
 		 * @param bool $renders Default false.
 		 */
-		if ( function_exists( 'is_front_page' ) && is_front_page() && ! apply_filters( 'lafka_front_page_renders_content', false ) ) {
+		if ( is_front_page() && ! apply_filters( 'lafka_front_page_renders_content', false ) ) {
 			return '';
 		}
 		return (string) $post->post_content;

@@ -70,7 +70,7 @@ if ( ! function_exists( 'lafka_active_promo_messages' ) ) {
 		// Combo deal.
 		if ( function_exists( 'lafka_combo_deal_config' ) ) {
 			$c = lafka_combo_deal_config();
-			if ( ! empty( $c['enabled'] ) && function_exists( 'get_term' ) ) {
+			if ( ! empty( $c['enabled'] ) ) {
 				$a = get_term( (int) $c['cat_a'], 'product_cat' );
 				$b = get_term( (int) $c['cat_b'], 'product_cat' );
 				if ( $a && $b && ! is_wp_error( $a ) && ! is_wp_error( $b ) ) {

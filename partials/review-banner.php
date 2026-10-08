@@ -83,7 +83,7 @@ $lafka_review_banner_target_url = function_exists( 'lafka_review_target_url' )
 	? (string) lafka_review_target_url()
 	: '';
 if ( '' === $lafka_review_banner_target_url ) {
-	$lafka_review_banner_target_url = function_exists( 'home_url' ) ? home_url( '/' ) : '/';
+	$lafka_review_banner_target_url = home_url( '/' );
 }
 ?>
 <aside class="lafka-review-banner"

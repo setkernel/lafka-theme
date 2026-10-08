@@ -65,7 +65,7 @@ if ( ! function_exists( 'lafka_counter_nap' ) ) {
 			$map = (string) ( $info['directions_url'] ?? '' );
 		}
 		return array(
-			'name'          => (string) ( $info['name'] ?? ( function_exists( 'get_bloginfo' ) ? get_bloginfo( 'name' ) : '' ) ),
+			'name'          => (string) ( $info['name'] ?? get_bloginfo( 'name' ) ),
 			'phone'         => $phone,
 			'tel'           => $tel,
 			'address_lines' => $lines,
@@ -216,10 +216,8 @@ if ( ! function_exists( 'lafka_counter_footer_location' ) ) {
 if ( ! function_exists( 'lafka_counter_register_nav_location' ) ) {
 	/** Register the counter header's and footer's WordPress menu locations. */
 	function lafka_counter_register_nav_location(): void {
-		if ( function_exists( 'register_nav_menu' ) ) {
-			register_nav_menu( lafka_counter_nav_location(), __( 'Header menu (counter layout)', 'lafka' ) );
-			register_nav_menu( lafka_counter_footer_location(), __( 'Footer menu (counter layout)', 'lafka' ) );
-		}
+		register_nav_menu( lafka_counter_nav_location(), __( 'Header menu (counter layout)', 'lafka' ) );
+		register_nav_menu( lafka_counter_footer_location(), __( 'Footer menu (counter layout)', 'lafka' ) );
 	}
 }
 add_action( 'after_setup_theme', 'lafka_counter_register_nav_location', 20 );
@@ -332,7 +330,7 @@ if ( ! function_exists( 'lafka_counter_render_nav' ) ) {
 	 */
 	function lafka_counter_render_nav( string $class ): void {
 		$location = lafka_counter_nav_location();
-		if ( function_exists( 'has_nav_menu' ) && has_nav_menu( $location ) ) {
+		if ( has_nav_menu( $location ) ) {
 			wp_nav_menu(
 				array(
 					'theme_location' => $location,
@@ -388,7 +386,7 @@ if ( ! function_exists( 'lafka_localize_fulfilment_cfg' ) ) {
 	 */
 	function lafka_localize_fulfilment_cfg( $handle ) {
 		static $done = array();
-		if ( isset( $done[ $handle ] ) || ! function_exists( 'wp_localize_script' ) ) {
+		if ( isset( $done[ $handle ] ) ) {
 			return;
 		}
 		$done[ $handle ] = true;
@@ -569,7 +567,7 @@ if ( ! function_exists( 'lafka_counter_lcp_image_url' ) ) {
 	 * @param string $url Preload URL.
 	 */
 	function lafka_counter_lcp_image_url( $url ) {
-		if ( function_exists( 'is_front_page' ) && is_front_page() && function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'home', 'counter' ) ) {
+		if ( is_front_page() && function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'home', 'counter' ) ) {
 			return '';
 		}
 		return $url;

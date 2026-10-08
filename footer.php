@@ -72,7 +72,7 @@ $lafka_ft_social = array(
 );
 $lafka_ft_social = array_filter( $lafka_ft_social );
 
-$lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' );
+$lafka_ft_year = wp_date( 'Y' );
 ?>
 		</div><!-- #container -->
 	</main><!-- #content -->
@@ -101,7 +101,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 						);
 					} else {
 						// Site icon as last-resort fallback (parity with header.php).
-						$lafka_ft_site_icon = function_exists( 'get_site_icon_url' ) ? get_site_icon_url( 96 ) : '';
+						$lafka_ft_site_icon = get_site_icon_url( 96 );
 						if ( $lafka_ft_site_icon ) {
 							printf(
 								'<img class="lafka-footer__logo" src="%s" alt="%s">',
@@ -144,7 +144,7 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 					<?php if ( function_exists( 'wc_get_checkout_url' ) ) : ?>
 						<li><a href="<?php echo esc_url( wc_get_checkout_url() ); ?>"><?php esc_html_e( 'Checkout', 'lafka' ); ?></a></li>
 					<?php endif; ?>
-					<?php if ( function_exists( 'get_option' ) && get_option( 'woocommerce_myaccount_page_id' ) ) : ?>
+					<?php if ( get_option( 'woocommerce_myaccount_page_id' ) ) : ?>
 						<li><a href="<?php echo esc_url( get_permalink( get_option( 'woocommerce_myaccount_page_id' ) ) ); ?>"><?php esc_html_e( 'My account', 'lafka' ); ?></a></li>
 					<?php endif; ?>
 				</ul>
@@ -189,11 +189,9 @@ $lafka_ft_year = function_exists( 'wp_date' ) ? wp_date( 'Y' ) : date_i18n( 'Y' 
 							</a>
 						</li>
 					<?php endif; ?>
-					<?php if ( function_exists( 'get_page_by_path' ) ) : ?>
-						<?php $lafka_contact_page = get_page_by_path( 'contact' ); ?>
-						<?php if ( $lafka_contact_page ) : ?>
-							<li><a href="<?php echo esc_url( get_permalink( $lafka_contact_page->ID ) ); ?>"><?php esc_html_e( 'Contact page', 'lafka' ); ?> →</a></li>
-						<?php endif; ?>
+					<?php $lafka_contact_page = get_page_by_path( 'contact' ); ?>
+					<?php if ( $lafka_contact_page ) : ?>
+						<li><a href="<?php echo esc_url( get_permalink( $lafka_contact_page->ID ) ); ?>"><?php esc_html_e( 'Contact page', 'lafka' ); ?> →</a></li>
 					<?php endif; ?>
 				</ul>
 			</div>

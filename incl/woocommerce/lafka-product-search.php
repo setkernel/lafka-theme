@@ -51,7 +51,7 @@ if ( ! function_exists( 'lafka_search_request_filter' ) ) {
 	 * @return array
 	 */
 	function lafka_search_request_filter( $vars ) {
-		if ( ! is_array( $vars ) || is_admin() || ( function_exists( 'wp_doing_ajax' ) && wp_doing_ajax() ) ) {
+		if ( ! is_array( $vars ) || is_admin() || wp_doing_ajax() ) {
 			return $vars;
 		}
 		return lafka_search_request_vars( $vars, lafka_search_products_only() );

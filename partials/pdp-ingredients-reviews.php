@@ -49,9 +49,7 @@ $lafka_pdp_allergen_slugs = (array) apply_filters(
 	)
 );
 
-$lafka_pdp_tags  = function_exists( 'wp_get_post_terms' )
-	? wp_get_post_terms( $product->get_id(), 'product_tag', array( 'fields' => 'slugs' ) )
-	: array();
+$lafka_pdp_tags  = wp_get_post_terms( $product->get_id(), 'product_tag', array( 'fields' => 'slugs' ) );
 if ( is_wp_error( $lafka_pdp_tags ) ) {
 	$lafka_pdp_tags = array();
 }

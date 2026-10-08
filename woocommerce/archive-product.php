@@ -56,7 +56,7 @@ $lafka_arch_is_shop   = ! $lafka_arch_is_search && function_exists( 'is_shop' ) 
 $lafka_arch_is_cat    = function_exists( 'is_product_category' ) ? is_product_category() : false;
 $lafka_arch_is_tag    = function_exists( 'is_product_tag' ) ? is_product_tag() : false;
 $lafka_arch_queried   = get_queried_object();
-$lafka_arch_query_s   = $lafka_arch_is_search && function_exists( 'get_search_query' ) ? (string) get_search_query() : '';
+$lafka_arch_query_s   = $lafka_arch_is_search ? (string) get_search_query() : '';
 $lafka_arch_found     = ( $lafka_arch_is_search && isset( $GLOBALS['wp_query'] ) && is_object( $GLOBALS['wp_query'] ) && isset( $GLOBALS['wp_query']->found_posts ) ) ? (int) $GLOBALS['wp_query']->found_posts : 0;
 
 $lafka_arch_title = '';
@@ -97,9 +97,9 @@ $lafka_arch_terms = ( taxonomy_exists( 'product_cat' ) && function_exists( 'lafk
 // subcategory reads Home / Menu / Pizza / Vegan pizzas like the PDP and the
 // JSON-LD BreadcrumbList.
 $lafka_arch_ancestors = array();
-if ( $lafka_arch_is_cat && $lafka_arch_queried && isset( $lafka_arch_queried->term_id ) && function_exists( 'get_ancestors' ) ) {
+if ( $lafka_arch_is_cat && $lafka_arch_queried && isset( $lafka_arch_queried->term_id ) ) {
 	foreach ( array_reverse( (array) get_ancestors( (int) $lafka_arch_queried->term_id, 'product_cat', 'taxonomy' ) ) as $lafka_arch_anc_id ) {
-		$lafka_arch_anc = function_exists( 'get_term' ) ? get_term( (int) $lafka_arch_anc_id, 'product_cat' ) : null;
+		$lafka_arch_anc = get_term( (int) $lafka_arch_anc_id, 'product_cat' );
 		if ( is_object( $lafka_arch_anc ) && ! is_wp_error( $lafka_arch_anc ) ) {
 			$lafka_arch_ancestors[] = $lafka_arch_anc;
 		}
@@ -228,9 +228,7 @@ $lafka_arch_shop_url = lafka_theme_menu_url();
 			<?php
 			// Store notices (e.g. "added to cart" after a non-AJAX add) — core
 			// prints these from woocommerce_before_shop_loop, which never fires here.
-			if ( function_exists( 'woocommerce_output_all_notices' ) ) {
-				woocommerce_output_all_notices();
-			}
+			woocommerce_output_all_notices();
 
 			if ( ! empty( $lafka_arch_children ) ) :
 				?>

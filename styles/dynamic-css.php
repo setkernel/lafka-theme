@@ -78,7 +78,7 @@ if ( ! function_exists( 'lafka_add_custom_css' ) ) {
 		// serving it would show stale styles for every dynamic-css-backed
 		// control (and writing here would poison the shared cache with
 		// unsaved values). Always rebuild, never cache, in preview.
-		if ( function_exists( 'is_customize_preview' ) && is_customize_preview() ) {
+		if ( is_customize_preview() ) {
 			wp_add_inline_style( 'lafka-style', lafka_dynamic_css_build() );
 			return;
 		}

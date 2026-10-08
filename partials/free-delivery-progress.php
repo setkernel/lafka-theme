@@ -60,9 +60,7 @@ if ( isset( $args['threshold'] ) ) {
 	if ( function_exists( 'lafka_get_free_delivery_threshold' ) ) {
 		$lafka_fdp_threshold = (float) lafka_get_free_delivery_threshold();
 	} else {
-		$lafka_fdp_threshold = function_exists( 'get_theme_mod' )
-			? (float) get_theme_mod( 'lafka_pdp_free_delivery_threshold', 0 )
-			: 0.0;
+		$lafka_fdp_threshold = (float) get_theme_mod( 'lafka_pdp_free_delivery_threshold', 0 );
 	}
 	// Back-compat (deprecated): re-apply the legacy
 	// 'lafka_pdp_free_delivery_threshold' filter on top of the resolved value so

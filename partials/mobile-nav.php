@@ -63,7 +63,7 @@ if ( taxonomy_exists( 'product_cat' ) && function_exists( 'lafka_menu_top_catego
 		<header class="lafka-mobile-nav__header">
 			<a class="lafka-mobile-nav__brand" href="<?php echo esc_url( home_url( '/' ) ); ?>" rel="home">
 				<?php
-				$lafka_logo_id = function_exists( 'get_theme_mod' ) ? get_theme_mod( 'lafka_theme_logo', 0 ) : 0;
+				$lafka_logo_id = get_theme_mod( 'lafka_theme_logo', 0 );
 				if ( $lafka_logo_id ) {
 					echo wp_get_attachment_image(
 						$lafka_logo_id,

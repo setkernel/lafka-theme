@@ -63,9 +63,6 @@ if ( ! function_exists( 'lafka_force_product_cat_archive_query' ) ) {
 			return $vars;
 		}
 		$slug = $m[1];
-		if ( ! function_exists( 'term_exists' ) ) {
-			return $vars;
-		}
 		// term_exists returns array|null|0; we only want a real match.
 		$term = term_exists( $slug, 'product_cat' );
 		if ( ! $term ) {

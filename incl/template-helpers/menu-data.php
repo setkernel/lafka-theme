@@ -223,7 +223,7 @@ if ( ! function_exists( 'lafka_counter_cache_key' ) ) {
 	 */
 	function lafka_counter_cache_key( array $settings ): string {
 		$wc_version = class_exists( 'WC_Cache_Helper' ) ? (string) WC_Cache_Helper::get_transient_version( 'product' ) : '0';
-		$locale     = function_exists( 'get_locale' ) ? get_locale() : '';
+		$locale     = get_locale();
 		$gen        = (int) get_option( 'lafka_counter_home_gen', 0 );
 		return 'lafka_counter_home_v2_' . md5( wp_json_encode( $settings ) . '|' . $locale . '|' . $gen ) . '_' . $wc_version;
 	}
@@ -238,7 +238,7 @@ if ( ! function_exists( 'lafka_counter_sections' ) ) {
 	 */
 	function lafka_counter_sections(): array {
 		$settings = lafka_counter_settings();
-		$preview  = function_exists( 'is_customize_preview' ) && is_customize_preview();
+		$preview  = is_customize_preview();
 		$key      = lafka_counter_cache_key( $settings );
 		if ( ! $preview ) {
 			$cached = get_transient( $key );
@@ -491,7 +491,7 @@ if ( ! function_exists( 'lafka_menu_filter_has_products' ) ) {
 	 * @param string $slug Chip / tag slug.
 	 */
 	function lafka_menu_filter_has_products( string $slug ): bool {
-		$term = function_exists( 'get_term_by' ) ? get_term_by( 'slug', $slug, 'product_tag' ) : false;
+		$term = get_term_by( 'slug', $slug, 'product_tag' );
 		if ( is_object( $term ) && isset( $term->count ) && (int) $term->count > 0 ) {
 			return true;
 		}
@@ -533,11 +533,11 @@ if ( ! function_exists( 'lafka_menu_pagination_html' ) ) {
 			$query = $GLOBALS['wp_query'] ?? null;
 			$total = is_object( $query ) && isset( $query->max_num_pages ) ? (int) $query->max_num_pages : 0;
 		}
-		if ( $total < 2 || ! function_exists( 'paginate_links' ) ) {
+		if ( $total < 2 ) {
 			return '';
 		}
 		if ( null === $current ) {
-			$current = function_exists( 'get_query_var' ) ? (int) get_query_var( 'paged' ) : 1;
+			$current = (int) get_query_var( 'paged' );
 		}
 		$links = paginate_links(
 			array(

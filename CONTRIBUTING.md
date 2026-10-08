@@ -79,7 +79,7 @@ Every npm script, one line each.
 
 - WordPress-Extra rule set (PHPCS).
 - Short array syntax allowed.
-- Min PHP 8.1, min WP 6.6.
+- Min PHP 8.3, min WP 7.0, min WooCommerce 11.0.
 - Text domain: `lafka`.
 
 ## Compatibility matrix

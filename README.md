@@ -6,7 +6,7 @@ Originally developed by [theAlThemist](https://www.althemist.com) and sold on Th
 
 ## Requirements
 
-- WordPress 6.6+ · WooCommerce 9.5+ · PHP 8.1+
+- WordPress 7.0+ · WooCommerce 11.0+ · PHP 8.3+
 
 These match the floors declared in `style.css`. The [Lafka Plugin](https://github.com/setkernel/lafka-plugin) (restaurant menus, product addons, delivery zones, order hours, KDS) is **recommended** — the theme runs standalone, but the full ordering experience needs it.
 

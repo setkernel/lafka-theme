@@ -158,8 +158,8 @@ if ( class_exists( 'Lafka_Order_Hours' ) && method_exists( 'Lafka_Order_Hours', 
               data-product_id="<?php echo absint( $product->get_id() ); ?>"
               data-product_variations="
               <?php
-				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_esc_json() is WC's attribute-context escape function; esc_attr fallback when not available.
-				echo function_exists( 'wc_esc_json' ) ? wc_esc_json( wp_json_encode( $product->get_available_variations() ) ) : esc_attr( wp_json_encode( $product->get_available_variations() ) );
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- wc_esc_json() is WC's attribute-context escape function.
+				echo wc_esc_json( wp_json_encode( $product->get_available_variations() ) );
 				?>
                 ">
 

@@ -3,7 +3,7 @@
  * Show error messages
  *
  * Lafka override of WooCommerce core notices/error.php 8.6.0 (current in
- * WooCommerce 10.9.1). T-24: core puts role="alert" on the <ul>, which
+ * WooCommerce 11.2.0). T-24: core puts role="alert" on the <ul>, which
  * replaces the list's own role, so screen readers lose "list, N items". The
  * alert role moves to a wrapping <div>; the <ul class="woocommerce-error">
  * stays a plain list and every <li> keeps its data-id attribute, which

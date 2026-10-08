@@ -199,7 +199,7 @@ if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
 		}
 
 		if ( null === $now ) {
-			$now = function_exists( 'current_time' ) ? (int) current_time( 'timestamp' ) : time();
+			$now = (int) current_time( 'timestamp' );
 		}
 
 		$day_names = array(

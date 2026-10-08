@@ -1,9 +1,11 @@
 === Lafka ===
 
 Contributors: setkernel
-Requires at least: 6.6
+Requires at least: 7.0
 Tested up to: 7.1
-Requires PHP: 8.1
+Requires PHP: 8.3
+WC requires at least: 11.0
+WC tested up to: 11.2
 Version: 7.3.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -26,8 +28,8 @@ hours, local-SEO schema) lives in the separate, free companion plugin — see th
 FAQ. The theme works on its own and degrades gracefully when the plugin is not
 installed.
 
-WooCommerce support is deep: WooCommerce 9.5 or newer is recommended (tested up
-to 11.1), with custom shop and archive layouts, an AJAX cart drawer, and a
+WooCommerce support is deep: WooCommerce 11.0 or newer is required (tested up
+to 11.2), with custom shop and archive layouts, an AJAX cart drawer, and a
 rebuilt single-product page.
 
 **Highlights**
@@ -85,8 +87,8 @@ plugin's own Modules screen.
 
 = Does it work with WooCommerce? =
 
-Yes — the theme is built around WooCommerce. WooCommerce 9.5 or newer is
-recommended (tested up to 11.1). Shop, archive, product, and cart surfaces all
+Yes — the theme is built around WooCommerce. WooCommerce 11.0 or newer is
+required (tested up to 11.2). Shop, archive, product, and cart surfaces all
 ship theme templates and styling.
 
 = Is the theme translation-ready? =

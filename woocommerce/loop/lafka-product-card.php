@@ -54,7 +54,7 @@ $lafka_arch_featured = $lafka_arch_p->is_featured();
 // Tags come from WC product_tag slugs ('popular', 'vegetarian', 'vegan', 'spicy').
 // Featured products auto-tagged 'popular' regardless of WC tag.
 $lafka_arch_tag_slugs = array();
-$lafka_arch_tags = function_exists( 'wp_get_post_terms' ) ? wp_get_post_terms( $lafka_arch_p->get_id(), 'product_tag', array( 'fields' => 'slugs' ) ) : array();
+$lafka_arch_tags = wp_get_post_terms( $lafka_arch_p->get_id(), 'product_tag', array( 'fields' => 'slugs' ) );
 if ( ! is_wp_error( $lafka_arch_tags ) && is_array( $lafka_arch_tags ) ) {
 	$lafka_arch_tag_slugs = array_map( 'strtolower', $lafka_arch_tags );
 }
@@ -68,9 +68,9 @@ $GLOBALS['product'] = $lafka_arch_p;
 
 // select_item tracking contract (docs/TRACKING.md): lafka-dl-client.js reads
 // these on the card link to push GA4 select_item.
-$lafka_arch_cat_names = function_exists( 'wp_get_post_terms' ) ? wp_get_post_terms( $lafka_arch_p->get_id(), 'product_cat', array( 'fields' => 'names' ) ) : array();
+$lafka_arch_cat_names = wp_get_post_terms( $lafka_arch_p->get_id(), 'product_cat', array( 'fields' => 'names' ) );
 $lafka_arch_cat       = ( ! is_wp_error( $lafka_arch_cat_names ) && ! empty( $lafka_arch_cat_names ) ) ? (string) $lafka_arch_cat_names[0] : '';
-$lafka_arch_list      = ( function_exists( 'is_tax' ) && is_tax( 'product_cat' ) ) ? (string) single_term_title( '', false ) : ( is_page() ? (string) get_the_title() : 'Menu' );
+$lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title( '', false ) : ( is_page() ? (string) get_the_title() : 'Menu' );
 ?>
 <li
 	class="lafka-favs__item"

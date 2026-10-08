@@ -530,13 +530,11 @@ if ( ! function_exists( 'lafka_comment' ) ) {
 	/*
 	 * Add custom image sizes for the lafka theme blog part
 	 */
-if ( function_exists( 'add_image_size' ) ) {
-	add_image_size( 'lafka-foodmenu-single-thumb', 1440 ); // (not cropped)
-	add_image_size( 'lafka-640x640', 640, 640, true ); //(cropped)
-	add_image_size( 'lafka-general-small-size', 100, 100, true ); //(cropped)
-	add_image_size( 'lafka-general-small-size-nocrop', 100 ); // (not cropped)
-	add_image_size( 'lafka-widgets-thumb', 60, 60, true ); //(cropped)
-}
+add_image_size( 'lafka-foodmenu-single-thumb', 1440 ); // (not cropped)
+add_image_size( 'lafka-640x640', 640, 640, true ); //(cropped)
+add_image_size( 'lafka-general-small-size', 100, 100, true ); //(cropped)
+add_image_size( 'lafka-general-small-size-nocrop', 100 ); // (not cropped)
+add_image_size( 'lafka-widgets-thumb', 60, 60, true ); //(cropped)
 
 	add_filter( 'wp_prepare_attachment_for_js', 'lafka_append_image_sizes_js', 10, 3 );
 if ( ! function_exists( 'lafka_append_image_sizes_js' ) ) {
@@ -1130,10 +1128,8 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 	 * @param bool|type $same_category
 	 * @param string|type $taxonomy
 	 * @return string
-	 * @global type $wp_version
 	 */
 	function lafka_post_nav( $same_category = false, $taxonomy = 'category' ) {
-		global $wp_version;
 		$excluded_terms = '';
 
 		$type = get_post_type( get_queried_object_id() );
@@ -1164,25 +1160,14 @@ if ( ! function_exists( 'lafka_post_nav' ) ) {
 		$prev_translated_key = esc_html__( 'prev', 'lafka' );
 		$next_translated_key = esc_html__( 'next', 'lafka' );
 
-		if ( version_compare( $wp_version, '3.8', '>=' ) ) {
-			$entries['prev'] = array(
-				'key_label' => esc_html__( 'prev', 'lafka' ),
-				'near_post' => get_previous_post( $same_category, $excluded_terms, $taxonomy ),
-			);
-			$entries['next'] = array(
-				'key_label' => esc_html__( 'next', 'lafka' ),
-				'near_post' => get_next_post( $same_category, $excluded_terms, $taxonomy ),
-			);
-		} else {
-			$entries['prev'] = array(
-				'key_label' => esc_html__( 'prev', 'lafka' ),
-				'near_post' => get_previous_post( $same_category ),
-			);
-			$entries['next'] = array(
-				'key_label' => esc_html__( 'next', 'lafka' ),
-				'near_post' => get_next_post( $same_category ),
-			);
-		}
+		$entries['prev'] = array(
+			'key_label' => esc_html__( 'prev', 'lafka' ),
+			'near_post' => get_previous_post( $same_category, $excluded_terms, $taxonomy ),
+		);
+		$entries['next'] = array(
+			'key_label' => esc_html__( 'next', 'lafka' ),
+			'near_post' => get_next_post( $same_category, $excluded_terms, $taxonomy ),
+		);
 
 		$output = '';
 

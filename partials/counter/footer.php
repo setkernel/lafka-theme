@@ -24,9 +24,9 @@ $lafka_cf_nap      = lafka_counter_nap();
 $lafka_cf_address  = $lafka_cf_nap['address_lines'] ? implode( ', ', array_slice( $lafka_cf_nap['address_lines'], 0, 2 ) ) : $lafka_cf_nap['address_short'];
 $lafka_cf_line     = implode( ' · ', array_filter( array( $lafka_cf_nap['name'], $lafka_cf_address ) ) );
 $lafka_cf_location = lafka_counter_footer_location();
-$lafka_cf_menu     = function_exists( 'has_nav_menu' ) && has_nav_menu( $lafka_cf_location );
+$lafka_cf_menu     = has_nav_menu( $lafka_cf_location );
 $lafka_cf_items    = $lafka_cf_menu ? array() : lafka_counter_footer_items();
-$lafka_cf_policy   = function_exists( 'get_the_privacy_policy_link' ) ? (string) get_the_privacy_policy_link() : '';
+$lafka_cf_policy   = (string) get_the_privacy_policy_link();
 ?>
 <footer id="footer" class="lafka-footer lafka-footer--counter" role="contentinfo">
 	<div class="lafka-counter-footer lafka-counter-wrap">

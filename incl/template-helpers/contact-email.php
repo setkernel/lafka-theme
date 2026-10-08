@@ -52,10 +52,7 @@ if ( ! function_exists( 'lafka_theme_reach_email' ) ) {
 		// clean host-only "info@<host>" instead. wp_parse_url(..., PHP_URL_HOST)
 		// returns the host WITHOUT the port.
 		if ( '' === $email || false !== strpos( $email, ':' ) ) {
-			$host = '';
-			if ( function_exists( 'wp_parse_url' ) && function_exists( 'home_url' ) ) {
-				$host = (string) wp_parse_url( home_url(), PHP_URL_HOST );
-			}
+			$host  = (string) wp_parse_url( home_url(), PHP_URL_HOST );
 			$email = '' !== $host ? 'info@' . $host : '';
 		}
 

@@ -88,16 +88,16 @@
 		<exclude name="Generic.WhiteSpace.DisallowSpaceIndent.SpacesUsed"/>
 	</rule>
 
-	<!-- Cross-version PHP compatibility against the 8.1 floor. PHPCompatibility
+	<!-- Cross-version PHP compatibility against the 8.3 floor. PHPCompatibility
 	     10 (alpha, same as lafka-plugin) is required: 9.3.5 has no PHP 8.x sniffs. -->
-	<config name="testVersion" value="8.1-"/>
+	<config name="testVersion" value="8.3-"/>
 	<rule ref="PHPCompatibilityWP"/>
 
 	<!-- WordPress text domain -->
 	<config name="text_domain" value="lafka"/>
 
-	<!-- Minimum supported WordPress version (WP 6.6 = mid-2024 baseline) -->
-	<config name="minimum_wp_version" value="6.6"/>
+	<!-- Minimum supported WordPress version (WP 7.0 floor) -->
+	<config name="minimum_wp_version" value="7.0"/>
 
 	<!-- Exclude third-party / vendor directories -->
 	<exclude-pattern>/vendor/*</exclude-pattern>
