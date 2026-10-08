@@ -49,7 +49,9 @@ if ( ! function_exists( 'lafka_time_plain' ) ) {
 		$h12  = 0 === $h % 12 ? 12 : $h % 12;
 		$time = 0 === $min ? (string) $h12 : $h12 . ':' . sprintf( '%02d', $min );
 		/* translators: %s: hour (and minutes), e.g. "11" or "11:30" */
-		return $h < 12 ? sprintf( __( '%s am', 'lafka' ), $time ) : sprintf( __( '%s pm', 'lafka' ), $time );
+		$spoken = $h < 12 ? sprintf( __( '%s am', 'lafka' ), $time ) : sprintf( __( '%s pm', 'lafka' ), $time );
+		// A no-break space keeps "11 am" on one line when the label wraps.
+		return str_replace( ' ', "\u{00A0}", $spoken );
 	}
 }
 

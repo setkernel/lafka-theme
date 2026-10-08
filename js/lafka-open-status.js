@@ -48,7 +48,8 @@
 		}
 		const h12 = h % 12 === 0 ? 12 : h % 12;
 		const time = i === 0 ? String( h12 ) : h12 + ':' + ( i < 10 ? '0' + i : i );
-		return fill( h < 12 ? t( 'am', '%s am' ) : t( 'pm', '%s pm' ), time );
+		// A no-break space keeps "11 am" on one line when the label wraps.
+		return fill( h < 12 ? t( 'am', '%s am' ) : t( 'pm', '%s pm' ), time ).replace( / /g, '\u00A0' );
 	}
 
 	function rangeOf( hours, day ) {

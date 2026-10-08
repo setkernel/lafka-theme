@@ -79,17 +79,14 @@ if ( ! function_exists( 'lafka_open_status_to_minutes' ) ) {
 
 if ( ! function_exists( 'lafka_open_status_format_12h' ) ) {
 	/**
-	 * Pretty 12h string for an "HH:MM" 24h value. e.g. "23:00" -> "11:00 pm".
+	 * Spoken 12h string for an "HH:MM" 24h value ("23:00" -> "11 pm"); the
+	 * same wording as lafka_time_plain() and the live status script.
 	 *
-	 * @param string $hhmm
+	 * @param string $hhmm 24h time.
 	 * @return string
 	 */
 	function lafka_open_status_format_12h( $hhmm ) {
-		$ts = strtotime( '2026-01-01 ' . $hhmm );
-		if ( ! $ts ) {
-			return $hhmm;
-		}
-		return strtolower( date_i18n( 'g:i a', $ts ) );
+		return lafka_time_plain( (string) $hhmm );
 	}
 }
 
