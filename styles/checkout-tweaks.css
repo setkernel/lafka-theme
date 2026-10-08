@@ -52,3 +52,11 @@
 [class*="address-field-autocomplete"] [class*="map"] {
 	display: none !important;
 }
+
+/* Distance-priced delivery (lafka_distance, plugin): the distance under the
+   rate's label, lined up with the label text beside the radio. */
+ul.lafka-shipping-choices > li.lafka-shipping-choice > .lafka-distance-note {
+	padding: 0 var(--lafka-space-4) var(--lafka-space-2) calc(var(--lafka-space-4) + 32px);
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-caption);
+}
