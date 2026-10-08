@@ -9,11 +9,11 @@
  *   3. Click-to-call phone link (yellow)
  *
  * Items 2 + 3 are hidden below 560px (CSS). On larger viewports all three
- * sit inline. The strip refreshes its status label every 60s via the
- * lafka-announce-bar.js companion — see /js/lafka-announce-bar.js.
+ * sit inline. The shared live status script (js/lafka-open-status.js) keeps
+ * the label current on a cached page.
  *
  * Operator data flows:
- *   - Hours       → lafka_open_status_get_hours_map() (plugin restaurant-info)
+ *   - Hours       → lafka_open_status() → the plugin's Lafka_Order_Hours::status()
  *   - City        → restaurant info → 'city'
  *   - Phone       → restaurant info → 'phone_display' / 'phone_e164'
  *   - Free over X → SSOT lafka_get_free_delivery_threshold() (plugin) when
@@ -60,8 +60,6 @@ $lafka_ann_threshold     = function_exists( 'lafka_get_free_delivery_threshold' 
 	: (float) get_theme_mod( 'lafka_announce_bar_delivery_threshold', 0 );
 $lafka_ann_show_delivery = (bool) get_theme_mod( 'lafka_announce_bar_show_delivery', true );
 
-$lafka_ann_hours_json = function_exists( 'lafka_open_status_hours_for_client' ) ? lafka_open_status_hours_for_client() : array();
-
 $lafka_ann_classes = array( 'lafka-announce-bar' );
 if ( $lafka_ann_status && ! empty( $lafka_ann_status['is_open'] ) ) {
 	$lafka_ann_classes[] = 'lafka-announce-bar--open';
@@ -78,21 +76,12 @@ $lafka_ann_threshold_label = function_exists( 'wc_price' )
 	role="region"
 	aria-label="<?php esc_attr_e( 'Service status and contact', 'lafka' ); ?>"
 	data-lafka-announce-bar
-	data-lafka-hours="<?php echo esc_attr( wp_json_encode( $lafka_ann_hours_json ) ); ?>"
-	<?php if ( ! empty( $lafka_ann_status['locked'] ) ) : ?>
-		data-lafka-status-locked
-	<?php endif; ?>
 >
 	<div class="lafka-container lafka-announce-bar__inner">
 
 		<?php if ( $lafka_ann_status ) : ?>
 			<span class="lafka-announce-bar__status" data-lafka-status>
-				<span
-					class="lafka-announce-bar__dot"
-					aria-hidden="true"
-					style="<?php echo esc_attr( '--lafka-dot: ' . $lafka_ann_status['dot_color'] ); ?>"
-					data-lafka-status-dot
-				></span>
+				<span class="lafka-announce-bar__dot" aria-hidden="true"></span>
 				<span class="lafka-announce-bar__status-label" data-lafka-status-label><?php echo esc_html( $lafka_ann_status['label'] ); ?></span>
 			</span>
 		<?php endif; ?>

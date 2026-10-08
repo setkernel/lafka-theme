@@ -20,7 +20,6 @@ $lafka_ch_nap    = lafka_counter_nap();
 $lafka_ch_status = function_exists( 'lafka_counter_open_status' ) ? lafka_counter_open_status() : null;
 $lafka_ch_logo   = function_exists( 'lafka_get_logo_id' ) ? (int) lafka_get_logo_id() : 0;
 $lafka_ch_nav_on = (bool) get_theme_mod( 'lafka_counter_header_nav', true );
-$lafka_ch_hours  = function_exists( 'lafka_open_status_hours_for_client' ) ? lafka_open_status_hours_for_client() : array();
 $lafka_ch_short  = lafka_counter_brand_short( $lafka_ch_nap['name'] );
 ?>
 <div class="lafka-counter-header">
@@ -55,8 +54,6 @@ $lafka_ch_short  = lafka_counter_brand_short( $lafka_ch_nap['name'] );
 			<p
 				class="lafka-counter-status <?php echo esc_attr( $lafka_ch_status['is_open'] ? 'is-open' : 'is-closed' ); ?>"
 				data-lafka-open-status
-				data-lafka-gate="<?php echo esc_attr( $lafka_ch_status['gate'] ); ?>"
-				data-lafka-hours="<?php echo esc_attr( (string) wp_json_encode( $lafka_ch_hours ) ); ?>"
 			>
 				<span class="lafka-counter-status__dot" aria-hidden="true"></span>
 				<span class="lafka-counter-status__text" data-lafka-open-status-text><strong><?php echo esc_html( $lafka_ch_status['strong'] ); ?></strong><?php echo '' !== $lafka_ch_status['rest'] ? ' · ' . esc_html( $lafka_ch_status['rest'] ) : ''; ?></span>

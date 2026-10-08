@@ -397,7 +397,7 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 	 * Enqueue the counter stylesheet + scripts (called from
 	 * lafka_enqueue_scripts_and_styles()). Nothing loads for a classic site.
 	 *  - lafka-counter.css           every counter surface (tokens only)
-	 *  - js/lafka-open-status.js     counter header status refresh (+ announce bar)
+	 *  - js/lafka-open-status.js     status refresh (counter header + announce bar)
 	 *  - js/lafka-fulfilment.js      Pickup/Delivery preference (cookie + event)
 	 *  - js/lafka-size-chooser.js    2-tap size chooser + row "Add"
 	 * All scripts are footer + defer, dependency-free (jQuery only to fire
@@ -414,32 +414,7 @@ if ( ! function_exists( 'lafka_counter_enqueue_assets' ) ) {
 		wp_enqueue_style( 'lafka-counter', get_template_directory_uri() . '/styles/lafka-counter.css', array( 'lafka-tokens' ), lafka_asset_version( '/styles/lafka-counter.css' ) );
 
 		if ( lafka_layout_is( 'header', 'counter' ) ) {
-			wp_enqueue_script( 'lafka-open-status', get_template_directory_uri() . '/js/lafka-open-status.js', array(), lafka_asset_version( '/js/lafka-open-status.js' ), $defer );
-			wp_localize_script(
-				'lafka-open-status',
-				'lafkaOpenStatusL10n',
-				array(
-					'openNow'       => __( 'Open now', 'lafka' ),
-					'closed'        => __( 'Closed', 'lafka' ),
-					/* translators: %s: closing time, e.g. "11 pm" */
-					'until'         => __( 'until %s', 'lafka' ),
-					/* translators: %s: opening time today */
-					'opensToday'    => __( 'opens today at %s', 'lafka' ),
-					/* translators: %s: opening time tomorrow */
-					'opensTomorrow' => __( 'opens tomorrow at %s', 'lafka' ),
-					/* translators: 1: weekday, 2: opening time */
-					'opensOn'       => __( 'opens %1$s at %2$s', 'lafka' ),
-					/* translators: %s: hour (and minutes), e.g. "11" or "11:30" */
-					'am'            => __( '%s am', 'lafka' ),
-					/* translators: %s: hour (and minutes), e.g. "11" or "11:30" */
-					'pm'            => __( '%s pm', 'lafka' ),
-					'noon'          => __( 'noon', 'lafka' ),
-					'midnight'      => __( 'midnight', 'lafka' ),
-					// Store UTC offset in minutes, so the refresh reads the store's clock.
-					'offset'        => (int) ( wp_timezone()->getOffset( new DateTime( 'now', wp_timezone() ) ) / 60 ),
-					'days'          => array( __( 'Sunday', 'lafka' ), __( 'Monday', 'lafka' ), __( 'Tuesday', 'lafka' ), __( 'Wednesday', 'lafka' ), __( 'Thursday', 'lafka' ), __( 'Friday', 'lafka' ), __( 'Saturday', 'lafka' ) ),
-				)
-			);
+			lafka_enqueue_open_status_script();
 		}
 		if ( lafka_layout_is( 'header', 'counter' ) || lafka_layout_is( 'drawer', 'counter' ) ) {
 			wp_enqueue_script( 'lafka-fulfilment', get_template_directory_uri() . '/js/lafka-fulfilment.js', array(), lafka_asset_version( '/js/lafka-fulfilment.js' ), $defer );

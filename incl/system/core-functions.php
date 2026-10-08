@@ -850,20 +850,16 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 		// v5.54.0: site-wide announce bar (dark strip with live open/closed
 		// status, delivery info, phone). Renders via wp_body_open priority 5
-		// so it sits above the promo bar. CSS + JS are both tiny.
+		// so it sits above the promo bar. The live status script is shared with the counter header.
 		wp_enqueue_style(
 			'lafka-announce-bar',
 			get_template_directory_uri() . '/styles/lafka-announce-bar.css',
 			array( 'lafka-tokens' ),
 			lafka_asset_version( '/styles/lafka-announce-bar.css' )
 		);
-		wp_enqueue_script(
-			'lafka-announce-bar',
-			get_template_directory_uri() . '/js/lafka-announce-bar.js',
-			array(),
-			lafka_asset_version( '/js/lafka-announce-bar.js' ),
-			true
-		);
+		if ( (bool) get_theme_mod( 'lafka_announce_bar_enabled', true ) ) {
+			lafka_enqueue_open_status_script();
+		}
 
 		// v5.55.0: header chrome. CSS for the rebuilt header.php
 		// (handoff-spec single-row layout). No JS — Order now CTA and

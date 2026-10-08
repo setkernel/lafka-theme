@@ -22,14 +22,9 @@ if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'header', 'counter
 	return;
 }
 
-$lafka_info        = lafka_get_restaurant_info();
-$lafka_method      = isset( $_COOKIE['lafka_order_method'] ) && 'pickup' === $_COOKIE['lafka_order_method'] ? 'pickup' : 'delivery';
-$lafka_is_open     = function_exists( 'lafka_pdp_is_store_open' ) ? lafka_pdp_is_store_open() : true;
-$lafka_today_hours = $lafka_info['hours'][ wp_date( 'l' ) ] ?? '';
-$lafka_close_time  = '';
-if ( preg_match( '/-(\d{2}:\d{2})$/', $lafka_today_hours, $m ) ) {
-	$lafka_close_time = $m[1];
-}
+$lafka_info   = lafka_get_restaurant_info();
+$lafka_method = isset( $_COOKIE['lafka_order_method'] ) && 'pickup' === $_COOKIE['lafka_order_method'] ? 'pickup' : 'delivery';
+$lafka_status = function_exists( 'lafka_open_status' ) ? lafka_open_status() : null;
 ?>
 <div class="lafka-order-method-bar" data-method="<?php echo esc_attr( $lafka_method ); ?>">
 	<div class="lafka-order-method-bar__inner">
@@ -65,29 +60,9 @@ if ( preg_match( '/-(\d{2}:\d{2})$/', $lafka_today_hours, $m ) ) {
 			<?php if ( ! empty( $lafka_info['phone_display'] ) ) : ?>
 				<a class="lafka-order-method-bar__phone" href="tel:<?php echo esc_attr( $lafka_info['phone_e164'] ); ?>">📞 <?php echo esc_html( $lafka_info['phone_display'] ); ?></a>
 			<?php endif; ?>
-			<span class="lafka-order-method-bar__hours">
-				<?php if ( $lafka_is_open && $lafka_close_time ) : ?>
-					<?php
-					/* translators: %s: closing time. */
-					printf( esc_html__( 'Open until %s', 'lafka' ), esc_html( $lafka_close_time ) );
-					?>
-				<?php elseif ( $lafka_is_open ) : ?>
-					<?php esc_html_e( 'Open', 'lafka' ); ?>
-				<?php else : ?>
-					<?php
-					esc_html_e( 'Closed', 'lafka' );
-
-					if ( class_exists( 'Lafka_Order_Hours' ) ) {
-						$lafka_next_open = Lafka_Order_Hours::get_next_opening_time();
-						$lafka_human     = Lafka_Order_Hours::format_next_open_time_human( $lafka_next_open );
-						if ( '' !== $lafka_human ) {
-							/* translators: %s: when the kitchen next opens, e.g. "today at 11:00 AM". */
-							echo ' &middot; ' . esc_html( sprintf( __( 'Opens %s', 'lafka' ), $lafka_human ) );
-						}
-					}
-					?>
-				<?php endif; ?>
-			</span>
+			<?php if ( $lafka_status ) : ?>
+				<span class="lafka-order-method-bar__hours"><?php echo esc_html( $lafka_status['label'] ); ?></span>
+			<?php endif; ?>
 		</div>
 	</div>
 </div>

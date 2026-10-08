@@ -32,7 +32,7 @@ if ( ! function_exists( 'lafka_deferred_script_handles' ) ) {
 			'lafka-libs-config',
 			'lafka-dialog',
 			'lafka-search',
-			'lafka-announce-bar',
+			'lafka-open-status',
 			'lafka-mobile-nav',
 			'lafka-cart-drawer',
 			'lafka-sticky-cart',

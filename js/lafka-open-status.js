@@ -1,149 +1,74 @@
 /**
- * GX4: shared open/closed compute + the counter header's 60 s refresh.
+ * Live open/closed status: keeps the announce bar and the counter header's
+ * wording true on a page that was cached or left open.
  *
- * window.lafkaOpenStatus.compute( hours, now ) mirrors the PHP
- * lafka_open_status() schedule logic (hours = { monday: "11:00-23:00" | "Closed" })
- * and returns { open, strong, rest }. The refresh only touches
- * [data-lafka-open-status][data-lafka-gate="schedule"]: when the ORDER GATE
- * overrides the schedule (force open/close, holiday) the server's verdict
- * stands and is never "refreshed" back to the schedule.
+ * The wording is never computed here. The server prints the status once as
+ * window.lafkaOpenStatus ({ is_open, strong, rest, label, until }); `until` is
+ * the Unix time the wording next changes. When that time passes the script
+ * asks the plugin's /lafka/v1/open-status route for the new wording.
  *
- * Strings come from window.lafkaOpenStatusL10n (wp_localize_script), with
- * English fallbacks.
+ * Depends on lafka-core (window.lafka.api).
  *
  * @since 7.2.0 (GX4)
  */
-( function () {
+( function ( w, d ) {
 	'use strict';
 
-	const L = window.lafkaOpenStatusL10n || {};
-	const DAYS = [ 'sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday' ];
-	const DAY_LABELS = L.days || [ 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' ];
-
-	function t( key, fallback ) {
-		return L[ key ] || fallback;
+	const lafka = w.lafka;
+	let state = w.lafkaOpenStatus;
+	if ( ! lafka || ! lafka.api || ! state ) {
+		return;
 	}
 
-	function fill( template, a, b ) {
-		return template.replace( '%1$s', a ).replace( '%2$s', b ).replace( '%s', a );
-	}
+	function render() {
+		const open = !! state.is_open;
+		const rest = state.rest ? ' · ' + state.rest : '';
 
-	function toMinutes( hhmm ) {
-		const m = /^(\d{1,2}):(\d{2})$/.exec( hhmm || '' );
-		return m ? parseInt( m[ 1 ], 10 ) * 60 + parseInt( m[ 2 ], 10 ) : -1;
-	}
-
-	function plain( hhmm ) {
-		const m = /^(\d{1,2}):(\d{2})$/.exec( hhmm || '' );
-		if ( ! m ) {
-			return hhmm;
-		}
-		const h = parseInt( m[ 1 ], 10 ) % 24;
-		const i = parseInt( m[ 2 ], 10 );
-		if ( i === 0 && h === 0 ) {
-			return t( 'midnight', 'midnight' );
-		}
-		if ( i === 0 && h === 12 ) {
-			return t( 'noon', 'noon' );
-		}
-		const h12 = h % 12 === 0 ? 12 : h % 12;
-		const time = i === 0 ? String( h12 ) : h12 + ':' + ( i < 10 ? '0' + i : i );
-		// A no-break space keeps "11 am" on one line when the label wraps.
-		return fill( h < 12 ? t( 'am', '%s am' ) : t( 'pm', '%s pm' ), time ).replace( / /g, '\u00A0' );
-	}
-
-	function rangeOf( hours, day ) {
-		const v = hours[ day ];
-		const m = v && ! /^closed$/i.test( v ) ? /^(\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/.exec( v ) : null;
-		return m ? { open: m[ 1 ], close: m[ 2 ] } : null;
-	}
-
-	function compute( hours, now ) {
-		let today;
-		let nowMin;
-		if ( now ) {
-			today = now.getDay();
-			nowMin = now.getHours() * 60 + now.getMinutes();
-		} else if ( typeof L.offset === 'number' ) {
-			// The STORE's wall clock (WP timezone offset), never the visitor's.
-			const store = new Date( Date.now() + L.offset * 60000 );
-			today = store.getUTCDay();
-			nowMin = store.getUTCHours() * 60 + store.getUTCMinutes();
-		} else {
-			const local = new Date();
-			today = local.getDay();
-			nowMin = local.getHours() * 60 + local.getMinutes();
-		}
-		const openNow = t( 'openNow', 'Open now' );
-		const closed = t( 'closed', 'Closed' );
-
-		const y = rangeOf( hours, DAYS[ ( today + 6 ) % 7 ] );
-		if ( y && toMinutes( y.close ) < toMinutes( y.open ) && nowMin < toMinutes( y.close ) ) {
-			return { open: true, strong: openNow, rest: fill( t( 'until', 'until %s' ), plain( y.close ) ) };
-		}
-		const r = rangeOf( hours, DAYS[ today ] );
-		if ( r ) {
-			const o = toMinutes( r.open );
-			const c = toMinutes( r.close );
-			if ( nowMin >= o && ( c < o || nowMin < c ) ) {
-				return { open: true, strong: openNow, rest: fill( t( 'until', 'until %s' ), plain( r.close ) ) };
+		d.querySelectorAll( '[data-lafka-open-status]' ).forEach( function ( node ) {
+			const text = node.querySelector( '[data-lafka-open-status-text]' );
+			if ( text ) {
+				const strong = d.createElement( 'strong' );
+				strong.textContent = state.strong;
+				text.textContent = '';
+				text.appendChild( strong );
+				text.appendChild( d.createTextNode( rest ) );
 			}
-			if ( nowMin < o ) {
-				return { open: false, strong: closed, rest: fill( t( 'opensToday', 'opens today at %s' ), plain( r.open ) ) };
-			}
+			node.classList.toggle( 'is-open', open );
+			node.classList.toggle( 'is-closed', ! open );
+		} );
+
+		const bar = d.querySelector( '[data-lafka-announce-bar]' );
+		const label = bar && bar.querySelector( '[data-lafka-status-label]' );
+		if ( label ) {
+			label.textContent = state.label;
+			bar.classList.toggle( 'lafka-announce-bar--open', open );
+			bar.classList.toggle( 'lafka-announce-bar--closed', ! open );
 		}
-		for ( let offset = 1; offset <= 7; offset++ ) {
-			const idx = ( today + offset ) % 7;
-			const n = rangeOf( hours, DAYS[ idx ] );
-			if ( n ) {
-				const rest = offset === 1
-					? fill( t( 'opensTomorrow', 'opens tomorrow at %s' ), plain( n.open ) )
-					: fill( t( 'opensOn', 'opens %1$s at %2$s' ), DAY_LABELS[ idx ], plain( n.open ) );
-				return { open: false, strong: closed, rest: rest };
-			}
-		}
-		return { open: false, strong: closed, rest: '' };
 	}
 
-	window.lafkaOpenStatus = { compute: compute, plain: plain };
+	let retryAt = 0;
 
-	function render( node ) {
-		let hours;
-		try {
-			hours = JSON.parse( node.getAttribute( 'data-lafka-hours' ) || '{}' ) || {};
-		} catch {
+	function check() {
+		const now = Date.now() / 1000;
+		if ( ! state.until || now < state.until || now < retryAt ) {
 			return;
 		}
-		if ( ! Object.keys( hours ).length ) {
-			return;
-		}
-		const s = compute( hours );
-		const text = node.querySelector( '[data-lafka-open-status-text]' );
-		if ( ! text ) {
-			return;
-		}
-		const strong = document.createElement( 'strong' );
-		strong.textContent = s.strong;
-		text.textContent = '';
-		text.appendChild( strong );
-		if ( s.rest ) {
-			text.appendChild( document.createTextNode( ' · ' + s.rest ) );
-		}
-		node.classList.toggle( 'is-open', s.open );
-		node.classList.toggle( 'is-closed', ! s.open );
+		retryAt = now + 60;
+		lafka.api.get( 'lafka/v1/open-status' ).then( function ( next ) {
+			if ( next && next.label ) {
+				state = next;
+				render();
+			}
+		} ).catch( function () {
+			// Keep the printed wording; the next tick tries again.
+		} );
 	}
 
-	function refresh() {
-		const nodes = document.querySelectorAll( '[data-lafka-open-status][data-lafka-gate="schedule"]' );
-		Array.prototype.forEach.call( nodes, render );
-	}
-
-	// A cached page can be hours old: re-check once on load, then every minute.
-	refresh();
-	setInterval( refresh, 60000 );
-	document.addEventListener( 'visibilitychange', function () {
-		if ( document.visibilityState === 'visible' ) {
-			refresh();
+	check();
+	w.setInterval( check, 30000 );
+	d.addEventListener( 'visibilitychange', function () {
+		if ( d.visibilityState === 'visible' ) {
+			check();
 		}
 	} );
-}() );
+}( window, document ) );

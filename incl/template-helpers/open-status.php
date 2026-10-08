@@ -1,32 +1,19 @@
 <?php
 /**
- * Open/closed status helper.
+ * Open/closed status for the storefront.
  *
- * Computes whether the restaurant is currently open from the hours map
- * returned by `lafka_get_restaurant_info()` (plugin: lafka-plugin schema
- * helpers). Returns a structured array the announce bar (and any other
- * surface) can render.
+ * A thin reader of the plugin's Lafka_Order_Hours::status(): the one answer
+ * the order gate, schema, the product-page trust line and this theme's badges
+ * all give. The plugin owns the hours, the "until 11 pm" / "opens tomorrow at
+ * 11 am" wording and the clock; the theme only dresses the result. Without the
+ * plugin there are no hours to show and the strip simply does not render.
  *
- * SSOT: `lafka_get_restaurant_info()['hours']` is now the single hours
- * store. When the operator hasn't populated the dedicated display-hours
- * store (`lafka_business_hours_*`), the resolver derives that map from the
- * SAME order-hours schedule that gates ordering (Lafka_Order_Hours), so the
- * "Open now" badge, the JSON-LD openingHoursSpecification, and the order
- * gate all agree on the schedule. The client-side refresh
- * (js/lafka-announce-bar.js) reads the same serialized map via
- * lafka_open_status_hours_for_client(), so server render and client refresh
- * stay in sync.
- *
- * The order gate also honours force-override, holiday/vacation closures and
- * the session branch, which the hours map cannot express. For "now",
- * lafka_open_status() therefore defers to Lafka_Order_Hours::is_shop_open()
- * when it disagrees with the schedule and marks the result 'locked'; the
- * announce bar then tells its client refresh (schedule-only) to keep the
- * server label.
+ * The live script (js/lafka-open-status.js) keeps a cached page honest: it
+ * reads the same status as JSON (lafkaOpenStatus) and asks the plugin's
+ * /lafka/v1/open-status route for the next wording when the time passes.
  *
  * Filter surface:
- *   lafka_open_status(array $status, int|null $now) — override the result
- *   lafka_open_status_schedule(array $status, int|null $now) — schedule only
+ *   lafka_open_status( array|null $status, int|null $now ) - override the result
  *
  * @package Lafka
  * @since   5.54.0
@@ -34,80 +21,44 @@
 
 defined( 'ABSPATH' ) || exit;
 
-if ( ! function_exists( 'lafka_open_status_get_hours_map' ) ) {
-	/**
-	 * Resolve the hours map from the plugin's restaurant-info resolver, or
-	 * an empty array when no plugin / no hours are configured.
-	 *
-	 * The resolver reconciles the two historical hours stores into one: when
-	 * the dedicated display store is unset it derives this map from the
-	 * order-acceptance schedule, so the value returned here matches what the
-	 * order gate enforces (see the file-level docblock).
-	 *
-	 * @return array<string, string> e.g. ['Monday' => '11:00-23:00', ...]
-	 */
-	function lafka_open_status_get_hours_map() {
-		if ( function_exists( 'lafka_get_restaurant_info' ) ) {
-			$info = lafka_get_restaurant_info();
-			if ( ! empty( $info['hours'] ) && is_array( $info['hours'] ) ) {
-				return $info['hours'];
-			}
-		}
-		return array();
-	}
-}
-
-if ( ! function_exists( 'lafka_open_status_to_minutes' ) ) {
-	/**
-	 * Convert "HH:MM" to minutes since midnight. Returns -1 on parse fail.
-	 *
-	 * @param string $hhmm e.g. "11:30"
-	 * @return int 0..1439, or -1 if invalid.
-	 */
-	function lafka_open_status_to_minutes( $hhmm ) {
-		if ( ! preg_match( '/^(\d{1,2}):(\d{2})$/', trim( $hhmm ), $m ) ) {
-			return -1;
-		}
-		$h = (int) $m[1];
-		$i = (int) $m[2];
-		if ( $h < 0 || $h > 47 || $i < 0 || $i > 59 ) {
-			return -1;
-		}
-		return $h * 60 + $i;
-	}
-}
-
-if ( ! function_exists( 'lafka_open_status_format_12h' ) ) {
-	/**
-	 * Spoken 12h string for an "HH:MM" 24h value ("23:00" -> "11 pm"); the
-	 * same wording as lafka_time_plain() and the live status script.
-	 *
-	 * @param string $hhmm 24h time.
-	 * @return string
-	 */
-	function lafka_open_status_format_12h( $hhmm ) {
-		return lafka_time_plain( (string) $hhmm );
-	}
-}
-
 if ( ! function_exists( 'lafka_open_status' ) ) {
 	/**
-	 * Open/closed status right now (or at $now), reconciled with the order gate.
+	 * Open/closed status right now (or at $now).
 	 *
-	 * The hours map only knows the weekly schedule. For the current moment the
-	 * plugin's Lafka_Order_Hours::is_shop_open() is authoritative — it also
-	 * applies the operator's force open/closed override, holiday closures and
-	 * the session branch. When it disagrees with the schedule, the gate wins
-	 * and the status is marked 'locked' so the announce bar's client refresh
-	 * (which only knows the schedule) leaves it alone.
+	 * Returns null when there are no hours to show (the caller hides the strip),
+	 * else:
+	 *   [
+	 *     'is_open'   => bool,
+	 *     'short'     => 'Open now' | 'Closed',
+	 *     'strong'    => the same,
+	 *     'rest'      => 'until 11 pm' | 'opens tomorrow at 11 am' | '',
+	 *     'label'     => 'Open now · until 11 pm',
+	 *     'dot_color' => css var for the status dot,
+	 *     'source'    => 'schedule' | 'display' | 'forced' | 'holiday',
+	 *     'close'     => 'HH:MM' closing time while open, else '',
+	 *   ]
 	 *
-	 * @param int|null $now Unix ts; default: now (only "now" consults the gate).
-	 * @return array|null See lafka_open_status_schedule().
+	 * @param int|null $now Unix timestamp; default now.
+	 * @return array|null
 	 */
 	function lafka_open_status( $now = null ) {
-		$status = lafka_open_status_schedule( $now );
-		if ( null === $now ) {
-			$status = lafka_open_status_apply_order_gate( $status );
+		$status = null;
+
+		if ( class_exists( 'Lafka_Order_Hours' ) ) {
+			$raw = Lafka_Order_Hours::status( null === $now ? null : new DateTimeImmutable( '@' . (int) $now ) );
+			if ( $raw['has_hours'] || $raw['forced'] || $raw['holiday'] ) {
+				$text   = Lafka_Order_Hours::status_text( $raw );
+				$status = array(
+					'is_open'   => $raw['is_open'],
+					'short'     => $text['strong'],
+					'strong'    => $text['strong'],
+					'rest'      => $text['rest'],
+					'label'     => $text['label'],
+					'dot_color' => $raw['is_open'] ? 'var(--lafka-color-success-500)' : 'var(--lafka-color-brand-500)',
+					'source'    => $raw['source'],
+					'close'     => $raw['is_open'] && $raw['closes_at'] instanceof DateTimeInterface ? $raw['closes_at']->format( 'H:i' ) : '',
+				);
+			}
 		}
 
 		/**
@@ -120,221 +71,30 @@ if ( ! function_exists( 'lafka_open_status' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_open_status_apply_order_gate' ) ) {
+if ( ! function_exists( 'lafka_enqueue_open_status_script' ) ) {
 	/**
-	 * Let the plugin's order gate override a schedule-only status.
+	 * Load the live status script once, with the status as one JSON object.
+	 * Does nothing without the plugin (no hours, no shared core script).
 	 *
-	 * @param array|null $status Schedule status.
-	 * @return array|null
+	 * @return void
 	 */
-	function lafka_open_status_apply_order_gate( $status ) {
-		if ( ! class_exists( 'Lafka_Order_Hours' ) || ! method_exists( 'Lafka_Order_Hours', 'is_shop_open' ) ) {
-			return $status;
+	function lafka_enqueue_open_status_script(): void {
+		if ( wp_script_is( 'lafka-open-status', 'enqueued' ) || ! class_exists( 'Lafka_Order_Hours' ) || ! wp_script_is( 'lafka-core', 'registered' ) ) {
+			return;
 		}
-		$gate_open = (bool) Lafka_Order_Hours::is_shop_open();
-		if ( is_array( $status ) && (bool) $status['is_open'] === $gate_open ) {
-			return $status;
+		if ( null === lafka_open_status() ) {
+			return;
 		}
-		if ( null === $status ) {
-			// No hours to show: keep the strip hidden rather than invent a status.
-			return null;
-		}
-
-		if ( $gate_open ) {
-			return array(
-				'is_open'   => true,
-				'short'     => __( 'Open now', 'lafka' ),
-				'label'     => __( 'Open now', 'lafka' ),
-				'dot_color' => 'var(--lafka-color-success-500)',
-				'locked'    => true,
-			);
-		}
-
-		$next = '';
-		if ( method_exists( 'Lafka_Order_Hours', 'get_next_opening_time' ) && method_exists( 'Lafka_Order_Hours', 'format_next_open_time_human' ) ) {
-			$next = (string) Lafka_Order_Hours::format_next_open_time_human( Lafka_Order_Hours::get_next_opening_time() );
-		}
-
-		return array(
-			'is_open'   => false,
-			'short'     => __( 'Closed', 'lafka' ),
-			'label'     => '' !== $next
-				/* translators: %s: next opening, e.g. "tomorrow at 11 am". */
-				? sprintf( __( 'Closed · opens %s', 'lafka' ), $next )
-				: __( 'Closed', 'lafka' ),
-			'dot_color' => 'var(--lafka-color-brand-500)',
-			'locked'    => true,
-		);
-	}
-}
-
-if ( ! function_exists( 'lafka_open_status_schedule' ) ) {
-	/**
-	 * Compute open/closed status at a given timestamp from the weekly
-	 * schedule alone (defaults to WP now). Most callers want lafka_open_status().
-	 *
-	 * Returns:
-	 *   [
-	 *     'is_open'  => bool,
-	 *     'short'    => 'Open now' | 'Closed',
-	 *     'label'    => 'Open now · Until 11:00 pm' | 'Closed · Opens today at 11:00 am' | 'Closed · Opens Monday at 11:00 am',
-	 *     'dot_color'=> css var name for the status dot,
-	 *   ]
-	 *
-	 * Returns null when no hours are configured (caller hides the strip).
-	 * Handles past-midnight closes (e.g. "11:00-02:00") by treating the
-	 * close as next-day. Looks up to 7 days forward to find the next open day.
-	 *
-	 * Filter `lafka_open_status_schedule` (array|null $status, int|null $now)
-	 * adjusts the schedule-only result; `lafka_open_status` the final one.
-	 *
-	 * @param int|null $now Unix ts; default: current_time('timestamp').
-	 * @return array|null
-	 */
-	function lafka_open_status_schedule( $now = null ) {
-		$hours = lafka_open_status_get_hours_map();
-		if ( empty( $hours ) ) {
-			return apply_filters( 'lafka_open_status_schedule', null, $now );
-		}
-
-		if ( null === $now ) {
-			$now = time() + (int) wp_timezone()->getOffset( new DateTimeImmutable( 'now' ) );
-		}
-
-		$day_names = array(
-			0 => 'Sunday',
-			1 => 'Monday',
-			2 => 'Tuesday',
-			3 => 'Wednesday',
-			4 => 'Thursday',
-			5 => 'Friday',
-			6 => 'Saturday',
-		);
-
-		$today_idx   = (int) gmdate( 'w', $now );
-		$now_minutes = ( (int) gmdate( 'H', $now ) * 60 ) + (int) gmdate( 'i', $now );
-		$today_name  = $day_names[ $today_idx ];
-		$today_hours = isset( $hours[ $today_name ] ) ? (string) $hours[ $today_name ] : '';
-
-		// 1. Check if currently open under today's range OR yesterday's range
-		// (yesterday's range can extend past midnight into today, e.g. Fri 11:00-02:00).
-		$yesterday_idx   = ( $today_idx + 6 ) % 7;
-		$yesterday_name  = $day_names[ $yesterday_idx ];
-		$yesterday_hours = isset( $hours[ $yesterday_name ] ) ? (string) $hours[ $yesterday_name ] : '';
-
-		if ( $yesterday_hours && 'closed' !== strtolower( $yesterday_hours ) && preg_match( '/^(\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/', $yesterday_hours, $m ) ) {
-			$y_open  = lafka_open_status_to_minutes( $m[1] );
-			$y_close = lafka_open_status_to_minutes( $m[2] );
-			if ( $y_close < $y_open ) {
-				// Yesterday's close rolls into today: e.g. open 23:00, close 02:00.
-				// Today is "still open" if now < close-of-yesterday.
-				if ( $now_minutes < $y_close ) {
-					return apply_filters(
-						'lafka_open_status_schedule',
-						array(
-							'is_open'   => true,
-							'short'     => __( 'Open now', 'lafka' ),
-							/* translators: %s: closing time, e.g. "11 pm". */
-							'label'     => sprintf( __( 'Open now · until %s', 'lafka' ), lafka_open_status_format_12h( $m[2] ) ),
-							'dot_color' => 'var(--lafka-color-success-500)',
-							'close'     => $m[2],
-						),
-						$now
-					);
-				}
-			}
-		}
-
-		if ( $today_hours && 'closed' !== strtolower( $today_hours ) && preg_match( '/^(\d{1,2}:\d{2})-(\d{1,2}:\d{2})$/', $today_hours, $m ) ) {
-			$t_open  = lafka_open_status_to_minutes( $m[1] );
-			$t_close = lafka_open_status_to_minutes( $m[2] );
-			$rolls   = $t_close < $t_open;
-
-			if ( $now_minutes >= $t_open && ( $rolls || $now_minutes < $t_close ) ) {
-				return apply_filters(
-					'lafka_open_status_schedule',
-					array(
-						'is_open'   => true,
-						'short'     => __( 'Open now', 'lafka' ),
-						/* translators: %s: closing time, e.g. "11 pm". */
-						'label'     => sprintf( __( 'Open now · until %s', 'lafka' ), lafka_open_status_format_12h( $m[2] ) ),
-						'dot_color' => 'var(--lafka-color-success-500)',
-						'close'     => $m[2],
-					),
-					$now
-				);
-			}
-
-			// Not open yet today — opens later today.
-			if ( $now_minutes < $t_open ) {
-				return apply_filters(
-					'lafka_open_status_schedule',
-					array(
-						'is_open'   => false,
-						'short'     => __( 'Closed', 'lafka' ),
-						/* translators: %s — opening time today */
-						'label'     => sprintf( __( 'Closed · opens today at %s', 'lafka' ), lafka_open_status_format_12h( $m[1] ) ),
-						'dot_color' => 'var(--lafka-color-brand-500)',
-						'opens'     => $m[1],
-						'opens_day' => 0,
-					),
-					$now
-				);
-			}
-		}
-
-		// Closed for today — search forward up to 7 days for next open day.
-		for ( $offset = 1; $offset <= 7; $offset++ ) {
-			$next_idx   = ( $today_idx + $offset ) % 7;
-			$next_name  = $day_names[ $next_idx ];
-			$next_hours = isset( $hours[ $next_name ] ) ? (string) $hours[ $next_name ] : '';
-
-			if ( $next_hours && 'closed' !== strtolower( $next_hours ) && preg_match( '/^(\d{1,2}:\d{2})-/', $next_hours, $m ) ) {
-				$when = ( 1 === $offset ) ? __( 'tomorrow', 'lafka' ) : $next_name;
-				return apply_filters(
-					'lafka_open_status_schedule',
-					array(
-						'is_open'   => false,
-						'short'     => __( 'Closed', 'lafka' ),
-						/* translators: 1: day-of-week label ("tomorrow" or "Monday"); 2: opening time */
-						'label'     => sprintf( __( 'Closed · opens %1$s at %2$s', 'lafka' ), $when, lafka_open_status_format_12h( $m[1] ) ),
-						'dot_color' => 'var(--lafka-color-brand-500)',
-						'opens'     => $m[1],
-						'opens_day' => $offset,
-						'opens_on'  => $next_name,
-					),
-					$now
-				);
-			}
-		}
-
-		// All seven days closed — operator data is broken.
-		return apply_filters(
-			'lafka_open_status_schedule',
+		wp_enqueue_script(
+			'lafka-open-status',
+			get_template_directory_uri() . '/js/lafka-open-status.js',
+			array( 'lafka-core' ),
+			lafka_asset_version( '/js/lafka-open-status.js' ),
 			array(
-				'is_open'   => false,
-				'short'     => __( 'Closed', 'lafka' ),
-				'label'     => __( 'Closed', 'lafka' ),
-				'dot_color' => 'var(--lafka-color-text-muted)',
-			),
-			$now
+				'in_footer' => true,
+				'strategy'  => 'defer',
+			)
 		);
-	}
-}
-
-if ( ! function_exists( 'lafka_open_status_hours_for_client' ) ) {
-	/**
-	 * Serialize the hours map for client-side JS (announce-bar live refresh).
-	 * Day keys lower-cased ("monday") to keep the JS lookup simple.
-	 *
-	 * @return array<string, string>
-	 */
-	function lafka_open_status_hours_for_client() {
-		$hours  = lafka_open_status_get_hours_map();
-		$client = array();
-		foreach ( $hours as $day_name => $range ) {
-			$client[ strtolower( $day_name ) ] = (string) $range;
-		}
-		return $client;
+		wp_add_inline_script( 'lafka-open-status', 'window.lafkaOpenStatus = ' . wp_json_encode( Lafka_Order_Hours::client_status() ) . ';', 'before' );
 	}
 }

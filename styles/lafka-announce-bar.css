@@ -63,7 +63,13 @@
 }
 
 .lafka-announce-bar--open .lafka-announce-bar__dot {
+	--lafka-dot: var(--lafka-color-success-500);
+
 	animation: lafka-announce-pulse 2s var(--lafka-motion-ease-in-out) infinite;
+}
+
+.lafka-announce-bar--closed .lafka-announce-bar__dot {
+	--lafka-dot: var(--lafka-color-brand-500);
 }
 
 @keyframes lafka-announce-pulse {

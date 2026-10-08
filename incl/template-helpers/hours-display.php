@@ -1,23 +1,16 @@
 <?php
 /**
- * GX4: human hours + the gate-aware open/closed status.
+ * GX4: human hours and the counter header's status wording.
  *
  *   lafka_time_plain( '23:00' )        -> "11 pm" ("midnight", "noon", "11:30 am")
  *   lafka_hours_grouped( $hours )      -> [ { days: "Sun–Thu", hours: "11 am–11 pm" }, … ]
  *   lafka_hours_late_note( $hours )    -> "Open till midnight Fri & Sat" | ''
- *   lafka_gated_open_status()          -> lafka_open_status() reconciled with the ORDER GATE
- *   lafka_counter_open_status()        -> the same, with the counter header's wording
+ *   lafka_counter_open_status()        -> lafka_open_status() with the counter header's parts
  *
- * The hours map is lafka_get_restaurant_info()['hours'] (the single NAP/hours
- * store): [ 'Monday' => '11:00-23:00' | 'Closed', … ].
- *
- * Gate: the storefront badge used to read the SCHEDULE only, so a store the
- * operator force-opened (or a holiday closure) showed the wrong state. When
- * lafka-plugin's order-hours module is on, Lafka_Order_Hours::is_shop_open()
- * — which honours force override + holidays — decides open/closed, and the
- * status is marked `gate = override` whenever it disagrees with the schedule
- * (or a force override is on), so the client never "refreshes" it back to
- * the schedule.
+ * The hours map is lafka_get_restaurant_info()['hours'] (the plugin publishes
+ * the order-hours schedule there): [ 'Monday' => '11:00-23:00' | 'Closed', … ].
+ * Whether the store is open NOW is not decided here: lafka_open_status() reads
+ * the plugin's Lafka_Order_Hours::status().
  *
  * Filters: lafka_hours_grouped, lafka_hours_late_note, lafka_counter_open_status.
  *
@@ -235,152 +228,25 @@ if ( ! function_exists( 'lafka_hours_late_note' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_open_status_gate' ) ) {
-	/**
-	 * The ORDER GATE's verdict, or null when lafka-plugin's order-hours module
-	 * is not running. Lafka_Order_Hours::is_shop_open() honours the force
-	 * override and holiday closures that the display schedule cannot express.
-	 */
-	function lafka_open_status_gate(): ?bool {
-		if ( ! class_exists( 'Lafka_Order_Hours' ) || ! method_exists( 'Lafka_Order_Hours', 'is_shop_open' ) ) {
-			return null;
-		}
-		if ( function_exists( 'is_lafka_order_hours' ) && ! is_lafka_order_hours() ) {
-			return null;
-		}
-		return (bool) Lafka_Order_Hours::is_shop_open();
-	}
-}
-
-if ( ! function_exists( 'lafka_open_status_forced' ) ) {
-	/** Whether the plugin's force override (open or closed) is on. */
-	function lafka_open_status_forced(): bool {
-		return class_exists( 'Lafka_Order_Hours' )
-			&& property_exists( 'Lafka_Order_Hours', 'lafka_order_hours_force_override_check' )
-			&& ! empty( Lafka_Order_Hours::$lafka_order_hours_force_override_check );
-	}
-}
-
-if ( ! function_exists( 'lafka_open_status_next_open_human' ) ) {
-	/** The plugin's "Saturday at 11:00 AM", or '' (no gate / no next opening). */
-	function lafka_open_status_next_open_human(): string {
-		if ( ! class_exists( 'Lafka_Order_Hours' ) || ! method_exists( 'Lafka_Order_Hours', 'format_next_open_time_human' ) ) {
-			return '';
-		}
-		$next = method_exists( 'Lafka_Order_Hours', 'get_next_opening_time' ) ? Lafka_Order_Hours::get_next_opening_time() : null;
-		return (string) Lafka_Order_Hours::format_next_open_time_human( $next );
-	}
-}
-
-if ( ! function_exists( 'lafka_gated_open_status' ) ) {
-	/**
-	 * The schedule status (lafka_open_status_schedule()) reconciled with the
-	 * order gate — the same rule lafka_open_status() applies for "now" (GX0),
-	 * plus: only while the order-hours MODULE is on, and a force override
-	 * always counts as an override. Adds `gate`: `schedule` (the client may
-	 * refresh it) or `override` (never refresh). Passes the public
-	 * `lafka_open_status` filter. Null when there are no hours and nothing
-	 * overrides them.
-	 *
-	 * @param int|null $now Unix timestamp (tests); default now.
-	 * @return array<string,mixed>|null
-	 */
-	function lafka_gated_open_status( ?int $now = null ): ?array {
-		if ( function_exists( 'lafka_open_status_schedule' ) ) {
-			$status = lafka_open_status_schedule( $now );
-		} else {
-			$status = function_exists( 'lafka_open_status' ) ? lafka_open_status( $now ) : null;
-		}
-		$gate   = lafka_open_status_gate();
-		$forced = null !== $gate && lafka_open_status_forced();
-
-		if ( null === $gate || ( is_array( $status ) && ! $forced && (bool) $status['is_open'] === $gate ) ) {
-			$result = is_array( $status ) ? $status + array( 'gate' => 'schedule' ) : null;
-		} elseif ( ! is_array( $status ) && ! $forced ) {
-			$result = null; // No hours configured and nothing overriding them: say nothing.
-		} elseif ( $gate ) {
-			$schedule_open = is_array( $status ) && ! empty( $status['is_open'] );
-			$result        = array(
-				'is_open'   => true,
-				'short'     => __( 'Open now', 'lafka' ),
-				// A force-open during scheduled hours still has a real closing time.
-				'label'     => $schedule_open ? $status['label'] : __( 'Open now', 'lafka' ),
-				'dot_color' => 'var(--lafka-color-success-500)',
-				'close'     => $schedule_open && isset( $status['close'] ) ? $status['close'] : '',
-				'locked'    => true,
-				'gate'      => 'override',
-			);
-		} else {
-			$next   = lafka_open_status_next_open_human();
-			$result = array(
-				'is_open'   => false,
-				'short'     => __( 'Closed', 'lafka' ),
-				'label'     => '' !== $next
-					/* translators: %s: next opening, e.g. "tomorrow at 11 am". */
-					? sprintf( __( 'Closed · opens %s', 'lafka' ), $next )
-					: __( 'Closed', 'lafka' ),
-				'dot_color' => 'var(--lafka-color-text-secondary)',
-				'next'      => $next,
-				'locked'    => true,
-				'gate'      => 'override',
-			);
-		}
-
-		/** This filter is documented in incl/template-helpers/open-status.php */
-		$result = apply_filters( 'lafka_open_status', $result, $now );
-		return is_array( $result ) ? $result + array( 'gate' => 'schedule' ) : null;
-	}
-}
-
 if ( ! function_exists( 'lafka_counter_open_status' ) ) {
 	/**
 	 * The counter header's status: `strong` ("Open now" / "Closed") + `rest`
-	 * ("until 11 pm" / "opens tomorrow at 11 am") + `label` (both joined),
-	 * `is_open` and `gate` (schedule | override).
+	 * ("until 11 pm" / "opens tomorrow at 11 am") + `label` (both joined) and
+	 * `is_open`. A reader of lafka_open_status(), which reads the plugin.
 	 *
 	 * @param int|null $now Unix timestamp (tests); default now.
-	 * @return array{is_open:bool,strong:string,rest:string,label:string,gate:string}|null
+	 * @return array{is_open:bool,strong:string,rest:string,label:string}|null
 	 */
 	function lafka_counter_open_status( ?int $now = null ): ?array {
-		$status = lafka_gated_open_status( $now );
-		if ( null === $status ) {
+		$status = lafka_open_status( $now );
+		if ( ! is_array( $status ) ) {
 			return null;
 		}
-		$open = ! empty( $status['is_open'] );
-		$rest = '';
-		if ( $open && ! empty( $status['close'] ) ) {
-			/* translators: %s: closing time, e.g. "11 pm" */
-			$rest = sprintf( __( 'until %s', 'lafka' ), lafka_time_plain( (string) $status['close'] ) );
-		} elseif ( ! $open && 'override' === $status['gate'] && ! empty( $status['next'] ) ) {
-			/* translators: %s: next opening, e.g. "Saturday at 11:00 AM" */
-			$rest = sprintf( __( 'opens %s', 'lafka' ), $status['next'] );
-		} elseif ( ! $open && ! empty( $status['opens'] ) ) {
-			$time = lafka_time_plain( (string) $status['opens'] );
-			$day  = (int) ( $status['opens_day'] ?? 0 );
-			if ( 0 === $day ) {
-				/* translators: %s: opening time today */
-				$rest = sprintf( __( 'opens today at %s', 'lafka' ), $time );
-			} elseif ( 1 === $day ) {
-				/* translators: %s: opening time tomorrow */
-				$rest = sprintf( __( 'opens tomorrow at %s', 'lafka' ), $time );
-			} else {
-				// open-status.php reports the English day key; show the translated name
-				// (the same strings js/lafka-open-status.js refreshes with).
-				$days_en = array( 'Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday' );
-				$days    = array( __( 'Sunday', 'lafka' ), __( 'Monday', 'lafka' ), __( 'Tuesday', 'lafka' ), __( 'Wednesday', 'lafka' ), __( 'Thursday', 'lafka' ), __( 'Friday', 'lafka' ), __( 'Saturday', 'lafka' ) );
-				$idx     = array_search( (string) ( $status['opens_on'] ?? '' ), $days_en, true );
-				$day     = false === $idx ? (string) ( $status['opens_on'] ?? '' ) : $days[ $idx ];
-				/* translators: 1: weekday, 2: opening time */
-				$rest = sprintf( __( 'opens %1$s at %2$s', 'lafka' ), $day, $time );
-			}
-		}
-		$strong = $open ? __( 'Open now', 'lafka' ) : __( 'Closed', 'lafka' );
-		$out    = array(
-			'is_open' => $open,
-			'strong'  => $strong,
-			'rest'    => $rest,
-			'label'   => '' !== $rest ? $strong . ' · ' . $rest : $strong,
-			'gate'    => (string) $status['gate'],
+		$out = array(
+			'is_open' => ! empty( $status['is_open'] ),
+			'strong'  => (string) $status['strong'],
+			'rest'    => (string) $status['rest'],
+			'label'   => (string) $status['label'],
 		);
 		return (array) apply_filters( 'lafka_counter_open_status', $out, $status );
 	}
