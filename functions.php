@@ -9,6 +9,7 @@ require_once get_template_directory() . '/incl/system/lafka-output.php';
  * the preset engine and the updater, which log through it.
  */
 require_once get_template_directory() . '/incl/system/lafka-log-shim.php';
+require_once get_template_directory() . '/incl/system/lafka-service-worker.php';
 
 /*
  * NX1-02 (theme 7.0): legacy Options Framework -> Customizer theme_mod
@@ -72,6 +73,12 @@ if ( is_admin() ) {
 }
 
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
+
+// Edit-screen options that change how a page looks (layout, header, subtitle,
+// sidebars, product video, gallery type): appearance, so the theme owns them.
+if ( is_admin() ) {
+	require_once get_template_directory() . '/incl/admin/lafka-metaboxes.php';
+}
 
 /*
  * NX1-02 (theme 7.0): the legacy Options Framework admin panel is RETIRED — the
@@ -934,7 +941,11 @@ if ( ! function_exists( 'lafka_append_body_classes' ) ) {
 
 		// header style
 		if ( isset( $wp_query->post->ID ) ) {
-			$is_header_style_meta = get_post_meta( $wp_query->post->ID, 'lafka_header_syle', true );
+			$is_header_style_meta = get_post_meta( $wp_query->post->ID, 'lafka_header_style', true );
+			if ( '' === $is_header_style_meta ) {
+				// Older versions stored the choice under a misspelt key.
+				$is_header_style_meta = get_post_meta( $wp_query->post->ID, 'lafka_header_syle', true );
+			}
 		} else {
 			$is_header_style_meta = '';
 		}

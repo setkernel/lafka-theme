@@ -31,7 +31,8 @@ if ( ! function_exists( 'lafka_theme_phone_display' ) ) {
 
 		// Only a bare number (optional +, digits only) is reformatted — an
 		// operator-typed display value ("902-555-0100 ext. 2") is kept verbatim.
-		if ( preg_match( '/^\+?\d{7,15}$/', $raw ) && function_exists( 'lafka_format_phone_display' ) ) {
+		// The plugin owns what counts as a bare number and how it is formatted.
+		if ( function_exists( 'lafka_phone_is_bare_number' ) && lafka_phone_is_bare_number( $raw ) && function_exists( 'lafka_format_phone_display' ) ) {
 			$formatted = trim( (string) lafka_format_phone_display( $raw ) );
 			if ( '' !== $formatted ) {
 				return $formatted;

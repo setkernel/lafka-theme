@@ -44,7 +44,7 @@ if ( ! function_exists( 'lafka_counter_nap' ) ) {
 		$e164  = isset( $info['phone_e164'] ) ? (string) $info['phone_e164'] : '';
 		$raw   = isset( $info['phone_display'] ) ? (string) $info['phone_display'] : '';
 		$phone = function_exists( 'lafka_theme_phone_display' ) ? lafka_theme_phone_display( $raw, $e164 ) : ( '' !== $raw ? $raw : $e164 );
-		$tel   = (string) preg_replace( '/[^0-9+]/', '', '' !== $e164 ? $e164 : $phone );
+		$tel   = (string) ( $info['phone_tel'] ?? '' );
 		$lines = array_values( array_filter( array_map( 'trim', explode( "\n", (string) ( $info['address_display'] ?? '' ) ) ) ) );
 		$map   = (string) ( $info['map_url'] ?? '' );
 		if ( '' === $map ) {

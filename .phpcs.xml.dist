@@ -21,6 +21,15 @@
 	<!-- Rules: the full WordPress-Extra standard, no exclusions, and warnings fail the run. -->
 	<rule ref="WordPress-Extra"/>
 
+	<!-- incl/system/lafka-service-worker.php prints the theme's own worker file through this filter. -->
+	<rule ref="WordPress.Security.EscapeOutput">
+		<properties>
+			<property name="customEscapingFunctions" type="array">
+				<element value="lafka_service_worker_escape"/>
+			</property>
+		</properties>
+	</rule>
+
 	<!-- Request-input sanitization: added explicitly because WordPress-Extra omits it. -->
 	<rule ref="WordPress.Security.ValidatedSanitizedInput"/>
 

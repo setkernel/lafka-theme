@@ -41,15 +41,19 @@
 defined( 'ABSPATH' ) || exit;
 
 // Master toggle gates everything.
-if ( '1' !== (string) get_theme_mod( 'lafka_push_enabled', '0' ) ) {
+$lafka_push_vapid = function_exists( 'lafka_push_get_vapid_config' ) ? lafka_push_get_vapid_config() : array(
+	'enabled' => false,
+	'public'  => '',
+);
+if ( empty( $lafka_push_vapid['enabled'] ) ) {
 	return;
 }
 // Prompt channel toggle (default ON when master is ON).
-if ( '1' !== (string) get_theme_mod( 'lafka_push_subscribe_prompt_enabled', '1' ) ) {
+if ( '1' !== (string) lafka_setting( 'lafka_push_subscribe_prompt_enabled', '1' ) ) {
 	return;
 }
 // No point rendering without a VAPID key.
-$lafka_push_vapid_pub = (string) get_theme_mod( 'lafka_push_vapid_public_key', '' );
+$lafka_push_vapid_pub = (string) $lafka_push_vapid['public'];
 if ( '' === $lafka_push_vapid_pub ) {
 	return;
 }
@@ -65,7 +69,7 @@ if ( $lafka_push_prompt_on_conversion_page ) {
 	return;
 }
 
-$lafka_push_prompt_copy = (string) get_theme_mod(
+$lafka_push_prompt_copy = (string) lafka_setting(
 	'lafka_push_subscribe_prompt_copy',
 	'Want occasional treats? We send 1-2 notifications a week max - never spam.'
 );

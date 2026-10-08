@@ -39,7 +39,7 @@ if ( $lafka_hero_status && (bool) get_theme_mod( 'lafka_announce_bar_enabled', t
 }
 $lafka_hero_info      = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_hero_phone     = isset( $lafka_hero_info['phone_display'] ) ? (string) $lafka_hero_info['phone_display'] : '';
-$lafka_hero_phone_tel = isset( $lafka_hero_info['phone_e164'] ) ? (string) $lafka_hero_info['phone_e164'] : $lafka_hero_phone;
+$lafka_hero_phone_tel = (string) ( $lafka_hero_info['phone_tel'] ?? '' );
 
 $lafka_hero_headline_default = sprintf(
 	/* translators: HTML allowed — second clause wrapped in an <em> for the accent treatment. */
@@ -132,7 +132,7 @@ $lafka_hero_stat_3_label    = (string) get_theme_mod( 'lafka_home_hero_stat_3_la
 					<span class="lafka-hero__cta-arrow" aria-hidden="true">→</span>
 				</a>
 				<?php if ( '' !== $lafka_hero_phone ) : ?>
-					<a class="lafka-hero__cta-ghost" href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_hero_phone_tel ) ); ?>">
+					<a class="lafka-hero__cta-ghost" href="<?php echo esc_attr( 'tel:' . $lafka_hero_phone_tel ); ?>">
 						<span class="lafka-hero__cta-ghost-icon" aria-hidden="true">📞</span>
 						<?php echo esc_html( $lafka_hero_phone ); ?>
 					</a>

@@ -38,7 +38,6 @@ if ( ! function_exists( 'lafka_counter_settings' ) ) {
 			'costar_b'       => absint( get_theme_mod( 'lafka_counter_costar_b', 0 ) ),
 			'hero_product_a' => absint( get_theme_mod( 'lafka_counter_hero_product_a', 0 ) ),
 			'hero_product_b' => absint( get_theme_mod( 'lafka_counter_hero_product_b', 0 ) ),
-			'deals_cat'      => absint( get_theme_mod( 'lafka_counter_deals_cat', 0 ) ),
 			'featured_deal'  => absint( get_theme_mod( 'lafka_counter_featured_deal', 0 ) ),
 			'deals_heading'  => (string) get_theme_mod( 'lafka_counter_deals_heading', __( "Today's deals", 'lafka' ) ),
 			'deals_lead'     => (string) get_theme_mod( 'lafka_counter_deals_lead', '' ),
@@ -107,18 +106,13 @@ if ( ! function_exists( 'lafka_counter_resolve_sections' ) ) {
 			}
 		}
 
+		// The deals category is a menu fact the plugin owns (operator pick under
+		// WooCommerce → Settings → Restaurant, else a category named deals,
+		// combos or specials).
 		$deals    = null;
-		$deals_id = (int) ( $settings['deals_cat'] ?? 0 );
+		$deals_id = function_exists( 'lafka_get_deals_category_id' ) ? lafka_get_deals_category_id() : 0;
 		if ( $deals_id && isset( $by_id[ $deals_id ] ) ) {
 			$deals = $by_id[ $deals_id ];
-		} else {
-			$slugs = array_map( 'strval', (array) apply_filters( 'lafka_counter_deals_slugs', array( 'deals', 'combos', 'specials' ) ) );
-			foreach ( $by_id as $term ) {
-				if ( in_array( (string) $term->slug, $slugs, true ) ) {
-					$deals = $term;
-					break;
-				}
-			}
 		}
 		$used = $deals ? array( (int) $deals->term_id => true ) : array();
 
@@ -559,18 +553,10 @@ if ( ! function_exists( 'lafka_menu_pagination_html' ) ) {
 
 if ( ! function_exists( 'lafka_counter_deals_term_id' ) ) {
 	/**
-	 * The deals category's term id (the same resolution as the homepage's
-	 * deals section), 0 when there is none. Cached for the request.
+	 * The deals category's term id, 0 when there is none: the plugin owns it
+	 * (lafka_get_deals_category_id()), so the menu, the cart and this agree.
 	 */
 	function lafka_counter_deals_term_id(): int {
-		$cached = wp_cache_get( 'deals_term_id', 'lafka_counter' );
-		if ( false !== $cached ) {
-			return (int) $cached;
-		}
-		wp_cache_add_non_persistent_groups( array( 'lafka_counter' ) ); // Per request only.
-		$resolved = lafka_counter_resolve_sections( lafka_menu_top_categories(), lafka_counter_settings() );
-		$id       = $resolved['deals'] ? (int) $resolved['deals']->term_id : 0;
-		wp_cache_set( 'deals_term_id', $id, 'lafka_counter' );
-		return $id;
+		return function_exists( 'lafka_get_deals_category_id' ) ? lafka_get_deals_category_id() : 0;
 	}
 }

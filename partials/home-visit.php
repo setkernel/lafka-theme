@@ -24,7 +24,7 @@ $lafka_visit_info       = function_exists( 'lafka_get_restaurant_info' ) ? lafka
 $lafka_visit_addr       = isset( $lafka_visit_info['address_display'] ) ? (string) $lafka_visit_info['address_display'] : '';
 $lafka_visit_short      = isset( $lafka_visit_info['address_short'] ) ? (string) $lafka_visit_info['address_short'] : '';
 $lafka_visit_phone      = isset( $lafka_visit_info['phone_display'] ) ? (string) $lafka_visit_info['phone_display'] : '';
-$lafka_visit_tel        = isset( $lafka_visit_info['phone_e164'] ) ? (string) $lafka_visit_info['phone_e164'] : $lafka_visit_phone;
+$lafka_visit_tel        = (string) ( $lafka_visit_info['phone_tel'] ?? '' );
 $lafka_visit_hours      = isset( $lafka_visit_info['hours'] ) && is_array( $lafka_visit_info['hours'] ) ? $lafka_visit_info['hours'] : array();
 $lafka_visit_directions = isset( $lafka_visit_info['directions_url'] ) ? (string) $lafka_visit_info['directions_url'] : '';
 
@@ -83,7 +83,7 @@ $lafka_visit_logo_id = get_theme_mod( 'lafka_theme_logo', 0 );
 				<?php endif; ?>
 
 				<?php if ( '' !== $lafka_visit_phone ) : ?>
-					<a class="lafka-visit__phone" href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_visit_tel ) ); ?>">
+					<a class="lafka-visit__phone" href="<?php echo esc_attr( 'tel:' . $lafka_visit_tel ); ?>">
 						<?php echo esc_html( $lafka_visit_phone ); ?>
 					</a>
 				<?php endif; ?>

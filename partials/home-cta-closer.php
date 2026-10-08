@@ -22,7 +22,7 @@ if ( ! (bool) get_theme_mod( 'lafka_home_closer_visible', true ) ) {
 
 $lafka_closer_info  = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_closer_phone = isset( $lafka_closer_info['phone_display'] ) ? (string) $lafka_closer_info['phone_display'] : '';
-$lafka_closer_tel   = isset( $lafka_closer_info['phone_e164'] ) ? (string) $lafka_closer_info['phone_e164'] : $lafka_closer_phone;
+$lafka_closer_tel   = (string) ( $lafka_closer_info['phone_tel'] ?? '' );
 
 $lafka_closer_headline_default = sprintf(
 	/* translators: HTML allowed — second clause wrapped in an <em> for the red italic accent. */
@@ -65,7 +65,7 @@ $lafka_closer_cta_url   = (string) get_theme_mod( 'lafka_home_closer_cta_url', l
 					<span class="lafka-closer__arrow" aria-hidden="true">→</span>
 				</a>
 				<?php if ( '' !== $lafka_closer_phone ) : ?>
-					<a class="lafka-closer__cta lafka-closer__cta--ghost" href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_closer_tel ) ); ?>">
+					<a class="lafka-closer__cta lafka-closer__cta--ghost" href="<?php echo esc_attr( 'tel:' . $lafka_closer_tel ); ?>">
 						<span aria-hidden="true">📞</span>
 						<?php echo esc_html( $lafka_closer_phone ); ?>
 					</a>

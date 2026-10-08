@@ -999,7 +999,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			// The banner is rendered from a wp_footer partial only when the
 			// plugin has set the `lafka_review_prompt_show` cookie (server-side
 			// gate — checks the current user's completed-order recency).
-			$lafka_review_banner_enabled = '1' === (string) get_theme_mod( 'lafka_review_banner_enabled', '0' );
+			$lafka_review_banner_enabled = function_exists( 'lafka_setting' ) && '1' === (string) lafka_setting( 'lafka_review_banner_enabled', '0' );
 			$lafka_review_on_conv_page   = ( function_exists( 'is_cart' ) && is_cart() )
 				|| ( function_exists( 'is_checkout' ) && is_checkout() )
 				|| ( function_exists( 'is_account_page' ) && is_account_page() )
@@ -1043,9 +1043,13 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			// AND we're not on a conversion page. The JS additionally gates on
 			// pageview count + Notification.permission state + 30-day
 			// suppression localStorage.
-			$lafka_push_master_on = '1' === (string) get_theme_mod( 'lafka_push_enabled', '0' );
-			$lafka_push_prompt_on = '1' === (string) get_theme_mod( 'lafka_push_subscribe_prompt_enabled', '1' );
-			$lafka_push_vapid_pub = (string) get_theme_mod( 'lafka_push_vapid_public_key', '' );
+			$lafka_push_vapid     = function_exists( 'lafka_push_get_vapid_config' ) ? lafka_push_get_vapid_config() : array(
+				'enabled' => false,
+				'public'  => '',
+			);
+			$lafka_push_master_on = ! empty( $lafka_push_vapid['enabled'] );
+			$lafka_push_prompt_on = function_exists( 'lafka_setting' ) && '1' === (string) lafka_setting( 'lafka_push_subscribe_prompt_enabled', '1' );
+			$lafka_push_vapid_pub = (string) $lafka_push_vapid['public'];
 			$lafka_push_on_conv   = ( function_exists( 'is_cart' ) && is_cart() )
 				|| ( function_exists( 'is_checkout' ) && is_checkout() )
 				|| ( function_exists( 'is_account_page' ) && is_account_page() )
@@ -1075,8 +1079,8 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 						'applicationServerKey' => $lafka_push_vapid_pub,
 						'restRoot'             => esc_url_raw( rest_url() ),
 						'restNonce'            => wp_create_nonce( 'wp_rest' ),
-						'threshold'            => (int) get_theme_mod( 'lafka_push_subscribe_prompt_threshold', 2 ),
-						'swUrl'                => esc_url_raw( get_template_directory_uri() . '/js/sw.js' ),
+						'threshold'            => (int) lafka_setting( 'lafka_push_subscribe_prompt_threshold', 2 ),
+						'swUrl'                => esc_url_raw( lafka_service_worker_url() ),
 					)
 				);
 			}

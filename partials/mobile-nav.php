@@ -24,7 +24,7 @@ defined( 'ABSPATH' ) || exit;
 
 $lafka_mn_info  = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_mn_phone = isset( $lafka_mn_info['phone_display'] ) ? (string) $lafka_mn_info['phone_display'] : '';
-$lafka_mn_tel   = isset( $lafka_mn_info['phone_e164'] ) ? (string) $lafka_mn_info['phone_e164'] : $lafka_mn_phone;
+$lafka_mn_tel   = (string) ( $lafka_mn_info['phone_tel'] ?? '' );
 
 $lafka_mn_terms = array();
 if ( taxonomy_exists( 'product_cat' ) && function_exists( 'lafka_menu_top_categories' ) ) {
@@ -165,7 +165,7 @@ if ( taxonomy_exists( 'product_cat' ) && function_exists( 'lafka_menu_top_catego
 			<footer class="lafka-mobile-nav__footer">
 				<a
 					class="lafka-mobile-nav__phone"
-					href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_mn_tel ) ); ?>"
+					href="<?php echo esc_attr( 'tel:' . $lafka_mn_tel ); ?>"
 				>
 					<span class="lafka-mobile-nav__phone-icon" aria-hidden="true">📞</span>
 					<span class="lafka-mobile-nav__phone-label">

@@ -92,7 +92,7 @@ if ( $lafka_pdp_rating_count > 0 ) {
 		}
 		$lafka_pdp_reviews[] = array(
 			'quote'  => $lafka_pdp_quote,
-			'author' => (string) $lafka_pdp_c->comment_author,
+			'author' => function_exists( 'lafka_store_reviews_short_name' ) ? lafka_store_reviews_short_name( (string) $lafka_pdp_c->comment_author ) : '',
 			'date'   => human_time_diff( strtotime( $lafka_pdp_c->comment_date_gmt ) ) . ' ' . __( 'ago', 'lafka' ),
 			'stars'  => (int) max( 1, min( 5, (int) get_comment_meta( (int) $lafka_pdp_c->comment_ID, 'rating', true ) ) ),
 		);

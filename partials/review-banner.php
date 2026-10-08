@@ -45,8 +45,8 @@
 
 defined( 'ABSPATH' ) || exit;
 
-// Customizer toggle gates the whole thing.
-$lafka_review_banner_enabled = '1' === (string) get_theme_mod( 'lafka_review_banner_enabled', '0' );
+// The review-banner setting (Customizer, stored by the plugin) gates the whole thing.
+$lafka_review_banner_enabled = function_exists( 'lafka_setting' ) && '1' === (string) lafka_setting( 'lafka_review_banner_enabled', '0' );
 if ( ! $lafka_review_banner_enabled ) {
 	return;
 }

@@ -164,7 +164,7 @@ if ( ! function_exists( 'lafka_ready_time_text' ) ) {
 		$data = lafka_service_eta_get_data();
 		$text = is_array( $data ) ? trim( (string) $data['pickup'] ) : '';
 		if ( '' === $text && function_exists( 'lafka_pdp_get_prep_time' ) ) {
-			$minutes = (int) get_theme_mod( 'lafka_pdp_prep_time_default', 25 );
+			$minutes = (int) lafka_setting( 'lafka_pdp_prep_time_default', 25 );
 			/* translators: %d: minutes. */
 			$text = $minutes > 0 ? sprintf( __( '~%d min', 'lafka' ), $minutes ) : '';
 		}

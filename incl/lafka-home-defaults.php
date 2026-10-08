@@ -105,3 +105,16 @@ if ( ! function_exists( 'lafka_home_default_hero_overlay' ) ) {
 	}
 }
 add_filter( 'theme_mod_lafka_home_hero_overlay', 'lafka_home_default_hero_overlay' );
+
+/**
+ * Answer the plugin's LCP preload: the hero is an appearance setting, so the
+ * theme supplies its attachment id.
+ *
+ * @since 7.4.0
+ *
+ * @return int Attachment id (0 = none).
+ */
+function lafka_home_hero_image_id_for_preload(): int {
+	return (int) get_theme_mod( 'lafka_home_hero_image_id', 0 );
+}
+add_filter( 'lafka_home_hero_image_id', 'lafka_home_hero_image_id_for_preload' );

@@ -290,7 +290,6 @@ if ( ! function_exists( 'lafka_counter_customize_register_home' ) ) {
 			'lafka_counter_costar_b'       => array( 0, 'absint', 'select', __( 'Second featured category', 'lafka' ), $categories, '' ),
 			'lafka_counter_hero_product_a' => array( 0, 'absint', 'select', __( 'Hero dish (front)', 'lafka' ), $products, __( 'Automatic = the first product with a photo in the first featured category.', 'lafka' ) ),
 			'lafka_counter_hero_product_b' => array( 0, 'absint', 'select', __( 'Hero dish (back)', 'lafka' ), $products, '' ),
-			'lafka_counter_deals_cat'      => array( 0, 'absint', 'select', __( 'Deals category', 'lafka' ), $categories, __( 'Automatic = a category named deals, combos or specials.', 'lafka' ) ),
 			'lafka_counter_featured_deal'  => array( 0, 'absint', 'select', __( 'Featured deal', 'lafka' ), $products, __( 'Automatic = a featured product in the deals category, else the first one.', 'lafka' ) ),
 			'lafka_counter_deals_heading'  => array( __( "Today's deals", 'lafka' ), 'sanitize_text_field', 'text', __( 'Deals heading', 'lafka' ), array(), '' ),
 			'lafka_counter_deals_lead'     => array( '', 'sanitize_text_field', 'text', __( 'Deals line', 'lafka' ), array(), __( 'Optional. Only claim what is true (for example that ordering here costs less than the delivery apps).', 'lafka' ) ),

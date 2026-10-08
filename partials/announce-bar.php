@@ -46,7 +46,7 @@ $lafka_ann_status = function_exists( 'lafka_open_status' ) ? lafka_open_status()
 $lafka_ann_info  = function_exists( 'lafka_get_restaurant_info' ) ? lafka_get_restaurant_info() : array();
 $lafka_ann_city  = isset( $lafka_ann_info['city'] ) ? (string) $lafka_ann_info['city'] : '';
 $lafka_ann_phone = isset( $lafka_ann_info['phone_display'] ) ? (string) $lafka_ann_info['phone_display'] : '';
-$lafka_ann_tel   = isset( $lafka_ann_info['phone_e164'] ) ? (string) $lafka_ann_info['phone_e164'] : $lafka_ann_phone;
+$lafka_ann_tel   = (string) ( $lafka_ann_info['phone_tel'] ?? '' );
 
 // Bail when there's truly nothing to say.
 if ( ! $lafka_ann_status && '' === $lafka_ann_phone && '' === $lafka_ann_city ) {
@@ -122,7 +122,7 @@ $lafka_ann_threshold_label = function_exists( 'wc_price' )
 		<?php if ( '' !== $lafka_ann_phone ) : ?>
 			<a
 				class="lafka-announce-bar__phone"
-				href="<?php echo esc_attr( 'tel:' . preg_replace( '/[^0-9+]/', '', $lafka_ann_tel ) ); ?>"
+				href="<?php echo esc_attr( 'tel:' . $lafka_ann_tel ); ?>"
 				rel="nofollow"
 			>
 				<?php echo esc_html( $lafka_ann_phone ); ?>
