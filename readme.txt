@@ -140,7 +140,10 @@ Fonts (self-hosted, `assets/fonts/`):
 Scripts and styles (verified from the bundled file headers):
 
 * Icons — drawn for Lafka as inline SVG (`incl/template-helpers/icons.php`),
-  GPLv2 or later with the theme. No icon font is bundled.
+  GPLv2 or later with the theme.
+* Feather icon font (`styles/fonts/feather.woff`, a Fontello build of the
+  Feather icon set; still used by a few legacy rules in `style.css`) — MIT —
+  Copyright (c) 2013-2017 Cole Bemis — https://github.com/feathericons/feather
 
 Other vendored libraries not enumerated above (for example the remaining helper
 scripts under `js/`) are pending the same NX5-01 GPL audit.
