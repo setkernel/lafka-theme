@@ -237,7 +237,7 @@ while ( have_posts() ) :
 									<?php elseif ( has_post_thumbnail() ) : ?>
 										<?php the_post_thumbnail( 'lafka-foodmenu-single-thumb' ); ?>
 									<?php else : ?>
-										<img src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cat_not_found.png' ); ?>" alt="<?php esc_html_e( 'No image available', 'lafka' ); ?>"/>
+										<img src="<?php echo esc_url( LAFKA_IMAGES_PATH . 'cat_not_found.png' ); ?>" alt="<?php esc_attr_e( 'No image available', 'lafka' ); ?>"/>
 									<?php endif; ?>
 									<!-- END OF FEATURED SLIDER/IMAGE -->
 								</div>

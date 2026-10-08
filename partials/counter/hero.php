@@ -70,9 +70,10 @@ if ( is_array( $lafka_hero_proof ) ) {
 			/* translators: %s: rating (e.g. "4.4") */
 			: sprintf( __( '%s out of 5', 'lafka' ), number_format_i18n( (float) $lafka_hero_proof['rating'], 1 ) );
 	}
-	if ( (int) $lafka_hero_proof['count'] > 0 ) {
+	$lafka_hero_review_count = (int) $lafka_hero_proof['count'];
+	if ( $lafka_hero_review_count > 0 ) {
 		/* translators: %s: number of reviews */
-		$lafka_hero_bits[] = sprintf( _n( '%s review', '%s reviews', (int) $lafka_hero_proof['count'], 'lafka' ), number_format_i18n( (int) $lafka_hero_proof['count'] ) );
+		$lafka_hero_bits[] = sprintf( _n( '%s review', '%s reviews', $lafka_hero_review_count, 'lafka' ), number_format_i18n( $lafka_hero_review_count ) );
 	}
 	$lafka_hero_rating = implode( ' · ', $lafka_hero_bits );
 }

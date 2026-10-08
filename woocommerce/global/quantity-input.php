@@ -32,7 +32,7 @@ $lafka_label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quant
 		 */
 		do_action( 'woocommerce_before_quantity_input_field' );
 		?>
-		<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_attr( $lafka_label ); ?></label>
+		<label class="screen-reader-text" for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $lafka_label ); ?></label>
 		<input
 				type="<?php echo esc_attr( $type ); ?>"
 				<?php echo $readonly ? 'readonly="readonly"' : ''; ?>
