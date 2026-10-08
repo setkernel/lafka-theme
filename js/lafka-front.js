@@ -88,11 +88,11 @@
         }
 
         $(document.body).on('added_to_cart updated_checkout', function() {
-            lafkaInitSmallCountdowns($(this).find('div.lafka-closed-store-message'));
+            lafkaInitSmallCountdowns($(this).find('.lafka-store-closed-card'));
         });
 
         // Order hours counter to the next opening
-        lafkaInitSmallCountdowns($(document.body).find('div.lafka-closed-store-message'));
+        lafkaInitSmallCountdowns($(document.body).find('.lafka-store-closed-card'));
 
         $('.woocommerce-review-link').on('click', function() {
             $('#tab-reviews').trigger('click');

@@ -1345,8 +1345,7 @@ add_action(
 				'lafka-order-method',
 				'lafkaOrderMethodLabels',
 				array(
-					'pickupLabel'   => trim( (string) ( $info['address_short'] ?? '' ) ),
-					'deliveryLabel' => trim( (string) ( $info['city'] ?? '' ) ),
+					'pickupLabel' => trim( (string) ( $info['address_short'] ?? '' ) ),
 				)
 			);
 		}

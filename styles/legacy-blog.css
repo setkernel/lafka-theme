@@ -1486,11 +1486,6 @@ body.woocommerce-checkout .content_holder div.woocommerce>form.woocommerce-form-
     width: 100%;
 }
 
-.widget_shopping_cart_content .lafka-closed-store-message {
-    position: absolute;
-    bottom: 0 !important;
-}
-
 #lafka_page_title.lafka_title_holder.title_has_image h1.heading-title, #lafka_page_title.lafka_title_holder.title_has_image .blog-post-meta *, #lafka_page_title.lafka_title_holder.title_has_image .blog-post-meta .post-meta-date::before, #lafka_page_title.lafka_title_holder.title_has_image h1.heading-title a, body.single-post #lafka_page_title.lafka_title_holder.title_has_image .blog-post-meta a, #lafka_page_title.lafka_title_holder.title_has_image h6, #lafka_page_title.lafka_title_holder.title_has_image .breadcrumb, #lafka_page_title.lafka_title_holder.title_has_image .breadcrumb a {
     color: var(--lafka-custom-page-title-color);
 }

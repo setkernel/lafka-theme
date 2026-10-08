@@ -14,24 +14,6 @@
 			}
 		}
 
-		/**************************
-		 * "lafka-dialog" image lightboxes
-		 **************************/
-		// P3-04: replaced Magnific Popup with native <dialog> via lafkaDialog
-		// (see js/lafka-dialog.js). Drops jQuery dep + 27 KB vendor weight.
-		if ( typeof window.lafkaDialog !== 'undefined' ) {
-			// Gallery: collect all items, open at the clicked index.
-			$(document).on('click', 'a.lafka-magnific-gallery-item', function (e) {
-				e.preventDefault();
-				const $links = $('a.lafka-magnific-gallery-item');
-				const items = $links.map(function () {
-					return { src: this.href, alt: $(this).find('img').attr('alt') || '' };
-				}).get();
-				const startIndex = $links.index(this);
-				window.lafkaDialog.gallery(items, startIndex);
-			});
-		}
-
 		/**********************
 		 * "lafka-quickview"
 		 *********************/
@@ -62,7 +44,7 @@
 									$content.find('form').each(function () {
 										$(this).lafka_wc_variation_form();
 									});
-									lafkaInitSmallCountdowns($content.find('div.lafka-closed-store-message'));
+									lafkaInitSmallCountdowns($content.find('.lafka-store-closed-card'));
 
 									$('.prod_hold.loading').removeClass('loading');
 									$(window).trigger('lafka_quickview_loaded');

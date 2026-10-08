@@ -385,25 +385,6 @@ function lafka_preset_register_fonts(): void {
 }
 
 /**
- * The URL of the active preset's POOL display font to `<link rel=preload>`
- * (the heaviest shipped weight, latin subset — the above-fold heading face,
- * the same intent as header.php's static Fraunces preload). Returns '' when
- * the display font is source:"base" (Peppery included) — the static Fraunces
- * preload already covers it, so the head stays byte-identical. The CALLER
- * escapes with esc_url() in the template. NX2-03.
- *
- * @return string A font URL, or '' when there is nothing new to preload.
- */
-function lafka_preset_display_preload_href(): string {
-	$sel = lafka_preset_font_selection( lafka_active_preset() );
-	if ( ! isset( $sel['display'] ) || 'pool' !== $sel['display']['source'] || '' === $sel['display']['slug'] ) {
-		return '';
-	}
-	$files = lafka_font_pool_latin_files( $sel['display']['slug'], 'heaviest' );
-	return $files ? $files[0] : '';
-}
-
-/**
  * Latin-subset file URL(s) of one pool family, for preloading.
  *
  *  - variable entry: its single latin file;

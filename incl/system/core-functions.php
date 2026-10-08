@@ -1039,7 +1039,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 
 			// v6.12.0 (Pillar 3E): Web Push subscribe prompt. Loads when both
 			// the master `lafka_push_enabled` toggle AND the prompt channel
-			// toggle are ON, AND the operator has pasted a VAPID public key,
+			// toggle are ON, AND the plugin has a VAPID public key,
 			// AND we're not on a conversion page. The JS additionally gates on
 			// pageview count + Notification.permission state + 30-day
 			// suppression localStorage.

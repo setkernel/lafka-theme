@@ -43,33 +43,17 @@ if ( ! function_exists( 'lafka_get_default_values' ) ) {
 		$defaults = array(
 			// Gated feature-module flags (NX1-01 registry / is_lafka_*() gates).
 			// product_addons ships ON; the rest ship OFF ('' / not 'enabled').
-			'product_addons'                => 'enabled',
-			'shipping_areas'                => '',
-			'order_hours'                   => '',
-			'kitchen_display'               => '',
+			'product_addons'      => 'enabled',
+			'shipping_areas'      => '',
+			'order_hours'         => '',
+			'kitchen_display'     => '',
 			// NX1-08b browser push for new orders (checkbox, OFF).
-			'order_notifications'           => 0,
+			'order_notifications' => 0,
 
 			// Functional-shared keys read by BOTH repos through the shim; they
 			// stay in the `lafka` array (never forked into a theme_mod).
-			'google_maps_api_key'           => '',
-			'category_description_position' => '',
-			'custom_product_popup_link'     => '',
-			'custom_product_popup_content'  => '',
-
-			// Theme-read NAP site value (operator-configurable phone in the
-			// trust strip); kept '' so a fresh install renders no literal.
-			'top_bar_message_phone'         => '',
+			'google_maps_api_key' => '',
 		);
-
-		// Promo-tooltip feature (plugin; three independent tooltips). Only
-		// `_position` carries a non-empty std; the copy mirrors the registry.
-		for ( $i = 1; $i <= 3; $i++ ) {
-			$defaults[ 'promo_tooltip_' . $i . '_text' ]            = '';
-			$defaults[ 'promo_tooltip_' . $i . '_trigger_text' ]    = '';
-			$defaults[ 'promo_tooltip_' . $i . '_show_in_listing' ] = 0;
-			$defaults[ 'promo_tooltip_' . $i . '_content' ]         = '';
-		}
 
 		/**
 		 * Filter the plugin-owned `lafka` option defaults.

@@ -233,7 +233,6 @@ incl/presets/
   lafka-preset-emit.php                    PTL builder, @font-face emitter, enqueue wiring,
                                            data attributes, lafka_preset_default()
   lafka-preset-fonts.php                   LAFKA_FONT_POOL
-  class-lafka-color-contrast.php           WCAG ratio helper
   lafka-preset-customizer.php              Customizer section, control, live-preview payloads
   class-lafka-customize-preset-control.php radio-image control
 incl/system/lafka-preset-reset.php         "Reset appearance to preset"
@@ -395,9 +394,11 @@ preview differs.
 
 - Set only whitelisted keys. Put the accent and brand in `chrome`, not `tokens`.
 - Measure the effective palette (base, PTL, chrome and derived `accent-text`) with
-  `Lafka_Color_Contrast`: body text on surface, accent text on surface, button
-  text on `accent-500`, focus ring, badges. Every pair must reach AA. A waiver in
-  `contrast_exceptions` must stay at or above the AA-large floor (3.0).
+  a WCAG contrast checker: body text on surface, accent text on surface, button
+  text on `accent-500`, focus ring, badges. Every pair must reach AA (4.5, large
+  text and UI 3.0). A waiver in `contrast_exceptions` must stay at or above the
+  AA-large floor (3.0). (The in-repo contrast helper was removed with its test
+  suite; rebuilding the preset contrast test brings it back.)
 - Pool fonts need the family in `LAFKA_FONT_POOL`. Add a `preview.jpg`.
 - Regenerate the editor palette after changing base tokens:
   `npm run build:theme-json` rewrites the colour, font-size, font-family and
