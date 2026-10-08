@@ -7,6 +7,22 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Added
+- The product page renders the plugin's Deal builder for Deal products (WooCommerce's
+  `woocommerce_lafka_deal_add_to_cart` action), and styles the plugin's half-and-half
+  Left / Whole / Right choice and the tips picker (classic and block checkout).
+
+### Fixed
+- "WooCommerce is active" is decided by whether WooCommerce is loaded, not by the
+  active-plugins list: requests that skip plugins (`/wp-activate.php`) no longer fatal.
+- Lists offer "Choose" instead of a quick Add for product types that cannot be added
+  from a list (WooCommerce `supports( 'ajax_add_to_cart' )`), such as Deals.
+- Theme Check: attribute escaping on placeholder images and the quantity label,
+  explicit `_n()` counts, one translator comment per string; cloud-zoom used the
+  jQuery 3-removed `.load( fn )`.
+- The theme no longer registers its own (never effective) Google Maps loader; the
+  plugin owns it.
+
 ### Changed
 - **The asset diet knows which templates render the page content.**
   `lafka_templates_without_content()` (filterable, `lafka_templates_without_content`) lists
