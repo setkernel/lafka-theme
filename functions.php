@@ -80,16 +80,13 @@ require_once ABSPATH . 'wp-admin/includes/plugin.php';
  * and is loaded here, plus the slim plugin-owned option defaults:
  *   - incl/system/lafka-option-defaults.php -> lafka_get_default_values(), the
  *     slim successor to the registry defaults (plugin-owned flags + shared keys).
- *   - lafka-options-functions.php -> lafka_typography_get_google_fonts(), read
- *     by the front-end Google-font enqueuer (incl/system/core-functions.php).
+ *   - incl/system/lafka-google-fonts.php -> lafka_typography_get_google_fonts(),
+ *     read by the front-end Google-font enqueuer (incl/system/core-functions.php).
  * The admin media-picker JS (js/lafka-medialibrary-uploader.js, used by plugin
- * metaboxes) is registered from LAFKA_OPTIONS_FRAMEWORK_DIRECTORY.
+ * metaboxes) is registered in incl/system/core-functions.php.
  */
-if ( ! defined( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY' ) ) {
-	define( 'LAFKA_OPTIONS_FRAMEWORK_DIRECTORY', get_template_directory_uri() . '/incl/lafka-options-framework/' );
-}
 require_once get_template_directory() . '/incl/system/lafka-option-defaults.php';
-require_once get_template_directory() . '/incl/lafka-options-framework/lafka-options-functions.php';
+require_once get_template_directory() . '/incl/system/lafka-google-fonts.php';
 
 /* Load configuration */
 require_once get_template_directory() . '/incl/system/config.php';

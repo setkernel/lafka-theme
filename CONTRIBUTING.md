@@ -62,7 +62,7 @@ Every npm script, one line each.
 | Top-level templates (single, archive, page, etc.) | repo root |
 | Theme functions / hooks | `functions.php` |
 | Reusable theme classes | `incl/` |
-| Legacy options shim (deprecated `lafka_get_option()`) | `incl/lafka-options-framework/` |
+| Legacy options shim (deprecated `lafka_get_option()`) | `incl/system/core-functions.php` |
 | Design presets (10 built-in) | `presets/` + `incl/presets/` ([docs/PRESET_ENGINE.md](docs/PRESET_ENGINE.md)) |
 | Per-template partials | `partials/` |
 | WooCommerce overrides | `woocommerce/` |

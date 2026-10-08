@@ -282,8 +282,7 @@ can't justify the change in one sentence on the PR, the change is wrong.
 
 ### Where theme settings live (config SSOT)
 
-As of theme 7.0 the legacy **Options Framework** (`incl/lafka-options-framework/`,
-the single `wp_options['lafka']` array read via `lafka_get_option()`) is retired.
+As of theme 7.0 the legacy **Options Framework** (the single `wp_options['lafka']` array read via `lafka_get_option()`) is retired.
 Every appearance/behaviour setting the theme owns is now a **Customizer
 `theme_mod`**, namespaced `lafka_<key>`, and `styles/dynamic-css.php` emits its
 `--lafka-*` tokens from those `theme_mods` (with the shipped default inline at

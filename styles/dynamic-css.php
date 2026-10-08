@@ -191,8 +191,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 
 		// H1-H6 fonts. Per-level inline defaults reproduce the Options-Framework
 		// std — face 'Rubik' and color '#22272d' are shared across levels; only
-		// the size + font-weight differ (see incl/lafka-options-framework/
-		// lafka-options.php $hN_font_default). Indexed h1..h6.
+		// the size + font-weight differ. Indexed h1..h6.
 		$h_sizes   = array( '60px', '44px', '30px', '24px', '21px', '19px' );
 		$h_weights = array( '700', '700', '700', '600', '500', '500' );
 		$h_vars    = '';

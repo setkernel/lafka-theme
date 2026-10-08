@@ -383,7 +383,7 @@ if ( ! function_exists( 'lafka_enqueue_admin_js' ) ) {
 		}
 
 		if ( $needs_editor || $needs_options ) {
-			wp_register_script( 'lafka-medialibrary-uploader', LAFKA_OPTIONS_FRAMEWORK_DIRECTORY . 'js/lafka-medialibrary-uploader.js', array( 'jquery-ui-accordion', 'media-upload' ), lafka_asset_version( '/incl/lafka-options-framework/js/lafka-medialibrary-uploader.js' ), true );
+			wp_register_script( 'lafka-medialibrary-uploader', get_template_directory_uri() . '/js/lafka-medialibrary-uploader.js', array( 'jquery-ui-accordion', 'media-upload' ), lafka_asset_version( '/js/lafka-medialibrary-uploader.js' ), true );
 			wp_enqueue_script( 'lafka-medialibrary-uploader' );
 
 			// wp-color-picker
