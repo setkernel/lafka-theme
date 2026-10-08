@@ -291,8 +291,6 @@
 .woocommerce-checkout .form-row select:focus {
 	border-color: var(--lafka-color-text-primary);
 	background: var(--lafka-color-surface-page);
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* v6.7.11 (FORM-ERR-new): invalid inputs paint a visible red border.
@@ -308,8 +306,8 @@
 .woocommerce-checkout .woocommerce-invalid input.input-text,
 .woocommerce-checkout .woocommerce-invalid select,
 .woocommerce-checkout .woocommerce-invalid textarea {
-	border-color: var(--lafka-color-error-500, #ef4444);
-	background: var(--lafka-color-error-50, #fef2f2);
+	border-color: var(--lafka-color-error-500);
+	background: var(--lafka-color-error-50);
 }
 
 /* -------- Order review (right column / sticky summary) ----------------- */
@@ -670,7 +668,7 @@
 	background: var(--lafka-color-success-500);
 	color: var(--lafka-color-text-inverse);
 	border-radius: var(--lafka-radius-pill);
-	font-size: 32px;
+	font-size: 2rem;
 	font-weight: var(--lafka-font-weight-bold);
 	margin-bottom: var(--lafka-space-3);
 	box-shadow: 0 6px 20px rgba(4, 120, 87, 0.25);
@@ -883,7 +881,7 @@
 .lafka-delivery-quote-notice__text {
 	margin: var(--lafka-space-2) 0 0;
 	padding: var(--lafka-space-2) var(--lafka-space-3);
-	border-left: 3px solid var(--lafka-color-info);
+	border-left: 3px solid var(--lafka-color-info-500);
 	border-radius: var(--lafka-radius-sm);
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-text-secondary);
@@ -1118,7 +1116,7 @@ ul.lafka-shipping-choices > li.lafka-shipping-choice .woocommerce-Price-amount {
  * ========================================================================= */
 .woocommerce-checkout .form-row .checkout-inline-error-message {
 	margin: var(--lafka-space-1) 0 0;
-	color: var(--lafka-color-error);
+	color: var(--lafka-color-error-500);
 	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-medium);
 	line-height: 1.4;
@@ -1135,8 +1133,8 @@ div.woocommerce-info.lafka-delivery-min-notice {
 	display: block;
 	padding: var(--lafka-space-3) var(--lafka-space-4);
 	border: 1px solid var(--lafka-color-border-subtle);
-	border-left: 4px solid var(--lafka-color-info);
-	background: var(--lafka-color-info-bg);
+	border-left: 4px solid var(--lafka-color-info-500);
+	background: var(--lafka-color-info-50);
 	color: var(--lafka-color-text-primary);
 	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-medium, 500);
@@ -1196,9 +1194,7 @@ div.woocommerce-info.lafka-delivery-min-notice .woocommerce-Price-amount {
 }
 
 .woocommerce-checkout .lafka-pickup-address-toggle__button:focus-visible {
-	outline: none;
 	border-radius: var(--lafka-radius-sm);
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* -------- Counter header on the cart / checkout (O-39) --------------------
@@ -1208,4 +1204,9 @@ div.woocommerce-info.lafka-delivery-min-notice .woocommerce-Price-amount {
 body.woocommerce-cart .lafka-counter-header__order,
 body.woocommerce-checkout .lafka-counter-header__order {
 	display: none;
+}
+
+/* The guest "Verify" button on the order-received page keeps a full tap target. */
+.woocommerce-order-received button.woocommerce-button {
+	min-height: var(--lafka-tap-target);
 }

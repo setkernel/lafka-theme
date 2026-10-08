@@ -33,10 +33,10 @@ if ( ! function_exists( 'lafka_counter_image_sizes' ) ) {
 			// .lafka-counter-header__logo: 40 / 52 (≥600) / 64 (≥1280) px.
 			'logo'          => '(min-width: 1280px) 64px, (min-width: 600px) 52px, 40px',
 			// Hero dishes: 58% / 66% of the art column (≥1024), 44% (≥600), 58% / 54% below.
-			'hero-front'    => '(min-width: 1440px) 400px, (min-width: 1024px) 28vw, (min-width: 600px) 40vw, 53vw',
-			'hero-back'     => '(min-width: 1440px) 456px, (min-width: 1024px) 32vw, (min-width: 600px) 40vw, 49vw',
+			'hero-front'    => '(min-width: 1280px) 400px, (min-width: 1024px) 28vw, (min-width: 600px) 40vw, 53vw',
+			'hero-back'     => '(min-width: 1280px) 456px, (min-width: 1024px) 32vw, (min-width: 600px) 40vw, 49vw',
 			// Featured deal card: ~85vw phones, 40vw tablets, 28vw desktop, 400px cap.
-			'deal-featured' => '(min-width: 1440px) 400px, (min-width: 1024px) 28vw, (min-width: 768px) 40vw, 85vw',
+			'deal-featured' => '(min-width: 1280px) 400px, (min-width: 1024px) 28vw, (min-width: 768px) 40vw, 85vw',
 			'deal-small'    => '(min-width: 1024px) 173px, (min-width: 600px) 46vw, 32vw',
 			// Menu / co-star photo rows: 120px, 160px from 1024.
 			'row-photo'     => '(min-width: 1024px) 160px, 120px',

@@ -52,7 +52,7 @@ if ( ! function_exists( 'lafka_card_image_sizes' ) ) {
 	 * @return string
 	 */
 	function lafka_card_image_sizes() {
-		$sizes = '(min-width: 1440px) 340px, (min-width: 1280px) 25vw, (min-width: 1024px) 33vw, (min-width: 600px) 50vw, 100vw';
+		$sizes = '(min-width: 1280px) 340px, (min-width: 1024px) 33vw, (min-width: 600px) 50vw, 100vw';
 		/**
 		 * Filter the `sizes` attribute of product card images.
 		 *

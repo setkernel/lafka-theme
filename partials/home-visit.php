@@ -41,7 +41,7 @@ $lafka_visit_logo_id = get_theme_mod( 'lafka_theme_logo', 0 );
 <section class="lafka-visit" aria-labelledby="lafka-visit-heading">
 	<div class="lafka-container">
 
-		<article class="lafka-visit__card">
+		<article class="lafka-visit__card lafka-card lafka-card--xl lafka-card--dark">
 
 			<div class="lafka-visit__media">
 				<?php if ( $lafka_visit_image_src ) : ?>
@@ -51,7 +51,7 @@ $lafka_visit_logo_id = get_theme_mod( 'lafka_theme_logo', 0 );
 				<?php endif; ?>
 
 				<?php if ( '' !== $lafka_visit_short ) : ?>
-					<div class="lafka-visit__pin">
+					<div class="lafka-visit__pin lafka-card lafka-card--sm lafka-card--float lafka-card--borderless">
 						<?php if ( $lafka_visit_logo_id ) : ?>
 							<?php
 							echo wp_get_attachment_image(
@@ -101,12 +101,12 @@ $lafka_visit_logo_id = get_theme_mod( 'lafka_theme_logo', 0 );
 
 				<div class="lafka-visit__actions">
 					<?php if ( '' !== $lafka_visit_directions ) : ?>
-						<a class="lafka-visit__cta lafka-visit__cta--primary" href="<?php echo esc_url( $lafka_visit_directions ); ?>" target="_blank" rel="noopener noreferrer">
+						<a class="lafka-btn lafka-btn--brand" href="<?php echo esc_url( $lafka_visit_directions ); ?>" target="_blank" rel="noopener noreferrer">
 							<span aria-hidden="true">📍</span>
 							<?php esc_html_e( 'Get directions', 'lafka' ); ?>
 						</a>
 					<?php endif; ?>
-					<a class="lafka-visit__cta lafka-visit__cta--ghost" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
+					<a class="lafka-btn lafka-btn--inverse" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 						<?php esc_html_e( 'Order online', 'lafka' ); ?>
 					</a>
 				</div>

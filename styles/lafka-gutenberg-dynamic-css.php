@@ -44,11 +44,11 @@ if ( ! function_exists( 'lafka_add_custom_gutenberg_css' ) ) {
 		<style media="all" type="text/css">
 		
 		div.edit-post-visual-editor blockquote, div.edit-post-visual-editor q {
-				background-color:<?php echo esc_attr( get_theme_mod( 'lafka_accent_color', '#dc2626' ) ); ?>;
+				background-color:<?php echo esc_attr( lafka_color_setting( 'lafka_accent_color', '--lafka-color-accent-500' ) ); ?>;
 			}
 
 			a, .editor-rich-text__tinymce a, .wp-block-freeform.block-library-rich-text__tinymce a, .block-editor-rich-text__editable a {
-				color: <?php echo esc_attr( get_theme_mod( 'lafka_links_color', '#dc2626' ) ); ?>;
+				color: <?php echo esc_attr( lafka_color_setting( 'lafka_links_color', '--lafka-color-accent-500' ) ); ?>;
 				text-decoration: none;
 			}
 			

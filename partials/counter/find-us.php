@@ -33,7 +33,7 @@ if ( 2 === count( $lafka_find_modes ) ) {
 		<div class="lafka-counter-find__head">
 			<h2 id="lafka-counter-find-title" class="lafka-counter-find__title"><?php esc_html_e( 'Find us', 'lafka' ); ?></h2>
 			<?php if ( '' !== $lafka_find['map_url'] ) : ?>
-				<a class="lafka-counter-btn" href="<?php echo esc_url( $lafka_find['map_url'] ); ?>" target="_blank" rel="noopener">
+				<a class="lafka-btn" href="<?php echo esc_url( $lafka_find['map_url'] ); ?>" target="_blank" rel="noopener">
 					<?php echo wp_kses( lafka_counter_icon( 'directions', 18 ), lafka_allowed_html() ); ?>
 					<span><?php esc_html_e( 'Get directions', 'lafka' ); ?></span>
 					<span class="screen-reader-text"><?php esc_html_e( '(opens in a new tab)', 'lafka' ); ?></span>

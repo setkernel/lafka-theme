@@ -26,6 +26,57 @@
 				"em",
 				"%"
 			]
+		},
+		"color-no-hex": [
+			true,
+			{
+				"message": "No raw hex colours in theme CSS: read a design token (var(--lafka-color-*)) from styles/lafka-tokens.css; add a token there if none fits (see docs/DESIGN_SYSTEM.md)."
+			}
+		],
+		"declaration-property-unit-disallowed-list": {
+			"font-size": [
+				"px"
+			],
+			"font": [
+				"px"
+			]
+		},
+		"media-feature-name-value-allowed-list": {
+			"min-width": [
+				"600px",
+				"768px",
+				"1024px",
+				"1280px"
+			],
+			"max-width": [
+				"599px",
+				"767px",
+				"1023px",
+				"1279px"
+			]
+		},
+		"declaration-property-value-disallowed-list": {
+			"z-index": [
+				"/^-?[0-9]{2,}$/"
+			]
 		}
-	}
+	},
+	"overrides": [
+		{
+			"files": [
+				"styles/lafka-tokens.css",
+				"styles/legacy-*.css",
+				"style.css",
+				"styles/lafka-admin.css",
+				"styles/lafka-gutenberg-styles.css",
+				"assets/customizer/*.css"
+			],
+			"rules": {
+				"color-no-hex": null,
+				"declaration-property-unit-disallowed-list": null,
+				"media-feature-name-value-allowed-list": null,
+				"declaration-property-value-disallowed-list": null
+			}
+		}
+	]
 }

@@ -39,7 +39,7 @@ run php-syntax composer lint:php --quiet
 run phpcs composer phpcs --quiet
 run eslint npm run lint:js --silent
 run stylelint npm run lint:css --silent
-run build-output sh -c 'npm run build --silent > /dev/null && git diff --exit-code -- js/lafka-dialog.min.js'
+run build-output sh -c 'npm run build --silent > /dev/null && git diff --exit-code -- js/lafka-dialog.min.js theme.json incl/presets/token-defaults.json'
 
 failed=0
 for i in "${!pids[@]}"; do

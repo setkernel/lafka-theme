@@ -17,7 +17,7 @@ $lafka_bar_nap = lafka_counter_nap();
 ?>
 <div class="lafka-counter-bar<?php echo '' === $lafka_bar_nap['phone'] ? ' lafka-counter-bar--no-phone' : ''; ?>" role="region" aria-label="<?php esc_attr_e( 'Quick order', 'lafka' ); ?>" data-lafka-counter-bar>
 	<?php if ( '' !== $lafka_bar_nap['phone'] ) : ?>
-		<a class="lafka-counter-bar__call lafka-counter-btn" href="<?php echo esc_attr( 'tel:' . $lafka_bar_nap['tel'] ); ?>" data-lafka-channel="phone">
+		<a class="lafka-counter-bar__call lafka-btn" href="<?php echo esc_attr( 'tel:' . $lafka_bar_nap['tel'] ); ?>" data-lafka-channel="phone">
 			<?php echo wp_kses( lafka_counter_icon( 'phone' ), lafka_allowed_html() ); ?>
 			<span><?php esc_html_e( 'Call', 'lafka' ); ?></span>
 			<span class="lafka-counter-bar__number"><?php echo esc_html( $lafka_bar_nap['phone'] ); ?></span>

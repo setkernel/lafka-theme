@@ -16,7 +16,7 @@
 	background: var(--lafka-color-surface-raised);
 	color: var(--lafka-color-text-primary);
 	font-size: var(--lafka-font-size-h4);
-	line-height: var(--lafka-line-height-normal);
+	line-height: var(--lafka-line-body);
 }
 
 .lafka-tracker .lafka-tracker__title {
@@ -119,7 +119,7 @@
 	font-weight: var(--lafka-font-weight-bold);
 }
 
-@media (min-width: 640px) {
+@media (min-width: 600px) {
 
 	.lafka-tracker__where {
 		grid-template-columns: repeat(2, minmax(0, 1fr));

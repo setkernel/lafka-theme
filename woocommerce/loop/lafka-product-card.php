@@ -91,7 +91,7 @@ $lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title
 		do_action( 'woocommerce_before_shop_loop_item' );
 	}
 	?>
-	<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_arch_url ); ?>"
+	<a class="lafka-favs__card lafka-card lafka-card--borderless lafka-card--lift" href="<?php echo esc_url( $lafka_arch_url ); ?>"
 		data-lafka-item-id="<?php echo esc_attr( (string) $lafka_arch_p->get_id() ); ?>"
 		data-lafka-item-name="<?php echo esc_attr( $lafka_arch_name ); ?>"
 		data-lafka-item-category="<?php echo esc_attr( $lafka_arch_cat ); ?>"
@@ -138,7 +138,7 @@ $lafka_arch_list      = ( is_tax( 'product_cat' ) ) ? (string) single_term_title
 					lafka_archive_quickadd_render();
 				} else {
 					?>
-					<span class="lafka-favs__cta"><?php esc_html_e( 'Customize', 'lafka' ); ?></span>
+					<span class="lafka-favs__cta lafka-btn lafka-btn--dark lafka-btn--sm"><?php esc_html_e( 'Customize', 'lafka' ); ?></span>
 					<?php
 				}
 				?>

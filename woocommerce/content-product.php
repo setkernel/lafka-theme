@@ -42,7 +42,7 @@ if ( wc_get_loop_prop( 'lafka_menu_card' ) ) {
 	return;
 }
 ?>
-<li <?php wc_product_class( 'lafka-product-card', $product ); ?>>
+<li <?php wc_product_class( 'lafka-product-card lafka-card', $product ); ?>>
 	<?php do_action( 'woocommerce_before_shop_loop_item' ); ?>
 	<?php
 	// v5.84.0: a11y — dropped redundant aria-label="<product name>". The

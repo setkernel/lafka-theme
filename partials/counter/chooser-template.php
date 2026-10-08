@@ -22,7 +22,7 @@ defined( 'ABSPATH' ) || exit;
 				<h2 id="lafka-chooser-title" class="lafka-chooser__title" data-lafka-chooser-name></h2>
 			</div>
 			<form method="dialog">
-				<button type="submit" class="lafka-chooser__close lafka-counter-btn">
+				<button type="submit" class="lafka-chooser__close lafka-btn">
 					<?php echo wp_kses( lafka_counter_icon( 'close', 18 ), lafka_allowed_html() ); ?>
 					<span><?php esc_html_e( 'Close', 'lafka' ); ?></span>
 				</button>

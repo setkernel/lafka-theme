@@ -149,7 +149,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_accent_color',
 				'lafka_settings_brand',
 				__( 'Accent color', 'lafka' ),
-				'#dc2626',
+				lafka_token_default( '--lafka-color-accent-500' ),
 				__( 'Primary brand color — CTAs, links, badges. Aliased to --lafka-color-accent-500 in modern components.', 'lafka' ),
 				'theme_mod',
 				'postMessage'
@@ -160,7 +160,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_brand_color',
 				'lafka_settings_brand',
 				__( 'Brand color', 'lafka' ),
-				'#f59e0b',
+				lafka_token_default( '--lafka-color-brand-500' ),
 				__( 'Secondary brand accent — drives the --lafka-color-brand-500 ramp (footer chrome, hero gradient, open-status dot). Defaults to the shipped pepper-yellow.', 'lafka' ),
 				'theme_mod',
 				'postMessage'
@@ -274,7 +274,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_links_color',
 				'lafka_settings_content_colors',
 				__( 'Links color', 'lafka' ),
-				'#dc2626',
+				lafka_token_default( '--lafka-color-accent-500' ),
 				'',
 				'theme_mod'
 			);
@@ -304,7 +304,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_all_buttons_color',
 				'lafka_settings_content_colors',
 				__( 'Buttons color', 'lafka' ),
-				'#dc2626',
+				lafka_token_default( '--lafka-color-accent-500' ),
 				'',
 				'theme_mod'
 			);
@@ -314,7 +314,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_all_buttons_hover_color',
 				'lafka_settings_content_colors',
 				__( 'Buttons hover color', 'lafka' ),
-				'#b91c1c',
+				lafka_token_default( '--lafka-color-accent-600' ),
 				'',
 				'theme_mod'
 			);
@@ -324,7 +324,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_new_label_color',
 				'lafka_settings_content_colors',
 				__( 'New product label color', 'lafka' ),
-				'#047857',
+				lafka_token_default( '--lafka-color-success-500' ),
 				'',
 				'theme_mod'
 			);
@@ -334,7 +334,7 @@ if ( ! class_exists( 'Lafka_Customizer_Bridge' ) ) {
 				'lafka_sale_label_color',
 				'lafka_settings_content_colors',
 				__( 'Sale product label color', 'lafka' ),
-				'#dc2626',
+				lafka_token_default( '--lafka-color-accent-500' ),
 				'',
 				'theme_mod'
 			);

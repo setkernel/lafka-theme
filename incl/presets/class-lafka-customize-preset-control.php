@@ -41,8 +41,8 @@ class Lafka_Customize_Preset_Control extends WP_Customize_Control {
 				$img_rel  = 'presets/' . $slug . '/preview.jpg';
 				$has_img  = file_exists( get_template_directory() . '/' . $img_rel );
 				$raw      = $preset->raw();
-				$accent   = isset( $raw['chrome']['lafka_accent_color'] ) ? (string) $raw['chrome']['lafka_accent_color'] : '#dc2626';
-				$brand    = isset( $raw['chrome']['lafka_brand_color'] ) ? (string) $raw['chrome']['lafka_brand_color'] : '#f59e0b';
+				$accent   = isset( $raw['chrome']['lafka_accent_color'] ) ? (string) $raw['chrome']['lafka_accent_color'] : lafka_token_default( '--lafka-color-accent-500' );
+				$brand    = isset( $raw['chrome']['lafka_brand_color'] ) ? (string) $raw['chrome']['lafka_brand_color'] : lafka_token_default( '--lafka-color-brand-500' );
 				?>
 				<label class="lafka-preset-card<?php echo $preset->is_dark() ? ' lafka-preset-card--dark' : ''; ?>" for="<?php echo esc_attr( $input_id ); ?>">
 					<input

@@ -58,7 +58,7 @@ $lafka_drw_current = lafka_counter_fulfilment_current();
 					<?php endif; ?>
 				</p>
 			</div>
-			<button type="button" class="lafka-cart-drawer__close lafka-drawer__close lafka-counter-btn" data-lafka-cart-close>
+			<button type="button" class="lafka-cart-drawer__close lafka-drawer__close lafka-btn" data-lafka-cart-close>
 				<?php echo wp_kses( lafka_counter_icon( 'close', 18 ), lafka_allowed_html() ); ?>
 				<span><?php esc_html_e( 'Close', 'lafka' ); ?></span>
 			</button>

@@ -38,11 +38,11 @@ $lafka_404_path = strtok( $lafka_404_path, '?' );
 		</p>
 
 		<div class="lafka-404__actions">
-			<a class="lafka-404__cta lafka-404__cta--primary" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
+			<a class="lafka-btn lafka-btn--primary lafka-btn--lg" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 				<?php esc_html_e( 'Browse the menu', 'lafka' ); ?>
-				<span class="lafka-404__arrow" aria-hidden="true">→</span>
+				<span class="lafka-btn__arrow" aria-hidden="true">→</span>
 			</a>
-			<a class="lafka-404__cta lafka-404__cta--ghost" href="<?php echo esc_url( home_url( '/' ) ); ?>">
+			<a class="lafka-btn lafka-btn--ghost lafka-btn--lg" href="<?php echo esc_url( home_url( '/' ) ); ?>">
 				<?php esc_html_e( 'Back to home', 'lafka' ); ?>
 			</a>
 		</div>

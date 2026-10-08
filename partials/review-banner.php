@@ -88,13 +88,13 @@ if ( '' === $lafka_review_banner_target_url ) {
 	aria-live="polite"
 	aria-labelledby="lafka-review-banner-copy"
 	data-cta-url="<?php echo esc_attr( $lafka_review_banner_target_url ); ?>">
-	<div class="lafka-review-banner__inner">
+	<div class="lafka-review-banner__inner lafka-card lafka-card--float">
 		<span class="lafka-review-banner__star" aria-hidden="true">&#9733;</span>
 		<div class="lafka-review-banner__body">
 			<p class="lafka-review-banner__copy" id="lafka-review-banner-copy">
 				<?php echo esc_html( $lafka_review_banner_copy_text ); ?>
 			</p>
-			<a class="lafka-review-banner__cta"
+			<a class="lafka-review-banner__cta lafka-btn lafka-btn--success lafka-btn--sm"
 				href="<?php echo esc_url( $lafka_review_banner_target_url ); ?>"
 				rel="noopener noreferrer"
 				target="_blank">

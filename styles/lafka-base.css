@@ -13,11 +13,11 @@
  */
 
 /* P6-SEO-9 / P6-A11Y-5: .section-subtitle replaces misused <h6> for visual
-   subtitles under <h1>/<h2>. #5e5e5e ≈ 4.6:1 on white (WCAG AA). */
+   subtitles under <h1>/<h2>. text-muted is the AA-checked neutral. */
 .section-subtitle {
 	text-align: center;
 	font-size: 14.3pt;
-	color: #5e5e5e;
+	color: var(--lafka-color-text-muted);
 	font-weight: 400;
 	margin: 0 0 1em;
 	line-height: 1.4;
@@ -129,4 +129,65 @@
 .woocommerce-cart-form__cart-item {
 	min-height: 80px; /* approx one product row */
 	contain: layout;
+}
+
+/* One keyboard-focus treatment for every control: the --lafka-shadow-focus
+ * token (a surface-coloured spacer, then a 4px accent ring, 3:1 or better on
+ * any fill). The transparent outline keeps the indicator in forced-colors
+ * mode, where box-shadow is dropped. Components do not re-declare it. */
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+[tabindex]:focus-visible,
+[role="button"]:focus-visible {
+	outline: 2px solid transparent;
+	box-shadow: var(--lafka-shadow-focus);
+}
+
+/* Tap targets: where the visual stays small (a text link, an inline toggle),
+ * a transparent ::after grows the hit area to --lafka-tap-target around it
+ * without moving anything. Add a selector here rather than padding the link. */
+.lafka-row__name a,
+.lafka-deal__name a,
+.lafka-related-browse,
+.lafka-counter-header__brand,
+.lafka-menu__chip,
+.product-addon .addon-name > .lafka-addon-toggle,
+.breadcrumb a,
+.lafka-page__crumbs a,
+.lafka-menu__crumbs a,
+.lafka-cart-item__title a,
+.lafka-archive-quickadd {
+	position: relative;
+}
+
+.lafka-row__name a::after,
+.lafka-deal__name a::after,
+.lafka-related-browse::after,
+.lafka-counter-header__brand::after,
+.lafka-menu__chip::after,
+.product-addon .addon-name > .lafka-addon-toggle::after,
+.breadcrumb a::after,
+.lafka-page__crumbs a::after,
+.lafka-menu__crumbs a::after,
+.lafka-cart-item__title a::after,
+.lafka-archive-quickadd::after {
+	content: "";
+	position: absolute;
+	inset: min(0px, calc((100% - var(--lafka-tap-target)) / 2));
+	width: auto;
+	height: auto;
+	margin: 0;
+	background: none;
+	border: 0;
+}
+
+/* Checkbox rows: the label is the target, so the whole row is one. */
+.woocommerce-form-login__rememberme,
+.product-addon.radiobutton p.form-row > label,
+.wc-block-components-checkbox label {
+	min-height: var(--lafka-tap-target);
 }

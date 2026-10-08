@@ -72,14 +72,14 @@
 }
 
 .lafka-cats__icon {
-	font-size: 40px;
+	font-size: 2.5rem;
 	line-height: 1;
 }
 
 .lafka-cats__name {
 	font-family: var(--lafka-font-family-display);
 	font-weight: 700;
-	font-size: 17px;
+	font-size: var(--lafka-font-size-body-lg);
 	line-height: 1.2;
 	color: var(--lafka-color-text-primary);
 
@@ -141,21 +141,9 @@
 .lafka-favs__card {
 	display: flex;
 	flex-direction: column;
-	background: var(--lafka-color-surface-raised);
-	border: none;
-	border-radius: var(--lafka-radius-lg);
-	box-shadow: var(--lafka-shadow-1);
-	overflow: hidden;
 	text-decoration: none;
 	color: inherit;
 	height: 100%;
-	transition: transform var(--lafka-motion-duration-base) var(--lafka-motion-ease-out),
-		box-shadow var(--lafka-motion-duration-base) var(--lafka-motion-ease-out);
-}
-
-.lafka-favs__card:hover {
-	transform: translateY(-2px);
-	box-shadow: var(--lafka-shadow-2);
 }
 
 /* v6.7.11 (C10): 1:1 aspect ratio matches the product card spec elsewhere
@@ -190,7 +178,7 @@
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-	font-size: 56px;
+	font-size: 3.5rem;
 	color: var(--lafka-color-text-muted);
 }
 
@@ -250,22 +238,10 @@
 	color: var(--lafka-color-text-primary);
 }
 
-.lafka-favs__cta {
-	display: inline-flex;
-	align-items: center;
-	padding: var(--lafka-space-2) var(--lafka-space-3);
-	background: var(--lafka-color-text-primary);
-	color: var(--lafka-color-text-inverse);
-	border-radius: var(--lafka-radius-pill);
-	font-size: var(--lafka-font-size-caption);
-	font-weight: var(--lafka-font-weight-semibold);
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-/* v5.74.0: handoff hover is darker ink + slight scale, NOT red. */
+/* The card is one link: hovering it lifts the label (darker ink + slight scale). */
 .lafka-favs__card:hover .lafka-favs__cta {
-	background: #27272a;
+	--lafka-btn-bg: var(--lafka-color-text-secondary);
+	--lafka-btn-border: var(--lafka-color-text-secondary);
 	transform: scale(1.04);
 }
 
@@ -348,16 +324,12 @@
 	 * light-theme (light) value here — identical to what Peppery resolves, so
 	 * no Peppery pixel moves; the inner surface-page "pin" card keeps its own
 	 * page-relative text tokens and inverts correctly. */
-	--lafka-color-text-inverse: #fff;
-	background: var(--lafka-color-surface-dark);
-	border-radius: var(--lafka-radius-xl);
-	overflow: hidden;
+	--lafka-color-text-inverse: var(--lafka-color-text-on-dark);
 	display: grid;
 	grid-template-columns: 1fr;
-	box-shadow: var(--lafka-shadow-3);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
 
 	.lafka-visit__card {
 		grid-template-columns: 1fr 1fr;
@@ -372,7 +344,7 @@
 	min-height: 280px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
 
 	.lafka-visit__media {
 		aspect-ratio: auto;
@@ -393,7 +365,7 @@
 	justify-content: center;
 	width: 100%;
 	height: 100%;
-	font-size: 96px;
+	font-size: 6rem;
 	background: linear-gradient(135deg, var(--lafka-color-brand-300) 0%, var(--lafka-color-brand-500) 100%);
 }
 
@@ -407,9 +379,6 @@
 	align-items: center;
 	gap: var(--lafka-space-3);
 	padding: var(--lafka-space-3) var(--lafka-space-4);
-	background: var(--lafka-color-surface-page);
-	border-radius: var(--lafka-radius-md);
-	box-shadow: var(--lafka-shadow-3);
 }
 
 .lafka-visit__pin-logo {
@@ -444,7 +413,7 @@
 	gap: var(--lafka-space-4);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
 
 	.lafka-visit__body {
 		padding: var(--lafka-space-12) var(--lafka-space-10);
@@ -454,7 +423,7 @@
 .lafka-visit__eyebrow {
 	margin: 0;
 	font-family: var(--lafka-font-family-body);
-	font-size: 11px;
+	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-bold);
 	letter-spacing: 0.16em;
 	text-transform: uppercase;
@@ -471,7 +440,7 @@
 	color: var(--lafka-color-text-inverse);
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1024px) {
 
 	.lafka-visit__addr {
 		font-size: 2.25rem;
@@ -526,51 +495,6 @@
 	flex-wrap: wrap;
 	gap: var(--lafka-space-3);
 	margin-top: var(--lafka-space-3);
-}
-
-.lafka-visit__cta {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--lafka-space-2);
-	padding: var(--lafka-space-3) var(--lafka-space-5);
-	border-radius: var(--lafka-radius-pill);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body);
-	font-weight: var(--lafka-font-weight-semibold);
-	text-decoration: none;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-visit__cta--primary {
-	background: var(--lafka-color-brand-500);
-	color: var(--lafka-color-text-primary);
-}
-
-.lafka-visit__cta--primary:hover {
-	background: var(--lafka-color-brand-600);
-	color: var(--lafka-color-text-primary);
-}
-
-/* NX2-07: the primary CTA sits on the bright brand FILL. Peppery reads the ink
- * (text-primary) — dark-on-amber, correct. A dark preset flips text-primary
- * light (near-white), which is unreadable on the still-bright brand fill. Pin
- * the CTA text to the on-accent token in dark scope only: it flips DARK on the
- * light fill for contrast, mirroring the closer CTA. Peppery keeps its exact
- * text-primary ink (no data-theme), so it stays byte/pixel-identical. */
-:root[data-theme="dark"] .lafka-visit__cta--primary,
-:root[data-theme="dark"] .lafka-visit__cta--primary:hover {
-	color: var(--lafka-color-text-on-accent);
-}
-
-.lafka-visit__cta--ghost {
-	background: transparent;
-	color: var(--lafka-color-text-inverse);
-	border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.lafka-visit__cta--ghost:hover {
-	background: rgba(255, 255, 255, 0.08);
-	color: var(--lafka-color-text-inverse);
 }
 
 /* =========================================================================
@@ -693,18 +617,14 @@
 	 * The primary CTA sits on the accent FILL, so it reads --lafka-color-text-
 	 * on-accent (below) which flips dark on the light accent under a dark
 	 * preset — the one spot that must NOT follow this light pin. */
-	--lafka-color-text-inverse: #fff;
+	--lafka-color-text-inverse: var(--lafka-color-text-on-dark);
 	padding-block: var(--lafka-space-16) var(--lafka-space-20);
-	background: var(--lafka-color-surface-ink, var(--lafka-color-surface-dark, #18181b));
-	color: var(--lafka-color-text-on-ink, var(--lafka-color-text-inverse, #fff));
+	background: var(--lafka-color-surface-dark);
+	color: var(--lafka-color-text-inverse);
 }
 
 .lafka-closer__card {
 	position: relative;
-	overflow: hidden;
-	background: var(--lafka-color-surface-dark);
-	color: var(--lafka-color-text-inverse);
-	border-radius: var(--lafka-radius-xl);
 	padding: var(--lafka-space-12) var(--lafka-space-6);
 	text-align: center;
 	display: flex;
@@ -770,51 +690,3 @@
 	margin-top: var(--lafka-space-3);
 }
 
-.lafka-closer__cta {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--lafka-space-2);
-	padding: var(--lafka-space-4) var(--lafka-space-6);
-	border-radius: var(--lafka-radius-pill);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-lg);
-	font-weight: var(--lafka-font-weight-semibold);
-	text-decoration: none;
-	min-height: 52px;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform 60ms var(--lafka-motion-ease-out);
-}
-
-.lafka-closer__cta--primary {
-	background: var(--lafka-color-accent-500);
-
-	/* NX2-07: text on the accent FILL — read the on-accent token (== #fff in
-	 * Peppery, so identical) so a dark preset with a light accent flips it to
-	 * dark for contrast, overriding the section's light inverse pin above. */
-	color: var(--lafka-color-text-on-accent);
-	box-shadow: 0 6px 20px rgba(220, 38, 38, 0.35);
-}
-
-.lafka-closer__cta--primary:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-text-on-accent);
-}
-
-.lafka-closer__cta--ghost {
-	background: rgba(255, 255, 255, 0.08);
-	color: var(--lafka-color-text-inverse);
-	border: 1px solid rgba(255, 255, 255, 0.25);
-}
-
-.lafka-closer__cta--ghost:hover {
-	background: rgba(255, 255, 255, 0.14);
-	color: var(--lafka-color-text-inverse);
-}
-
-.lafka-closer__arrow {
-	transition: transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-closer__cta:hover .lafka-closer__arrow {
-	transform: translateX(2px);
-}

@@ -107,7 +107,7 @@
 	background: transparent;
 	border-radius: var(--lafka-radius-pill);
 	color: var(--lafka-color-text-primary);
-	font-size: 28px;
+	font-size: 1.75rem;
 	line-height: 1;
 	cursor: pointer;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
@@ -116,11 +116,6 @@
 .lafka-cart-drawer__close:hover {
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-accent-text);
-}
-
-.lafka-cart-drawer__close:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* Body */
@@ -141,7 +136,7 @@
 }
 
 .lafka-cart-drawer__empty-icon {
-	font-size: 56px;
+	font-size: 3.5rem;
 	line-height: 1;
 }
 
@@ -236,7 +231,7 @@
 	border: none;
 	background: transparent;
 	color: var(--lafka-color-text-muted);
-	font-size: 18px;
+	font-size: 1.125rem;
 	line-height: 1;
 	cursor: pointer;
 	border-radius: var(--lafka-radius-pill);
@@ -302,40 +297,6 @@
 	gap: var(--lafka-space-2);
 }
 
-.lafka-cart-drawer__checkout {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: var(--lafka-space-2);
-	padding: var(--lafka-space-3) var(--lafka-space-6);
-	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-text-inverse);
-	border-radius: var(--lafka-radius-pill);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-lg);
-	font-weight: var(--lafka-font-weight-semibold);
-	text-decoration: none;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform 60ms var(--lafka-motion-ease-out);
-}
-
-.lafka-cart-drawer__checkout:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-text-inverse);
-}
-
-.lafka-cart-drawer__checkout:active {
-	transform: translateY(1px);
-}
-
-.lafka-cart-drawer__arrow {
-	transition: transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-cart-drawer__checkout:hover .lafka-cart-drawer__arrow {
-	transform: translateX(2px);
-}
-
 .lafka-cart-drawer__view-cart {
 	text-align: center;
 	color: var(--lafka-color-text-secondary);
@@ -365,7 +326,7 @@
 	margin: 0 0 var(--lafka-space-2, 8px);
 	font-weight: 600;
 	font-size: 0.9rem;
-	color: var(--lafka-color-text, #18181b);
+	color: var(--lafka-color-text-primary);
 }
 
 .lafka-cart-drawer__upsell-list {
@@ -385,9 +346,6 @@
 	flex-direction: column;
 	gap: 4px;
 	padding: var(--lafka-space-2, 8px);
-	border: 1px solid var(--lafka-color-border-subtle);
-	border-radius: var(--lafka-radius-md, 8px);
-	background: var(--lafka-color-surface-raised, #fff);
 }
 
 .lafka-cart-drawer__upsell-link {
@@ -403,7 +361,7 @@
 	aspect-ratio: 1 / 1;
 	object-fit: cover;
 	border-radius: var(--lafka-radius-sm, 6px);
-	background: var(--lafka-color-surface-muted, #f4f4f5);
+	background: var(--lafka-color-surface-muted);
 }
 
 .lafka-cart-drawer__upsell-img--ph {
@@ -413,7 +371,7 @@
 .lafka-cart-drawer__upsell-name {
 	font-size: 0.78rem;
 	line-height: 1.2;
-	color: var(--lafka-color-text, #27272a);
+	color: var(--lafka-color-text-primary);
 	overflow: hidden;
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
@@ -423,33 +381,11 @@
 .lafka-cart-drawer__upsell-price {
 	font-size: 0.78rem;
 	font-weight: 600;
-	color: var(--lafka-color-text-muted, #52525b);
+	color: var(--lafka-color-text-muted);
 }
 
 .lafka-cart-drawer__upsell-add {
 	margin-top: auto;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 36px;
-	padding: 0 10px;
-	border-radius: var(--lafka-radius-pill, 999px);
-	background: var(--lafka-color-accent-500, #dc2626);
-	color: var(--lafka-color-text-on-accent, #fff);
-	font-size: 0.8rem;
-	font-weight: 600;
-	text-decoration: none;
-}
-
-.lafka-cart-drawer__upsell-add.loading {
-	opacity: 0.6;
-	pointer-events: none;
-}
-
-.lafka-cart-drawer__upsell-add:hover,
-.lafka-cart-drawer__upsell-add:focus-visible {
-	background: var(--lafka-color-accent-600, #b91c1c);
-	color: var(--lafka-color-text-on-accent, #fff);
 }
 
 /* =========================================================================
@@ -529,11 +465,6 @@
 	margin-right: -12px; /* the word lines up with the row's right edge */
 }
 
-.lafka-cart-drawer--counter .lafka-cart-drawer__remove:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
 /* Empty order (O-19): no "Go to checkout $0.00", subtotal or Pickup/Delivery
  * picker — only the empty state and its "Browse the menu". :has() follows the
  * fragment swap without JS. */
@@ -558,14 +489,8 @@
 
 .lafka-cart-drawer--counter .lafka-cart-drawer__upsell-name,
 .lafka-cart-drawer--counter .lafka-cart-drawer__upsell-price {
-	font-size: max(0.875rem, 14px);
+	font-size: max(0.875rem, var(--lafka-font-size-caption));
 	color: var(--lafka-color-text-primary);
-}
-
-.lafka-cart-drawer--counter .lafka-cart-drawer__upsell-add {
-	min-height: 44px;
-	font-size: max(0.875rem, 14px);
-	border-radius: var(--lafka-radius-button);
 }
 
 /* Short viewports — landscape phones, 200% zoom, small phones (O-11): the

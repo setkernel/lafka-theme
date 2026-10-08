@@ -218,6 +218,7 @@
 /* Coupon panel — quiet collapsible, tokenised chrome. */
 .wc-block-components-totals-coupon .wc-block-components-panel__button,
 .wc-block-components-panel__button {
+	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-secondary);
 	font-weight: var(--lafka-font-weight-medium);
 }
@@ -266,12 +267,6 @@
 	background: var(--lafka-color-accent-600);
 	color: var(--lafka-color-accent-contrast);
 	box-shadow: var(--lafka-shadow-2);
-}
-
-.wc-block-cart__submit-button:focus-visible,
-.wc-block-components-checkout-place-order-button:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* =========================================================================
@@ -350,8 +345,6 @@
 .wc-block-components-address-form select:focus {
 	border-color: var(--lafka-color-text-primary);
 	background: var(--lafka-color-surface-page);
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* Floating field labels + generic labels. */
@@ -456,8 +449,8 @@
 .lafka-block-free-delivery {
 	margin: var(--lafka-space-4) 0;
 	padding: var(--lafka-space-4);
-	background: var(--lafka-color-success-bg);
-	border: 1px solid var(--lafka-status-success-border);
+	background: var(--lafka-color-success-50);
+	border: 1px solid var(--lafka-color-success-500);
 	border-radius: var(--lafka-radius-md);
 }
 
@@ -466,7 +459,7 @@
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-medium);
-	color: var(--lafka-color-success);
+	color: var(--lafka-color-success-500);
 }
 
 .lafka-block-free-delivery__track {
@@ -488,7 +481,7 @@
 }
 
 .lafka-block-free-delivery--reached .lafka-block-free-delivery__label {
-	color: var(--lafka-color-success);
+	color: var(--lafka-color-success-500);
 	font-weight: var(--lafka-font-weight-semibold);
 }
 
@@ -538,8 +531,6 @@
 .lafka-block-timeslot__date:focus,
 .lafka-block-timeslot__time:focus {
 	border-color: var(--lafka-color-text-primary);
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 .lafka-block-timeslot__time:disabled {
@@ -590,7 +581,7 @@
 	}
 }
 
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 
 	.wc-block-components-quantity-selector,
 	.wc-block-components-radio-control__option {
@@ -613,7 +604,7 @@
 .lafka-block-delivery-quote-notice {
 	margin: var(--lafka-space-2) 0 0;
 	padding: var(--lafka-space-2) var(--lafka-space-3);
-	border-left: 3px solid var(--lafka-color-info);
+	border-left: 3px solid var(--lafka-color-info-500);
 	border-radius: var(--lafka-radius-sm);
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-text-secondary);
@@ -634,4 +625,11 @@
  * woocommerce_no_shipping_available_html). */
 .wc-block-components-shipping-rates-control:has(.lafka-block-delivery-unavailable) .wc-block-components-shipping-rates-control__no-results-notice {
 	display: none;
+}
+
+/* The "+ Add apartment, suite, etc." toggle is a text control: keep a full tap target. */
+.wc-block-components-address-form__address_2-toggle {
+	display: inline-flex;
+	align-items: center;
+	min-height: var(--lafka-tap-target);
 }

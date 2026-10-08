@@ -86,7 +86,7 @@
 }
 
 .lafka-page--has-hero .lafka-page__crumbs a:hover {
-	color: #fff;
+	color: var(--lafka-color-text-on-dark);
 	text-decoration: underline;
 	text-underline-offset: 3px;
 }
@@ -108,7 +108,7 @@
 }
 
 .lafka-page--has-hero .lafka-page__title {
-	color: #fff;
+	color: var(--lafka-color-text-on-dark);
 	text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
@@ -375,7 +375,7 @@
 }
 
 .lafka-page--has-hero .lafka-post__author {
-	color: #fff;
+	color: var(--lafka-color-text-on-dark);
 }
 
 .lafka-post__date {
@@ -477,7 +477,7 @@
 	color: var(--lafka-color-text-primary);
 }
 
-@media (max-width: 600px) {
+@media (max-width: 599px) {
 
 	.lafka-post__nav {
 		grid-template-columns: 1fr;

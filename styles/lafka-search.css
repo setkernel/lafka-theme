@@ -21,7 +21,7 @@
 	gap: var(--lafka-space-2, 8px);
 	align-items: center;
 	padding: var(--lafka-space-3, 12px);
-	background: var(--lafka-color-surface-raised, #fff);
+	background: var(--lafka-color-surface-raised);
 	border-radius: var(--lafka-radius-lg, 12px);
 	box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
 }
@@ -38,12 +38,12 @@
 	min-width: 0;
 
 	/* 16px prevents iOS zoom-on-focus. */
-	font-size: 16px;
+	font-size: var(--lafka-font-size-body);
 	padding: 10px 16px;
 	border: 1px solid var(--lafka-color-border-subtle);
 	border-radius: var(--lafka-radius-pill, 999px);
-	background: var(--lafka-color-surface-page, #fff);
-	color: var(--lafka-color-text, #18181b);
+	background: var(--lafka-color-surface-page);
+	color: var(--lafka-color-text-primary);
 }
 
 .lafka-search-dialog__submit,
@@ -56,8 +56,8 @@
 
 .lafka-search-dialog__submit {
 	padding: 10px 20px;
-	background: var(--lafka-color-accent-500, #dc2626);
-	color: var(--lafka-color-text-on-accent, #fff);
+	background: var(--lafka-color-accent-500);
+	color: var(--lafka-color-text-on-accent);
 }
 
 .lafka-search-dialog__close-form {
@@ -67,16 +67,10 @@
 .lafka-search-dialog__close {
 	width: 40px;
 	height: 40px;
-	font-size: 24px;
+	font-size: 1.5rem;
 	line-height: 1;
-	background: var(--lafka-color-surface-muted, #f4f4f5);
+	background: var(--lafka-color-surface-muted);
 	color: inherit;
 }
 
 /* Visible keyboard focus for accessibility. */
-.lafka-search-dialog__input:focus-visible,
-.lafka-search-dialog__submit:focus-visible,
-.lafka-search-dialog__close:focus-visible {
-	outline: 2px solid var(--lafka-color-accent-500, #dc2626);
-	outline-offset: 2px;
-}

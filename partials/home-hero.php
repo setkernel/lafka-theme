@@ -127,12 +127,12 @@ $lafka_hero_stat_3_label    = (string) get_theme_mod( 'lafka_home_hero_stat_3_la
 			<p class="lafka-hero__lead"><?php echo esc_html( $lafka_hero_lead ); ?></p>
 
 			<div class="lafka-hero__actions">
-				<a class="lafka-hero__cta" href="<?php echo esc_url( $lafka_hero_cta_primary_url ); ?>">
+				<a class="lafka-btn lafka-btn--primary lafka-btn--lg" href="<?php echo esc_url( $lafka_hero_cta_primary_url ); ?>">
 					<?php echo esc_html( $lafka_hero_cta_primary_label ); ?>
-					<span class="lafka-hero__cta-arrow" aria-hidden="true">→</span>
+					<span class="lafka-btn__arrow" aria-hidden="true">→</span>
 				</a>
 				<?php if ( '' !== $lafka_hero_phone ) : ?>
-					<a class="lafka-hero__cta-ghost" href="<?php echo esc_attr( 'tel:' . $lafka_hero_phone_tel ); ?>">
+					<a class="lafka-btn lafka-btn--ghost lafka-btn--lg" href="<?php echo esc_attr( 'tel:' . $lafka_hero_phone_tel ); ?>">
 						<span class="lafka-hero__cta-ghost-icon" aria-hidden="true">📞</span>
 						<?php echo esc_html( $lafka_hero_phone ); ?>
 					</a>

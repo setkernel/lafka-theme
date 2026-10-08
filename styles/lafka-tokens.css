@@ -71,7 +71,6 @@
 	--lafka-color-brand-600: #d97706;
 	--lafka-color-brand-700: #b45309;
 	--lafka-color-brand-900: #451a03;
-	--lafka-color-on-brand: var(--lafka-color-text-primary);
 
 	/* ------- Colour: accent ramp — PIZZA RED (calls to action) ----------
 	 * WCAG: white on accent-500 = 4.83:1 (AA)
@@ -111,6 +110,16 @@
 	--lafka-color-text-muted: #71717a;     /* AA 4.83:1 — handoff value */
 	--lafka-color-text-inverse: #fff;
 	--lafka-color-text-on-accent: #fff;
+
+	/* Text on a PERMANENTLY dark band (announce bar, footer, closer, dialog
+	 * scrim): stays light in every preset, unlike text-inverse which a dark
+	 * preset flips. */
+	--lafka-color-text-on-dark: #fff;
+
+	/* Small fixed accents with no preset-specific meaning. */
+	--lafka-color-rating: #f5b400;                  /* review stars */
+	--lafka-color-highlight: #ffd166;               /* gold link on a dark bar */
+	--lafka-color-success-on-dark: #6ee7b7;         /* success text on a dark band */
 
 	/* ------- Colour: surface -------------------------------------------- */
 	--lafka-color-surface-page: #fff;
@@ -213,18 +222,12 @@
 	--lafka-font-weight-bold: 700;
 	--lafka-font-weight-display: 800;
 
-	/* Line heights — handoff names + legacy semantic names. */
+	/* Line heights. */
 	--lafka-line-display: 1.1;
 	--lafka-line-heading: 1.15;
 	--lafka-line-body: 1.5;
 	--lafka-line-small: 1.4;
-
-	/* Semantic line-height aliases used by existing components. */
-	--lafka-line-height-display: var(--lafka-line-display);
-	--lafka-line-height-tight: var(--lafka-line-heading);
 	--lafka-line-height-snug: 1.3;
-	--lafka-line-height-normal: var(--lafka-line-body);
-	--lafka-line-height-relaxed: 1.65;
 
 	--lafka-letter-spacing-tight: -0.025em;
 	--lafka-letter-spacing-snug: -0.01em;
@@ -245,15 +248,6 @@
 	--lafka-space-12: 48px;
 	--lafka-space-16: 64px;
 	--lafka-space-20: 80px;
-	--lafka-space-0: 0;
-
-	/* Semantic spacing aliases — components reference these, not raw scale */
-	--lafka-gap-inline: var(--lafka-space-2);
-	--lafka-gap-stack: var(--lafka-space-3);
-	--lafka-gap-card: var(--lafka-space-4);
-	--lafka-gap-card-padding: var(--lafka-space-5);
-	--lafka-gap-section: var(--lafka-space-12);
-	--lafka-gap-section-lg: var(--lafka-space-20);
 
 	/* ------- Radii ------------------------------------------------------ */
 	--lafka-radius-xs: 2px;
@@ -310,23 +304,27 @@
 	--lafka-motion-ease-out: cubic-bezier(0.2, 0.8, 0.4, 1);
 	--lafka-motion-ease-in-out: cubic-bezier(0.4, 0, 0.2, 1);
 
-	/* ------- Z-index scale (gapped to allow plugin insertions) ---------- */
+	/* ------- Z-index scale — the ONLY z-index vocabulary ----------------
+	 * Every z-index in modern CSS (and the plugin's front-end CSS, through
+	 * var(--lafka-z-*, <same number>)) reads one of these. Raw numbers are
+	 * allowed only for local stacking inside one component (-1, 0, 1, 2).
+	 * Gapped so a plugin can insert a layer without renumbering. Legacy
+	 * rules in style.css that out-bid this scale are lowered where they
+	 * reach a customer surface (badges, gallery trigger). */
 	--lafka-z-base: 0;
-	--lafka-z-raised: 10;
-	--lafka-z-dropdown: 100;
-	--lafka-z-sticky-cta: 200;
-	--lafka-z-header: 300;
-
-	/* Legacy theme stylesheet (style.css line 3418, 3445) hardcodes the
-	 * header element to z-index: 999, ignoring this token. The cart
-	 * drawer must layer above the header when open, so the drawer
-	 * z-index here is 10000 — high enough to escape the 999 wall
-	 * without colliding with the rare 9999 sticky elsewhere in core. */
-	--lafka-z-drawer: 10000;
-	--lafka-z-overlay: 950;
-	--lafka-z-dialog: 1000;
-	--lafka-z-toast: 1100;
+	--lafka-z-raised: 10;          /* badges, in-card overlays, stretched links */
+	--lafka-z-dropdown: 100;       /* menus and popovers anchored to a control */
+	--lafka-z-sticky-cta: 200;     /* sticky add-to-cart bars, category strip */
+	--lafka-z-header: 300;         /* site header, announce bar, counter bar */
+	--lafka-z-overlay: 950;        /* scrim behind a dialog */
+	--lafka-z-dialog: 1000;        /* native dialogs, method modal */
+	--lafka-z-toast: 1100;         /* exit-intent, review banner, push prompt */
 	--lafka-z-tooltip: 1200;
+	--lafka-z-drawer: 10000;       /* cart drawer, mobile nav, promo toast */
+	--lafka-z-consent: 99998;      /* consent banner (modal = +1) */
+	--lafka-z-top: 100000;         /* skip link, preloader */
+	--lafka-z-popup: 200000;       /* branch-select popup (plugin) */
+	--lafka-z-maps-suggest: 200100; /* Google Places .pac-container: above the popup */
 
 	/* ------- Layout ----------------------------------------------------- */
 	--lafka-container-max: 1440px;
@@ -338,97 +336,62 @@
 	--lafka-header-h-desk: 72px;
 	--lafka-tap-target: 44px;
 
+	/* ------- Breakpoints --------------------------------------------------
+	 * mobile < 600, tablet 600-767, laptop 768-1023, desktop 1024-1279, wide
+	 * 1280 and up. CSS @media cannot read a custom property, so every query
+	 * writes these numbers literally (min-width: 600px | 768px | 1024px |
+	 * 1280px; max-width: one less) and stylelint rejects any other value.
+	 * Script reads them from here (lafkaBreakpoint() in js/lafka-front.js). */
+	--lafka-bp-mobile: 600px;
+	--lafka-bp-tablet: 768px;
+	--lafka-bp-laptop: 1024px;
+	--lafka-bp-desktop: 1280px;
+
+	/* ------- Runtime hooks ------------------------------------------------
+	 * Set on <html> by script (consent banner height, sticky category strip
+	 * offset); declared so every var() read resolves before the script runs. */
+	--lafka-consent-banner-h: 0px;
+	--lafka-menu-cats-offset: 0px;
+
+	/* ------- Consent banner (markup + behaviour: lafka-plugin) -----------
+	 * The plugin ships neutral fallbacks for these; the theme skins them with
+	 * the active preset so the banner matches the site. @public-start */
+	--lafka-consent-bg: var(--lafka-color-surface-announce);
+	--lafka-consent-fg: var(--lafka-color-text-inverse);
+	--lafka-consent-accept: var(--lafka-color-accent-500);
+	--lafka-consent-accept-fg: var(--lafka-color-text-on-accent);
+	--lafka-consent-reject: color-mix(in srgb, var(--lafka-color-text-inverse) 16%, transparent);
+	--lafka-consent-reject-fg: var(--lafka-color-text-inverse);
+	--lafka-consent-overlay: var(--lafka-color-surface-overlay);
+	--lafka-consent-panel-bg: var(--lafka-color-surface-raised);
+	--lafka-consent-panel-fg: var(--lafka-color-text-primary);
+	--lafka-consent-border: var(--lafka-color-border-subtle);
+	--lafka-consent-close-bg: var(--lafka-color-surface-muted);
+	--lafka-consent-close-fg: var(--lafka-color-text-primary);
+
+	/* @public-end */
+
 	/* =====================================================================
-	 * Legacy name aliases — keep existing component CSS compiling without
-	 * a wholesale rewrite. New code should reference the handoff-native
-	 * names above. Aliases will be removed after a full component sweep.
+	 * Deprecated legacy aliases — read ONLY by the legacy theme sheets
+	 * (style.css, legacy-blog.css, inside @layer legacy). They stay so those
+	 * rules keep resolving to the canonical values; modern CSS must not use
+	 * them, and they go when the legacy layer does. This file is unlayered, so
+	 * its declarations beat the legacy :root block that defines the same names
+	 * with the pre-redesign values.
 	 * ===================================================================== */
-
-	/* Typography legacy → handoff */
-	--lafka-font-sans: var(--lafka-font-family-body);
-	--lafka-font-display: var(--lafka-font-family-display);
-	--lafka-font-mono: var(--lafka-font-family-mono);
-	--lafka-font-size-sm: var(--lafka-font-size-body-sm);
-	--lafka-font-size-base: var(--lafka-font-size-body);
-	--lafka-font-size-lg: var(--lafka-font-size-body-lg);
-
-	/* Motion legacy → handoff (+ instant/spring/in not in handoff, kept) */
-	--lafka-duration-instant: 80ms;
-	--lafka-duration-fast: var(--lafka-motion-duration-fast);
-	--lafka-duration-normal: var(--lafka-motion-duration-base);
-	--lafka-duration-slow: var(--lafka-motion-duration-slow);
-	--lafka-ease-out: var(--lafka-motion-ease-out);
-	--lafka-ease-in-out: var(--lafka-motion-ease-in-out);
-	--lafka-ease-in: cubic-bezier(0.7, 0, 0.84, 0);
-	--lafka-ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
-
-	/* Semantic colour legacy → handoff */
-	--lafka-color-success: var(--lafka-color-success-500);
-	--lafka-color-success-bg: var(--lafka-color-success-50);
-	--lafka-color-error: var(--lafka-color-error-500);
-	--lafka-color-error-bg: var(--lafka-color-error-50);
-	--lafka-color-warning: var(--lafka-color-warning-500);
-	--lafka-color-warning-bg: var(--lafka-color-warning-50);
-	--lafka-color-info: var(--lafka-color-info-500);
-	--lafka-color-info-bg: var(--lafka-color-info-50);
-
-	/* =====================================================================
-	 * v5.70.0: Legacy style.css :root namespace bridge.
-	 *
-	 * The legacy style.css declares its own --lafka-* tokens (text-primary,
-	 * border-light, space-xs, etc.) with pre-handoff values (#333 text,
-	 * 4px spacing, etc.). Since style.css is now in @layer legacy and
-	 * THIS file is unlayered, our redeclarations win at the cascade —
-	 * pointing every legacy :root token at the canonical handoff value.
-	 *
-	 * Result: all 21k lines of legacy style.css instantly inherit the
-	 * canonical design system colours / spacing / typography without
-	 * touching any individual selector.
-	 * ===================================================================== */
-
-	/* Text */
-	--lafka-text-primary: var(--lafka-color-text-primary);
-	--lafka-text-secondary: var(--lafka-color-text-secondary);
-	--lafka-text-muted: var(--lafka-color-text-muted);
-	--lafka-text-heading: var(--lafka-color-text-primary);
-	--lafka-text-heading-alt: var(--lafka-color-text-secondary);
-
-	/* Borders */
 	--lafka-border-light: var(--lafka-color-border-subtle);
 	--lafka-border-default: var(--lafka-color-border-default);
-	--lafka-border-medium: var(--lafka-color-border-default);
-	--lafka-border-dark: var(--lafka-color-border-strong);
-
-	/* Surfaces / backgrounds */
-	--lafka-bg-white: var(--lafka-color-surface-page);
 	--lafka-bg-subtle: var(--lafka-color-surface-sunken);
 	--lafka-bg-input: var(--lafka-color-surface-sunken);
-	--lafka-disabled-bg: var(--lafka-color-surface-muted);
-	--lafka-disabled-text: var(--lafka-color-text-muted);
-
-	/* Spacing aliases (legacy t-shirt scale → handoff numeric) */
-	--lafka-space-xs: var(--lafka-space-1);
-	--lafka-space-sm: var(--lafka-space-2);
-	--lafka-space-md: var(--lafka-space-4);
-	--lafka-space-lg: var(--lafka-space-6);
 	--lafka-space-xl: var(--lafka-space-8);
 	--lafka-section-gap: var(--lafka-space-12);
-	--lafka-container-padding: var(--lafka-container-px);
 	--lafka-card-padding: var(--lafka-space-5);
-
-	/* Status palette aliases */
-	--lafka-status-success: var(--lafka-color-success-500);
-	--lafka-status-success-bg: var(--lafka-color-success-50);
-	--lafka-status-success-border: var(--lafka-color-success-500);
 	--lafka-status-error: var(--lafka-color-error-500);
 	--lafka-status-error-bg: var(--lafka-color-error-50);
 	--lafka-status-error-border: var(--lafka-color-error-500);
 	--lafka-status-warning: var(--lafka-color-warning-500);
 	--lafka-status-warning-bg: var(--lafka-color-warning-50);
 	--lafka-status-warning-border: var(--lafka-color-warning-500);
-	--lafka-status-info: var(--lafka-color-info-500);
-	--lafka-status-info-bg: var(--lafka-color-info-50);
-	--lafka-status-info-border: var(--lafka-color-info-500);
 }
 
 /* -------- Dark mode (opt-in) ----------------------------------------------

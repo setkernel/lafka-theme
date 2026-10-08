@@ -105,7 +105,7 @@ $lafka_pdp_initial       = $lafka_pdp_ctx['initial'];
 							<input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input" aria-label="<?php esc_attr_e( 'Quantity', 'lafka' ); ?>">
 							<button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
 						</div>
-						<button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
+						<button type="submit" class="lafka-pdp-summary__cta lafka-btn lafka-btn--primary" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
 							<span data-lafka-cta-label><?php echo esc_html( $lafka_pdp_cta_prompt ); ?></span>
 						</button>
 					</div>
@@ -116,7 +116,7 @@ $lafka_pdp_initial       = $lafka_pdp_ctx['initial'];
 							<span data-lafka-qty-display>1</span>
 							<button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka' ); ?>">+</button>
 						</div>
-						<button type="submit" class="lafka-pdp-mobile-cta__btn" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
+						<button type="submit" class="lafka-pdp-mobile-cta__btn lafka-btn lafka-btn--primary" data-lafka-add-to-cart disabled data-lafka-state="incomplete">
 							<span data-lafka-cta-label><?php echo esc_html( $lafka_pdp_cta_prompt ); ?></span>
 						</button>
 					</div>
@@ -194,7 +194,7 @@ $lafka_pdp_initial       = $lafka_pdp_ctx['initial'];
 					<input type="number" name="quantity" value="1" min="1" class="qty lafka-pdp-qty__input" aria-label="<?php esc_attr_e( 'Quantity', 'lafka' ); ?>">
 					<button type="button" class="lafka-pdp-qty__btn" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase quantity', 'lafka' ); ?>">+</button>
 				</div>
-				<button type="submit" class="lafka-pdp-summary__cta" data-lafka-add-to-cart>
+				<button type="submit" class="lafka-pdp-summary__cta lafka-btn lafka-btn--primary" data-lafka-add-to-cart>
 					<span data-lafka-cta-label><?php esc_html_e( 'Add to order', 'lafka' ); ?></span>
 				</button>
 			</div>
@@ -205,7 +205,7 @@ $lafka_pdp_initial       = $lafka_pdp_ctx['initial'];
 					<span data-lafka-qty-display>1</span>
 					<button type="button" data-lafka-qty="+1" aria-label="<?php esc_attr_e( 'Increase', 'lafka' ); ?>">+</button>
 				</div>
-				<button type="submit" class="lafka-pdp-mobile-cta__btn" data-lafka-add-to-cart>
+				<button type="submit" class="lafka-pdp-mobile-cta__btn lafka-btn lafka-btn--primary" data-lafka-add-to-cart>
 					<span data-lafka-cta-label><?php esc_html_e( 'Add to order', 'lafka' ); ?></span>
 				</button>
 			</div>

@@ -7,6 +7,33 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Design system: one source, one button, one card
+- **One token source.** `styles/lafka-tokens.css` and the preset engine drive everything. `theme.json`'s
+  palette, font sizes, font families and spacing are generated (`npm run build`; `incl/presets/theme-json-map.json`
+  maps slugs to tokens) and `npm run check-theme-json` fails when they are stale. `lafka_theme_json_overlay()`
+  lays the active preset and the operator's accent/brand over them, so the block editor matches the front end.
+  New helpers `lafka_token_default()` and `lafka_color_setting()` replace the `#dc2626`/`#f59e0b` literals in
+  dynamic CSS, the Customizer defaults and the editor CSS.
+- **First paint follows the preset.** `styles/critical.css` has no colour literal; `lafka_critical_root_css()`
+  prints the resolved accent, brand and the preset's critical tokens in front of it, on every layout.
+- **Tokens.** Every `var(--lafka-*)` read is defined (new: `--lafka-bp-*`, `--lafka-consent-*`,
+  `--lafka-color-text-on-dark|rating|highlight|success-on-dark`, the z-index scale incl. `--lafka-z-popup`,
+  `--lafka-z-maps-suggest`, `--lafka-z-consent`, `--lafka-z-top`); unused tokens and the duplicate aliases are
+  deleted (`--lafka-font-sans`, `--lafka-duration-*`, `--lafka-color-success`, `--lafka-pdp-*`, ...); a short
+  documented block of legacy names remains for `style.css`. `scripts/check-tokens.mjs` (part of `npm run lint:css`) keeps it so.
+- **Stylelint forbids drift** in non-legacy theme CSS: raw hex colours, px font sizes, raw z-index values and
+  any `@media` width outside 600/768/1024/1280. Literal colours and font sizes in the sheets are now tokens.
+- **`.lafka-btn` and `.lafka-card`** are the one button and the one card. `.lafka-counter-btn`, the hero,
+  closer, visit, 404, contact, direct-value, header, review, push, exit-intent, cart-empty, PDP and drawer CTAs
+  and the favs, product, upsell, info, pin and toast cards map onto them (markup gains the classes; the
+  section classes keep placement only). Corners now follow `--lafka-radius-button` everywhere.
+- **Breakpoints** are 600/768/1024/1280 only (`lafkaBreakpoint()` in script reads the same tokens); the cart
+  drawer's second copy in `pdp-redesign.css` is gone.
+- **Tap targets** of 44 px for close buttons, text links in lists, breadcrumbs, toggles and checkbox rows
+  (a transparent `::after` where the visual stays small). **Focus** is one `:focus-visible` rule using
+  `--lafka-shadow-focus`; the per-component outline and ring copies are removed.
+- Consent banner skin (`--lafka-consent-*`) now follows the preset.
+
 ### One source of truth: hours, money, fulfilment, the shared script
 - **Open/closed status is the plugin's.** `lafka_open_status()` and the counter header status read
   `Lafka_Order_Hours::status()`; the theme's schedule maths, order-gate reconcile and the two duplicate

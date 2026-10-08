@@ -20,7 +20,7 @@
 	 * so a dark preset keeps light-on-dark text instead of flipping it dark.
 	 * Both equal the values Peppery already resolves, so Peppery stays
 	 * byte/pixel-identical. */
-	--lafka-color-text-inverse: #fff;
+	--lafka-color-text-inverse: var(--lafka-color-text-on-dark);
 	position: relative;
 	z-index: var(--lafka-z-header);
 	background: var(--lafka-color-surface-announce);
@@ -104,16 +104,15 @@
 }
 
 .lafka-announce-bar__phone:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 	border-radius: var(--lafka-radius-xs);
 }
 
-/* Below 560px the delivery + phone strings won't fit alongside status —
- * hide the delivery line and keep status + phone only. */
-@media (max-width: 559px) {
+/* Below 600px the delivery + phone strings won't fit alongside status —
+ * keep the status only (the header and the sticky bar carry Call). */
+@media (max-width: 599px) {
 
-	.lafka-announce-bar__delivery {
+	.lafka-announce-bar__delivery,
+	.lafka-announce-bar__phone {
 		display: none;
 	}
 
@@ -123,14 +122,6 @@
 
 	.lafka-announce-bar__status-label {
 		font-size: 0.78rem;
-	}
-}
-
-/* Below 400px the phone hides too — status only. */
-@media (max-width: 399px) {
-
-	.lafka-announce-bar__phone {
-		display: none;
 	}
 }
 

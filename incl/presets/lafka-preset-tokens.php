@@ -25,7 +25,8 @@
  *    beats it by get_theme_mod() semantics.
  *
  *  - LAFKA_PRESET_CRITICAL_KEYS — the above-fold subset of the token whitelist
- *    (inert this wave; consumed by the NX2-04.1 critical.css preset-awareness).
+ *    (printed in front of the inline critical.css by lafka_critical_root_css(),
+ *    on every layout, together with the resolved accent and brand).
  *
  * @package Lafka
  * @since   7.1.0 (NX2-01)
@@ -244,10 +245,10 @@ define(
 );
 
 /**
- * Above-fold subset of LAFKA_PRESET_TOKEN_WHITELIST. Inert this wave; the
- * NX2-04.1 critical.css preset-awareness will read it so first-paint on a
- * non-default preset reflects the preset's key surfaces/type. MUST stay a
- * subset of LAFKA_PRESET_TOKEN_WHITELIST (asserted by PresetSchemaTest).
+ * Above-fold subset of LAFKA_PRESET_TOKEN_WHITELIST. lafka_critical_root_css()
+ * prints these in front of the inline critical.css so first paint on any preset
+ * reflects the preset's key surfaces and type. MUST stay a subset of
+ * LAFKA_PRESET_TOKEN_WHITELIST.
  */
 define(
 	'LAFKA_PRESET_CRITICAL_KEYS',

@@ -163,11 +163,6 @@
 	font-weight: var(--lafka-font-weight-regular);
 }
 
-.lafka-menu__tab:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
 /* Search */
 .lafka-menu__search {
 	display: flex;
@@ -196,7 +191,7 @@
 
 .lafka-menu__search-icon {
 	color: var(--lafka-color-text-muted);
-	font-size: 16px;
+	font-size: 1rem;
 	line-height: 1;
 }
 
@@ -209,7 +204,6 @@
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body);
 	color: var(--lafka-color-text-primary);
-	outline: none;
 }
 
 .lafka-menu__search-input::placeholder {
@@ -280,11 +274,6 @@
 	background: var(--lafka-color-text-primary);
 	color: var(--lafka-color-text-inverse);
 	border-color: var(--lafka-color-text-primary);
-}
-
-.lafka-menu__chip:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 .lafka-menu__clear-filters {
@@ -403,7 +392,7 @@
 	background: var(--lafka-color-surface-page);
 	color: var(--lafka-color-text-muted);
 	border-radius: var(--lafka-radius-pill);
-	font-size: 11px;
+	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-semibold);
 }
 
@@ -564,7 +553,7 @@
 }
 
 .lafka-menu__empty-icon {
-	font-size: 48px; /* v5.74.0: 48px per handoff (was 64) */
+	font-size: 3rem; /* v5.74.0: 48px per handoff (was 64) */
 	line-height: 1;
 }
 
@@ -618,7 +607,7 @@
 
 .lafka-menu__toc-label {
 	font-family: var(--lafka-font-family-body);
-	font-size: 11px;
+	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-bold);
 	letter-spacing: var(--lafka-letter-spacing-wide);
 	text-transform: uppercase;
@@ -690,7 +679,7 @@
 	right: 0;
 	bottom: 0;
 	width: 48px;
-	background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--lafka-color-surface-page, #fff));
+	background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--lafka-color-surface-page));
 	pointer-events: none;
 }
 
@@ -714,11 +703,6 @@
 	scroll-margin-top: var(--lafka-menu-cats-offset, 80px);
 }
 
-.lafka-menu__cat-chip:focus-visible {
-	outline: 3px solid var(--lafka-color-accent-700);
-	outline-offset: -3px;
-}
-
 /* Search clear: a 44 px hit area around the small visible disc (T-21). */
 .lafka-menu__search-clear {
 	display: inline-flex;
@@ -727,7 +711,7 @@
 	border: 0;
 	color: var(--lafka-color-text-muted);
 	border-radius: var(--lafka-radius-pill);
-	font-size: 14px;
+	font-size: var(--lafka-font-size-caption);
 	line-height: 1;
 	cursor: pointer;
 	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
@@ -736,11 +720,6 @@
 	margin-block: -10px;
 	margin-inline-end: -10px;
 	background: radial-gradient(circle, var(--lafka-color-surface-muted) 12px, transparent 13px);
-}
-
-.lafka-menu__search-clear:focus-visible {
-	outline: 3px solid var(--lafka-color-accent-700);
-	outline-offset: -6px;
 }
 
 /* Empty state: a button reset as well as a link. */

@@ -39,7 +39,7 @@ $lafka_closer_cta_url   = (string) get_theme_mod( 'lafka_home_closer_cta_url', l
 ?>
 <section class="lafka-closer" aria-labelledby="lafka-closer-heading">
 	<div class="lafka-container">
-		<div class="lafka-closer__card">
+		<div class="lafka-closer__card lafka-card lafka-card--xl lafka-card--dark lafka-card--flat">
 
 			<h2 id="lafka-closer-heading" class="lafka-closer__headline">
 				<?php
@@ -60,12 +60,12 @@ $lafka_closer_cta_url   = (string) get_theme_mod( 'lafka_home_closer_cta_url', l
 			<?php endif; ?>
 
 			<div class="lafka-closer__actions">
-				<a class="lafka-closer__cta lafka-closer__cta--primary" href="<?php echo esc_url( $lafka_closer_cta_url ); ?>">
+				<a class="lafka-btn lafka-btn--primary lafka-btn--lg" href="<?php echo esc_url( $lafka_closer_cta_url ); ?>">
 					<?php echo esc_html( $lafka_closer_cta_label ); ?>
-					<span class="lafka-closer__arrow" aria-hidden="true">→</span>
+					<span class="lafka-btn__arrow" aria-hidden="true">→</span>
 				</a>
 				<?php if ( '' !== $lafka_closer_phone ) : ?>
-					<a class="lafka-closer__cta lafka-closer__cta--ghost" href="<?php echo esc_attr( 'tel:' . $lafka_closer_tel ); ?>">
+					<a class="lafka-btn lafka-btn--inverse lafka-btn--lg" href="<?php echo esc_attr( 'tel:' . $lafka_closer_tel ); ?>">
 						<span aria-hidden="true">📞</span>
 						<?php echo esc_html( $lafka_closer_phone ); ?>
 					</a>

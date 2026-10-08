@@ -57,7 +57,7 @@
 	left: auto;
 	width: 320px;
 	max-width: calc(100vw - 32px);
-	z-index: 1090;
+	z-index: calc(var(--lafka-z-toast) - 10);
 	pointer-events: none;
 	opacity: 0;
 	transform: translateY(16px);
@@ -87,12 +87,9 @@
 	align-items: center;
 	gap: var(--lafka-space-3);
 	padding: var(--lafka-space-4) var(--lafka-space-5) var(--lafka-space-4) var(--lafka-space-4);
-	background: var(--lafka-color-surface-raised);
-	color: var(--lafka-color-text-primary);
-	border: 1px solid var(--lafka-color-success-500, #047857);
+	--lafka-card-border: var(--lafka-color-success-500);
+
 	border-left-width: 4px;
-	border-radius: var(--lafka-radius-lg);
-	box-shadow: var(--lafka-shadow-3);
 }
 
 /* Large gold star icon — anchor of the "rating prompt" affordance.
@@ -105,9 +102,9 @@
 	justify-content: center;
 	width: 40px;
 	height: 40px;
-	font-size: 32px;
+	font-size: 2rem;
 	line-height: 1;
-	color: #f5b400;
+	color: var(--lafka-color-rating);
 }
 
 /* Body column — vertical stack of copy + CTA. */
@@ -128,50 +125,19 @@
 	color: var(--lafka-color-text-primary);
 }
 
-/* Primary CTA — green pill, distinct from the exit-intent red CTA. */
+/* Primary CTA — .lafka-btn--success (green, distinct from the exit-intent
+ * red CTA); only its place in the banner is set here. */
 .lafka-review-banner__cta {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
 	align-self: flex-start;
-	padding: var(--lafka-space-2) var(--lafka-space-4);
-	background: var(--lafka-color-success-500, #047857);
-	color: #fff;
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-sm);
-	font-weight: var(--lafka-font-weight-semibold);
-	line-height: 1.2;
-	text-decoration: none;
-	border: 0;
-	border-radius: var(--lafka-radius-pill);
-	cursor: pointer;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-review-banner__cta:hover,
-.lafka-review-banner__cta:focus-visible {
-	background: var(--lafka-color-success-600, color-mix(in srgb, var(--lafka-color-success-500) 85%, #000));
-	color: #fff;
-	text-decoration: none;
-}
-
-.lafka-review-banner__cta:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
-.lafka-review-banner__cta:active {
-	transform: translateY(1px);
 }
 
 /* Close × — 28×28 tap target in top-right corner. Stays subtle. */
 .lafka-review-banner__close {
 	position: absolute;
 	top: 4px;
-	right: 4px;
-	width: 28px;
-	height: 28px;
+	right: 0;
+	width: var(--lafka-tap-target);
+	height: var(--lafka-tap-target);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -181,7 +147,7 @@
 	border: 0;
 	border-radius: var(--lafka-radius-pill);
 	color: var(--lafka-color-text-muted);
-	font-size: 20px;
+	font-size: 1.25rem;
 	line-height: 1;
 	cursor: pointer;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
@@ -192,7 +158,6 @@
 .lafka-review-banner__close:focus-visible {
 	background: var(--lafka-color-surface-hover);
 	color: var(--lafka-color-text-primary);
-	outline: none;
 }
 
 .lafka-review-banner__close:focus-visible {
@@ -205,7 +170,7 @@
  * On phones the bottom-right anchor is awkward; bottom-center reads naturally
  * because mobile thumbs reach the bottom-center most easily.
  * ------------------------------------------------------------------------- */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 
 	.lafka-review-banner {
 		right: 16px;

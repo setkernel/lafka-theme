@@ -31,6 +31,7 @@ require_once get_template_directory() . '/incl/presets/lafka-preset-fonts.php';
 require_once get_template_directory() . '/incl/presets/class-lafka-preset.php';
 require_once get_template_directory() . '/incl/presets/class-lafka-presets.php';
 require_once get_template_directory() . '/incl/presets/lafka-preset-emit.php';
+require_once get_template_directory() . '/incl/presets/lafka-token-defaults.php';
 
 /*
  * NX2-04: Customizer-side preset surface — per-preset preview payloads (the

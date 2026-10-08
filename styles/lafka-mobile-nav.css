@@ -101,7 +101,7 @@
 	background: transparent;
 	border-radius: var(--lafka-radius-pill);
 	color: var(--lafka-color-text-primary);
-	font-size: 28px;
+	font-size: 1.75rem;
 	line-height: 1;
 	cursor: pointer;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
@@ -110,11 +110,6 @@
 .lafka-mobile-nav__close:hover {
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-accent-text);
-}
-
-.lafka-mobile-nav__close:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* Body — scrollable nav lists */
@@ -179,11 +174,6 @@
 .lafka-mobile-nav__nav .menu > li.current-menu-item > a {
 	color: var(--lafka-color-accent-text);
 	font-weight: var(--lafka-font-weight-semibold);
-}
-
-.lafka-mobile-nav__list > li > a:focus-visible {
-	outline: 3px solid var(--lafka-color-accent-700);
-	outline-offset: -3px;
 }
 
 .lafka-mobile-nav__count {

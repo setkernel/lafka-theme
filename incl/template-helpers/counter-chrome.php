@@ -511,14 +511,14 @@ if ( ! function_exists( 'lafka_counter_add_action' ) ) {
 			// A one-variation variable product adds that variation directly.
 			$payload = 'direct' === $mode ? lafka_chooser_payload( $product ) : array();
 			$add_id  = ! empty( $payload['variation_id'] ) ? (int) $payload['variation_id'] : (int) $product->get_id();
-			return '<button type="button" class="' . esc_attr( trim( 'lafka-counter-btn ' . $css_class ) ) . '"'
+			return '<button type="button" class="' . esc_attr( trim( 'lafka-btn ' . $css_class ) ) . '"'
 				. ' data-lafka-add="' . esc_attr( (string) $add_id ) . '"'
 				. ' data-lafka-add-mode="' . esc_attr( $mode ) . '"'
 				. ' data-lafka-add-url="' . esc_url( $url ) . '">'
 				. esc_html( $label ) . '<span class="screen-reader-text"> ' . esc_html( $name ) . '</span></button>';
 		}
 		$choose = (string) apply_filters( 'lafka_counter_choose_label', __( 'Choose', 'lafka' ), $product );
-		return '<a class="' . esc_attr( trim( 'lafka-counter-btn lafka-counter-btn--choose ' . $css_class ) ) . '" href="' . esc_url( $url ) . '">'
+		return '<a class="' . esc_attr( trim( 'lafka-btn lafka-btn--choose ' . $css_class ) ) . '" href="' . esc_url( $url ) . '">'
 			. esc_html( $choose ) . '<span class="screen-reader-text"> '
 			/* translators: %s: product name */
 			. esc_html( sprintf( __( 'options for %s', 'lafka' ), $name ) ) . '</span></a>';
@@ -605,14 +605,14 @@ if ( ! function_exists( 'lafka_counter_bar_order_html' ) ) {
 		$count = lafka_counter_cart_count();
 		$arrow = lafka_counter_icon( 'arrow' );
 		if ( 0 === $count ) {
-			return '<a class="lafka-counter-bar__order lafka-counter-btn lafka-counter-btn--primary" href="' . esc_url( lafka_theme_menu_url() ) . '">'
+			return '<a class="lafka-counter-bar__order lafka-btn lafka-btn--primary" href="' . esc_url( lafka_theme_menu_url() ) . '">'
 				. '<span>' . esc_html__( 'Order online', 'lafka' ) . '</span>' . $arrow . '</a>';
 		}
 		$subtotal = lafka_counter_cart_subtotal_text();
 		$cart_url = function_exists( 'wc_get_cart_url' ) ? wc_get_cart_url() : lafka_theme_menu_url();
 		/* translators: 1: number of items, 2: subtotal */
 		$label = sprintf( _n( 'View order, %1$d item, %2$s', 'View order, %1$d items, %2$s', $count, 'lafka' ), $count, $subtotal );
-		return '<a class="lafka-counter-bar__order lafka-counter-btn lafka-counter-btn--primary" href="' . esc_url( $cart_url ) . '" data-lafka-cart-open aria-label="' . esc_attr( $label ) . '">'
+		return '<a class="lafka-counter-bar__order lafka-btn lafka-btn--primary" href="' . esc_url( $cart_url ) . '" data-lafka-cart-open aria-label="' . esc_attr( $label ) . '">'
 			. '<span>' . esc_html__( 'View order', 'lafka' ) . '</span>'
 			. '<span class="lafka-counter-bar__count" aria-hidden="true">' . esc_html( (string) $count ) . '</span>'
 			. ( '' !== $subtotal ? '<span aria-hidden="true">' . esc_html( $subtotal ) . '</span>' : '' )

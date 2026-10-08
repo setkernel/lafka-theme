@@ -88,7 +88,7 @@ if ( ! function_exists( 'lafka_cart_empty_popular_render' ) ) {
 					}
 					?>
 					<li class="lafka-cart-empty-popular__item">
-						<a class="lafka-cart-empty-popular__link" href="<?php echo esc_url( $product->get_permalink() ); ?>">
+						<a class="lafka-cart-empty-popular__link lafka-card lafka-card--sm" href="<?php echo esc_url( $product->get_permalink() ); ?>">
 							<span class="lafka-cart-empty-popular__media">
 								<?php
 								if ( $image_html ) {

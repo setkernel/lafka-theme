@@ -1220,7 +1220,7 @@ span.show-password-input {
     line-height: 22px;
     vertical-align: middle;
     position: absolute;
-    z-index: 10000;
+    z-index: 10;
     top: 12px;
     right: 10px;
     text-align: center;
@@ -3025,7 +3025,7 @@ div.product div.images a.woocommerce-product-gallery__trigger,
     position: absolute;
     top: 30px;
     right: 30px;
-    z-index: 19000;
+    z-index: 10;
     display: block;
     background: rgba(255, 255, 255, 0.35);
     text-align: center;
@@ -3506,7 +3506,7 @@ ul.products {
     padding: var(--lafka-card-padding, 15px);
     position: relative;
     top: 0;
-    z-index: 444;
+    z-index: 2;
     box-sizing: border-box;
     text-align: center;
     border-radius: 3px;
@@ -3564,7 +3564,7 @@ ul.products {
 }
 
 .prod_hold:hover {
-    z-index: 555;
+    z-index: 3;
     background-color: #fff;
     box-shadow: none;
 }
@@ -3585,7 +3585,7 @@ div.product-category {
     margin: 0;
     padding: 20px;
     position: relative;
-    z-index: 444;
+    z-index: 2;
     overflow: hidden;
     text-align: center;
     list-style: none !important;
@@ -4204,7 +4204,7 @@ span.onsale,
     position: absolute;
     top: 30px;
     right: 30px;
-    z-index: 12002;
+    z-index: 3;
     font-size: 12px;
     border-radius: 50%;
     display: block;
@@ -4275,7 +4275,7 @@ p.product.woocommerce.add_to_cart_inline+.links a.button.add_to_cart_button.ajax
 }
 
 .prod_hold .new_prod {
-    z-index: 12000;
+    z-index: 2;
 
     /* NEW label color */
     background-color: var(--lafka-new-label-color);
@@ -5187,7 +5187,7 @@ img.avatar {
 .commentlist li .comment-body span,
 .commentlist li .comment-body div {
     position: relative;
-    z-index: 1000;
+    z-index: 3;
 }
 
 .commentlist li ul.children li .comment-body {
@@ -5199,7 +5199,7 @@ img.avatar {
     top: -35px;
     left: 30px;
     margin: 0;
-    z-index: 200;
+    z-index: 2;
 }
 
 .lafka-author-content img.avatar {
@@ -5975,9 +5975,7 @@ p.demo_store a.woocommerce-store-notice__dismiss-link::before {
 }
 
 .woocommerce-Message .button,
-.woocommerce-Message .button:hover,
-.woocommerce-message .button,
-.woocommerce-message .button:hover {
+.woocommerce-Message .button:hover {
     float: right;
     margin-left: 30px;
     border: none;
@@ -6290,7 +6288,7 @@ html.touch .ajax_loading .ajax_loading_inner {
     background: url(image/loading3.gif) center center no-repeat;
     background-color: #fff;
     opacity: 0.85;
-    z-index: 15000;
+    z-index: 4;
     position: absolute;
     top: 0;
     left: 0;
@@ -6339,7 +6337,7 @@ div.product .summary.entry-summary p.price+p.stock {
     display: inline-block;
     margin: 0;
     padding: 0;
-    z-index: 1099;
+    z-index: 3;
     list-style: none !important;
 }
 

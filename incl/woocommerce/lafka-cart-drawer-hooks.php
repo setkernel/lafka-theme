@@ -24,16 +24,16 @@ if ( ! function_exists( 'lafka_cart_drawer_button_checkout' ) ) {
 	function lafka_cart_drawer_button_checkout(): void {
 		if ( function_exists( 'lafka_layout_is' ) && lafka_layout_is( 'drawer', 'counter' ) ) {
 			?>
-			<a class="lafka-cart-drawer__checkout lafka-counter-btn lafka-counter-btn--primary lafka-counter-btn--lg" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">
+			<a class="lafka-cart-drawer__checkout lafka-btn lafka-btn--primary lafka-btn--lg lafka-btn--block" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">
 				<?php echo wp_kses( lafka_counter_drawer_checkout_label(), lafka_allowed_html() ); ?>
 			</a>
 			<?php
 			return;
 		}
 		?>
-		<a class="lafka-cart-drawer__checkout" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">
+		<a class="lafka-cart-drawer__checkout lafka-btn lafka-btn--primary lafka-btn--block" href="<?php echo esc_url( wc_get_checkout_url() ); ?>">
 			<?php esc_html_e( 'Checkout', 'lafka' ); ?>
-			<span class="lafka-cart-drawer__arrow" aria-hidden="true">→</span>
+			<span class="lafka-btn__arrow" aria-hidden="true">→</span>
 		</a>
 		<?php
 	}

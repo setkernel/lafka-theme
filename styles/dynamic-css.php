@@ -111,26 +111,25 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// theme_mods (migrated off the legacy `lafka` option); inline defaults
 		// reproduce the registry `std` so fresh installs still render the
 		// shipped Peppery pixels.
-		$accent_color = esc_attr( get_theme_mod( 'lafka_accent_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_accent_color', '#dc2626' ) : '#dc2626' ) );
-		// f074: brand-ramp anchor. Default #f59e0b matches the shipped
-		// pepper-yellow in lafka-tokens.css so the out-of-box ramp is
-		// unchanged; operators who set a brand color drive the handoff
+		$accent_color = esc_attr( lafka_color_setting( 'lafka_accent_color', '--lafka-color-accent-500' ) );
+		// f074: brand-ramp anchor. Default is the shipped brand token
+		// (lafka_token_default(), generated from lafka-tokens.css); operators who set a brand color drive the handoff
 		// `--lafka-color-brand-500` consumers (footer chrome, hero gradient,
 		// open-status dot, etc.) instead of that token being fixed in CSS.
-		$brand_color   = esc_attr( get_theme_mod( 'lafka_brand_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_brand_color', '#f59e0b' ) : '#f59e0b' ) );
+		$brand_color   = esc_attr( lafka_color_setting( 'lafka_brand_color', '--lafka-color-brand-500' ) );
 		$logo_bg_color = esc_attr( get_theme_mod( 'lafka_logo_background_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_logo_background_color', '#fccc4c' ) : '#fccc4c' ) );
 		// NX1-02.dyncss-content-colors: content color tokens (links, sidebar
 		// titles, all-buttons, new/sale labels, page title/subtitle) read from
 		// `lafka_<key>` theme_mods (migrated off the legacy `lafka` option).
 		// Inline defaults reproduce the Options-Framework `std` so fresh installs
 		// still render the shipped Peppery pixels.
-		$links_color             = esc_attr( get_theme_mod( 'lafka_links_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_links_color', '#dc2626' ) : '#dc2626' ) );
+		$links_color             = esc_attr( lafka_color_setting( 'lafka_links_color', '--lafka-color-accent-500' ) );
 		$links_hover_color       = esc_attr( get_theme_mod( 'lafka_links_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_links_hover_color', '#ce4f44' ) : '#ce4f44' ) );
 		$sidebar_titles_color    = esc_attr( get_theme_mod( 'lafka_sidebar_titles_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_sidebar_titles_color', '#333333' ) : '#333333' ) );
-		$all_buttons_color       = esc_attr( get_theme_mod( 'lafka_all_buttons_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_all_buttons_color', '#dc2626' ) : '#dc2626' ) );
-		$all_buttons_hover_color = esc_attr( get_theme_mod( 'lafka_all_buttons_hover_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_all_buttons_hover_color', '#b91c1c' ) : '#b91c1c' ) );
-		$new_label_color         = esc_attr( get_theme_mod( 'lafka_new_label_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_new_label_color', '#047857' ) : '#047857' ) );
-		$sale_label_color        = esc_attr( get_theme_mod( 'lafka_sale_label_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_sale_label_color', '#dc2626' ) : '#dc2626' ) );
+		$all_buttons_color       = esc_attr( lafka_color_setting( 'lafka_all_buttons_color', '--lafka-color-accent-500' ) );
+		$all_buttons_hover_color = esc_attr( lafka_color_setting( 'lafka_all_buttons_hover_color', '--lafka-color-accent-600' ) );
+		$new_label_color         = esc_attr( lafka_color_setting( 'lafka_new_label_color', '--lafka-color-success-500' ) );
+		$sale_label_color        = esc_attr( lafka_color_setting( 'lafka_sale_label_color', '--lafka-color-accent-500' ) );
 		$page_title_color        = esc_attr( get_theme_mod( 'lafka_page_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_title_color', '#22272d' ) : '#22272d' ) );
 		$page_subtitle_color     = esc_attr( get_theme_mod( 'lafka_page_subtitle_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_page_subtitle_color', '#5e5e5e' ) : '#5e5e5e' ) );
 		$custom_page_title_color = esc_attr( get_theme_mod( 'lafka_custom_page_title_color', function_exists( 'lafka_preset_default' ) ? lafka_preset_default( 'lafka_custom_page_title_color', '#ffffff' ) : '#ffffff' ) );
@@ -181,13 +180,13 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// Headings font.
 		// v5.44.0: the legacy theme-options "Headings Font" picker is now
 		// inert — design system defines h1/h2 typography via
-		// --lafka-font-display (Fraunces, see docs/DESIGN_SYSTEM.md). Operators
-		// wanting custom heading typography override --lafka-font-display
+		// --lafka-font-family-display (Fraunces, see docs/DESIGN_SYSTEM.md). Operators
+		// wanting custom heading typography override --lafka-font-family-display
 		// in a child-theme stylesheet. The legacy CSS variable name
 		// `--lafka-headings-font-family` is kept (style.css:21214 still
 		// references it via that name across thousands of selectors), but
 		// routed through the design token so a single source of truth wins.
-		$headings_font_family = 'var(--lafka-font-display)';
+		$headings_font_family = 'var(--lafka-font-family-display)';
 
 		// H1-H6 fonts. Per-level inline defaults reproduce the Options-Framework
 		// std — face 'Rubik' and color '#22272d' are shared across levels; only
@@ -288,7 +287,7 @@ if ( ! function_exists( 'lafka_dynamic_css_build' ) ) {
 		// (consumed by every rebuilt page since v5.59.0). Without this
 		// alias, operators who set their brand color in Customizer
 		// see the legacy surfaces change but the handoff pages stay
-		// on the shipped #dc2626 — colour drift across the site.
+		// on the shipped accent — colour drift across the site.
 		// Emitted as a reference to --lafka-accent-color (same computed value)
 		// so the Customizer preview only has to update one property.
 		$custom_css .= '--lafka-color-accent-500:var(--lafka-accent-color);';

@@ -1,30 +1,31 @@
 #!/usr/bin/env node
 /**
- * Regenerate theme.json's editor presets from the token SSOT.
+ * Generate the editor presets and the PHP token defaults from the token SSOT.
  *
- * `styles/lafka-tokens.css` (the :root block — ~212 --lafka-* custom properties)
- * is the single source of truth for colour, type and spacing. The block editor,
- * however, reads its palette / font-size / font-family / spacing presets from
- * `theme.json`. When the two drift (they did: theme.json accent #DD430E vs token
- * accent-500 #dc2626) the editor and the front end render different brand colours.
+ * `styles/lafka-tokens.css` (the base `:root` block and the dark scaffold) plus
+ * the preset engine (`presets/<default>/preset.json`) are the single source for
+ * colour, type and spacing. The block editor reads its palette, font sizes,
+ * font families and spacing from `theme.json`; PHP needs the shipped token
+ * values as fallbacks for Customizer defaults. Both are derived here from
+ * `incl/presets/theme-json-map.json` (slug -> token), never edited by hand:
  *
- * This script parses the tokens and rewrites ONLY these theme.json sections from
- * an explicit slug -> token map:
- *   - settings.color.palette
- *   - settings.typography.fontSizes
- *   - settings.typography.fontFamilies  (added — body/display/mono)
- *   - settings.spacing.spacingSizes
- * Every other key (appearanceTools, layout, styles, version, $schema, the inline
- * spacing.units array, ...) is preserved byte-for-byte. Output is deterministic:
- * stable key order + tab indentation, matching the committed file's style so the
- * git diff is limited to the reconciled values.
+ *   theme.json                     settings.color.palette, settings.typography.fontSizes,
+ *                                  settings.typography.fontFamilies, settings.spacing.spacingSizes
+ *                                  (values = base tokens overlaid with the default preset, so the
+ *                                  shipped editor matches what the default design renders)
+ *   incl/presets/token-defaults.json  { light: base tokens, dark: dark-scaffold tokens }
+ *                                  (read by lafka_token_default() and the theme.json overlay)
  *
- * theme.json stays committed — there is NO build step at install time. Run this
- * whenever tokens change; `ThemeJsonTokenParityTest` gates the two back into sync.
+ * Every other theme.json key is preserved byte for byte. Output is
+ * deterministic (tab indentation, stable key order).
  *
- * Usage: `npm run build:theme-json`  (or `node scripts/build-theme-json.mjs`)
+ * Usage:
+ *   npm run build:theme-json    write both files (npm run build runs it)
+ *   npm run check-theme-json    exit 1 when either file is stale (CI + pre-push)
  *
- * NX2-06 (style variations) builds on this same generator.
+ * At runtime the active preset and the operator's accent/brand are laid over
+ * these values by lafka_theme_json_overlay() (incl/presets/lafka-token-defaults.php),
+ * so the editor follows the front end for every preset.
  */
 
 import { readFileSync, writeFileSync } from 'node:fs';
@@ -34,69 +35,26 @@ import { dirname, join } from 'node:path';
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const THEME_JSON = join(ROOT, 'theme.json');
 const TOKENS_CSS = join(ROOT, 'styles', 'lafka-tokens.css');
+const MAP_JSON = join(ROOT, 'incl', 'presets', 'theme-json-map.json');
+const DEFAULTS_JSON = join(ROOT, 'incl', 'presets', 'token-defaults.json');
+const DEFAULT_PRESET = 'peppery';
 
-/* Palette slug -> --lafka-* colour token. Slugs keep their names; values come
- * from the SSOT. background-input / border-medium follow the token file's own
- * legacy-alias bridge (--lafka-bg-input -> surface-sunken,
- * --lafka-border-medium -> border-default). */
-const PALETTE_MAP = {
-	accent: '--lafka-color-accent-500',
-	'text-primary': '--lafka-color-text-primary',
-	'text-secondary': '--lafka-color-text-secondary',
-	'text-muted': '--lafka-color-text-muted',
-	background: '--lafka-color-surface-page',
-	'background-subtle': '--lafka-color-surface-sunken',
-	'background-input': '--lafka-color-surface-sunken',
-	'border-light': '--lafka-color-border-subtle',
-	'border-default': '--lafka-color-border-default',
-	'border-medium': '--lafka-color-border-default',
-	'border-dark': '--lafka-color-border-strong',
-	'status-error': '--lafka-color-error-500',
-	'status-warning': '--lafka-color-warning-500',
-	'status-success': '--lafka-color-success-500',
-	'status-info': '--lafka-color-info-500',
-};
-
-/* Font-size slug -> --lafka-* type token. `x-large` (28px) has no clean token
- * on the type scale, so it is left at its current value (logged below). */
-const FONT_SIZE_MAP = {
-	small: '--lafka-font-size-caption',
-	medium: '--lafka-font-size-body',
-	large: '--lafka-font-size-h3',
-	'xx-large': '--lafka-font-size-display',
-};
-
-/* Font-family presets (new) generated from the family tokens. */
-const FONT_FAMILY_MAP = {
-	body: '--lafka-font-family-body',
-	display: '--lafka-font-family-display',
-	mono: '--lafka-font-family-mono',
-};
-const FONT_FAMILY_NAMES = { body: 'Body', display: 'Display', mono: 'Mono' };
-
-/* Spacing slug -> --lafka-* space token. `3xl` (30px) / `5xl` (50px) sit between
- * scale steps and have no token, so they keep their current values (logged). */
-const SPACING_MAP = {
-	xs: '--lafka-space-1',
-	sm: '--lafka-space-2',
-	md: '--lafka-space-3',
-	lg: '--lafka-space-4',
-	xl: '--lafka-space-5',
-	'2xl': '--lafka-space-6',
-	'4xl': '--lafka-space-10',
-};
+const CHECK = process.argv.includes('--check');
 
 /**
- * Parse the base (light-mode) :root { ... } block of lafka-tokens.css into a
- * name -> value map. Comments are stripped first so prose can't corrupt the
- * declaration split; the base block has no nested braces, so the first `}`
- * closes it.
+ * Declarations of one rule block as a name -> value map. Comments are stripped
+ * first so prose cannot corrupt the split. The blocks parsed here hold no
+ * nested braces, so the first `}` closes them.
+ *
+ * @param {string} css Stylesheet text.
+ * @param {RegExp} selector Matches the block's selector, with the body in group 1.
+ * @returns {Record<string,string>} Token name -> value.
  */
-function parseRootTokens(css) {
+function parseBlock(css, selector) {
 	const stripped = css.replace(/\/\*[\s\S]*?\*\//g, '');
-	const match = stripped.match(/:root\s*\{([\s\S]*?)\}/);
+	const match = stripped.match(selector);
 	if (!match) {
-		throw new Error('Could not locate the base :root { … } block in lafka-tokens.css');
+		throw new Error(`Could not locate ${selector} in lafka-tokens.css`);
 	}
 	const tokens = {};
 	for (const decl of match[1].split(';')) {
@@ -108,37 +66,40 @@ function parseRootTokens(css) {
 		if (colon === -1) {
 			continue;
 		}
-		const name = trimmed.slice(0, colon).trim();
-		const value = trimmed.slice(colon + 1).trim().replace(/\s+/g, ' ');
-		tokens[name] = value;
+		tokens[trimmed.slice(0, colon).trim()] = trimmed
+			.slice(colon + 1)
+			.trim()
+			.replace(/\s+/g, ' ');
 	}
 	return tokens;
 }
 
 /**
- * Rewrite an array-of-preset-objects section in place: for each existing entry,
- * if its slug maps to a token, replace `valueKey`; otherwise keep + log it.
+ * Follow `var(--other)` aliases (single hop, repeated) to a literal value.
+ *
+ * @param {string} name Token name.
+ * @param {Record<string,string>} tokens Token map.
+ * @returns {string} Resolved value.
  */
-function remap(section, map, valueKey, tokens, label, logKept) {
-	for (const entry of section) {
-		const token = map[entry.slug];
-		if (!token) {
-			if (logKept) {
-				console.log(`  · ${label} "${entry.slug}" kept at ${entry[valueKey]} (no token maps).`);
-			}
-			continue;
+function resolve(name, tokens) {
+	let value = tokens[name];
+	for (let i = 0; i < 5 && typeof value === 'string'; i++) {
+		const alias = value.match(/^var\((--[a-z0-9-]+)\)$/);
+		if (!alias) {
+			break;
 		}
-		if (!(token in tokens)) {
-			throw new Error(`${label} "${entry.slug}" maps to ${token}, which is missing from lafka-tokens.css`);
-		}
-		entry[valueKey] = tokens[token];
+		value = tokens[alias[1]];
 	}
+	return value;
 }
 
 /**
  * Deterministic serializer matching the committed theme.json style: tab indent,
- * one member per line, arrays of primitives inline (reproduces the `units`
- * array byte-for-byte), arrays of objects expanded.
+ * one member per line, arrays of primitives inline, arrays of objects expanded.
+ *
+ * @param {*} value Value.
+ * @param {number} depth Indent depth.
+ * @returns {string} JSON text.
  */
 function serialize(value, depth) {
 	const pad = '\t'.repeat(depth);
@@ -164,35 +125,99 @@ function serialize(value, depth) {
 	return `{\n${items.join(',\n')}\n${pad}}`;
 }
 
-const tokens = parseRootTokens(readFileSync(TOKENS_CSS, 'utf8'));
+const css = readFileSync(TOKENS_CSS, 'utf8');
+const map = JSON.parse(readFileSync(MAP_JSON, 'utf8'));
 const theme = JSON.parse(readFileSync(THEME_JSON, 'utf8'));
 
-const typography = theme.settings.typography;
+const base = parseBlock(css, /(?<![\w-]):root\s*\{([\s\S]*?)\n\}/);
+const dark = parseBlock(css, /:root\[data-theme="dark"\]\s*\{([\s\S]*?)\n\}/);
 
-console.log('Regenerating theme.json presets from lafka-tokens.css …');
-remap(theme.settings.color.palette, PALETTE_MAP, 'color', tokens, 'palette', false);
-remap(typography.fontSizes, FONT_SIZE_MAP, 'size', tokens, 'fontSize', true);
-remap(theme.settings.spacing.spacingSizes, SPACING_MAP, 'size', tokens, 'spacingSize', true);
+/* The default preset overlays the base so the shipped editor matches the
+ * default design: its PTL tokens, and its chrome accent/brand (which feed
+ * --lafka-color-accent-500 / --lafka-color-brand-500 through the operator
+ * layer). */
+const preset = JSON.parse(readFileSync(join(ROOT, 'presets', DEFAULT_PRESET, 'preset.json'), 'utf8'));
+const shipped = { ...base, ...(preset.tokens || {}) };
+if (preset.chrome && preset.chrome.lafka_accent_color) {
+	shipped['--lafka-color-accent-500'] = preset.chrome.lafka_accent_color;
+}
+if (preset.chrome && preset.chrome.lafka_brand_color) {
+	shipped['--lafka-color-brand-500'] = preset.chrome.lafka_brand_color;
+}
 
-/* fontFamilies: generated fresh from the family tokens, inserted right after
- * fontSizes so the typography object reads sizes-then-families. */
-const fontFamilies = Object.entries(FONT_FAMILY_MAP).map(([slug, token]) => {
-	if (!(token in tokens)) {
-		throw new Error(`fontFamily "${slug}" maps to ${token}, which is missing from lafka-tokens.css`);
+/**
+ * Build a preset list (`slug`, `name`, then `valueKey`) from one map section.
+ *
+ * @param {Record<string,{name:string,token:string}>} section Map section.
+ * @param {string} valueKey `color` | `size` | `fontFamily`.
+ * @param {string} label For error messages.
+ * @returns {Array<Object>} Preset entries.
+ */
+function build(section, valueKey, label) {
+	return Object.entries(section).map(([slug, { name, token }]) => {
+		const value = resolve(token, shipped);
+		if (typeof value !== 'string') {
+			throw new Error(`${label} "${slug}" maps to ${token}, which is missing from lafka-tokens.css`);
+		}
+		return { slug, name, [valueKey]: value };
+	});
+}
+
+const settings = theme.settings;
+settings.color.palette = build(map.palette, 'color', 'palette');
+const typography = {};
+for (const [key, val] of Object.entries(settings.typography)) {
+	if (key === 'fontFamilies') {
+		continue;
 	}
-	return { slug, name: FONT_FAMILY_NAMES[slug], fontFamily: tokens[token] };
-});
-const rebuiltTypography = {};
-for (const [key, val] of Object.entries(typography)) {
-	rebuiltTypography[key] = val;
+	typography[key] = key === 'fontSizes' ? build(map.fontSizes, 'size', 'fontSize') : val;
 	if (key === 'fontSizes') {
-		rebuiltTypography.fontFamilies = fontFamilies;
+		typography.fontFamilies = build(map.fontFamilies, 'fontFamily', 'fontFamily');
 	}
 }
-if (!rebuiltTypography.fontFamilies) {
-	rebuiltTypography.fontFamilies = fontFamilies;
-}
-theme.settings.typography = rebuiltTypography;
+settings.typography = typography;
+settings.spacing.spacingSizes = build(map.spacing, 'size', 'spacingSize');
 
-writeFileSync(THEME_JSON, `${serialize(theme, 0)}\n`);
-console.log('✓ theme.json regenerated from tokens.');
+/* Every token that is a literal (not an alias): the PHP defaults. Sorted so the
+ * file diff is stable. */
+const literals = (tokens) =>
+	Object.fromEntries(
+		Object.entries(tokens)
+			.filter(([, v]) => !/^var\(/.test(v))
+			.sort(([a], [b]) => a.localeCompare(b))
+	);
+const defaults = { light: literals(base), dark: literals(dark) };
+
+const outputs = [
+	[THEME_JSON, `${serialize(theme, 0)}\n`],
+	[DEFAULTS_JSON, `${serialize(defaults, 0)}\n`],
+];
+
+let stale = 0;
+for (const [file, text] of outputs) {
+	const current = (() => {
+		try {
+			return readFileSync(file, 'utf8');
+		} catch {
+			return '';
+		}
+	})();
+	if (CHECK) {
+		if (current !== text) {
+			stale += 1;
+			console.error(`✖ ${file.replace(`${ROOT}/`, '')} is stale — run: npm run build:theme-json`);
+		}
+	} else if (current !== text) {
+		writeFileSync(file, text);
+		console.log(`✓ wrote ${file.replace(`${ROOT}/`, '')}`);
+	}
+}
+
+if (CHECK) {
+	if (stale) {
+		process.exit(1);
+	}
+	console.log('✓ theme.json and token-defaults.json match lafka-tokens.css and the default preset.');
+} else {
+	console.log('✓ editor presets and token defaults generated from the token SSOT.');
+}

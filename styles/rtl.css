@@ -261,7 +261,7 @@ a.lafka-post-nav.lafka-post-next .entry-info::after {
     clear: right;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 599px) {
 
 	.foodmenu-unit-info h4 > span {
         right: auto;

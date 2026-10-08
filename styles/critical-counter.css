@@ -59,7 +59,7 @@ body {
 .lafka-counter-header .lafka-counter-header__name {
 	min-width: 0;
 	overflow: hidden;
-	font-size: clamp(14px, 4vw, 17px);
+	font-size: clamp(0.875rem, 4vw, 1.0625rem);
 	white-space: nowrap;
 	text-overflow: ellipsis;
 }
@@ -109,7 +109,7 @@ body {
 	}
 }
 
-@media (max-width: 439px) {
+@media (max-width: 599px) {
 
 	.lafka-counter-header .lafka-counter-header__cart-label {
 		display: none;
@@ -144,7 +144,7 @@ body {
 	}
 
 	.lafka-counter-header .lafka-counter-header__name {
-		font-size: 21px;
+		font-size: 1.3125rem;
 	}
 
 	.lafka-counter-header .lafka-counter-status {
@@ -221,7 +221,7 @@ body {
 	}
 
 	.lafka-counter-header .lafka-counter-header__name {
-		font-size: 24px;
+		font-size: 1.5rem;
 	}
 
 	/* Never cut the name; the status wraps instead. */
@@ -248,11 +248,7 @@ body {
 	}
 }
 
-@media (min-width: 1440px) {
-
-	.lafka-counter-header .lafka-counter-header__name {
-		font-size: 26px;
-	}
+@media (min-width: 1280px) {
 
 	.lafka-counter-header .lafka-counter-header__phone-number {
 		position: static;

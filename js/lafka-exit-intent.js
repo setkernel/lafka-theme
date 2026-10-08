@@ -230,7 +230,7 @@
 		root.setAttribute('aria-labelledby', 'lafka-exit-toast-headline');
 
 		const inner = document.createElement('div');
-		inner.className = 'lafka-exit-toast__inner';
+		inner.className = 'lafka-exit-toast__inner lafka-card lafka-card--float';
 
 		// Close × in top-right corner.
 		const closeBtn = document.createElement('button');
@@ -258,14 +258,14 @@
 		actions.className = 'lafka-exit-toast__actions';
 
 		const primary = document.createElement('a');
-		primary.className = 'lafka-exit-toast__primary';
+		primary.className = 'lafka-exit-toast__primary lafka-btn lafka-btn--primary lafka-btn--sm';
 		primary.href = cartUrl;
 		primary.textContent = ctaLabel;
 		actions.appendChild(primary);
 
 		const dismiss = document.createElement('button');
 		dismiss.type = 'button';
-		dismiss.className = 'lafka-exit-toast__dismiss';
+		dismiss.className = 'lafka-exit-toast__dismiss lafka-btn lafka-btn--quiet lafka-btn--sm';
 		dismiss.textContent = dismissLabel;
 		actions.appendChild(dismiss);
 

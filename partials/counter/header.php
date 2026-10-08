@@ -77,7 +77,7 @@ $lafka_ch_short  = lafka_counter_brand_short( $lafka_ch_nap['name'] );
 
 			<?php echo wp_kses( lafka_counter_header_cart_html(), lafka_allowed_html() ); ?>
 
-			<a class="lafka-counter-header__order lafka-counter-btn lafka-counter-btn--primary" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
+			<a class="lafka-counter-header__order lafka-btn lafka-btn--primary" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 				<?php echo esc_html( (string) apply_filters( 'lafka_header_cta_label', __( 'Order online', 'lafka' ) ) ); ?>
 			</a>
 		</div>

@@ -12,62 +12,77 @@
 				{
 					"slug": "accent",
 					"name": "Accent",
-					"color": "#dc2626"
+					"color": "#B0271D"
+				},
+				{
+					"slug": "accent-hover",
+					"name": "Accent Hover",
+					"color": "#962018"
+				},
+				{
+					"slug": "on-accent",
+					"name": "Text on Accent",
+					"color": "#FFFFFF"
+				},
+				{
+					"slug": "brand",
+					"name": "Brand",
+					"color": "#2E6A3B"
 				},
 				{
 					"slug": "text-primary",
 					"name": "Text",
-					"color": "#18181b"
+					"color": "#1F1B18"
 				},
 				{
 					"slug": "text-secondary",
 					"name": "Text Secondary",
-					"color": "#3f3f46"
+					"color": "#3F3832"
 				},
 				{
 					"slug": "text-muted",
 					"name": "Text Muted",
-					"color": "#71717a"
+					"color": "#57504A"
 				},
 				{
 					"slug": "background",
 					"name": "Background",
-					"color": "#fff"
+					"color": "#FFFFFF"
 				},
 				{
 					"slug": "background-subtle",
 					"name": "Background Subtle",
-					"color": "#fafafa"
+					"color": "#F6F3EE"
 				},
 				{
 					"slug": "background-input",
 					"name": "Background Input",
-					"color": "#fafafa"
+					"color": "#F6F3EE"
 				},
 				{
 					"slug": "border-light",
 					"name": "Border Light",
-					"color": "#e4e4e7"
+					"color": "#E3DCD2"
 				},
 				{
 					"slug": "border-default",
 					"name": "Border Default",
-					"color": "#d4d4d8"
+					"color": "#D9D0C4"
 				},
 				{
 					"slug": "border-medium",
 					"name": "Border Medium",
-					"color": "#d4d4d8"
+					"color": "#D9D0C4"
 				},
 				{
 					"slug": "border-dark",
 					"name": "Border Dark",
-					"color": "#a1a1aa"
+					"color": "#8C8177"
 				},
 				{
 					"slug": "status-error",
 					"name": "Error",
-					"color": "#b91c1c"
+					"color": "#9E231A"
 				},
 				{
 					"slug": "status-warning",
@@ -77,7 +92,7 @@
 				{
 					"slug": "status-success",
 					"name": "Success",
-					"color": "#047857"
+					"color": "#2E6A3B"
 				},
 				{
 					"slug": "status-info",
@@ -94,39 +109,39 @@
 				{
 					"slug": "small",
 					"name": "Small",
-					"size": "0.8125rem"
+					"size": "0.875rem"
 				},
 				{
 					"slug": "medium",
 					"name": "Medium",
-					"size": "1rem"
+					"size": "1.0625rem"
 				},
 				{
 					"slug": "large",
 					"name": "Large",
-					"size": "1.25rem"
+					"size": "1.1875rem"
 				},
 				{
 					"slug": "x-large",
 					"name": "Extra Large",
-					"size": "28px"
+					"size": "2.75rem"
 				},
 				{
 					"slug": "xx-large",
 					"name": "XX Large",
-					"size": "2.5rem"
+					"size": "clamp(2.1875rem, 1.6rem + 2.6vw, 3.875rem)"
 				}
 			],
 			"fontFamilies": [
 				{
 					"slug": "body",
 					"name": "Body",
-					"fontFamily": "\"Rubik\", system-ui, -apple-system, \"Segoe UI\", roboto, \"Helvetica Neue\", arial, sans-serif"
+					"fontFamily": "\"Atkinson Hyperlegible Next\", verdana, sans-serif"
 				},
 				{
 					"slug": "display",
 					"name": "Display",
-					"fontFamily": "\"Fraunces\", \"Iowan Old Style\", \"Palatino Linotype\", \"Book Antiqua\", palatino, georgia, serif"
+					"fontFamily": "\"Bricolage Grotesque\", \"Trebuchet MS\", sans-serif"
 				},
 				{
 					"slug": "mono",
@@ -172,7 +187,7 @@
 				{
 					"slug": "3xl",
 					"name": "3XL",
-					"size": "30px"
+					"size": "32px"
 				},
 				{
 					"slug": "4xl",
@@ -182,7 +197,7 @@
 				{
 					"slug": "5xl",
 					"name": "5XL",
-					"size": "50px"
+					"size": "48px"
 				}
 			]
 		},
@@ -240,12 +255,12 @@
 			},
 			"button": {
 				"color": {
-					"text": "#ffffff",
+					"text": "var(--wp--preset--color--on-accent)",
 					"background": "var(--wp--preset--color--accent)"
 				},
 				":hover": {
 					"color": {
-						"background": "#c43d0d"
+						"background": "var(--wp--preset--color--accent-hover)"
 					}
 				}
 			}

@@ -124,7 +124,7 @@ if ( '' === $lafka_pdp_long_desc && empty( $lafka_pdp_allergens ) && ! $lafka_pd
 <section class="lafka-pdp-info" aria-label="<?php echo esc_attr( $lafka_pdp_reviews_show && ! empty( $lafka_pdp_reviews ) ? __( 'Ingredients and reviews', 'lafka' ) : __( 'Ingredients', 'lafka' ) ); ?>">
 	<div class="lafka-container lafka-pdp-info__grid">
 
-		<article class="lafka-pdp-info__card">
+		<article class="lafka-pdp-info__card lafka-card">
 			<h2 class="lafka-pdp-info__card-title"><?php esc_html_e( "What's in it", 'lafka' ); ?></h2>
 			<div class="lafka-pdp-info__body">
 				<?php
@@ -151,7 +151,7 @@ if ( '' === $lafka_pdp_long_desc && empty( $lafka_pdp_allergens ) && ! $lafka_pd
 		</article>
 
 		<?php if ( $lafka_pdp_reviews_show && ! empty( $lafka_pdp_reviews ) ) : ?>
-			<article class="lafka-pdp-info__card">
+			<article class="lafka-pdp-info__card lafka-card">
 				<h2 class="lafka-pdp-info__card-title">
 					<?php
 					/* translators: %s — average rating, e.g. "4.8" */

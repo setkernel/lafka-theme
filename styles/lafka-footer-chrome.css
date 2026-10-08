@@ -17,8 +17,8 @@
 	 * this scope so a dark preset keeps light-on-dark footer text instead of
 	 * flipping it dark-on-dark. Both pins equal the values Peppery already
 	 * resolves, so Peppery stays byte/pixel-identical. */
-	--lafka-color-text-inverse: #fff;
-	--lafka-color-text-primary: #18181b;
+	--lafka-color-text-inverse: var(--lafka-color-text-on-dark);
+	--lafka-color-text-primary: var(--lafka-color-surface-dark);
 	background: var(--lafka-color-surface-footer);
 	color: var(--lafka-color-text-inverse);
 	padding-block: var(--lafka-space-12);
@@ -44,7 +44,7 @@
 .lafka-footer__col-title {
 	margin: 0 0 var(--lafka-space-4) 0;
 	font-family: var(--lafka-font-family-body);
-	font-size: 11px;
+	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-bold);
 	letter-spacing: 0.16em;
 	text-transform: uppercase;
@@ -139,7 +139,6 @@
 }
 
 .lafka-footer__signup-input:focus {
-	outline: none;
 	border-color: var(--lafka-color-brand-500);
 	background: rgba(255, 255, 255, 0.12);
 }
@@ -163,7 +162,6 @@
 }
 
 .lafka-footer__signup-button:focus-visible {
-	outline: none;
 	box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.4);
 }
 
@@ -172,7 +170,7 @@
 	margin: var(--lafka-space-3) 0 0;
 	padding: var(--lafka-space-2) var(--lafka-space-3);
 	background: rgba(4, 120, 87, 0.18);
-	color: #6ee7b7;
+	color: var(--lafka-color-success-on-dark);
 	border-radius: var(--lafka-radius-md);
 	font-size: var(--lafka-font-size-body-sm);
 }

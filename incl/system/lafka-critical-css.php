@@ -69,16 +69,18 @@ if ( ! function_exists( 'lafka_inline_critical_css' ) ) {
 			return;
 		}
 
-		$css = lafka_critical_css_minify( $css );
+		// The resolved accent/brand and the active preset's above-fold tokens
+		// come first, so the shell below reads the same design the page renders
+		// (critical.css itself holds no colour literal).
+		$css = lafka_critical_root_css() . ' ' . lafka_critical_css_minify( $css );
 
-		// GX4: under a counter layout, append the active preset's above-fold
-		// tokens + the var()-only counter slice (body face/size/ink, header +
-		// hero skeleton). Classic layouts inline exactly the pre-GX4 bundle.
-		$preset_block = lafka_critical_preset_css();
-		if ( '' !== $preset_block ) {
+		// GX4: under a counter layout, append the var()-only counter slice (body
+		// face/size/ink, header + hero skeleton). Classic layouts inline exactly
+		// the shared bundle.
+		if ( lafka_critical_counter_layout() ) {
 			$slice_path = get_template_directory() . '/styles/critical-counter.css';
 			$slice      = file_exists( $slice_path ) ? (string) lafka_read_file( $slice_path ) : '';
-			$css       .= ' ' . $preset_block . ' ' . lafka_critical_css_minify( $slice );
+			$css       .= ' ' . lafka_critical_css_minify( $slice );
 		}
 
 		// GX T-01: the (default-off) preloader's rules, printed once, here.
@@ -135,30 +137,43 @@ if ( ! function_exists( 'lafka_critical_css_minify' ) ) {
 	}
 }
 
-if ( ! function_exists( 'lafka_critical_preset_css' ) ) {
+if ( ! function_exists( 'lafka_critical_counter_layout' ) ) {
 	/**
-	 * GX4 (NX2-04.1, minimal): the active preset's LAFKA_PRESET_CRITICAL_KEYS
-	 * values as one `:root{}` block, returned only while a counter header or
-	 * home layout is active (else '' — classic first paint is untouched).
-	 * Values pass the same sanitiser as the Preset-Token Layer.
+	 * Whether the header or home surface renders the counter layout, which adds
+	 * the counter slice to the inline bundle.
 	 */
-	function lafka_critical_preset_css(): string {
-		if ( ! function_exists( 'lafka_layout_is' ) || ! function_exists( 'lafka_active_preset' ) ) {
-			return '';
-		}
-		if ( ! lafka_layout_is( 'header', 'counter' ) && ! lafka_layout_is( 'home', 'counter' ) ) {
-			return '';
-		}
-		$keys   = defined( 'LAFKA_PRESET_CRITICAL_KEYS' ) ? LAFKA_PRESET_CRITICAL_KEYS : array();
-		$tokens = lafka_active_preset()->tokens();
-		$decls  = '';
-		foreach ( $keys as $key ) {
-			if ( isset( $tokens[ $key ] ) && is_scalar( $tokens[ $key ] ) ) {
-				$decls .= $key . ':' . lafka_preset_css_value( (string) $tokens[ $key ] ) . ';';
+	function lafka_critical_counter_layout(): bool {
+		return function_exists( 'lafka_layout_is' )
+			&& ( lafka_layout_is( 'header', 'counter' ) || lafka_layout_is( 'home', 'counter' ) );
+	}
+}
+
+if ( ! function_exists( 'lafka_critical_root_css' ) ) {
+	/**
+	 * The `:root{}` block printed in front of critical.css: the RESOLVED
+	 * accent and brand (operator theme_mod, else the active preset, else the
+	 * token default, exactly as dynamic-css.php resolves them) and the active
+	 * preset's LAFKA_PRESET_CRITICAL_KEYS tokens. It is what keeps first paint
+	 * on the preset's design for every layout, with no colour literal in
+	 * critical.css and the bundle still small. Values pass the same sanitiser
+	 * as the Preset-Token Layer.
+	 *
+	 * @since 7.4.0
+	 */
+	function lafka_critical_root_css(): string {
+		$decls = '--lafka-accent-color:' . lafka_preset_css_value( lafka_color_setting( 'lafka_accent_color', '--lafka-color-accent-500' ) ) . ';'
+			. '--lafka-color-accent-500:var(--lafka-accent-color);'
+			. '--lafka-color-brand-500:' . lafka_preset_css_value( lafka_color_setting( 'lafka_brand_color', '--lafka-color-brand-500' ) ) . ';';
+
+		if ( function_exists( 'lafka_active_preset' ) && defined( 'LAFKA_PRESET_CRITICAL_KEYS' ) ) {
+			$tokens = lafka_active_preset()->tokens();
+			foreach ( LAFKA_PRESET_CRITICAL_KEYS as $key ) {
+				if ( isset( $tokens[ $key ] ) && is_scalar( $tokens[ $key ] ) ) {
+					$decls .= $key . ':' . lafka_preset_css_value( (string) $tokens[ $key ] ) . ';';
+				}
 			}
 		}
-		// Always non-empty under a counter layout so the slice is appended even
-		// for a preset that sets none of the critical keys.
+
 		return ':root{' . $decls . '}';
 	}
 }

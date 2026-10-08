@@ -167,3 +167,21 @@ if ( ! function_exists( 'lafka_wc_product_meta_category_orderby' ) ) {
 		return is_string( $orderby ) && in_array( $orderby, array( 'name', 'breadcrumb', '' ), true ) ? $orderby : '';
 	}
 }
+
+if ( ! function_exists( 'lafka_wc_notice_button_class' ) ) {
+	/**
+	 * WooCommerce's "View cart" button inside the add-to-cart notice is the
+	 * theme's button: give it the .lafka-btn classes (a compact size).
+	 *
+	 * @since 7.4.0
+	 *
+	 * @param string $message Notice HTML.
+	 * @return string
+	 */
+	function lafka_wc_notice_button_class( $message ) {
+		return is_string( $message )
+			? str_replace( 'class="button wc-forward', 'class="button wc-forward lafka-btn lafka-btn--primary lafka-btn--sm', $message )
+			: $message;
+	}
+	add_filter( 'wc_add_to_cart_message_html', 'lafka_wc_notice_button_class' );
+}

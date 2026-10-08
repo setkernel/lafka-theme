@@ -52,7 +52,7 @@ if ( 'text' !== $lafka_deal_variant && (int) $lafka_deal->get_image_id() ) {
 		)
 	);
 }
-$lafka_deal_button_class = 'featured' === $lafka_deal_variant ? 'lafka-counter-btn--primary lafka-deal__add' : ( 'text' === $lafka_deal_variant ? 'lafka-counter-btn--link lafka-deal__add' : 'lafka-deal__add' );
+$lafka_deal_button_class = 'featured' === $lafka_deal_variant ? 'lafka-btn--primary lafka-deal__add' : ( 'text' === $lafka_deal_variant ? 'lafka-btn--link lafka-deal__add' : 'lafka-deal__add' );
 ?>
 <article class="lafka-deal lafka-deal--<?php echo esc_attr( $lafka_deal_variant ); ?><?php echo '' === $lafka_deal_img ? ' lafka-deal--no-img' : ''; ?>">
 	<?php if ( 'featured' === $lafka_deal_variant ) : ?>

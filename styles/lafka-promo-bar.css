@@ -10,11 +10,11 @@
 	display: block;
 	background: var(--lafka-color-accent-600);
 	color: var(--lafka-color-text-inverse);
-	font-family: var(--lafka-font-sans);
+	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-caption);
 	font-weight: var(--lafka-font-weight-medium);
 	position: relative;
-	z-index: 30;
+	z-index: var(--lafka-z-raised);
 }
 
 .lafka-promo-bar__inner {
@@ -52,6 +52,7 @@
 
 .lafka-promo-bar__close {
 	flex-shrink: 0;
+	position: relative;
 	width: 32px;
 	height: 32px;
 	display: inline-flex;
@@ -65,8 +66,8 @@
 	border-radius: var(--lafka-radius-pill);
 	cursor: pointer;
 	opacity: 0.85;
-	transition: background var(--lafka-duration-fast) var(--lafka-ease-out),
-		opacity var(--lafka-duration-fast) var(--lafka-ease-out);
+	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		opacity var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
 .lafka-promo-bar__close:hover {
@@ -74,14 +75,16 @@
 	opacity: 1;
 }
 
-.lafka-promo-bar__close:focus-visible {
-	outline: 2px solid var(--lafka-color-text-inverse);
-	outline-offset: 2px;
-}
-
 @media (min-width: 768px) {
 
 	.lafka-promo-bar__inner {
 		min-height: 40px;
 	}
+}
+
+/* A 32px close glyph with a 44px hit area (a transparent ::after). */
+.lafka-promo-bar__close::after {
+	content: "";
+	position: absolute;
+	inset: -6px;
 }

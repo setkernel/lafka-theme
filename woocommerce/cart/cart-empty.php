@@ -53,7 +53,7 @@ $lafka_cart_empty_menu_url = (string) apply_filters(
 	<p class="lafka-cart-empty__lead">
 		<?php esc_html_e( 'Add something delicious to get started.', 'lafka' ); ?>
 	</p>
-	<a class="lafka-cart-empty__cta" href="<?php echo esc_url( $lafka_cart_empty_menu_url ); ?>">
+	<a class="lafka-btn lafka-btn--primary" href="<?php echo esc_url( $lafka_cart_empty_menu_url ); ?>">
 		<?php
 		echo esc_html( apply_filters( 'woocommerce_return_to_shop_text', __( 'Browse the menu', 'lafka' ) ) );
 		?>

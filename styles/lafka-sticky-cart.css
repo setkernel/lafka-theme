@@ -21,7 +21,7 @@
 	box-shadow: var(--lafka-shadow-2);
 	padding-bottom: env(safe-area-inset-bottom, 0);
 	transform: translateY(0);
-	transition: transform var(--lafka-duration-normal) var(--lafka-ease-out);
+	transition: transform var(--lafka-motion-duration-base) var(--lafka-motion-ease-out);
 }
 
 .lafka-sticky-cart[hidden] {
@@ -39,7 +39,7 @@
 	margin: 0 auto;
 	color: var(--lafka-color-text-primary);
 	text-decoration: none;
-	font-family: var(--lafka-font-sans);
+	font-family: var(--lafka-font-family-body);
 }
 
 .lafka-sticky-cart__link:hover,
@@ -47,16 +47,11 @@
 	color: var(--lafka-color-text-primary);
 }
 
-.lafka-sticky-cart__link:focus-visible {
-	outline: 3px solid var(--lafka-color-accent-500);
-	outline-offset: -3px;
-}
-
 .lafka-sticky-cart__summary {
 	display: inline-flex;
 	align-items: baseline;
 	gap: var(--lafka-space-2);
-	font-size: var(--lafka-font-size-base);
+	font-size: var(--lafka-font-size-body);
 	font-weight: var(--lafka-font-weight-medium);
 
 	/* Tabular numerals so the count + price column-align across updates. */
@@ -88,11 +83,11 @@
 	color: var(--lafka-color-text-on-accent);
 	padding: var(--lafka-space-2) var(--lafka-space-4);
 	border-radius: var(--lafka-radius-pill);
-	font-size: var(--lafka-font-size-sm);
+	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-semibold);
 	letter-spacing: var(--lafka-letter-spacing-snug);
 	white-space: nowrap;
-	transition: background-color var(--lafka-duration-fast) var(--lafka-ease-out);
+	transition: background-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
 .lafka-sticky-cart__arrow {
@@ -112,7 +107,7 @@
 }
 
 /* Narrow viewports: compress secondary text so the CTA stays primary. */
-@media (max-width: 380px) {
+@media (max-width: 599px) {
 
 	.lafka-sticky-cart__count-label,
 	.lafka-sticky-cart__separator {

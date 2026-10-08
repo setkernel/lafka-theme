@@ -88,12 +88,12 @@ $lafka_hero_dishes = lafka_counter_hero_products( $lafka_hero_sections, $lafka_h
 				<p class="lafka-counter-hero__lead"><?php echo esc_html( $lafka_hero_lead ); ?></p>
 			<?php endif; ?>
 			<div class="lafka-counter-hero__ctas">
-				<a class="lafka-counter-btn lafka-counter-btn--primary lafka-counter-btn--lg" href="<?php echo esc_url( $lafka_hero_cta_url ); ?>">
+				<a class="lafka-btn lafka-btn--primary lafka-btn--lg" href="<?php echo esc_url( $lafka_hero_cta_url ); ?>">
 					<span><?php echo esc_html( $lafka_hero_cta_label ); ?></span>
 					<?php echo wp_kses( lafka_counter_icon( 'arrow' ), lafka_allowed_html() ); ?>
 				</a>
 				<?php if ( '' !== $lafka_hero_nap['phone'] ) : ?>
-					<a class="lafka-counter-btn lafka-counter-btn--lg" href="<?php echo esc_attr( 'tel:' . $lafka_hero_nap['tel'] ); ?>" data-lafka-channel="phone">
+					<a class="lafka-btn lafka-btn--lg" href="<?php echo esc_attr( 'tel:' . $lafka_hero_nap['tel'] ); ?>" data-lafka-channel="phone">
 						<?php echo wp_kses( lafka_counter_icon( 'phone' ), lafka_allowed_html() ); ?>
 						<span>
 						<?php

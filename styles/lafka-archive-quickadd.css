@@ -30,13 +30,13 @@
 	justify-content: center;
 	gap: var(--lafka-space-1);
 	margin-left: auto;
-	min-height: 36px;
+	min-height: var(--lafka-tap-target);
 	padding: 6px var(--lafka-space-3);
 	background: var(--lafka-color-accent-500);
 	color: var(--lafka-color-text-on-accent);
 	border-radius: var(--lafka-radius-pill);
-	font-family: var(--lafka-font-sans);
-	font-size: var(--lafka-font-size-sm);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-semibold);
 	letter-spacing: var(--lafka-letter-spacing-snug);
 	text-decoration: none;
@@ -44,13 +44,8 @@
 	cursor: pointer;
 	user-select: none;
 	transition:
-		background-color var(--lafka-duration-fast) var(--lafka-ease-out),
-		transform var(--lafka-duration-fast) var(--lafka-ease-out);
-}
-
-.lafka-archive-quickadd:focus-visible {
-	outline: 3px solid var(--lafka-color-accent-500);
-	outline-offset: 2px;
+		background-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
 .lafka-archive-quickadd--choose .lafka-archive-quickadd__label::after {
@@ -77,7 +72,7 @@
 }
 
 .lafka-archive-quickadd.added {
-	background: var(--lafka-color-success);
+	background: var(--lafka-color-success-500);
 }
 
 .lafka-archive-quickadd.added .lafka-archive-quickadd__label::after {

@@ -68,33 +68,19 @@ body {
     margin: 0;
     padding: 0;
     font-family: Rubik, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    font-size: 13px;
-    color: #5e5e5e;
-    background: var(--lafka-color-surface-page, #fff);
+    font-size: 0.8125rem;
+    color: var(--lafka-color-text-primary);
+    background: var(--lafka-color-surface-page);
     overflow-x: hidden;
 }
 
-/* ── CSS DESIGN TOKENS (subset needed above-fold) ── */
-:root {
-    --lafka-accent-color: #dc2626;
-
-    /* f074: name the handoff accent/brand SSOT tokens above-fold too, at the
-       design-system defaults. dynamic-css.php (inlined later in <head>)
-       overrides both with the operator's Customizer colors, so these are
-       only the first-paint fallbacks — they must stay equal to the
-       lafka-tokens.css defaults (accent-500 #dc2626 / brand-500 #f59e0b)
-       so the out-of-box render is identical across the legacy and handoff
-       naming systems. */
-    --lafka-color-accent-500: #dc2626;
-    --lafka-color-brand-500: #f59e0b;
-    --lafka-header-bg-color: #fff;
-    --lafka-body-font-family: 'Rubik', -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, sans-serif;
-    --lafka-body-font-size: 16px;
-    --lafka-h1-color: #22272d;
-    --lafka-h2-color: #22272d;
-    --lafka-h3-color: #22272d;
-    --lafka-border-light: #f1f1f1;
-}
+/* ── DESIGN TOKENS ──
+ * No colour literal lives here. lafka_inline_critical_css() prints a `:root{}`
+ * block in front of this file with the RESOLVED accent and brand (operator
+ * theme_mod, else the active preset, else the token default) plus the active
+ * preset's above-fold tokens (LAFKA_PRESET_CRITICAL_KEYS), so the inline shell
+ * matches the preset on every layout. Everything else reads var(--lafka-*)
+ * from lafka-tokens.css, which is render-blocking. */
 
 /* ── SKIP LINK (keyboard / a11y — must exist before any paint) ── */
 .skip-link {
@@ -102,10 +88,10 @@ body {
     top: -100%;
     left: 50%;
     transform: translateX(-50%);
-    z-index: 100000;
+    z-index: var(--lafka-z-top);
     padding: 12px 24px;
-    background: var(--lafka-accent-color, #dc2626);
-    color: #fff;
+    background: var(--lafka-accent-color);
+    color: var(--lafka-color-text-on-accent);
     font-weight: 600;
     text-decoration: none;
     border-radius: 0 0 4px 4px;
@@ -114,8 +100,6 @@ body {
 
 .skip-link:focus {
     top: 0;
-    outline: 3px solid var(--lafka-accent-color, #dc2626);
-    outline-offset: 2px;
 }
 
 /* ── SCREEN-READER-ONLY HELPER ── */
@@ -155,9 +139,9 @@ body {
     margin: 0;
     padding: 0;
     position: relative;
-    z-index: 999;
+    z-index: var(--lafka-z-header);
     width: 100%;
-    background-color: var(--lafka-header-bg-color, #fff);
+    background-color: var(--lafka-header-bg-color, var(--lafka-color-surface-page));
     transition: all 0.3s ease-in-out 0s;
 }
 
@@ -174,7 +158,6 @@ a.button {
 /* ── LINKS ── */
 a {
     max-width: 100%;
-    outline: 0 none;
     text-decoration: none;
     transition: all 0.3s ease 0s;
 }

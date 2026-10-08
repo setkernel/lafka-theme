@@ -25,7 +25,7 @@
 }
 
 .lafka-cart-empty-popular__intro {
-	font-size: var(--lafka-font-size-base);
+	font-size: var(--lafka-font-size-body);
 	color: var(--lafka-color-text-secondary);
 	margin: 0 0 var(--lafka-space-6);
 }
@@ -39,7 +39,7 @@
 	grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
-@media (min-width: 640px) {
+@media (min-width: 600px) {
 
 	.lafka-cart-empty-popular__grid {
 		grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -64,20 +64,10 @@
 	gap: var(--lafka-space-2);
 	height: 100%;
 	padding: var(--lafka-space-3);
-	background: var(--lafka-color-surface-raised);
-	border-radius: var(--lafka-radius-md);
-	border: 1px solid var(--lafka-color-border-subtle);
-	box-shadow: var(--lafka-shadow-1);
-	color: var(--lafka-color-text-primary);
 	text-decoration: none;
 	transition:
-		transform var(--lafka-duration-fast) var(--lafka-ease-out),
-		box-shadow var(--lafka-duration-fast) var(--lafka-ease-out);
-}
-
-.lafka-cart-empty-popular__link:focus-visible {
-	outline: 3px solid var(--lafka-color-accent-500);
-	outline-offset: 2px;
+		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		box-shadow var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
 .lafka-cart-empty-popular__media {
@@ -101,14 +91,14 @@
 }
 
 .lafka-cart-empty-popular__name {
-	font-size: var(--lafka-font-size-sm);
+	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-semibold);
 	line-height: 1.25;
 	color: var(--lafka-color-text-primary);
 }
 
 .lafka-cart-empty-popular__price {
-	font-size: var(--lafka-font-size-sm);
+	font-size: var(--lafka-font-size-body-sm);
 	font-weight: var(--lafka-font-weight-semibold);
 	color: var(--lafka-color-accent-text);
 	margin-top: auto;

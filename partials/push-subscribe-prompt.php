@@ -85,7 +85,7 @@ $lafka_push_prompt_close_aria   = esc_attr__( 'Dismiss push notifications prompt
 	role="complementary"
 	aria-live="polite"
 	aria-labelledby="lafka-push-prompt-copy">
-	<div class="lafka-push-prompt__inner">
+	<div class="lafka-push-prompt__inner lafka-card lafka-card--float">
 		<span class="lafka-push-prompt__bell" aria-hidden="true">
 			<svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" role="presentation">
 				<path d="M12 2a1 1 0 0 1 1 1v.6a7 7 0 0 1 6 6.9V14l1.6 2.4a1 1 0 0 1-.83 1.55H4.23a1 1 0 0 1-.83-1.55L5 14v-3.5A7 7 0 0 1 11 3.6V3a1 1 0 0 1 1-1Zm0 19a3 3 0 0 1-2.83-2h5.66A3 3 0 0 1 12 21Z" fill="currentColor"/>
@@ -96,10 +96,10 @@ $lafka_push_prompt_close_aria   = esc_attr__( 'Dismiss push notifications prompt
 				<?php echo esc_html( $lafka_push_prompt_copy ); ?>
 			</p>
 			<div class="lafka-push-prompt__actions">
-				<button type="button" class="lafka-push-prompt__accept">
+				<button type="button" class="lafka-push-prompt__accept lafka-btn lafka-btn--primary lafka-btn--sm">
 					<?php echo esc_html( $lafka_push_prompt_accept_label ); ?>
 				</button>
-				<button type="button" class="lafka-push-prompt__deny">
+				<button type="button" class="lafka-push-prompt__deny lafka-btn lafka-btn--quiet lafka-btn--sm">
 					<?php echo esc_html( $lafka_push_prompt_deny_label ); ?>
 				</button>
 			</div>

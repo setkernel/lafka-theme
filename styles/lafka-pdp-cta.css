@@ -37,21 +37,16 @@
 	color: var(--lafka-color-text-on-accent);
 	border: 0;
 	border-radius: var(--lafka-radius-pill);
-	font-family: var(--lafka-font-sans);
-	font-size: var(--lafka-font-size-base);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body);
 	font-weight: var(--lafka-font-weight-semibold);
 	letter-spacing: var(--lafka-letter-spacing-snug);
 	cursor: pointer;
 	font-variant-numeric: tabular-nums;
 	transition:
-		background-color var(--lafka-duration-fast) var(--lafka-ease-out),
-		transform var(--lafka-duration-fast) var(--lafka-ease-out),
-		opacity var(--lafka-duration-fast) var(--lafka-ease-out);
-}
-
-.lafka-pdp-cta__btn:focus-visible {
-	outline: 3px solid var(--lafka-color-accent-500);
-	outline-offset: 3px;
+		background-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		opacity var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
 .lafka-pdp-cta__btn[disabled] {
@@ -113,7 +108,7 @@ body.lafka-has-pdp-cta {
  * (with quantity stepper + tap-target sizing) is the only bottom CTA.
  * Both rendered created an accessibility issue — screen readers
  * announced two "Add to Cart" buttons at the same screen position. */
-@media (max-width: 720px) {
+@media (max-width: 767px) {
 
 	.lafka-pdp-cta {
 		display: none !important;

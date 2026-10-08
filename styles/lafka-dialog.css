@@ -47,8 +47,8 @@
 	border: 0;
 	border-radius: 50%;
 	background: rgba(255, 255, 255, 0.9);
-	color: #111;
-	font-size: 28px;
+	color: var(--lafka-color-surface-dark);
+	font-size: 1.75rem;
 	line-height: 1;
 	cursor: pointer;
 	padding: 0;
@@ -56,9 +56,7 @@
 
 .lafka-dialog__close:hover,
 .lafka-dialog__close:focus-visible {
-	background: #fff;
-	outline: 2px solid #fff;
-	outline-offset: 2px;
+	background: var(--lafka-color-text-on-dark);
 }
 
 .lafka-dialog__image {
@@ -69,9 +67,9 @@
 }
 
 .lafka-dialog__caption {
-	color: #fff;
+	color: var(--lafka-color-text-on-dark);
 	margin-top: 12px;
-	font-size: 14px;
+	font-size: var(--lafka-font-size-caption);
 	text-align: center;
 	max-width: 90%;
 }
@@ -85,8 +83,8 @@
 	border: 0;
 	border-radius: 50%;
 	background: rgba(255, 255, 255, 0.9);
-	color: #111;
-	font-size: 24px;
+	color: var(--lafka-color-surface-dark);
+	font-size: 1.5rem;
 	line-height: 1;
 	cursor: pointer;
 	z-index: 2;
@@ -94,7 +92,7 @@
 
 .lafka-dialog__nav:hover,
 .lafka-dialog__nav:focus-visible {
-	background: #fff;
+	background: var(--lafka-color-text-on-dark);
 }
 
 .lafka-dialog__nav--prev { left: 8px; }
@@ -102,9 +100,9 @@
 .lafka-dialog__nav--next { right: 8px; }
 
 .lafka-dialog--inline .lafka-dialog__content {
-	background: #fff;
-	color: #111;
-	border-radius: 6px;
+	background: var(--lafka-color-surface-raised);
+	color: var(--lafka-color-text-primary);
+	border-radius: var(--lafka-radius-sm);
 	padding: 24px;
 	max-width: 640px;
 	max-height: 90vh;

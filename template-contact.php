@@ -88,7 +88,7 @@ $lafka_faqs = (array) apply_filters( 'lafka_contact_faqs', $lafka_faqs );
 					<img class="lafka-contact__photo" src="<?php echo esc_url( $lafka_c_photo ); ?>" alt="" loading="lazy">
 
 					<?php if ( '' !== $lafka_c_short ) : ?>
-						<div class="lafka-contact__pin">
+						<div class="lafka-contact__pin lafka-card lafka-card--sm lafka-card--float lafka-card--borderless">
 							<?php if ( $lafka_c_logo ) : ?>
 								<?php
 								echo wp_get_attachment_image(
@@ -158,19 +158,19 @@ $lafka_faqs = (array) apply_filters( 'lafka_contact_faqs', $lafka_faqs );
 
 				<div class="lafka-contact__actions">
 					<?php if ( '' !== $lafka_c_directions ) : ?>
-						<a class="lafka-contact__cta lafka-contact__cta--dark" href="<?php echo esc_url( $lafka_c_directions ); ?>" target="_blank" rel="noopener noreferrer">
+						<a class="lafka-btn lafka-btn--dark" href="<?php echo esc_url( $lafka_c_directions ); ?>" target="_blank" rel="noopener noreferrer">
 							<span aria-hidden="true">📍</span>
 							<?php esc_html_e( 'Get directions', 'lafka' ); ?>
 						</a>
 					<?php endif; ?>
 					<?php if ( '' !== $lafka_c_phone ) : ?>
-						<a class="lafka-contact__cta lafka-contact__cta--primary" href="<?php echo esc_attr( 'tel:' . $lafka_c_tel ); ?>">
+						<a class="lafka-btn lafka-btn--primary" href="<?php echo esc_attr( 'tel:' . $lafka_c_tel ); ?>">
 							<span aria-hidden="true">📞</span>
 							<?php esc_html_e( 'Call to order', 'lafka' ); ?>
 						</a>
 					<?php endif; ?>
 					<?php if ( '' !== $lafka_c_email ) : ?>
-						<a class="lafka-contact__cta lafka-contact__cta--ghost" href="mailto:<?php echo esc_attr( $lafka_c_email ); ?>">
+						<a class="lafka-btn lafka-btn--ghost" href="mailto:<?php echo esc_attr( $lafka_c_email ); ?>">
 							<span aria-hidden="true">✉</span>
 							<?php esc_html_e( 'Email us', 'lafka' ); ?>
 						</a>

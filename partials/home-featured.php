@@ -78,7 +78,7 @@ if ( empty( $lafka_feat_products ) ) {
 				$lafka_feat_is_featured = $lafka_feat_product->is_featured();
 				?>
 				<li class="lafka-favs__item">
-					<a class="lafka-favs__card" href="<?php echo esc_url( $lafka_feat_url ); ?>">
+					<a class="lafka-favs__card lafka-card lafka-card--borderless lafka-card--lift" href="<?php echo esc_url( $lafka_feat_url ); ?>">
 						<div class="lafka-favs__media">
 							<?php if ( $lafka_feat_img ) : ?>
 								<?php echo wp_kses( $lafka_feat_img, lafka_allowed_html() ); ?>
@@ -96,7 +96,7 @@ if ( empty( $lafka_feat_products ) ) {
 							<?php endif; ?>
 							<div class="lafka-favs__foot">
 								<span class="lafka-favs__price"><?php echo wp_kses_post( $lafka_feat_price ); ?></span>
-								<span class="lafka-favs__cta"><?php esc_html_e( 'Customize', 'lafka' ); ?></span>
+								<span class="lafka-favs__cta lafka-btn lafka-btn--dark lafka-btn--sm"><?php esc_html_e( 'Customize', 'lafka' ); ?></span>
 							</div>
 						</div>
 					</a>

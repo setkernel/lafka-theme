@@ -174,11 +174,6 @@
 	color: var(--lafka-color-text-muted);
 }
 
-.lafka-cart-tab:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
 /* -------- Bottom actions row (+ Add more items / Clear order) ----------
  * O-16: one row (Clear order is the quieter action, pushed to the end). */
 .lafka-cart-bottom-actions {
@@ -310,7 +305,7 @@
 	border-radius: var(--lafka-radius-pill);
 	background: transparent;
 	color: var(--lafka-color-text-muted);
-	font-size: 18px;
+	font-size: 1.125rem;
 	line-height: 1;
 	text-decoration: none;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
@@ -372,7 +367,7 @@
  * align-items: stretch on the parent. The legacy `input { padding: 15px }`
  * base + min-height: 50px (from another file) summed to ~150px on the
  * coupon input. Force a normal 44px input height regardless of cascade. */
-@media (max-width: 600px) {
+@media (max-width: 599px) {
 
 	.woocommerce-cart .coupon .input-text,
 	.woocommerce-cart .coupon input.input-text,
@@ -429,15 +424,9 @@
 	color: var(--lafka-color-text-primary) !important;
 }
 
-.woocommerce-cart .lafka-cart__actions button[name="apply_coupon"]:focus-visible,
-.woocommerce-cart .lafka-cart__actions button[name="update_cart"]:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
 /* Mobile stacking — O-16: the coupon input and Apply stay on ONE row; only
  * the (no-JS) Update cart button drops to its own full-width row. */
-@media (max-width: 600px) {
+@media (max-width: 599px) {
 
 	.woocommerce-cart .lafka-cart__actions {
 		flex-direction: column;
@@ -577,7 +566,7 @@
 .woocommerce-cart .cart-empty::before {
 	content: "🛒";
 	display: block;
-	font-size: 56px;
+	font-size: 3.5rem;
 	margin-bottom: var(--lafka-space-3);
 	line-height: 1;
 }
@@ -654,7 +643,7 @@
 
 .lafka-cart-empty__emoji {
 	display: block;
-	font-size: 56px;
+	font-size: 3.5rem;
 	line-height: 1;
 	margin-bottom: var(--lafka-space-4);
 }
@@ -675,41 +664,6 @@
 	font-size: var(--lafka-font-size-body);
 	line-height: 1.5;
 	color: var(--lafka-color-text-secondary);
-}
-
-/* v5.97.0: escalate selector to `a.lafka-cart-empty__cta` so it beats
- * the legacy `a { color: var(--lafka-link-color) }` that the dynamic
- * CSS emits — that rule inherits the operator's accent color and
- * makes our cart CTA render red-on-red invisible. */
-a.lafka-cart-empty__cta {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	min-height: 52px;
-	padding: var(--lafka-space-3) var(--lafka-space-8);
-	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-accent-contrast);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body);
-	font-weight: var(--lafka-font-weight-bold);
-	text-decoration: none;
-	border-radius: var(--lafka-radius-button);
-	box-shadow: var(--lafka-shadow-1);
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-	text-transform: none;
-	letter-spacing: normal;
-}
-
-a.lafka-cart-empty__cta:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-accent-contrast);
-	transform: translateY(-1px);
-}
-
-a.lafka-cart-empty__cta:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 /* Hide the legacy WC empty card if it slips through other paths. */
@@ -747,7 +701,7 @@ a.lafka-cart-empty__cta:focus-visible {
 	min-width: 96px;
 }
 
-@media (min-width: 601px) {
+@media (min-width: 600px) {
 
 	.woocommerce-cart .coupon button[name="apply_coupon"] {
 		flex-grow: 0;
@@ -818,7 +772,7 @@ a.lafka-cart-empty__cta:focus-visible {
 	right: 0;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 599px) {
 
 	.woocommerce-cart .lafka-cart > li,
 	.woocommerce-cart .lafka-cart .cart_item {

@@ -16,17 +16,10 @@
  * variants in new components; convert any you find to the values above.
  */
 
-@media only screen and (min-width: 1440px) {
+@media only screen and (min-width: 1280px) {
 
     body.lafka_boxed #container, body.lafka_boxed .inner {
         width: 1280px;
-    }
-}
-
-@media only screen and (min-width: 1480px) {
-
-    body.lafka_boxed #container, body.lafka_boxed .inner {
-        width: 1440px;
     }
 }
 
@@ -43,7 +36,7 @@
     }
 }
 
-@media only screen and (min-width: 768px) and (max-width: 1024px) {
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
 
     div.product div.summary, #content div.product div.summary {
         padding-right: 40px;
@@ -58,7 +51,7 @@
     }
 }
 
-@media only screen and (min-width: 1024px) and (max-width: 1359px) {
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {
 
     .cart-info .coupon {
         width: 60%;
@@ -70,7 +63,7 @@
 
 }
 
-@media only screen and (max-width: 782px) {
+@media only screen and (max-width: 767px) {
 
     body.admin-bar #header {
         top: 46px
@@ -117,7 +110,7 @@
 
     .cart-info .coupon button {
         margin-bottom: 5px;
-        background-color: #333;
+        background-color: var(--lafka-color-text-primary);
     }
 
     .lafka_blog_masonry.lafka-mozaic .blog-post, .lafka_blog_masonry .blog-post {
@@ -140,7 +133,7 @@
     }
 
     .foodmenu-unit-info h4 {
-        font-size: 15px;
+        font-size: 0.9375rem;
         width: 100%;
     }
 
@@ -149,7 +142,7 @@
     }
 
     body.single-product #content div.product div.summary h1.product_title {
-        font-size: 18px !important;
+        font-size: 1.125rem !important;
     }
 
     #content div.product .lafka-product-summary-wrapper.lafka-has-product-cover-image div.images {
@@ -186,7 +179,7 @@ and (orientation: landscape) {
     }
 }
 
-@media only screen and (max-width: 979px) {
+@media only screen and (max-width: 1023px) {
 
     body.woocommerce-cart .cart-collaterals {
         width: 320px;
@@ -200,7 +193,7 @@ and (orientation: landscape) {
     }
 
     .lafka_title_holder.title_has_image h6 {
-        font-size: 18px;
+        font-size: 1.125rem;
     }
 
     .lafka_transparent_header .lafka_title_holder.title_has_image {
@@ -228,16 +221,16 @@ and (orientation: landscape) {
     }
 
     #lafka_page_title h1.heading-title {
-        font-size: 36px;
+        font-size: 2.25rem;
     }
 
     body.single-post .lafka_title_holder .blog-post-meta {
-        font-size: 12px;
+        font-size: 0.75rem;
         margin-top: 30px;
     }
 
     .breadcrumb {
-        font-size: 12px;
+        font-size: 0.75rem;
     }
 
     body.single-post .lafka_title_holder .blog-post-meta img.avatar {
@@ -354,7 +347,7 @@ and (orientation: landscape) {
     }
 
     .blog-post .lafka_post_data_holder h2.heading-title {
-        font-size: 15px !important;
+        font-size: 0.9375rem !important;
         padding: 0;
     }
 }
@@ -499,7 +492,7 @@ and (orientation: landscape) {
     }
 
     body.single-product #content div.product div.summary h1.product_title {
-        font-size: 18px !important;
+        font-size: 1.125rem !important;
     }
 
     .lafka-products-list-view .prod_hold .links {
@@ -523,7 +516,7 @@ and (orientation: landscape) {
     .lafka-products-list-view div.prod_hold.lafka-variations-list-in-catalog .links a.lafka-quick-view-link {
         width: auto;
         text-indent: 0;
-        font-size: 12px;
+        font-size: 0.75rem;
         padding: 0 12px;
     }
 
@@ -641,7 +634,7 @@ and (orientation: landscape) {
         float: left;
         vertical-align: middle;
         font-weight: 400;
-        font-size: 12px;
+        font-size: 0.75rem;
     }
 
     .cart_totals table.shop_table_responsive tr td::before {
@@ -657,7 +650,7 @@ and (orientation: landscape) {
     }
 
     .woocommerce table.shop_table_responsive tr {
-        border-bottom: 1px solid #f1f1f1;
+        border-bottom: 1px solid var(--lafka-color-border-subtle);
         background: none !important;
     }
 
@@ -684,12 +677,12 @@ and (orientation: landscape) {
 
     .cart-info tbody td a.remove {
         display: block;
-        font-size: 27px;
+        font-size: 1.6875rem;
         width: 36px !important;
         height: 36px !important;
         vertical-align: middle !important;
         line-height: 36px !important;
-        background-color: #f8f8f8;
+        background-color: var(--lafka-color-surface-sunken);
         border-radius: 50%;
         text-decoration: none;
         float: none;
@@ -729,9 +722,9 @@ and (orientation: landscape) {
     }
 
     .woocommerce table.shop_table_responsive .coupon button.button {
-        background-color:#fff;
-        color:#333;
-        border: 2px solid #333;
+        background-color: var(--lafka-color-surface-page);
+        color: var(--lafka-color-text-primary);
+        border: 2px solid var(--lafka-color-text-primary);
         padding: 10px 20px;
     }
 
@@ -851,7 +844,7 @@ and (orientation: landscape) {
     }
 
     .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.product_title {
-        font-size: 36px !important;
+        font-size: 2.25rem !important;
     }
 
 }
@@ -904,7 +897,7 @@ and (orientation: landscape) {
     }
 }
 
-@media only screen and (min-width: 320px) and (max-width: 599px) {
+@media only screen and (max-width: 599px) {
 
 .lafka-checkout-datetime-fields {
     height: auto;
@@ -934,14 +927,14 @@ and (orientation: landscape) {
 
   .lafka-checkout-datetime-fields .lafka-datetime-clear::before {
     margin-right: 0;
-    font-size: 21px;
+    font-size: 1.3125rem;
     width: 24px;
     height: 24px;
     line-height: 24px;
   }
 
   .lafka-delivery-time-toggle, .lafka-delivery-time-toggle::before {
-      font-size: 12px;
+      font-size: 0.75rem;
   }
 
   .woocommerce-message[data-lafka-notice="minimum-amount"] {
@@ -949,7 +942,7 @@ and (orientation: landscape) {
   }
 
   .woocommerce-message[data-lafka-notice="minimum-amount"], .woocommerce-message[data-lafka-notice="minimum-amount"]::before {
-      font-size: 14px;
+      font-size: 0.875rem;
   }
 
   .woocommerce-message[data-lafka-notice="minimum-amount"]::before {
@@ -957,15 +950,15 @@ and (orientation: landscape) {
   }
 }
 
-@media only screen and (min-width: 380px) and (max-width: 599px) {
+@media only screen and (max-width: 599px) {
 
     #price-filter, a.lafka-filter-widgets-triger {
         width: 100%;
     }
 
     a.lafka-filter-widgets-triger {
-        background-color: #fff;
-        border: 1px solid #f1f1f1;
+        background-color: var(--lafka-color-surface-page);
+        border: 1px solid var(--lafka-color-border-subtle);
         vertical-align: middle;
         padding: 0 10px;
         margin-bottom: 10px;
@@ -1060,7 +1053,7 @@ and (orientation: landscape) {
     }
 
     .lafka_title_holder.title_has_image h1.heading-title, #content div.product div.summary h1.product_title {
-        font-size: 32px !important;
+        font-size: 2rem !important;
     }
 
     .cart-info .coupon, .cart-info .coupon input, table.shop_table.cart .actions > input.button, form.checkout_coupon p, form.checkout_coupon p input, .cart-info .coupon button, .cart-info tbody td.actions > button.button {
@@ -1069,20 +1062,20 @@ and (orientation: landscape) {
 
     .cart-info .coupon button {
         margin-bottom: 5px;
-        background-color: #333;
+        background-color: var(--lafka-color-text-primary);
     }
 
     }
 
-@media only screen and (min-width: 300px) and (max-width: 379px) {
+@media only screen and (max-width: 599px) {
 
     #price-filter, a.lafka-filter-widgets-triger {
         width: 100%;
     }
 
     a.lafka-filter-widgets-triger {
-        background-color: #fff;
-        border: 1px solid #f1f1f1;
+        background-color: var(--lafka-color-surface-page);
+        border: 1px solid var(--lafka-color-border-subtle);
         vertical-align: middle;
         padding: 0 10px;
         margin-bottom: 10px;
@@ -1185,7 +1178,7 @@ and (orientation: landscape) {
     }
 
     .lafka_title_holder h1.heading-title, #content div.product div.summary h1.product_title {
-        font-size: 32px !important;
+        font-size: 2rem !important;
     }
 
     span.striped-word {
@@ -1193,11 +1186,11 @@ and (orientation: landscape) {
     }
 
     .lafka_title_holder h1.heading-title {
-        font-size: 25px !important;
+        font-size: 1.5625rem !important;
     }
 
     .icon_teaser h3:first-child, .related.products h2, .upsells.products h2, .similar_projects > h4, .lafka-related-blog-posts > h4 {
-        font-size: 27px !important;
+        font-size: 1.6875rem !important;
     }
 
     .lafka-author-info .title {
@@ -1209,11 +1202,11 @@ and (orientation: landscape) {
     }
 
     .lafka-author-info .title h2 a {
-        font-size: 19px;
+        font-size: 1.1875rem;
     }
 
     .lafka-author-content .description {
-        font-size: 13px;
+        font-size: 0.8125rem;
     }
 
     body.single-post #comments {
@@ -1243,7 +1236,7 @@ and (orientation: landscape) {
 
     .woocommerce-tabs ul.tabs a {
         padding: 8px 0 !important;
-        font-size: 12px;
+        font-size: 0.75rem;
         margin-bottom: 8px;
     }
 
@@ -1262,7 +1255,7 @@ and (orientation: landscape) {
     }
 
     .lafka-products-list-view div.prod_hold .name {
-        font-size: 15px;
+        font-size: 0.9375rem;
         padding: 0;
     }
 
@@ -1283,7 +1276,7 @@ and (orientation: landscape) {
     .lafka-products-list-view div.prod_hold a.button, .lafka-products-list-view div.prod_hold .links a.button.add_to_cart_button, .lafka-products-list-view div.prod_hold .links a.button.add_to_cart_button.ajax_add_to_cart {
         width: auto;
         text-indent: 0;
-        font-size: 12px;
+        font-size: 0.75rem;
         padding: 0 12px 0 4px;
     }
 
@@ -1292,13 +1285,13 @@ and (orientation: landscape) {
     }
 
     .lafka-products-list-view div.prod_hold .woocommerce-product-details__short-description p {
-        font-size: 14px;
+        font-size: 0.875rem;
     }
 
     .lafka-products-list-view div.prod_hold:not(.lafka-variations-list-in-catalog) .links a.lafka-quick-view-link {
         width: auto;
         text-indent: 0;
-        font-size: 12px;
+        font-size: 0.75rem;
         padding: 0 12px;
         text-align: left;
     } 

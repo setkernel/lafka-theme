@@ -101,12 +101,9 @@
 	align-items: flex-start;
 	gap: var(--lafka-space-3);
 	padding: var(--lafka-space-4) var(--lafka-space-5) var(--lafka-space-4) var(--lafka-space-4);
-	background: var(--lafka-color-surface-raised);
-	color: var(--lafka-color-text-primary);
-	border: 1px solid var(--lafka-color-info-500, #2563eb);
+	--lafka-card-border: var(--lafka-color-info-500);
+
 	border-left-width: 4px;
-	border-radius: var(--lafka-radius-lg);
-	box-shadow: var(--lafka-shadow-3);
 }
 
 /* Bell icon — anchor of the "notifications prompt" affordance. */
@@ -117,7 +114,7 @@
 	justify-content: center;
 	width: 32px;
 	height: 32px;
-	color: var(--lafka-color-info-500, #2563eb);
+	color: var(--lafka-color-info-500);
 	margin-top: 2px;
 }
 
@@ -145,84 +142,15 @@
 	gap: var(--lafka-space-2);
 }
 
-/* Primary CTA — pill on the canonical accent ramp so it follows the
- * operator's Customizer brand color like every other CTA.
- * Same shape as the exit-intent CTA so the customer's pattern-recognition
- * still parses "this is the action button". */
-.lafka-push-prompt__accept {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: var(--lafka-space-2) var(--lafka-space-4);
-	background: var(--lafka-color-accent-500, #dc2626);
-	color: #fff;
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-sm);
-	font-weight: var(--lafka-font-weight-semibold);
-	line-height: 1.2;
-	text-decoration: none;
-	border: 0;
-	border-radius: var(--lafka-radius-pill);
-	cursor: pointer;
-	transition:
-		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-push-prompt__accept:hover,
-.lafka-push-prompt__accept:focus-visible {
-	background: var(--lafka-color-accent-600, #b91c1c);
-	color: #fff;
-	text-decoration: none;
-}
-
-.lafka-push-prompt__accept:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
-.lafka-push-prompt__accept:active {
-	transform: translateY(1px);
-}
-
-/* Ghost secondary — "No thanks". */
-.lafka-push-prompt__deny {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: var(--lafka-space-2) var(--lafka-space-4);
-	background: transparent;
-	color: var(--lafka-color-text-muted);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-sm);
-	font-weight: var(--lafka-font-weight-medium);
-	line-height: 1.2;
-	border: 0;
-	border-radius: var(--lafka-radius-pill);
-	cursor: pointer;
-	transition:
-		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-push-prompt__deny:hover,
-.lafka-push-prompt__deny:focus-visible {
-	color: var(--lafka-color-text-primary);
-	background: var(--lafka-color-surface-hover);
-	outline: none;
-}
-
-.lafka-push-prompt__deny:focus-visible {
-	box-shadow: var(--lafka-shadow-focus);
-}
+/* The two actions are .lafka-btn (--primary and --quiet); the row's layout is above. */
 
 /* Close × — 28×28 tap target in top-right. */
 .lafka-push-prompt__close {
 	position: absolute;
 	top: 4px;
-	right: 4px;
-	width: 28px;
-	height: 28px;
+	right: 0;
+	width: var(--lafka-tap-target);
+	height: var(--lafka-tap-target);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -232,7 +160,7 @@
 	border: 0;
 	border-radius: var(--lafka-radius-pill);
 	color: var(--lafka-color-text-muted);
-	font-size: 20px;
+	font-size: 1.25rem;
 	line-height: 1;
 	cursor: pointer;
 	transition:
@@ -244,7 +172,6 @@
 .lafka-push-prompt__close:focus-visible {
 	background: var(--lafka-color-surface-hover);
 	color: var(--lafka-color-text-primary);
-	outline: none;
 }
 
 .lafka-push-prompt__close:focus-visible {
@@ -254,7 +181,7 @@
 /* -------------------------------------------------------------------------
  * Mobile — bottom-center, full-width minus 16px gutters.
  * ------------------------------------------------------------------------- */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 
 	.lafka-push-prompt {
 		right: 16px;

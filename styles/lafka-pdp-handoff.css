@@ -10,12 +10,6 @@
  * @since 5.62.0
  * ========================================================================= */
 
-/* v5.67.0: REVERT v5.66.3 ink override. After comparing prod to the
- * canonical handoff render (localhost:9123/#/product/meat-lovers), the
- * active size/crust state IS red-filled, not ink as the README text
- * implied. Restoring the existing pdp-redesign.css behavior (which
- * leaves --lafka-pdp-accent at accent-500). Comment kept for history. */
-
 /* -------- 2-col layout: gallery + sticky buy box ------------------------ */
 @media (min-width: 1024px) {
 
@@ -210,7 +204,7 @@
 	position: absolute;
 	top: 6px;
 	right: 8px;
-	font-size: 11px;
+	font-size: 0.6875rem;
 	line-height: 1;
 	color: var(--lafka-color-text-inverse);
 	opacity: 0.9;
@@ -285,6 +279,7 @@
 	border: none;
 	background: transparent;
 	width: 56px;
+	min-width: var(--lafka-tap-target);
 	text-align: center;
 	font-family: var(--lafka-font-family-display);
 	font-weight: var(--lafka-font-weight-semibold);
@@ -349,7 +344,6 @@
 		box-shadow: var(--lafka-shadow-3);
 	}
 
-	.lafka-pdp-mobile-cta__btn,
 	.lafka-pdp .lafka-pdp-sticky-cta .single_add_to_cart_button {
 		background: var(--lafka-color-accent-500);
 		color: var(--lafka-color-text-inverse);
@@ -400,7 +394,7 @@
 	border-radius: var(--lafka-radius-pill);
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-text-primary);
-	font-size: 13px;
+	font-size: 0.8125rem;
 	line-height: 1;
 	flex: 0 0 auto;
 }
@@ -439,11 +433,7 @@
 }
 
 .lafka-pdp-info__card {
-	background: var(--lafka-color-surface-raised);
-	border: 1px solid var(--lafka-color-border-subtle);
-	border-radius: var(--lafka-radius-lg);
 	padding: var(--lafka-space-6);
-	box-shadow: var(--lafka-shadow-1);
 }
 
 .lafka-pdp-info__card-title {
@@ -526,8 +516,8 @@
 
 .lafka-pdp-info__review-stars {
 	display: inline-block;
-	color: var(--lafka-color-warning-500, #f59e0b);
-	font-size: 14px;
+	color: var(--lafka-color-warning-500);
+	font-size: 0.875rem;
 	letter-spacing: 1px;
 	line-height: 1;
 }
@@ -671,11 +661,6 @@ body.lafka-layout-header-counter .lafka-pdp__main {
 	mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='6.5'/%3E%3Cpath d='M15.5 15.5 21 21M10.5 7.5v6M7.5 10.5h6'/%3E%3C/svg%3E") center / contain no-repeat;
 }
 
-.lafka-pdp__gallery .woocommerce-product-gallery__trigger:focus-visible {
-	box-shadow: var(--lafka-shadow-focus);
-	outline: none;
-}
-
 /* Chips: sentence case, legible prices in the display face (M-28, M-39). */
 .lafka-pdp-summary .lafka-pdp-chip__name,
 .lafka-pdp-summary .lafka-pdp-picker__label,
@@ -712,7 +697,7 @@ body.lafka-layout-header-counter .lafka-pdp__main {
 .lafka-pdp-summary .lafka-pdp-chip__na,
 .lafka-pdp-summary .product-addon .amount {
 	font-family: var(--lafka-font-family-display);
-	font-size: max(13px, var(--lafka-font-size-caption));
+	font-size: var(--lafka-font-size-caption);
 	font-variant-numeric: tabular-nums;
 }
 
@@ -791,17 +776,3 @@ body.lafka-layout-header-counter .lafka-pdp__main {
 	color: var(--lafka-color-text-secondary);
 }
 
-.lafka-pdp .lafka-pdp-upsell__add {
-	min-height: 44px;
-	border: 1.5px solid var(--lafka-color-border-strong);
-	border-radius: var(--lafka-radius-button, var(--lafka-radius-md));
-	background: var(--lafka-color-surface-raised);
-	color: var(--lafka-color-text-primary);
-	font-weight: var(--lafka-font-weight-bold);
-}
-
-.lafka-pdp .lafka-pdp-upsell__add:hover {
-	border-color: var(--lafka-color-text-primary);
-	background: var(--lafka-color-text-primary);
-	color: var(--lafka-color-text-inverse);
-}

@@ -266,9 +266,9 @@ if ( ! function_exists( 'lafka_get_logo_id' ) ) {
 					</a>
 				<?php endif; ?>
 
-				<a class="lafka-header__cta" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
+				<a class="lafka-header__cta lafka-btn lafka-btn--primary lafka-btn--sm" href="<?php echo esc_url( lafka_theme_menu_url() ); ?>">
 					<span class="lafka-header__cta-label"><?php echo esc_html( apply_filters( 'lafka_header_cta_label', __( 'Order now', 'lafka' ) ) ); ?></span>
-					<span class="lafka-header__cta-arrow" aria-hidden="true">→</span>
+					<span class="lafka-btn__arrow" aria-hidden="true">→</span>
 				</a>
 
 			</div>

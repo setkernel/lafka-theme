@@ -1,0 +1,46 @@
+{
+	"_doc": "Editor-preset map: theme.json slug -> design token. The ONE place the block editor's palette, font sizes, font families and spacing are tied to styles/lafka-tokens.css. scripts/build-theme-json.mjs writes theme.json and token-defaults.json from it (npm run build); the check-theme-json gate fails when either is stale. At runtime lafka_theme_json_overlay() lets the active preset and the operator's accent/brand override the generated values, so the editor matches the front end.",
+	"palette": {
+		"accent": { "name": "Accent", "token": "--lafka-color-accent-500" },
+		"accent-hover": { "name": "Accent Hover", "token": "--lafka-color-accent-600" },
+		"on-accent": { "name": "Text on Accent", "token": "--lafka-color-text-on-accent" },
+		"brand": { "name": "Brand", "token": "--lafka-color-brand-500" },
+		"text-primary": { "name": "Text", "token": "--lafka-color-text-primary" },
+		"text-secondary": { "name": "Text Secondary", "token": "--lafka-color-text-secondary" },
+		"text-muted": { "name": "Text Muted", "token": "--lafka-color-text-muted" },
+		"background": { "name": "Background", "token": "--lafka-color-surface-page" },
+		"background-subtle": { "name": "Background Subtle", "token": "--lafka-color-surface-sunken" },
+		"background-input": { "name": "Background Input", "token": "--lafka-color-surface-sunken" },
+		"border-light": { "name": "Border Light", "token": "--lafka-color-border-subtle" },
+		"border-default": { "name": "Border Default", "token": "--lafka-color-border-default" },
+		"border-medium": { "name": "Border Medium", "token": "--lafka-color-border-default" },
+		"border-dark": { "name": "Border Dark", "token": "--lafka-color-border-strong" },
+		"status-error": { "name": "Error", "token": "--lafka-color-error-500" },
+		"status-warning": { "name": "Warning", "token": "--lafka-color-warning-500" },
+		"status-success": { "name": "Success", "token": "--lafka-color-success-500" },
+		"status-info": { "name": "Info", "token": "--lafka-color-info-500" }
+	},
+	"fontSizes": {
+		"small": { "name": "Small", "token": "--lafka-font-size-caption" },
+		"medium": { "name": "Medium", "token": "--lafka-font-size-body" },
+		"large": { "name": "Large", "token": "--lafka-font-size-h3" },
+		"x-large": { "name": "Extra Large", "token": "--lafka-font-size-h2-desk" },
+		"xx-large": { "name": "XX Large", "token": "--lafka-font-size-display" }
+	},
+	"fontFamilies": {
+		"body": { "name": "Body", "token": "--lafka-font-family-body" },
+		"display": { "name": "Display", "token": "--lafka-font-family-display" },
+		"mono": { "name": "Mono", "token": "--lafka-font-family-mono" }
+	},
+	"spacing": {
+		"xs": { "name": "XS", "token": "--lafka-space-1" },
+		"sm": { "name": "Small", "token": "--lafka-space-2" },
+		"md": { "name": "Medium", "token": "--lafka-space-3" },
+		"lg": { "name": "Large", "token": "--lafka-space-4" },
+		"xl": { "name": "XL", "token": "--lafka-space-5" },
+		"2xl": { "name": "2XL", "token": "--lafka-space-6" },
+		"3xl": { "name": "3XL", "token": "--lafka-space-8" },
+		"4xl": { "name": "4XL", "token": "--lafka-space-10" },
+		"5xl": { "name": "5XL", "token": "--lafka-space-12" }
+	}
+}

@@ -90,7 +90,7 @@ body .lafka-header {
 	border: none;
 	background: transparent;
 	color: var(--lafka-color-text-primary);
-	font-size: 20px;
+	font-size: 1.25rem;
 	border-radius: var(--lafka-radius-pill);
 	cursor: pointer;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
@@ -99,11 +99,6 @@ body .lafka-header {
 .lafka-header__menu-toggle:hover {
 	background: var(--lafka-color-surface-muted);
 	color: var(--lafka-color-accent-text);
-}
-
-.lafka-header__menu-toggle:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
 }
 
 @media (max-width: 1023px) {
@@ -229,7 +224,7 @@ body .lafka-header {
 	right: 0;
 	bottom: 0;
 	width: 48px;
-	background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--lafka-color-surface-page, #fff));
+	background: linear-gradient(to right, rgba(255, 255, 255, 0), var(--lafka-color-surface-page));
 	pointer-events: none;
 }
 
@@ -367,12 +362,6 @@ body .lafka-header {
 	flex: none;
 }
 
-.lafka-header__icon-btn:focus-visible,
-.lafka-header__cart:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
 /* Cart badge
  *
  * v6.7.11 (A06): nudge the badge inside the icon-btn bounds. Previous
@@ -386,7 +375,7 @@ body .lafka-header {
 	background: var(--lafka-color-accent-500);
 	color: var(--lafka-color-text-inverse);
 	font-family: var(--lafka-font-family-body);
-	font-size: 11px;
+	font-size: 0.6875rem;
 	font-weight: var(--lafka-font-weight-bold);
 	line-height: 1;
 	padding: 3px 6px;
@@ -423,47 +412,9 @@ body .lafka-header {
 	}
 }
 
-/* -------- "Order now" CTA ----------------------------------------------- */
+/* -------- "Order now" CTA — .lafka-btn--primary; only its place in the bar is set here. */
 .lafka-header__cta {
-	display: inline-flex;
-	align-items: center;
-	gap: var(--lafka-space-2);
-	padding: var(--lafka-space-2) var(--lafka-space-5);
-	min-height: 40px;
-	border-radius: var(--lafka-radius-pill);
-	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-text-inverse);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-sm);
-	font-weight: var(--lafka-font-weight-semibold);
-	text-decoration: none;
-	white-space: nowrap;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform 60ms var(--lafka-motion-ease-out);
 	margin-inline-start: var(--lafka-space-1);
-}
-
-.lafka-header__cta:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-text-inverse);
-}
-
-.lafka-header__cta:active {
-	transform: translateY(1px);
-}
-
-.lafka-header__cta:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
-.lafka-header__cta-arrow {
-	display: inline-block;
-	transition: transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-header__cta:hover .lafka-header__cta-arrow {
-	transform: translateX(2px);
 }
 
 @media (max-width: 767px) {

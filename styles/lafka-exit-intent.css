@@ -51,7 +51,7 @@
 	left: auto;
 	width: 320px;
 	max-width: calc(100vw - 32px);
-	z-index: 1100;
+	z-index: var(--lafka-z-toast);
 	pointer-events: none;
 	opacity: 0;
 	transform: translateY(16px);
@@ -78,20 +78,15 @@
 .lafka-exit-toast__inner {
 	position: relative;
 	padding: var(--lafka-space-5) var(--lafka-space-5) var(--lafka-space-4);
-	background: var(--lafka-color-surface-raised);
-	color: var(--lafka-color-text-primary);
-	border: 1px solid var(--lafka-color-border-subtle);
-	border-radius: var(--lafka-radius-lg);
-	box-shadow: var(--lafka-shadow-3);
 }
 
 /* Close × — 32×32 tap target in top-right corner. */
 .lafka-exit-toast__close {
 	position: absolute;
 	top: 4px;
-	right: 4px;
-	width: 32px;
-	height: 32px;
+	right: 0;
+	width: var(--lafka-tap-target);
+	height: var(--lafka-tap-target);
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
@@ -101,7 +96,7 @@
 	border: 0;
 	border-radius: var(--lafka-radius-pill);
 	color: var(--lafka-color-text-muted);
-	font-size: 22px;
+	font-size: 1.375rem;
 	line-height: 1;
 	cursor: pointer;
 	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
@@ -112,7 +107,6 @@
 .lafka-exit-toast__close:focus-visible {
 	background: var(--lafka-color-surface-hover);
 	color: var(--lafka-color-text-primary);
-	outline: none;
 }
 
 .lafka-exit-toast__close:focus-visible {
@@ -141,7 +135,7 @@
 	font-family: var(--lafka-font-family-body);
 	font-size: var(--lafka-font-size-body-sm);
 	color: var(--lafka-color-text-secondary);
-	line-height: var(--lafka-line-height-normal);
+	line-height: var(--lafka-line-body);
 }
 
 /* Action row — primary pill + ghost text link, baseline-aligned. */
@@ -152,67 +146,7 @@
 	gap: var(--lafka-space-3);
 }
 
-/* Primary CTA — matches the cart-page "Proceed to checkout" red pill. */
-.lafka-exit-toast__primary {
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	padding: var(--lafka-space-3) var(--lafka-space-5);
-	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-text-on-accent);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-sm);
-	font-weight: var(--lafka-font-weight-semibold);
-	line-height: 1.2;
-	text-decoration: none;
-	border: 0;
-	border-radius: var(--lafka-radius-pill);
-	cursor: pointer;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-exit-toast__primary:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-text-on-accent);
-	text-decoration: none;
-}
-
-.lafka-exit-toast__primary:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
-.lafka-exit-toast__primary:active {
-	transform: translateY(1px);
-}
-
-/* Ghost dismiss — text link styling, muted colour so the primary
- * pill leads. */
-.lafka-exit-toast__dismiss {
-	display: inline-flex;
-	align-items: center;
-	padding: var(--lafka-space-2) var(--lafka-space-3);
-	background: transparent;
-	color: var(--lafka-color-text-muted);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-sm);
-	font-weight: var(--lafka-font-weight-medium);
-	border: 0;
-	border-radius: var(--lafka-radius-pill);
-	cursor: pointer;
-	transition: color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-exit-toast__dismiss:hover,
-.lafka-exit-toast__dismiss:focus-visible {
-	color: var(--lafka-color-text-primary);
-	outline: none;
-}
-
-.lafka-exit-toast__dismiss:focus-visible {
-	box-shadow: var(--lafka-shadow-focus);
-}
+/* The two actions are .lafka-btn (--primary and --quiet); the row's layout is above. */
 
 /* -------------------------------------------------------------------------
  * Mobile — bottom-center, full-width minus 16px gutters.
@@ -221,7 +155,7 @@
  * the bottom-center more naturally and the sticky cart bar (when present)
  * already lives bottom-aligned. We layer above it with z-index 1100.
  * ------------------------------------------------------------------------- */
-@media (max-width: 768px) {
+@media (max-width: 767px) {
 
 	.lafka-exit-toast {
 		right: 16px;

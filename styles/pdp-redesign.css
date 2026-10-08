@@ -10,32 +10,10 @@
  */
 
 /*
- * v5.33.0: PDP redesign tokens now alias onto the root design system
- * (lafka-tokens.css). Previously these were hardcoded coral / grey
- * values that drifted visually from the unified token palette — the
- * design audit specifically flagged this as "token chaos." Anything
- * still PDP-specific (bar heights, CTA height) stays as a raw value.
+ * Colours, radii and shadows come straight from lafka-tokens.css; only the PDP
+ * bar and CTA heights are local.
  */
 :root {
-	--lafka-pdp-accent: var(--lafka-color-accent-500);
-	--lafka-pdp-accent-dark: var(--lafka-color-accent-700);
-	--lafka-pdp-text: var(--lafka-color-text-primary);
-	--lafka-pdp-muted: var(--lafka-color-text-muted);
-	--lafka-pdp-border: var(--lafka-color-border-subtle);
-	--lafka-pdp-bg-soft: var(--lafka-color-surface-sunken);
-	--lafka-pdp-bg-warm: var(--lafka-color-accent-50);
-	--lafka-pdp-bg-dark: var(--lafka-color-text-primary);
-
-	/* NX2-07: the raised card/panel/drawer surface. Was a hardcoded #fff in
-	 * every component below; aliased onto the design-system raised surface so
-	 * a dark preset renders dark cards. Peppery's raised surface == #fff, so
-	 * this is byte-for-byte identical there. */
-	--lafka-pdp-surface: var(--lafka-color-surface-raised);
-	--lafka-pdp-radius: var(--lafka-radius-md);
-	--lafka-pdp-radius-chip: var(--lafka-radius-md);
-	--lafka-pdp-shadow-card: var(--lafka-shadow-1);
-	--lafka-pdp-z-bar: var(--lafka-z-dropdown);
-	--lafka-pdp-z-drawer: var(--lafka-z-drawer);
 	--lafka-pdp-bar-h: 36px;
 	--lafka-pdp-bar-h-mobile: 32px;
 	--lafka-pdp-cta-h-mobile: 64px;
@@ -53,11 +31,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 /* === Order method bar (W4-T11) === */
 .lafka-order-method-bar {
   position: fixed; top: 0; left: 0; right: 0;
-  z-index: var(--lafka-pdp-z-bar);
+  z-index: var(--lafka-z-dropdown);
   height: var(--lafka-pdp-bar-h);
-  background: var(--lafka-pdp-bg-dark);
-  color: #fff;
-  font-size: 12px;
+  background: var(--lafka-color-text-primary);
+  color: var(--lafka-color-text-on-dark);
+  font-size: var(--lafka-font-size-caption);
   display: flex; align-items: center;
 }
 
@@ -69,22 +47,22 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .lafka-order-method-bar__method {
-  background: none; border: none; color: #fff;
+  background: none; border: none; color: var(--lafka-color-text-on-dark);
   display: flex; align-items: center; gap: 6px;
   cursor: pointer; padding: 0; font: inherit;
 }
 
 .lafka-order-method-bar__location { text-decoration: underline; text-underline-offset: 3px; }
 
-.lafka-order-method-bar__switch { color: #ffd166; margin-left: 6px; font-weight: 500; }
+.lafka-order-method-bar__switch { color: var(--lafka-color-highlight); margin-left: 6px; font-weight: 500; }
 
 .lafka-order-method-bar__right { display: flex; gap: 12px; align-items: center; }
 
-.lafka-order-method-bar__phone { color: #fff; text-decoration: none; }
+.lafka-order-method-bar__phone { color: var(--lafka-color-text-on-dark); text-decoration: none; }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
 
-  .lafka-order-method-bar { height: var(--lafka-pdp-bar-h-mobile); font-size: 11px; }
+  .lafka-order-method-bar { height: var(--lafka-pdp-bar-h-mobile); font-size: var(--lafka-font-size-caption); }
 
   .lafka-order-method-bar__inner { padding: 0 10px; gap: 6px; }
 
@@ -101,37 +79,37 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .lafka-method-modal__overlay {
   position: fixed; inset: 0;
   background: rgba(0,0,0,.5);
-  z-index: var(--lafka-pdp-z-drawer);
+  z-index: var(--lafka-z-drawer);
   display: flex; align-items: center; justify-content: center;
 }
 
 .lafka-method-modal {
-  background: var(--lafka-pdp-surface); padding: 24px;
-  border-radius: var(--lafka-pdp-radius);
+  background: var(--lafka-color-surface-raised); padding: 24px;
+  border-radius: var(--lafka-radius-md);
   max-width: 320px; width: calc(100% - 32px);
   position: relative;
 }
 
-.lafka-method-modal h3 { margin: 0 0 16px; font-size: 16px; }
+.lafka-method-modal h3 { margin: 0 0 16px; font-size: var(--lafka-font-size-body-sm); }
 
 .lafka-method-modal button:not(.lafka-method-modal__close) {
   display: block; width: 100%;
   padding: 12px; margin: 8px 0;
-  background: var(--lafka-pdp-surface); border: 1.5px solid var(--lafka-pdp-border);
-  border-radius: var(--lafka-pdp-radius-chip);
+  background: var(--lafka-color-surface-raised); border: 1.5px solid var(--lafka-color-border-subtle);
+  border-radius: var(--lafka-radius-md);
   font: inherit; cursor: pointer; text-align: left;
 }
 
 .lafka-method-modal button:not(.lafka-method-modal__close):hover {
-  border-color: var(--lafka-pdp-accent);
-  background: var(--lafka-pdp-bg-warm);
+  border-color: var(--lafka-color-accent-500);
+  background: var(--lafka-color-accent-50);
 }
 
 .lafka-method-modal__close {
   position: absolute; top: 8px; right: 12px;
   background: none; border: none;
-  font-size: 22px; cursor: pointer;
-  color: var(--lafka-pdp-muted);
+  font-size: 1.375rem; cursor: pointer;
+  color: var(--lafka-color-text-muted);
 }
 
 /* === PDP pickers (W4-T12) === */
@@ -141,9 +119,9 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-picker__label {
   display: block;
-  font-size: 11px; font-weight: 600;
+  font-size: var(--lafka-font-size-caption); font-weight: 600;
   text-transform: uppercase; letter-spacing: 1.5px;
-  color: var(--lafka-pdp-text);
+  color: var(--lafka-color-text-primary);
   margin: 0 0 8px;
 }
 
@@ -155,30 +133,29 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-chip__inner {
   display: inline-flex; flex-direction: column; align-items: center;
-  border: 1.5px solid var(--lafka-pdp-border);
-  border-radius: var(--lafka-pdp-radius-chip);
-  background: var(--lafka-pdp-surface);
+  border: 1.5px solid var(--lafka-color-border-subtle);
+  border-radius: var(--lafka-radius-md);
+  background: var(--lafka-color-surface-raised);
   transition: border-color .12s, background .12s, color .12s;
   text-align: center;
   padding: 6px 10px;
   min-width: 56px;
 }
 
-.lafka-pdp-chip__name { font-weight: 500; font-size: 12px; }
+.lafka-pdp-chip__name { font-weight: 500; font-size: var(--lafka-font-size-caption); }
 
-.lafka-pdp-chip:hover .lafka-pdp-chip__inner { border-color: var(--lafka-pdp-accent); }
+.lafka-pdp-chip:hover .lafka-pdp-chip__inner { border-color: var(--lafka-color-accent-500); }
 
 .lafka-pdp-chip:has(:checked) .lafka-pdp-chip__inner {
-  border-color: var(--lafka-pdp-accent);
-  background: var(--lafka-pdp-accent);
-  color: #fff;
+  border-color: var(--lafka-color-accent-500);
+  background: var(--lafka-color-accent-500);
+  color: var(--lafka-color-text-on-accent);
 }
 
 .lafka-pdp-chip:has(:checked) .lafka-pdp-chip__price { color: rgba(255,255,255,.85); }
 
 .lafka-pdp-chip:focus-within .lafka-pdp-chip__inner {
-  outline: 2px solid var(--lafka-pdp-accent-dark);
-  outline-offset: 2px;
+	box-shadow: var(--lafka-shadow-focus);
 }
 
 /*
@@ -210,8 +187,8 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
  */
 
 .product-addon {
-  background: var(--lafka-pdp-bg-warm);
-  border-radius: var(--lafka-pdp-radius);
+  background: var(--lafka-color-accent-50);
+  border-radius: var(--lafka-radius-md);
   padding: 12px 14px;
   margin: 14px 0;
 }
@@ -234,11 +211,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 11px;
+  font-size: var(--lafka-font-size-caption);
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 1.5px;
-  color: var(--lafka-pdp-text);
+  color: var(--lafka-color-text-primary);
   margin: 0;
   padding: 4px 0;
   line-height: 1.4;
@@ -248,12 +225,10 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .product-addon .addon-name:hover {
-  color: var(--lafka-pdp-accent-dark);
+  color: var(--lafka-color-accent-700);
 }
 
 .product-addon .addon-name:focus-visible {
-  outline: 2px solid var(--lafka-pdp-accent);
-  outline-offset: 4px;
   border-radius: 3px;
 }
 
@@ -299,8 +274,6 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .product-addon .addon-name > .lafka-addon-toggle:focus-visible {
-  outline: 2px solid var(--lafka-pdp-accent);
-  outline-offset: 4px;
   border-radius: 3px;
 }
 
@@ -311,7 +284,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .product-addon .addon-name .required {
-  color: var(--lafka-pdp-accent);
+  color: var(--lafka-color-accent-500);
   text-decoration: none;
   margin-left: 4px;
 }
@@ -319,11 +292,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 /* Live selection summary: "<count> selected · +$X.XX" */
 .product-addon .lafka-addon-summary {
   margin-left: auto;
-  font-size: 11px;
+  font-size: var(--lafka-font-size-caption);
   font-weight: 500;
   text-transform: none;
   letter-spacing: 0;
-  color: var(--lafka-pdp-muted);
+  color: var(--lafka-color-text-muted);
   white-space: nowrap;
 
   /* Empty by default — JS populates after selection. Reserve space so the
@@ -332,7 +305,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .product-addon .lafka-addon-summary.is-active {
-  color: var(--lafka-pdp-accent);
+  color: var(--lafka-color-accent-500);
   font-weight: 600;
 }
 
@@ -359,7 +332,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
  * Mobile (default block flow) keeps 1 column — narrower viewport,
  * legibility priority.
  */
-@media (min-width: 721px) {
+@media (min-width: 768px) {
 
   .product-addon:not([data-collapsed="true"]) {
     display: grid;
@@ -382,8 +355,8 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 /* Description block (uncommon — only when operator filled it in) */
 .product-addon .addon-description {
-  font-size: 12px;
-  color: var(--lafka-pdp-muted);
+  font-size: var(--lafka-font-size-caption);
+  color: var(--lafka-color-text-muted);
   margin: 0 0 8px;
   line-height: 1.45;
 }
@@ -413,11 +386,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   padding: 10px 2px;
   cursor: pointer;
 
-  /* lafka-theme has site-wide `label { font-size: 12px !important }`
+  /* lafka-theme has site-wide `label { font-size: var(--lafka-font-size-caption) !important }`
      that cascades through. Use !important to win the cascade — this
      is intentional, not a smell. */
-  font-size: 13px !important;
-  color: var(--lafka-pdp-text);
+  font-size: var(--lafka-font-size-caption) !important;
+  color: var(--lafka-color-text-primary);
   margin: 0;
   line-height: 1.4;
   transition: color .12s;
@@ -428,7 +401,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .product-addon p.form-row > label:hover {
-  color: var(--lafka-pdp-accent-dark);
+  color: var(--lafka-color-accent-700);
 }
 
 /* Native checkbox/radio: visible, sized to feel tappable on mobile,
@@ -439,7 +412,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   height: 18px;
   margin: 0;
   flex: 0 0 auto;
-  accent-color: var(--lafka-pdp-accent);
+  accent-color: var(--lafka-color-accent-500);
   cursor: pointer;
 }
 
@@ -466,20 +439,20 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   margin-left: auto;
   font-size: 0;
   font-weight: 600;
-  color: var(--lafka-pdp-muted);
+  color: var(--lafka-color-text-muted);
   white-space: nowrap;
 }
 
 .product-addon p.form-row > label .lafka-addon-price::before {
   content: "+";
-  font-size: 13px;
+  font-size: var(--lafka-font-size-caption);
   margin-right: 1px;
   font-weight: 500;
   color: inherit;
 }
 
 .product-addon p.form-row > label .lafka-addon-price .woocommerce-Price-amount {
-  font-size: 13px;
+  font-size: var(--lafka-font-size-caption);
 }
 
 /* v5.77.0: orphan rule removed — no <sup> is emitted anymore (the source
@@ -488,11 +461,11 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
  * inline like $3.00 rather than as superscripted cents. */
 
 .product-addon p.form-row > label:has(:checked) .lafka-addon-price {
-  color: var(--lafka-pdp-accent);
+  color: var(--lafka-color-accent-500);
 }
 
 .product-addon p.form-row > label:has(:checked) {
-  color: var(--lafka-pdp-text);
+  color: var(--lafka-color-text-primary);
   font-weight: 500;
 }
 
@@ -510,8 +483,8 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 /* Limit-message under the list ("Select up to N items.") */
 .product-addon .lafka-addon-limit-message {
   display: block;
-  font-size: 11px;
-  color: var(--lafka-pdp-muted);
+  font-size: var(--lafka-font-size-caption);
+  color: var(--lafka-color-text-muted);
   margin-top: 8px;
   text-align: right;
 }
@@ -520,9 +493,9 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .product-addon.required-product-addon .addon-name::after {
   content: "Required";
   display: inline-block;
-  background: var(--lafka-pdp-accent);
-  color: #fff;
-  font-size: 9px;
+  background: var(--lafka-color-accent-500);
+  color: var(--lafka-color-text-on-accent);
+  font-size: var(--lafka-font-size-caption);
   font-weight: 700;
   letter-spacing: 1px;
   padding: 2px 6px;
@@ -543,9 +516,9 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .product-addon.textarea p.form-row > label {
   padding: 0 0 4px;
-  font-size: 12px;
+  font-size: var(--lafka-font-size-caption);
   font-weight: 600;
-  color: var(--lafka-pdp-muted);
+  color: var(--lafka-color-text-muted);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
@@ -554,28 +527,27 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   width: 100%;
   min-height: 64px;
   padding: 8px 10px;
-  border: 1.5px solid var(--lafka-pdp-border);
-  border-radius: var(--lafka-pdp-radius-chip);
+  border: 1.5px solid var(--lafka-color-border-subtle);
+  border-radius: var(--lafka-radius-md);
   font: inherit;
-  font-size: 13px;
+  font-size: var(--lafka-font-size-caption);
   resize: vertical;
 }
 
 .product-addon.textarea textarea:focus {
-  border-color: var(--lafka-pdp-accent);
-  outline: none;
+  border-color: var(--lafka-color-accent-500);
 }
 
 /* Engine v2 totals widget (live-updated by the plugin's addons.js). The
    plugin emits a bare div; we give it the same warm-card treatment to
    anchor the running total below the toppings. */
 #product-addons-total {
-  background: var(--lafka-pdp-surface);
-  border: 1px solid var(--lafka-pdp-border);
-  border-radius: var(--lafka-pdp-radius);
+  background: var(--lafka-color-surface-raised);
+  border: 1px solid var(--lafka-color-border-subtle);
+  border-radius: var(--lafka-radius-md);
   padding: 10px 14px;
   margin: 12px 0 0;
-  font-size: 13px;
+  font-size: var(--lafka-font-size-caption);
   display: none; /* shown by the plugin's JS only when total > 0 */
 }
 
@@ -584,123 +556,54 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 #product-addons-total .product-addons-total-amount {
-  color: var(--lafka-pdp-accent);
+  color: var(--lafka-color-accent-500);
   font-weight: 700;
 }
 
-/* === Cart drawer (W4-T14) === */
-.lafka-cart-drawer { position: fixed; inset: 0; z-index: var(--lafka-pdp-z-drawer); pointer-events: none; visibility: hidden; }
-
-.lafka-cart-drawer[data-open="true"] { pointer-events: auto; visibility: visible; }
-
-.lafka-cart-drawer__overlay { position: absolute; inset: 0; background: rgba(0,0,0,.4); opacity: 0; transition: opacity .25s ease; }
-
-.lafka-cart-drawer[data-open="true"] .lafka-cart-drawer__overlay { opacity: 1; }
-
-.lafka-cart-drawer__panel {
-  position: absolute; right: 0; top: 0; bottom: 0;
-  width: 400px; max-width: 92vw;
-  background: var(--lafka-pdp-surface);
-  display: flex; flex-direction: column;
-  transform: translateX(100%);
-  transition: transform .25s ease;
-  box-shadow: -4px 0 24px rgba(0,0,0,.12);
-}
-
-.lafka-cart-drawer[data-open="true"] .lafka-cart-drawer__panel { transform: translateX(0); }
-
-.lafka-cart-drawer__header { padding: 16px 20px; border-bottom: 1px solid var(--lafka-pdp-border); display: flex; justify-content: space-between; align-items: center; }
-
-.lafka-cart-drawer__header h2 { margin: 0; font-size: 18px; }
-
-.lafka-cart-drawer__close { background: none; border: none; font-size: 24px; cursor: pointer; color: var(--lafka-pdp-muted); padding: 0 4px; }
-
-.lafka-cart-drawer__body { flex: 1; overflow-y: auto; padding: 16px 20px; }
-
-.lafka-cart-drawer__items { list-style: none; padding: 0; margin: 0; }
-
-.lafka-cart-drawer__item {
-  display: grid; grid-template-columns: 56px 1fr auto;
-  gap: 10px; align-items: center;
-  padding: 10px 0; border-bottom: 1px solid #f0f0f0;
-}
-
-.lafka-cart-drawer__thumb img { width: 56px; height: 56px; object-fit: cover; border-radius: 4px; }
-
-.lafka-cart-drawer__name { font-size: 13px; font-weight: 500; }
-
-.lafka-cart-drawer__qty { font-size: 12px; color: var(--lafka-pdp-muted); }
-
-.lafka-cart-drawer__price { font-size: 13px; font-weight: 600; }
-
-.lafka-cart-drawer__remove {
-  background: none; border: none; cursor: pointer;
-  color: var(--lafka-pdp-muted); font-size: 18px;
-  grid-column: 3; grid-row: 1;
-}
-
-.lafka-cart-drawer__footer { border-top: 1px solid var(--lafka-pdp-border); padding: 16px 20px; }
-
-.lafka-cart-drawer__subtotal { display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 6px; }
-
-.lafka-cart-drawer__threshold { font-size: 12px; color: var(--lafka-pdp-muted); padding: 6px 0; }
-
-.lafka-cart-drawer__threshold--reached { color: #2e7d32; font-weight: 500; }
-
-.lafka-cart-drawer__actions { display: flex; gap: 8px; margin-top: 12px; }
-
-.lafka-cart-drawer__continue { flex: 1; background: var(--lafka-pdp-surface); border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); padding: 12px; cursor: pointer; font: inherit; }
-
-/* v6.7.11 (H-new, CTA-RADIUS-new): pill radius on the drawer Checkout
- * CTA so it matches the site-wide primary CTAs (hero, cart Proceed, etc).
- * Was --lafka-pdp-radius-chip (~10px) which was a holdover from the older
- * PDP-cluster styling. */
-.lafka-cart-drawer__checkout { flex: 1; background: var(--lafka-pdp-accent); color: #fff; border: none; border-radius: var(--lafka-radius-button); padding: 12px; text-align: center; font-weight: 600; text-decoration: none; }
-
-.lafka-cart-drawer__checkout:hover { background: var(--lafka-pdp-accent-dark); color: #fff; }
+/* The cart drawer lives in lafka-cart-drawer.css (one stylesheet; this one held a second, older copy). */
 
 /* === Last-order card (W4-T16) === */
 .lafka-pdp-last-order {
-  background: var(--lafka-pdp-bg-soft);
-  border: 1px solid var(--lafka-pdp-border);
-  border-radius: var(--lafka-pdp-radius);
+  background: var(--lafka-color-surface-sunken);
+  border: 1px solid var(--lafka-color-border-subtle);
+  border-radius: var(--lafka-radius-md);
   padding: 12px 14px;
   margin: 14px 0;
 }
 
 .lafka-pdp-last-order__heading {
-  font-size: 11px; font-weight: 600;
+  font-size: var(--lafka-font-size-caption); font-weight: 600;
   text-transform: uppercase; letter-spacing: 1.5px;
-  color: var(--lafka-pdp-muted);
+  color: var(--lafka-color-text-muted);
 }
 
-.lafka-pdp-last-order__items { list-style: none; padding: 0; margin: 6px 0 10px; font-size: 13px; }
+.lafka-pdp-last-order__items { list-style: none; padding: 0; margin: 6px 0 10px; font-size: var(--lafka-font-size-caption); }
 
 .lafka-pdp-last-order__items li { padding: 2px 0; }
 
 .lafka-pdp-last-order__reorder {
-  background: var(--lafka-pdp-surface);
-  border: 1.5px solid var(--lafka-pdp-accent);
-  color: var(--lafka-pdp-accent);
+  background: var(--lafka-color-surface-raised);
+  border: 1.5px solid var(--lafka-color-accent-500);
+  color: var(--lafka-color-accent-500);
   padding: 6px 14px;
-  border-radius: var(--lafka-pdp-radius-chip);
+  border-radius: var(--lafka-radius-md);
   font: inherit; font-weight: 600;
   cursor: pointer;
 }
 
-.lafka-pdp-last-order__reorder:hover { background: var(--lafka-pdp-accent); color: #fff; }
+.lafka-pdp-last-order__reorder:hover { background: var(--lafka-color-accent-500); color: var(--lafka-color-text-on-accent); }
 
 /* === Upsell row "Make it a meal" (W4-T17) === */
 .lafka-pdp-upsell { margin: 24px 0; }
 
 /* NX2-07: this bare <h3> otherwise inherits its colour from WordPress's
  * global-styles `h3 { color: var(--wp--preset--color--text-primary) }` (a fixed
- * #18181b that a dark preset can't flip → dark-on-dark). Wire it to the
+ * near-black ink that a dark preset can't flip → dark-on-dark). Wire it to the
  * mode-aware text token; text-primary's light value equals that WP ink, so
  * Peppery is unchanged, and a dark preset flips it light. */
-.lafka-pdp-upsell__heading { font-size: 14px; font-weight: 700; margin: 0 0 12px; color: var(--lafka-color-text-primary); }
+.lafka-pdp-upsell__heading { font-size: var(--lafka-font-size-caption); font-weight: 700; margin: 0 0 12px; color: var(--lafka-color-text-primary); }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
 
  .lafka-pdp-upsell__grid { grid-template-columns: repeat(2, 1fr); } }
 
@@ -714,8 +617,6 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 }
 
 .lafka-pdp-upsell__card {
-  background: var(--lafka-pdp-bg-soft);
-  border-radius: var(--lafka-pdp-radius);
   padding: 10px; text-align: center;
   display: flex; flex-direction: column; gap: 6px;
   min-height: 200px;
@@ -743,7 +644,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   display: block;
   width: 100%;
   aspect-ratio: 1;
-  background: var(--lafka-pdp-bg-soft, #f5f1ec);
+  background: var(--lafka-color-surface-sunken);
   border-radius: 4px;
   order: -1;
 }
@@ -765,7 +666,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   height: auto;
   min-height: 120px;
   order: -1;
-  background: var(--lafka-pdp-bg-soft, #f5f1ec);
+  background: var(--lafka-color-surface-sunken);
 }
 
 /* v6.7.0 — when the PHP renderer falls back to <span class="...__placeholder"/>
@@ -777,7 +678,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   width: 100%;
   aspect-ratio: 1 / 1;
   min-height: 120px;
-  background: var(--lafka-pdp-bg-soft, var(--lafka-color-surface-muted, #f5f1ec));
+  background: var(--lafka-color-surface-sunken, var(--lafka-color-surface-muted));
   border-radius: 4px;
   order: -1;
 }
@@ -785,19 +686,19 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 /* Force visible text — legacy cascade can dim/zero these spans. */
 .lafka-pdp-upsell__name {
   display: block !important;
-  font-size: 13px !important;
+  font-size: var(--lafka-font-size-caption) !important;
   font-weight: 600;
   line-height: 1.3;
   margin-top: 4px;
-  color: var(--lafka-pdp-text, var(--lafka-color-text-primary));
+  color: var(--lafka-color-text-primary, var(--lafka-color-text-primary));
   visibility: visible;
 }
 
 .lafka-pdp-upsell__price {
   display: block !important;
-  font-size: 12px !important;
+  font-size: var(--lafka-font-size-caption) !important;
   font-weight: 500;
-  color: var(--lafka-pdp-accent, var(--lafka-color-accent-text));
+  color: var(--lafka-color-accent-500, var(--lafka-color-accent-text));
   visibility: visible;
 }
 
@@ -807,26 +708,13 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   color: inherit;
 }
 
-.lafka-pdp-upsell__add {
-  background: var(--lafka-pdp-surface);
-  border: 1.5px solid var(--lafka-pdp-accent);
-  color: var(--lafka-pdp-accent);
-  padding: 6px;
-  border-radius: var(--lafka-pdp-radius-chip);
-  font: inherit; font-weight: 600;
-  cursor: pointer;
-  margin-top: auto;
-}
-
-.lafka-pdp-upsell__add:hover { background: var(--lafka-pdp-accent); color: #fff; }
-
-.lafka-pdp-upsell__add:disabled { opacity: .6; cursor: wait; }
+.lafka-pdp-upsell__add { margin-top: auto; }
 
 /* === PDP summary (W4-T18) === */
 .lafka-pdp-summary {
-  background: var(--lafka-pdp-surface);
-  border-radius: var(--lafka-pdp-radius);
-  box-shadow: var(--lafka-pdp-shadow-card);
+  background: var(--lafka-color-surface-raised);
+  border-radius: var(--lafka-radius-md);
+  box-shadow: var(--lafka-shadow-1);
   position: sticky;
 
   /* v5.96.0: was calc(bar-h + header-h). The order-method-bar is
@@ -841,9 +729,9 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-eyebrow--bestseller {
   display: inline-block;
-  font-size: 10px; font-weight: 700;
+  font-size: var(--lafka-font-size-caption); font-weight: 700;
   letter-spacing: 1.5px;
-  color: var(--lafka-pdp-accent);
+  color: var(--lafka-color-accent-500);
   margin-bottom: 6px;
 }
 
@@ -851,12 +739,12 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-summary__price {
   font-weight: 700;
-  color: var(--lafka-pdp-accent);
-  font-size: 24px;
+  color: var(--lafka-color-accent-500);
+  font-size: 1.5rem;
   margin: 6px 0 12px;
 }
 
-.lafka-pdp-summary__price small { font-size: 11px; font-weight: 400; color: var(--lafka-pdp-muted); margin-left: 8px; }
+.lafka-pdp-summary__price small { font-size: var(--lafka-font-size-caption); font-weight: 400; color: var(--lafka-color-text-muted); margin-left: 8px; }
 
 .lafka-pdp-summary__cart-row { display: flex; gap: 10px; align-items: stretch; margin-top: 12px; }
 
@@ -892,40 +780,24 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .single_variation_wrap .variations_button { order: 2; }
 
-.lafka-pdp-summary__qty { display: flex; align-items: center; border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); }
+.lafka-pdp-summary__qty { display: flex; align-items: center; border: 1.5px solid var(--lafka-color-border-subtle); border-radius: var(--lafka-radius-md); }
 
 /* v6.7.11 (E15): 44×44 tap target (was 36×47). Hit area now WCAG 2.5.5 */
 .lafka-pdp-qty__btn { background: none; border: none; min-width: 44px; min-height: 44px; padding: 8px 12px; cursor: pointer; font: inherit; font-weight: 700; }
 
-.lafka-pdp-qty__input { width: 36px; text-align: center; border: none; background: none; font: inherit; font-weight: 600; }
+.lafka-pdp-qty__input { width: var(--lafka-tap-target); text-align: center; border: none; background: none; font: inherit; font-weight: 600; }
 
 .lafka-pdp-qty__input::-webkit-outer-spin-button, .lafka-pdp-qty__input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
-.lafka-pdp-summary__cta {
-  flex: 1;
+/* The add button is .lafka-btn--primary; only its place in the row is set here. */
+.lafka-pdp-summary__cta { flex: 1; }
 
-  /* v5.89.0: align with site-wide primary CTA recipe — pill radius
-   * (was --lafka-pdp-radius-chip = 10px), min-height 48px touch
-   * target, body-size text. Matches .lafka-hero__cta and the
-   * .return-to-shop button so customers see a single button language. */
-  background: var(--lafka-color-accent-500); color: var(--lafka-color-accent-contrast);
-  border: none; border-radius: var(--lafka-radius-button);
-  min-height: 48px;
-  padding: 12px 24px; font: inherit; font-weight: 700;
-  cursor: pointer;
-  transition: background .12s, opacity .12s;
-}
-
-.lafka-pdp-summary__cta:hover:not(:disabled) { background: var(--lafka-pdp-accent-dark); }
-
-.lafka-pdp-summary__cta:disabled { background: #ccc; cursor: not-allowed; opacity: .85; }
-
-.lafka-pdp-trust--closed { color: var(--lafka-pdp-accent); font-weight: 500; }
+.lafka-pdp-trust--closed { color: var(--lafka-color-accent-500); font-weight: 500; }
 
 /* === Mobile sticky bottom CTA === */
 .lafka-pdp-mobile-cta { display: none; }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
 
   .lafka-pdp-summary { position: static; box-shadow: none; }
 
@@ -936,15 +808,15 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   .lafka-pdp-mobile-cta {
     display: flex;
     position: fixed; bottom: var(--lafka-consent-banner-h, 0); left: 0; right: 0;
-    z-index: 90;
-    background: var(--lafka-pdp-surface);
-    border-top: 2px solid var(--lafka-pdp-accent);
+    z-index: var(--lafka-z-sticky-cta);
+    background: var(--lafka-color-surface-raised);
+    border-top: 2px solid var(--lafka-color-accent-500);
     padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
     gap: 10px; align-items: stretch;
     box-shadow: 0 -4px 16px rgba(0,0,0,.08);
   }
 
-  .lafka-pdp-mobile-cta__qty { display: flex; align-items: center; border: 1.5px solid var(--lafka-pdp-border); border-radius: var(--lafka-pdp-radius-chip); }
+  .lafka-pdp-mobile-cta__qty { display: flex; align-items: center; border: 1.5px solid var(--lafka-color-border-subtle); border-radius: var(--lafka-radius-md); }
 
   /* v6.7.11 (f033): 44×44 tap target (was ~28×30). Hit area now WCAG 2.5.5,
    * mirroring desktop .lafka-pdp-qty__btn. padding:0 8px keeps the glyph
@@ -953,15 +825,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
   .lafka-pdp-mobile-cta__qty span { padding: 0 8px; font-weight: 600; min-width: 18px; text-align: center; }
 
-  .lafka-pdp-mobile-cta__btn {
-    flex: 1;
-    background: var(--lafka-pdp-accent); color: #fff;
-    border: none; border-radius: var(--lafka-pdp-radius-chip);
-    padding: 12px; font: inherit; font-weight: 700;
-    cursor: pointer;
-  }
-
-  .lafka-pdp-mobile-cta__btn:disabled { background: #ccc; }
+  .lafka-pdp-mobile-cta__btn { flex: 1; }
 
   /*
    * Hide the floating mini-cart icon on mobile single-product pages.
@@ -999,15 +863,15 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
   .product-addon p.form-row > label {
     padding: 11px 2px;
-    font-size: 14px;
+    font-size: var(--lafka-font-size-caption);
   }
 
   .product-addon p.form-row > label .lafka-addon-price::before {
-    font-size: 14px;
+    font-size: var(--lafka-font-size-caption);
   }
 
   .product-addon p.form-row > label .lafka-addon-price .woocommerce-Price-amount {
-    font-size: 14px;
+    font-size: var(--lafka-font-size-caption);
   }
 }
 
@@ -1015,35 +879,35 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 /* Tabs: adjust padding so panel content doesn't look orphaned */
 .lafka-pdp-tabs {
-  background: var(--lafka-pdp-surface);
-  border-radius: var(--lafka-pdp-radius);
-  box-shadow: var(--lafka-pdp-shadow-card);
+  background: var(--lafka-color-surface-raised);
+  border-radius: var(--lafka-radius-md);
+  box-shadow: var(--lafka-shadow-1);
   margin: 24px 0;
   padding: 16px 20px;
 }
 
 .lafka-pdp-tabs__buttons {
   display: flex; gap: 24px;
-  border-bottom: 1px solid var(--lafka-pdp-border);
+  border-bottom: 1px solid var(--lafka-color-border-subtle);
   padding-bottom: 8px; margin-bottom: 16px;
 }
 
 .lafka-pdp-tabs__buttons [role="tab"] {
   background: none; border: none;
-  font-size: 11px; font-weight: 600;
+  font-size: var(--lafka-font-size-caption); font-weight: 600;
   text-transform: uppercase; letter-spacing: 1.5px;
-  color: var(--lafka-pdp-muted);
+  color: var(--lafka-color-text-muted);
   padding: 0 0 8px; margin-bottom: -9px;
   cursor: pointer;
   border-bottom: 2px solid transparent;
 }
 
 .lafka-pdp-tabs__buttons [aria-selected="true"] {
-  color: var(--lafka-pdp-accent);
-  border-bottom-color: var(--lafka-pdp-accent);
+  color: var(--lafka-color-accent-500);
+  border-bottom-color: var(--lafka-color-accent-500);
 }
 
-.lafka-pdp-tabs__panel { font-size: 13px; line-height: 1.6; color: var(--lafka-pdp-text); padding-top: 4px; }
+.lafka-pdp-tabs__panel { font-size: var(--lafka-font-size-caption); line-height: 1.6; color: var(--lafka-color-text-primary); padding-top: 4px; }
 
 .lafka-pdp-tabs__panel[hidden] { display: none; }
 
@@ -1078,13 +942,13 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .woocommerce-cart-form td.product-name dl.variation dt.variation- + dd,
 .cart_item td.product-name dl.variation dt.variation- + dd {
   padding-left: 1em;
-  color: var(--lafka-pdp-muted, #5e5e5e);
+  color: var(--lafka-color-text-muted);
 }
 
 /* === PDP container (W4-T20) === */
 .lafka-pdp__main { max-width: 1280px; margin: 0 auto; padding: 24px 16px; }
 
-.lafka-pdp__breadcrumb { font-size: 11px; color: var(--lafka-pdp-muted); margin-bottom: 16px; }
+.lafka-pdp__breadcrumb { font-size: var(--lafka-font-size-caption); color: var(--lafka-color-text-muted); margin-bottom: 16px; }
 
 .lafka-pdp__breadcrumb a { color: inherit; }
 
@@ -1100,7 +964,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   align-items: start;
 }
 
-@media (max-width: 960px) {
+@media (max-width: 1023px) {
 
  .lafka-pdp__hero { grid-template-columns: 1fr; gap: 16px; } }
 
@@ -1122,15 +986,15 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   object-fit: contain;
 }
 
-.lafka-pdp-summary__title { line-height: 1.15; color: var(--lafka-pdp-text); font-size: 24px; margin: 0 0 4px; }
+.lafka-pdp-summary__title { line-height: 1.15; color: var(--lafka-color-text-primary); font-size: 1.5rem; margin: 0 0 4px; }
 
-.lafka-pdp-summary__short { font-size: 13px; color: var(--lafka-pdp-muted); line-height: 1.5; margin-bottom: 10px; }
+.lafka-pdp-summary__short { font-size: var(--lafka-font-size-caption); color: var(--lafka-color-text-muted); line-height: 1.5; margin-bottom: 10px; }
 
-.lafka-pdp-summary__trust { font-size: 11px; color: var(--lafka-pdp-muted); border-top: 1px solid #f0f0f0; margin-top: 10px; padding-top: 10px; }
+.lafka-pdp-summary__trust { font-size: var(--lafka-font-size-caption); color: var(--lafka-color-text-muted); border-top: 1px solid var(--lafka-color-border-subtle); margin-top: 10px; padding-top: 10px; }
 
-.lafka-pdp-chip__price { color: var(--lafka-pdp-muted); font-size: 10px; margin-top: 1px; }
+.lafka-pdp-chip__price { color: var(--lafka-color-text-muted); font-size: var(--lafka-font-size-caption); margin-top: 1px; }
 
-@media (max-width: 720px) {
+@media (max-width: 767px) {
 
   .lafka-pdp-upsell__grid {
     grid-template-columns: repeat(2, 1fr);
@@ -1144,7 +1008,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 .lafka-pdp__main .related.products .product img,
 .lafka-pdp__main .upsells.products .product img,
 .lafka-pdp__main ul.products .product img {
-  background: var(--lafka-pdp-bg-soft);
+  background: var(--lafka-color-surface-sunken);
   min-height: 100px;
 }
 
@@ -1183,7 +1047,7 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
   border-radius: var(--lafka-radius-pill);
   background: var(--lafka-color-surface-raised);
   color: var(--lafka-color-text-primary);
-  font-size: var(--lafka-font-size-sm);
+  font-size: var(--lafka-font-size-body-sm);
   font-weight: 600;
   text-transform: none;
   cursor: pointer;

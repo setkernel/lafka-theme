@@ -44,7 +44,7 @@ if ( 'home' === $lafka_dv_ctx ) :
 				<?php endif; ?>
 			</div>
 			<?php if ( '' !== $lafka_dv['cta_label'] ) : ?>
-				<a class="lafka-direct__cta" href="<?php echo esc_url( $lafka_dv['cta_url'] ); ?>"
+				<a class="lafka-direct__cta lafka-btn lafka-btn--primary" href="<?php echo esc_url( $lafka_dv['cta_url'] ); ?>"
 					data-lafka-order-channel="direct" data-lafka-order-source="home_strip">
 					<?php echo esc_html( $lafka_dv['cta_label'] ); ?>
 				</a>

@@ -1,9 +1,9 @@
 /* =========================================================================
  * Lafka reusable components (v5.70.0)
  *
- * Primitive components consumed by multiple page templates. Extracted
- * from the deprecated lafka-home.css (v5.51 home) so the .lafka-btn
- * system + .lafka-status-pill survive the home rebuild deletion.
+ * Primitive components consumed by multiple page templates: the button
+ * (.lafka-btn), the card (.lafka-card), the status pill and the checkout tips
+ * row.
  *
  * Layer: unlayered (default = highest priority over @layer legacy).
  * Load: every page (cheap, ~3 KB).
@@ -12,72 +12,283 @@
  * ========================================================================= */
 
 /* =========================================================================
- * Button primitives — .lafka-btn
+ * Button — .lafka-btn, the one button for every call to action.
  *
- * Used by: hero CTAs, closer CTAs, ghost phone buttons on hero / closer.
- * The v5.59+ hero markup uses bespoke `.lafka-hero__cta` / `.lafka-closer__cta`
- * for the homepage red pills; this primitive system is for OSS-bundle use
- * and any partial that wants the legacy `.lafka-btn` API.
+ *   <a class="lafka-btn lafka-btn--primary lafka-btn--lg" href="…">Order</a>
+ *
+ * Default is the secondary look: an ink outline on the raised surface. A
+ * modifier re-points the --lafka-btn-* custom properties, so a surface that
+ * needs a one-off tone sets those variables instead of re-writing the button:
+ *
+ *   --primary    accent fill (the main action on the page)
+ *   --ghost      transparent fill, ink outline
+ *   --inverse    outline for a permanently dark band
+ *   --brand      brand fill       --dark     ink fill      --success  success fill
+ *   --quiet      text only, muted (the "No thanks" beside a primary)
+ *   --link       underlined text link that sits in a button row
+ *   --sm         compact (still a full tap target)   --lg    hero size
+ *   --block      full width
+ *
+ * Radius follows --lafka-radius-button, so a preset squares every button at
+ * once. The focus ring comes from the global :focus-visible rule
+ * (lafka-base.css).
  * ========================================================================= */
 
 .lafka-btn {
+	--lafka-btn-bg: var(--lafka-color-surface-raised);
+	--lafka-btn-fg: var(--lafka-color-text-primary);
+	--lafka-btn-border: var(--lafka-color-text-primary);
+	--lafka-btn-hover-bg: var(--lafka-color-surface-muted);
+	--lafka-btn-hover-fg: var(--lafka-color-text-primary);
+	--lafka-btn-hover-border: var(--lafka-btn-border);
+
+	box-sizing: border-box;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	gap: var(--lafka-space-2);
-	min-height: var(--lafka-tap-target);
-	padding: var(--lafka-space-3) var(--lafka-space-6);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-sm);
-	font-weight: var(--lafka-font-weight-semibold);
-	letter-spacing: var(--lafka-letter-spacing-wide);
-	text-transform: uppercase;
-	text-decoration: none;
-	border: 1px solid transparent;
+	gap: 10px;
+	min-height: 48px;
+	padding: 0 20px;
+	border: 2px solid var(--lafka-btn-border);
 	border-radius: var(--lafka-radius-button);
+	background: var(--lafka-btn-bg);
+	color: var(--lafka-btn-fg);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-lg);
+	font-weight: var(--lafka-font-weight-bold);
+	line-height: 1.2;
+	text-decoration: none;
+	white-space: nowrap;
 	cursor: pointer;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+	transition:
+		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
 		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
-		transform var(--lafka-duration-instant) var(--lafka-motion-ease-out);
+		border-color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 }
 
-.lafka-btn:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
+.lafka-btn:hover {
+	border-color: var(--lafka-btn-hover-border);
+	background: var(--lafka-btn-hover-bg);
+	color: var(--lafka-btn-hover-fg);
+	text-decoration: none;
 }
 
 .lafka-btn:active {
 	transform: translateY(1px);
 }
 
-.lafka-btn--lg {
-	min-height: 52px;
-	padding: var(--lafka-space-4) var(--lafka-space-8);
-	font-size: var(--lafka-font-size-body);
+.lafka-btn.loading,
+.lafka-btn[aria-busy="true"] {
+	opacity: 0.6;
+	pointer-events: none;
 }
 
+.lafka-btn:disabled,
+.lafka-btn[aria-disabled="true"] {
+	--lafka-btn-bg: var(--lafka-color-surface-muted);
+	--lafka-btn-fg: var(--lafka-color-text-muted);
+	--lafka-btn-border: var(--lafka-color-border-default);
+	--lafka-btn-hover-bg: var(--lafka-color-surface-muted);
+	--lafka-btn-hover-fg: var(--lafka-color-text-muted);
+
+	cursor: not-allowed;
+}
+
+.lafka-btn__arrow {
+	display: inline-block;
+	transition: transform var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-btn:hover .lafka-btn__arrow {
+	transform: translateX(2px);
+}
+
+/* -------- Variants ------------------------------------------------------- */
 .lafka-btn--primary {
-	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-accent-contrast);
-	box-shadow: var(--lafka-shadow-1);
+	--lafka-btn-bg: var(--lafka-color-accent-500);
+	--lafka-btn-fg: var(--lafka-color-text-on-accent);
+	--lafka-btn-border: var(--lafka-color-accent-500);
+	--lafka-btn-hover-bg: var(--lafka-color-accent-600);
+	--lafka-btn-hover-fg: var(--lafka-color-text-on-accent);
+	--lafka-btn-hover-border: var(--lafka-color-accent-600);
 }
 
-.lafka-btn--primary:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-accent-contrast);
-	box-shadow: var(--lafka-shadow-2);
+.lafka-btn--primary:focus-visible {
+	background: var(--lafka-btn-hover-bg);
+	border-color: var(--lafka-btn-hover-border);
 }
 
 .lafka-btn--ghost {
-	background: transparent;
-	color: var(--lafka-color-text-primary);
-	border-color: var(--lafka-color-text-primary);
+	--lafka-btn-bg: transparent;
 }
 
-.lafka-btn--ghost:hover {
-	background: var(--lafka-color-text-primary);
-	color: var(--lafka-color-text-inverse);
+.lafka-btn--inverse {
+	--lafka-btn-bg: transparent;
+	--lafka-btn-fg: var(--lafka-color-text-on-dark);
+	--lafka-btn-border: color-mix(in srgb, var(--lafka-color-text-on-dark) 40%, transparent);
+	--lafka-btn-hover-bg: color-mix(in srgb, var(--lafka-color-text-on-dark) 12%, transparent);
+	--lafka-btn-hover-fg: var(--lafka-color-text-on-dark);
+}
+
+.lafka-btn--brand {
+	--lafka-btn-bg: var(--lafka-color-brand-500);
+	--lafka-btn-fg: var(--lafka-color-text-primary);
+	--lafka-btn-border: var(--lafka-color-brand-500);
+	--lafka-btn-hover-bg: var(--lafka-color-brand-600);
+	--lafka-btn-hover-fg: var(--lafka-color-text-primary);
+	--lafka-btn-hover-border: var(--lafka-color-brand-600);
+}
+
+/* The brand fill stays bright under a dark preset, where text-primary flips
+ * light: read the on-accent ink there. */
+:root[data-theme="dark"] .lafka-btn--brand {
+	--lafka-btn-fg: var(--lafka-color-text-on-accent);
+	--lafka-btn-hover-fg: var(--lafka-color-text-on-accent);
+}
+
+.lafka-btn--dark {
+	--lafka-btn-bg: var(--lafka-color-text-primary);
+	--lafka-btn-fg: var(--lafka-color-text-inverse);
+	--lafka-btn-border: var(--lafka-color-text-primary);
+	--lafka-btn-hover-bg: color-mix(in srgb, var(--lafka-color-text-primary) 80%, var(--lafka-color-surface-dark));
+	--lafka-btn-hover-fg: var(--lafka-color-text-inverse);
+	--lafka-btn-hover-border: color-mix(in srgb, var(--lafka-color-text-primary) 80%, var(--lafka-color-surface-dark));
+}
+
+.lafka-btn--success {
+	--lafka-btn-bg: var(--lafka-color-success-500);
+	--lafka-btn-fg: var(--lafka-color-text-on-accent);
+	--lafka-btn-border: var(--lafka-color-success-500);
+	--lafka-btn-hover-bg: color-mix(in srgb, var(--lafka-color-success-500) 85%, var(--lafka-color-surface-dark));
+	--lafka-btn-hover-fg: var(--lafka-color-text-on-accent);
+	--lafka-btn-hover-border: color-mix(in srgb, var(--lafka-color-success-500) 85%, var(--lafka-color-surface-dark));
+}
+
+.lafka-btn--quiet {
+	--lafka-btn-bg: transparent;
+	--lafka-btn-fg: var(--lafka-color-text-muted);
+	--lafka-btn-border: transparent;
+	--lafka-btn-hover-bg: transparent;
+	--lafka-btn-hover-fg: var(--lafka-color-text-primary);
+
+	font-weight: var(--lafka-font-weight-medium);
+}
+
+.lafka-btn--link {
+	min-height: 48px;
+	padding: 0;
+	border: 0;
+	background: none;
+	text-decoration: underline;
+	text-decoration-thickness: 2px;
+	text-underline-offset: 4px;
+}
+
+.lafka-btn--link:hover {
+	background: none;
+	color: var(--lafka-color-accent-text);
+	text-decoration: underline;
+}
+
+/* -------- Sizes ---------------------------------------------------------- */
+.lafka-btn--sm {
+	gap: var(--lafka-space-2);
+	min-height: var(--lafka-tap-target);
+	padding: 0 var(--lafka-space-4);
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.lafka-btn--lg {
+	min-height: 60px;
+	padding: 0 28px;
+	font-size: var(--lafka-font-size-body-lg-desk);
+}
+
+.lafka-btn--block {
+	display: flex;
+	width: 100%;
+}
+
+/* =========================================================================
+ * Card — .lafka-card, the one raised surface (product cards, upsell tiles,
+ * info panels, floating toasts, dark feature bands).
+ *
+ *   <article class="lafka-card lafka-card--lift">…</article>
+ *
+ * Default: raised surface, subtle border, large radius, soft shadow. The
+ * component owns only the surface; padding and inner layout belong to the
+ * element's own BEM class. A modifier re-points the --lafka-card-* variables:
+ *
+ *   --sm         medium radius (tiles inside another surface)
+ *   --xl         extra-large radius (feature bands)
+ *   --flat       no shadow             --borderless  no border
+ *   --sunken     recessed fill, no border or shadow
+ *   --float      lifted shadow (toasts, map pins)
+ *   --lift       rises on hover or focus (a card that is one link)
+ *   --dark       the permanent dark band (light text in every preset)
+ * ========================================================================= */
+
+.lafka-card {
+	--lafka-card-bg: var(--lafka-color-surface-raised);
+	--lafka-card-border: var(--lafka-color-border-subtle);
+	--lafka-card-radius: var(--lafka-radius-lg);
+	--lafka-card-shadow: var(--lafka-shadow-1);
+
+	box-sizing: border-box;
+	overflow: hidden;
+	border: 1px solid var(--lafka-card-border);
+	border-radius: var(--lafka-card-radius);
+	background: var(--lafka-card-bg);
+	box-shadow: var(--lafka-card-shadow);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-card--sm {
+	--lafka-card-radius: var(--lafka-radius-md);
+}
+
+.lafka-card--xl {
+	--lafka-card-radius: var(--lafka-radius-xl);
+}
+
+.lafka-card--flat {
+	--lafka-card-shadow: none;
+}
+
+.lafka-card--borderless {
+	border-width: 0;
+}
+
+.lafka-card--sunken {
+	--lafka-card-bg: var(--lafka-color-surface-sunken);
+	--lafka-card-shadow: none;
+
+	border-width: 0;
+}
+
+.lafka-card--float {
+	--lafka-card-shadow: var(--lafka-shadow-3);
+}
+
+.lafka-card--lift {
+	transition:
+		transform var(--lafka-motion-duration-base) var(--lafka-motion-ease-out),
+		box-shadow var(--lafka-motion-duration-base) var(--lafka-motion-ease-out);
+}
+
+.lafka-card--lift:hover,
+.lafka-card--lift:focus-within {
+	--lafka-card-shadow: var(--lafka-shadow-2);
+
+	transform: translateY(-2px);
+}
+
+.lafka-card--dark {
+	--lafka-card-bg: var(--lafka-color-surface-dark);
+	--lafka-card-shadow: var(--lafka-shadow-3);
+
+	border-width: 0;
+	color: var(--lafka-color-text-on-dark);
 }
 
 /* =========================================================================

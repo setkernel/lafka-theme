@@ -26,11 +26,7 @@ ul.products {
 .lafka-product-card {
 	display: grid;
 	grid-template-columns: 92px 1fr;
-	background: var(--lafka-color-surface-raised, #fff);
-	border-radius: 14px;
-	box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
-	overflow: hidden;
-	transition: box-shadow 0.15s ease;
+	transition: box-shadow var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
 
 	/* WC core CSS sets `.woocommerce ul.products.columns-4 li.product`
 	 * to ~22% width (its 4-up archive grid). That selector has higher
@@ -44,7 +40,7 @@ ul.products {
 
 .lafka-product-card:hover,
 .lafka-product-card:focus-within {
-	box-shadow: 0 2px 8px rgba(0, 0, 0, 0.14);
+	--lafka-card-shadow: var(--lafka-shadow-2);
 }
 
 .lafka-product-card__link {
@@ -56,7 +52,7 @@ ul.products {
 .lafka-product-card__img-wrap {
 	width: 92px;
 	height: 92px;
-	background: #f5f5f5;
+	background: var(--lafka-color-surface-muted);
 	overflow: hidden;
 	position: relative;
 }
@@ -88,10 +84,10 @@ ul.products {
 
 .lafka-product-card__title {
 	margin: 0 0 2px;
-	font-size: 15px;
+	font-size: var(--lafka-font-size-body-sm);
 	font-weight: 700;
 	line-height: 1.2;
-	color: #1a1a1a;
+	color: var(--lafka-color-text-primary);
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -100,9 +96,9 @@ ul.products {
 
 .lafka-product-card__desc {
 	margin: 0;
-	font-size: 12px;
+	font-size: var(--lafka-font-size-caption);
 	line-height: 1.3;
-	color: #6a6a6a;
+	color: var(--lafka-color-text-secondary);
 	display: -webkit-box;
 	-webkit-line-clamp: 2;
 	-webkit-box-orient: vertical;
@@ -132,17 +128,17 @@ ul.products {
 }
 
 .lafka-product-card__price {
-	font-size: 15px;
+	font-size: var(--lafka-font-size-body-sm);
 	font-weight: 700;
 	color: var(--lafka-color-text-primary);
 	white-space: nowrap;
 }
 
 .lafka-product-card__price del {
-	color: #999;
+	color: var(--lafka-color-text-muted);
 	font-weight: 500;
 	margin-right: 4px;
-	font-size: 13px;
+	font-size: var(--lafka-font-size-caption);
 }
 
 .lafka-product-card__price ins {
@@ -187,7 +183,7 @@ ul.products {
 	position: absolute;
 	top: 6px;
 	left: 6px;
-	font-size: 11px;
+	font-size: 0.6875rem;
 	padding: 2px 6px;
 	border-radius: 8px;
 	z-index: 1;

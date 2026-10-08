@@ -117,7 +117,7 @@ if ( ! function_exists( 'lafka_legacy_migrate_map' ) ) {
 			// backgrounds carry color/image/position/repeat/attachment) whose exact
 			// shape is preserved by the copy below and the theme_mod sanitizers.
 			// `headings_font` is inert in dynamic-css.php (headings resolve to
-			// --lafka-font-display) but is still read by the editor CSS + the font
+			// --lafka-font-family-display) but is still read by the editor CSS + the font
 			// enqueuer, so it migrates here with the rest of the typography.
 			'body_font'                          => 'lafka_body_font',
 			'headings_font'                      => 'lafka_headings_font',

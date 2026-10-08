@@ -12,25 +12,25 @@
  */
 
 .lafka-store-closed-card {
-	background: #fff8e1;
+	background: var(--lafka-color-warning-50);
 	border-left: 4px solid var(--lafka-color-warning-500);
 	border-radius: 8px;
 	padding: 12px 14px;
 	margin: 12px 0;
-	font-size: 14px;
+	font-size: var(--lafka-font-size-caption);
 	line-height: 1.45;
 }
 
 .lafka-store-closed-card__title {
 	margin: 0;
 	font-weight: 700;
-	color: #1a1a1a;
+	color: var(--lafka-color-text-primary);
 }
 
 .lafka-store-closed-card__subtitle {
 	margin: 2px 0 0;
 	font-weight: 400;
-	color: #6a6a6a;
+	color: var(--lafka-color-text-secondary);
 }
 
 .lafka-store-closed-card__countdown {

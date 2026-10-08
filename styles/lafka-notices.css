@@ -22,7 +22,7 @@
 	gap: var(--lafka-space-3);
 	padding: var(--lafka-space-4) var(--lafka-space-5);
 	margin: 0 0 var(--lafka-space-4);
-	font-family: var(--lafka-font-sans);
+	font-family: var(--lafka-font-family-body);
 	font-size: 0.9375rem;
 	line-height: 1.5;
 	font-weight: var(--lafka-font-weight-medium, 500);
@@ -37,25 +37,25 @@
 
 /* Success */
 .woocommerce-message {
-	border-left-color: var(--lafka-color-success);
-	background: var(--lafka-color-success-bg);
-	color: var(--lafka-color-success);
+	border-left-color: var(--lafka-color-success-500);
+	background: var(--lafka-color-success-50);
+	color: var(--lafka-color-success-500);
 }
 
 /* Error */
 .woocommerce-error {
-	border-left-color: var(--lafka-color-error);
-	background: var(--lafka-color-error-bg);
-	color: var(--lafka-color-error);
+	border-left-color: var(--lafka-color-error-500);
+	background: var(--lafka-color-error-50);
+	color: var(--lafka-color-error-500);
 }
 
 /* Info */
 .woocommerce-info,
 .woocommerce-noreviews,
 .no-comments {
-	border-left-color: var(--lafka-color-info);
-	background: var(--lafka-color-info-bg);
-	color: var(--lafka-color-info);
+	border-left-color: var(--lafka-color-info-500);
+	background: var(--lafka-color-info-50);
+	color: var(--lafka-color-info-500);
 }
 
 /* Notice icon (WC core uses ::before for the dot — override to match
@@ -68,29 +68,12 @@
 	margin-right: 0;
 }
 
-/* Embedded action button (e.g. "View cart" after add-to-cart) */
+/* Embedded action button (e.g. "View cart" after add-to-cart): a .lafka-btn
+ * (lafka_wc_notice_button_class()); only its place in the notice is set here. */
 .woocommerce-message .button,
 .woocommerce-error .button,
 .woocommerce-info .button {
 	margin-left: auto;
-	padding: var(--lafka-space-2) var(--lafka-space-4);
-	font-size: 0.875rem;
-	font-weight: var(--lafka-font-weight-semibold, 600);
-	text-transform: uppercase;
-	letter-spacing: var(--lafka-letter-spacing-wide);
-	color: var(--lafka-color-accent-contrast);
-	background: var(--lafka-color-accent-500);
-	border: 0;
-	border-radius: var(--lafka-radius-pill);
-	text-decoration: none;
-	transition: background 150ms ease;
-}
-
-.woocommerce-message .button:hover,
-.woocommerce-error .button:hover,
-.woocommerce-info .button:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-accent-contrast);
 }
 
 /* WC list-style cleanup */
@@ -102,7 +85,7 @@ ul.woocommerce-error li {
 	list-style: none;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 599px) {
 
 	.woocommerce-message,
 	.woocommerce-error,

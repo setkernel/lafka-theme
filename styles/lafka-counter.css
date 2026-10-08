@@ -108,66 +108,7 @@ body[class*="lafka-layout-"][class*="-counter"] {
 	transform: none;
 }
 
-/* ── Buttons ──────────────────────────────────────────────────────────── */
-.lafka-counter-btn {
-	box-sizing: border-box;
-	display: inline-flex;
-	align-items: center;
-	justify-content: center;
-	gap: 10px;
-	min-height: 48px;
-	padding: 0 20px;
-	border: 2px solid var(--lafka-color-text-primary);
-	border-radius: var(--lafka-radius-button);
-	background: var(--lafka-color-surface-raised);
-	color: var(--lafka-color-text-primary);
-	font-family: var(--lafka-font-family-body);
-	font-size: var(--lafka-font-size-body-lg);
-	font-weight: var(--lafka-font-weight-bold);
-	line-height: 1.2;
-	text-decoration: none;
-	white-space: nowrap;
-	cursor: pointer;
-	transition: background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out), color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
-}
-
-.lafka-counter-btn:hover {
-	background: var(--lafka-color-surface-muted);
-	color: var(--lafka-color-text-primary);
-}
-
-.lafka-counter-btn--primary {
-	border-color: var(--lafka-color-accent-500);
-	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-text-on-accent);
-}
-
-.lafka-counter-btn--primary:hover,
-.lafka-counter-btn--primary:focus-visible {
-	border-color: var(--lafka-color-accent-600);
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-text-on-accent);
-}
-
-.lafka-counter-btn--lg {
-	min-height: 60px;
-	padding: 0 28px;
-	font-size: var(--lafka-font-size-body-lg-desk);
-}
-
-.lafka-counter-btn:focus-visible,
-.lafka-counter-link:focus-visible,
-.lafka-counter-header a:focus-visible,
-.lafka-counter-header button:focus-visible,
-.lafka-counter-nav a:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus); /* M-38: the header's links too */
-}
-
-.lafka-counter-btn.loading {
-	opacity: 0.6;
-	pointer-events: none;
-}
+/* Buttons are .lafka-btn (styles/lafka-components.css). */
 
 /* ── Motif: the checkered band (only with body.lafka-motif-check) ───────── */
 
@@ -242,6 +183,7 @@ body.lafka-layout-header-counter .lafka-header {
 	position: relative;
 }
 
+/* The full tap target of a text-only brand comes from lafka-base.css (::after). */
 .lafka-counter-header__brand {
 	color: var(--lafka-color-text-primary);
 	text-decoration: none;
@@ -430,7 +372,9 @@ body.lafka-layout-header-counter .lafka-header {
 .lafka-counter-nav__list a {
 	display: inline-flex;
 	align-items: center;
-	min-height: 44px;
+	justify-content: center;
+	min-width: var(--lafka-tap-target);
+	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-primary);
 	font-weight: var(--lafka-font-weight-bold);
 	text-decoration: none;
@@ -836,11 +780,6 @@ body.lafka-layout-header-counter .lafka-header {
 	background: var(--lafka-color-surface-muted);
 }
 
-.lafka-chooser__option:focus-visible {
-	outline: none;
-	box-shadow: var(--lafka-shadow-focus);
-}
-
 .lafka-chooser__option[disabled] {
 	border-style: dashed;
 	border-color: var(--lafka-color-border-strong);
@@ -895,21 +834,6 @@ body.lafka-layout-header-counter .lafka-header {
 		opacity: 0;
 		transform: translateY(12px);
 	}
-}
-
-.lafka-counter-btn--link {
-	min-height: 48px;
-	padding: 0;
-	border: 0;
-	background: none;
-	text-decoration: underline;
-	text-decoration-thickness: 2px;
-	text-underline-offset: 4px;
-}
-
-.lafka-counter-btn--link:hover {
-	background: none;
-	color: var(--lafka-color-accent-text);
 }
 
 /* ── Hero (box geometry in critical-counter.css) ──────────────────────── */
@@ -986,7 +910,7 @@ body.lafka-layout-header-counter .lafka-header {
 
 @media (max-width: 599px) {
 
-	.lafka-counter-hero__ctas .lafka-counter-btn {
+	.lafka-counter-hero__ctas .lafka-btn {
 		width: 100%;
 	}
 }
@@ -1309,7 +1233,9 @@ body.lafka-layout-header-counter .lafka-header {
 .lafka-jump__list a {
 	display: inline-flex;
 	align-items: center;
-	min-height: 44px;
+	justify-content: center;
+	min-width: var(--lafka-tap-target);
+	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-primary);
 	text-decoration: underline;
 	text-underline-offset: 4px;
@@ -1467,14 +1393,14 @@ body.lafka-layout-header-counter .lafka-header {
 	}
 }
 
-@media (min-width: 840px) {
+@media (min-width: 1024px) {
 
 	.lafka-counter-find__grid {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr) minmax(0, 1fr);
 	}
 }
 
-@media (min-width: 1200px) {
+@media (min-width: 1280px) {
 
 	.lafka-counter-find__grid {
 		grid-template-columns: minmax(180px, 240px) minmax(0, 1fr) minmax(0, 1.4fr) minmax(0, 1fr);
@@ -1512,7 +1438,7 @@ body.lafka-layout-header-counter .lafka-header {
 	grid-template-columns: minmax(0, 1fr);
 }
 
-.lafka-counter-bar .lafka-counter-btn {
+.lafka-counter-bar .lafka-btn {
 	min-height: 52px;
 	padding: 0 12px;
 }
@@ -1522,28 +1448,20 @@ body.lafka-layout-header-counter .lafka-header {
 	white-space: nowrap;
 }
 
-@media (max-width: 399px) {
+@media (max-width: 599px) {
 
 	.lafka-counter-bar {
 		grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
 		gap: 8px;
 	}
 
-	.lafka-counter-bar .lafka-counter-btn {
+	.lafka-counter-bar .lafka-btn {
 		padding: 0 10px;
-		font-size: 16px;
+		font-size: var(--lafka-font-size-body);
 	}
 
 	.lafka-counter-bar__order {
 		gap: 6px;
-	}
-}
-
-/* Count stays in the aria-label. */
-@media (max-width: 359px) {
-
-	.lafka-counter-bar__order .lafka-counter-bar__count {
-		display: none;
 	}
 }
 
@@ -1755,22 +1673,6 @@ body.lafka-has-counter-bar {
 .lafka-drawer__tax {
 	margin: 0;
 	color: var(--lafka-color-text-secondary);
-}
-
-.lafka-cart-drawer--counter .lafka-cart-drawer__checkout {
-	flex: none;
-	width: 100%;
-	padding: 0 28px;
-	border-color: var(--lafka-color-accent-500);
-	background: var(--lafka-color-accent-500);
-	color: var(--lafka-color-text-on-accent);
-	text-transform: none;
-	letter-spacing: 0;
-}
-
-.lafka-cart-drawer--counter .lafka-cart-drawer__checkout:hover {
-	background: var(--lafka-color-accent-600);
-	color: var(--lafka-color-text-on-accent);
 }
 
 .lafka-drawer__call {
@@ -1996,7 +1898,9 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 .lafka-counter-footer__list a {
 	display: inline-flex;
 	align-items: center;
-	min-height: 44px;
+	justify-content: center;
+	min-width: var(--lafka-tap-target);
+	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-secondary);
 	text-decoration: underline;
 	text-underline-offset: 4px;
@@ -2021,7 +1925,7 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 		padding-block: 6px max(6px, env(safe-area-inset-bottom));
 	}
 
-	.lafka-counter-bar .lafka-counter-btn {
+	.lafka-counter-bar .lafka-btn {
 		min-height: 44px;
 	}
 

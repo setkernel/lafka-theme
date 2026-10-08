@@ -70,28 +70,28 @@
 
 .lafka-editorial-home,
 .lafka-editorial-contact {
-    --paper:        #FAF6F0;
-    --paper-deep:   #F1EBE0;
-    --ink:          #1A1A1A;
-    --ink-soft:     #2A2A2A;
-    --gray:         #5E5E5E;
-    --gray-soft:    #8A8074;
+    --paper:        var(--lafka-color-surface-sunken);
+    --paper-deep:   var(--lafka-color-surface-muted);
+    --ink:          var(--lafka-color-text-primary);
+    --ink-soft:     var(--lafka-color-text-secondary);
+    --gray:         var(--lafka-color-text-muted);
+    --gray-soft:    var(--lafka-color-border-strong);
 
     /* f074 SSOT: editorial brand now follows the operator accent instead of
        the old hardcoded coral/deep-coral brand literals. --brand reads the
        design-system accent token (--lafka-color-accent-500), which
        dynamic-css.php drives from the Customizer accent_color (v5.96 alias),
        so editorial pages share one brand color with every other rebuilt
-       surface. Fallbacks are the design-system defaults (accent-500 #dc2626 /
-       accent-600 #b91c1c) — no brand literal remains in this OSS file and the
-       out-of-box color matches the rest of the theme. --brand-deep is upgraded
+       surface. No colour literal remains in this file: the palette above and
+       below reads design tokens, so editorial pages follow the active preset
+       like every other surface. --brand-deep is upgraded
        to a derived darker shade of the live accent in the @supports color-mix
        block at the end of this file so the primary-CTA hover stays in-family
        with whatever accent the operator picks. */
-    --brand:        var(--lafka-color-accent-500, #dc2626);
-    --brand-deep:   var(--lafka-color-accent-600, #b91c1c);
-    --gold:         #FFD166;
-    --green:        #2D5A3D;
+    --brand:        var(--lafka-color-accent-500);
+    --brand-deep:   var(--lafka-color-accent-600);
+    --gold:         var(--lafka-color-highlight);
+    --green:        var(--lafka-color-success-500);
     --shadow-1:     0 1px 2px rgba(26,26,26,0.04), 0 4px 16px rgba(26,26,26,0.06);
     --shadow-2:     0 4px 12px rgba(26,26,26,0.08), 0 16px 48px rgba(26,26,26,0.12);
     --grain:        url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0 0.1 0 0 0 0.06 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
@@ -168,8 +168,8 @@
     width: 6px;
     height: 6px;
     border-radius: 50%;
-    background: #5BCB72;
-    box-shadow: 0 0 8px #5BCB72;
+    background: var(--lafka-color-success-on-dark);
+    box-shadow: 0 0 8px var(--lafka-color-success-on-dark);
     animation: lafka-ed-pulse 2s infinite;
 }
 
@@ -1039,7 +1039,7 @@
    MOBILE — ≤ 900px
    ============================================================ */
 
-@media (max-width: 900px) {
+@media (max-width: 767px) {
 
     .lafka-editorial-home .editorial-utility,
     .lafka-editorial-contact .editorial-utility {
@@ -1166,6 +1166,6 @@
 
     .lafka-editorial-home,
     .lafka-editorial-contact {
-        --brand-deep: color-mix(in srgb, var(--lafka-color-accent-500, #dc2626) 85%, #000);
+        --brand-deep: color-mix(in srgb, var(--lafka-color-accent-500) 85%, var(--lafka-color-surface-dark));
     }
 }

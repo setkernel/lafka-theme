@@ -3,6 +3,20 @@
     let lafka_ajaxXHR = null;
 
     /**
+     * lafkaBreakpoint — a viewport breakpoint in px, read from the design
+     * tokens (--lafka-bp-mobile | tablet | laptop | desktop in
+     * styles/lafka-tokens.css), the one place the values live. CSS media
+     * queries cannot read them, so they repeat the same numbers and stylelint
+     * pins them; script reads them here.
+     *
+     * @param {string} name mobile | tablet | laptop | desktop.
+     * @return {number} Width in px (0 when the token is missing).
+     */
+    function lafkaBreakpoint(name) {
+        return parseInt(window.getComputedStyle(document.documentElement).getPropertyValue('--lafka-bp-' + name), 10) || 0;
+    }
+
+    /**
      * lafkaOnVisible — IntersectionObserver-based one-shot trigger.
      *
      * Replaces the old jquery.appear / isInViewport vendor libs (P3-05).
@@ -134,11 +148,12 @@
         // P3-04: video popups migrated to native <dialog> via lafkaDialog.
         // The iframe(url) call handles YouTube watch URLs, Vimeo links, and
         // direct .mp4/.mov/.swf URLs (the helper maps them to embed URLs).
-        // The 700px-disable behaviour from Magnific's `disableOn` is preserved
-        // — narrow viewports navigate to the original href (mobile bandwidth).
+        // The small-viewport disable from Magnific's `disableOn` is preserved
+        // — phones (below the tablet breakpoint) navigate to the original href
+        // (mobile bandwidth).
         if ( typeof window.lafkaDialog !== 'undefined' ) {
             $(document).on('click', 'a[href$=".mov"], a[href$=".swf"], a[href$=".mp4"], a[href*="vimeo.com/"], a[href*="youtube.com/watch"]', function (e) {
-                if (window.innerWidth < 700) { return; }
+                if (window.innerWidth < lafkaBreakpoint('tablet')) { return; }
                 e.preventDefault();
                 window.lafkaDialog.iframe(this.href);
             });
@@ -692,7 +707,7 @@
         const $lafkaVisibleHeight = $(window).height();
         const current_window_width = $(window).width();
         const $body_summary = $("body, .lafka-product-summary-wrapper div.summary");
-        if ($lafkaSummaryHeight < $lafkaVisibleHeight - 250 && current_window_width > 768) {
+        if ($lafkaSummaryHeight < $lafkaVisibleHeight - 250 && current_window_width >= lafkaBreakpoint('tablet')) {
             $body_summary.addClass("lafka-sticky-summary");
         } else {
             $body_summary.removeClass("lafka-sticky-summary");
@@ -704,7 +719,7 @@
         const $lafkaVisibleHeight = $(window).height();
         const current_window_width = $(window).width();
         const $body_sidebar = $("body, .sidebar");
-        if ($lafkaSidebarHeight < $lafkaVisibleHeight - 250 && current_window_width > 768) {
+        if ($lafkaSidebarHeight < $lafkaVisibleHeight - 250 && current_window_width >= lafkaBreakpoint('tablet')) {
             $body_sidebar.addClass("lafka-sticky-sidebar");
         } else {
             $body_sidebar.removeClass("lafka-sticky-sidebar");
@@ -772,7 +787,7 @@
             'left': 0,
             'width': '100%',
             'height': '100%',
-            'z-index': 19999,
+            'z-index': 'var(--lafka-z-overlay)',
         });
 
         // P6-PERF-8: Batch reads before writes inside the loader .each() to

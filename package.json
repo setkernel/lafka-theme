@@ -6,18 +6,19 @@
 	"scripts": {
 		"lint:js": "eslint --max-warnings=0 --cache --cache-strategy content --cache-location .eslintcache .",
 		"lint:js:fix": "eslint --cache --cache-strategy content --cache-location .eslintcache . --fix",
-		"lint:css": "stylelint --max-warnings=0 --cache --cache-strategy content --cache-location .stylelintcache '**/*.css'",
+		"lint:css": "stylelint --max-warnings=0 --cache --cache-strategy content --cache-location .stylelintcache '**/*.css' && node scripts/check-tokens.mjs",
 		"lint:css:fix": "stylelint --cache --cache-strategy content --cache-location .stylelintcache '**/*.css' --fix",
 		"lint": "npm run lint:js && npm run lint:css",
 		"lint:fix": "npm run lint:js:fix && npm run lint:css:fix",
-		"build": "node scripts/build-assets.mjs",
+		"build": "node scripts/build-assets.mjs && node scripts/build-theme-json.mjs",
 		"build:theme-json": "node scripts/build-theme-json.mjs",
 		"i18n:pot": "../local-env/lafka wp i18n make-pot wp-content/themes/lafka wp-content/themes/lafka/languages/lafka.pot --slug=lafka --domain=lafka --package-name=Lafka --headers='{\"Report-Msgid-Bugs-To\":\"https://github.com/setkernel/lafka-theme/issues\"}' --exclude=node_modules,vendor,scripts,docs,presets,assets",
 		"sync:fonts": "node scripts/nx2-03-sync-fonts.mjs",
 		"previews:presets": "node scripts/nx2-04-preset-previews.mjs",
 		"sync-version": "node scripts/sync-version.mjs",
 		"check-version": "node scripts/sync-version.mjs --check",
-		"version": "node scripts/sync-version.mjs --stage"
+		"version": "node scripts/sync-version.mjs --stage",
+		"check-theme-json": "node scripts/build-theme-json.mjs --check"
 	},
 	"versionSync": [
 		{

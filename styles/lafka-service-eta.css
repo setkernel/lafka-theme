@@ -17,8 +17,8 @@
 	align-items: center;
 	flex-wrap: wrap;
 	gap: var(--lafka-space-2);
-	font-family: var(--lafka-font-sans);
-	font-size: var(--lafka-font-size-sm);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
 	color: var(--lafka-color-text-secondary);
 	line-height: 1.4;
 }
@@ -61,12 +61,12 @@
 	gap: var(--lafka-space-3);
 	margin: 0 0 var(--lafka-space-3);
 	padding: var(--lafka-space-3) var(--lafka-space-4);
-	background: var(--lafka-color-success-bg);
-	border-left: 3px solid var(--lafka-color-success);
+	background: var(--lafka-color-success-50);
+	border-left: 3px solid var(--lafka-color-success-500);
 	border-radius: var(--lafka-radius-sm);
-	font-size: var(--lafka-font-size-sm);
+	font-size: var(--lafka-font-size-body-sm);
 }
 
 .lafka-service-eta--cart .lafka-service-eta__value {
-	color: var(--lafka-color-success);
+	color: var(--lafka-color-success-500);
 }
