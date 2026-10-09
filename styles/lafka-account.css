@@ -430,10 +430,11 @@ p.woocommerce-LostPassword.lost_password {
 	box-shadow: var(--lafka-shadow-1);
 }
 
-/* Bottom safe-zone so sticky cart bar doesn't overlap form actions */
+/* Bottom safe-zone so sticky cart bar doesn't overlap form actions; never
+ * less than the sticky bottom bar itself (--lafka-bottom-bar-h). */
 .woocommerce-account,
 body.woocommerce-page.woocommerce-account {
-	padding-bottom: var(--lafka-space-16);
+	padding-bottom: max(var(--lafka-space-16), var(--lafka-bottom-bar-h, 0px));
 }
 
 /* v6.5.0 — Legacy lafka_icon_box callout on my-account page.

@@ -8,6 +8,14 @@ git tags + GitHub Releases.
 ## [Unreleased]
 
 ### Fixed
+- Tap targets under 44px at 375, found by a hit-test scan (a 44px square around each control must land on it): the
+  promo-bar link lost its lower edge to the header name's hit area (the name's area now starts at the header bar
+  and grows downwards), the block checkout's address "Edit" and the coupon chip's remove button got a transparent
+  `::after` hit area, the block cart item name keeps its area over the price beside it, the block cart quantity
+  field is 44px wide (WooCommerce's own 40px rule won before), payment/shipping radio rows are 44px tall at every
+  width (only below 768 before), WooCommerce notice buttons are 44px tall, and My Account's bottom padding never
+  falls short of the sticky bottom bar (the last 13px of the page sat under it). Every scanned page now has no
+  misses at 375 / 768 / 1280 outside inline text links.
 - The product page offered "Add to order" for every product that was not variable: a grouped product showed one
   quantity box and could not be added, an external product added nothing instead of linking to its shop, and a
   sold-out product looked orderable. Only a simple product that can be bought uses the page's own form (now with

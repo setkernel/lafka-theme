@@ -151,7 +151,8 @@
 	background: var(--lafka-color-surface-muted);
 }
 
-.wc-block-components-quantity-selector__input {
+/* As specific as WooCommerce's own rule (min-width: 40px), which loads earlier. */
+.wc-block-components-quantity-selector input.wc-block-components-quantity-selector__input {
 	min-width: var(--lafka-tap-target);
 	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-primary);
@@ -393,6 +394,7 @@
  * Left padding on the option clears the absolutely-positioned radio input
  * (left:16px, 20px wide) so the label text never overlaps the dot. */
 .wc-block-components-radio-control__option {
+	min-height: var(--lafka-tap-target);
 	border: 1px solid var(--lafka-color-border-subtle);
 	border-radius: var(--lafka-radius-md);
 	padding: var(--lafka-space-3) var(--lafka-space-4) var(--lafka-space-3) var(--lafka-space-12);
@@ -592,14 +594,6 @@
 	.wc-block-cart__sidebar > .wc-block-components-sidebar,
 	.wc-block-checkout__sidebar > .wc-block-components-sidebar {
 		margin-top: var(--lafka-space-6);
-	}
-}
-
-@media (max-width: 767px) {
-
-	.wc-block-components-quantity-selector,
-	.wc-block-components-radio-control__option {
-		min-height: var(--lafka-tap-target);
 	}
 }
 

@@ -162,6 +162,8 @@ summary:focus-visible,
 .lafka-cart-item__title a,
 .wc-block-cart-item__product .wc-block-components-product-name,
 .wc-block-cart-item__remove-link,
+.wc-block-components-address-card__edit,
+.wc-block-components-chip .wc-block-components-chip__remove,
 .lafka-archive-quickadd {
 	position: relative;
 }
@@ -178,6 +180,8 @@ summary:focus-visible,
 .lafka-cart-item__title a::after,
 .wc-block-cart-item__product .wc-block-components-product-name::after,
 .wc-block-cart-item__remove-link::after,
+.wc-block-components-address-card__edit::after,
+.wc-block-components-chip .wc-block-components-chip__remove::after,
 .lafka-archive-quickadd::after {
 	content: "";
 	position: absolute;
@@ -187,6 +191,30 @@ summary:focus-visible,
 	margin: 0;
 	background: none;
 	border: 0;
+}
+
+/* The header name sits 8px under the promo bar: its hit area starts at the
+ * header bar's top padding and grows downwards, so it never takes the promo
+ * link's taps. */
+.lafka-counter-header__brand::after {
+	top: -8px;
+	bottom: auto;
+	height: max(calc(100% + 16px), var(--lafka-tap-target));
+}
+
+/* The cart item's name keeps its hit area over the price beside it. */
+.wc-block-cart-item__product .wc-block-components-product-name::after {
+	z-index: 1;
+}
+
+/* WooCommerce notice buttons (legacy a.button): the full tap height. */
+.woocommerce-info .button,
+.woocommerce-message .button,
+.woocommerce-error .button {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	min-height: var(--lafka-tap-target);
 }
 
 /* Checkbox rows: the label is the target, so the whole row is one. */
