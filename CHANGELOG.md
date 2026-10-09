@@ -7,6 +7,10 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Fixed
+- The block checkout's order-summary quantity badge showed white digits on a white disc (WooCommerce draws the disc with
+  `currentColor`); it is the dark pill with a light number again.
+
 ### Installable app
 - `js/sw.js` is one worker for Web Push, static assets and the installable app. Fixed: it used to keep a copy of
   every page a customer visited, the cart and checkout included; now pages are network-only, the menu page keeps a

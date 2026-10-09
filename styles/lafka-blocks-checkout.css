@@ -436,11 +436,16 @@
 	color: var(--lafka-color-text-primary);
 }
 
-.wc-block-components-order-summary-item__quantity {
+/* WooCommerce paints this badge with `background: currentColor` and a white label, at this specificity;
+ * the old rule set the container's colour to white, so the dark fill lost and the quantity was white on white. */
+.wc-block-components-order-summary .wc-block-components-order-summary-item__quantity {
 	background: var(--lafka-color-text-primary);
-	color: var(--lafka-color-text-inverse);
 	border-radius: var(--lafka-radius-pill);
 	font-weight: var(--lafka-font-weight-semibold);
+}
+
+.wc-block-components-order-summary .wc-block-components-order-summary-item__quantity span {
+	color: var(--lafka-color-text-inverse);
 }
 
 .wc-block-components-order-summary-item__total-price {
