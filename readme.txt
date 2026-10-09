@@ -6,7 +6,7 @@ Tested up to: 7.1
 Requires PHP: 8.3
 WC requires at least: 11.0
 WC tested up to: 11.2
-Version: 7.3.0
+Version: 7.4.0
 License: GNU General Public License v2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 Tags: e-commerce, food-and-drink, full-width-template, custom-menu, custom-logo, featured-images, threaded-comments, translation-ready, accessibility-ready, block-styles, wide-blocks
