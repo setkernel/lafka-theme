@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-09T01:45:58+00:00\n"
+"POT-Creation-Date: 2026-10-09T06:55:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: lafka\n"
@@ -158,7 +158,7 @@ msgid "Thanks — you are subscribed."
 msgstr ""
 
 #: footer.php:134
-#: incl/woocommerce-functions.php:1114
+#: incl/woocommerce-functions.php:1125
 msgid "Order"
 msgstr ""
 
@@ -236,7 +236,7 @@ msgid "Showing %1$s to %2$s of %3$s (%4$s Pages)"
 msgstr ""
 
 #: functions.php:316
-#: page-menu.php:62
+#: page-menu.php:72
 #: page.php:47
 #: partials/counter/costars.php:30
 #: partials/counter/menu-rest.php:47
@@ -2596,8 +2596,8 @@ msgstr ""
 
 #: incl/template-helpers/counter-chrome.php:459
 #: partials/counter/deal-card.php:36
-#: partials/pdp-buybox.php:198
 #: partials/pdp-buybox.php:209
+#: partials/pdp-buybox.php:220
 msgid "Add to order"
 msgstr ""
 
@@ -3212,12 +3212,12 @@ msgid "Offer ends in"
 msgstr ""
 
 #. translators: %s: the category name (linked), e.g. "Poutine".
-#: incl/woocommerce-functions.php:1394
+#: incl/woocommerce-functions.php:1405
 #, php-format
 msgid "More from %s"
 msgstr ""
 
-#: incl/woocommerce-functions.php:1396
+#: incl/woocommerce-functions.php:1407
 msgid "You might also like"
 msgstr ""
 
@@ -3293,7 +3293,7 @@ msgstr ""
 msgid "The full menu"
 msgstr ""
 
-#: page-menu.php:61
+#: page-menu.php:71
 #: page.php:46
 #: partials/search-results.php:25
 #: single.php:46
@@ -3302,21 +3302,21 @@ msgstr ""
 msgid "Breadcrumb"
 msgstr ""
 
-#: page-menu.php:94
+#: page-menu.php:104
 msgid "Jump to category"
 msgstr ""
 
-#: page-menu.php:96
+#: page-menu.php:106
 msgid "Jump to"
 msgstr ""
 
-#: page-menu.php:112
+#: page-menu.php:122
 #: partials/mobile-nav.php:119
 #: woocommerce/archive-product.php:192
 msgid "Categories"
 msgstr ""
 
-#: page-menu.php:117
+#: page-menu.php:127
 #: woocommerce/archive-product.php:201
 msgid "All"
 msgstr ""
@@ -3719,31 +3719,31 @@ msgid "Made fresh to order"
 msgstr ""
 
 #: partials/pdp-buybox.php:104
-#: partials/pdp-buybox.php:193
+#: partials/pdp-buybox.php:204
 #: woocommerce/global/quantity-input.php:65
 msgid "Decrease quantity"
 msgstr ""
 
 #. translators: %s: Quantity.
 #: partials/pdp-buybox.php:105
-#: partials/pdp-buybox.php:194
+#: partials/pdp-buybox.php:205
 #: woocommerce/global/quantity-input.php:24
 msgid "Quantity"
 msgstr ""
 
 #: partials/pdp-buybox.php:106
-#: partials/pdp-buybox.php:195
+#: partials/pdp-buybox.php:206
 #: woocommerce/global/quantity-input.php:64
 msgid "Increase quantity"
 msgstr ""
 
 #: partials/pdp-buybox.php:115
-#: partials/pdp-buybox.php:204
+#: partials/pdp-buybox.php:215
 msgid "Decrease"
 msgstr ""
 
 #: partials/pdp-buybox.php:117
-#: partials/pdp-buybox.php:206
+#: partials/pdp-buybox.php:217
 msgid "Increase"
 msgstr ""
 
