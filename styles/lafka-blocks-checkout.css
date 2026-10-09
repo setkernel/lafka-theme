@@ -132,12 +132,17 @@
 
 /* Quantity stepper — pill control, ink glyphs, accent focus. */
 .wc-block-components-quantity-selector {
+	width: auto;
+	min-height: var(--lafka-tap-target);
 	border: 1px solid var(--lafka-color-border-default);
 	border-radius: var(--lafka-radius-pill);
 	background: var(--lafka-color-surface-page);
 }
 
 .wc-block-components-quantity-selector__button {
+	flex: 0 0 var(--lafka-tap-target);
+	min-width: var(--lafka-tap-target);
+	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-primary);
 }
 
@@ -147,6 +152,8 @@
 }
 
 .wc-block-components-quantity-selector__input {
+	min-width: var(--lafka-tap-target);
+	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-primary);
 	font-weight: var(--lafka-font-weight-medium);
 }
@@ -218,6 +225,8 @@
 /* Coupon panel — quiet collapsible, tokenised chrome. */
 .wc-block-components-totals-coupon .wc-block-components-panel__button,
 .wc-block-components-panel__button {
+	display: flex;
+	align-items: center;
 	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-secondary);
 	font-weight: var(--lafka-font-weight-medium);

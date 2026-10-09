@@ -160,6 +160,8 @@ summary:focus-visible,
 .lafka-page__crumbs a,
 .lafka-menu__crumbs a,
 .lafka-cart-item__title a,
+.wc-block-cart-item__product .wc-block-components-product-name,
+.wc-block-cart-item__remove-link,
 .lafka-archive-quickadd {
 	position: relative;
 }
@@ -174,6 +176,8 @@ summary:focus-visible,
 .lafka-page__crumbs a::after,
 .lafka-menu__crumbs a::after,
 .lafka-cart-item__title a::after,
+.wc-block-cart-item__product .wc-block-components-product-name::after,
+.wc-block-cart-item__remove-link::after,
 .lafka-archive-quickadd::after {
 	content: "";
 	position: absolute;

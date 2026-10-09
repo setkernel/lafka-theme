@@ -1373,6 +1373,10 @@ body.lafka-layout-header-counter .lafka-header {
 	white-space: nowrap;
 }
 
+.lafka-counter-footer__phone {
+	color: inherit; /* the footer scope pins text-primary dark; a dark preset's footer needs the line's own colour */
+}
+
 .lafka-counter-find__phone {
 	font-size: var(--lafka-font-size-body-lg-desk);
 	font-weight: var(--lafka-font-weight-bold);

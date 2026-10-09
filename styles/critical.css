@@ -145,8 +145,8 @@ body {
     transition: all 0.3s ease-in-out 0s;
 }
 
-/* ── PRIMARY CTA BUTTON ── */
-a.button {
+/* ── PRIMARY CTA BUTTON ── (unlayered, so it would out-rank .lafka-btn, a layered component: leave that one alone) */
+a.button:not(.lafka-btn) {
     display: inline-block;
     text-decoration: none;
     position: relative;

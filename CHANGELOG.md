@@ -29,6 +29,7 @@ git tags + GitHub Releases.
   section classes keep placement only). Corners now follow `--lafka-radius-button` everywhere.
 - **Breakpoints** are 600/768/1024/1280 only (`lafkaBreakpoint()` in script reads the same tokens); the cart
   drawer's second copy in `pdp-redesign.css` is gone.
+- **Verified against the pre-design render** (home, menu, product pages, cart, checkout, account, contact, order tracker, drawer; all ten presets). Fixed in that pass: the block cart's coupon row (chevron off-centre), the block cart's quantity buttons, product link and remove button now reach 44 px, `.lafka-btn` links inside notices keep their flex layout (the critical `a.button` rule no longer out-ranks the layered component), and the counter footer phone follows the footer's own colour in a dark preset.
 - **Tap targets** of 44 px for close buttons, text links in lists, breadcrumbs, toggles and checkbox rows
   (a transparent `::after` where the visual stays small). **Focus** is one `:focus-visible` rule using
   `--lafka-shadow-focus`; the per-component outline and ring copies are removed.
