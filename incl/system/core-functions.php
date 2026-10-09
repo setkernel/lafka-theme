@@ -1222,6 +1222,16 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 			);
 		}
 
+		// Loyalty points (lafka-plugin): the checkout panel and My Account → Points.
+		if ( class_exists( 'Lafka_Loyalty' ) && Lafka_Loyalty::enabled() && function_exists( 'is_checkout' ) && ( is_checkout() || ( function_exists( 'is_account_page' ) && is_account_page() ) ) ) {
+			wp_enqueue_style(
+				'lafka-loyalty-theme',
+				get_template_directory_uri() . '/styles/lafka-loyalty.css',
+				wp_style_is( 'lafka-loyalty', 'enqueued' ) ? array( 'lafka-tokens', 'lafka-loyalty' ) : array( 'lafka-tokens' ),
+				lafka_asset_version( '/styles/lafka-loyalty.css' )
+			);
+		}
+
 		// NX1-04b: block Cart/Checkout skin. Applies the handoff visual language
 		// to WooCommerce's block cart + checkout and to the plugin's lafka- block
 		// components (order_type/branch fields, timeslot picker, free-delivery

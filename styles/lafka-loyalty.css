@@ -1,0 +1,151 @@
+/*
+ * Loyalty points (lafka-plugin: Loyalty points).
+ *
+ * The plugin ships the structure and the markup; this is the look: a calm
+ * card at checkout (classic order review and block order summary share it),
+ * a large balance in My Account, 44px tap targets, plain labels.
+ */
+
+/* Checkout panel. */
+.lafka-loyalty.lafka-card {
+	display: grid;
+	gap: var(--lafka-space-2);
+	margin: var(--lafka-space-3) 0;
+	padding: var(--lafka-space-4);
+	text-align: start;
+}
+
+.lafka-loyalty .lafka-loyalty__title {
+	margin: 0;
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+	color: var(--lafka-color-text-muted);
+}
+
+.lafka-loyalty .lafka-loyalty__text,
+.lafka-loyalty .lafka-loyalty__hint,
+.lafka-loyalty .lafka-loyalty__applied {
+	margin: 0;
+}
+
+.lafka-loyalty .lafka-loyalty__text:first-of-type {
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-loyalty .lafka-loyalty__hint {
+	color: var(--lafka-color-text-secondary);
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.lafka-loyalty .lafka-loyalty__applied {
+	color: var(--lafka-color-success-500);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-loyalty .lafka-loyalty__form {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-2);
+	align-items: center;
+}
+
+.lafka-loyalty .lafka-loyalty__label {
+	flex: 1 0 100%;
+	margin: 0;
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-loyalty .lafka-loyalty__form input[type="number"] {
+	width: 8em;
+	min-height: 44px;
+}
+
+.lafka-loyalty .lafka-btn {
+	min-height: 44px;
+	justify-self: start;
+}
+
+.lafka-loyalty .lafka-loyalty__error {
+	margin: 0;
+	color: var(--lafka-color-error-500);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+/* My Account → Points. */
+.lafka-loyalty-account .lafka-loyalty-account__balance {
+	margin: 0 0 var(--lafka-space-6);
+	padding: var(--lafka-space-5);
+	background: var(--lafka-color-surface-brand-soft);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__label {
+	margin: 0 0 var(--lafka-space-1);
+	color: var(--lafka-color-text-muted);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-bold);
+	letter-spacing: var(--lafka-letter-spacing-wide);
+	text-transform: uppercase;
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__points {
+	margin: 0;
+	font-family: var(--lafka-font-family-display);
+	font-size: var(--lafka-font-size-h1);
+	font-weight: var(--lafka-font-weight-display);
+	line-height: var(--lafka-line-height-snug);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__worth {
+	font-size: var(--lafka-font-size-h4);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__rules,
+.lafka-loyalty-account .lafka-loyalty-account__expiry {
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__history {
+	margin: 0 0 var(--lafka-space-4);
+	padding: 0;
+	list-style: none;
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__row {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	gap: var(--lafka-space-1) var(--lafka-space-4);
+	margin: 0;
+	padding: var(--lafka-space-3) 0;
+	border-bottom: 1px solid var(--lafka-color-border-subtle);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__what {
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__date,
+.lafka-loyalty-account .lafka-loyalty-account__after {
+	color: var(--lafka-color-text-muted);
+	font-size: var(--lafka-font-size-body-sm);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__delta,
+.lafka-loyalty-account .lafka-loyalty-account__after {
+	text-align: end;
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__delta {
+	font-size: var(--lafka-font-size-h4);
+	font-weight: var(--lafka-font-weight-bold);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__delta.is-in {
+	color: var(--lafka-color-success-500);
+}
+
+.lafka-loyalty-account .lafka-loyalty-account__delta.is-out {
+	color: var(--lafka-color-error-500);
+}

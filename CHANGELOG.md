@@ -7,6 +7,11 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Loyalty points
+- `styles/lafka-loyalty.css`: the checkout points panel (`.lafka-loyalty`, shared by the classic order review
+  and the block order summary, on `.lafka-card` and `.lafka-btn`) and My Account → Points (balance card and
+  history list), loaded only when the Loyalty module is on.
+
 ### Deals
 - `.lafka-deal-nudge`: the card the Deals module shows in the cart drawer, the cart and the block cart
   ("Add 1 more item to get ..."), built on `.lafka-card` and `.lafka-btn` (`lafka-components.css`).
