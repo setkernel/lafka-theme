@@ -7,6 +7,11 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Text messages
+- The Contact page prints the plugin's "Message us on WhatsApp" link (`do_action( 'lafka_whatsapp_link' )`) with
+  its action buttons; `.lafka-wa` spacing, and the checkout opt-in (`.lafka-notify-optin`) as one plain sentence
+  beside a 24px checkbox.
+
 ### Loyalty points
 - `styles/lafka-loyalty.css`: the checkout points panel (`.lafka-loyalty`, shared by the classic order review
   and the block order summary, on `.lafka-card` and `.lafka-btn`) and My Account → Points (balance card and

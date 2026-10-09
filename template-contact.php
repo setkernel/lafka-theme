@@ -175,6 +175,14 @@ $lafka_faqs = (array) apply_filters( 'lafka_contact_faqs', $lafka_faqs );
 							<?php esc_html_e( 'Email us', 'lafka' ); ?>
 						</a>
 					<?php endif; ?>
+					<?php
+					/**
+					 * The plugin's "Message us on WhatsApp" link (Restaurant → Text messages), when it is on.
+					 *
+					 * @since 7.4.0
+					 */
+					do_action( 'lafka_whatsapp_link' );
+					?>
 				</div>
 
 			</div>

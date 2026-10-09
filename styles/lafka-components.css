@@ -438,3 +438,14 @@
 	color: var(--lafka-color-text-on-accent);
 	text-decoration: none;
 }
+
+/* "Message us on WhatsApp" (plugin: Restaurant → Text messages): a ghost button;
+ * under the order tracker it sits on its own line, in the Contact actions it is
+ * one of the buttons. */
+.lafka-wa {
+	margin: var(--lafka-space-4, 16px) 0 0;
+}
+
+.lafka-contact__actions .lafka-wa {
+	margin: 0;
+}

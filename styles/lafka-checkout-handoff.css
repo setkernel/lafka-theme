@@ -264,6 +264,31 @@
 	text-decoration: none;
 }
 
+/* The text-message opt-in (plugin: Restaurant → Text messages): one plain
+ * sentence beside a 24px checkbox, the whole line a 44px tap target. */
+.woocommerce-checkout .form-row.lafka-notify-optin label.checkbox {
+	display: flex;
+	align-items: flex-start;
+	gap: var(--lafka-space-3);
+	min-height: 44px;
+	margin: 0;
+	text-transform: none;
+	letter-spacing: normal;
+	line-height: 1.5;
+	color: var(--lafka-color-text-primary);
+}
+
+.woocommerce-checkout .form-row.lafka-notify-optin .optional {
+	display: none;
+}
+
+.woocommerce-checkout .form-row.lafka-notify-optin input[type="checkbox"] {
+	flex: 0 0 auto;
+	width: 24px;
+	height: 24px;
+	margin: 2px 0 0;
+}
+
 .woocommerce-checkout .form-row .input-text,
 .woocommerce-checkout .form-row input[type="text"],
 .woocommerce-checkout .form-row input[type="email"],
@@ -1159,6 +1184,7 @@ div.woocommerce-info.lafka-delivery-min-notice .woocommerce-Price-amount {
  * (O-06 / O-09 / O-28 / T-21). */
 @layer legacy {
 
+	.woocommerce-checkout .form-row.lafka-notify-optin label.checkbox,
 	ul.lafka-shipping-choices > li.lafka-shipping-choice > label,
 	.woocommerce-checkout-payment ul.payment_methods > li > label,
 	.woocommerce-checkout #customer_details h3#ship-to-different-address label {
