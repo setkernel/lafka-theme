@@ -1,0 +1,61 @@
+/*
+ * "Add to home screen" card (lafka-plugin: Installable app).
+ *
+ * The plugin ships the structure, position and stacking; this is the look: a
+ * calm card with the brand accent on its edge, readable type, 44px tap
+ * targets. It matches the push, review and exit-intent cards so the prompts
+ * read as one family.
+ */
+.lafka-install-card .lafka-install-card__inner {
+	--lafka-card-border: var(--lafka-color-brand-500);
+
+	padding: var(--lafka-space-4) var(--lafka-space-5) var(--lafka-space-4) var(--lafka-space-4);
+	border-left-width: 4px;
+}
+
+.lafka-install-card__title {
+	margin: 0 0 var(--lafka-space-2);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	font-weight: var(--lafka-font-weight-bold);
+	line-height: var(--lafka-line-height-snug);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-install-card__text {
+	margin: 0 0 var(--lafka-space-3);
+	font-family: var(--lafka-font-family-body);
+	font-size: var(--lafka-font-size-body-sm);
+	line-height: var(--lafka-line-height-snug);
+	color: var(--lafka-color-text-secondary);
+}
+
+.lafka-install-card__share {
+	margin-inline-start: var(--lafka-space-1);
+	color: var(--lafka-color-accent-text);
+}
+
+.lafka-install-card__actions {
+	gap: var(--lafka-space-2);
+}
+
+.lafka-install-card__close {
+	top: 4px;
+	width: var(--lafka-tap-target);
+	height: var(--lafka-tap-target);
+	border-radius: var(--lafka-radius-pill);
+	color: var(--lafka-color-text-muted);
+	transition:
+		background var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out),
+		color var(--lafka-motion-duration-fast) var(--lafka-motion-ease-out);
+}
+
+.lafka-install-card__close:hover,
+.lafka-install-card__close:focus-visible {
+	background: var(--lafka-color-surface-hover);
+	color: var(--lafka-color-text-primary);
+}
+
+.lafka-install-card__close:focus-visible {
+	box-shadow: var(--lafka-shadow-focus);
+}

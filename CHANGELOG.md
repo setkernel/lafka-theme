@@ -7,6 +7,17 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Installable app
+- `js/sw.js` is one worker for Web Push, static assets and the installable app. Fixed: it used to keep a copy of
+  every page a customer visited, the cart and checkout included; now pages are network-only, the menu page keeps a
+  snapshot shown only when the network fails or is slow, and an offline page comes from the plugin. Cart, checkout,
+  My Account, order pages, admin, REST, AJAX and any request with a session are never cached. Cache names carry the
+  plugin version and other versions are deleted on activate. The worker is scoped to the site's path
+  (`lafka_service_worker_scope()`, also the Push registration) and receives the plugin's settings
+  (`lafka_service_worker_config()`, filter `lafka_service_worker_config`). `lafka_pwa_colors` hands the active
+  design's accent, page surface and text colour to the app manifest and offline page.
+- `styles/lafka-install-card.css`: the look of the plugin's "Add to home screen" card, loaded only when the card is on.
+
 ### Text messages
 - The Contact page prints the plugin's "Message us on WhatsApp" link (`do_action( 'lafka_whatsapp_link' )`) with
   its action buttons; `.lafka-wa` spacing, and the checkout opt-in (`.lafka-notify-optin`) as one plain sentence

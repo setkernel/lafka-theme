@@ -1073,6 +1073,7 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 						'applicationServerKey' => $lafka_push_vapid_pub,
 						'threshold'            => (int) lafka_setting( 'lafka_push_subscribe_prompt_threshold', 2 ),
 						'swUrl'                => esc_url_raw( lafka_service_worker_url() ),
+						'swScope'              => lafka_service_worker_scope(),
 					)
 				);
 			}
@@ -1229,6 +1230,16 @@ if ( ! function_exists( 'lafka_enqueue_scripts_and_styles' ) ) {
 				get_template_directory_uri() . '/styles/lafka-loyalty.css',
 				wp_style_is( 'lafka-loyalty', 'enqueued' ) ? array( 'lafka-tokens', 'lafka-loyalty' ) : array( 'lafka-tokens' ),
 				lafka_asset_version( '/styles/lafka-loyalty.css' )
+			);
+		}
+
+		// Installable app (lafka-plugin): the look of the "Add to home screen" card.
+		if ( class_exists( 'Lafka_Pwa' ) && wp_style_is( 'lafka-pwa', 'enqueued' ) ) {
+			wp_enqueue_style(
+				'lafka-install-card',
+				get_template_directory_uri() . '/styles/lafka-install-card.css',
+				array( 'lafka-tokens', 'lafka-pwa' ),
+				lafka_asset_version( '/styles/lafka-install-card.css' )
 			);
 		}
 

@@ -31,6 +31,7 @@
  *         restNonce: string,
  *         threshold: number,              // page views before prompt
  *         swUrl: string,                  // service worker URL
+ *         swScope: string,                // the folder it controls (the site's path)
  *       }
  *
  * Outputs:
@@ -62,6 +63,7 @@
 
     const threshold = parseInt(settings.threshold || '2', 10) || 2;
     const swUrl = settings.swUrl || '/sw.js';
+    const swScope = settings.swScope || '/';
     const SUPPRESS_DAYS = 30;
     const STORAGE_KEY = 'lafka_push_dismissed_at';
     const SESSION_KEY = 'lafka_push_pageviews';
@@ -131,7 +133,7 @@
             if (reg) {
                 return reg;
             }
-            return navigator.serviceWorker.register(swUrl, { scope: '/' });
+            return navigator.serviceWorker.register(swUrl, { scope: swScope });
         });
         return _swReady;
     }
