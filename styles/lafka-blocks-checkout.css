@@ -330,13 +330,15 @@
 	font-size: var(--lafka-font-size-body-sm);
 }
 
-/* -------- Form fields: match .lafka-input (sunken → ink focus) --------- */
-.wc-block-components-text-input input,
+/* -------- Form fields: match .lafka-input (sunken → ink focus) --------- *
+ * Text fields only: a checkbox inside a text-input wrapper (the "Create an
+ * account" box) keeps WooCommerce's own 20px box. */
+.wc-block-components-text-input input:not([type="checkbox"]):not([type="radio"]),
 .wc-block-components-text-input textarea,
 .wc-block-components-textarea,
 .wc-blocks-components-select__select,
 .wc-block-components-select-input select,
-.wc-block-components-address-form input,
+.wc-block-components-address-form input:not([type="checkbox"]):not([type="radio"]),
 .wc-block-components-address-form select {
 	background: var(--lafka-color-surface-sunken);
 	border: 1px solid var(--lafka-color-border-default);

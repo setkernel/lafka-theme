@@ -8,6 +8,9 @@ git tags + GitHub Releases.
 ## [Unreleased]
 
 ### Fixed
+- The block checkout's "Create an account" checkbox was drawn as a tall empty field (48px high, sunken, rounded): the
+  text-field look also matched the checkbox inside its text-input wrapper. Checkboxes and radios keep WooCommerce's
+  own 20px box; the label row stays 44px tall.
 - Tap targets under 44px at 375, found by a hit-test scan (a 44px square around each control must land on it): the
   promo-bar link lost its lower edge to the header name's hit area (the name's area now starts at the header bar
   and grows downwards), the block checkout's address "Edit" and the coupon chip's remove button got a transparent
