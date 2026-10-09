@@ -7,6 +7,10 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+### Deals
+- `.lafka-deal-nudge`: the card the Deals module shows in the cart drawer, the cart and the block cart
+  ("Add 1 more item to get ..."), built on `.lafka-card` and `.lafka-btn` (`lafka-components.css`).
+
 ### Design system: one source, one button, one card
 - **One token source.** `styles/lafka-tokens.css` and the preset engine drive everything. `theme.json`'s
   palette, font sizes, font families and spacing are generated (`npm run build`; `incl/presets/theme-json-map.json`

@@ -408,3 +408,33 @@
   width: 7em;
   min-height: 44px;
 }
+
+/* ==========================================================================
+ * Deal nudge (the Deals module): "Add 1 more item to get <deal>" in the cart
+ * drawer, the classic cart and the block cart. A calm card with one action.
+ * ========================================================================= */
+
+.lafka-card.lafka-deal-nudge {
+	display: flex;
+	flex-wrap: wrap;
+	gap: var(--lafka-space-2, 8px) var(--lafka-space-3, 12px);
+	align-items: center;
+	justify-content: space-between;
+	margin: 0 0 var(--lafka-space-3, 12px);
+	padding: var(--lafka-space-3, 12px) var(--lafka-space-4, 16px);
+	border-color: var(--lafka-color-accent-500);
+	background: var(--lafka-color-surface-brand-soft);
+}
+
+.lafka-deal-nudge__text {
+	flex: 1 1 14em;
+	margin: 0;
+	color: var(--lafka-color-text-primary);
+	font-weight: 600;
+}
+
+.lafka-deal-nudge .lafka-deal-nudge__cta {
+	flex: 0 0 auto;
+	color: var(--lafka-color-text-on-accent);
+	text-decoration: none;
+}
