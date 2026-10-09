@@ -405,7 +405,8 @@
 }
 
 .lafka-tips__custom input[type="number"] {
-  width: 7em;
+  width: 10em;
+  max-width: 100%;
   min-height: 44px;
 }
 

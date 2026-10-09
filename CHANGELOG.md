@@ -10,6 +10,7 @@ git tags + GitHub Releases.
 ### Fixed
 - The block checkout's order-summary quantity badge showed white digits on a white disc (WooCommerce draws the disc with
   `currentColor`); it is the dark pill with a light number again.
+- The tip box's "Other amount" field was too narrow for its placeholder ("Other amo"); it is 10em wide.
 
 ### Installable app
 - `js/sw.js` is one worker for Web Push, static assets and the installable app. Fixed: it used to keep a copy of
