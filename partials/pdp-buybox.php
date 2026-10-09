@@ -177,8 +177,19 @@ $lafka_pdp_initial       = $lafka_pdp_ctx['initial'];
 		do_action( 'woocommerce_after_add_to_cart_form' );
 		?>
 
-	<?php else : /* simple / combo / etc. */ ?>
+	<?php elseif ( ! $product->is_type( 'simple' ) || ! $product->is_purchasable() || ! $product->is_in_stock() ) : ?>
 
+		<?php
+		// Every other case is WooCommerce's own: a grouped product lists its
+		// items, an external one links out, a sold-out one says so, and any
+		// extension's product type prints its own form (core's per-type
+		// woocommerce_{type}_add_to_cart action and templates).
+		woocommerce_template_single_add_to_cart();
+		?>
+
+	<?php else : /* a simple product that can be bought */ ?>
+
+		<?php echo wp_kses_post( wc_get_stock_html( $product ) ); ?>
 		<?php do_action( 'woocommerce_before_add_to_cart_form' ); ?>
 		<form class="cart"
 				action="<?php echo esc_url( $lafka_form_action ); ?>"

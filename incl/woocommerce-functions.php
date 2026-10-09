@@ -1108,9 +1108,20 @@ if ( ! function_exists( 'lafka_get_chosen_category_for_related' ) ) {
 	}
 }
 
-add_filter( 'woocommerce_product_single_add_to_cart_text', 'lafka_change_single_add_to_cart_to_order' );
+add_filter( 'woocommerce_product_single_add_to_cart_text', 'lafka_change_single_add_to_cart_to_order', 10, 2 );
 if ( ! function_exists( 'lafka_change_single_add_to_cart_to_order' ) ) {
-	function lafka_change_single_add_to_cart_to_order() {
+	/**
+	 * "Order" on the product page's button; an external product keeps its own
+	 * button text (it links to another shop, it does not add to the order).
+	 *
+	 * @param string          $text    Button text.
+	 * @param WC_Product|null $product Product.
+	 * @return string
+	 */
+	function lafka_change_single_add_to_cart_to_order( $text = '', $product = null ) {
+		if ( $product instanceof WC_Product && $product->is_type( 'external' ) ) {
+			return $text;
+		}
 		return esc_html__( 'Order', 'lafka' );
 	}
 }

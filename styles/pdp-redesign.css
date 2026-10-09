@@ -748,6 +748,15 @@ body.lafka-pdp-disabled .lafka-order-method-bar { display: none !important; }
 
 .lafka-pdp-summary__cart-row { display: flex; gap: 10px; align-items: stretch; margin-top: 12px; }
 
+/* WooCommerce's own add-to-cart forms in the card (a grouped product's item list). */
+.lafka-pdp-summary .group_table { width: 100%; table-layout: fixed; border-collapse: collapse; margin-bottom: 12px; }
+
+.lafka-pdp-summary .group_table td { padding: 8px 4px; vertical-align: middle; }
+
+.lafka-pdp-summary .group_table .woocommerce-grouped-product-list-item__quantity { width: 112px; }
+
+.lafka-pdp-summary .group_table .woocommerce-grouped-product-list-item__price { width: 72px; text-align: right; }
+
 /*
  * Cart-row reorder for variable products.
  *

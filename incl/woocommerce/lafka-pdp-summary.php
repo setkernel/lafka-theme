@@ -60,7 +60,7 @@ if ( ! function_exists( 'lafka_pdp_summary_context' ) ) {
 		}
 		$price_html = $is_variable && function_exists( 'lafka_pdp_price_html' )
 			? lafka_pdp_price_html( $product, $initial )
-			: wc_price( $product->get_price() );
+			: $product->get_price_html();
 
 		$cache[ $id ] = array(
 			'is_variable'   => $is_variable,

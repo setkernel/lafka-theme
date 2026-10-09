@@ -8,6 +8,13 @@ git tags + GitHub Releases.
 ## [Unreleased]
 
 ### Fixed
+- The product page offered "Add to order" for every product that was not variable: a grouped product showed one
+  quantity box and could not be added, an external product added nothing instead of linking to its shop, and a
+  sold-out product looked orderable. Only a simple product that can be bought uses the page's own form (now with
+  WooCommerce's stock line, e.g. "Available on backorder"); every other case prints WooCommerce's own add-to-cart
+  (the grouped item list, the external link with its button text, "Out of stock", any extension's product type).
+  The price line is WooCommerce's price HTML, so a sale shows the struck-through regular price and extensions'
+  price suffixes appear.
 - The block checkout's order-summary quantity badge showed white digits on a white disc (WooCommerce draws the disc with
   `currentColor`); it is the dark pill with a light number again.
 - The tip box's "Other amount" field was too narrow for its placeholder ("Other amo"); it is 10em wide.
