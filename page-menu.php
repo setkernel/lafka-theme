@@ -55,6 +55,16 @@ while ( have_posts() ) :
 	$lafka_menu_shop_url = lafka_theme_menu_url();
 	?>
 	<div class="lafka-menu">
+	<?php
+	// WooCommerce notices raised on this page (an add-to-cart link that could not
+	// add, a closed-store refusal) print here; otherwise they wait unseen in the
+	// session and surface later as a checkout error about something else.
+	if ( function_exists( 'wc_notice_count' ) && wc_notice_count() > 0 ) :
+		?>
+		<div class="lafka-container lafka-page-notices"><?php woocommerce_output_all_notices(); ?></div>
+		<?php
+	endif;
+	?>
 
 		<header class="lafka-menu__header">
 			<div class="lafka-container">

@@ -1948,3 +1948,8 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 		--lafka-bottom-bar-h: calc(58px + env(safe-area-inset-bottom));
 	}
 }
+
+/* WooCommerce notices on the counter home and the /menu/ page (only when one is waiting). */
+.lafka-page-notices {
+	padding-top: var(--lafka-space-4);
+}

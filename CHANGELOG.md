@@ -8,6 +8,10 @@ git tags + GitHub Releases.
 ## [Unreleased]
 
 ### Fixed
+- The counter homepage and the /menu/ page never printed WooCommerce notices, so a refusal raised there (an
+  add-to-cart link for a sold-out item, a closed-store add) stayed in the session unseen and later blocked the block
+  checkout with that unrelated message. Both pages now print waiting notices under the header (nothing is printed,
+  and the layout is unchanged, when there are none).
 - The block checkout's "Create an account" checkbox was drawn as a tall empty field (48px high, sunken, rounded): the
   text-field look also matched the checkbox inside its text-input wrapper. Checkboxes and radios keep WooCommerce's
   own 20px box; the label row stays 44px tall.

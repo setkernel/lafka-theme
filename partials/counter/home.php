@@ -35,6 +35,16 @@ $lafka_home_args = array(
 ?>
 <div id="main" class="lafka-front-page lafka-counter-home">
 	<?php
+	// WooCommerce notices raised on this page (an add-to-cart link that could not
+	// add, a closed-store refusal) print here; otherwise they wait unseen in the
+	// session and surface later as a checkout error about something else.
+	if ( function_exists( 'wc_notice_count' ) && wc_notice_count() > 0 ) :
+		?>
+		<div class="lafka-container lafka-page-notices"><?php woocommerce_output_all_notices(); ?></div>
+		<?php
+	endif;
+	?>
+	<?php
 	foreach ( (array) apply_filters( 'lafka_counter_home_sections', array( 'hero', 'deals', 'costars', 'menu', 'find-us' ) ) as $lafka_home_slug ) {
 		$lafka_home_slug = sanitize_key( (string) $lafka_home_slug );
 		do_action( 'lafka_counter_before_section', $lafka_home_slug, $lafka_home_args );
