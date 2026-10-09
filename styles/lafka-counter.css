@@ -1899,15 +1899,24 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 	list-style: none;
 }
 
+/* 44px tall; the width stays the word's, so the footer keeps one line at
+   768. A transparent hit area 8px wider on each side makes short words
+   ("Menu") at least 44px to tap without moving anything (gaps are 28px). */
 .lafka-counter-footer__list a {
+	position: relative;
 	display: inline-flex;
 	align-items: center;
 	justify-content: center;
-	min-width: var(--lafka-tap-target);
 	min-height: var(--lafka-tap-target);
 	color: var(--lafka-color-text-secondary);
 	text-decoration: underline;
 	text-underline-offset: 4px;
+}
+
+.lafka-counter-footer__list a::after {
+	content: "";
+	position: absolute;
+	inset: 0 -8px;
 }
 
 .lafka-counter-footer__list a:hover {
