@@ -1,5 +1,6 @@
 {
 	"light": {
+		"--lafka-bottom-bar-h": "0px",
 		"--lafka-bp-desktop": "1280px",
 		"--lafka-bp-laptop": "1024px",
 		"--lafka-bp-mobile": "600px",
