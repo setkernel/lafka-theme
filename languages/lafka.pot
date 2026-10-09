@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-08T17:21:36+00:00\n"
+"POT-Creation-Date: 2026-10-09T01:45:58+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: lafka\n"
@@ -50,7 +50,7 @@ msgid "We couldn't find that page. It may have moved, or never existed."
 msgstr ""
 
 #: 404.php:42
-#: incl/customizer-home.php:480
+#: incl/customizer-home.php:479
 #: partials/home-categories.php:23
 #: woocommerce/cart/cart-empty.php:58
 msgid "Browse the menu"
@@ -133,6 +133,7 @@ msgid "About the Author:"
 msgstr ""
 
 #: footer.php:42
+#: incl/customizer-site-copy.php:37
 msgid "Fresh food, made to order from scratch in our kitchen. Order online for pickup or delivery."
 msgstr ""
 
@@ -156,55 +157,55 @@ msgstr ""
 msgid "Thanks — you are subscribed."
 msgstr ""
 
-#: footer.php:138
-#: incl/woocommerce-functions.php:1003
+#: footer.php:134
+#: incl/woocommerce-functions.php:1114
 msgid "Order"
 msgstr ""
 
-#: footer.php:140
+#: footer.php:136
 msgid "Full menu"
 msgstr ""
 
-#: footer.php:142
-#: partials/cart-drawer.php:60
+#: footer.php:138
+#: partials/cart-drawer.php:59
 msgid "Your cart"
 msgstr ""
 
-#: footer.php:145
-#: partials/cart-drawer.php:127
+#: footer.php:141
+#: incl/woocommerce/lafka-cart-drawer-hooks.php:35
 msgid "Checkout"
 msgstr ""
 
-#: footer.php:148
+#: footer.php:144
 #: header.php:239
 msgid "My account"
 msgstr ""
 
-#: footer.php:154
+#: footer.php:150
 #: partials/home-visit.php:77
 msgid "Visit us"
 msgstr ""
 
-#: footer.php:174
+#: footer.php:170
 msgid "Reach us"
 msgstr ""
 
-#: footer.php:194
+#: footer.php:190
 msgid "Contact page"
 msgstr ""
 
 #. translators: 1: year, 2: business name
-#: footer.php:206
+#: footer.php:202
 #, php-format
 msgid "© %1$s %2$s. All rights reserved."
 msgstr ""
 
-#: footer.php:210
+#: footer.php:206
 msgid "Made fresh. Served fast. Eaten happily."
 msgstr ""
 
-#: footer.php:223
-#: footer.php:228
+#: footer.php:219
+#: footer.php:224
 #: header.php:233
 #: partials/search-results.php:36
 #: searchform.php:5
@@ -213,141 +214,141 @@ msgstr ""
 msgid "Search"
 msgstr ""
 
-#: footer.php:226
+#: footer.php:222
 #: woocommerce/product-searchform.php:26
 msgid "Search for:"
 msgstr ""
 
-#: footer.php:227
-#: partials/menu-controls.php:165
+#: footer.php:223
+#: partials/menu-controls.php:160
 #: partials/search-results.php:56
 msgid "Search the menu…"
 msgstr ""
 
-#: footer.php:231
+#: footer.php:227
 msgid "Close search"
 msgstr ""
 
 #. translators: 1: first item number, 2: last item number, 3: total items, 4: number of pages.
-#: functions.php:282
+#: functions.php:292
 #, php-format
 msgid "Showing %1$s to %2$s of %3$s (%4$s Pages)"
 msgstr ""
 
-#: functions.php:306
+#: functions.php:316
 #: page-menu.php:62
 #: page.php:47
 #: partials/counter/costars.php:30
 #: partials/counter/menu-rest.php:47
 #: partials/search-results.php:26
 #: single.php:47
-#: woocommerce/archive-product.php:144
+#: woocommerce/archive-product.php:139
 msgid "Home"
 msgstr ""
 
 #. translators: %s: the search term entered by the visitor
-#: functions.php:408
+#: functions.php:418
 #, php-format
 msgid "Search results for \"%s\""
 msgstr ""
 
 #. translators: %s: the tag name
-#: functions.php:411
+#: functions.php:421
 #, php-format
 msgid "Posts tagged \"%s\""
 msgstr ""
 
 #. translators: %s: the author display name
-#: functions.php:416
+#: functions.php:426
 #, php-format
 msgid "Articles posted by %s"
 msgstr ""
 
-#: functions.php:418
+#: functions.php:428
 msgid "Error 404"
 msgstr ""
 
-#: functions.php:426
+#: functions.php:436
 msgid "Page"
 msgstr ""
 
-#: functions.php:457
+#: functions.php:467
 msgid "Pingback:"
 msgstr ""
 
-#: functions.php:457
-#: functions.php:473
+#: functions.php:467
+#: functions.php:483
 msgid "Edit"
 msgstr ""
 
 #. translators: 1: date, 2: time
-#: functions.php:470
+#: functions.php:480
 #, php-format
 msgid "%1$s at %2$s"
 msgstr ""
 
-#: functions.php:475
+#: functions.php:485
 msgid "Your comment is awaiting moderation."
 msgstr ""
 
-#: functions.php:486
+#: functions.php:496
 msgid "Reply"
 msgstr ""
 
-#: functions.php:584
-#: functions.php:601
+#: functions.php:594
+#: functions.php:611
 msgid "continue reading"
 msgstr ""
 
-#: functions.php:736
+#: functions.php:746
 msgid "Sorry, no posts matched your criteria"
 msgstr ""
 
-#: functions.php:737
+#: functions.php:747
 msgid "Please try another search term"
 msgstr ""
 
-#: functions.php:741
+#: functions.php:751
 msgid "View all results"
 msgstr ""
 
-#: functions.php:1072
+#: functions.php:1086
 msgid "post"
 msgstr ""
 
-#: functions.php:1075
+#: functions.php:1089
 msgid "product"
 msgstr ""
 
-#: functions.php:1090
-#: functions.php:1094
+#: functions.php:1104
+#: functions.php:1108
 msgid "prev"
 msgstr ""
 
-#: functions.php:1091
-#: functions.php:1098
+#: functions.php:1105
+#: functions.php:1112
 msgid "next"
 msgstr ""
 
-#: functions.php:1154
-#: partials/pdp-ingredients-reviews.php:125
+#: functions.php:1168
+#: partials/pdp-ingredients-reviews.php:96
 msgid "ago"
 msgstr ""
 
 #. translators: %s: order line total, e.g. "$23.25".
-#: functions.php:1382
+#: functions.php:1362
 #, php-format
 msgid "Add to order · %s"
 msgstr ""
 
-#: functions.php:1383
-#: incl/template-helpers/counter-chrome.php:469
+#: functions.php:1363
+#: incl/template-helpers/counter-chrome.php:465
 #: partials/counter/chooser-template.php:21
-#: partials/pdp-summary.php:147
+#: partials/pdp-buybox.php:61
 msgid "Choose your options"
 msgstr ""
 
-#: functions.php:1384
+#: functions.php:1364
 msgid "Not available with this choice"
 msgstr ""
 
@@ -361,7 +362,7 @@ msgstr ""
 
 #. translators: %d: number of items in the cart
 #: header.php:254
-#: incl/woocommerce-functions.php:694
+#: incl/woocommerce-functions.php:797
 #, php-format
 msgid "View cart, %d item"
 msgid_plural "View cart, %d items"
@@ -370,6 +371,164 @@ msgstr[1] ""
 
 #: header.php:270
 msgid "Order now"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:87
+msgid "Page Layout Options"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:103
+msgid "Page Layout Options is disabled for this page, because the page is set as Blog page from Settings->Reading."
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:109
+msgid "Page Layout Options is disabled for this page, because the page is set as Shop page."
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:143
+msgid "You can define layout specific options here."
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:146
+msgid "Choose Page Layout"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:148
+#: incl/admin/lafka-metaboxes.php:157
+msgid "Default"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:150
+msgid "Full-Width"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:152
+msgid "Boxed"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:155
+msgid "Footer style"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:159
+msgid "Standard"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:161
+msgid "Reveal"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:170
+msgid "Header Style"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:179
+msgid "Normal"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:183
+msgid "Transparent - Light Scheme"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:184
+msgid "Transparent - Dark Scheme"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:197
+msgid "Page Subtitle"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:269
+msgid "Page Structure Options"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:285
+msgid "Page Structure Options are disabled for this page, because the page is set as Blog page from Settings->Reading."
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:290
+msgid "Page Structure Options are disabled for this page, because the page is set as Shop page."
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:330
+msgid "You can configure the page structure, using this options."
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:334
+msgid "Choose Top Menu"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:343
+msgid "Main Sidebar"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:345
+#: incl/admin/lafka-metaboxes.php:382
+#: woocommerce/loop/orderby.php:32
+msgid "Show"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:347
+#: incl/admin/lafka-metaboxes.php:384
+msgid "Hide"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:356
+#: incl/admin/lafka-metaboxes.php:374
+#: incl/admin/lafka-metaboxes.php:394
+msgid "default"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:372
+msgid "Main Sidebar Position"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:375
+msgid "Left"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:376
+msgid "Right"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:380
+msgid "Off Canvas Sidebar"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:468
+msgid "Product Video"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:497
+msgid "Product Video to be displayed on the product page (YouTube, Vimeo, Self-hosted)."
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:500
+msgid "Video URL"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:554
+msgid "Product Gallery Type"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:582
+msgid "Use Theme Options Setting"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:583
+msgid "WooCommerce Default Gallery"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:584
+msgid "Image List Gallery"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:585
+msgid "Mosaic Images Gallery"
+msgstr ""
+
+#: incl/admin/lafka-metaboxes.php:587
+msgid "Choose between default WooCommerce gallery and image list gallery."
 msgstr ""
 
 #: incl/class-lafka-customizer-bridge.php:61
@@ -644,15 +803,7 @@ msgid "Show the delivery line"
 msgstr ""
 
 #: incl/customizer-announce-bar.php:74
-msgid "Adds \"Delivery in {city} · Free over ${threshold}\" between the status and phone. Hidden below 560px on all viewports."
-msgstr ""
-
-#: incl/customizer-announce-bar.php:91
-msgid "Free-delivery threshold"
-msgstr ""
-
-#: incl/customizer-announce-bar.php:92
-msgid "Minimum cart subtotal that unlocks free delivery. Displayed in the bar and used by the cart progress meter."
+msgid "Adds \"Delivery in {city} · Free over $X\" between the status and phone; X is the free-delivery amount set in WooCommerce → Settings → Restaurant → Promotions. Hidden below 560px on all viewports."
 msgstr ""
 
 #: incl/customizer-counter.php:30
@@ -676,7 +827,7 @@ msgid "Menu page and category pages"
 msgstr ""
 
 #: incl/customizer-counter.php:41
-#: partials/counter/footer.php:41
+#: partials/counter/footer.php:43
 msgid "Footer"
 msgstr ""
 
@@ -774,89 +925,81 @@ msgid "Hero dish (back)"
 msgstr ""
 
 #: incl/customizer-counter.php:293
-msgid "Deals category"
-msgstr ""
-
-#: incl/customizer-counter.php:293
-msgid "Automatic = a category named deals, combos or specials."
-msgstr ""
-
-#: incl/customizer-counter.php:294
 msgid "Featured deal"
 msgstr ""
 
-#: incl/customizer-counter.php:294
+#: incl/customizer-counter.php:293
 msgid "Automatic = a featured product in the deals category, else the first one."
 msgstr ""
 
-#: incl/customizer-counter.php:295
-#: incl/template-helpers/menu-data.php:43
+#: incl/customizer-counter.php:294
+#: incl/template-helpers/menu-data.php:42
 msgid "Today's deals"
 msgstr ""
 
-#: incl/customizer-counter.php:295
+#: incl/customizer-counter.php:294
 msgid "Deals heading"
 msgstr ""
 
-#: incl/customizer-counter.php:296
+#: incl/customizer-counter.php:295
 msgid "Deals line"
 msgstr ""
 
-#: incl/customizer-counter.php:296
+#: incl/customizer-counter.php:295
 msgid "Optional. Only claim what is true (for example that ordering here costs less than the delivery apps)."
 msgstr ""
 
-#: incl/customizer-counter.php:297
+#: incl/customizer-counter.php:296
 msgid "Deals shown"
 msgstr ""
 
+#: incl/customizer-counter.php:296
 #: incl/customizer-counter.php:297
-#: incl/customizer-counter.php:298
 msgid "1 to 12."
 msgstr ""
 
-#: incl/customizer-counter.php:298
+#: incl/customizer-counter.php:297
 msgid "Dishes per featured category"
 msgstr ""
 
-#: incl/customizer-counter.php:299
-#: incl/template-helpers/menu-data.php:50
+#: incl/customizer-counter.php:298
+#: incl/template-helpers/menu-data.php:49
 msgid "More from our menu"
 msgstr ""
 
-#: incl/customizer-counter.php:299
+#: incl/customizer-counter.php:298
 msgid "Heading above the rest of the menu"
 msgstr ""
 
-#: incl/customizer-counter.php:300
+#: incl/customizer-counter.php:299
 msgid "Dishes per category (rest of the menu)"
 msgstr ""
 
-#: incl/customizer-counter.php:300
+#: incl/customizer-counter.php:299
 msgid "1 to 24. Longer categories get a \"See all\" link."
 msgstr ""
 
-#: incl/customizer-counter.php:305
+#: incl/customizer-counter.php:304
 msgid "Rest of the menu: row style"
 msgstr ""
 
-#: incl/customizer-counter.php:307
+#: incl/customizer-counter.php:306
 msgid "Compact"
 msgstr ""
 
-#: incl/customizer-counter.php:308
+#: incl/customizer-counter.php:307
 msgid "Large photos"
 msgstr ""
 
-#: incl/customizer-counter.php:312
+#: incl/customizer-counter.php:311
 msgid "Show small photos in compact rows"
 msgstr ""
 
-#: incl/customizer-counter.php:313
+#: incl/customizer-counter.php:312
 msgid "Show the list of category links"
 msgstr ""
 
-#: incl/customizer-counter.php:314
+#: incl/customizer-counter.php:313
 msgid "Show \"Find us\" (address, hours, phone)"
 msgstr ""
 
@@ -1185,14 +1328,15 @@ msgstr ""
 
 #: incl/customizer-home.php:58
 #: incl/customizer-home.php:292
-#: incl/customizer-home.php:426
-#: incl/customizer-home.php:484
-#: incl/customizer-home.php:573
+#: incl/customizer-home.php:331
+#: incl/customizer-home.php:425
+#: incl/customizer-home.php:483
+#: incl/customizer-home.php:572
 msgid "Headline"
 msgstr ""
 
 #: incl/customizer-home.php:63
-#: incl/customizer-home.php:431
+#: incl/customizer-home.php:430
 msgid "Sub-headline"
 msgstr ""
 
@@ -1207,7 +1351,7 @@ msgid "Primary CTA label"
 msgstr ""
 
 #: incl/customizer-home.php:69
-#: incl/customizer-home.php:437
+#: incl/customizer-home.php:436
 #: woocommerce/loop/add-to-cart.php:62
 msgid "Order Now"
 msgstr ""
@@ -1278,127 +1422,182 @@ msgid "Reviews"
 msgstr ""
 
 #: incl/customizer-home.php:267
-msgid "Up to 3 customer review cards plus an optional aggregate rating callout. Section is hidden automatically when no reviews entered."
+msgid "Shows up to 3 of your customers' real WooCommerce product reviews (4 stars and up). Nothing is typed in here: the section is hidden until customers have left a review. The rating next to the headline is your provider rating (Social Proof panel) or the average of your own reviews."
 msgstr ""
 
 #: incl/customizer-home.php:284
-#: incl/customizer-home.php:415
+#: incl/customizer-home.php:414
 msgid "Show this section"
 msgstr ""
 
 #: incl/customizer-home.php:293
-#: partials/home-reviews.php:26
+#: partials/home-reviews.php:24
 msgid "What our neighbors say"
 msgstr ""
 
-#: incl/customizer-home.php:297
-msgid "Aggregate rating (e.g. 4.9)"
+#: incl/customizer-home.php:322
+#: incl/customizer-home.php:330
+#: partials/home-how-it-works.php:17
+msgid "How it works"
 msgstr ""
 
-#: incl/customizer-home.php:302
-msgid "Number of reviews (e.g. 230)"
+#: incl/customizer-home.php:323
+msgid "The three-step explainer under the menu. Leave a field empty to use the standard wording."
 msgstr ""
 
-#. translators: %d: review number.
+#: incl/customizer-home.php:328
+#: incl/template-helpers/free-delivery.php:85
+#: partials/home-how-it-works.php:24
+msgid "Pickup is fastest, or get it delivered piping hot."
+msgstr ""
+
+#: incl/customizer-home.php:330
+msgid "Small heading above"
+msgstr ""
+
 #: incl/customizer-home.php:331
-#, php-format
-msgid "Review %d — quote"
+#: partials/home-how-it-works.php:18
+msgid "Hot food, three taps away."
 msgstr ""
 
-#. translators: %d: review number.
+#: incl/customizer-home.php:332
+msgid "Step 1 — title"
+msgstr ""
+
+#: incl/customizer-home.php:332
+#: partials/home-how-it-works.php:30
+msgid "Pick your favourites"
+msgstr ""
+
+#: incl/customizer-home.php:333
+msgid "Step 1 — text"
+msgstr ""
+
+#: incl/customizer-home.php:333
+#: partials/home-how-it-works.php:31
+msgid "Browse the full menu. Customize every order, save your favourites."
+msgstr ""
+
+#: incl/customizer-home.php:334
+msgid "Step 2 — title"
+msgstr ""
+
+#: incl/customizer-home.php:334
+#: partials/counter/hero.php:52
+#: partials/home-how-it-works.php:34
+msgid "Pickup or delivery"
+msgstr ""
+
+#: incl/customizer-home.php:335
+msgid "Step 2 — text"
+msgstr ""
+
+#: incl/customizer-home.php:336
+msgid "Step 3 — title"
+msgstr ""
+
+#: incl/customizer-home.php:336
+#: partials/home-how-it-works.php:38
+msgid "We start cooking"
+msgstr ""
+
 #: incl/customizer-home.php:337
-#, php-format
-msgid "Review %d — reviewer name"
+msgid "Step 3 — text"
 msgstr ""
 
-#. translators: %d: review number.
-#: incl/customizer-home.php:343
-#, php-format
-msgid "Review %d — source (Google/Yelp/etc.)"
+#: incl/customizer-home.php:337
+#: partials/home-how-it-works.php:39
+msgid "Track your order in real time from the confirmation page."
 msgstr ""
 
-#. translators: %d: review number.
-#: incl/customizer-home.php:379
-#, php-format
-msgid "Review %d — star rating (1–5)"
+#: incl/customizer-home.php:364
+msgid "Visit us card"
 msgstr ""
 
-#: incl/customizer-home.php:397
+#: incl/customizer-home.php:365
+msgid "The address, phone and hours on this card come from WooCommerce → Settings → Restaurant. Here you only choose its photo."
+msgstr ""
+
+#: incl/customizer-home.php:383
+msgid "Photo (optional)"
+msgstr ""
+
+#: incl/customizer-home.php:396
 msgid "CTA Closer Band"
 msgstr ""
 
-#: incl/customizer-home.php:398
+#: incl/customizer-home.php:397
 msgid "Full-bleed brand-yellow band at the bottom of the home — catches scrollers who didn't tap a CTA above."
 msgstr ""
 
-#: incl/customizer-home.php:427
+#: incl/customizer-home.php:426
 msgid "Hungry?"
 msgstr ""
 
-#: incl/customizer-home.php:432
+#: incl/customizer-home.php:431
 #: partials/home-cta-closer.php:35
 msgid "Pickup or delivery. Ready in about 25 minutes."
 msgstr ""
 
-#: incl/customizer-home.php:436
+#: incl/customizer-home.php:435
 msgid "CTA label"
 msgstr ""
 
-#: incl/customizer-home.php:441
+#: incl/customizer-home.php:440
 msgid "CTA URL"
 msgstr ""
 
-#: incl/customizer-home.php:471
+#: incl/customizer-home.php:470
 msgid "Category Showcase"
 msgstr ""
 
-#: incl/customizer-home.php:479
-#: incl/customizer-home.php:568
+#: incl/customizer-home.php:478
+#: incl/customizer-home.php:567
 msgid "Eyebrow"
 msgstr ""
 
-#: incl/customizer-home.php:485
+#: incl/customizer-home.php:484
 #: partials/home-categories.php:24
 msgid "What are you craving?"
 msgstr ""
 
-#: incl/customizer-home.php:520
+#: incl/customizer-home.php:519
 msgid "How many categories to show"
 msgstr ""
 
-#: incl/customizer-home.php:542
+#: incl/customizer-home.php:541
 msgid "Order categories by"
 msgstr ""
 
-#: incl/customizer-home.php:546
+#: incl/customizer-home.php:545
 msgid "Most popular (item count)"
 msgstr ""
 
-#: incl/customizer-home.php:547
+#: incl/customizer-home.php:546
 msgid "Alphabetical"
 msgstr ""
 
-#: incl/customizer-home.php:548
+#: incl/customizer-home.php:547
 msgid "Manual order (drag-and-drop in Products → Categories)"
 msgstr ""
 
-#: incl/customizer-home.php:559
+#: incl/customizer-home.php:558
 msgid "Featured Products"
 msgstr ""
 
-#: incl/customizer-home.php:560
+#: incl/customizer-home.php:559
 msgid "Showcases products marked as \"Featured\" in Products → All Products."
 msgstr ""
 
-#: incl/customizer-home.php:569
+#: incl/customizer-home.php:568
 msgid "Tonight's specials"
 msgstr ""
 
-#: incl/customizer-home.php:574
+#: incl/customizer-home.php:573
 msgid "Top picks"
 msgstr ""
 
-#: incl/customizer-home.php:609
+#: incl/customizer-home.php:608
 msgid "How many featured products to show"
 msgstr ""
 
@@ -1424,7 +1623,7 @@ msgstr ""
 
 #: incl/customizer-menu-landing.php:84
 #: page-menu.php:41
-#: woocommerce/archive-product.php:88
+#: woocommerce/archive-product.php:83
 msgid "Browse everything we make. Tap a category to jump to it or scroll through the whole menu."
 msgstr ""
 
@@ -1617,7 +1816,7 @@ msgid "How long after page load before the toast can fire. 10–300 seconds. Def
 msgstr ""
 
 #: incl/customizer-order-flow.php:301
-#: incl/system/core-functions.php:985
+#: incl/system/core-functions.php:981
 msgid "Add {amount} more for free delivery"
 msgstr ""
 
@@ -1630,7 +1829,7 @@ msgid "Shown when the cart subtotal is below the free-delivery threshold. Use th
 msgstr ""
 
 #: incl/customizer-order-flow.php:319
-#: incl/system/core-functions.php:986
+#: incl/system/core-functions.php:982
 msgid "Your cart is ready — checkout in 30 seconds"
 msgstr ""
 
@@ -1643,7 +1842,7 @@ msgid "Shown when the cart subtotal has already crossed the free-delivery thresh
 msgstr ""
 
 #: incl/customizer-order-flow.php:337
-#: incl/system/core-functions.php:987
+#: incl/system/core-functions.php:983
 msgid "Tap below to pick up where you left off."
 msgstr ""
 
@@ -1652,7 +1851,7 @@ msgid "Body copy"
 msgstr ""
 
 #: incl/customizer-order-flow.php:354
-#: incl/system/core-functions.php:988
+#: incl/system/core-functions.php:984
 msgid "Resume checkout"
 msgstr ""
 
@@ -1661,7 +1860,7 @@ msgid "Red filled button that links to the cart page."
 msgstr ""
 
 #: incl/customizer-order-flow.php:372
-#: incl/system/core-functions.php:989
+#: incl/system/core-functions.php:985
 msgid "Maybe later"
 msgstr ""
 
@@ -1792,6 +1991,39 @@ msgstr ""
 msgid "Show on cart and checkout"
 msgstr ""
 
+#: incl/customizer-site-copy.php:28
+msgid "Lafka — Site text"
+msgstr ""
+
+#: incl/customizer-site-copy.php:29
+msgid "Short pieces of text on the footer and the contact page."
+msgstr ""
+
+#: incl/customizer-site-copy.php:45
+msgid "Footer: about text"
+msgstr ""
+
+#: incl/customizer-site-copy.php:46
+msgid "Two short sentences under the logo in the footer. Leave empty to hide."
+msgstr ""
+
+#: incl/customizer-site-copy.php:55
+#: template-contact.php:149
+msgid "Last orders 15 min before close. Statutory holidays may differ — call ahead."
+msgstr ""
+
+#: incl/customizer-site-copy.php:63
+msgid "Contact page: note under the opening hours"
+msgstr ""
+
+#: incl/customizer-site-copy.php:64
+msgid "Say only what is true for your restaurant. Leave empty to hide."
+msgstr ""
+
+#: incl/customizer-site-copy.php:83
+msgid "Contact page: photo"
+msgstr ""
+
 #: incl/customizer-social-proof.php:30
 msgid "Lafka — Social Proof"
 msgstr ""
@@ -1841,35 +2073,35 @@ msgid "Show on product pages"
 msgstr ""
 
 #. translators: %s = discount percent
-#: incl/lafka-active-promos.php:53
+#: incl/lafka-active-promos.php:43
 #, php-format
 msgid "Today only — %s%% off"
 msgstr ""
 
 #. translators: %s = discount percent
-#: incl/lafka-active-promos.php:65
+#: incl/lafka-active-promos.php:55
 #, php-format
 msgid "%s%% off your first online order"
 msgstr ""
 
 #. translators: 1: category A, 2: category B, 3: amount
-#: incl/lafka-active-promos.php:83
+#: incl/lafka-active-promos.php:73
 #, php-format
 msgid "%1$s + %2$s? Save %3$s"
 msgstr ""
 
 #. translators: %s: free-delivery threshold, e.g. "$30".
-#: incl/lafka-active-promos.php:96
-#: partials/pdp-summary.php:332
+#: incl/lafka-active-promos.php:85
+#: partials/pdp-assurances.php:45
 #, php-format
 msgid "Free delivery over %s"
 msgstr ""
 
-#: incl/lafka-active-promos.php:117
+#: incl/lafka-active-promos.php:105
 msgid "Current offers"
 msgstr ""
 
-#: incl/lafka-active-promos.php:118
+#: incl/lafka-active-promos.php:106
 msgid "Order direct & save:"
 msgstr ""
 
@@ -2209,63 +2441,63 @@ msgctxt "Google fonts: on or off"
 msgid "on"
 msgstr ""
 
-#: incl/system/core-functions.php:990
+#: incl/system/core-functions.php:986
 msgid "Close reminder"
 msgstr ""
 
-#: incl/system/core-functions.php:1167
+#: incl/system/core-functions.php:1164
 msgid "No menu items match."
 msgstr ""
 
-#: incl/system/core-functions.php:1168
+#: incl/system/core-functions.php:1165
 msgid "1 item matches."
 msgstr ""
 
 #. translators: %d: number of matching menu items (kept literal for the script).
-#: incl/system/core-functions.php:1170
+#: incl/system/core-functions.php:1167
 #, php-format
 msgid "%d items match."
 msgstr ""
 
-#: incl/system/core-functions.php:1360
-#: incl/template-helpers/counter-chrome.php:764
+#: incl/system/core-functions.php:1387
+#: incl/template-helpers/counter-chrome.php:760
 #: incl/woocommerce/lafka-archive-quickadd.php:61
-#: partials/counter/menu-row.php:75
+#: partials/counter/menu-row.php:78
 msgid "Add"
 msgstr ""
 
-#: incl/system/core-functions.php:1361
+#: incl/system/core-functions.php:1388
 #: template-parts/lafka-pdp-cta.php:54
 msgid "Select options"
 msgstr ""
 
-#: incl/system/core-functions.php:1362
+#: incl/system/core-functions.php:1389
 msgid "Out of stock"
 msgstr ""
 
-#: incl/system/core-functions.php:1578
+#: incl/system/core-functions.php:1605
 msgid "Sorry, no products matched your selection. Please choose a different combination."
 msgstr ""
 
-#: incl/system/core-functions.php:1579
+#: incl/system/core-functions.php:1606
 msgid "Please select some product options before adding this product to your cart."
 msgstr ""
 
-#: incl/system/core-functions.php:1580
+#: incl/system/core-functions.php:1607
 msgid "Sorry, this product is unavailable. Please choose a different combination."
 msgstr ""
 
 #. translators: 1: legacy option key, 2: replacement theme_mod key.
-#: incl/system/core-functions.php:1788
+#: incl/system/core-functions.php:1821
 #, php-format
 msgid "The \"%1$s\" theme setting moved to the Customizer theme_mod \"%2$s\". Read it with get_theme_mod() — lafka_get_option() for this key is deprecated and will be removed in a future major version."
 msgstr ""
 
-#: incl/system/core-functions.php:2080
+#: incl/system/core-functions.php:2113
 msgid "- No menu -"
 msgstr ""
 
-#: incl/system/core-functions.php:2081
+#: incl/system/core-functions.php:2114
 msgid "- Use global set top menu -"
 msgstr ""
 
@@ -2294,264 +2526,150 @@ msgstr ""
 msgid "ID"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:154
+#: incl/template-helpers/counter-chrome.php:151
 #: incl/template-helpers/service-eta.php:70
 #: partials/counter/hero.php:56
-#: partials/menu-controls.php:129
-#: woocommerce/cart/cart.php:123
+#: partials/menu-controls.php:124
+#: woocommerce/cart/cart.php:116
 msgid "Delivery"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:154
+#: incl/template-helpers/counter-chrome.php:151
 #: incl/template-helpers/service-eta.php:61
 #: partials/counter/hero.php:54
-#: partials/menu-controls.php:106
-#: woocommerce/cart/cart.php:107
+#: partials/menu-controls.php:101
+#: woocommerce/cart/cart.php:100
 msgid "Pickup"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:176
+#: incl/template-helpers/counter-chrome.php:173
 msgid "How do you want your order?"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:205
+#: incl/template-helpers/counter-chrome.php:202
 msgid "Header menu (counter layout)"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:206
+#: incl/template-helpers/counter-chrome.php:203
 msgid "Footer menu (counter layout)"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:223
-#: incl/template-helpers/counter-chrome.php:290
+#: incl/template-helpers/counter-chrome.php:220
+#: incl/template-helpers/counter-chrome.php:287
 #: incl/woocommerce/lafka-shop-to-menu.php:219
-#: partials/counter/header.php:76
-#: partials/counter/header.php:78
+#: partials/counter/header.php:73
+#: partials/counter/header.php:75
 #: partials/mobile-nav.php:101
-#: woocommerce/archive-product.php:146
+#: woocommerce/archive-product.php:141
 msgid "Menu"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:230
-#: incl/template-helpers/counter-chrome.php:297
+#: incl/template-helpers/counter-chrome.php:227
+#: incl/template-helpers/counter-chrome.php:294
 #: partials/counter/deal-card.php:67
 msgid "Deals"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:236
-#: incl/template-helpers/counter-chrome.php:303
+#: incl/template-helpers/counter-chrome.php:233
+#: incl/template-helpers/counter-chrome.php:300
 #: partials/counter/find-us.php:34
 #: partials/editorial-contact-nap.php:27
 msgid "Find us"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:422
-#: incl/template-helpers/hours-display.php:305
-#: incl/template-helpers/hours-display.php:307
-#: incl/template-helpers/hours-display.php:377
-#: incl/template-helpers/open-status.php:146
-#: incl/template-helpers/open-status.php:147
-#: incl/template-helpers/open-status.php:236
-#: incl/template-helpers/open-status.php:258
-#: partials/editorial-utility-bar.php:25
-msgid "Open now"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:423
-#: incl/template-helpers/hours-display.php:88
-#: incl/template-helpers/hours-display.php:317
-#: incl/template-helpers/hours-display.php:321
-#: incl/template-helpers/hours-display.php:377
-#: incl/template-helpers/open-status.php:160
-#: incl/template-helpers/open-status.php:164
-#: incl/template-helpers/open-status.php:274
-#: incl/template-helpers/open-status.php:298
-#: incl/template-helpers/open-status.php:316
-#: incl/template-helpers/open-status.php:317
-#: partials/order-method-bar.php:78
-msgid "Closed"
-msgstr ""
-
-#. translators: %s: closing time, e.g. "11 pm"
-#: incl/template-helpers/counter-chrome.php:425
-#: incl/template-helpers/hours-display.php:353
-#, php-format
-msgid "until %s"
-msgstr ""
-
-#. translators: %s: opening time today
-#: incl/template-helpers/counter-chrome.php:427
-#: incl/template-helpers/hours-display.php:362
-#, php-format
-msgid "opens today at %s"
-msgstr ""
-
-#. translators: %s: opening time tomorrow
-#: incl/template-helpers/counter-chrome.php:429
-#: incl/template-helpers/hours-display.php:365
-#, php-format
-msgid "opens tomorrow at %s"
-msgstr ""
-
-#. translators: 1: weekday, 2: opening time
-#: incl/template-helpers/counter-chrome.php:431
-#: incl/template-helpers/hours-display.php:374
-#, php-format
-msgid "opens %1$s at %2$s"
-msgstr ""
-
-#. translators: %s: hour (and minutes), e.g. "11" or "11:30"
-#: incl/template-helpers/counter-chrome.php:433
-#: incl/template-helpers/hours-display.php:52
-#, php-format
-msgid "%s am"
-msgstr ""
-
-#. translators: %s: hour (and minutes), e.g. "11" or "11:30"
-#: incl/template-helpers/counter-chrome.php:435
-#: incl/template-helpers/hours-display.php:52
-#, php-format
-msgid "%s pm"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:436
-#: incl/template-helpers/hours-display.php:47
-msgid "noon"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:437
-#: incl/template-helpers/hours-display.php:44
-msgid "midnight"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:440
-#: incl/template-helpers/hours-display.php:370
-msgid "Sunday"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:440
-#: incl/template-helpers/hours-display.php:370
-msgid "Monday"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:440
-#: incl/template-helpers/hours-display.php:370
-msgid "Tuesday"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:440
-#: incl/template-helpers/hours-display.php:370
-msgid "Wednesday"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:440
-#: incl/template-helpers/hours-display.php:370
-msgid "Thursday"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:440
-#: incl/template-helpers/hours-display.php:370
-msgid "Friday"
-msgstr ""
-
-#: incl/template-helpers/counter-chrome.php:440
-#: incl/template-helpers/hours-display.php:370
-msgid "Saturday"
-msgstr ""
-
 #. translators: 1: product name, 2: option (e.g. "Medium")
-#: incl/template-helpers/counter-chrome.php:459
+#: incl/template-helpers/counter-chrome.php:455
 #, php-format
 msgid "Added %1$s, %2$s"
 msgstr ""
 
 #. translators: %s: product name
-#: incl/template-helpers/counter-chrome.php:461
+#: incl/template-helpers/counter-chrome.php:457
 #, php-format
 msgid "Added %s"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:462
+#: incl/template-helpers/counter-chrome.php:458
 #: partials/pdp-pickers.php:90
 msgid "Not available"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:463
+#: incl/template-helpers/counter-chrome.php:459
 #: partials/counter/deal-card.php:36
-#: partials/pdp-summary.php:279
-#: partials/pdp-summary.php:290
+#: partials/pdp-buybox.php:198
+#: partials/pdp-buybox.php:209
 msgid "Add to order"
 msgstr ""
 
 #. translators: 1: option (e.g. "Medium"), 2: price
-#: incl/template-helpers/counter-chrome.php:465
+#: incl/template-helpers/counter-chrome.php:461
 #, php-format
 msgid "%1$s, %2$s, add to order"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:466
+#: incl/template-helpers/counter-chrome.php:462
 msgid "Could not add that. Opening the product page…"
 msgstr ""
 
 #. translators: %s: attribute name in lower case, e.g. "size", "pieces".
-#: incl/template-helpers/counter-chrome.php:468
+#: incl/template-helpers/counter-chrome.php:464
 #: incl/template-helpers/pdp-selection.php:54
 #, php-format
 msgid "Choose %s"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:524
+#: incl/template-helpers/counter-chrome.php:520
 #: incl/woocommerce/lafka-archive-quickadd.php:61
 msgid "Choose"
 msgstr ""
 
 #. translators: %s: product name
-#: incl/template-helpers/counter-chrome.php:528
+#: incl/template-helpers/counter-chrome.php:524
 #, php-format
 msgid "options for %s"
 msgstr ""
 
 #. translators: %s: lowest price.
-#: incl/template-helpers/counter-chrome.php:542
+#: incl/template-helpers/counter-chrome.php:538
 #: incl/woocommerce/lafka-cart-empty-popular.php:81
 #: partials/counter/deal-card.php:31
-#: partials/counter/menu-row.php:131
+#: partials/counter/menu-row.php:150
 #, php-format
 msgid "from %s"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:613
-#: partials/counter/header.php:84
+#: incl/template-helpers/counter-chrome.php:609
+#: partials/counter/header.php:81
 #: partials/home-visit.php:110
 msgid "Order online"
 msgstr ""
 
 #. translators: 1: number of items, 2: subtotal
-#: incl/template-helpers/counter-chrome.php:618
+#: incl/template-helpers/counter-chrome.php:614
 #, php-format
 msgid "View order, %1$d item, %2$s"
 msgid_plural "View order, %1$d items, %2$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: incl/template-helpers/counter-chrome.php:620
+#: incl/template-helpers/counter-chrome.php:616
 msgid "View order"
 msgstr ""
 
 #. translators: %d: number of items in the cart
-#: incl/template-helpers/counter-chrome.php:692
+#: incl/template-helpers/counter-chrome.php:688
 #, php-format
 msgid "Cart, %d item"
 msgid_plural "Cart, %d items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: incl/template-helpers/counter-chrome.php:695
+#: incl/template-helpers/counter-chrome.php:691
 msgid "Cart"
 msgstr ""
 
 #. translators: %d: number of items.
-#: incl/template-helpers/counter-chrome.php:706
+#: incl/template-helpers/counter-chrome.php:702
 #: partials/home-categories.php:115
 #, php-format
 msgid "%d item"
@@ -2560,16 +2678,16 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: order subtotal
-#: incl/template-helpers/counter-chrome.php:716
+#: incl/template-helpers/counter-chrome.php:712
 #, php-format
 msgid "Go to checkout — %s"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:717
+#: incl/template-helpers/counter-chrome.php:713
 msgid "Go to checkout"
 msgstr ""
 
-#: incl/template-helpers/counter-chrome.php:729
+#: incl/template-helpers/counter-chrome.php:725
 msgid "Add a little extra?"
 msgstr ""
 
@@ -2581,131 +2699,114 @@ msgid_plural "For %1$d: about %2$s each"
 msgstr[0] ""
 msgstr[1] ""
 
-#: incl/template-helpers/free-delivery.php:72
+#: incl/template-helpers/free-delivery.php:68
 msgid "Free"
 msgstr ""
 
 #. translators: %s: formatted free-delivery threshold amount.
-#: incl/template-helpers/free-delivery.php:74
+#: incl/template-helpers/free-delivery.php:70
 #, php-format
 msgid "delivery %s+"
 msgstr ""
 
-#: incl/template-helpers/free-delivery.php:89
-#: partials/home-how-it-works.php:24
-msgid "Pickup is fastest, or get it delivered piping hot."
-msgstr ""
-
 #. translators: %s: formatted free-delivery threshold amount.
-#: incl/template-helpers/free-delivery.php:93
+#: incl/template-helpers/free-delivery.php:89
 #, php-format
 msgid "Pickup is fastest. Free delivery on orders over %s."
 msgstr ""
 
-#: incl/template-helpers/hours-display.php:67
+#: incl/template-helpers/hours-display.php:37
+msgid "midnight"
+msgstr ""
+
+#: incl/template-helpers/hours-display.php:40
+msgid "noon"
+msgstr ""
+
+#. translators: %s: hour (and minutes), e.g. "11" or "11:30"
+#: incl/template-helpers/hours-display.php:45
+#, php-format
+msgid "%s am"
+msgstr ""
+
+#. translators: %s: hour (and minutes), e.g. "11" or "11:30"
+#: incl/template-helpers/hours-display.php:45
+#, php-format
+msgid "%s pm"
+msgstr ""
+
+#: incl/template-helpers/hours-display.php:60
 msgid "Sun"
 msgstr ""
 
-#: incl/template-helpers/hours-display.php:68
+#: incl/template-helpers/hours-display.php:61
 msgid "Mon"
 msgstr ""
 
-#: incl/template-helpers/hours-display.php:69
+#: incl/template-helpers/hours-display.php:62
 msgid "Tue"
 msgstr ""
 
-#: incl/template-helpers/hours-display.php:70
+#: incl/template-helpers/hours-display.php:63
 msgid "Wed"
 msgstr ""
 
-#: incl/template-helpers/hours-display.php:71
+#: incl/template-helpers/hours-display.php:64
 msgid "Thu"
 msgstr ""
 
-#: incl/template-helpers/hours-display.php:72
+#: incl/template-helpers/hours-display.php:65
 msgid "Fri"
 msgstr ""
 
-#: incl/template-helpers/hours-display.php:73
+#: incl/template-helpers/hours-display.php:66
 msgid "Sat"
 msgstr ""
 
+#: incl/template-helpers/hours-display.php:81
+msgid "Closed"
+msgstr ""
+
 #. translators: 1: first day, 2: second day (e.g. "Fri & Sat")
-#: incl/template-helpers/hours-display.php:227
+#: incl/template-helpers/hours-display.php:220
 #, php-format
 msgid "%1$s & %2$s"
 msgstr ""
 
 #. translators: 1: closing time such as midnight; 2: the days it applies to, such as Fri & Sat.
-#: incl/template-helpers/hours-display.php:233
+#: incl/template-helpers/hours-display.php:226
 #, php-format
 msgid "Open till %1$s %2$s"
 msgstr ""
 
-#. translators: %s: next opening, e.g. "tomorrow at 11 am".
-#: incl/template-helpers/hours-display.php:320
-#: incl/template-helpers/open-status.php:163
-#, php-format
-msgid "Closed · opens %s"
-msgstr ""
-
-#. translators: %s: next opening, e.g. "Saturday at 11:00 AM"
-#: incl/template-helpers/hours-display.php:356
-#, php-format
-msgid "opens %s"
-msgstr ""
-
-#: incl/template-helpers/menu-data.php:449
+#: incl/template-helpers/menu-data.php:443
 #: partials/home-featured.php:89
-#: woocommerce/loop/lafka-product-card.php:94
+#: woocommerce/loop/lafka-product-card.php:112
 msgid "Popular"
 msgstr ""
 
-#: incl/template-helpers/menu-data.php:453
+#: incl/template-helpers/menu-data.php:447
 msgid "Vegetarian"
 msgstr ""
 
-#: incl/template-helpers/menu-data.php:457
+#: incl/template-helpers/menu-data.php:451
 msgid "Vegan"
 msgstr ""
 
-#: incl/template-helpers/menu-data.php:461
+#: incl/template-helpers/menu-data.php:455
 msgid "Spicy"
 msgstr ""
 
-#: incl/template-helpers/menu-data.php:545
+#: incl/template-helpers/menu-data.php:542
 msgid "Previous"
 msgstr ""
 
-#: incl/template-helpers/menu-data.php:546
+#: incl/template-helpers/menu-data.php:543
 msgid "Next"
 msgstr ""
 
-#: incl/template-helpers/menu-data.php:556
+#: incl/template-helpers/menu-data.php:554
 msgid "More menu items"
-msgstr ""
-
-#. translators: %s: closing time, e.g. "11 pm".
-#: incl/template-helpers/open-status.php:238
-#: incl/template-helpers/open-status.php:260
-#, php-format
-msgid "Open now · until %s"
-msgstr ""
-
-#. translators: %s — opening time today
-#: incl/template-helpers/open-status.php:276
-#, php-format
-msgid "Closed · opens today at %s"
-msgstr ""
-
-#: incl/template-helpers/open-status.php:293
-msgid "tomorrow"
-msgstr ""
-
-#. translators: 1: day-of-week label ("tomorrow" or "Monday"); 2: opening time
-#: incl/template-helpers/open-status.php:300
-#, php-format
-msgid "Closed · opens %1$s at %2$s"
 msgstr ""
 
 #: incl/template-helpers/payment-trust.php:74
@@ -2753,8 +2854,8 @@ msgstr ""
 #. translators: %s: ready time, e.g. "20–30 min".
 #: incl/template-helpers/service-eta.php:187
 #: partials/counter/hero.php:124
-#: partials/menu-controls.php:111
-#: woocommerce/cart/cart.php:112
+#: partials/menu-controls.php:106
+#: woocommerce/cart/cart.php:105
 #, php-format
 msgid "Ready in %s"
 msgstr ""
@@ -3080,43 +3181,43 @@ msgstr ""
 msgid "Hide Details"
 msgstr ""
 
-#: incl/woocommerce-functions.php:245
+#: incl/woocommerce-functions.php:348
 msgid "More Filters"
 msgstr ""
 
-#: incl/woocommerce-functions.php:245
-#: partials/menu-controls.php:182
+#: incl/woocommerce-functions.php:348
+#: partials/menu-controls.php:177
 msgid "Filter"
 msgstr ""
 
-#: incl/woocommerce-functions.php:354
+#: incl/woocommerce-functions.php:457
 msgid "Min price"
 msgstr ""
 
-#: incl/woocommerce-functions.php:355
+#: incl/woocommerce-functions.php:458
 msgid "Max price"
 msgstr ""
 
-#: incl/woocommerce-functions.php:358
+#: incl/woocommerce-functions.php:461
 msgid "Price range:"
 msgstr ""
 
-#: incl/woocommerce-functions.php:492
+#: incl/woocommerce-functions.php:595
 msgid "Reset All Filters"
 msgstr ""
 
-#: incl/woocommerce-functions.php:594
-#: incl/woocommerce-functions.php:622
+#: incl/woocommerce-functions.php:697
+#: incl/woocommerce-functions.php:725
 msgid "Offer ends in"
 msgstr ""
 
 #. translators: %s: the category name (linked), e.g. "Poutine".
-#: incl/woocommerce-functions.php:1283
+#: incl/woocommerce-functions.php:1394
 #, php-format
 msgid "More from %s"
 msgstr ""
 
-#: incl/woocommerce-functions.php:1285
+#: incl/woocommerce-functions.php:1396
 msgid "You might also like"
 msgstr ""
 
@@ -3130,6 +3231,10 @@ msgstr ""
 #: incl/woocommerce/lafka-archive-quickadd.php:68
 #, php-format
 msgid "Choose options for %s"
+msgstr ""
+
+#: incl/woocommerce/lafka-cart-drawer-hooks.php:55
+msgid "View full cart"
 msgstr ""
 
 #: incl/woocommerce/lafka-cart-empty-popular.php:53
@@ -3163,18 +3268,18 @@ msgid "Check this field."
 msgstr ""
 
 #. translators: %s: minimum order amount for delivery
-#: incl/woocommerce/lafka-order-path.php:69
+#: incl/woocommerce/lafka-order-path.php:66
 #, php-format
 msgid "Delivery on orders over %s."
 msgstr ""
 
 #. translators: %s: order amount above which delivery is free
-#: incl/woocommerce/lafka-order-path.php:73
+#: incl/woocommerce/lafka-order-path.php:70
 #, php-format
 msgid "Free delivery over %s."
 msgstr ""
 
-#: incl/woocommerce/lafka-order-path.php:75
+#: incl/woocommerce/lafka-order-path.php:72
 msgid "The delivery fee shows at checkout once you enter your address."
 msgstr ""
 
@@ -3183,8 +3288,8 @@ msgid "from"
 msgstr ""
 
 #: page-menu.php:36
-#: woocommerce/archive-product.php:82
-#: woocommerce/archive-product.php:84
+#: woocommerce/archive-product.php:77
+#: woocommerce/archive-product.php:79
 msgid "The full menu"
 msgstr ""
 
@@ -3192,8 +3297,8 @@ msgstr ""
 #: page.php:46
 #: partials/search-results.php:25
 #: single.php:46
-#: woocommerce/archive-product.php:143
-#: woocommerce/single-product.php:116
+#: woocommerce/archive-product.php:138
+#: woocommerce/single-product.php:64
 msgid "Breadcrumb"
 msgstr ""
 
@@ -3207,12 +3312,12 @@ msgstr ""
 
 #: page-menu.php:112
 #: partials/mobile-nav.php:119
-#: woocommerce/archive-product.php:193
+#: woocommerce/archive-product.php:192
 msgid "Categories"
 msgstr ""
 
 #: page-menu.php:117
-#: woocommerce/archive-product.php:202
+#: woocommerce/archive-product.php:201
 msgid "All"
 msgstr ""
 
@@ -3237,18 +3342,18 @@ msgstr ""
 msgid "Editorial Home (Lafka)"
 msgstr ""
 
-#: partials/announce-bar.php:79
+#: partials/announce-bar.php:71
 msgid "Service status and contact"
 msgstr ""
 
 #. translators: 1: city name; 2: formatted threshold (e.g. "$30")
-#: partials/announce-bar.php:107
+#: partials/announce-bar.php:90
 #, php-format
 msgid "Delivery in %1$s · Free over %2$s"
 msgstr ""
 
 #. translators: %s: city name
-#: partials/announce-bar.php:114
+#: partials/announce-bar.php:97
 #, php-format
 msgid "Delivery in %s"
 msgstr ""
@@ -3265,12 +3370,8 @@ msgstr ""
 msgid "View comments"
 msgstr ""
 
-#: partials/cart-drawer.php:69
+#: partials/cart-drawer.php:68
 msgid "Close cart"
-msgstr ""
-
-#: partials/cart-drawer.php:131
-msgid "View full cart"
 msgstr ""
 
 #: partials/counter/chooser-template.php:27
@@ -3290,21 +3391,21 @@ msgstr ""
 msgid "Your order"
 msgstr ""
 
-#: partials/counter/drawer.php:90
+#: partials/counter/drawer.php:86
 msgid "Pickup or delivery?"
 msgstr ""
 
 #. translators: %s: pickup address
-#: partials/counter/drawer.php:97
+#: partials/counter/drawer.php:93
 #, php-format
 msgid "Pick up at %s"
 msgstr ""
 
-#: partials/counter/drawer.php:118
+#: partials/counter/drawer.php:114
 msgid "Taxes are added at checkout."
 msgstr ""
 
-#: partials/counter/drawer.php:124
+#: partials/counter/drawer.php:118
 msgid "Prefer to call?"
 msgstr ""
 
@@ -3323,8 +3424,8 @@ msgstr ""
 #: partials/counter/find-us.php:38
 #: partials/editorial-visit.php:95
 #: partials/home-visit.php:106
-#: template-contact.php:122
-#: template-contact.php:162
+#: template-contact.php:123
+#: template-contact.php:163
 msgid "Get directions"
 msgstr ""
 
@@ -3335,7 +3436,7 @@ msgstr ""
 #: partials/counter/find-us.php:45
 #: partials/editorial-contact-nap.php:49
 #: partials/editorial-visit.php:64
-#: template-contact.php:116
+#: template-contact.php:117
 msgid "Address"
 msgstr ""
 
@@ -3346,7 +3447,7 @@ msgstr ""
 #: partials/counter/find-us.php:51
 #: partials/editorial-contact-nap.php:56
 #: partials/editorial-visit.php:71
-#: template-contact.php:129
+#: template-contact.php:130
 msgid "Hours"
 msgstr ""
 
@@ -3356,7 +3457,7 @@ msgstr ""
 msgid "Phone"
 msgstr ""
 
-#: partials/counter/header.php:90
+#: partials/counter/header.php:87
 msgid "Main"
 msgstr ""
 
@@ -3368,11 +3469,6 @@ msgstr ""
 
 #: partials/counter/hero.php:40
 msgid "Start an order"
-msgstr ""
-
-#: partials/counter/hero.php:52
-#: partials/home-how-it-works.php:34
-msgid "Pickup or delivery"
 msgstr ""
 
 #. translators: 1: rating (e.g. "4.4"), 2: provider (e.g. "Google")
@@ -3403,7 +3499,7 @@ msgstr ""
 
 #: partials/counter/menu-rest.php:24
 #: partials/search-results.php:95
-#: woocommerce/archive-product.php:301
+#: woocommerce/archive-product.php:303
 msgid "See the full menu"
 msgstr ""
 
@@ -3449,6 +3545,10 @@ msgstr ""
 msgid "Our featured items"
 msgstr ""
 
+#: partials/editorial-utility-bar.php:25
+msgid "Open now"
+msgstr ""
+
 #: partials/editorial-visit.php:40
 msgid "Map"
 msgstr ""
@@ -3461,18 +3561,18 @@ msgstr ""
 msgid "today"
 msgstr ""
 
-#: partials/free-delivery-progress.php:88
+#: partials/free-delivery-progress.php:77
 msgid "Free delivery unlocked ✓"
 msgstr ""
 
 #. translators: %s — amount remaining to qualify for free delivery, formatted (e.g. "$7.50").
-#: partials/free-delivery-progress.php:92
+#: partials/free-delivery-progress.php:81
 #, php-format
 msgid "Add %s more for free delivery!"
 msgstr ""
 
 #. translators: 1: cart subtotal formatted; 2: threshold formatted; 3: percentage 0-100.
-#: partials/free-delivery-progress.php:99
+#: partials/free-delivery-progress.php:88
 #, php-format
 msgid "%1$s / %2$s · %3$d%%"
 msgstr ""
@@ -3496,7 +3596,7 @@ msgid "Customer favourites"
 msgstr ""
 
 #: partials/home-featured.php:99
-#: woocommerce/loop/lafka-product-card.php:113
+#: woocommerce/loop/lafka-product-card.php:141
 msgid "Customize"
 msgstr ""
 
@@ -3514,32 +3614,8 @@ msgstr ""
 msgid "Welcome"
 msgstr ""
 
-#: partials/home-how-it-works.php:17
-msgid "How it works"
-msgstr ""
-
-#: partials/home-how-it-works.php:18
-msgid "Hot food, three taps away."
-msgstr ""
-
-#: partials/home-how-it-works.php:30
-msgid "Pick your favourites"
-msgstr ""
-
-#: partials/home-how-it-works.php:31
-msgid "Browse the full menu. Customize every order, save your favourites."
-msgstr ""
-
-#: partials/home-how-it-works.php:38
-msgid "We start cooking"
-msgstr ""
-
-#: partials/home-how-it-works.php:39
-msgid "Track your order in real time. Most orders are ready in about 25 minutes."
-msgstr ""
-
 #. translators: %s — review count formatted
-#: partials/home-reviews.php:85
+#: partials/home-reviews.php:78
 #, php-format
 msgid "· %s reviews"
 msgstr ""
@@ -3552,29 +3628,29 @@ msgstr ""
 msgid "Frequently asked questions"
 msgstr ""
 
-#: partials/menu-controls.php:97
-#: woocommerce/cart/cart.php:105
+#: partials/menu-controls.php:92
+#: woocommerce/cart/cart.php:98
 msgid "Fulfilment method"
 msgstr ""
 
 #. translators: 1: free-delivery threshold, e.g. "$30"; 2: city.
-#: partials/menu-controls.php:135
-#: woocommerce/cart/cart.php:129
+#: partials/menu-controls.php:130
+#: woocommerce/cart/cart.php:122
 #, php-format
 msgid "Free over %1$s%2$s"
 msgstr ""
 
-#: partials/menu-controls.php:157
+#: partials/menu-controls.php:152
 #: partials/search-results.php:54
-#: woocommerce/archive-product.php:69
+#: woocommerce/archive-product.php:64
 msgid "Search the menu"
 msgstr ""
 
-#: partials/menu-controls.php:173
+#: partials/menu-controls.php:168
 msgid "Clear search"
 msgstr ""
 
-#: partials/menu-controls.php:197
+#: partials/menu-controls.php:192
 msgid "Clear all"
 msgstr ""
 
@@ -3585,8 +3661,8 @@ msgid "See all %s items"
 msgstr ""
 
 #: partials/menu-groups.php:198
-#: woocommerce/archive-product.php:270
-#: woocommerce/archive-product.php:297
+#: woocommerce/archive-product.php:272
+#: woocommerce/archive-product.php:299
 msgid "Nothing matches"
 msgstr ""
 
@@ -3595,7 +3671,7 @@ msgid "Try another word, or clear the search and filters to see the whole menu."
 msgstr ""
 
 #: partials/menu-groups.php:201
-#: woocommerce/archive-product.php:272
+#: woocommerce/archive-product.php:274
 msgid "Clear search and filters"
 msgstr ""
 
@@ -3616,152 +3692,136 @@ msgid "Pages"
 msgstr ""
 
 #: partials/mobile-nav.php:172
-#: template-contact.php:168
+#: template-contact.php:169
 msgid "Call to order"
 msgstr ""
 
-#: partials/order-method-bar.php:43
+#: partials/order-method-bar.php:37
 msgid "Pickup at"
 msgstr ""
 
-#: partials/order-method-bar.php:44
+#: partials/order-method-bar.php:37
 msgid "Delivery to"
 msgstr ""
 
-#: partials/order-method-bar.php:62
+#: partials/order-method-bar.php:51
 msgid "Switch"
 msgstr ""
 
-#. translators: %s: closing time.
-#: partials/order-method-bar.php:72
+#. translators: %s — short pickup address, e.g. "512 Sackville Dr."
+#: partials/pdp-assurances.php:56
 #, php-format
-msgid "Open until %s"
+msgid "Pickup at %s"
 msgstr ""
 
-#: partials/order-method-bar.php:75
-msgid "Open"
+#: partials/pdp-assurances.php:63
+msgid "Made fresh to order"
 msgstr ""
 
-#. translators: %s: when the kitchen next opens, e.g. "today at 11:00 AM".
-#: partials/order-method-bar.php:85
-#, php-format
-msgid "Opens %s"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:38
-msgid "Wheat"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:39
-msgid "Gluten"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:40
-msgid "Milk"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:41
-msgid "Dairy"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:42
-#: partials/pdp-ingredients-reviews.php:43
-msgid "Egg"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:44
-msgid "Soy"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:45
-msgid "Peanuts"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:46
-msgid "May contain nuts"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:47
-msgid "Fish"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:48
-msgid "Shellfish"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:141
-msgid "Ingredients and reviews"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:141
-msgid "Ingredients"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:145
-msgid "What's in it"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:153
-msgid "Made fresh to order."
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:158
-msgid "Allergens"
-msgstr ""
-
-#: partials/pdp-ingredients-reviews.php:164
-msgid "Ask staff about dietary restrictions"
-msgstr ""
-
-#. translators: %s — average rating, e.g. "4.8"
-#: partials/pdp-ingredients-reviews.php:175
-#, php-format
-msgid "Reviews · %s"
-msgstr ""
-
-#. translators: %s — total review count, e.g. "312"
-#: partials/pdp-ingredients-reviews.php:204
-#, php-format
-msgid "Based on %s customer reviews."
-msgstr ""
-
-#: partials/pdp-summary.php:189
-#: partials/pdp-summary.php:274
+#: partials/pdp-buybox.php:104
+#: partials/pdp-buybox.php:193
 #: woocommerce/global/quantity-input.php:65
 msgid "Decrease quantity"
 msgstr ""
 
 #. translators: %s: Quantity.
-#: partials/pdp-summary.php:190
-#: partials/pdp-summary.php:275
+#: partials/pdp-buybox.php:105
+#: partials/pdp-buybox.php:194
 #: woocommerce/global/quantity-input.php:24
 msgid "Quantity"
 msgstr ""
 
-#: partials/pdp-summary.php:191
-#: partials/pdp-summary.php:276
+#: partials/pdp-buybox.php:106
+#: partials/pdp-buybox.php:195
 #: woocommerce/global/quantity-input.php:64
 msgid "Increase quantity"
 msgstr ""
 
-#: partials/pdp-summary.php:200
-#: partials/pdp-summary.php:285
+#: partials/pdp-buybox.php:115
+#: partials/pdp-buybox.php:204
 msgid "Decrease"
 msgstr ""
 
-#: partials/pdp-summary.php:202
-#: partials/pdp-summary.php:287
+#: partials/pdp-buybox.php:117
+#: partials/pdp-buybox.php:206
 msgid "Increase"
 msgstr ""
 
-#. translators: %s — short pickup address, e.g. "512 Sackville Dr."
-#: partials/pdp-summary.php:343
-#, php-format
-msgid "Pickup at %s"
+#: partials/pdp-ingredients-reviews.php:37
+msgid "Wheat"
 msgstr ""
 
-#: partials/pdp-summary.php:350
-msgid "Made fresh to order"
+#: partials/pdp-ingredients-reviews.php:38
+msgid "Gluten"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:39
+msgid "Milk"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:40
+msgid "Dairy"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:41
+#: partials/pdp-ingredients-reviews.php:42
+msgid "Egg"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:43
+msgid "Soy"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:44
+msgid "Peanuts"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:45
+msgid "May contain nuts"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:46
+msgid "Fish"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:47
+msgid "Shellfish"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:124
+msgid "Ingredients and reviews"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:124
+msgid "Ingredients"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:128
+msgid "What's in it"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:136
+msgid "Made fresh to order."
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:141
+msgid "Allergens"
+msgstr ""
+
+#: partials/pdp-ingredients-reviews.php:147
+msgid "Ask staff about dietary restrictions"
+msgstr ""
+
+#. translators: %s — average rating, e.g. "4.8"
+#: partials/pdp-ingredients-reviews.php:158
+#, php-format
+msgid "Reviews · %s"
+msgstr ""
+
+#. translators: %s — total review count, e.g. "312"
+#: partials/pdp-ingredients-reviews.php:187
+#, php-format
+msgid "Based on %s customer reviews."
 msgstr ""
 
 #: partials/promo-bar.php:61
@@ -3772,15 +3832,15 @@ msgstr ""
 msgid "Dismiss promotion"
 msgstr ""
 
-#: partials/push-subscribe-prompt.php:76
+#: partials/push-subscribe-prompt.php:80
 msgid "Yes please"
 msgstr ""
 
-#: partials/push-subscribe-prompt.php:77
+#: partials/push-subscribe-prompt.php:81
 msgid "No thanks"
 msgstr ""
 
-#: partials/push-subscribe-prompt.php:78
+#: partials/push-subscribe-prompt.php:82
 msgid "Dismiss push notifications prompt"
 msgstr ""
 
@@ -3789,13 +3849,13 @@ msgid "Dismiss review prompt"
 msgstr ""
 
 #: partials/search-results.php:28
-#: woocommerce/archive-product.php:156
+#: woocommerce/archive-product.php:151
 msgid "Search results"
 msgstr ""
 
 #. translators: %s: the visitor's search words.
 #: partials/search-results.php:35
-#: woocommerce/archive-product.php:68
+#: woocommerce/archive-product.php:63
 #, php-format
 msgid "Results for “%s”"
 msgstr ""
@@ -3893,35 +3953,31 @@ msgstr ""
 msgid "Yes — give us a call ahead of time so we can plan your order."
 msgstr ""
 
-#: template-contact.php:71
+#: template-contact.php:72
 msgid "Get in touch"
 msgstr ""
 
-#: template-contact.php:72
+#: template-contact.php:73
 msgid "Come hang out, or just say hi."
 msgstr ""
 
-#: template-contact.php:73
+#: template-contact.php:74
 msgid "Address, hours, and the fastest way to reach us — plus answers to the questions we get most."
 msgstr ""
 
-#: template-contact.php:105
+#: template-contact.php:106
 msgid "Drop in at"
 msgstr ""
 
-#: template-contact.php:148
-msgid "Last orders 15 min before close. Statutory holidays may differ — call ahead."
-msgstr ""
-
-#: template-contact.php:174
+#: template-contact.php:175
 msgid "Email us"
 msgstr ""
 
-#: template-contact.php:185
+#: template-contact.php:194
 msgid "Questions"
 msgstr ""
 
-#: template-contact.php:186
+#: template-contact.php:195
 msgid "Frequently asked"
 msgstr ""
 
@@ -3949,7 +4005,7 @@ msgid "View cart"
 msgstr ""
 
 #. translators: %s: number of matching menu items.
-#: woocommerce/archive-product.php:72
+#: woocommerce/archive-product.php:67
 #, php-format
 msgid "%s item on the menu matches."
 msgid_plural "%s items on the menu match."
@@ -3957,26 +4013,26 @@ msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: category name.
-#: woocommerce/archive-product.php:235
+#: woocommerce/archive-product.php:236
 #, php-format
 msgid "More in %s"
 msgstr ""
 
-#: woocommerce/archive-product.php:271
+#: woocommerce/archive-product.php:273
 msgid "Try another word, or clear the search and filters."
 msgstr ""
 
 #. translators: %s: the customer's search words.
-#: woocommerce/archive-product.php:292
+#: woocommerce/archive-product.php:294
 #, php-format
 msgid "Nothing on the menu matches “%s”"
 msgstr ""
 
-#: woocommerce/archive-product.php:295
+#: woocommerce/archive-product.php:297
 msgid "Check the spelling, try a shorter word (like “pizza” or “wings”), or browse a category above."
 msgstr ""
 
-#: woocommerce/archive-product.php:298
+#: woocommerce/archive-product.php:300
 msgid "Try clearing filters or searching for something else."
 msgstr ""
 
@@ -3985,38 +4041,38 @@ msgid "Add something delicious to get started."
 msgstr ""
 
 #. Translators: $s shipping destination.
-#: woocommerce/cart/cart-shipping.php:75
+#: woocommerce/cart/cart-shipping.php:71
 #, php-format
 msgid "Shipping to %s."
 msgstr ""
 
-#: woocommerce/cart/cart-shipping.php:76
+#: woocommerce/cart/cart-shipping.php:72
 msgid "Change address"
 msgstr ""
 
-#: woocommerce/cart/cart-shipping.php:78
+#: woocommerce/cart/cart-shipping.php:74
 msgid "Shipping options will be updated during checkout."
 msgstr ""
 
-#: woocommerce/cart/cart-shipping.php:86
+#: woocommerce/cart/cart-shipping.php:82
 msgid "Shipping costs are calculated during checkout."
 msgstr ""
 
-#: woocommerce/cart/cart-shipping.php:88
+#: woocommerce/cart/cart-shipping.php:84
 msgid "Enter your address to view shipping options."
 msgstr ""
 
-#: woocommerce/cart/cart-shipping.php:91
+#: woocommerce/cart/cart-shipping.php:87
 msgid "There are no shipping options available. Please ensure that your address has been entered correctly, or contact us if you need any help."
 msgstr ""
 
 #. Translators: $s shipping destination.
-#: woocommerce/cart/cart-shipping.php:105
+#: woocommerce/cart/cart-shipping.php:101
 #, php-format
 msgid "No shipping options were found for %s."
 msgstr ""
 
-#: woocommerce/cart/cart-shipping.php:109
+#: woocommerce/cart/cart-shipping.php:105
 msgid "Enter a different address"
 msgstr ""
 
@@ -4025,42 +4081,42 @@ msgid "Review your items, choose pickup or delivery, then check out."
 msgstr ""
 
 #. translators: %s: unit price of the cart item.
-#: woocommerce/cart/cart.php:204
+#: woocommerce/cart/cart.php:197
 #, php-format
 msgid "%s each"
 msgstr ""
 
-#: woocommerce/cart/cart.php:214
+#: woocommerce/cart/cart.php:207
 msgid "Available on backorder"
 msgstr ""
 
 #. translators: %s: Product name
-#: woocommerce/cart/cart.php:257
+#: woocommerce/cart/cart.php:250
 #, php-format
 msgid "Remove %s from cart"
 msgstr ""
 
-#: woocommerce/cart/cart.php:291
+#: woocommerce/cart/cart.php:284
 msgid "Add more items"
 msgstr ""
 
-#: woocommerce/cart/cart.php:299
+#: woocommerce/cart/cart.php:292
 msgid "Clear order"
 msgstr ""
 
-#: woocommerce/cart/cart.php:306
+#: woocommerce/cart/cart.php:299
 msgid "Coupon:"
 msgstr ""
 
-#: woocommerce/cart/cart.php:307
+#: woocommerce/cart/cart.php:300
 msgid "Coupon code"
 msgstr ""
 
-#: woocommerce/cart/cart.php:308
+#: woocommerce/cart/cart.php:301
 msgid "Apply coupon"
 msgstr ""
 
-#: woocommerce/cart/cart.php:313
+#: woocommerce/cart/cart.php:306
 msgid "Update cart"
 msgstr ""
 
@@ -4088,10 +4144,6 @@ msgstr ""
 msgid "More Options"
 msgstr ""
 
-#: woocommerce/loop/orderby.php:32
-msgid "Show"
-msgstr ""
-
 #: woocommerce/loop/orderby.php:43
 msgid "Show All"
 msgstr ""
@@ -4105,24 +4157,16 @@ msgstr ""
 msgid "Shop order"
 msgstr ""
 
-#: woocommerce/loop/pagination.php:41
-msgid "Loading"
-msgstr ""
-
-#: woocommerce/loop/pagination.php:42
-msgid "No more items available"
-msgstr ""
-
-#: woocommerce/loop/pagination.php:47
-msgid "Load More"
-msgstr ""
-
 #: woocommerce/loop/sale-flash.php:28
 msgid "sale"
 msgstr ""
 
 #: woocommerce/loop/sale-flash.php:38
 msgid "New"
+msgstr ""
+
+#: woocommerce/order/order-again.php:18
+msgid "Order this again"
 msgstr ""
 
 #: woocommerce/product-searchform.php:27
@@ -4170,6 +4214,21 @@ msgstr ""
 #: theme.json
 msgctxt "Color name"
 msgid "Accent"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Accent Hover"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Text on Accent"
+msgstr ""
+
+#: theme.json
+msgctxt "Color name"
+msgid "Brand"
 msgstr ""
 
 #: theme.json
