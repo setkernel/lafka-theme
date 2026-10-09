@@ -118,3 +118,11 @@ body.lafka-has-pdp-cta {
 		padding-bottom: 0;
 	}
 }
+
+/* The bar shows from 768 to 1023: floating prompts sit above it there. */
+@media (min-width: 768px) and (max-width: 1023px) {
+
+	:root:has(.lafka-pdp-cta) {
+		--lafka-bottom-bar-h: calc(68px + env(safe-area-inset-bottom, 0px));
+	}
+}

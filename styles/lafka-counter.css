@@ -1486,7 +1486,9 @@ body.lafka-layout-header-counter .lafka-header {
 }
 
 body.lafka-has-counter-bar {
-	padding-bottom: calc(80px + env(safe-area-inset-bottom));
+	--lafka-bottom-bar-h: calc(80px + env(safe-area-inset-bottom));
+
+	padding-bottom: var(--lafka-bottom-bar-h);
 }
 
 @media (min-width: 600px) {
@@ -1508,7 +1510,7 @@ body.lafka-has-counter-bar {
 	}
 
 	body.lafka-has-counter-bar {
-		padding-bottom: 0;
+		--lafka-bottom-bar-h: 0px;
 	}
 }
 
@@ -1943,6 +1945,6 @@ body.lafka-layout-menu-counter .lafka-menu__faq {
 	}
 
 	body.lafka-has-counter-bar {
-		padding-bottom: calc(58px + env(safe-area-inset-bottom));
+		--lafka-bottom-bar-h: calc(58px + env(safe-area-inset-bottom));
 	}
 }

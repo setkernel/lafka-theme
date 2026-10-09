@@ -28,6 +28,11 @@
 	display: none;
 }
 
+/* While the bar shows, floating prompts sit above it. */
+:root:has(.lafka-sticky-cart:not([hidden])) {
+	--lafka-bottom-bar-h: calc(56px + env(safe-area-inset-bottom, 0px));
+}
+
 .lafka-sticky-cart__link {
 	display: flex;
 	align-items: center;

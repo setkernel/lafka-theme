@@ -351,6 +351,11 @@
 	 * Set on <html> by script (consent banner height, sticky category strip
 	 * offset); declared so every var() read resolves before the script runs. */
 	--lafka-consent-banner-h: 0px;
+
+	/* Height of a sticky bottom bar on screen (the counter bar, the sticky
+	   cart, the product page's add-to-cart bar), set where the bar shows;
+	   floating prompts sit above it. */
+	--lafka-bottom-bar-h: 0px;
 	--lafka-menu-cats-offset: 0px;
 
 	/* ------- Consent banner (markup + behaviour: lafka-plugin) -----------

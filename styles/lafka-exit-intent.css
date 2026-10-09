@@ -47,7 +47,7 @@
 .lafka-exit-toast {
 	position: fixed;
 	right: 16px;
-	bottom: calc(16px + var(--lafka-consent-banner-h, 0px));
+	bottom: calc(16px + var(--lafka-consent-banner-h, 0px) + var(--lafka-bottom-bar-h, 0px));
 	left: auto;
 	width: 320px;
 	max-width: calc(100vw - 32px);
@@ -160,7 +160,7 @@
 	.lafka-exit-toast {
 		right: 16px;
 		left: 16px;
-		bottom: calc(16px + var(--lafka-consent-banner-h, 0px));
+		bottom: calc(16px + var(--lafka-consent-banner-h, 0px) + var(--lafka-bottom-bar-h, 0px));
 		width: auto;
 		max-width: none;
 	}
