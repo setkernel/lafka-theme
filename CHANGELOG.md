@@ -7,6 +7,8 @@ git tags + GitHub Releases.
 
 ## [Unreleased]
 
+## [7.4.0] — 2026-10-09
+
 ### Fixed
 - The counter homepage and the /menu/ page never printed WooCommerce notices, so a refusal raised there (an
   add-to-cart link for a sold-out item, a closed-store add) stayed in the session unseen and later blocked the block
@@ -33,6 +35,20 @@ git tags + GitHub Releases.
 - The block checkout's order-summary quantity badge showed white digits on a white disc (WooCommerce draws the disc with
   `currentColor`); it is the dark pill with a light number again.
 - The tip box's "Other amount" field was too narrow for its placeholder ("Other amo"); it is 10em wide.
+
+- The product page printed the age notice twice when it applied.
+
+- Order confirmation: the legacy feather icons no longer overlap the order overview, and
+  the page header and overview are no longer pushed 15 px off the content column.
+- "WooCommerce is active" is decided by whether WooCommerce is loaded, not by the
+  active-plugins list: requests that skip plugins (`/wp-activate.php`) no longer fatal.
+- Lists offer "Choose" instead of a quick Add for product types that cannot be added
+  from a list (WooCommerce `supports( 'ajax_add_to_cart' )`), such as Deals.
+- Theme Check: attribute escaping on placeholder images and the quantity label,
+  explicit `_n()` counts, one translator comment per string; cloud-zoom used the
+  jQuery 3-removed `.load( fn )`.
+- The theme no longer registers its own (never effective) Google Maps loader; the
+  plugin owns it.
 
 ### Installable app
 - `js/sw.js` is one worker for Web Push, static assets and the installable app. Fixed: it used to keep a copy of
@@ -144,136 +160,9 @@ git tags + GitHub Releases.
   return with the test suite), `lafka_preset_display_preload_href()`, the Magnific-era gallery click
   handler, and the `deliveryLabel` script parameter.
 
-### Changed
-- **The redesigned pages fire WooCommerce's own hooks** (design unchanged, screenshots
-  identical at 375 and 1280): the product page fires `woocommerce_before_main_content`,
-  `woocommerce_before_single_product_summary`, `woocommerce_single_product_summary`,
-  `woocommerce_before_add_to_cart_form` / `after`, `woocommerce_product_meta_start` / `_end`,
-  `woocommerce_share`, `woocommerce_after_single_product_summary` and the closing actions;
-  each part of the summary is a callback on the summary hook (`incl/woocommerce/lafka-pdp-summary.php`),
-  and the core callbacks the design replaces are removed rather than skipped. The shop /
-  category / tag / search archive fires `woocommerce_shop_loop_header`, `before_shop_loop`,
-  the loop through `woocommerce_product_loop_start()` / `content-product.php` /
-  `woocommerce_product_loop_end()`, the loop-item actions, `after_shop_loop`,
-  `no_products_found` and the closing actions (`incl/woocommerce/lafka-archive-hooks.php`).
-  The cart drawer fires the mini-cart actions (`incl/woocommerce/lafka-cart-drawer-hooks.php`).
-  The GA4 `view_item` / `view_item_list` events now ride the core actions.
-- The product wrapper carries core's id and classes (type, stock, categories) for extensions.
-- WooCommerce's stylesheet is still not enqueued as it is (the theme owns the styling, and
-  loading it moved the cart, checkout and My Account layouts in measurement), but the theme
-  now keeps the URL from WooCommerce's own list and offers it as an opt-in fallback for
-  extension UI on the classic cart, checkout and account pages: it loads inside the
-  `lafka-wc-core` CSS layer, under every theme rule, when `lafka_wc_core_fallback_styles`
-  returns true (off by default).
-- `lafka_wc_add_cart_ajax` returns WooCommerce's notice markup on a failed add (shown in the
-  page's notices area) instead of an alert.
-- The gateway-asset dequeue matches handles by pattern (the SkyVerge framework versions its
-  handles).
-- `global/sidebar.php` calls `get_sidebar( 'shop' )`; the menu pager runs
-  `woocommerce_pagination_args`; the error-notice override keeps extension markup.
-
-### Fixed
-- The product page printed the age notice twice when it applied.
-
-### Removed
 - `woocommerce/loop/pagination.php` (the classic shop pager nothing reaches any more).
 - `lafka_pdp_summary` action (internal; its callbacks sit on `woocommerce_single_product_summary`).
 
-### Added
-- Order tracker styling (`styles/lafka-order-tracker.css`) for the plugin's Order tracking
-  stepper: large type and dots, vertical on phones and in a row from 640 px; "Order this
-  again" label on WooCommerce's order-again button.
-- All ten presets use the modern counter layout on every surface (header, home,
-  menu, footer, cart drawer); only Peppery adds the checkered motif. Verified on
-  the production clone at 375 and 1280 px: home, menu and a product page per preset.
-- The product page renders the plugin's Deal builder for Deal products (WooCommerce's
-  `woocommerce_lafka_deal_add_to_cart` action), and styles the plugin's half-and-half
-  Left / Whole / Right choice and the tips picker (classic and block checkout).
-
-### Fixed
-- Order confirmation: the legacy feather icons no longer overlap the order overview, and
-  the page header and overview are no longer pushed 15 px off the content column.
-- "WooCommerce is active" is decided by whether WooCommerce is loaded, not by the
-  active-plugins list: requests that skip plugins (`/wp-activate.php`) no longer fatal.
-- Lists offer "Choose" instead of a quick Add for product types that cannot be added
-  from a list (WooCommerce `supports( 'ajax_add_to_cart' )`), such as Deals.
-- Theme Check: attribute escaping on placeholder images and the quantity label,
-  explicit `_n()` counts, one translator comment per string; cloud-zoom used the
-  jQuery 3-removed `.load( fn )`.
-- The theme no longer registers its own (never effective) Google Maps loader; the
-  plugin owns it.
-
-### Changed
-- **The asset diet knows which templates render the page content.**
-  `lafka_templates_without_content()` (filterable, `lafka_templates_without_content`) lists
-  the templates that never output the page's post_content — `page-menu.php`,
-  `template-contact.php` and the editorial templates — and `lafka_template_renders_content()`
-  reads the template WordPress resolved. Those pages skip the legacy libraries
-  (imagesloaded, wp-util) whatever old page-builder content is stored on them, so
-  /contact-us/ and /menu/ no longer load them. `lafka_rendered_post_content()` is gone (its
-  only users, the icon-font and typed.js sniffs, are removed).
-- **JS/CSS lint rules switched back on** (no `null`/`"off"` overrides left except
-  `no-descending-specificity`, deferred to the 1.0 CSS rewrite). `eslint.config.mjs` now
-  runs `no-var`, `prefer-const`, `no-unused-vars` and `eqeqeq` as errors; every `var` in
-  `js/` and `assets/customizer/` became `let`/`const` (no top-level `var` existed, so no
-  `window` global changed). `js/lafka-dialog.min.js` rebuilt.
-- **Stylelint**: `selector-class-pattern` / `selector-id-pattern` are configured to the
-  project's real naming convention (documented in CONTRIBUTING.md, Coding standards) instead
-  of being disabled, with no class or ID renamed. Every `font-family` that named only an icon
-  font now ends with `sans-serif`. `declaration-property-unit-allowed-list` allows `px`, `em`
-  and `%` for `line-height` (13 legacy declarations). `no-duplicate-selectors` is on: all 98
-  reports are resolved by merging blocks only where the cascade stays identical (every
-  equal-specificity rule in between was checked, and a computed-style comparison of old vs new
-  CSS across 3,000+ selectors at 375/768/1280 px shows no difference), dropping declarations
-  that a later block always overrode, and removing one selector listed twice. One block that
-  cannot be merged without reordering the cascade (the hover colour for links) is written as
-  the equivalent `a:is(:hover)` and keeps its place.
-- Dropped the dead `#commentsForm` selector from `styles/rtl.css` (no markup uses that ID).
-
-- **New platform floors**: WordPress 7.0 (tested up to 7.1), WooCommerce 11.0 (tested up
-  to 11.2), PHP 8.3 (style.css, readme.txt, composer.json, `.phpcs.xml.dist`, docs).
-  `theme.json` already uses the newest schema (version 3, `schemas.wp.org/wp/7.1`).
-- The GitHub updater reports the 7.0 / 7.1 WordPress requirement and tested versions
-  from named constants instead of stale literals (`5.0` / `6.7`).
-- WooCommerce template overrides synced to 11.2.0: `cart/cart-shipping.php`
-  8.8.0 -> 11.2.0 (package index normalised with `%d` in every printf, as core does);
-  every other override already matched its 11.2.0 core `@version`.
-- TGM Plugin Activation now registers only the Lafka plugin and WooCommerce, both
-  required (no more optional YITH Wishlist, Revolution Slider or WPBakery entries).
-- `npm run i18n:pot` and `npm run previews:presets` now target the local stack
-  (`lafka-local-cli` container, `http://localhost:8080`; override with
-  `LAFKA_WPCLI_CONTAINER` / `LAFKA_BASE_URL`). The WP-CLI helper moved to
-  `scripts/lib/wp-cli.mjs`; the preview script uses the `playwright` library.
-- The pre-push hook runs PHPCS, ESLint, Stylelint and the version check, never skips a gate and
-  fails with an `npm ci` / `composer install` hint when dependencies are missing.
-- **Zero-suppression lint policy**: PHPCS runs the full `WordPress-Extra` standard with no
-  `<exclude>` rules, warnings fail the run and `PrefixAllGlobals` enforces the `lafka`
-  prefix. The only excluded paths are `vendor/`, `node_modules/` and the unmodified upstream
-  `incl/tgm-plugin-activation/`. Every inline PHPCS, ESLint and Stylelint
-  suppression comment is gone and each cause is fixed: output is escaped late
-  (new `lafka_allowed_html()` kses allowlist in `incl/system/lafka-output.php`), public query
-  arguments are read through `lafka_query_arg()`, the price-filter bounds use a real query
-  plus a prepared statement, WordPress globals are no longer assigned, template variables
-  carry the `lafka_` prefix, comparisons are strict and Yoda, dates use `gmdate()`, and
-  translator comments are in place. ESLint and Stylelint
-  run with `--max-warnings=0`, and the rules that were switched off are on again except the
-  structural Stylelint ones (see CONTRIBUTING).
-- `incl/lafka-options-framework/` is retired: the Google-font list helper is now
-  `incl/system/lafka-google-fonts.php` and the media-picker script `js/lafka-medialibrary-uploader.js`
-  (its dead Theme Options sidebar and accordion code is gone). Class files follow the
-  `class-*.php` convention (`class-lafka-customizer-bridge.php`, `class-lafka-maintenance-page.php`),
-  the food-menu partial uses a hyphenated name, and dead test-seam guards in
-  `incl/presets/` are removed.
-- The log fallback (plugin inactive, `WP_DEBUG` or the `lafka_theme_log_fallback` filter) now
-  writes to the WooCommerce log, source `lafka-theme`, instead of the PHP error log. The
-  critical CSS is printed through core's style API (`<style id="lafka-critical-inline-css">`).
-  The WooCommerce `woocommerce_price_filter_sql` filter is no longer applied to the
-  theme's own price-filter query.
-- **Documentation consolidated**: `DESIGN_SYSTEM.md` and `docs/PRESET_ENGINE.md` are now one
-  `docs/DESIGN_SYSTEM.md`, refreshed against the code (Peppery counter palette, ten presets,
-  layout resolver, cache keys). The `versionSync` entry for the old file is gone.
-
-### Removed
 - Magnific Popup (`js/magnific/`, `styles/magnific/`) and about 80 lines of its
   `mfp` CSS: the plugin's location popup, its last user, is a native dialog; the
   lightboxes moved to `lafkaDialog` earlier. Also the hidden-popup workaround on
@@ -376,6 +265,114 @@ git tags + GitHub Releases.
 - Dead `combo` product-type branches (`woocommerce/loop/sale-flash.php`,
   `woocommerce/loop/add-to-cart.php`, the listing quantity check) and the
   `woocommerce_variable_sale_price_html` filter, which WooCommerce 11 never applies.
+
+### Changed
+- **The redesigned pages fire WooCommerce's own hooks** (design unchanged, screenshots
+  identical at 375 and 1280): the product page fires `woocommerce_before_main_content`,
+  `woocommerce_before_single_product_summary`, `woocommerce_single_product_summary`,
+  `woocommerce_before_add_to_cart_form` / `after`, `woocommerce_product_meta_start` / `_end`,
+  `woocommerce_share`, `woocommerce_after_single_product_summary` and the closing actions;
+  each part of the summary is a callback on the summary hook (`incl/woocommerce/lafka-pdp-summary.php`),
+  and the core callbacks the design replaces are removed rather than skipped. The shop /
+  category / tag / search archive fires `woocommerce_shop_loop_header`, `before_shop_loop`,
+  the loop through `woocommerce_product_loop_start()` / `content-product.php` /
+  `woocommerce_product_loop_end()`, the loop-item actions, `after_shop_loop`,
+  `no_products_found` and the closing actions (`incl/woocommerce/lafka-archive-hooks.php`).
+  The cart drawer fires the mini-cart actions (`incl/woocommerce/lafka-cart-drawer-hooks.php`).
+  The GA4 `view_item` / `view_item_list` events now ride the core actions.
+- The product wrapper carries core's id and classes (type, stock, categories) for extensions.
+- WooCommerce's stylesheet is still not enqueued as it is (the theme owns the styling, and
+  loading it moved the cart, checkout and My Account layouts in measurement), but the theme
+  now keeps the URL from WooCommerce's own list and offers it as an opt-in fallback for
+  extension UI on the classic cart, checkout and account pages: it loads inside the
+  `lafka-wc-core` CSS layer, under every theme rule, when `lafka_wc_core_fallback_styles`
+  returns true (off by default).
+- `lafka_wc_add_cart_ajax` returns WooCommerce's notice markup on a failed add (shown in the
+  page's notices area) instead of an alert.
+- The gateway-asset dequeue matches handles by pattern (the SkyVerge framework versions its
+  handles).
+- `global/sidebar.php` calls `get_sidebar( 'shop' )`; the menu pager runs
+  `woocommerce_pagination_args`; the error-notice override keeps extension markup.
+
+- **The asset diet knows which templates render the page content.**
+  `lafka_templates_without_content()` (filterable, `lafka_templates_without_content`) lists
+  the templates that never output the page's post_content — `page-menu.php`,
+  `template-contact.php` and the editorial templates — and `lafka_template_renders_content()`
+  reads the template WordPress resolved. Those pages skip the legacy libraries
+  (imagesloaded, wp-util) whatever old page-builder content is stored on them, so
+  /contact-us/ and /menu/ no longer load them. `lafka_rendered_post_content()` is gone (its
+  only users, the icon-font and typed.js sniffs, are removed).
+- **JS/CSS lint rules switched back on** (no `null`/`"off"` overrides left except
+  `no-descending-specificity`, deferred to the 1.0 CSS rewrite). `eslint.config.mjs` now
+  runs `no-var`, `prefer-const`, `no-unused-vars` and `eqeqeq` as errors; every `var` in
+  `js/` and `assets/customizer/` became `let`/`const` (no top-level `var` existed, so no
+  `window` global changed). `js/lafka-dialog.min.js` rebuilt.
+- **Stylelint**: `selector-class-pattern` / `selector-id-pattern` are configured to the
+  project's real naming convention (documented in CONTRIBUTING.md, Coding standards) instead
+  of being disabled, with no class or ID renamed. Every `font-family` that named only an icon
+  font now ends with `sans-serif`. `declaration-property-unit-allowed-list` allows `px`, `em`
+  and `%` for `line-height` (13 legacy declarations). `no-duplicate-selectors` is on: all 98
+  reports are resolved by merging blocks only where the cascade stays identical (every
+  equal-specificity rule in between was checked, and a computed-style comparison of old vs new
+  CSS across 3,000+ selectors at 375/768/1280 px shows no difference), dropping declarations
+  that a later block always overrode, and removing one selector listed twice. One block that
+  cannot be merged without reordering the cascade (the hover colour for links) is written as
+  the equivalent `a:is(:hover)` and keeps its place.
+- Dropped the dead `#commentsForm` selector from `styles/rtl.css` (no markup uses that ID).
+
+- **New platform floors**: WordPress 7.0 (tested up to 7.1), WooCommerce 11.0 (tested up
+  to 11.2), PHP 8.3 (style.css, readme.txt, composer.json, `.phpcs.xml.dist`, docs).
+  `theme.json` already uses the newest schema (version 3, `schemas.wp.org/wp/7.1`).
+- The GitHub updater reports the 7.0 / 7.1 WordPress requirement and tested versions
+  from named constants instead of stale literals (`5.0` / `6.7`).
+- WooCommerce template overrides synced to 11.2.0: `cart/cart-shipping.php`
+  8.8.0 -> 11.2.0 (package index normalised with `%d` in every printf, as core does);
+  every other override already matched its 11.2.0 core `@version`.
+- TGM Plugin Activation now registers only the Lafka plugin and WooCommerce, both
+  required (no more optional YITH Wishlist, Revolution Slider or WPBakery entries).
+- `npm run i18n:pot` and `npm run previews:presets` now target the local stack
+  (`lafka-local-cli` container, `http://localhost:8080`; override with
+  `LAFKA_WPCLI_CONTAINER` / `LAFKA_BASE_URL`). The WP-CLI helper moved to
+  `scripts/lib/wp-cli.mjs`; the preview script uses the `playwright` library.
+- The pre-push hook runs PHPCS, ESLint, Stylelint and the version check, never skips a gate and
+  fails with an `npm ci` / `composer install` hint when dependencies are missing.
+- **Zero-suppression lint policy**: PHPCS runs the full `WordPress-Extra` standard with no
+  `<exclude>` rules, warnings fail the run and `PrefixAllGlobals` enforces the `lafka`
+  prefix. The only excluded paths are `vendor/`, `node_modules/` and the unmodified upstream
+  `incl/tgm-plugin-activation/`. Every inline PHPCS, ESLint and Stylelint
+  suppression comment is gone and each cause is fixed: output is escaped late
+  (new `lafka_allowed_html()` kses allowlist in `incl/system/lafka-output.php`), public query
+  arguments are read through `lafka_query_arg()`, the price-filter bounds use a real query
+  plus a prepared statement, WordPress globals are no longer assigned, template variables
+  carry the `lafka_` prefix, comparisons are strict and Yoda, dates use `gmdate()`, and
+  translator comments are in place. ESLint and Stylelint
+  run with `--max-warnings=0`, and the rules that were switched off are on again except the
+  structural Stylelint ones (see CONTRIBUTING).
+- `incl/lafka-options-framework/` is retired: the Google-font list helper is now
+  `incl/system/lafka-google-fonts.php` and the media-picker script `js/lafka-medialibrary-uploader.js`
+  (its dead Theme Options sidebar and accordion code is gone). Class files follow the
+  `class-*.php` convention (`class-lafka-customizer-bridge.php`, `class-lafka-maintenance-page.php`),
+  the food-menu partial uses a hyphenated name, and dead test-seam guards in
+  `incl/presets/` are removed.
+- The log fallback (plugin inactive, `WP_DEBUG` or the `lafka_theme_log_fallback` filter) now
+  writes to the WooCommerce log, source `lafka-theme`, instead of the PHP error log. The
+  critical CSS is printed through core's style API (`<style id="lafka-critical-inline-css">`).
+  The WooCommerce `woocommerce_price_filter_sql` filter is no longer applied to the
+  theme's own price-filter query.
+- **Documentation consolidated**: `DESIGN_SYSTEM.md` and `docs/PRESET_ENGINE.md` are now one
+  `docs/DESIGN_SYSTEM.md`, refreshed against the code (Peppery counter palette, ten presets,
+  layout resolver, cache keys). The `versionSync` entry for the old file is gone.
+
+### Added
+- Order tracker styling (`styles/lafka-order-tracker.css`) for the plugin's Order tracking
+  stepper: large type and dots, vertical on phones and in a row from 640 px; "Order this
+  again" label on WooCommerce's order-again button.
+- All ten presets use the modern counter layout on every surface (header, home,
+  menu, footer, cart drawer); only Peppery adds the checkered motif. Verified on
+  the production clone at 375 and 1280 px: home, menu and a product page per preset.
+- The product page renders the plugin's Deal builder for Deal products (WooCommerce's
+  `woocommerce_lafka_deal_add_to_cart` action), and styles the plugin's half-and-half
+  Left / Whole / Right choice and the tips picker (classic and block checkout).
 
 ## [7.3.0] — 2026-09-25
 
